@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חומר לימוד SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* TOP NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;gap:6px;transition:opacity .2s}
+.back-btn:hover{opacity:.7}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-right{margin-right:auto;display:flex;gap:.75rem}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;transition:color .2s;font-weight:600}
+.topnav-link:hover{color:var(--cyan)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 49px)}
+
+/* SIDEBAR */
+.sidebar{width:260px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto;padding:1rem 0;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.sidebar-section{padding:.5rem 1rem;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:1rem}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:.5rem 1rem;cursor:pointer;transition:all .15s;font-size:13px;color:var(--text2);border-right:2px solid transparent}
+.sidebar-item:hover{background:var(--bg3);color:var(--text)}
+.sidebar-item.active{background:rgba(74,158,255,.08);color:var(--blue);border-right-color:var(--blue)}
+.sidebar-num{font-family:var(--mono);font-size:10px;background:var(--bg4);color:var(--text3);width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.sidebar-item.active .sidebar-num{background:var(--blue3);color:var(--blue)}
+
+/* MAIN */
+.main-content{flex:1;padding:2rem;overflow-x:hidden;max-width:860px}
+
+/* CHAPTER HEADER */
+.ch-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.ch-meta{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem}
+.ch-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.ch-desc{color:var(--text2);font-size:14px;line-height:1.8;max-width:660px}
+
+/* SYNTAX BOX */
+.syntax-box{background:var(--bg3);border:1px solid var(--border2);border-right:3px solid var(--cyan);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-family:var(--mono);font-size:12.5px;color:var(--yellow);line-height:1.8}
+
+/* CONCEPT CARDS */
+.concepts{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:2rem}
+.concept{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.concept-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-text{color:var(--text2);font-size:13px;line-height:1.7}
+.concept-text strong{color:var(--text);font-weight:600}
+
+/* SECTION DIVIDER */
+.sec-div{border:none;border-top:1px solid var(--border);margin:2rem 0}
+.sec-label{font-size:.85rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:3px;height:14px;background:var(--yellow);border-radius:2px;display:block}
+
+/* EXAMPLE CARD */
+.example-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:1.25rem;overflow:hidden}
+.ex-head{padding:.85rem 1rem;display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;user-select:none;transition:background .15s}
+.ex-head:hover{background:var(--bg3)}
+.ex-num{background:var(--blue3);color:var(--blue);font-size:11px;font-weight:700;width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:var(--mono)}
+.ex-q{font-size:13.5px;color:var(--text);line-height:1.5;flex:1}
+.ex-toggle{color:var(--text3);font-size:16px;transition:transform .2s;flex-shrink:0;margin-top:4px}
+.example-card.open .ex-toggle{transform:rotate(180deg)}
+.ex-body{display:none;border-top:1px solid var(--border)}
+.example-card.open .ex-body{display:block}
+.ex-explain{background:rgba(74,158,255,.04);border-right:3px solid var(--blue2);padding:.75rem 1rem;margin:.75rem 1rem 0}
+.ex-explain p{color:var(--text2);font-size:13px;line-height:1.6}
+.ex-explain p strong{color:var(--text);font-weight:600}
+
+/* CODE BLOCK */
+.code-block{margin:.75rem 1rem 1rem;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.code-hdr{background:var(--bg4);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600;letter-spacing:.5px}
+.copy-btn{background:transparent;border:none;color:var(--text2);cursor:pointer;font-size:11px;font-family:var(--font);padding:2px 8px;border-radius:4px;transition:all .15s}
+.copy-btn:hover{background:var(--border);color:var(--text)}
+.copy-btn.ok{color:var(--green)}
+pre{background:var(--bg);padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+/* SYNTAX HIGHLIGHT */
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.num{color:#79c0ff}
+.cmt{color:#4a6080;font-style:italic}.tbl{color:#7ee787}.col{color:#e6edf3}.op{color:#ffa657}
+
+/* TAGS */
+.tag{display:inline-flex;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:6px;letter-spacing:.3px}
+.tag-b{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.tag-m{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.25)}
+.tag-a{background:rgba(210,168,255,.1);color:var(--purple);border:1px solid rgba(210,168,255,.25)}
+
+.chapter{display:none}
+.chapter.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">📚 חומר לימוד SQL</div>
+  <div class="topnav-right">
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="main-content" id="mainContent">
+    <!-- chapters injected by JS -->
+  </div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section">פרקים</div>
+  </div>
+</div>
+
+<script>
+const chapters = [
+{num:1,icon:"📗",title:"שיעור 1 — SELECT, מחרוזות, חישובים, ORDER BY",desc:"החומר המלא של השיעור הראשון: שליפת נתונים, DISTINCT, פונקציות טקסט, חישובים מתמטיים ומיון תוצאות.",
+syntax:"SELECT col1, col2 FROM table;\nSELECT DISTINCT col FROM table;\nSELECT LEFT(col,3), ROUND(price*1.17,2) FROM table;\nORDER BY col DESC LIMIT 5 OFFSET 10;",
+concepts:[
+{label:"חלק 1 — SELECT & FROM",text:"<strong>SELECT *</strong> = כל העמודות. <strong>SELECT col1, col2</strong> = עמודות ספציפיות. <strong>AS</strong> = שם תצוגה (Alias) לעמודה."},
+{label:"חלק 2 — DISTINCT ומחרוזות",text:"<strong>DISTINCT</strong> = מסיר כפילויות. <strong>LEFT/RIGHT(col,N)</strong> = N תווים. <strong>SUBSTRING(col,start,len)</strong> = חילוץ. <strong>TRIM/REPLACE/UPPER/LOWER</strong> לניקוי ועיצוב."},
+{label:"חלק 3 — חישובים מתמטיים",text:"<strong>+ - * /</strong> על עמודות. <strong>ROUND(val,2)</strong> = עיגול. <strong>MOD(val,12)</strong> = שארית. <strong>ABS(val)</strong> = ערך מוחלט."},
+{label:"חלק 4 — ORDER BY, LIMIT, OFFSET",text:"<strong>ORDER BY col DESC</strong> = יורד. <strong>LIMIT 5</strong> = 5 שורות. <strong>OFFSET 10</strong> = דלג 10. ניתן למיין לפי פונקציות כמו <strong>CHAR_LENGTH()</strong>."},
+],
+sections:[
+{label:"📌 חלק 1: SELECT & FROM",examples:[
+{title:"דוגמה 1 — שליפת כל העמודות מטבלת מוצרים",tag:"b",
+explain:"כוכבית (*) שולפת את כל העמודות. מצוין לסקירה ראשונית — בפרודקשן עדיף לציין עמודות ספציפיות.",
+code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 2 — שליפת עמודה בודדת: שמות חברות לקוחות",tag:"b",
+explain:"שלוף רק את עמודת company. פחות עומס על השרת ויותר קריא.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span> <span class="kw">FROM</span> <span class="tbl">customers</span>;`},
+{title:"דוגמה 3 — מספר עמודות: שם, משפחה ותפקיד עובדים",tag:"b",
+explain:"מפרידים עמודות בפסיק. הסדר שכותבים = סדר שמוצג בתוצאה.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>, <span class="col">job_title</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>;`},
+{title:"דוגמה 4 — AS (Alias): שם חליפי לעמודה",tag:"b",
+explain:"AS נותן שם תצוגה. לא משנה את הטבלה! שם עם רווחים → בגרשיים בודדות.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span> <span class="kw">AS</span> <span class="str">'שם המוצר'</span>, <span class="col">list_price</span> <span class="kw">AS</span> <span class="str">'מחיר'</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 5 — שליפת שדות נבחרים מהזמנות",tag:"b",
+explain:"מטבלת orders: מזהה הזמנה, תאריך, ועיר משלוח — בדיוק מה שצריך.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>, <span class="col">ship_city</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+]},
+{label:"📌 חלק 2: DISTINCT ופונקציות טקסט",examples:[
+{title:"דוגמה 1 — DISTINCT: מדינות ייחודיות",tag:"b",
+explain:"DISTINCT מסיר כפילויות. גם אם יש 100 לקוחות מ-USA — USA יופיע פעם אחת.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">country_region</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>;`},
+{title:"דוגמה 2 — LEFT ו-RIGHT: קידומת ולחתימת טלפון",tag:"b",
+explain:"LEFT(col,3) = 3 תווים ראשונים. RIGHT(col,4) = 4 אחרונים. שימושי לקודים מקוצרים.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">LEFT</span>(<span class="col">company</span>, <span class="num">3</span>) <span class="kw">AS</span> <span class="str">comp_prefix</span>,\n       <span class="col">business_phone</span>, <span class="fn">RIGHT</span>(<span class="col">business_phone</span>, <span class="num">4</span>) <span class="kw">AS</span> <span class="str">phone_suffix</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">business_phone</span> <span class="kw">IS NOT NULL</span>;`},
+{title:"דוגמה 3 — SUBSTRING: חילוץ ממיקום ספציפי",tag:"b",
+explain:"SUBSTRING(col, 2, 5) = 5 תווים החל מהתו ה-2. מיקום מתחיל מ-1.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">SUBSTRING</span>(<span class="col">product_name</span>, <span class="num">2</span>, <span class="num">5</span>) <span class="kw">AS</span> <span class="str">middle_text</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 4 — TRIM, LTRIM, RTRIM: ניקוי רווחים",tag:"b",
+explain:"LTRIM = רווחים משמאל. RTRIM = ימין. TRIM = שני הצדדים. קריטי לניקוי נתונים שהוזנו ידנית.",
+code:`<span class="kw">SELECT</span>\n  <span class="fn">LTRIM</span>(<span class="str">'   LeftSpace'</span>) <span class="kw">AS</span> <span class="str">l_trimmed</span>,\n  <span class="fn">RTRIM</span>(<span class="str">'RightSpace   '</span>) <span class="kw">AS</span> <span class="str">r_trimmed</span>,\n  <span class="fn">TRIM</span>(<span class="str">'   BothSides   '</span>) <span class="kw">AS</span> <span class="str">full_trimmed</span>;`},
+{title:"דוגמה 5 — REPLACE ו-UPPER: החלפה ותקינה",tag:"m",
+explain:"REPLACE(col,'UK','United Kingdom') מחליף טקסט. UPPER() הופך לאותיות גדולות.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">company_caps</span>,\n       <span class="fn">REPLACE</span>(<span class="col">country_region</span>, <span class="str">'UK'</span>, <span class="str">'United Kingdom'</span>) <span class="kw">AS</span> <span class="str">country</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'UK'</span>;`},
+]},
+{label:"📌 חלק 3: חישובים מתמטיים",examples:[
+{title:"דוגמה 1 — רווח ליחידה: מחיר פחות עלות",tag:"b",
+explain:"SQL מחשב בזמן אמת — הטבלה לא משתנה. list_price - standard_cost = רווח גולמי.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>, <span class="col">standard_cost</span>,\n       (<span class="col">list_price</span> <span class="op">-</span> <span class="col">standard_cost</span>) <span class="kw">AS</span> <span class="str">unit_profit</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 2 — ערך מלאי כולל: מחיר × כמות יעד",tag:"b",
+explain:"כפל בין שתי עמודות מחשב את שווי המלאי הכולל לכל מוצר.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       (<span class="col">list_price</span> <span class="op">*</span> <span class="col">target_level</span>) <span class="kw">AS</span> <span class="str">total_stock_value</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 3 — ROUND: מחיר עם מס 17%, 2 ספרות",tag:"b",
+explain:"list_price * 1.17 מוסיף 17%. ROUND(..., 2) מעגל לשתי ספרות אחרי הנקודה.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">1.17</span>, <span class="num">2</span>) <span class="kw">AS</span> <span class="str">price_with_tax</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 4 — MOD: שארית חלוקה למארזים",tag:"m",
+explain:"MOD(target_level, 12) = כמה מוצרים נשארים מחוץ למארז שלם של 12 יחידות.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">target_level</span>,\n       <span class="fn">MOD</span>(<span class="col">target_level</span>, <span class="num">12</span>) <span class="kw">AS</span> <span class="str">loose_items</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 5 — ABS: הפרש מוחלט בין מלאי ליעד",tag:"m",
+explain:"ABS מבטיח תוצאה חיובית תמיד. לא משנה מי גדול — ההפרש תמיד חיובי.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ABS</span>(<span class="col">target_level</span> <span class="op">-</span> <span class="col">reorder_level</span>) <span class="kw">AS</span> <span class="str">stock_gap</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+]},
+{label:"📌 חלק 4: ORDER BY, LIMIT, OFFSET",examples:[
+{title:"דוגמה 1 — ORDER BY DESC: מוצרים מהיקר לזול",tag:"b",
+explain:"DESC = סדר יורד. list_price DESC = מהמחיר הגבוה לנמוך.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>;`},
+{title:"דוגמה 2 — מיון כפול: מדינה ואז עיר",tag:"b",
+explain:"שתי עמודות ב-ORDER BY: קודם מדינה, בשוויון — עיר. ASC הוא ברירת המחדל.",
+code:`<span class="kw">SELECT</span> <span class="col">country_region</span>, <span class="col">city</span>, <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">country_region</span>, <span class="col">city</span>;`},
+{title:"דוגמה 3 — LIMIT: 5 המוצרים היקרים ביותר",tag:"b",
+explain:"ORDER BY DESC ממיין מהיקר. LIMIT 5 לוקח רק את 5 הראשונים.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{title:"דוגמה 4 — מיון לפי אורך שם משפחה (CHAR_LENGTH)",tag:"m",
+explain:"CHAR_LENGTH מחזיר מספר תווים. ניתן למיין לפי כל ביטוי — לא רק עמודה.",
+code:`<span class="kw">SELECT</span> <span class="col">last_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="fn">CHAR_LENGTH</span>(<span class="col">last_name</span>) <span class="kw">DESC</span>;`},
+{title:"דוגמה 5 — OFFSET: דלג על 10, הצג 5 הבאים",tag:"m",
+explain:"LIMIT 5 OFFSET 10 = דף שני של תוצאות. OFFSET קובע מאיפה להתחיל לספור.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">id</span>\n<span class="kw">LIMIT</span> <span class="num">5</span> <span class="kw">OFFSET</span> <span class="num">10</span>;`},
+]},
+],
+examples:[]},
+
+{num:5,icon:"📅",title:"תאריכים",desc:"חילוץ חלקים, עיצוב, חישוב הפרשים — עבודה מלאה עם תאריכים.",
+syntax:"YEAR(date) / MONTH(date) / DAY(date)\nDATE_FORMAT(date, '%d/%m/%Y')\nDATEDIFF(date2, date1) -- מספר ימים\nDATE_ADD(date, INTERVAL 30 DAY)",
+concepts:[
+{label:"חילוץ חלקים",text:"<strong>YEAR() MONTH() DAY()</strong> — שולפים חלק מהתאריך. שימוש ב-WHERE לסינון תקופות."},
+{label:"DATE_FORMAT",text:"<strong>%d</strong>=יום <strong>%m</strong>=חודש <strong>%Y</strong>=שנה 4 ספ' <strong>%M</strong>=שם חודש <strong>%H:%i</strong>=שעה:דקה"},
+{label:"DATEDIFF",text:"<strong>DATEDIFF(מאוחר, מוקדם)</strong> = ימים. סדר חשוב! הפוך → מספר שלילי."},
+{label:"DATE_ADD / DATE_SUB",text:"<strong>DATE_ADD(date, INTERVAL 30 DAY)</strong> מוסיף 30 ימים. DATE_SUB מחסיר."},
+],
+examples:[
+{title:"דוגמה 1 — YEAR: שנת ביצוע כל הזמנה",tag:"b",
+explain:"YEAR() מחלץ את השנה מהתאריך. ניתן לשלב ב-WHERE לסינון שנה ספציפית.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_year</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"דוגמה 2 — MONTH: חודש ביצוע",tag:"b",
+explain:"MONTH() מחזיר מספר 1-12. ניתן לסנן לפי חודש בכל שנה.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_month</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"דוגמה 3 — DATE_FORMAT: פורמט ישראלי",tag:"b",
+explain:"'%d/%m/%Y' = DD/MM/YYYY. ניתן ליצור כל פורמט תצוגה הרצוי.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">il_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"דוגמה 4 — DATEDIFF: ימי משלוח",tag:"m",
+explain:"DATEDIFF(shipped, ordered) = מספר הימים מהזמנה עד משלוח. חשוב: הסדר משנה!",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">shipping_days</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"דוגמה 5 — DATE_ADD: שוטף + 30",tag:"m",
+explain:"DATE_ADD מוסיף INTERVAL. ניתן לציין DAY, MONTH, YEAR, HOUR ועוד.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+]},
+
+{num:6,icon:"🔎",title:"WHERE — סינון",desc:"סינון שורות לפי תנאים. הכלי הכי שימושי בעבודה יומיומית.",
+syntax:"WHERE עמודה = 'ערך' AND/OR ...\nIN ('a','b','c')\nBETWEEN x AND y\nLIKE '%pattern%'\nIS NULL / IS NOT NULL",
+concepts:[
+{label:"AND / OR / NOT",text:"<strong>AND</strong> = שניהם. <strong>OR</strong> = לפחות אחד. סוגריים לשליטה בעדיפות: <strong>WHERE (a OR b) AND c</strong>"},
+{label:"IN",text:"<strong>IN ('London','Paris')</strong> = קיצור ל-OR מרובה. יעיל וקריא יותר."},
+{label:"BETWEEN",text:"<strong>BETWEEN 20 AND 50</strong> = כולל את 20 ו-50! שקול ל: >= 20 AND <= 50"},
+{label:"LIKE",text:"<strong>%</strong> = כל מספר תווים. <strong>_</strong> = תו בודד. 'j%' מתחיל ב-j. '%@gmail%' מכיל gmail."},
+],
+examples:[
+{title:"דוגמה 1 — WHERE בסיסי: מחיר מעל 50",tag:"b",
+explain:"תנאי השוואה פשוט. ניתן: > < >= <= = != (שונה).",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
+{title:"דוגמה 2 — AND: מדינה + עיר",tag:"b",
+explain:"AND = שני התנאים חייבים להתקיים. לקוח חייב להיות גם מ-USA וגם מ-NY.",
+code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>\n  <span class="kw">AND</span> <span class="col">city</span> = <span class="str">'New York'</span>;`},
+{title:"דוגמה 3 — IN: מספר ערים",tag:"b",
+explain:"IN = קיצור ל-OR. נקרא ומתוחזק הרבה יותר טוב.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">suppliers</span>\n<span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'Tokyo'</span>, <span class="str">'London'</span>, <span class="str">'New York'</span>);`},
+{title:"דוגמה 4 — LIKE: חיפוש דפוס",tag:"m",
+explain:"% = כל מספר תווים. כאן: אימיילים שמסתיימים בדומיין ספציפי.",
+code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders.com'</span>;`},
+{title:"דוגמה 5 — IS NULL: הזמנות שלא נשלחו",tag:"m",
+explain:"NULL = ערך חסר. חייבים IS NULL ולא = NULL! שגיאה קלאסית של מתחילים.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;`},
+]},
+
+{num:7,icon:"📦",title:"GROUP BY & צבירה",desc:"קיבוץ נתונים וחישוב סטטיסטיקות. כולל HAVING, ROLLUP ו-UNION.",
+syntax:"SELECT עמודה, COUNT(*) / SUM() / AVG()\nFROM טבלה\nGROUP BY עמודה\nHAVING COUNT(*) > 5;",
+concepts:[
+{label:"פונקציות צבירה",text:"<strong>COUNT(*)</strong> ספירה | <strong>SUM()</strong> סכום | <strong>AVG()</strong> ממוצע | <strong>MIN/MAX()</strong> קיצוני"},
+{label:"כלל GROUP BY",text:"כל עמודה ב-SELECT שאינה צבירה <strong>חייבת</strong> להיות ב-GROUP BY. אחרת — שגיאה."},
+{label:"WHERE לעומת HAVING",text:"<strong>WHERE</strong> = לפני קיבוץ (על שורות). <strong>HAVING</strong> = אחרי קיבוץ (על קבוצות). לא ניתן צבירה ב-WHERE."},
+{label:"ROLLUP",text:"<strong>GROUP BY col WITH ROLLUP</strong> — מוסיף שורת סיכום כולל (NULL בעמודת הקיבוץ)."},
+],
+examples:[
+{title:"דוגמה 1 — COUNT: מוצרים בכל קטגוריה",tag:"b",
+explain:"GROUP BY מקבץ, COUNT(*) סופר כל שורה בקבוצה.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
+{title:"דוגמה 2 — SUM: דמי משלוח לפי חברה",tag:"b",
+explain:"SUM מסכם את shipping_fee לכל shipper_id נפרד.",
+code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
+{title:"דוגמה 3 — WHERE לפני GROUP BY",tag:"m",
+explain:"WHERE מסנן קודם (לפני קיבוץ). כאן: רק מוצרים מעל 20, ואז ממוצע לספק.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
+{title:"דוגמה 4 — HAVING: סינון אחרי קיבוץ",tag:"m",
+explain:"HAVING פועל על תוצאת הקיבוץ. כאן: רק ערים עם יותר מ-2 לקוחות.",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">2</span>;`},
+{title:"דוגמה 5 — ROLLUP: עם סיכום כולל",tag:"a",
+explain:"WITH ROLLUP מוסיף שורה עם NULL ו-סה\"כ. COALESCE מחליף NULL בטקסט.",
+code:`<span class="kw">SELECT</span>\n  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- סה"כ ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,\n  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;`},
+]},
+
+{num:8,icon:"🔗",title:"JOIN",desc:"חיבור טבלאות — הכלי החשוב ביותר ב-SQL לעבודה אמיתית עם מסדי נתונים.",
+syntax:"FROM טבלה1 a\nINNER JOIN טבלה2 b ON a.id = b.fk\nLEFT JOIN טבלה3 c ON b.id = c.fk",
+concepts:[
+{label:"INNER JOIN",text:"מחזיר רק שורות עם <strong>התאמה בשתי הטבלאות</strong>. ללא התאמה — השורה נעלמת."},
+{label:"LEFT JOIN",text:"מחזיר <strong>כל שורות הטבלה השמאלית</strong> + התאמות. ללא התאמה → NULL."},
+{label:"ON — תנאי חיבור",text:"<strong>ON a.id = b.customer_id</strong> — מחבר מפתח ראשי (PK) לזר (FK). חובה!"},
+{label:"Aliases לטבלאות",text:"<strong>FROM orders o JOIN customers c</strong> — o.id במקום orders.id. קצר וברור יותר."},
+],
+examples:[
+{title:"דוגמה 1 — INNER JOIN: הזמנות עם שם לקוח",tag:"m",
+explain:"orders מכיל customer_id. JOIN מביא את השם מ-customers.",
+code:`<span class="kw">SELECT</span> <span class="col">o.id</span>, <span class="col">o.order_date</span>, <span class="col">c.company</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span> <span class="col">o</span>\n<span class="kw">INNER JOIN</span> <span class="tbl">customers</span> <span class="col">c</span> <span class="kw">ON</span> <span class="col">o.customer_id</span> = <span class="col">c.id</span>;`},
+{title:"דוגמה 2 — JOIN: פרטי הזמנה עם שם מוצר",tag:"m",
+explain:"order_details מכיל product_id. JOIN ל-products מביא את השם.",
+code:`<span class="kw">SELECT</span> <span class="col">od.order_id</span>, <span class="col">p.product_name</span>, <span class="col">od.quantity</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span> <span class="col">od</span>\n<span class="kw">INNER JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>;`},
+{title:"דוגמה 3 — LEFT JOIN: לקוחות גם ללא הזמנות",tag:"m",
+explain:"LEFT JOIN שומר את כל הלקוחות. מי שאין לו הזמנות — יקבל NULL בעמודות orders.",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="col">o.id</span> <span class="kw">AS</span> <span class="str">order_id</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>;`},
+{title:"דוגמה 4 — 4 טבלאות: דוח מכירות מלא",tag:"a",
+explain:"כל JOIN מוסיף שכבת מידע. customers → orders → order_details → products.",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="col">o.order_date</span>, <span class="col">p.product_name</span>, <span class="col">od.quantity</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>;`},
+{title:"דוגמה 5 — JOIN + GROUP BY: סך מכירות ללקוח",tag:"a",
+explain:"שילוב JOIN וGROUP BY: מחברים ואז מקבצים לפי לקוח ומסכמים.",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>,\n       <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">total_revenue</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">GROUP BY</span> <span class="col">c.company</span>\n<span class="kw">ORDER BY</span> <span class="str">total_revenue</span> <span class="kw">DESC</span>;`},
+]},
+
+{num:9,icon:"🧠",title:"Subqueries, CASE, CTE",desc:"שאילתות מתקדמות — לוגיקה מורכבת בצורה קריאה.",
+syntax:"WHERE col > (SELECT AVG(col) FROM ...)\nCASE WHEN ... THEN ... ELSE ... END\nWITH cte AS (SELECT ...) SELECT ...",
+concepts:[
+{label:"Subquery",text:"שאילתה בתוך שאילתה. ב-WHERE, ב-FROM (טבלה זמנית), או ב-SELECT (עמודה מחושבת)."},
+{label:"EXISTS",text:"<strong>EXISTS (SELECT 1 FROM ... WHERE ...)</strong> = בדיקה בוליאנית. מהיר יותר מ-IN לטבלאות גדולות."},
+{label:"CASE WHEN",text:"<strong>CASE WHEN תנאי THEN ערך ... ELSE ברירת_מחדל END</strong> — כמו if-else. ניתן בכל מקום בשאילתה."},
+{label:"CTE (WITH)",text:"<strong>WITH שם AS (שאילתה)</strong> — טבלה זמנית עם שם. הופך שאילתות ארוכות לקריאות."},
+],
+examples:[
+{title:"דוגמה 1 — Subquery: מוצרים מעל ממוצע",tag:"m",
+explain:"הסוגריים הפנימיים מחשבים ממוצע, ה-WHERE החיצוני משווה אליו.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">FROM</span> <span class="tbl">products</span>);`},
+{title:"דוגמה 2 — EXISTS: לקוחות עם הזמנות",tag:"m",
+explain:"EXISTS בודק האם יש שורה אחת לפחות. SELECT 1 = קיצור יעיל (לא צריך ערך אמיתי).",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">WHERE</span> <span class="kw">EXISTS</span> (\n  <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> <span class="tbl">orders</span> <span class="col">o</span>\n  <span class="kw">WHERE</span> <span class="col">o.customer_id</span> = <span class="col">c.id</span>\n);`},
+{title:"דוגמה 3 — CASE WHEN: קטגוריות מחיר",tag:"m",
+explain:"CASE בודק תנאים בסדר. עוצר בתנאי הראשון שמתקיים. ELSE = ברירת מחדל.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> > <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'יקר'</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'בינוני'</span>\n    <span class="kw">ELSE</span> <span class="str">'זול'</span>\n  <span class="kw">END</span> <span class="kw">AS</span> <span class="str">price_cat</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 4 — CTE: קטגוריות גדולות",tag:"a",
+explain:"WITH מגדיר 'טבלה' בשם CategoryStats. השאילתה הראשית עובדת איתה כאילו היא טבלה אמיתית.",
+code:`<span class="kw">WITH</span> <span class="tbl">CategoryStats</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n  <span class="kw">FROM</span> <span class="tbl">products</span> <span class="kw">GROUP BY</span> <span class="col">category</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">CategoryStats</span>\n<span class="kw">WHERE</span> <span class="col">cnt</span> > <span class="num">5</span>;`},
+]},
+
+{num:10,icon:"🪟",title:"Window Functions",desc:"חישובים מתוחכמים שמשאירים את כל השורות — דירוג, סכום מצטבר, LAG/LEAD.",
+syntax:"RANK() OVER (PARTITION BY col ORDER BY col)\nLAG(col) OVER (PARTITION BY ... ORDER BY ...)\nSUM(col) OVER (ORDER BY col ROWS BETWEEN ...)",
+concepts:[
+{label:"OVER()",text:"עוטפים כל Window Function ב-<strong>OVER(...)</strong>. עם OVER = לא מקמץ שורות!"},
+{label:"PARTITION BY",text:"מחלק לחלונות נפרדים. <strong>PARTITION BY category</strong> = דירוג נפרד לכל קטגוריה."},
+{label:"ROW_NUMBER vs RANK",text:"<strong>ROW_NUMBER</strong> = רציף תמיד | <strong>RANK</strong> = שוויון + פספוס | <strong>DENSE_RANK</strong> = שוויון ללא פספוס"},
+{label:"LAG / LEAD",text:"<strong>LAG(col)</strong> = ערך מהשורה הקודמת. <strong>LEAD(col)</strong> = הבאה. לחישוב שינויים בין תקופות."},
+],
+examples:[
+{title:"דוגמה 1 — ROW_NUMBER: מספור שורות",tag:"m",
+explain:"ROW_NUMBER() נותן מספר סידורי. תמיד ייחודי גם בשוויון ערכים.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">row_num</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 2 — RANK: דירוג בתוך קטגוריה",tag:"a",
+explain:"PARTITION BY category = חלון נפרד לכל קטגוריה. RANK מדרג בתוכה.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>, <span class="col">list_price</span>,\n       <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">category</span> <span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">rank_pos</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"דוגמה 3 — LAG: הזמנה קודמת של לקוח",tag:"a",
+explain:"PARTITION BY customer_id = חלון נפרד לכל לקוח. LAG מחזיר את תאריך ההזמנה הקודמת.",
+code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="col">order_date</span>,\n       <span class="fn">LAG</span>(<span class="col">order_date</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n         <span class="kw">ORDER BY</span> <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">prev_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"דוגמה 4 — SUM: סכום מצטבר",tag:"a",
+explain:"SUM() OVER(ORDER BY) = סכום מצטבר. כל שורה מוסיפה את עצמה לסכום הקודם.",
+code:`<span class="kw">SELECT</span> <span class="col">order_date</span>, <span class="col">shipping_fee</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">running_total</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+]},
+
+{num:11,icon:"⚙️",title:"DML, DDL, עסקאות",desc:"שינוי נתונים ומבנה. INSERT, UPDATE, DELETE, TRANSACTION, CREATE, ALTER.",
+syntax:"INSERT INTO טבלה (cols) VALUES (...);\nUPDATE טבלה SET col=val WHERE ...;\nSTART TRANSACTION; ... COMMIT;",
+concepts:[
+{label:"DML — שינוי נתונים",text:"<strong>INSERT</strong> הוספה | <strong>UPDATE</strong> עדכון | <strong>DELETE</strong> מחיקה. תמיד WHERE עם UPDATE/DELETE!"},
+{label:"⚠️ אזהרה!",text:"<strong>UPDATE/DELETE ללא WHERE</strong> = שינוי/מחיקה של כל הטבלה! תמיד SELECT קודם עם אותו WHERE."},
+{label:"TRANSACTION",text:"<strong>START TRANSACTION</strong> מתחיל | <strong>COMMIT</strong> מאשר | <strong>ROLLBACK</strong> מבטל הכל. כל הפעולות יחד."},
+{label:"DDL — שינוי מבנה",text:"<strong>CREATE TABLE</strong> | <strong>ALTER TABLE ADD/DROP</strong> | <strong>DROP TABLE</strong>. DDL לא ניתן ל-ROLLBACK!"},
+],
+examples:[
+{title:"דוגמה 1 — INSERT: הוספת לקוח",tag:"b",
+explain:"ציין עמודות ואז ערכים באותו סדר. ניתן לדלג על עמודות עם ברירת מחדל.",
+code:`<span class="kw">INSERT INTO</span> <span class="tbl">customers</span> (<span class="col">company</span>, <span class="col">last_name</span>, <span class="col">first_name</span>, <span class="col">city</span>)\n<span class="kw">VALUES</span> (<span class="str">'Tech Ltd'</span>, <span class="str">'Cohen'</span>, <span class="str">'Yossi'</span>, <span class="str">'Tel Aviv'</span>);`},
+{title:"דוגמה 2 — UPDATE עם WHERE",tag:"b",
+explain:"WHERE קריטי! ללא WHERE — כל המחירים יתעדכנו. תמיד SELECT קודם לבדיקה.",
+code:`<span class="kw">UPDATE</span> <span class="tbl">products</span>\n<span class="kw">SET</span> <span class="col">list_price</span> = <span class="num">20</span>\n<span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">1</span>;`},
+{title:"דוגמה 3 — TRANSACTION: עדכון בטוח",tag:"m",
+explain:"הכל בתוך TRANSACTION. אם משהו נכשל — ROLLBACK מבטל הכל. COMMIT שומר.",
+code:`<span class="kw">START TRANSACTION</span>;\n<span class="kw">UPDATE</span> <span class="tbl">products</span> <span class="kw">SET</span> <span class="col">list_price</span> = <span class="col">list_price</span> <span class="op">*</span> <span class="num">1.1</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">5</span>;\n<span class="kw">INSERT INTO</span> <span class="tbl">orders</span> (<span class="col">id</span>, <span class="col">customer_id</span>) <span class="kw">VALUES</span> (<span class="num">9000</span>, <span class="num">4</span>);\n<span class="kw">COMMIT</span>; <span class="cmt">-- או ROLLBACK לביטול</span>`},
+]},
+];
+
+function buildSidebar(){
+const sb=document.getElementById('sidebar');
+chapters.forEach((ch,i)=>{
+const count=ch.sections ? ch.sections.reduce((s,sec)=>s+sec.examples.length,0) : ch.examples.length;
+sb.innerHTML+=`<div class="sidebar-item${i===0?' active':''}" onclick="showCh(${i})" id="si-${i}">
+<span class="sidebar-num">${ch.num}</span>${ch.icon} ${ch.title}</div>`;
+});
+}
+
+function showCh(idx){
+document.querySelectorAll('.chapter').forEach(c=>c.classList.remove('active'));
+document.querySelectorAll('.sidebar-item').forEach(s=>s.classList.remove('active'));
+document.getElementById('ch-'+idx).classList.add('active');
+document.getElementById('si-'+idx).classList.add('active');
+document.querySelector('.main-content').scrollTop=0;
+window.scrollTo(0,0);
+}
+
+function tagHTML(t){
+if(t==='b')return`<span class="tag tag-b">בסיסי</span>`;
+if(t==='m')return`<span class="tag tag-m">בינוני</span>`;
+return`<span class="tag tag-a">מתקדם</span>`;
+}
+
+function buildChapters(){
+const mc=document.getElementById('mainContent');
+chapters.forEach((ch,ci)=>{
+let h=`<div class="chapter${ci===0?' active':''}" id="ch-${ci}">`;
+h+=`<div class="ch-header"><div class="ch-meta">פרק ${ch.num} / 11</div>
+<h1 class="ch-title">${ch.icon} ${ch.title}</h1>
+<p class="ch-desc">${ch.desc}</p></div>`;
+h+=`<div class="syntax-box">${ch.syntax.replace(/\n/g,'<br>')}</div>`;
+h+=`<div class="sec-label">מושגים מרכזיים</div><div class="concepts">`;
+ch.concepts.forEach(c=>{
+h+=`<div class="concept"><div class="concept-label">${c.label}</div><div class="concept-text">${c.text}</div></div>`;
+});
+h+='</div><hr class="sec-div">';
+// Support sections (multi-part chapters like lesson 1) OR flat examples
+if(ch.sections && ch.sections.length){
+let globalIdx=0;
+ch.sections.forEach((sec,si)=>{
+h+=`<div class="sec-label" style="margin-top:${si>0?'2rem':'0'}">${sec.label} <span style="color:var(--text3);font-size:11px;font-weight:400">(${sec.examples.length} דוגמאות)</span></div>`;
+sec.examples.forEach((ex,ei)=>{
+const id=`${ci}-${globalIdx}`;
+h+=`<div class="example-card" id="ex-${id}">
+<div class="ex-head" onclick="toggleEx('${id}')">
+<span class="ex-num">${globalIdx+1}</span>
+<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>
+<span class="ex-toggle">▾</span></div>
+<div class="ex-body">
+<div class="ex-explain"><p>${ex.explain}</p></div>
+<div class="code-block"><div class="code-hdr">
+<span class="code-lang">SQL</span>
+<button class="copy-btn" onclick="copyCode('${id}',this)">📋 העתק</button></div>
+<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
+globalIdx++;
+});
+});
+} else {
+const total=ch.examples.length;
+h+=`<div class="sec-label">דוגמאות קוד (${total})</div>`;
+ch.examples.forEach((ex,ei)=>{
+const id=`${ci}-${ei}`;
+h+=`<div class="example-card" id="ex-${id}">
+<div class="ex-head" onclick="toggleEx('${id}')">
+<span class="ex-num">${ei+1}</span>
+<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>
+<span class="ex-toggle">▾</span></div>
+<div class="ex-body">
+<div class="ex-explain"><p>${ex.explain}</p></div>
+<div class="code-block"><div class="code-hdr">
+<span class="code-lang">SQL</span>
+<button class="copy-btn" onclick="copyCode('${id}',this)">📋 העתק</button></div>
+<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
+});
+}
+h+='</div>';
+mc.innerHTML+=h;
+});
+}
+
+function toggleEx(id){
+document.getElementById(`ex-${id}`).classList.toggle('open');
+}
+function copyCode(id,btn){
+const text=document.getElementById(`code-${id}`).innerText;
+navigator.clipboard.writeText(text).then(()=>{
+btn.textContent='✅ הועתק';btn.classList.add('ok');
+setTimeout(()=>{btn.textContent='📋 העתק';btn.classList.remove('ok')},2000);
+});
+}
+
+buildSidebar();
+buildChapters();
+</script>
+</body>
+</html>

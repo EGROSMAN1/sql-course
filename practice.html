@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תרגולים SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-right{margin-right:auto}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 16px;font-size:12px;font-family:var(--mono);color:var(--yellow);font-weight:700}
+
+/* LESSON TABS */
+.lesson-tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;gap:0;overflow-x:auto}
+.lesson-tab{padding:1rem 1.5rem;font-size:14px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.lesson-tab:hover{color:var(--text2)}
+.lesson-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.lesson-badge{font-size:10px;background:var(--bg4);padding:2px 8px;border-radius:10px;font-family:var(--mono)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* LESSON HEADER */
+.lesson-header{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.lesson-header::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:linear-gradient(to bottom,var(--cyan),var(--blue2))}
+.lesson-title{font-size:1.4rem;font-weight:900;margin-bottom:.4rem}
+.lesson-desc{color:var(--text2);font-size:14px;line-height:1.7}
+.lesson-topics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.topic-tag{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:3px 12px;border-radius:12px;font-size:11px;font-family:var(--mono);font-weight:600}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-info{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:.5rem}
+.progress-track{background:var(--bg3);border-radius:4px;height:6px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue2),var(--cyan));border-radius:4px;transition:width .4s ease}
+
+/* DIFFICULTY FILTER */
+.filter-row{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:12px;color:var(--text3);font-weight:600}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.filter-btn:hover{border-color:var(--border2)}
+.filter-btn.active-f{background:var(--blue3);border-color:var(--blue);color:var(--blue)}
+.f-b.active-f{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.4);color:var(--green)}
+.f-m.active-f{background:rgba(255,140,66,.1);border-color:rgba(255,140,66,.4);color:var(--orange)}
+.f-a.active-f{background:rgba(210,168,255,.1);border-color:rgba(210,168,255,.4);color:var(--purple)}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:1rem;overflow:hidden;transition:border-color .2s}
+.q-card.solved{border-color:var(--green2)}
+.q-card.hidden-q{display:none}
+.q-head{padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:.85rem;cursor:pointer}
+.q-head:hover{background:rgba(255,255,255,.02)}
+.q-num{width:28px;height:28px;border-radius:8px;background:var(--bg4);color:var(--text3);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.q-card.solved .q-num{background:var(--green2);color:#fff}
+.q-text{flex:1;font-size:14px;line-height:1.6;color:var(--text)}
+.q-right{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+.diff-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.db-b{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.db-m{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.25)}
+.db-a{background:rgba(210,168,255,.1);color:var(--purple);border:1px solid rgba(210,168,255,.25)}
+.check-icon{font-size:16px;opacity:0;transition:opacity .2s}
+.q-card.solved .check-icon{opacity:1}
+
+/* ANSWER REVEAL */
+.q-body{display:none;border-top:1px solid var(--border)}
+.q-card.open .q-body{display:block}
+.hint-box{background:rgba(74,158,255,.04);border-right:3px solid var(--blue2);padding:.75rem 1rem;margin:.75rem 1rem 0}
+.hint-box p{color:var(--text2);font-size:13px;line-height:1.6}
+.hint-box p strong{color:var(--text);font-weight:600}
+.code-block{margin:.75rem 1rem;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.code-hdr{background:var(--bg4);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600}
+.code-actions{display:flex;gap:.5rem}
+.copy-btn{background:transparent;border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:11px;font-family:var(--font);padding:3px 10px;border-radius:4px;transition:all .15s}
+.copy-btn:hover{border-color:var(--border2);color:var(--text)}
+.copy-btn.ok{color:var(--green);border-color:var(--green2)}
+.mark-btn{background:var(--green2);border:1px solid var(--green);color:#fff;cursor:pointer;font-size:11px;font-family:var(--font);padding:3px 10px;border-radius:4px;font-weight:700;transition:all .15s}
+.mark-btn:hover{background:var(--green)}
+.q-card.solved .mark-btn{background:var(--bg4);border-color:var(--border);color:var(--text3)}
+pre{background:var(--bg);padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+/* SYNTAX COLORS */
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.num{color:#79c0ff}
+.cmt{color:#4a6080;font-style:italic}.tbl{color:#7ee787}.col{color:#e6edf3}.op{color:#ffa657}
+
+/* LESSON PANE */
+.lesson-pane{display:none}
+.lesson-pane.active{display:block}
+
+/* FINISH BANNER */
+.finish-banner{background:linear-gradient(135deg,rgba(0,230,118,.08),rgba(0,168,84,.05));border:1px solid var(--green2);border-radius:14px;padding:2rem;text-align:center;margin-top:2rem;display:none}
+.finish-banner.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.4rem;font-weight:900;color:var(--green);margin-bottom:.5rem}
+.finish-sub{color:var(--text2);font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">✏️ תרגולים</div>
+  <div class="topnav-right">
+    <div class="score-badge" id="globalScore">✅ 0 / 70</div>
+  </div>
+</div>
+
+<!-- LESSON TABS -->
+<div class="lesson-tabs">
+  <div class="lesson-tab active" onclick="showLesson(0)" id="tab-0">
+    <span>📗</span> תרגול שיעור 1
+    <span class="lesson-badge" id="badge-0">30 שאלות</span>
+  </div>
+  <div class="lesson-tab" onclick="showLesson(1)" id="tab-1">
+    <span>📘</span> תרגול שיעור 2
+    <span class="lesson-badge" id="badge-1">20 שאלות</span>
+  </div>
+  <div class="lesson-tab" onclick="showLesson(2)" id="tab-2">
+    <span>📙</span> תרגול שיעור 3
+    <span class="lesson-badge" id="badge-2">20 שאלות</span>
+  </div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const lessons=[
+{
+title:"תרגול שיעור 1",
+desc:"פונקציות טקסט, מספרים, מיון ותאריכים (חלק א') + WHERE עם שילובי פונקציות (חלק ב') — 30 שאלות.",
+topics:["UPPER","LENGTH","ROUND","DISTINCT","LIMIT","YEAR","MONTH","DATE_FORMAT","DATEDIFF","DATE_ADD","WHERE","LOWER","<>"],
+questions:[
+// רמה 1 — חימום
+{q:"הצג את כל שמות המוצרים (product_name) באותיות גדולות מתוך products.",diff:"b",
+hint:"UPPER() עוטף את שם העמודה. לא משנה מה הוזן — הפלט יהיה אותיות גדולות.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">product_name</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"שלוף את האורך (LENGTH) של שם המשפחה (last_name) של כל עובד מ-employees.",diff:"b",
+hint:"LENGTH() מחזיר מספר — כמה תווים יש במחרוזת. כדאי להציג גם את last_name כדי שיהיה מובן.",
+code:`<span class="kw">SELECT</span> <span class="col">last_name</span>, <span class="fn">LENGTH</span>(<span class="col">last_name</span>)\n<span class="kw">FROM</span> <span class="tbl">employees</span>;`},
+{q:"הצג את המחיר (list_price) של כל המוצרים מעוגל למספר שלם (ROUND) מ-products.",diff:"b",
+hint:"ROUND(עמודה, 0) עגול לאפס ספרות אחרי הנקודה = מספר שלם. ניתן גם ROUND(עמודה) ללא פרמטר שני.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="fn">ROUND</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">rounded_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"שלוף את רשימת הערים (city) הייחודיות מ-customers.",diff:"b",
+hint:"DISTINCT מסיר כפילויות. מציב אחרי SELECT ולפני שם העמודה.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>;`},
+{q:"שלוף את 5 הלקוחות הראשונים מ-customers, ממוינים לפי שם החברה בסדר עולה (A-Z).",diff:"b",
+hint:"ORDER BY company ASC (ASC הוא ברירת המחדל). אחר כך LIMIT 5.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">company</span> <span class="kw">ASC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+// רמה 2 — תאריכים
+{q:"הצג את השנה (YEAR) שבה בוצעה כל הזמנה מ-orders.",diff:"b",
+hint:"YEAR(order_date) מחלץ רק את השנה. מוסיפים גם את id להבנת ההקשר.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_year</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"הצג את החודש (MONTH) שבו בוצעה כל הזמנה מ-orders.",diff:"b",
+hint:"MONTH() מחזיר מספר 1-12. שמים גם id כדי לדעת על איזה הזמנה מדובר.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_month</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"הצג את התאריך והשעה הנוכחיים (NOW) ביחד עם התאריך של היום (CURDATE).",diff:"b",
+hint:"NOW() כולל שעה, CURDATE() רק תאריך. ניתן להפעיל ללא FROM.",
+code:`<span class="kw">SELECT</span> <span class="fn">NOW</span>() <span class="kw">AS</span> <span class="str">current_datetime</span>, <span class="fn">CURDATE</span>() <span class="kw">AS</span> <span class="str">today</span>;`},
+{q:"הצג את תאריך ההזמנה (order_date) בפורמט 'DD/MM/YYYY' עבור כל ההזמנות ב-orders.",diff:"b",
+hint:"DATE_FORMAT(עמודה, '%d/%m/%Y'). %d=יום, %m=חודש, %Y=שנה 4 ספרות.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">il_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"הצג את 3 ההזמנות החדשות ביותר (לפי order_date) מ-orders.",diff:"b",
+hint:"ORDER BY order_date DESC = מהחדש לישן. אחר כך LIMIT 3.",
+code:`<span class="kw">SELECT</span> *\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">ORDER BY</span> <span class="col">order_date</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">3</span>;`},
+// רמה 3 — שילובים
+{q:"שלוף שמות מוצרים ומחירם לאחר הנחה של 10%, עגל ל-2 ספרות. (products)",diff:"m",
+hint:"הנחה 10% = כפל ב-0.9. ROUND(list_price * 0.9, 2) לשתי ספרות.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">0.9</span>, <span class="num">2</span>) <span class="kw">AS</span> <span class="str">discounted_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"הצג תפקידים (job_title) ייחודיים מ-employees, ממוינים לפי סדר ה-ABC.",diff:"m",
+hint:"DISTINCT מסיר כפילויות, ORDER BY job_title ASC ממיין א\"ב.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">job_title</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="col">job_title</span> <span class="kw">ASC</span>;`},
+{q:"שלוף שם פרטי של עובדים באותיות קטנות (LOWER), ממוין לפי אורך השם (מקצר לארוך). (employees)",diff:"m",
+hint:"LOWER() לאותיות קטנות. ORDER BY LENGTH(first_name) ASC = מהקצר לארוך.",
+code:`<span class="kw">SELECT</span> <span class="fn">LOWER</span>(<span class="col">first_name</span>) <span class="kw">AS</span> <span class="str">lower_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="fn">LENGTH</span>(<span class="col">first_name</span>) <span class="kw">ASC</span>;`},
+{q:"חישוב ימי משלוח: DATEDIFF בין shipped_date ל-order_date עבור כל הזמנה. (orders)",diff:"m",
+hint:"DATEDIFF(מאוחר, מוקדם). כאן: DATEDIFF(shipped_date, order_date). חשוב שהסדר נכון!",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">shipping_days</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"תחזית תשלום: הצג תאריך הזמנה + 30 יום (DATE_ADD) עבור כל הזמנה. (orders)",diff:"m",
+hint:"DATE_ADD(order_date, INTERVAL 30 DAY). כתיב מדויק חשוב!",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+// רמה 4 — מתקדם
+{q:"מצא 5 המשלוחים האיטיים ביותר: ימי משלוח מהגבוה לנמוך, הגבל ל-5. (orders)",diff:"a",
+hint:"DATEDIFF(shipped_date, order_date) ואז ORDER BY DESC LIMIT 5. לסנן NULL אם צריך.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">days_diff</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">ORDER BY</span> <span class="str">days_diff</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"מוצרים עם השמות הארוכים ביותר: שם + אורך, מיון יורד, הגבל ל-10. (products)",diff:"a",
+hint:"LENGTH(product_name) בשתי מקומות — ב-SELECT וב-ORDER BY. ניתן לכתוב Alias וב-ORDER BY לשים את ה-Alias.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">LENGTH</span>(<span class="col">product_name</span>) <span class="kw">AS</span> <span class="str">name_length</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="fn">LENGTH</span>(<span class="col">product_name</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">10</span>;`},
+{q:"הצג שם חודש ('January' וכו') של תאריך ההזמנה, עבור 5 ההזמנות הישנות ביותר. (orders)",diff:"a",
+hint:"DATE_FORMAT(order_date, '%M') מחזיר שם החודש באנגלית. ORDER BY order_date ASC לישנות.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%M'</span>) <span class="kw">AS</span> <span class="str">month_name</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">ORDER BY</span> <span class="col">order_date</span> <span class="kw">ASC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"ערי לקוחות ב-UPPER, ללא כפילויות, ממוינות לפי סדר הפוך (Z-A). (customers)",diff:"a",
+hint:"SELECT DISTINCT UPPER(city). ORDER BY city DESC — מיון לפי העמודה המקורית, לא ה-UPPER.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="fn">UPPER</span>(<span class="col">city</span>) <span class="kw">AS</span> <span class="str">upper_city</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">city</span> <span class="kw">DESC</span>;`},
+{q:"דוח מוצרים זולים: שם, מחיר מקורי, מחיר מבצע (חצי מחיר מעוגל לשלם). מיין מזול ליקר, הגבל ל-20. (products)",diff:"a",
+hint:"ROUND(list_price * 0.5) = חצי מחיר. ORDER BY list_price ASC = מהזול. LIMIT 20.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">0.5</span>) <span class="kw">AS</span> <span class="str">sale_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">ASC</span>\n<span class="kw">LIMIT</span> <span class="num">20</span>;`},
+// ===== חלק ב': WHERE עם שילובי פונקציות =====
+{q:"⭐ חלק ב׳ — שמות מוצרים ב-UPPER, רק עבור מוצרים שמחירם גדול מ-50. (products)",diff:"m",
+hint:"UPPER(product_name) ב-SELECT, ו-WHERE list_price > 50 לסינון. הפונקציה פועלת על השורות שנשארו אחרי הסינון.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">product_name</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
+{q:"הצג company ו-city מלקוחות — רק מ-'London', ממוין לפי שם החברה A-Z. (customers)",diff:"m",
+hint:"WHERE city = 'London' + ORDER BY company ASC.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">city</span> = <span class="str">'London'</span>\n<span class="kw">ORDER BY</span> <span class="col">company</span> <span class="kw">ASC</span>;`},
+{q:"מזהה הזמנה + תאריך בפורמט ישראלי DD/MM/YYYY — רק הזמנות משנת 2006. (orders)",diff:"m",
+hint:"WHERE YEAR(order_date) = 2006 + DATE_FORMAT(order_date, '%d/%m/%Y') ב-SELECT.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">israel_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>) = <span class="num">2006</span>;`},
+{q:"שם פרטי ואורכו — רק עובדים שאינם 'Sales Representative'. (<> או !=) (employees)",diff:"m",
+hint:"WHERE job_title <> 'Sales Representative'. <> ו-!= זהים ב-SQL.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="fn">LENGTH</span>(<span class="col">first_name</span>) <span class="kw">AS</span> <span class="str">name_len</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">job_title</span> <> <span class="str">'Sales Representative'</span>;`},
+{q:"5 ההזמנות האחרונות שבוצעו בחודש דצמבר (חודש 12). (orders)",diff:"m",
+hint:"WHERE MONTH(order_date) = 12, אחר כך ORDER BY order_date DESC, LIMIT 5.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>) = <span class="num">12</span>\n<span class="kw">ORDER BY</span> <span class="col">order_date</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"מוצרים שמחירם >= 100: שם, מחיר מקורי, ומחיר אחרי 25% הנחה מעוגל. (products)",diff:"m",
+hint:"WHERE list_price >= 100 + ROUND(list_price * 0.75) = הנחה 25%.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">0.75</span>) <span class="kw">AS</span> <span class="str">discounted_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> >= <span class="num">100</span>;`},
+{q:"מזהה + תאריך הזמנה + תאריך משלוח — רק הזמנות עם הפרש > 10 ימים. (orders + DATEDIFF)",diff:"a",
+hint:"WHERE DATEDIFF(shipped_date, order_date) > 10. מסנן ישירות לפי תוצאת DATEDIFF.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>, <span class="col">shipped_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) > <span class="num">10</span>;`},
+{q:"ערים ייחודיות ב-LOWER — רק ערים שאורכן קטן או שווה ל-5 תווים. (customers)",diff:"a",
+hint:"WHERE LENGTH(city) <= 5 סורן לפי אורך. SELECT DISTINCT LOWER(city) מציג בלי כפילויות.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="fn">LOWER</span>(<span class="col">city</span>)\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="fn">LENGTH</span>(<span class="col">city</span>) <= <span class="num">5</span>;`},
+{q:"הזמנות מ-'2006-03-15' בלבד: מזהה + יעד תשלום (חודש אחרי). (orders + DATE_ADD)",diff:"a",
+hint:"WHERE order_date = '2006-03-15'. DATE_ADD(order_date, INTERVAL 1 MONTH) = חודש אחד קדימה.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">1</span> <span class="kw">MONTH</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">order_date</span> = <span class="str">'2006-03-15'</span>;`},
+{q:"דוח מוצרים זולים (מחיר < 20): שם ב-UPPER + מחיר מעוגל, ממוין מיקר לזול, הגבל ל-10. (products)",diff:"a",
+hint:"WHERE list_price < 20 + UPPER(product_name) + ROUND(list_price) + ORDER BY list_price DESC LIMIT 10.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">product_name</span>), <span class="fn">ROUND</span>(<span class="col">list_price</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> < <span class="num">20</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">10</span>;`},
+]
+},
+
+{
+title:"תרגול שיעור 2",
+desc:"WHERE, IN, BETWEEN, LIKE, IS NULL, GROUP BY, COUNT, SUM, AVG — 20 שאלות.",
+topics:["WHERE","AND/OR","IN","BETWEEN","LIKE","IS NULL","GROUP BY","COUNT","SUM","AVG","HAVING","ORDER BY"],
+questions:[
+// רמה 1
+{q:"שלוף מוצרים שמחירם (list_price) מעל 50 מ-products.",diff:"b",
+hint:"WHERE list_price > 50. פשוט ומהיר. ניתן להוסיף product_name לידו.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
+{q:"שלוף לקוחות מ-USA בלבד מ-customers.",diff:"b",
+hint:"WHERE country_region = 'USA'. שים לב לגרשיים מסביב לטקסט.",
+code:`<span class="kw">SELECT</span> *\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>;`},
+{q:"שלוף מוצרים מקטגוריות 'Beverages' או 'Condiments'. (products)",diff:"b",
+hint:"IN ('Beverages','Condiments') = קיצור ל-OR. קריא ויעיל.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">category</span> <span class="kw">IN</span> (<span class="str">'Beverages'</span>, <span class="str">'Condiments'</span>);`},
+{q:"שלוף הזמנות עם דמי משלוח בין 20 ל-50. (orders)",diff:"b",
+hint:"BETWEEN כולל את הקצוות. שקול ל->= 20 AND <= 50.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipping_fee</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span>;`},
+{q:"שלוף הזמנות שטרם נשלחו (shipped_date ריק/NULL). (orders)",diff:"b",
+hint:"IS NULL ולא = NULL! זו שגיאה קלאסית של מתחילים שצריך לזכור.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;`},
+// רמה 2
+{q:"שלוף עובדים שכתובת האימייל שלהם מכילה 'northwindtraders'. (employees)",diff:"b",
+hint:"LIKE '%northwindtraders%' — % משני הצדדים מחפש בתוך המחרוזת.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>, <span class="col">email_address</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders%'</span>;`},
+{q:"כמה מוצרים יש בכל קטגוריה? (products + GROUP BY)",diff:"b",
+hint:"GROUP BY category, COUNT(*) סופר שורות בכל קבוצה.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
+{q:"מה סכום דמי המשלוח לכל חברת שילוח? (orders, GROUP BY shipper_id)",diff:"b",
+hint:"SUM(shipping_fee) מסכם. GROUP BY shipper_id מחלק לקבוצות.",
+code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
+{q:"מהו המחיר הממוצע של מוצרים בכל קטגוריה? (products)",diff:"b",
+hint:"AVG(list_price) + GROUP BY category.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
+{q:"הצג ספקים ומחירם הגבוה ביותר, ממוינים מהיקר לזול. (products)",diff:"b",
+hint:"MAX(list_price) + GROUP BY supplier_ids + ORDER BY MAX(list_price) DESC.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_ids</span>,\n       <span class="fn">MAX</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">max_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_ids</span>\n<span class="kw">ORDER BY</span> <span class="str">max_price</span> <span class="kw">DESC</span>;`},
+// רמה 3
+{q:"הצג קטגוריות שיש בהן יותר מ-3 מוצרים. (HAVING)",diff:"m",
+hint:"HAVING COUNT(*) > 3 — מסנן קבוצות אחרי הקיבוץ. לא ניתן WHERE עם COUNT.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">3</span>;`},
+{q:"שלוף לקוחות מ-France ומ-Germany בלבד. (customers)",diff:"m",
+hint:"IN ('France','Germany') = קיצור נוח יותר מ-OR.",
+code:`<span class="kw">SELECT</span> *\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> <span class="kw">IN</span> (<span class="str">'France'</span>, <span class="str">'Germany'</span>);`},
+{q:"הצג מוצרים שמחירם בין 10 ל-30 ומקטגוריית 'Beverages'. (AND + BETWEEN)",diff:"m",
+hint:"שני תנאים עם AND: BETWEEN ל-מחיר, ו-= לקטגוריה.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> <span class="kw">BETWEEN</span> <span class="num">10</span> <span class="kw">AND</span> <span class="num">30</span>\n  <span class="kw">AND</span> <span class="col">category</span> = <span class="str">'Beverages'</span>;`},
+{q:"WHERE לפני GROUP BY: ממוצע מחיר לספק — רק מוצרים מעל 20. (products)",diff:"m",
+hint:"WHERE list_price > 20 מסנן לפני GROUP BY. ממוצע יחושב רק מהשורות שנשארו.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_ids</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_ids</span>;`},
+{q:"הצג מספרי הזמנות שיש להן יותר מ-3 פריטים שונים. (order_details + HAVING)",diff:"m",
+hint:"GROUP BY order_id, HAVING COUNT(*) > 3. ספירת פריטים בכל הזמנה.",
+code:`<span class="kw">SELECT</span> <span class="col">order_id</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">items_count</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span>\n<span class="kw">GROUP BY</span> <span class="col">order_id</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">3</span>;`},
+// רמה 4
+{q:"3 הספקים עם הכי הרבה מוצרים: ספק + כמות, מיון יורד, הגבל ל-3. (products)",diff:"a",
+hint:"GROUP BY supplier_ids, COUNT(*), ORDER BY COUNT(*) DESC, LIMIT 3.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_ids</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_ids</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(*) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">3</span>;`},
+{q:"הצג ערים שיש בהן יותר מ-2 לקוחות, ממוינות לפי כמות (יורד). (customers)",diff:"a",
+hint:"HAVING COUNT(*) > 2, ORDER BY COUNT(*) DESC.",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">customer_count</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">2</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(*) <span class="kw">DESC</span>;`},
+{q:"מוצרים שמחירם מעל ממוצע הקטגוריה שלהם: שם + קטגוריה + מחיר. (Correlated Subquery)",diff:"a",
+hint:"Correlated Subquery: WHERE list_price > (SELECT AVG... FROM products p2 WHERE p2.category = p1.category). לתת alias לשתי ה-products.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p1</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > (\n  <span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>)\n  <span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p2</span>\n  <span class="kw">WHERE</span> <span class="col">p2.category</span> = <span class="col">p1.category</span>\n);`},
+{q:"הזמנות שנשלחו לעיר שמתחילה ב-'S' — כמה בכל עיר? (LIKE + GROUP BY)",diff:"a",
+hint:"WHERE ship_city LIKE 'S%' מסנן ערים שמתחילות ב-S. אחר כך GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="col">ship_city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">orders_count</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">ship_city</span> <span class="kw">LIKE</span> <span class="str">'S%'</span>\n<span class="kw">GROUP BY</span> <span class="col">ship_city</span>\n<span class="kw">ORDER BY</span> <span class="str">orders_count</span> <span class="kw">DESC</span>;`},
+{q:"קטגוריה יקרה ביותר בממוצע — הצג מזהה ומחיר ממוצע, הגבל ל-1 תוצאה. (products)",diff:"a",
+hint:"GROUP BY category, ORDER BY AVG(list_price) DESC, LIMIT 1.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>\n<span class="kw">ORDER BY</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">1</span>;`},
+]
+},
+
+{
+title:"תרגול שיעור 3",
+desc:"GROUP BY מתקדם עם פונקציות טקסט, תאריכים, HAVING, מיון ודוחות — 20 שאלות.",
+topics:["GROUP BY","COUNT","AVG","MAX","MIN","SUM","UPPER","LOWER","WHERE + GROUP BY","HAVING","YEAR","MONTH","ORDER BY"],
+questions:[
+{q:"הצג רשימת ערים (city) ב-UPPER וליד כל עיר מספר הלקוחות הגרים בה. (customers)",diff:"b",
+hint:"UPPER(city) ב-SELECT וב-GROUP BY. COUNT(id) סופר.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">city</span>) <span class="kw">AS</span> <span class="str">city_upper</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">customer_count</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>;`},
+{q:"הצג תפקידים (job_title) ב-LOWER וספור עובדים בכל תפקיד. (employees)",diff:"b",
+hint:"LOWER(job_title) ב-SELECT, GROUP BY job_title (המקורי).",
+code:`<span class="kw">SELECT</span> <span class="fn">LOWER</span>(<span class="col">job_title</span>) <span class="kw">AS</span> <span class="str">title_lower</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">count</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">GROUP BY</span> <span class="col">job_title</span>;`},
+{q:"הצג category_id ואת המחיר הממוצע (AVG) לכל קטגוריה. (products)",diff:"b",
+hint:"GROUP BY category_id, AVG(list_price).",
+code:`<span class="kw">SELECT</span> <span class="col">category_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category_id</span>;`},
+{q:"הצג supplier_id והמחיר הגבוה ביותר (MAX) שכל ספק גובה. (products)",diff:"b",
+hint:"GROUP BY supplier_id, MAX(list_price).",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">MAX</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">max_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
+{q:"סכום דמי משלוח כולל (SUM של shipping_fee) לכל shipper_id. (orders)",diff:"b",
+hint:"GROUP BY shipper_id, SUM(shipping_fee).",
+code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>, <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_fee</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
+{q:"ערים ב-UPPER + מספר לקוחות — רק מ-France. (customers + WHERE)",diff:"b",
+hint:"WHERE country = 'France' קודם, אחר כך GROUP BY city. UPPER רק ב-SELECT.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">city</span>), <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country</span> = <span class="str">'France'</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>;`},
+{q:"ממוצע מחיר לספק — רק מוצרים שמחירם > 20. (products + WHERE)",diff:"m",
+hint:"WHERE list_price > 20 לפני GROUP BY supplier_id. הסינון קורה לפני הקיבוץ.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
+{q:"כמה הזמנות נשלחו לכל עיר (ship_city)? סנן את 'London'. (orders)",diff:"m",
+hint:"WHERE ship_city <> 'London' (שונה) — אחר כך GROUP BY ship_city.",
+code:`<span class="kw">SELECT</span> <span class="col">ship_city</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">ship_city</span> <> <span class="str">'London'</span>\n<span class="kw">GROUP BY</span> <span class="col">ship_city</span>;`},
+{q:"מחיר מינימלי לקטגוריה — רק מוצרים מתחת ל-50. (products + WHERE + MIN)",diff:"m",
+hint:"WHERE list_price < 50, GROUP BY category_id, MIN(list_price).",
+code:`<span class="kw">SELECT</span> <span class="col">category_id</span>, <span class="fn">MIN</span>(<span class="col">list_price</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> < <span class="num">50</span>\n<span class="kw">GROUP BY</span> <span class="col">category_id</span>;`},
+{q:"ספור עובדים לפי עיר — רק 'Sales Representative'. (employees)",diff:"m",
+hint:"WHERE job_title = 'Sales Representative', GROUP BY city.",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">job_title</span> = <span class="str">'Sales Representative'</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>;`},
+{q:"כמה הזמנות בוצעו בכל שנה? (YEAR + GROUP BY + orders)",diff:"m",
+hint:"YEAR(order_date) בתוך GROUP BY. ב-MySQL ניתן לשים פונקציה ישירות ב-GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">yr</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>);`},
+{q:"מספר החודש + כמות הזמנות — רק שנת 2006. (MONTH + WHERE + GROUP BY)",diff:"m",
+hint:"WHERE YEAR(order_date) = 2006 קודם, אחר כך GROUP BY MONTH(order_date).",
+code:`<span class="kw">SELECT</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">mo</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>) = <span class="num">2006</span>\n<span class="kw">GROUP BY</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>);`},
+{q:"לכל לקוח — תאריך ההזמנה המאוחרת ביותר (MAX). (orders + GROUP BY customer_id)",diff:"m",
+hint:"GROUP BY customer_id, MAX(order_date) = הזמנה האחרונה של כל לקוח.",
+code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="fn">MAX</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">last_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">customer_id</span>;`},
+{q:"כמה עובדים התקבלו בכל שנה? (YEAR(hire_date) + GROUP BY)",diff:"m",
+hint:"אותו עיקרון כמו הזמנות — YEAR(hire_date) ב-SELECT וב-GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="fn">YEAR</span>(<span class="col">hire_date</span>) <span class="kw">AS</span> <span class="str">hire_year</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">GROUP BY</span> <span class="fn">YEAR</span>(<span class="col">hire_date</span>);`},
+{q:"כמה לקוחות בכל שילוב מדינה+עיר? מדינה ב-UPPER, עיר ב-LOWER. (customers)",diff:"a",
+hint:"GROUP BY country, city (המקוריות). SELECT UPPER(country), LOWER(city). שניהם ב-GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">country</span>), <span class="fn">LOWER</span>(<span class="col">city</span>), <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">country</span>, <span class="col">city</span>;`},
+{q:"קבץ עובדים לפי עיר ותפקיד: הצג עיר, תפקיד, כמות. (employees)",diff:"a",
+hint:"GROUP BY שתי עמודות: city, job_title. כמות = COUNT(id).",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="col">job_title</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>, <span class="col">job_title</span>;`},
+{q:"כמה מוצרים יש לכל ספק בכל קטגוריה? (GROUP BY שניהם)",diff:"a",
+hint:"GROUP BY supplier_id, category_id — קיבוץ לפי שתי עמודות יחד.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="col">category_id</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>, <span class="col">category_id</span>;`},
+{q:"3 ספקים עם הכי הרבה מוצרים: ספק + כמות, מיון יורד, הגבל ל-3. (products)",diff:"a",
+hint:"GROUP BY supplier_id, COUNT(*) DESC, LIMIT 3.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">3</span>;`},
+{q:"הקטגוריה היקרה ביותר בממוצע: category_id + ממוצע מחיר, הגבל ל-1. (products)",diff:"a",
+hint:"ORDER BY AVG(list_price) DESC, LIMIT 1 — לוקח רק את הראשון.",
+code:`<span class="kw">SELECT</span> <span class="col">category_id</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category_id</span>\n<span class="kw">ORDER BY</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">1</span>;`},
+{q:"עובדים עם employee_id < 5: מזהה, כמות הזמנות, הזמנה אחרונה — ממוין לפי כמות עולה. (orders)",diff:"a",
+hint:"WHERE employee_id < 5, GROUP BY employee_id, COUNT(id), MAX(order_date), ORDER BY COUNT(id) ASC.",
+code:`<span class="kw">SELECT</span> <span class="col">employee_id</span>,\n       <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">orders_count</span>,\n       <span class="fn">MAX</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">last_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">employee_id</span> < <span class="num">5</span>\n<span class="kw">GROUP BY</span> <span class="col">employee_id</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">ASC</span>;`},
+]
+}
+];
+
+// STATE
+let solved=[{},{},{}];
+let activeLesson=0;
+let activeFilter={0:'all',1:'all',2:'all'};
+
+function totalSolved(){
+return Object.keys(solved[0]).length+Object.keys(solved[1]).length+Object.keys(solved[2]).length;
+}
+function lessonSolved(li){return Object.keys(solved[li]).length;}
+function updateScore(){
+document.getElementById('globalScore').textContent=`✅ ${totalSolved()} / 70`;
+[0,1,2].forEach(li=>{
+const s=lessonSolved(li);
+const t=lessons[li].questions.length;
+document.getElementById('badge-'+li).textContent=`${s}/${t}`;
+const prog=document.getElementById('prog-'+li);
+if(prog)prog.style.width=`${Math.round(s/t*100)}%`;
+const pct=document.getElementById('pct-'+li);
+if(pct)pct.textContent=`${s}/${t} (${Math.round(s/t*100)}%)`;
+const banner=document.getElementById('finish-'+li);
+if(banner)banner.classList.toggle('show',s===t);
+});
+}
+
+function showLesson(idx){
+activeLesson=idx;
+document.querySelectorAll('.lesson-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+document.querySelectorAll('.lesson-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+function toggleQ(li,qi){
+const el=document.getElementById(`q-${li}-${qi}`);
+el.classList.toggle('open');
+}
+
+function markSolved(li,qi){
+if(solved[li][qi]){
+delete solved[li][qi];
+document.getElementById(`q-${li}-${qi}`).classList.remove('solved');
+} else {
+solved[li][qi]=true;
+document.getElementById(`q-${li}-${qi}`).classList.add('solved');
+}
+updateScore();
+}
+
+function copyCode(li,qi,btn){
+const text=document.getElementById(`code-${li}-${qi}`).innerText;
+navigator.clipboard.writeText(text).then(()=>{
+btn.textContent='✅ הועתק';btn.classList.add('ok');
+setTimeout(()=>{btn.textContent='📋 העתק';btn.classList.remove('ok')},2000);
+});
+}
+
+function filterDiff(li,diff){
+activeFilter[li]=diff;
+document.querySelectorAll(`.filter-btn[data-lesson="${li}"]`).forEach(b=>{
+b.classList.toggle('active-f', b.dataset.diff===diff);
+});
+lessons[li].questions.forEach((_,qi)=>{
+const el=document.getElementById(`q-${li}-${qi}`);
+if(!el)return;
+const d=lessons[li].questions[qi].diff;
+el.classList.toggle('hidden-q', diff!=='all' && d!==diff);
+});
+}
+
+function diffLabel(d){
+if(d==='b')return`<span class="diff-badge db-b">חימום</span>`;
+if(d==='m')return`<span class="diff-badge db-m">בינוני</span>`;
+return`<span class="diff-badge db-a">מתקדם</span>`;
+}
+
+function build(){
+const mc=document.getElementById('mainContent');
+lessons.forEach((ls,li)=>{
+let h=`<div class="lesson-pane${li===0?' active':''}" id="pane-${li}">`;
+// header
+h+=`<div class="lesson-header">
+<div class="lesson-title">${ls.title}</div>
+<div class="lesson-desc">${ls.desc}</div>
+<div class="lesson-topics">${ls.topics.map(t=>`<span class="topic-tag">${t}</span>`).join('')}</div>
+</div>`;
+// progress
+h+=`<div class="progress-wrap">
+<div class="progress-info"><span>התקדמות</span><span id="pct-${li}">0/${ls.questions.length} (0%)</span></div>
+<div class="progress-track"><div class="progress-fill" id="prog-${li}" style="width:0%"></div></div>
+</div>`;
+// filter
+h+=`<div class="filter-row">
+<span class="filter-label">סנן לפי רמה:</span>
+<button class="filter-btn active-f" data-lesson="${li}" data-diff="all" onclick="filterDiff(${li},'all')">הכל</button>
+<button class="filter-btn f-b" data-lesson="${li}" data-diff="b" onclick="filterDiff(${li},'b')">🟢 חימום</button>
+<button class="filter-btn f-m" data-lesson="${li}" data-diff="m" onclick="filterDiff(${li},'m')">🟠 בינוני</button>
+<button class="filter-btn f-a" data-lesson="${li}" data-diff="a" onclick="filterDiff(${li},'a')">🟣 מתקדם</button>
+</div>`;
+// questions
+ls.questions.forEach((q,qi)=>{
+h+=`<div class="q-card" id="q-${li}-${qi}">
+<div class="q-head" onclick="toggleQ(${li},${qi})">
+  <span class="q-num">${qi+1}</span>
+  <span class="q-text">${q.q}</span>
+  <div class="q-right">
+    ${diffLabel(q.diff)}
+    <span class="check-icon">✅</span>
+  </div>
+</div>
+<div class="q-body">
+  <div class="hint-box"><p><strong>💡 רמז:</strong> ${q.hint}</p></div>
+  <div class="code-block">
+    <div class="code-hdr">
+      <span class="code-lang">SQL — פתרון</span>
+      <div class="code-actions">
+        <button class="copy-btn" onclick="copyCode(${li},${qi},this)">📋 העתק</button>
+        <button class="mark-btn" onclick="markSolved(${li},${qi})">✅ פתרתי</button>
+      </div>
+    </div>
+    <pre id="code-${li}-${qi}">${q.code}</pre>
+  </div>
+</div>
+</div>`;
+});
+// finish banner
+h+=`<div class="finish-banner" id="finish-${li}">
+<div class="finish-emoji">🎉</div>
+<div class="finish-title">כל הכבוד!</div>
+<div class="finish-sub">סיימת את כל ${ls.questions.length} השאלות בשיעור הזה. המשך לשיעור הבא!</div>
+</div>`;
+h+='</div>';
+mc.innerHTML+=h;
+});
+updateScore();
+}
+
+build();
+</script>
+</body>
+</html>
