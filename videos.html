@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הדרכה מצולמת — קורס SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(255,71,87,.04) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.25);color:var(--red);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2.2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:15px;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:1.8rem;font-weight:900;color:var(--red);font-family:var(--mono)}
+.hero-stat-label{font-size:12px;color:var(--text3)}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* VIDEO GRID */
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem}
+
+/* VIDEO CARD */
+.video-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
+.video-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+
+/* THUMBNAIL */
+.video-thumb{position:relative;padding-top:56.25%;background:var(--bg3);overflow:hidden;cursor:pointer}
+.video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.video-card:hover .video-thumb img{transform:scale(1.03)}
+.play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);transition:background .2s}
+.video-card:hover .play-overlay{background:rgba(0,0,0,.15)}
+.play-btn{width:52px;height:52px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s;box-shadow:0 4px 20px rgba(255,71,87,.4)}
+.video-card:hover .play-btn{transform:scale(1.1)}
+.play-icon{width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;margin-right:-3px}
+.part-badge{position:absolute;top:10px;right:10px;background:rgba(6,10,15,.85);color:var(--text2);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid var(--border2)}
+
+/* VIDEO INFO */
+.video-info{padding:1rem 1.1rem;flex:1;display:flex;flex-direction:column}
+.video-part{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:.3rem;font-family:var(--mono)}
+.video-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.4rem;line-height:1.4}
+.video-desc{font-size:12.5px;color:var(--text3);line-height:1.6;flex:1}
+.video-link{display:inline-flex;align-items:center;gap:6px;margin-top:.75rem;color:var(--red);text-decoration:none;font-size:12px;font-weight:700;transition:opacity .2s}
+.video-link:hover{opacity:.75}
+
+/* WATCHED BADGE */
+.watched-check{position:absolute;top:10px;left:10px;width:28px;height:28px;background:var(--green2);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s}
+.watched-check.show{display:flex}
+.video-card.watched{border-color:var(--green2)}
+.video-card.watched .part-badge{background:rgba(0,168,84,.2);color:var(--green);border-color:rgba(0,168,84,.3)}
+.watch-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:var(--font);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;margin-top:.5rem;transition:all .15s;align-self:flex-start}
+.watch-btn:hover{border-color:var(--green2);color:var(--green)}
+.video-card.watched .watch-btn{border-color:var(--green2);color:var(--green);background:rgba(0,168,84,.08)}
+
+/* PROGRESS BAR */
+.progress-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1.5rem}
+.progress-text{flex:1}
+.progress-title{font-size:13px;font-weight:700;margin-bottom:.3rem}
+.progress-sub{font-size:12px;color:var(--text3)}
+.progress-bar-wrap{flex:2}
+.progress-track{background:var(--bg3);border-radius:4px;height:8px;overflow:hidden;margin-bottom:.3rem}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:4px;transition:width .4s ease}
+.progress-pct{font-size:12px;color:var(--text3);font-family:var(--mono)}
+.progress-count{font-size:1.5rem;font-weight:900;color:var(--green);font-family:var(--mono);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">🎬 הדרכה מצולמת</div>
+  <div class="topnav-links">
+    <a href="setup.html" class="topnav-link">🛠️ התקנה</a>
+    <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">▶ YouTube · אלירן גרוסמן</div>
+  <h1 class="hero-title">הדרכה מצולמת — קורס SQL</h1>
+  <p class="hero-sub">13 סרטונים מהבסיס ועד מתקדם — צפו בסדר או קפצו לנושא שתרצו</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">13</div><div class="hero-stat-label">סרטונים</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="watchedCount">0</div><div class="hero-stat-label">נצפו</div></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-text">
+      <div class="progress-title">ההתקדמות שלך</div>
+      <div class="progress-sub">סמן סרטון כנצפה אחרי הצפייה</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-pct" id="progressPct">0 / 13 סרטונים</div>
+    </div>
+    <div class="progress-count" id="progressBig">0%</div>
+  </div>
+
+  <div class="section-label">כל הסרטונים</div>
+
+  <div class="video-grid" id="videoGrid"></div>
+
+</div>
+
+<script>
+const videos = [
+  {part:1, title:"מבוא לקורס וסביבת העבודה", desc:"היכרות עם הקורס, התקנת MySQL Workbench והכנת סביבת העבודה.", url:"https://www.youtube.com/watch?v=Pnq2_C77LBE&t=1s", vid:"Pnq2_C77LBE"},
+  {part:2, title:"SELECT, FROM ו-WHERE בסיסי", desc:"שליפת נתונים ראשונה — בחירת עמודות, סינון בסיסי ומשתמשים ב-Northwind.", url:"https://www.youtube.com/watch?v=b_FBQkNfVy4&t=1s", vid:"b_FBQkNfVy4"},
+  {part:3, title:"פונקציות טקסט ומחרוזות", desc:"UPPER, LOWER, LENGTH, LEFT, RIGHT, SUBSTRING, TRIM, REPLACE ועוד.", url:"https://www.youtube.com/watch?v=tK8ccMHj_Ps", vid:"tK8ccMHj_Ps"},
+  {part:4, title:"חישובים ופונקציות מתמטיות", desc:"חישובים על עמודות, ROUND, MOD, ABS ועמודות מחושבות.", url:"https://www.youtube.com/watch?v=m8M877ZSaxY&t=1s", vid:"m8M877ZSaxY"},
+  {part:5, title:"מיון, DISTINCT ו-LIMIT", desc:"ORDER BY, DISTINCT, LIMIT, OFFSET — שליטה בתוצאות.", url:"https://www.youtube.com/watch?v=2Ly8yZMbqn8&t=3s", vid:"2Ly8yZMbqn8"},
+  {part:6, title:"תאריכים ופונקציות זמן", desc:"YEAR, MONTH, DAY, DATE_FORMAT, DATEDIFF, DATE_ADD ועוד.", url:"https://www.youtube.com/watch?v=waxOan9b5mU&t=1s", vid:"waxOan9b5mU"},
+  {part:7, title:"WHERE מתקדם — IN, BETWEEN, LIKE", desc:"סינון מתקדם עם IN, BETWEEN, LIKE, IS NULL ואופרטורים לוגיים.", url:"https://www.youtube.com/watch?v=kf1ap4s1wH0", vid:"kf1ap4s1wH0"},
+  {part:8, title:"GROUP BY ופונקציות צבירה", desc:"COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING, ROLLUP ו-UNION.", url:"https://www.youtube.com/watch?v=jqosAwvbiVU&t=3s", vid:"jqosAwvbiVU"},
+  {part:9, title:"JOIN — חיבור טבלאות", desc:"INNER JOIN, LEFT JOIN, חיבור מרובה טבלאות ודוחות מסכמים.", url:"https://www.youtube.com/watch?v=OMwZxyzC7Vw&t=1s", vid:"OMwZxyzC7Vw"},
+  {part:10, title:"Subqueries ו-CASE WHEN", desc:"תת-שאילתות, EXISTS, NOT IN, לוגיקה מותנית עם CASE WHEN.", url:"https://www.youtube.com/watch?v=mjspIIUySCU", vid:"mjspIIUySCU"},
+  {part:11, title:"CTE ו-Window Functions", desc:"WITH, ROW_NUMBER, RANK, LAG, LEAD, SUM מצטבר ועוד.", url:"https://www.youtube.com/watch?v=UfNzoBQk04o&t=1s", vid:"UfNzoBQk04o"},
+  {part:12, title:"DML — שינוי נתונים", desc:"INSERT, UPDATE, DELETE, TRANSACTION, COMMIT, ROLLBACK.", url:"https://www.youtube.com/watch?v=_q9yrxz-w48", vid:"_q9yrxz-w48"},
+  {part:13, title:"סיכום ופרויקט סיום", desc:"סיכום הקורס, פרויקט מסכם ועצות להמשך הדרך.", url:"https://www.youtube.com/watch?v=QPCxVBbn6jo&t=1s", vid:"QPCxVBbn6jo"},
+];
+
+let watched = JSON.parse(localStorage.getItem('sql_watched') || '{}');
+
+function saveWatched(){
+  try{ localStorage.setItem('sql_watched', JSON.stringify(watched)); } catch(e){}
+}
+
+function updateProgress(){
+  const count = Object.keys(watched).filter(k=>watched[k]).length;
+  const pct = Math.round(count/videos.length*100);
+  document.getElementById('watchedCount').textContent = count;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = count+' / '+videos.length+' סרטונים';
+  document.getElementById('progressBig').textContent = pct+'%';
+}
+
+function toggleWatched(i){
+  watched[i] = !watched[i];
+  saveWatched();
+  const card = document.getElementById('card-'+i);
+  const btn = document.getElementById('wbtn-'+i);
+  if(watched[i]){
+    card.classList.add('watched');
+    btn.textContent = '✓ נצפה';
+  } else {
+    card.classList.remove('watched');
+    btn.textContent = 'סמן כנצפה';
+  }
+  updateProgress();
+}
+
+function buildGrid(){
+  const grid = document.getElementById('videoGrid');
+  videos.forEach((v,i)=>{
+    const isWatched = watched[i];
+    const thumbUrl = `https://img.youtube.com/vi/${v.vid}/hqdefault.jpg`;
+    grid.innerHTML += `
+    <div class="video-card${isWatched?' watched':''}" id="card-${i}">
+      <div class="video-thumb" onclick="window.open('${v.url}','_blank')">
+        <img src="${thumbUrl}" alt="חלק ${v.part}" loading="lazy" onerror="this.style.display='none'">
+        <div class="play-overlay">
+          <div class="play-btn"><div class="play-icon"></div></div>
+        </div>
+        <div class="part-badge">חלק ${v.part}</div>
+      </div>
+      <div class="video-info">
+        <div class="video-part">חלק ${v.part} / ${videos.length}</div>
+        <div class="video-title">${v.title}</div>
+        <div class="video-desc">${v.desc}</div>
+        <a href="${v.url}" target="_blank" class="video-link">▶ צפה ב-YouTube →</a>
+        <button class="watch-btn" id="wbtn-${i}" onclick="toggleWatched(${i})">${isWatched?'✓ נצפה':'סמן כנצפה'}</button>
+      </div>
+    </div>`;
+  });
+}
+
+buildGrid();
+updateProgress();
+</script>
+</body>
+</html>
