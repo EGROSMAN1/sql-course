@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Server למתחילים — קורס SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px;transition:all .2s}
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(255,140,66,.04) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,140,66,.1);border:1px solid rgba(255,140,66,.25);color:var(--orange);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2.2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:15px;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat-num{font-size:1.8rem;font-weight:900;color:var(--orange);font-family:var(--mono)}
+.hero-stat-label{font-size:12px;color:var(--text3)}
+.playlist-btn{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;margin-top:1rem;transition:all .2s}
+.playlist-btn:hover{opacity:.85;transform:translateY(-1px)}
+.main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.section-label{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.progress-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.progress-text{flex:1;min-width:150px}
+.progress-title{font-size:13px;font-weight:700;margin-bottom:.3rem}
+.progress-sub{font-size:12px;color:var(--text3)}
+.progress-bar-wrap{flex:2;min-width:200px}
+.progress-track{background:var(--bg3);border-radius:4px;height:8px;overflow:hidden;margin-bottom:.3rem}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--yellow));border-radius:4px;transition:width .4s ease}
+.progress-pct{font-size:12px;color:var(--text3);font-family:var(--mono)}
+.progress-count{font-size:1.5rem;font-weight:900;color:var(--orange);font-family:var(--mono);white-space:nowrap}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+.video-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
+.video-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.video-card.watched{border-color:var(--green2)}
+.video-thumb{position:relative;padding-top:56.25%;background:var(--bg3);overflow:hidden;cursor:pointer}
+.video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.video-card:hover .video-thumb img{transform:scale(1.03)}
+.play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);transition:background .2s}
+.video-card:hover .play-overlay{background:rgba(0,0,0,.15)}
+.play-btn{width:52px;height:52px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s;box-shadow:0 4px 20px rgba(255,71,87,.4)}
+.video-card:hover .play-btn{transform:scale(1.1)}
+.play-icon{width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;margin-right:-3px}
+.part-badge{position:absolute;top:10px;right:10px;background:rgba(6,10,15,.85);color:var(--text2);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid var(--border2)}
+.video-card.watched .part-badge{background:rgba(0,168,84,.2);color:var(--green);border-color:rgba(0,168,84,.3)}
+.video-info{padding:1rem 1.1rem;flex:1;display:flex;flex-direction:column}
+.video-part{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:.3rem;font-family:var(--mono)}
+.video-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.4rem;line-height:1.4}
+.video-link{display:inline-flex;align-items:center;gap:6px;margin-top:.5rem;color:var(--red);text-decoration:none;font-size:12px;font-weight:700;transition:opacity .2s}
+.video-link:hover{opacity:.75}
+.watch-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:var(--font);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;margin-top:.5rem;transition:all .15s;align-self:flex-start}
+.watch-btn:hover{border-color:var(--green2);color:var(--green)}
+.video-card.watched .watch-btn{border-color:var(--green2);color:var(--green);background:rgba(0,168,84,.08)}
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.hero-title{font-size:1.6rem}
+.video-grid{grid-template-columns:1fr}
+.progress-section{flex-direction:column}
+.main{padding:1rem .75rem 4rem}
+}
+
+/* MODAL PLAYER */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:860px;overflow:hidden;position:relative}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--border)}
+.modal-title{font-size:14px;font-weight:700;color:var(--text)}
+.modal-close{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.modal-player{position:relative;padding-top:56.25%}
+.modal-player iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.modal-footer{padding:.75rem 1rem;display:flex;gap:.75rem;align-items:center;border-top:1px solid var(--border)}
+.modal-yt-btn{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;padding:7px 16px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;transition:opacity .2s}
+.modal-yt-btn:hover{opacity:.8}
+.modal-watch-btn{background:transparent;border:1px solid var(--border2);color:var(--text2);font-family:var(--font);font-size:12px;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .15s}
+.modal-watch-btn:hover{border-color:var(--green2);color:var(--green)}
+.modal-watch-btn.done{border-color:var(--green2);color:var(--green);background:rgba(0,168,84,.08)}
+@media(max-width:768px){.modal-overlay{padding:.5rem;align-items:flex-end}.modal-box{border-radius:16px 16px 0 0}}
+
+</style>
+</head>
+<body>
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">🖥️ SQL Server למתחילים</div>
+  <div class="topnav-links">
+    <a href="videos.html" class="topnav-link">🎬 MySQL</a>
+    <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 דף הבית</a>
+  <a href="videos.html">🎬 MySQL</a>
+  <a href="course.html">📚 חומר לימוד</a>
+  <a href="practice.html">✏️ תרגולים</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🖥️ SQL Server · אלירן גרוסמן</div>
+  <h1 class="hero-title">SQL Server למתחילים</h1>
+  <p class="hero-sub">39 סרטונים — מהתקנה ועד שאילתות מתקדמות ב-SQL Server</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">39</div><div class="hero-stat-label">סרטונים</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="watchedCount">0</div><div class="hero-stat-label">נצפו</div></div>
+  </div>
+  <a href="https://www.youtube.com/playlist?list=PLgfmXjukhxzCFDE2E7uU_TD-I5Bstg5O3" target="_blank" class="playlist-btn">▶ פתח פלייליסט מלא ב-YouTube</a>
+</div>
+
+<div class="main">
+  <div class="progress-section">
+    <div class="progress-text">
+      <div class="progress-title">ההתקדמות שלך</div>
+      <div class="progress-sub">סמן סרטון כנצפה אחרי הצפייה</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-pct" id="progressPct">0 / 39 סרטונים</div>
+    </div>
+    <div class="progress-count" id="progressBig">0%</div>
+  </div>
+
+  <div class="section-label">כל הסרטונים</div>
+  <div class="video-grid" id="videoGrid"></div>
+</div>
+
+<!-- MODAL PLAYER -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">טוען...</div>
+      <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    </div>
+    <div class="modal-player">
+      <iframe id="modalIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="#" id="modalYtBtn" target="_blank" class="modal-yt-btn">▶ פתח ב-YouTube</a>
+      <button class="modal-watch-btn" id="modalWatchBtn" onclick="toggleFromModal()">סמן כנצפה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PLAYLIST = "PLgfmXjukhxzCFDE2E7uU_TD-I5Bstg5O3";
+const videos = [
+  {part:1,  vid:"4yt1JaJoUDs"},
+  {part:2,  vid:"-P82Jm1bTFo"},
+  {part:3,  vid:"4-nJ3HukQws"},
+  {part:4,  vid:"Oz876bxCGSE"},
+  {part:5,  vid:"oig2jQf_sRE"},
+  {part:6,  vid:"0qM2wsz19-E"},
+  {part:7,  vid:"6xhE4FyWsLU"},
+  {part:8,  vid:"HhKZLoHxLY0"},
+  {part:9,  vid:"i2SsBvcRBIo"},
+  {part:10, vid:"rGwRHlvxXGo"},
+  {part:11, vid:"PfXCqKntu7M"},
+  {part:12, vid:"J0s4_4qWdyE"},
+  {part:13, vid:"YJ3AegetpPQ"},
+  {part:14, vid:"3j9g5Xl5ht4"},
+  {part:15, vid:"do-RPTin97M"},
+  {part:16, vid:"_V8k8Phs2Dc"},
+  {part:17, vid:"IflPS-FvZzg"},
+  {part:18, vid:"BrzLFnYZtAA"},
+  {part:19, vid:"TK7-JQMP9T0"},
+  {part:20, vid:"3UahnfU84aE"},
+  {part:21, vid:"wMI584AQ_EU"},
+  {part:22, vid:"5NBTEIsasSA"},
+  {part:23, vid:"Xgn4FOs6brY"},
+  {part:24, vid:"XQsN5ZiOpJk"},
+  {part:25, vid:"geslZB1Sl_I"},
+  {part:26, vid:"je0BiVnB-Kk"},
+  {part:27, vid:"6LNTrQvUggM"},
+  {part:28, vid:"kMbnn2I2eYs"},
+  {part:29, vid:"wptMPwv6oZE"},
+  {part:30, vid:"i1HzSz7qsck"},
+  {part:31, vid:"HybMhY6wKqw"},
+  {part:32, vid:"EY5oToci4fw"},
+  {part:33, vid:"dgIfBT18QqY"},
+  {part:34, vid:"VzrLamJ5a8A"},
+  {part:35, vid:"ig8_p-AM7kw"},
+  {part:36, vid:"2MYu9zvrD9Y"},
+  {part:37, vid:"6O9HXBy3jgA"},
+  {part:38, vid:"OG3EOS8DyG4"},
+  {part:39, vid:"TJ1SkyGmju4"},
+];
+
+let watched = {};
+try { watched = JSON.parse(localStorage.getItem('sqlserver_watched') || '{}'); } catch(e){}
+
+function saveWatched(){ try{ localStorage.setItem('sqlserver_watched', JSON.stringify(watched)); }catch(e){} }
+
+function updateProgress(){
+  const count = Object.keys(watched).filter(k=>watched[k]).length;
+  const pct = Math.round(count/videos.length*100);
+  document.getElementById('watchedCount').textContent = count;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = count+' / '+videos.length+' סרטונים';
+  document.getElementById('progressBig').textContent = pct+'%';
+}
+
+function toggleWatched(i){
+  watched[i] = !watched[i];
+  saveWatched();
+  document.getElementById('card-'+i).classList.toggle('watched', watched[i]);
+  document.getElementById('wbtn-'+i).textContent = watched[i] ? '✓ נצפה' : 'סמן כנצפה';
+  updateProgress();
+}
+
+function buildGrid(){
+  const grid = document.getElementById('videoGrid');
+  videos.forEach((v,i)=>{
+    const url = `https://www.youtube.com/watch?v=${v.vid}&list=${PLAYLIST}&index=${v.part}`;
+    const thumb = `https://img.youtube.com/vi/${v.vid}/hqdefault.jpg`;
+    const isW = watched[i];
+    grid.innerHTML += `
+    <div class="video-card${isW?' watched':''}" id="card-${i}">
+      <div class="video-thumb" onclick="openModal(${i})">
+        <img src="${thumb}" alt="חלק ${v.part}" loading="lazy" onerror="this.style.background='var(--bg4)'">
+        <div class="play-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
+        <div class="part-badge">חלק ${v.part}</div>
+      </div>
+      <div class="video-info">
+        <div class="video-part">חלק ${v.part} / ${videos.length} · SQL Server</div>
+        <div class="video-title">SQL Server למתחילים — חלק ${v.part}</div>
+        <a href="${url}" target="_blank" class="video-link">▶ צפה ב-YouTube →</a>
+        <button class="watch-btn" id="wbtn-${i}" onclick="toggleWatched(${i})">${isW?'✓ נצפה':'סמן כנצפה'}</button>
+      </div>
+    </div>`;
+  });
+}
+
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+
+let currentIdx = null;
+
+function openModal(i){
+  currentIdx = i;
+  const v = videos[i];
+  const url = `https://www.youtube.com/watch?v=${v.vid}&list=${PLAYLIST}&index=${v.part}`;
+  document.getElementById('modalTitle').textContent = 'חלק '+v.part+' — SQL Server למתחילים';
+  document.getElementById('modalIframe').src = 'https://www.youtube.com/embed/'+v.vid+'?autoplay=1';
+  document.getElementById('modalYtBtn').href = url;
+  const wb = document.getElementById('modalWatchBtn');
+  wb.textContent = watched[i] ? '✓ נצפה' : 'סמן כנצפה';
+  wb.classList.toggle('done', !!watched[i]);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModalBtn(){
+  document.getElementById('modalIframe').src = '';
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentIdx = null;
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById('modalOverlay')) closeModalBtn();
+}
+
+function toggleFromModal(){
+  if(currentIdx === null) return;
+  watched[currentIdx] = !watched[currentIdx];
+  saveWatched();
+  const wb = document.getElementById('modalWatchBtn');
+  wb.textContent = watched[currentIdx] ? '✓ נצפה' : 'סמן כנצפה';
+  wb.classList.toggle('done', !!watched[currentIdx]);
+  document.getElementById('card-'+currentIdx).classList.toggle('watched', !!watched[currentIdx]);
+  document.getElementById('wbtn-'+currentIdx).textContent = watched[currentIdx] ? '✓ נצפה' : 'סמן כנצפה';
+  updateProgress();
+}
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModalBtn(); });
+
+buildGrid();
+updateProgress();
+</script>
+</body>
+</html>
