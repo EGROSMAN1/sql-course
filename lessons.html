@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מדריך שיעורים — קורס SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* LESSON TABS */
+.lesson-tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.lesson-tabs::-webkit-scrollbar{display:none}
+.lesson-tab{padding:.85rem 1.2rem;font-size:13px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px;background:none;border-top:none;border-right:none;border-left:none;font-family:var(--font)}
+.lesson-tab:hover{color:var(--text2)}
+.lesson-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.lesson-pane{display:none}
+.lesson-pane.active{display:block}
+
+/* LESSON HEADER */
+.lesson-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.lesson-header::before{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.06) 0%,transparent 70%);pointer-events:none}
+.lesson-num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.lesson-title{font-size:1.8rem;font-weight:900;margin-bottom:.6rem}
+.lesson-desc{color:var(--text2);font-size:14px;line-height:1.8;max-width:650px}
+.lesson-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.lesson-tag{background:var(--bg4);border:1px solid var(--border2);color:var(--text2);padding:3px 12px;border-radius:12px;font-size:11px;font-family:var(--mono);font-weight:600}
+
+/* SECTION */
+.section{margin-bottom:2.5rem}
+.section-title{font-size:1rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';display:block;width:3px;height:16px;background:var(--yellow);border-radius:2px;flex-shrink:0}
+
+/* CONCEPT BOX */
+.concept-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.concept-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-text{color:var(--text2);font-size:14px;line-height:1.8}
+.concept-text strong{color:var(--text);font-weight:600}
+.concept-text code{background:var(--bg3);border:1px solid var(--border);color:var(--cyan);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
+
+/* HIGHLIGHT BOX */
+.highlight-box{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;display:flex;gap:.75rem;align-items:flex-start}
+.highlight-box.info{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-right:3px solid var(--blue)}
+.highlight-box.tip{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-right:3px solid var(--green2)}
+.highlight-box.warn{background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow)}
+.highlight-box.danger{background:rgba(255,71,87,.05);border:1px solid rgba(255,71,87,.2);border-right:3px solid var(--red)}
+.hb-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.hb-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.hb-text strong{color:var(--text);font-weight:600}
+
+/* CODE BLOCK */
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:.75rem 0}
+.code-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600}
+.copy-btn{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:11px;font-family:var(--font);padding:2px 8px;border-radius:4px;transition:all .15s}
+.copy-btn:hover{background:var(--bg4);color:var(--text)}
+.copy-btn.ok{color:var(--green)}
+pre{padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.num{color:#79c0ff}
+.cmt{color:#4a6080;font-style:italic}.tbl{color:#7ee787}.col{color:#e6edf3}.op{color:#ffa657}
+
+/* COMPARISON TABLE */
+.compare-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
+.compare-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.6rem 1rem;text-align:right;border:1px solid var(--border)}
+.compare-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.compare-table .good{color:var(--green)}
+.compare-table .bad{color:var(--red)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:.6rem;margin:.75rem 0}
+.step{display:flex;gap:.75rem;align-items:flex-start}
+.step-num{width:28px;height:28px;border-radius:8px;background:var(--blue3);color:var(--blue);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{font-size:13.5px;color:var(--text2);line-height:1.6;flex:1}
+.step-text strong{color:var(--text)}
+
+/* DIVIDER */
+hr.div{border:none;border-top:1px solid var(--border);margin:2rem 0}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+pre{font-size:11px}
+.lesson-tab{font-size:11px;padding:.6rem .6rem}
+.compare-table{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">📖 מדריך שיעורים</div>
+  <div class="topnav-links">
+    <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+    <a href="quiz.html" class="topnav-link">🧠 קוויז</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 דף הבית</a>
+  <a href="course.html">📚 חומר לימוד</a>
+  <a href="practice.html">✏️ תרגולים</a>
+  <a href="quiz.html">🧠 קוויז</a>
+</div>
+
+<!-- TABS -->
+<div class="lesson-tabs">
+  <button class="lesson-tab active" onclick="showLesson(0)">📗 שיעור 1 — מבוא ל-SQL</button>
+  <button class="lesson-tab" onclick="showLesson(1)">📘 שיעור 2 — פונקציות מחרוזת</button>
+  <button class="lesson-tab" onclick="showLesson(2)">📙 שיעור 3 — WHERE</button>
+  <button class="lesson-tab" onclick="showLesson(3)">📕 שיעור 4 — GROUP BY</button>
+</div>
+
+<div class="main">
+
+<!-- ===================== שיעור 1 ===================== -->
+<div class="lesson-pane active" id="pane-0">
+  <div class="lesson-header">
+    <div class="lesson-num">שיעור 1 / 4</div>
+    <div class="lesson-title">🗄️ מבוא ל-SQL ומסדי נתונים</div>
+    <div class="lesson-desc">מה זה SQL, למה הוא נחוץ, איך נראה מסד נתונים ומה ההבדל בין SQL לאקסל.</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">SQL</span>
+      <span class="lesson-tag">Database</span>
+      <span class="lesson-tag">Primary Key</span>
+      <span class="lesson-tag">Foreign Key</span>
+      <span class="lesson-tag">Northwind</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 מה זה SQL?</div>
+    <div class="concept-box">
+      <div class="concept-label">הגדרה</div>
+      <div class="concept-text">
+        <strong>SQL = Structured Query Language</strong> — שפת שאילתות מובנית.<br><br>
+        בניגוד לשפות כמו Python או Java שהן "שפות למטרות כלליות", SQL היא <strong>שפה ייעודית (Domain-Specific)</strong> שנוצרה אך ורק לעבודה עם נתונים.<br><br>
+        התחביר (Syntax) של SQL מזכיר <strong>אנגלית פשוטה</strong> — פקודות כמו <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code> הופכות את הקוד לקריא ומובן.
+      </div>
+    </div>
+    <div class="highlight-box info">
+      <div class="hb-icon">📜</div>
+      <div class="hb-text"><strong>היסטוריה:</strong> SQL פותחה בשנות ה-70 במעבדות IBM ונקראה בתחילה SEQUEL. מאז היא נשארת השפה המובילה בעולם הנתונים — מעל 50 שנה!</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">❓ למה בכלל SQL ולא אקסל?</div>
+    <div class="concept-box">
+      <div class="concept-label">3 סיבות עיקריות</div>
+      <div class="concept-text">
+        <strong>1. Big Data — נפחי מידע עצומים</strong><br>
+        כשאקסל מתחיל "לגמגם" (סביב מיליון שורות) — SQL רק מתחיל להתחמם. SQL מעבד מיליארדי שורות בשניות בודדות.<br><br>
+        <strong>2. "האמת האחת" — מסד נתונים מרכזי</strong><br>
+        בניגוד לקבצים שמסתובבים במיילים ומשתנים, SQL שומר על בסיס נתונים מרכזי אחד, מונע טעויות ושומר על קשרים לוגיים תקינים.<br><br>
+        <strong>3. שליפה כירורגית</strong><br>
+        אקסל טוען את כל הקובץ לזיכרון. SQL שולף <strong>רק</strong> את הנתונים הספציפיים שצריך — חוסך זיכרון ומקצר זמני ריצה.
+      </div>
+    </div>
+    <table class="compare-table">
+      <tr><th>קריטריון</th><th>אקסל</th><th>SQL</th></tr>
+      <tr><td>כמות שורות</td><td class="bad">עד ~1M שורות</td><td class="good">מיליארדי שורות</td></tr>
+      <tr><td>מהירות</td><td class="bad">איטי עם קבצים גדולים</td><td class="good">מהיר מאוד</td></tr>
+      <tr><td>שיתוף נתונים</td><td class="bad">קבצים שמסתובבים</td><td class="good">מסד מרכזי אחד</td></tr>
+      <tr><td>אבטחה</td><td class="bad">כל אחד יכול לערוך</td><td class="good">הרשאות ובקרה</td></tr>
+      <tr><td>ביצוע חישובים</td><td class="good">נוח למשתמש רגיל</td><td class="good">עוצמתי ומדויק</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🗃️ איך נראה מסד נתונים?</div>
+    <div class="concept-box">
+      <div class="concept-label">מבנה מסד נתונים</div>
+      <div class="concept-text">
+        מסד נתונים (Database) מורכב מ<strong>טבלאות (Tables)</strong>. כל טבלה מכילה <strong>עמודות (Columns)</strong> ו<strong>שורות (Rows)</strong>.<br><br>
+        דמיינו כמה גיליונות אקסל שקשורים זה לזה — כך נראה מסד נתונים.
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Database</strong> — מסד הנתונים הכולל (למשל: Northwind)</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Tables</strong> — טבלאות בתוך מסד הנתונים (למשל: customers, orders, products)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Columns</strong> — עמודות בטבלה (למשל: id, first_name, city)</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Rows</strong> — שורות נתונים (למשל: פרטי לקוח ספציפי)</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔑 מפתחות וקשרים</div>
+    <div class="concept-box">
+      <div class="concept-label">Primary Key — מפתח ראשי</div>
+      <div class="concept-text">
+        עמודה שמזהה כל שורה באופן <strong>ייחודי</strong>. לא יכולים להיות שני ערכים זהים. לא יכול להיות NULL.<br>
+        <strong>דוגמה:</strong> עמודת <code>id</code> בטבלת לקוחות — לכל לקוח יש מספר ייחודי משלו.
+      </div>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">Foreign Key — מפתח זר</div>
+      <div class="concept-text">
+        עמודה בטבלה אחת שמפנה ל<strong>Primary Key בטבלה אחרת</strong>. יוצרת את הקשר בין הטבלאות.<br>
+        <strong>דוגמה:</strong> עמודת <code>customer_id</code> בטבלת orders מפנה ל-<code>id</code> בטבלת customers.
+      </div>
+    </div>
+    <div class="highlight-box tip">
+      <div class="hb-icon">💡</div>
+      <div class="hb-text"><strong>טיפ:</strong> הקשר בין מפתח ראשי למשני הוא הבסיס לפקודת JOIN — זה איך מחברים מידע מטבלאות שונות.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🏪 מסד הנתונים של הקורס — Northwind</div>
+    <div class="concept-box">
+      <div class="concept-label">מה זה Northwind?</div>
+      <div class="concept-text">
+        מסד נתונים קלאסי שמדמה <strong>חברת מסחר</strong>. כולל לקוחות, הזמנות, מוצרים, ספקים ועובדים. בשימוש נרחב ללימוד SQL כבר עשרות שנים.
+      </div>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">הטבלאות הראשיות</div>
+      <div class="concept-text">
+        <code>customers</code> — לקוחות | <code>orders</code> — הזמנות | <code>order_details</code> — פרטי הזמנות<br>
+        <code>products</code> — מוצרים | <code>employees</code> — עובדים | <code>suppliers</code> — ספקים | <code>shippers</code> — חברות שילוח
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== שיעור 2 ===================== -->
+<div class="lesson-pane" id="pane-1">
+  <div class="lesson-header">
+    <div class="lesson-num">שיעור 2 / 4</div>
+    <div class="lesson-title">📝 פונקציות מחרוזת (String Functions)</div>
+    <div class="lesson-desc">ניקוי, חילוץ, עיצוב ותקינה של נתוני טקסט. 4 קטגוריות פעולה עיקריות.</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">UPPER / LOWER</span>
+      <span class="lesson-tag">LEFT / RIGHT</span>
+      <span class="lesson-tag">SUBSTRING</span>
+      <span class="lesson-tag">TRIM / REPLACE</span>
+      <span class="lesson-tag">LENGTH</span>
+      <span class="lesson-tag">CONCAT</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧹 קטגוריה 1: ניקוי נתונים (Cleaning)</div>
+    <div class="concept-box">
+      <div class="concept-label">TRIM / LTRIM / RTRIM</div>
+      <div class="concept-text">
+        מסיר רווחים מיותרים מהמחרוזת.<br>
+        <code>TRIM</code> — משני הצדדים | <code>LTRIM</code> — משמאל בלבד | <code>RTRIM</code> — מימין בלבד
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="kw">SELECT</span> <span class="fn">TRIM</span>(<span class="str">'   שלום עולם   '</span>) <span class="kw">AS</span> <span class="str">clean_text</span>;
+<span class="cmt">-- תוצאה: 'שלום עולם'</span>
+
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">TRIM</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">clean_company</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">REPLACE</div>
+      <div class="concept-text">
+        מחליף תת-מחרוזת אחת באחרת.<br>
+        <code>REPLACE(עמודה, 'מה להחליף', 'במה')</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- הסרת מקפים ממספרי טלפון</span>
+<span class="kw">SELECT</span> <span class="fn">REPLACE</span>(<span class="col">business_phone</span>, <span class="str">'-'</span>, <span class="str">''</span>) <span class="kw">AS</span> <span class="str">clean_phone</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;
+
+<span class="cmt">-- החלפת UK ב-United Kingdom</span>
+<span class="kw">SELECT</span> <span class="fn">REPLACE</span>(<span class="col">country_region</span>, <span class="str">'UK'</span>, <span class="str">'United Kingdom'</span>)
+<span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">✂️ קטגוריה 2: חילוץ נתונים (Extraction)</div>
+    <div class="concept-box">
+      <div class="concept-label">LEFT / RIGHT</div>
+      <div class="concept-text">
+        <code>LEFT(עמודה, N)</code> — N תווים מהתחלה<br>
+        <code>RIGHT(עמודה, N)</code> — N תווים מהסוף
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- 3 אותיות ראשונות משם החברה</span>
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">LEFT</span>(<span class="col">company</span>, <span class="num">3</span>) <span class="kw">AS</span> <span class="str">short_code</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;
+
+<span class="cmt">-- 4 ספרות אחרונות של טלפון</span>
+<span class="kw">SELECT</span> <span class="fn">RIGHT</span>(<span class="col">business_phone</span>, <span class="num">4</span>) <span class="kw">AS</span> <span class="str">phone_end</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">SUBSTRING</div>
+      <div class="concept-text">
+        <code>SUBSTRING(עמודה, התחלה, אורך)</code> — חילוץ ממיקום ספציפי.<br>
+        <strong>חשוב:</strong> המיקום מתחיל מ-1 (לא מ-0!).
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- 5 תווים החל מהתו ה-2</span>
+<span class="kw">SELECT</span> <span class="fn">SUBSTRING</span>(<span class="col">product_name</span>, <span class="num">2</span>, <span class="num">5</span>) <span class="kw">AS</span> <span class="str">middle_text</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">LENGTH ו-INSTR</div>
+      <div class="concept-text">
+        <code>LENGTH(עמודה)</code> — מחזיר את אורך המחרוזת במספר תווים<br>
+        <code>INSTR(עמודה, 'תו')</code> — מחזיר את המיקום של תת-מחרוזת
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="kw">SELECT</span> <span class="col">email_address</span>,
+       <span class="fn">LENGTH</span>(<span class="col">email_address</span>) <span class="kw">AS</span> <span class="str">email_length</span>,
+       <span class="fn">INSTR</span>(<span class="col">email_address</span>, <span class="str">'@'</span>) <span class="kw">AS</span> <span class="str">at_position</span>
+<span class="kw">FROM</span> <span class="tbl">employees</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🎨 קטגוריה 3: עיצוב מחדש (Formatting)</div>
+    <div class="concept-box">
+      <div class="concept-label">CONCAT ו-CONCAT_WS</div>
+      <div class="concept-text">
+        <code>CONCAT(a, b, c)</code> — מחבר מחרוזות. אם אחד מהערכים הוא NULL — התוצאה NULL.<br>
+        <code>CONCAT_WS(מפריד, a, b, c)</code> — מחבר עם מפריד קבוע <strong>ומדלג על NULL אוטומטית</strong>.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- כתובת מלאה עם פסיקים (מדלג על NULL)</span>
+<span class="kw">SELECT</span> <span class="fn">CONCAT_WS</span>(<span class="str">', '</span>, <span class="col">city</span>, <span class="col">state_province</span>, <span class="col">zip_postal_code</span>) <span class="kw">AS</span> <span class="str">full_address</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;
+
+<span class="cmt">-- מחיר עם סימן $</span>
+<span class="kw">SELECT</span> <span class="fn">CONCAT</span>(<span class="str">'$'</span>, <span class="fn">ROUND</span>(<span class="col">list_price</span>, <span class="num">2</span>)) <span class="kw">AS</span> <span class="str">formatted_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">✅ קטגוריה 4: תקינה ואחידות (Standardization)</div>
+    <div class="concept-box">
+      <div class="concept-label">UPPER / LOWER</div>
+      <div class="concept-text">
+        <code>UPPER(עמודה)</code> — הופך את כל הטקסט לאותיות גדולות<br>
+        <code>LOWER(עמודה)</code> — הופך את כל הטקסט לאותיות קטנות<br><br>
+        שימושי לנורמליזציה של נתונים לפני השוואה.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">company_caps</span>
+<span class="kw">FROM</span> <span class="tbl">suppliers</span>;
+
+<span class="kw">SELECT</span> <span class="fn">LOWER</span>(<span class="col">email_address</span>) <span class="kw">AS</span> <span class="str">standard_email</span>
+<span class="kw">FROM</span> <span class="tbl">employees</span>;</pre>
+    </div>
+    <div class="highlight-box warn">
+      <div class="hb-icon">⚠️</div>
+      <div class="hb-text"><strong>שים לב:</strong> UPPER/LOWER משנים את <strong>התצוגה בלבד</strong> — הם לא שומרים את השינוי בטבלה. לשינוי קבוע צריך UPDATE.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== שיעור 3 ===================== -->
+<div class="lesson-pane" id="pane-2">
+  <div class="lesson-header">
+    <div class="lesson-num">שיעור 3 / 4</div>
+    <div class="lesson-title">🔎 WHERE — סינון נתונים</div>
+    <div class="lesson-desc">סינון שורות לפי תנאים. הכלי הכי חיוני לשאילתות אמיתיות — כולל AND/OR, IN, BETWEEN, LIKE ו-IS NULL.</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">WHERE</span>
+      <span class="lesson-tag">AND / OR</span>
+      <span class="lesson-tag">IN</span>
+      <span class="lesson-tag">BETWEEN</span>
+      <span class="lesson-tag">LIKE</span>
+      <span class="lesson-tag">IS NULL</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📍 WHERE בסיסי</div>
+    <div class="concept-box">
+      <div class="concept-label">תחביר</div>
+      <div class="concept-text">
+        <code>WHERE</code> מגיע <strong>אחרי FROM</strong> ומסנן שורות לפי תנאי.<br>
+        אופרטורי השוואה: <code>=</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- מוצרים שמחירם מעל 50</span>
+<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;
+
+<span class="cmt">-- עובדים שאינם Sales Representative</span>
+<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">job_title</span>
+<span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">job_title</span> != <span class="str">'Sales Representative'</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔗 AND / OR — תנאים מרובים</div>
+    <div class="concept-box">
+      <div class="concept-label">ההבדל</div>
+      <div class="concept-text">
+        <code>AND</code> — <strong>שני</strong> התנאים חייבים להתקיים<br>
+        <code>OR</code> — <strong>לפחות אחד</strong> מהתנאים צריך להתקיים<br><br>
+        סוגריים קובעים עדיפות: <code>WHERE (a OR b) AND c</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- AND: לקוחות מ-USA ומ-New York</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>
+  <span class="kw">AND</span> <span class="col">city</span> = <span class="str">'New York'</span>;
+
+<span class="cmt">-- OR: מוצרים מ-Beverages או Condiments</span>
+<span class="kw">SELECT</span> <span class="col">product_name</span> <span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">WHERE</span> <span class="col">category</span> = <span class="str">'Beverages'</span>
+   <span class="kw">OR</span> <span class="col">category</span> = <span class="str">'Condiments'</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 IN — רשימת ערכים</div>
+    <div class="concept-box">
+      <div class="concept-label">מה זה IN?</div>
+      <div class="concept-text">
+        <code>IN</code> הוא קיצור נוח ל-OR מרובה. קריא יותר וקצר יותר.<br>
+        <code>WHERE city IN ('Tel Aviv', 'Jerusalem', 'Haifa')</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- ספקים מ-3 ערים (קיצור ל-OR)</span>
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>
+<span class="kw">FROM</span> <span class="tbl">suppliers</span>
+<span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'Tokyo'</span>, <span class="str">'London'</span>, <span class="str">'New York'</span>);
+
+<span class="cmt">-- NOT IN: לא מהערים האלה</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">WHERE</span> <span class="col">country_region</span> <span class="kw">NOT IN</span> (<span class="str">'USA'</span>, <span class="str">'UK'</span>);</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📏 BETWEEN — טווח ערכים</div>
+    <div class="concept-box">
+      <div class="concept-label">חשוב לדעת</div>
+      <div class="concept-text">
+        <code>BETWEEN x AND y</code> — כולל את שני הקצוות (x ו-y עצמם).<br>
+        שקול ל: <code>WHERE col >= x AND col <= y</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- הזמנות עם דמי משלוח בין 20 ל-50</span>
+<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>
+<span class="kw">FROM</span> <span class="tbl">orders</span>
+<span class="kw">WHERE</span> <span class="col">shipping_fee</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 LIKE — חיפוש דפוס</div>
+    <div class="concept-box">
+      <div class="concept-label">תווי wildcard</div>
+      <div class="concept-text">
+        <code>%</code> — כל מספר תווים (גם אפס)<br>
+        <code>_</code> — תו בודד בדיוק<br><br>
+        <code>'%gmail%'</code> — מכיל gmail | <code>'j%'</code> — מתחיל ב-j | <code>'%@gmail.com'</code> — מסתיים ב-@gmail.com
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- אימיילים שמסתיימים ב-northwindtraders.com</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders.com'</span>;
+
+<span class="cmt">-- שמות שמתחילים ב-A</span>
+<span class="kw">SELECT</span> <span class="col">first_name</span> <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">first_name</span> <span class="kw">LIKE</span> <span class="str">'A%'</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🚫 IS NULL / IS NOT NULL</div>
+    <div class="concept-box">
+      <div class="concept-label">NULL — ערך חסר</div>
+      <div class="concept-text">
+        NULL הוא ערך <strong>חסר / לא ידוע</strong> — לא אפס, לא ריק!<br>
+        לא ניתן להשתמש ב-<code>= NULL</code> — חייבים <code>IS NULL</code>.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- הזמנות שטרם נשלחו</span>
+<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>
+<span class="kw">FROM</span> <span class="tbl">orders</span>
+<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;
+
+<span class="cmt">-- לקוחות עם אתר אינטרנט</span>
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">web_page</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">WHERE</span> <span class="col">web_page</span> <span class="kw">IS NOT NULL</span>;</pre>
+    </div>
+    <div class="highlight-box danger">
+      <div class="hb-icon">❌</div>
+      <div class="hb-text"><strong>שגיאה נפוצה!</strong> <code>WHERE shipped_date = NULL</code> — זה <strong>לא עובד</strong> ב-SQL! תמיד משתמשים ב-<code>IS NULL</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== שיעור 4 ===================== -->
+<div class="lesson-pane" id="pane-3">
+  <div class="lesson-header">
+    <div class="lesson-num">שיעור 4 / 4</div>
+    <div class="lesson-title">📦 GROUP BY וצבירה</div>
+    <div class="lesson-desc">קיבוץ שורות וחישוב סטטיסטיקות — COUNT, SUM, AVG, MIN, MAX. כולל HAVING, ROLLUP ו-UNION.</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">GROUP BY</span>
+      <span class="lesson-tag">COUNT</span>
+      <span class="lesson-tag">SUM / AVG</span>
+      <span class="lesson-tag">MIN / MAX</span>
+      <span class="lesson-tag">HAVING</span>
+      <span class="lesson-tag">ROLLUP</span>
+      <span class="lesson-tag">UNION</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📊 פונקציות צבירה</div>
+    <div class="concept-box">
+      <div class="concept-label">הפונקציות העיקריות</div>
+      <div class="concept-text">
+        <code>COUNT(*)</code> — סופר שורות | <code>COUNT(עמודה)</code> — סופר ערכים לא-NULL<br>
+        <code>SUM(עמודה)</code> — מחשב סכום<br>
+        <code>AVG(עמודה)</code> — מחשב ממוצע<br>
+        <code>MIN(עמודה)</code> — הערך הנמוך ביותר<br>
+        <code>MAX(עמודה)</code> — הערך הגבוה ביותר
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- סטטיסטיקות על טבלת המוצרים</span>
+<span class="kw">SELECT</span>
+  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total_products</span>,
+  <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>,
+  <span class="fn">MIN</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">min_price</span>,
+  <span class="fn">MAX</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">max_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🗂️ GROUP BY — קיבוץ לפי קבוצות</div>
+    <div class="concept-box">
+      <div class="concept-label">הכלל החשוב</div>
+      <div class="concept-text">
+        כל עמודה ב-SELECT שאינה פונקציית צבירה <strong>חייבת</strong> להיות ב-GROUP BY.<br>
+        GROUP BY מחלק את הטבלה לקבוצות ומחשב צבירה לכל קבוצה.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- כמה מוצרים יש בכל קטגוריה?</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>;
+
+<span class="cmt">-- ממוצע מחיר לקטגוריה</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>
+<span class="kw">ORDER BY</span> <span class="str">avg_price</span> <span class="kw">DESC</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 HAVING — סינון אחרי קיבוץ</div>
+    <div class="concept-box">
+      <div class="concept-label">WHERE לעומת HAVING</div>
+      <div class="concept-text">
+        <code>WHERE</code> — מסנן שורות <strong>לפני</strong> הקיבוץ<br>
+        <code>HAVING</code> — מסנן קבוצות <strong>אחרי</strong> הקיבוץ<br><br>
+        <strong>כלל:</strong> לא ניתן להשתמש בפונקציות צבירה (COUNT, SUM…) ב-WHERE. לכן צריך HAVING.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- קטגוריות עם יותר מ-5 מוצרים</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">5</span>;
+
+<span class="cmt">-- WHERE (לפני) + HAVING (אחרי)</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">10</span>        <span class="cmt">-- סינון לפני קיבוץ</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>
+<span class="kw">HAVING</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) > <span class="num">30</span>; <span class="cmt">-- סינון אחרי קיבוץ</span></pre>
+    </div>
+    <div class="highlight-box tip">
+      <div class="hb-icon">💡</div>
+      <div class="hb-text"><strong>טריק לזכור:</strong> WHERE → לפני GROUP BY (על שורות). HAVING → אחרי GROUP BY (על קבוצות).</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📈 ROLLUP — סיכום כולל</div>
+    <div class="concept-box">
+      <div class="concept-label">מה זה ROLLUP?</div>
+      <div class="concept-text">
+        <code>GROUP BY עמודה WITH ROLLUP</code> — מוסיף שורת סיכום כולל בסוף התוצאות.<br>
+        השורה האחרונה תכיל NULL בעמודת הקיבוץ וסה"כ כולל.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- ספירה לפי קטגוריה + סה"כ</span>
+<span class="kw">SELECT</span>
+  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- סה"כ ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,
+  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔀 UNION — איחוד תוצאות</div>
+    <div class="concept-box">
+      <div class="concept-label">UNION לעומת UNION ALL</div>
+      <div class="concept-text">
+        <code>UNION</code> — מאחד תוצאות של שתי שאילתות ומסיר כפילויות<br>
+        <code>UNION ALL</code> — מאחד ושומר כפילויות (מהיר יותר)<br><br>
+        <strong>תנאי:</strong> שתי השאילתות חייבות להחזיר אותו מספר עמודות עם סוגי נתונים תואמים.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 העתק</button></div>
+      <pre><span class="cmt">-- רשימה מאוחדת של ערים מלקוחות ומספקים</span>
+<span class="kw">SELECT</span> <span class="col">city</span>, <span class="str">'לקוח'</span> <span class="kw">AS</span> <span class="str">type</span> <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">UNION</span>
+<span class="kw">SELECT</span> <span class="col">city</span>, <span class="str">'ספק'</span> <span class="kw">AS</span> <span class="str">type</span> <span class="kw">FROM</span> <span class="tbl">suppliers</span>
+<span class="kw">ORDER BY</span> <span class="col">city</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 סדר ביצוע SQL — חשוב לדעת!</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>FROM</strong> — מאיזו טבלה לשלוף</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>WHERE</strong> — סינון שורות</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>GROUP BY</strong> — קיבוץ לקבוצות</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>HAVING</strong> — סינון קבוצות</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text"><strong>SELECT</strong> — בחירת עמודות לתצוגה</div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-text"><strong>ORDER BY</strong> — מיון התוצאות</div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-text"><strong>LIMIT</strong> — הגבלת כמות שורות</div></div>
+    </div>
+    <div class="highlight-box info">
+      <div class="hb-icon">💡</div>
+      <div class="hb-text">הסדר שאנחנו <strong>כותבים</strong> SQL שונה מהסדר שה-DB <strong>מבצע</strong> אותו. זו הסיבה שלא ניתן להשתמש ב-Alias מ-SELECT בתוך WHERE.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showLesson(idx){
+  document.querySelectorAll('.lesson-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.lesson-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function copyThis(btn){
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='✅ הועתק';
+    setTimeout(()=>btn.textContent='📋 העתק',2000);
+  });
+}
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

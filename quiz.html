@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>בחן את עצמך — SQL Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;min-height:100vh}
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(188,140,255,.05) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(188,140,255,.1);border:1px solid rgba(188,140,255,.25);color:var(--purple);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:1.8rem;font-weight:900;color:var(--purple);font-family:var(--mono)}
+.hero-stat-label{font-size:12px;color:var(--text3)}
+
+/* SCORE BAR */
+.score-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;position:sticky;top:49px;z-index:90}
+.score-info{font-size:13px;color:var(--text2)}
+.score-info strong{color:var(--text);font-size:15px}
+.score-track{flex:1;min-width:150px;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:4px;transition:width .4s}
+.score-pct{font-family:var(--mono);font-size:13px;color:var(--purple);font-weight:700;white-space:nowrap}
+.reset-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:var(--font);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-label.easy{color:var(--green)}
+.section-label.medium{color:var(--orange)}
+.section-label.hard{color:var(--red)}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow:hidden;transition:border-color .2s}
+.q-card.correct{border-color:var(--green2)}
+.q-card.wrong{border-color:var(--red)}
+.q-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.q-meta{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.q-num{background:var(--bg4);color:var(--text3);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.q-diff{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.diff-easy{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.diff-medium{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.25)}
+.diff-hard{background:rgba(255,71,87,.1);color:var(--red);border:1px solid rgba(255,71,87,.25)}
+.q-topic{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.q-text{font-size:14px;font-weight:600;color:var(--text);line-height:1.6}
+.q-body{padding:1rem 1.25rem}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:.6rem}
+.option{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.75rem;text-align:right}
+.option:hover:not(.disabled){background:var(--bg4);border-color:var(--border2)}
+.option.selected{border-color:var(--blue);background:rgba(74,158,255,.06)}
+.option.correct-ans{border-color:var(--green2)!important;background:rgba(0,168,84,.08)!important}
+.option.wrong-ans{border-color:var(--red)!important;background:rgba(255,71,87,.08)!important}
+.option.disabled{cursor:default;pointer-events:none}
+.opt-letter{width:26px;height:26px;border-radius:6px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.option.correct-ans .opt-letter{background:var(--green2);color:#fff;border-color:var(--green2)}
+.option.wrong-ans .opt-letter{background:var(--red);color:#fff;border-color:var(--red)}
+.option.selected .opt-letter{background:var(--blue2);color:#fff;border-color:var(--blue)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1;font-family:var(--mono)}
+.option.correct-ans .opt-text,.option.wrong-ans .opt-text{color:var(--text)}
+
+/* EXPLANATION */
+.explanation{display:none;margin-top:.75rem;background:rgba(74,158,255,.04);border-right:3px solid var(--blue2);border-radius:0 6px 6px 0;padding:.75rem 1rem}
+.explanation.show{display:block}
+.explanation p{font-size:13px;color:var(--text2);line-height:1.7}
+.explanation strong{color:var(--text);font-weight:600}
+.result-icon{font-size:1.1rem;margin-left:.4rem}
+
+/* FINISH */
+.finish-card{background:linear-gradient(135deg,rgba(188,140,255,.08),rgba(74,158,255,.05));border:1px solid rgba(188,140,255,.2);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.6rem;font-weight:900;color:var(--purple);margin-bottom:.5rem}
+.finish-score{font-size:3rem;font-weight:900;font-family:var(--mono);margin:.75rem 0}
+.finish-sub{color:var(--text2);font-size:14px}
+.finish-grade{display:inline-block;font-size:1rem;font-weight:700;padding:.4rem 1.2rem;border-radius:20px;margin:.75rem 0}
+.grade-a{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.grade-b{background:rgba(74,158,255,.15);color:var(--blue);border:1px solid rgba(74,158,255,.3)}
+.grade-c{background:rgba(255,140,66,.15);color:var(--orange);border:1px solid rgba(255,140,66,.3)}
+.grade-d{background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3)}
+.retry-btn{background:var(--blue2);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;transition:all .2s}
+.retry-btn:hover{background:var(--blue);transform:translateY(-1px)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.opt-text{font-size:11px}
+.score-bar{gap:.75rem}
+.score-track{min-width:80px}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">🧠 בחן את עצמך — SQL Quiz</div>
+  <div class="topnav-links">
+    <a href="quiz-beginner.html" class="topnav-link">🌱 קוויז מתחילים</a>
+    <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 דף הבית</a>
+  <a href="course.html">📚 חומר לימוד</a>
+  <a href="practice.html">✏️ תרגולים</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🧠 Sakila + SQL Server · 33 שאלות</div>
+  <h1 class="hero-title">בחן את עצמך — SQL Quiz</h1>
+  <p class="hero-sub">שאלות אמריקאיות על CASE WHEN, Subqueries, JOIN ו-Window Functions</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">33</div><div class="hero-stat-label">שאלות</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">רמות קושי</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="heroAnswered">0</div><div class="hero-stat-label">נענו</div></div>
+  </div>
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div class="score-info">ניקוד: <strong id="scoreText">0 / 0</strong></div>
+  <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="score-pct" id="scorePct">0%</div>
+  <button class="reset-btn" onclick="resetQuiz()">🔄 התחל מחדש</button>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const questions = [
+  {
+    num:1, diff:'easy', topic:'CASE WHEN + JOIN',
+    text:'איזו שאילתה תציג את שם הסרט, שמו המלא של השפה וסיווג אורך (Long/Medium/Short)?',
+    options:[
+      "SELECT f.title, l.name, CASE WHEN f.length > 120 THEN 'Long' WHEN f.length > 60 THEN 'Medium' ELSE 'Short' END FROM film f JOIN language l ON f.language_id = l.language_id",
+      "SELECT f.title, l.name, CASE f.length WHEN 120 THEN 'Long' WHEN 60 THEN 'Medium' ELSE 'Short' END FROM film f JOIN language l ON f.language_id = l.language_id",
+      "SELECT f.title, l.name, IF(f.length > 120, 'Long', 'Short') FROM film f JOIN language l ON f.language_id = l.language_id",
+      "SELECT f.title, l.name FROM film f JOIN language l ON f.language_id = l.language_id WHERE f.length > 120"
+    ],
+    correct:0,
+    explain:'שימוש נכון ב-<strong>CASE WHEN</strong> לטווחים (> 120, > 60) וחיבור לטבלת השפות דרך language_id.'
+  },
+  {
+    num:2, diff:'easy', topic:'CASE WHEN',
+    text:"כיצד נציג את שם הלקוח ואת שם הסניף ('Downtown' לסניף 1, 'Uptown' לסניף 2)?",
+    options:[
+      "SELECT first_name, store_id, CASE WHEN store_id = 1 THEN 'Downtown' ELSE 'Uptown' END FROM customer",
+      "SELECT first_name, store_id, DECODE(store_id, 1, 'Downtown', 2, 'Uptown') FROM customer",
+      "SELECT first_name, store_id, IF store_id = 1 THEN 'Downtown' FROM customer",
+      "SELECT first_name, store_id, SWITCH store_id CASE 1: 'Downtown' FROM customer"
+    ],
+    correct:0,
+    explain:'מבנה <strong>CASE WHEN</strong> תקני ב-MySQL. DECODE שייך ל-Oracle, ו-IF/SWITCH אינם תחביר חוקי בצורה זו.'
+  },
+  {
+    num:3, diff:'easy', topic:'IS NULL',
+    text:'איך נזהה סרטים שטרם הוחזרו (שבהם return_date הוא ריק)?',
+    options:[
+      "SELECT rental_id, CASE WHEN return_date = 0 THEN 'Still Out' ELSE 'Returned' END FROM rental",
+      "SELECT rental_id, CASE WHEN return_date IS NULL THEN 'Still Out' ELSE 'Returned' END FROM rental",
+      "SELECT rental_id, CASE WHEN return_date = '' THEN 'Still Out' ELSE 'Returned' END FROM rental",
+      "SELECT rental_id, IFNULL(return_date, 'Still Out') FROM rental"
+    ],
+    correct:1,
+    explain:'בדיקה נכונה של ערכי <strong>NULL</strong> מתבצעת תמיד עם <strong>IS NULL</strong> ולא עם = 0 או = רווח.'
+  },
+  {
+    num:4, diff:'easy', topic:'CASE WHEN',
+    text:"איזו שאילתה תסווג מחיר מתחת ל-2 כ-'Budget' ומעל 4 כ-'Premium'?",
+    options:[
+      "SELECT title, CASE WHEN rental_rate < 2 THEN 'Budget' WHEN rental_rate > 4 THEN 'Premium' ELSE 'Standard' END FROM film",
+      "SELECT title, CASE rental_rate WHEN 0.99 THEN 'Budget' WHEN 4.99 THEN 'Premium' END FROM film",
+      "SELECT title, CASE WHEN rental_rate < 2 THEN Budget ELSE Premium END FROM film",
+      "SELECT title, rental_rate WHERE rental_rate < 2 AS Budget FROM film"
+    ],
+    correct:0,
+    explain:'שימוש נכון בסימני השוואה (< >) ומחרוזות בגרשיים בתוך ה-CASE. ב-תשובה 3 חסרים גרשיים סביב Budget/Premium.'
+  },
+  {
+    num:5, diff:'easy', topic:'JOIN משולש',
+    text:"איזו שאילתה מחברת בין לקוח לעיר שלו ומציגה 'Active' אם הערך ב-active הוא 1?",
+    options:[
+      "SELECT c.first_name, ci.city, CASE WHEN c.active = 1 THEN 'Active' ELSE 'Inactive' END FROM customer c JOIN address a ON c.address_id = a.address_id JOIN city ci ON a.city_id = ci.city_id",
+      "SELECT c.first_name, ci.city, IF(c.active, 'Active', 'Inactive') FROM customer c JOIN city ci ON c.city_id = ci.city_id",
+      "SELECT c.first_name, ci.city, CASE c.active WHEN 1 THEN Active ELSE Inactive END FROM customer c JOIN address a ON c.address_id = a.address_id",
+      "SELECT c.first_name, ci.city FROM customer c, city ci WHERE c.active = 1"
+    ],
+    correct:0,
+    explain:'דורש <strong>JOIN משולש</strong>: לקוח → כתובת → עיר. אין קשר ישיר בין customer לבין city.'
+  },
+  {
+    num:6, diff:'medium', topic:'GROUP BY + CASE',
+    text:"איזו שאילתה תציג שם עובד, סך הכנסות וסיווג 'Top Performer' מעל 35,000?",
+    options:[
+      "SELECT s.first_name, SUM(p.amount), CASE WHEN SUM(p.amount) > 35000 THEN 'Top Performer' ELSE 'Standard' END FROM staff s JOIN payment p ON s.staff_id = p.staff_id GROUP BY s.staff_id",
+      "SELECT s.first_name, p.amount, CASE WHEN p.amount > 35000 THEN 'Top Performer' END FROM staff s JOIN payment p ON s.staff_id = p.staff_id",
+      "SELECT s.first_name, SUM(p.amount) FROM staff s JOIN payment p ON s.staff_id = p.staff_id HAVING SUM(p.amount) > 35000",
+      "SELECT s.first_name, SUM(p.amount) AS total FROM staff s JOIN payment p ON s.staff_id = p.staff_id WHERE total > 35000 GROUP BY s.first_name"
+    ],
+    correct:0,
+    explain:'חובה להשתמש ב-<strong>GROUP BY</strong> כדי שה-SUM יחושב לכל עובד בנפרד. ב-תשובה 4 לא ניתן להשתמש ב-Alias בתוך WHERE.'
+  },
+  {
+    num:7, diff:'medium', topic:'COUNT + CASE',
+    text:"איך נסווג קטגוריות עם יותר מ-70 סרטים כ-'Popular'?",
+    options:[
+      "SELECT c.name, COUNT(fc.film_id), CASE WHEN COUNT(fc.film_id) > 70 THEN 'Popular' ELSE 'Niche' END FROM category c JOIN film_category fc ON c.category_id = fc.category_id GROUP BY c.name",
+      "SELECT c.name, COUNT(fc.film_id) FROM category c JOIN film_category fc ON c.category_id = fc.category_id WHERE COUNT(fc.film_id) > 70",
+      "SELECT c.name, CASE WHEN film_id > 70 THEN 'Popular' END FROM category",
+      "SELECT c.name, COUNT(fc.film_id) AS total FROM category c JOIN film_category fc ON c.category_id = fc.category_id GROUP BY c.name HAVING total > 70"
+    ],
+    correct:0,
+    explain:'שימוש ב-<strong>COUNT בתוך CASE</strong> עם GROUP BY. ב-תשובה 2 לא ניתן להשתמש ב-COUNT בתוך WHERE.'
+  },
+  {
+    num:8, diff:'medium', topic:'LEFT JOIN',
+    text:"איזו שאילתה תציג 'Out of Stock' אם אין עותקים לסרט בסניף מסוים?",
+    options:[
+      "SELECT f.title, i.store_id, CASE WHEN COUNT(i.inventory_id) = 0 THEN 'Out of Stock' ELSE 'In Stock' END FROM film f LEFT JOIN inventory i ON f.film_id = i.film_id GROUP BY f.title, i.store_id",
+      "SELECT f.title, i.store_id, CASE WHEN i.inventory_id IS NULL THEN 'Out of Stock' END FROM film f JOIN inventory i ON f.film_id = i.film_id",
+      "SELECT f.title, COUNT(i.inventory_id) FROM film f JOIN inventory i ON f.film_id = i.film_id WHERE i.inventory_id = 0",
+      "SELECT f.title, IF(COUNT(inventory_id) > 0, 'In Stock', 'Out of Stock') FROM film f INNER JOIN inventory i ON f.film_id = i.film_id"
+    ],
+    correct:0,
+    explain:'<strong>LEFT JOIN</strong> קריטי כדי לראות סרטים עם 0 עותקים. עם INNER JOIN, סרטים ללא מלאי לא יופיעו בכלל.'
+  },
+  {
+    num:9, diff:'medium', topic:'CASE ערכים קבועים',
+    text:"איך נמיר את הקוד 'R' למילים 'Restricted'?",
+    options:[
+      "SELECT title, CASE rating WHEN 'R' THEN 'Restricted' WHEN 'G' THEN 'General' ELSE 'Other' END FROM film",
+      "SELECT title, IF(rating = 'R', 'Restricted', 'Other') FROM film",
+      "SELECT title, rating AS Restricted FROM film WHERE rating = 'R'",
+      "SELECT title, REPLACE(rating, 'R', 'Restricted') FROM film"
+    ],
+    correct:0,
+    explain:'זו הצורה הפשוטה של <strong>CASE</strong> להחלפת ערכים קבועים — CASE עמודה WHEN ערך THEN תוצאה.'
+  },
+  {
+    num:10, diff:'medium', topic:'JOIN ארבע טבלאות',
+    text:"איזו שאילתה תסווג לקוחות מארה\"ב וקנדה כ-'North America'?",
+    options:[
+      "SELECT c.first_name, co.country, CASE WHEN co.country IN ('United States', 'Canada') THEN 'North America' ELSE 'Other' END FROM customer c JOIN address a ON c.address_id = a.address_id JOIN city ci ON a.city_id = ci.city_id JOIN country co ON ci.country_id = co.country_id",
+      "SELECT c.first_name, co.country, CASE co.country WHEN 'United States' OR 'Canada' THEN 'North America' END FROM customer",
+      "SELECT c.first_name, co.country FROM customer c JOIN country co ON c.country_id = co.country_id WHERE co.country = 'Canada'",
+      "SELECT first_name, CASE WHEN country = 'USA' THEN 'North America' END FROM customer"
+    ],
+    correct:0,
+    explain:'דורש את כל שרשרת ה-JOINs: לקוח → כתובת → עיר → מדינה. <strong>IN</strong> משמש לבדיקת מספר ערכים.'
+  },
+  {
+    num:11, diff:'hard', topic:'DATEDIFF + JOIN',
+    text:'איזו שאילתה בודקת אם משך ההשכרה בפועל (DATEDIFF) גדול ממה שהוגדר לסרט (rental_duration)?',
+    options:[
+      "SELECT f.title, CASE WHEN DATEDIFF(r.return_date, r.rental_date) > f.rental_duration THEN 'Late' ELSE 'On Time' END FROM rental r JOIN inventory i ON r.inventory_id = i.inventory_id JOIN film f ON i.film_id = f.film_id",
+      "SELECT f.title, CASE WHEN return_date - rental_date > rental_duration THEN 'Late' END FROM film",
+      "SELECT f.title, IF(r.return_date > f.rental_duration, 'Late', 'On Time') FROM rental r JOIN film f ON r.film_id = f.film_id",
+      "SELECT f.title FROM film f WHERE rental_duration < (SELECT COUNT(*) FROM rental)"
+    ],
+    correct:0,
+    explain:'שימוש נכון ב-<strong>DATEDIFF(return_date, rental_date)</strong> והשוואה ל-rental_duration מטבלת film דרך JOIN דו-שלבי.'
+  },
+  {
+    num:12, diff:'hard', topic:'Subquery בתוך CASE',
+    text:"איזו שאילתה תסווג לקוח כ-'High Spender' אם סך תשלומיו גבוה מהממוצע של כל הלקוחות?",
+    options:[
+      "SELECT first_name, SUM(amount), CASE WHEN SUM(amount) > (SELECT AVG(total) FROM (SELECT SUM(amount) AS total FROM payment GROUP BY customer_id) AS sub) THEN 'High Spender' ELSE 'Regular' END FROM customer JOIN payment USING (customer_id) GROUP BY customer_id",
+      "SELECT first_name, SUM(amount) FROM payment GROUP BY customer_id HAVING SUM(amount) > AVG(amount)",
+      "SELECT first_name, CASE WHEN amount > AVG(amount) THEN 'High Spender' END FROM payment",
+      "SELECT first_name, SUM(amount) AS total FROM payment WHERE total > AVG(total) GROUP BY customer_id"
+    ],
+    correct:0,
+    explain:'שילוב של <strong>תת-שאילתה בתוך CASE</strong> — הממוצע הכללי מחושב בנפרד בתוך הסוגריים, ואז מושווה לסכום של כל לקוח.'
+  },
+  {
+    num:13, diff:'hard', topic:'COUNT + GROUP BY',
+    text:"איך נסווג שחקן עם מעל 30 סרטים כ-'Superstar'?",
+    options:[
+      "SELECT a.first_name, COUNT(fa.film_id), CASE WHEN COUNT(fa.film_id) > 30 THEN 'Superstar' ELSE 'Veteran' END FROM actor a JOIN film_actor fa ON a.actor_id = fa.actor_id GROUP BY a.actor_id",
+      "SELECT a.first_name, COUNT(fa.film_id) AS movies FROM actor a JOIN film_actor fa ON a.actor_id = fa.actor_id WHERE movies > 30",
+      "SELECT a.first_name, CASE WHEN film_id > 30 THEN 'Superstar' END FROM film_actor",
+      "SELECT first_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor HAVING COUNT(*) > 30)"
+    ],
+    correct:0,
+    explain:'ספירה וסיווג בתוך שאילתת אגרגציה. <strong>GROUP BY a.actor_id</strong> מאפשר לספור סרטים לכל שחקן.'
+  },
+  {
+    num:14, diff:'hard', topic:'Window Function LAG',
+    text:"איזו שאילתה משווה הכנסות חודשיות ורושמת 'Growth' אם החודש הנוכחי גבוה מהקודם (LAG)?",
+    options:[
+      "SELECT month, current_rev, CASE WHEN current_rev > LAG(current_rev) OVER (ORDER BY month) THEN 'Growth' ELSE 'Decline' END FROM (SELECT DATE_FORMAT(payment_date, '%Y-%m') AS month, SUM(amount) AS current_rev FROM payment GROUP BY month) AS t",
+      "SELECT month, SUM(amount), CASE WHEN current > previous THEN 'Growth' END FROM payment",
+      "SELECT month, SUM(amount) FROM payment GROUP BY month HAVING SUM(amount) > SUM(amount)[-1]",
+      "SELECT month, IF(SUM(amount) > (SELECT SUM(amount) FROM payment), 'Growth', 'Decline') FROM payment"
+    ],
+    correct:0,
+    explain:'שימוש ב-<strong>Window Function LAG()</strong> כדי לגשת לשורה הקודמת, בתוך CTE/תת-שאילתה שמחשבת הכנסות חודשיות.'
+  },
+  {
+    num:15, diff:'hard', topic:'חישוב בתוך CASE',
+    text:'איזו שאילתה תעלה את מחיר ההשכרה ב-20% לסרטים שהושכרו מעל 30 פעמים?',
+    options:[
+      "SELECT f.title, COUNT(r.rental_id), CASE WHEN COUNT(r.rental_id) > 30 THEN f.rental_rate * 1.2 ELSE f.rental_rate END AS New_Price FROM film f JOIN inventory i ON f.film_id = i.film_id JOIN rental r ON i.inventory_id = r.inventory_id GROUP BY f.film_id",
+      "SELECT title, rental_rate * 1.2 FROM film WHERE (SELECT COUNT(*) FROM rental) > 30",
+      "UPDATE film SET rental_rate = rental_rate * 1.2 WHERE film_id IN (SELECT film_id FROM rental GROUP BY film_id HAVING COUNT(*) > 30)",
+      "SELECT f.title, IF(COUNT(r.rental_id) > 30, 'Increase', 'Keep') FROM film f JOIN rental r ON f.film_id = r.film_id"
+    ],
+    correct:0,
+    explain:'חישוב מתמטי (<strong>rental_rate * 1.2</strong>) בתוך ה-CASE על בסיס נתוני אגרגציה מ-JOIN משולש דרך inventory.'
+  },
+
+  // ===== חלק 4: תת-שאילתות Sakila =====
+  {
+    num:16, diff:'easy', topic:'Subquery · Sakila',
+    text:'איזו שאילתה תציג את שמות הסרטים שאורכם גדול מהממוצע?',
+    options:[
+      "SELECT title FROM film WHERE length > AVG(length);",
+      "SELECT title FROM film WHERE length > (SELECT AVG(length) FROM film);",
+      "SELECT title FROM film HAVING length > (SELECT AVG(length) FROM film);",
+      "SELECT title FROM film WHERE length > (AVG(length) FROM film);"
+    ],
+    correct:1,
+    explain:'לא ניתן להשתמש ב-<strong>AVG()</strong> ישירות ב-WHERE. חייבים תת-שאילתה: WHERE length > (SELECT AVG(length) FROM film).'
+  },
+  {
+    num:17, diff:'easy', topic:'IN + Subquery · Sakila',
+    text:'איך נשלוף את שמות הלקוחות שמופיעים בטבלת התשלומים בעזרת תת-שאילתה?',
+    options:[
+      "SELECT first_name FROM customer WHERE customer_id IN (SELECT customer_id FROM payment);",
+      "SELECT first_name FROM customer WHERE EXISTS (SELECT * FROM payment);",
+      "SELECT first_name FROM customer WHERE customer_id = (SELECT customer_id FROM payment);",
+      "SELECT first_name FROM customer JOIN payment USING (customer_id);"
+    ],
+    correct:0,
+    explain:'<strong>IN</strong> עם תת-שאילתה — מחזיר לקוחות שה-ID שלהם מופיע בטבלת payment. תשובה ב שגויה כי EXISTS ללא תנאי קורלציה יחזיר תמיד TRUE.'
+  },
+  {
+    num:18, diff:'easy', topic:'Subquery ערך בודד · Sakila',
+    text:"איך נשלוף סרטים שהשפה שלהם היא English מבלי להשתמש ב-JOIN?",
+    options:[
+      "SELECT title FROM film WHERE language_id = 'English';",
+      "SELECT title FROM film WHERE language_id = (SELECT language_id FROM language WHERE name = 'English');",
+      "SELECT title FROM film WHERE language_name = (SELECT name FROM language);",
+      "SELECT title FROM film WHERE EXISTS (SELECT name FROM language WHERE name = 'English');"
+    ],
+    correct:1,
+    explain:'תת-שאילתה שמחזירה <strong>ערך בודד</strong> (language_id) — מושלמת לשימוש עם =. תשובה א שגויה כי language_id הוא מספר, לא טקסט.'
+  },
+  {
+    num:19, diff:'easy', topic:'NOT IN + Subquery · Sakila',
+    text:'איזו שאילתה תמצא סרטים שלא מופיעים בטבלת ה-inventory?',
+    options:[
+      "SELECT title FROM film WHERE film_id NOT IN (SELECT film_id FROM inventory);",
+      "SELECT title FROM film WHERE film_id IN (SELECT film_id FROM inventory WHERE quantity = 0);",
+      "SELECT title FROM film f LEFT JOIN inventory i ON f.film_id = i.film_id WHERE i.inventory_id IS NOT NULL;",
+      "SELECT title FROM film WHERE film_id != (SELECT film_id FROM inventory);"
+    ],
+    correct:0,
+    explain:'<strong>NOT IN</strong> עם תת-שאילתה מוצא שורות שה-ID שלהן לא מופיע בתוצאה. תשובה ד שגויה כי = עם תת-שאילתה שמחזירה מספר שורות תיכשל.'
+  },
+  {
+    num:20, diff:'easy', topic:'IN + Subquery · Sakila',
+    text:'איך נציג את שמות השחקנים ששיחקו בסרט שבו film_id = 1?',
+    options:[
+      "SELECT first_name FROM actor WHERE actor_id = (SELECT actor_id FROM film_actor WHERE film_id = 1);",
+      "SELECT first_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = 1);",
+      "SELECT first_name FROM actor JOIN film_actor USING (actor_id) WHERE film_id = 1;",
+      "SELECT first_name FROM actor WHERE film_id = 1;"
+    ],
+    correct:1,
+    explain:'<strong>IN</strong> הכרחי כאן כי תת-השאילתה מחזירה <strong>מספר שחקנים</strong>. = יכשל כשיש יותר משורה אחת.'
+  },
+
+  // ===== חלק 5: תת-שאילתות SQL Server =====
+  {
+    num:21, diff:'medium', topic:'Subquery · SQL Server',
+    text:'איזו שאילתה תציג את שם המוצר ומחירו, אם מחירו גבוה מהממוצע הכללי?',
+    options:[
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > (SELECT AVG(UnitPrice) FROM Warehouse.StockItems);",
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > AVG(UnitPrice);",
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems GROUP BY StockItemName HAVING UnitPrice > AVG(UnitPrice);",
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > (SELECT SUM(UnitPrice)/COUNT(*) FROM Warehouse.StockItems);"
+    ],
+    correct:0,
+    explain:'<strong>AVG() לא עובד ב-WHERE ישירות</strong> — חייבים תת-שאילתה. תשובה ד גם נכונה טכנית אבל פחות קריאה.'
+  },
+  {
+    num:22, diff:'medium', topic:'Correlated Subquery · SQL Server',
+    text:'איך נציג את שם הלקוח ואת תאריך ההזמנה האחרונה שלו בעזרת תת-שאילתה בקורלציה?',
+    options:[
+      "SELECT c.CustomerName, MAX(o.OrderDate) FROM Sales.Customers c JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
+      "SELECT c.CustomerName, (SELECT MAX(OrderDate) FROM Sales.Orders o WHERE o.CustomerID = c.CustomerID) AS LastOrderDate FROM Sales.Customers c;",
+      "SELECT CustomerName, (SELECT MAX(OrderDate) FROM Sales.Orders) FROM Sales.Customers;",
+      "SELECT c.CustomerName, o.OrderDate FROM Sales.Customers c WHERE o.OrderDate = (SELECT MAX(OrderDate) FROM Sales.Orders);"
+    ],
+    correct:1,
+    explain:'<strong>Correlated Subquery</strong> — התת-שאילתה מתייחסת ל-c.CustomerID מהשאילתה החיצונית. מחושבת מחדש לכל לקוח.'
+  },
+  {
+    num:23, diff:'medium', topic:'Derived Table · SQL Server',
+    text:'איך נחשב ממוצע של סכומי הזמנות (שחושבו מראש בתת-שאילתה)?',
+    options:[
+      "SELECT AVG(SUM(Quantity * UnitPrice)) FROM Sales.OrderLines;",
+      "SELECT AVG(Total) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS Total FROM Sales.OrderLines GROUP BY OrderID) AS Sub;",
+      "SELECT SUM(Quantity * UnitPrice) / COUNT(OrderID) FROM Sales.OrderLines;",
+      "SELECT AVG(Total) FROM (SELECT SUM(Quantity * UnitPrice) FROM Sales.OrderLines) AS Sub;"
+    ],
+    correct:1,
+    explain:'<strong>Derived Table</strong> (טבלה נגזרת) — תת-שאילתה ב-FROM שמחשבת סכום לכל הזמנה, ואז AVG על התוצאות.'
+  },
+  {
+    num:24, diff:'medium', topic:'TOP + Subquery · SQL Server',
+    text:'איזו שאילתה תמצא את שם העובד עם כמות ההזמנות הגבוהה ביותר?',
+    options:[
+      "SELECT FullName FROM Application.People WHERE PersonID = (SELECT TOP 1 SalespersonPersonID FROM Sales.Orders GROUP BY SalespersonPersonID ORDER BY COUNT(*) DESC);",
+      "SELECT FullName FROM Application.People WHERE PersonID IN (SELECT COUNT(OrderID) FROM Sales.Orders);",
+      "SELECT FullName FROM Application.People p JOIN Sales.Orders o ON p.PersonID = o.SalespersonPersonID WHERE COUNT(o.OrderID) = MAX(COUNT(o.OrderID));",
+      "SELECT FullName FROM Application.People WHERE PersonID = MAX(SalespersonPersonID);"
+    ],
+    correct:0,
+    explain:'<strong>TOP 1</strong> עם ORDER BY COUNT(*) DESC מחזיר את העובד עם הכי הרבה הזמנות. ב-SQL Server TOP משמש במקום LIMIT.'
+  },
+  {
+    num:25, diff:'medium', topic:'NOT IN + JOIN · SQL Server',
+    text:'איך נמצא מוצרים שלא הוזמנו בשנת 2016?',
+    options:[
+      "SELECT StockItemName FROM Warehouse.StockItems WHERE StockItemID NOT IN (SELECT StockItemID FROM Sales.OrderLines ol JOIN Sales.Orders o ON ol.OrderID = o.OrderID WHERE YEAR(o.OrderDate) = 2016);",
+      "SELECT StockItemName FROM Warehouse.StockItems WHERE YEAR(OrderDate) != 2016;",
+      "SELECT StockItemName FROM Warehouse.StockItems s LEFT JOIN Sales.OrderLines ol ON s.StockItemID = ol.StockItemID WHERE ol.OrderID IS NULL;",
+      "SELECT StockItemName FROM Warehouse.StockItems WHERE NOT EXISTS (SELECT * FROM Sales.Orders WHERE YEAR(OrderDate) = 2016);"
+    ],
+    correct:0,
+    explain:'<strong>NOT IN</strong> עם תת-שאילתה שמסננת הזמנות מ-2016 בלבד. תשובה ג מוצאת מוצרים שלא הוזמנו בכלל, לא רק ב-2016.'
+  },
+
+  // ===== חלק 6: JOIN + SQL Server =====
+  {
+    num:26, diff:'medium', topic:'INNER JOIN · SQL Server',
+    text:'איזו שאילתה מחברת נכון בין מוצר לספק שלו?',
+    options:[
+      "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si JOIN Purchasing.Suppliers s ON si.SupplierID = s.SupplierID;",
+      "SELECT StockItemName, SupplierName FROM Warehouse.StockItems, Purchasing.Suppliers;",
+      "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si LEFT JOIN Purchasing.Suppliers s ON si.StockItemID = s.SupplierID;",
+      "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si JOIN Purchasing.Suppliers s ON si.StockItemName = s.SupplierName;"
+    ],
+    correct:0,
+    explain:'<strong>JOIN על SupplierID</strong> — המפתח הנכון לחיבור. תשובה ב יוצרת Cartesian Product, תשובה ג מחברת שדות שגויים.'
+  },
+  {
+    num:27, diff:'medium', topic:'LEFT JOIN · SQL Server',
+    text:'איך נציג את כל הלקוחות, גם כאלו שמעולם לא ביצעו הזמנה?',
+    options:[
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c LEFT JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Orders o LEFT JOIN Sales.Customers c ON o.CustomerID = c.CustomerID;",
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c FULL JOIN Sales.Orders o ON c.CustomerID = o.CustomerID WHERE o.OrderID IS NULL;"
+    ],
+    correct:1,
+    explain:'<strong>LEFT JOIN</strong> מטבלת Customers — שומר את כל הלקוחות. לקוחות ללא הזמנות יקבלו NULL בעמודות ה-Orders.'
+  },
+  {
+    num:28, diff:'hard', topic:'JOIN חמש טבלאות · SQL Server',
+    text:'בשביל להציג הזמנה, לקוח, עובד, מוצר וכמות — מהו סדר החיבורים הנכון?',
+    options:[
+      "Orders → Customers → People (Salesperson) → OrderLines → StockItems",
+      "Orders → Customers → StockItems → OrderLines",
+      "Customers → People → Orders",
+      "StockItems → Suppliers → Orders → Customers"
+    ],
+    correct:0,
+    explain:'הסדר הלוגי: <strong>Orders</strong> (מרכז) → Customers (מי הזמין) → People (מי מכר) → OrderLines (פרטי שורות) → StockItems (שם המוצר).'
+  },
+  {
+    num:29, diff:'hard', topic:'Self JOIN · SQL Server',
+    text:'בטבלת הלקוחות יש עמודה BillToCustomerID. איך נראה את שם הלקוח לצד שם הלקוח שמשלם עליו?',
+    options:[
+      "SELECT c.CustomerName, b.CustomerName FROM Sales.Customers c JOIN Sales.Customers b ON c.BillToCustomerID = b.CustomerID;",
+      "SELECT c.CustomerName, c.BillToCustomerID FROM Sales.Customers c;",
+      "SELECT c1.CustomerName, c2.CustomerName FROM Sales.Customers c1 JOIN Sales.Customers c2 ON c1.CustomerID = c2.CustomerID;",
+      "SELECT CustomerName FROM Sales.Customers WHERE BillToCustomerID IS NOT NULL;"
+    ],
+    correct:0,
+    explain:'<strong>Self JOIN</strong> — מחברים טבלה לעצמה עם שני aliases שונים (c ו-b). c הוא הלקוח, b הוא מי שמשלם עליו.'
+  },
+  {
+    num:30, diff:'hard', topic:'LEFT JOIN + IS NULL · SQL Server',
+    text:'איך נמצא מוצר שלא מופיע בטבלת שורות ההזמנה (OrderLines)?',
+    options:[
+      "SELECT si.StockItemName FROM Warehouse.StockItems si JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID;",
+      "SELECT si.StockItemName FROM Warehouse.StockItems si LEFT JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID WHERE ol.OrderLineID IS NULL;",
+      "SELECT si.StockItemName FROM Warehouse.StockItems si WHERE EXISTS (SELECT * FROM Sales.OrderLines);",
+      "SELECT si.StockItemName FROM Warehouse.StockItems si RIGHT JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID WHERE si.StockItemID IS NULL;"
+    ],
+    correct:1,
+    explain:'<strong>LEFT JOIN + WHERE IS NULL</strong> — הטריק הקלאסי: מחברים, ואז מסננים רק שורות שלא נמצאה להן התאמה (NULL).'
+  },
+  {
+    num:31, diff:'hard', topic:'CASE + DATEDIFF · Sakila',
+    text:'איך נבדוק אם סרט הוחזר באיחור?',
+    options:[
+      "CASE WHEN DATEDIFF(return_date, rental_date) > rental_duration THEN 'Late' ELSE 'On Time' END",
+      "CASE WHEN return_date > rental_duration THEN 'Late' ELSE 'On Time' END",
+      "CASE WHEN return_date - rental_date > 7 THEN 'Late' END",
+      "IF(return_date > rental_date, 'Late', 'On Time')"
+    ],
+    correct:0,
+    explain:'<strong>DATEDIFF(return_date, rental_date)</strong> מחשב מספר ימים בפועל ומשווה ל-rental_duration. תשובה ב משווה תאריך למספר ימים — שגוי.'
+  },
+  {
+    num:32, diff:'hard', topic:'CASE + Subquery · Sakila',
+    text:"איך נסווג לקוח כ-'High Spender' אם הוא מעל הממוצע הכללי?",
+    options:[
+      "CASE WHEN SUM(amount) > (SELECT AVG(total) FROM (SELECT SUM(amount) AS total FROM payment GROUP BY customer_id) AS sub) THEN 'High Spender' ELSE 'Regular' END",
+      "CASE WHEN amount > AVG(amount) THEN 'High Spender' END",
+      "CASE WHEN SUM(amount) > AVG(SUM(amount)) THEN 'High Spender' END",
+      "SELECT first_name FROM payment HAVING SUM(amount) > AVG(amount)"
+    ],
+    correct:0,
+    explain:'<strong>תת-שאילתה בתוך CASE</strong> — ממוצע הסכומים מחושב בנפרד (ממוצע של סכומים, לא של תשלומים בודדים).'
+  },
+  {
+    num:33, diff:'hard', topic:'CASE חישוב דינמי · Sakila',
+    text:'איך נעלה מחיר ב-20% רק לסרטים שהושכרו מעל 30 פעם?',
+    options:[
+      "CASE WHEN COUNT(rental_id) > 30 THEN rental_rate * 1.2 ELSE rental_rate END",
+      "CASE WHEN rental_count > 30 THEN rental_rate + 20% END",
+      "UPDATE film SET rental_rate = rental_rate * 1.2 WHERE count > 30",
+      "SELECT title, rental_rate * 1.2 AS New_Price FROM film"
+    ],
+    correct:0,
+    explain:'<strong>חישוב מתמטי בתוך CASE</strong> — rental_rate * 1.2 מעלה ב-20%. תשובה ב שגויה כי + 20% אינו תחביר תקני.'
+  }
+];
+
+const diffLabel = {easy:'קל',medium:'בינוני',hard:'קשה'};
+const diffClass = {easy:'diff-easy',medium:'diff-medium',hard:'diff-hard'};
+const sectionClass = {easy:'easy',medium:'medium',hard:'hard'};
+const sectionTitle = {easy:'🟢 חלק א׳ — CASE WHEN (Sakila)',medium:'🟠 חלק ב׳ — Subqueries + JOIN',hard:'🔴 חלק ג׳ — רמה קשה מאוד'};
+
+let answers = {};
+let correct = 0;
+let answered = 0;
+
+function updateScore(){
+  const total = Object.keys(answers).length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('scoreText').textContent = correct+' / '+total;
+  document.getElementById('scoreFill').style.width = pct+'%';
+  document.getElementById('scorePct').textContent = pct+'%';
+  document.getElementById('heroAnswered').textContent = total;
+  if(total === questions.length) showFinish();
+}
+
+function selectOption(qIdx, optIdx){
+  if(answers[qIdx] !== undefined) return;
+  const q = questions[qIdx];
+  const isCorrect = optIdx === q.correct;
+  answers[qIdx] = optIdx;
+  if(isCorrect) correct++;
+  answered++;
+
+  // Style card
+  const card = document.getElementById('qcard-'+qIdx);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  // Style options
+  const opts = card.querySelectorAll('.option');
+  opts.forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i === q.correct) o.classList.add('correct-ans');
+    if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+
+  // Show explanation
+  document.getElementById('exp-'+qIdx).classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc = document.getElementById('mainContent');
+  let lastDiff = null;
+  questions.forEach((q,i)=>{
+    if(q.diff !== lastDiff){
+      mc.innerHTML += `<div class="section-label ${sectionClass[q.diff]}">${sectionTitle[q.diff]}</div>`;
+      lastDiff = q.diff;
+    }
+    const letters = ['א','ב','ג','ד'];
+    let optsHtml = q.options.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+
+    mc.innerHTML += `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">שאלה ${q.num}</div>
+          <div class="q-diff ${diffClass[q.diff]}">${diffLabel[q.diff]}</div>
+          <div class="q-topic">${q.topic}</div>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-body">
+        <div class="options">${optsHtml}</div>
+        <div class="explanation" id="exp-${i}">
+          <p>${q.correct === answers[i] ? '✅' : '❌'} <strong>${q.correct === answers[i] ? 'נכון!' : 'לא נכון.'}</strong> ${q.explain}</p>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  mc.innerHTML += `
+  <div class="finish-card" id="finishCard">
+    <div class="finish-emoji">🎉</div>
+    <div class="finish-title">סיימת את הקוויז!</div>
+    <div class="finish-score" id="finishScore">0/15</div>
+    <div id="finishGrade"></div>
+    <div class="finish-sub" id="finishSub"></div>
+    <br>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 נסה שוב</button>
+  </div>`;
+}
+
+function showFinish(){
+  const card = document.getElementById('finishCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('finishScore').textContent = correct+'/'+questions.length;
+  const pct = Math.round(correct/questions.length*100);
+  let grade, sub;
+  if(pct>=90){grade='<span class="finish-grade grade-a">⭐ מצוין! A</span>';sub='ביצועים יוצאי דופן — אתה שולט ב-SQL ברמה גבוהה!';}
+  else if(pct>=75){grade='<span class="finish-grade grade-b">👍 טוב מאוד! B</span>';sub='עבודה טובה! כדאי לחזור על הנושאים שטעית בהם.';}
+  else if(pct>=60){grade='<span class="finish-grade grade-c">📚 עובר! C</span>';sub='בסיס טוב, אבל יש מקום לשיפור. חזור על החומר.';}
+  else{grade='<span class="finish-grade grade-d">💪 ממשיכים להתאמן! D</span>';sub='אל תתייאש — חזור לחומר הלימוד ונסה שוב!';}
+  document.getElementById('finishGrade').innerHTML = grade;
+  document.getElementById('finishSub').textContent = sub;
+}
+
+function resetQuiz(){
+  answers = {}; correct = 0; answered = 0;
+  document.getElementById('mainContent').innerHTML = '';
+  buildQuiz();
+  updateScore();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+buildQuiz();
+updateScore();
+</script>
+</body>
+</html>

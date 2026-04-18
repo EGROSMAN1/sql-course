@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חומר לימודי — קורס SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(74,158,255,.06) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.25);color:var(--blue);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px}
+
+/* TABS */
+.tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;position:sticky;top:49px;z-index:90}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.85rem 1.2rem;font-size:13px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-right:none;border-left:none;font-family:var(--font)}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* SECTION HEADER */
+.sec-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.sec-header::before{content:'';position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle,rgba(0,212,255,.05) 0%,transparent 70%)}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.sec-title{font-size:1.6rem;font-weight:900;margin-bottom:.5rem}
+.sec-desc{color:var(--text2);font-size:14px;line-height:1.8}
+
+/* CONTENT SECTION */
+.content-sec{margin-bottom:2.5rem}
+.content-sec-title{font-size:.95rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.content-sec-title::before{content:'';display:block;width:3px;height:16px;background:var(--yellow);border-radius:2px;flex-shrink:0}
+
+/* CONCEPT BOX */
+.concept{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.concept-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-body{color:var(--text2);font-size:14px;line-height:1.85}
+.concept-body strong{color:var(--text);font-weight:600}
+.concept-body code{background:var(--bg3);border:1px solid var(--border);color:var(--cyan);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
+
+/* HIGHLIGHT */
+.hl{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;display:flex;gap:.75rem;align-items:flex-start}
+.hl.info{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-right:3px solid var(--blue)}
+.hl.tip{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-right:3px solid var(--green2)}
+.hl.warn{background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow)}
+.hl-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.hl-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.hl-text strong{color:var(--text)}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
+.data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.65rem 1rem;text-align:right;border:1px solid var(--border)}
+.data-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.6}
+.data-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.data-table .pk{color:var(--yellow);font-family:var(--mono);font-size:11px;font-weight:700}
+.data-table .fk{color:var(--orange);font-family:var(--mono);font-size:11px;font-weight:700}
+.data-table .good{color:var(--green)}
+.data-table .bad{color:var(--red)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:.6rem;margin:.75rem 0}
+.step{display:flex;gap:.75rem;align-items:flex-start}
+.step-n{width:28px;height:28px;border-radius:8px;background:var(--blue3);color:var(--blue);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-t{font-size:13.5px;color:var(--text2);line-height:1.6;flex:1}
+.step-t strong{color:var(--text)}
+
+/* NORTHWIND DIAGRAM */
+.diagram-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:.75rem 0}
+.diagram-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.75rem 1rem;font-size:13px;font-weight:700;color:var(--text2)}
+.diagram-body{padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
+.db-table{background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.db-table-header{padding:.5rem .75rem;font-size:12px;font-weight:700;font-family:var(--mono);text-align:center}
+.db-table-header.blue{background:rgba(74,158,255,.2);color:var(--blue)}
+.db-table-header.green{background:rgba(0,230,118,.15);color:var(--green)}
+.db-table-header.orange{background:rgba(255,140,66,.15);color:var(--orange)}
+.db-table-header.purple{background:rgba(210,168,255,.15);color:var(--purple)}
+.db-table-header.cyan{background:rgba(0,212,255,.15);color:var(--cyan)}
+.db-table-header.red{background:rgba(255,71,87,.15);color:var(--red)}
+.db-table-header.yellow{background:rgba(255,209,102,.15);color:var(--yellow)}
+.db-table-header.teal{background:rgba(0,168,150,.15);color:#00d4aa}
+.db-col{padding:.3rem .75rem;font-size:11.5px;color:var(--text3);font-family:var(--mono);border-top:1px solid var(--border)}
+.db-col.pk-col{color:var(--yellow)}
+.db-col.fk-col{color:var(--orange)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.diagram-body{grid-template-columns:repeat(2,1fr)}
+.tab-btn{font-size:11px;padding:.65rem .75rem}
+.data-table{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">📖 חומר לימודי</div>
+  <div class="topnav-links">
+    <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+    <a href="quiz.html" class="topnav-link">🧠 קוויז</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 דף הבית</a>
+  <a href="course.html">📚 חומר לימוד</a>
+  <a href="practice.html">✏️ תרגולים</a>
+  <a href="quiz.html">🧠 קוויז</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">📖 חומר לימודי מסודר</div>
+  <h1 class="hero-title">חומר לימודי — קורס SQL</h1>
+  <p class="hero-sub">הסברים מעמיקים על מסדי נתונים, מבנה Northwind ויסודות SQL</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab(0)">🗄️ מהו מסד נתונים?</button>
+  <button class="tab-btn" onclick="showTab(1)">🏗️ מבנה Northwind</button>
+  <button class="tab-btn" onclick="showTab(2)">🔑 מפתחות וקשרים</button>
+  <button class="tab-btn" onclick="showTab(3)">📊 SQL לעומת Excel</button>
+</div>
+
+<div class="main">
+
+<!-- ===================== TAB 1: מהו DB ===================== -->
+<div class="tab-pane active" id="tab-0">
+  <div class="sec-header">
+    <div class="sec-num">חלק 1</div>
+    <div class="sec-title">🗄️ מהו מסד נתונים?</div>
+    <div class="sec-desc">כדי להבין מהו מסד נתונים, הכי קל לדמיין אותו כ<strong>ספרייה דיגיטלית ענקית ומתוחכמת</strong>. בעוד שקובץ אקסל הוא כמו דף נייר בודד, מסד נתונים הוא המבנה שמחזיק אלפי "מחברות", דואג שיהיו מסודרות, ומאפשר למצוא מידע בשבריר שנייה.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🏛️ מה זה מסד נתונים ומה הוא עושה?</div>
+    <div class="concept">
+      <div class="concept-lbl">הגדרה</div>
+      <div class="concept-body">
+        מסד נתונים הוא <strong>אוסף מאורגן של מידע המאוחסן בצורה אלקטרונית</strong>. המערכת שמנהלת את המידע נקראת <strong>DBMS (Database Management System)</strong> — כמו MySQL, SQL Server או Oracle.
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-lbl">5 תפקידים עיקריים</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>אחסון כמויות אדירות</strong> — בניגוד לאקסל שמתחיל "להיתקל" במיליון שורות, מסד נתונים מנהל <strong>מיליארדי שורות</strong> בקלות.</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>שליפה מהירה</strong> — באמצעות SQL ניתן למצוא נתון ספציפי מתוך מיליונים <strong>תוך אלפיות השנייה</strong>.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>אבטחה והרשאות</strong> — קביעת בדיוק מי יכול לראות, לערוך ולמחוק מידע.</div></div>
+          <div class="step"><div class="step-n">4</div><div class="step-t"><strong>Data Integrity</strong> — מניעת כפילויות וסתירות (למשל, שני לקוחות עם אותו ת.ז.).</div></div>
+          <div class="step"><div class="step-n">5</div><div class="step-t"><strong>עבודה במקביל</strong> — מאות משתמשים קוראים וכותבים בו-זמנית מבלי ש"הקובץ יינעל".</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🏗️ ההיררכיה של מסד הנתונים</div>
+    <div class="concept">
+      <div class="concept-lbl">מהרמה הגבוהה לנמוכה</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">☁️</div><div class="step-t"><strong>שרת (Server/Instance)</strong> — המחשב או הענן עליו רצה התוכנה.</div></div>
+          <div class="step"><div class="step-n">🗄️</div><div class="step-t"><strong>מסד נתונים (Database)</strong> — "המחסן" הראשי. למשל: "מערכת מכירות".</div></div>
+          <div class="step"><div class="step-n">📁</div><div class="step-t"><strong>סכמה (Schema)</strong> — חלוקה לוגית בתוך המחסן (כמו מחלקות בסופרמרקט: לקוחות, כספים...).</div></div>
+          <div class="step"><div class="step-n">📋</div><div class="step-t"><strong>טבלאות (Tables)</strong> — היחידות הבסיסיות שבהן המידע נשמר בפועל.</div></div>
+          <div class="step"><div class="step-n">🔍</div><div class="step-t"><strong>אובייקטים נוספים</strong> — Views (שאילתות שמורות), Procedures (תהליכי עבודה).</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📋 מבנה הטבלה — הלב של מסד הנתונים</div>
+    <div class="concept">
+      <div class="concept-lbl">הסבר</div>
+      <div class="concept-body">
+        הטבלה בנויה כרשת (Grid) — אבל בניגוד לאקסל, היא <strong>קשיחה</strong>: לכל עמודה יש תפקיד וסוג נתונים מוגדר מראש.
+      </div>
+    </div>
+    <table class="data-table">
+      <tr><th>מרכיב</th><th>תיאור</th><th>דוגמה</th></tr>
+      <tr>
+        <td><strong>עמודה (Column/Field)</strong></td>
+        <td>מגדירה את סוג הנתון. לכל עמודה יש שם וטיפוס (מספר, טקסט, תאריך)</td>
+        <td>עמודת "שם לקוח" או "מחיר מוצר"</td>
+      </tr>
+      <tr>
+        <td><strong>שורה (Row/Record)</strong></td>
+        <td>מייצגת מופע בודד של ישות. כל שורה היא "אובייקט" אחד מלא</td>
+        <td>כל פרטי לקוח ספציפי</td>
+      </tr>
+      <tr>
+        <td><span class="pk">🔑 Primary Key</span></td>
+        <td>עמודה שחייבת להיות ייחודית לכל שורה — "תעודת הזהות" של הרשומה</td>
+        <td>CustomerID</td>
+      </tr>
+      <tr>
+        <td><span class="fk">🔗 Foreign Key</span></td>
+        <td>עמודה שמקשרת למפתח ראשי בטבלה אחרת — יוצרת קשרים בין טבלאות</td>
+        <td>CustomerID בטבלת Orders</td>
+      </tr>
+    </table>
+
+    <div class="concept">
+      <div class="concept-lbl">דוגמה ויזואלית — טבלת Products</div>
+      <div class="concept-body">
+        <table class="data-table">
+          <tr>
+            <th><span class="pk">🔑 ProductID (PK)</span></th>
+            <th>ProductName</th>
+            <th><span class="fk">🔗 CategoryID (FK)</span></th>
+            <th>ListPrice</th>
+          </tr>
+          <tr><td>101</td><td>Laptop</td><td>1</td><td>3,500</td></tr>
+          <tr><td>102</td><td>Mouse</td><td>2</td><td>150</td></tr>
+          <tr><td>103</td><td>Keyboard</td><td>2</td><td>250</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text">
+        <strong>הסבר על הדוגמה:</strong><br>
+        • <strong>Primary Key</strong>: ProductID מבטיח שלא יהיו שני מוצרים עם אותו מספר<br>
+        • <strong>Foreign Key</strong>: CategoryID מקשר לטבלת Categories — שם כתוב שקטגוריה 1 = "מחשבים", 2 = "ציוד היקפי"<br>
+        • <strong>טיפוסים</strong>: ListPrice תמיד מספר, ProductName תמיד טקסט
+      </div>
+    </div>
+  </div>
+
+  <div class="hl info">
+    <div class="hl-icon">🎯</div>
+    <div class="hl-text"><strong>לסיכום:</strong> מסד נתונים הוא המנוע שמאחורי כל אפליקציה ואתר שאתם מכירים. הוא אוחסן מידע בטבלאות מקושרות, ומאפשר לשלוף תובנות עסקיות מורכבות במהירות.</div>
+  </div>
+</div>
+
+<!-- ===================== TAB 2: Northwind ===================== -->
+<div class="tab-pane" id="tab-1">
+  <div class="sec-header">
+    <div class="sec-num">חלק 2</div>
+    <div class="sec-title">🏪 מבנה מסד הנתונים Northwind</div>
+    <div class="sec-desc">Northwind הוא מסד נתונים קלאסי שמדמה <strong>חברת מסחר</strong>. הוא כולל 8 טבלאות מרכזיות המקושרות זו לזו. זהו מסד הנתונים שנשתמש בו לאורך כל הקורס.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🗂️ 8 הטבלאות של Northwind</div>
+    <div class="diagram-wrap">
+      <div class="diagram-header">📊 מבנה הטבלאות — Northwind</div>
+      <div class="diagram-body">
+
+        <div class="db-table">
+          <div class="db-table-header blue">🏢 Customers</div>
+          <div class="db-col pk-col">🔑 CustomerID</div>
+          <div class="db-col">CompanyName</div>
+          <div class="db-col">ContactTitle</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+          <div class="db-col">Region</div>
+          <div class="db-col">PostalCode</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header green">📦 Orders</div>
+          <div class="db-col pk-col">🔑 OrderID</div>
+          <div class="db-col fk-col">🔗 CustomerID</div>
+          <div class="db-col fk-col">🔗 EmployeeID</div>
+          <div class="db-col">OrderDate</div>
+          <div class="db-col">RequiredDate</div>
+          <div class="db-col">ShippedDate</div>
+          <div class="db-col fk-col">🔗 ShipVia</div>
+          <div class="db-col">Freight</div>
+          <div class="db-col">ShipCity</div>
+          <div class="db-col">ShipCountry</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header red">📋 Order Details</div>
+          <div class="db-col pk-col">🔑 OrderID</div>
+          <div class="db-col fk-col">🔗 ProductID</div>
+          <div class="db-col">UnitPrice</div>
+          <div class="db-col">Quantity</div>
+          <div class="db-col">Discount</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header orange">🛒 Products</div>
+          <div class="db-col pk-col">🔑 ProductID</div>
+          <div class="db-col">ProductName</div>
+          <div class="db-col fk-col">🔗 SupplierID</div>
+          <div class="db-col fk-col">🔗 CategoryID</div>
+          <div class="db-col">UnitPrice</div>
+          <div class="db-col">UnitsInStock</div>
+          <div class="db-col">Discontinued</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header purple">👤 Employees</div>
+          <div class="db-col pk-col">🔑 EmployeeID</div>
+          <div class="db-col">LastName</div>
+          <div class="db-col">FirstName</div>
+          <div class="db-col">Title</div>
+          <div class="db-col">BirthDate</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header cyan">🏭 Suppliers</div>
+          <div class="db-col pk-col">🔑 SupplierID</div>
+          <div class="db-col">CompanyName</div>
+          <div class="db-col">ContactTitle</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+          <div class="db-col">PostalCode</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header yellow">🏷️ Categories</div>
+          <div class="db-col pk-col">🔑 CategoryID</div>
+          <div class="db-col">CategoryName</div>
+          <div class="db-col">Description</div>
+          <div class="db-col">Picture</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header teal">🚚 Shippers</div>
+          <div class="db-col pk-col">🔑 ShipperID</div>
+          <div class="db-col fk-col">🔗 CompanyName</div>
+          <div class="db-col">Phone</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔗 הקשרים בין הטבלאות</div>
+    <table class="data-table">
+      <tr><th>מ-טבלה</th><th>קשר דרך</th><th>אל-טבלה</th><th>משמעות</th></tr>
+      <tr><td>Orders</td><td>CustomerID</td><td>Customers</td><td>כל הזמנה שייכת ללקוח</td></tr>
+      <tr><td>Orders</td><td>EmployeeID</td><td>Employees</td><td>כל הזמנה טופלה ע"י עובד</td></tr>
+      <tr><td>Orders</td><td>ShipVia</td><td>Shippers</td><td>כל הזמנה נשלחה ע"י חברת שילוח</td></tr>
+      <tr><td>Order Details</td><td>OrderID</td><td>Orders</td><td>פרטי כל הזמנה</td></tr>
+      <tr><td>Order Details</td><td>ProductID</td><td>Products</td><td>איזה מוצר הוזמן</td></tr>
+      <tr><td>Products</td><td>SupplierID</td><td>Suppliers</td><td>מי מספק את המוצר</td></tr>
+      <tr><td>Products</td><td>CategoryID</td><td>Categories</td><td>לאיזו קטגוריה שייך המוצר</td></tr>
+    </table>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text"><strong>טיפ:</strong> טבלת <strong>Orders</strong> היא הלב של Northwind — היא מקושרת ל-4 טבלאות אחרות. רוב שאילתות ה-JOIN שנכתוב יעברו דרכה.</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🎯 שאילתה ראשונה על Northwind</div>
+    <div class="concept">
+      <div class="concept-lbl">SELECT בסיסי</div>
+      <div class="concept-body">
+        לאחר שמחברים ל-Northwind, אפשר לשלוף נתונים:<br><br>
+        <code>USE Northwind;</code><br>
+        <code>SELECT * FROM customers LIMIT 5;</code><br><br>
+        אם רואים 5 שורות של לקוחות — מסד הנתונים עובד מצוין! 🎉
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 3: מפתחות ===================== -->
+<div class="tab-pane" id="tab-2">
+  <div class="sec-header">
+    <div class="sec-num">חלק 3</div>
+    <div class="sec-title">🔑 מפתחות וקשרים</div>
+    <div class="sec-desc">המפתחות הם הבסיס לקשרים בין טבלאות — הם מה שהופך אוסף טבלאות נפרדות למסד נתונים אמיתי.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔑 Primary Key — מפתח ראשי</div>
+    <div class="concept">
+      <div class="concept-lbl">הגדרה וכללים</div>
+      <div class="concept-body">
+        עמודה (או שילוב עמודות) שמזהה כל שורה באופן <strong>ייחודי לחלוטין</strong>.<br><br>
+        <strong>3 כללים:</strong><br>
+        1. לא יכולים להיות שני ערכים זהים<br>
+        2. לא יכול להיות NULL<br>
+        3. לא משתנה לאורך זמן<br><br>
+        <strong>דוגמה:</strong> <code>CustomerID</code> בטבלת customers — לכל לקוח מספר ייחודי שלו.
+      </div>
+    </div>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text">Primary Key הוא <strong>"תעודת הזהות"</strong> של כל שורה בטבלה. בדיוק כמו שאי אפשר לשתי תעודות זהות לקיים את אותו מספר.</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔗 Foreign Key — מפתח זר</div>
+    <div class="concept">
+      <div class="concept-lbl">הגדרה</div>
+      <div class="concept-body">
+        עמודה בטבלה אחת שמפנה ל-Primary Key <strong>בטבלה אחרת</strong>. יוצרת את הקשר בין הטבלאות.<br><br>
+        <strong>דוגמה:</strong> <code>CustomerID</code> בטבלת orders מפנה ל-<code>CustomerID</code> בטבלת customers.<br><br>
+        זה אומר: "לכל הזמנה יש לקוח מוגדר שניתן למצוא בטבלת הלקוחות."
+      </div>
+    </div>
+    <div class="hl warn">
+      <div class="hl-icon">⚠️</div>
+      <div class="hl-text"><strong>Referential Integrity:</strong> לא ניתן ליצור הזמנה עם CustomerID שלא קיים בטבלת הלקוחות. מסד הנתונים שומר על תקינות הקשרים.</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📊 סוגי קשרים</div>
+    <table class="data-table">
+      <tr><th>סוג קשר</th><th>הסבר</th><th>דוגמה ב-Northwind</th></tr>
+      <tr>
+        <td><strong>1:N (One-to-Many)</strong></td>
+        <td>שורה אחת בטבלה א' מקושרת לרבות בטבלה ב'</td>
+        <td>לקוח אחד → הרבה הזמנות</td>
+      </tr>
+      <tr>
+        <td><strong>N:N (Many-to-Many)</strong></td>
+        <td>דורש טבלת ביניים — רבות לרבות</td>
+        <td>הזמנה ↔ מוצרים (דרך Order Details)</td>
+      </tr>
+      <tr>
+        <td><strong>1:1 (One-to-One)</strong></td>
+        <td>שורה אחת בטבלה א' = שורה אחת בטבלה ב'</td>
+        <td>פחות נפוץ — למשל פרטי התקשרות נפרדים</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔄 איך זה קשור ל-JOIN?</div>
+    <div class="concept">
+      <div class="concept-lbl">הקשר הישיר</div>
+      <div class="concept-body">
+        פקודת JOIN משתמשת בדיוק בקשרי המפתחות הראשיים והזרים כדי לחבר טבלאות:<br><br>
+        <code>JOIN orders ON customers.CustomerID = orders.CustomerID</code><br><br>
+        כל JOIN שנכתוב מחבר טבלאות דרך העמודות שמגדירות את הקשר ביניהן.
+      </div>
+    </div>
+    <div class="hl info">
+      <div class="hl-icon">🎯</div>
+      <div class="hl-text"><strong>הכלל:</strong> לפני כל JOIN, שאל את עצמך — <strong>דרך איזו עמודה הטבלאות מקושרות?</strong> התשובה היא בדרך כלל המפתח הראשי/זר.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 4: SQL vs Excel ===================== -->
+<div class="tab-pane" id="tab-3">
+  <div class="sec-header">
+    <div class="sec-num">חלק 4</div>
+    <div class="sec-title">📊 SQL לעומת Excel</div>
+    <div class="sec-desc">שני כלים מצוינים — אבל לשימושים שונים. הבנת ההבדל תעזור לך לדעת מתי להשתמש בכל אחד.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">⚡ השוואה מלאה</div>
+    <table class="data-table">
+      <tr><th>קריטריון</th><th>Excel</th><th>SQL</th></tr>
+      <tr>
+        <td><strong>כמות נתונים</strong></td>
+        <td class="bad">עד ~1M שורות</td>
+        <td class="good">מיליארדי שורות</td>
+      </tr>
+      <tr>
+        <td><strong>מהירות</strong></td>
+        <td class="bad">איטי עם קבצים גדולים</td>
+        <td class="good">מהיר מאוד בכל גודל</td>
+      </tr>
+      <tr>
+        <td><strong>שיתוף ונגישות</strong></td>
+        <td class="bad">קבצים שמסתובבים, גרסאות שונות</td>
+        <td class="good">מסד מרכזי אחד לכולם</td>
+      </tr>
+      <tr>
+        <td><strong>אבטחת נתונים</strong></td>
+        <td class="bad">כל אחד יכול לערוך</td>
+        <td class="good">הרשאות מדויקות לכל משתמש</td>
+      </tr>
+      <tr>
+        <td><strong>שגיאות אנוש</strong></td>
+        <td class="bad">קל להזין ערך שגוי</td>
+        <td class="good">מבנה קשיח מונע טעויות</td>
+      </tr>
+      <tr>
+        <td><strong>עבודה במקביל</strong></td>
+        <td class="bad">קובץ נועל — רק אחד בכל פעם</td>
+        <td class="good">מאות משתמשים במקביל</td>
+      </tr>
+      <tr>
+        <td><strong>גמישות ויזואלית</strong></td>
+        <td class="good">גרפים וצבעים בקלות</td>
+        <td class="bad">דורש כלי BI נפרד</td>
+      </tr>
+      <tr>
+        <td><strong>נגישות למשתמש רגיל</strong></td>
+        <td class="good">ממשק גרפי אינטואיטיבי</td>
+        <td class="bad">דורש לימוד שפה</td>
+      </tr>
+      <tr>
+        <td><strong>שליפה מדויקת</strong></td>
+        <td class="bad">טוען את כל הקובץ לזיכרון</td>
+        <td class="good">שולף רק מה שצריך</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🎯 מתי להשתמש בכל אחד?</div>
+    <div class="concept">
+      <div class="concept-lbl">השתמש ב-Excel כשרוצים</div>
+      <div class="concept-body">
+        ✅ ניתוח חד-פעמי של קבצים קטנים (עד כמה מאות אלפי שורות)<br>
+        ✅ ויזואליזציה מהירה — גרפים, Pivot Tables<br>
+        ✅ עבודה עם נתונים שכבר יוצאו מהמסד<br>
+        ✅ שיתוף קל עם מנהלים שלא מכירים SQL
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-lbl">השתמש ב-SQL כשרוצים</div>
+      <div class="concept-body">
+        ✅ עבודה עם מיליוני שורות ומעלה<br>
+        ✅ שאילתות מורכבות שמחברות מספר טבלאות<br>
+        ✅ דוחות שמתרענן ים אוטומטית<br>
+        ✅ שמירת "האמת האחת" — נתונים נכונים ומרכזיים<br>
+        ✅ אוטומציה וביצוע תהליכים חוזרים
+      </div>
+    </div>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text"><strong>בפועל:</strong> אנליסטים משתמשים ב-SQL לשלוף נתונים ממסד הנתונים — ואז מביאים אותם ל-Excel, Power BI, או Python לצורך ניתוח וויזואליזציה. <strong>השניים משלימים זה את זה!</strong></div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📈 מסקנה — למה ללמוד SQL?</div>
+    <div class="concept">
+      <div class="concept-lbl">3 סיבות מרכזיות</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>שפה אוניברסלית</strong> — SQL עובדת עם MySQL, SQL Server, Oracle, PostgreSQL ועוד. לומדים פעם אחת — עובדים בכל מקום.</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>ביקוש בשוק</strong> — SQL היא אחת המיומנויות הנדרשות ביותר בכל תפקיד Data, BI, Analytics ו-Product.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>עצמאות אנליטית</strong> — במקום לחכות ל-IT שיכין לך דוח, אתה שולף את הנתונים שאתה צריך בדיוק כשאתה צריך.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showTab(idx){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

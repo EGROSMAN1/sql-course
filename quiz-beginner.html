@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>קוויז למתחילים — SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --blue:#4a9eff;--blue2:#1a6fd4;
+  --cyan:#00d4ff;--green:#00e676;--green2:#00a854;
+  --orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;
+  --teal:#00d4aa;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(0,212,170,.05) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.25);color:var(--teal);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:1.8rem;font-weight:900;color:var(--teal);font-family:var(--mono)}
+.hero-stat-label{font-size:12px;color:var(--text3)}
+
+/* SCORE BAR */
+.score-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;position:sticky;top:49px;z-index:90}
+.score-info{font-size:13px;color:var(--text2)}
+.score-info strong{color:var(--text);font-size:15px}
+.score-track{flex:1;min-width:150px;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:4px;transition:width .4s}
+.score-pct{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:700;white-space:nowrap}
+.reset-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:var(--font);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* SECTION LABEL */
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px;color:var(--teal)}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow:hidden;transition:border-color .2s}
+.q-card.correct{border-color:var(--green2)}
+.q-card.wrong{border-color:var(--red)}
+.q-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.q-meta{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap}
+.q-num{background:var(--bg4);color:var(--text3);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.q-section{font-size:10px;color:var(--teal);font-family:var(--mono);background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.2);padding:2px 8px;border-radius:10px}
+.q-text{font-size:14px;font-weight:600;color:var(--text);line-height:1.6}
+.q-body{padding:1rem 1.25rem}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:.6rem}
+.option{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.75rem;text-align:right}
+.option:hover:not(.disabled){background:var(--bg4);border-color:var(--border2)}
+.option.disabled{cursor:default;pointer-events:none}
+.option.correct-ans{border-color:var(--green2)!important;background:rgba(0,168,84,.08)!important}
+.option.wrong-ans{border-color:var(--red)!important;background:rgba(255,71,87,.08)!important}
+.opt-letter{width:26px;height:26px;border-radius:6px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.option.correct-ans .opt-letter{background:var(--green2);color:#fff;border-color:var(--green2)}
+.option.wrong-ans .opt-letter{background:var(--red);color:#fff;border-color:var(--red)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1;font-family:var(--mono)}
+.option.correct-ans .opt-text,.option.wrong-ans .opt-text{color:var(--text)}
+
+/* EXPLANATION */
+.explanation{display:none;margin-top:.75rem;border-radius:8px;padding:.85rem 1rem;background:rgba(0,212,170,.04);border:1px solid rgba(0,212,170,.15);border-right:3px solid var(--teal)}
+.explanation.show{display:block}
+.exp-label{font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.5px;margin-bottom:.3rem;font-family:var(--mono)}
+.exp-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.exp-text strong{color:var(--text)}
+
+/* FINISH */
+.finish-card{background:linear-gradient(135deg,rgba(0,212,170,.08),rgba(0,230,118,.05));border:1px solid rgba(0,212,170,.2);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.6rem;font-weight:900;color:var(--teal);margin-bottom:.5rem}
+.finish-score{font-size:3rem;font-weight:900;font-family:var(--mono);margin:.75rem 0}
+.finish-grade{display:inline-block;font-size:1rem;font-weight:700;padding:.4rem 1.2rem;border-radius:20px;margin:.75rem 0}
+.grade-a{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.grade-b{background:rgba(74,158,255,.15);color:var(--blue);border:1px solid rgba(74,158,255,.3)}
+.grade-c{background:rgba(255,140,66,.15);color:var(--orange);border:1px solid rgba(255,140,66,.3)}
+.grade-d{background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3)}
+.finish-sub{color:var(--text2);font-size:14px;line-height:1.7}
+.retry-btn{background:var(--teal);color:#000;border:none;padding:12px 28px;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;transition:all .2s}
+.retry-btn:hover{opacity:.85;transform:translateY(-1px)}
+.adv-link{display:inline-flex;align-items:center;gap:6px;margin-top:.75rem;margin-right:1rem;color:var(--blue);text-decoration:none;font-size:13px;font-weight:700}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.opt-text{font-size:11px}
+.score-track{min-width:80px}
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">🌱 קוויז למתחילים</div>
+  <div class="topnav-links">
+    <a href="quiz.html" class="topnav-link">🧠 קוויז מתקדם</a>
+    <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
+    <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 דף הבית</a>
+  <a href="quiz.html">🧠 קוויז מתקדם</a>
+  <a href="course.html">📚 חומר לימוד</a>
+  <a href="practice.html">✏️ תרגולים</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🌱 מתחילים · SELECT בסיסי</div>
+  <h1 class="hero-title">קוויז למתחילים — SQL</h1>
+  <p class="hero-sub">150 שאלות על SELECT, WHERE, GROUP BY, JOIN ו-Subqueries — עם הסבר מפורט לכל תשובה</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">150</div><div class="hero-stat-label">שאלות</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-label">נושאים</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="heroAnswered">0</div><div class="hero-stat-label">נענו</div></div>
+  </div>
+</div>
+
+<div class="score-bar">
+  <div class="score-info">ניקוד: <strong id="scoreText">0 / 0</strong></div>
+  <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="score-pct" id="scorePct">0%</div>
+  <button class="reset-btn" onclick="resetQuiz()">🔄 התחל מחדש</button>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const questions = [
+  // חלק א': יסודות SELECT
+  {num:1, section:"חלק א׳ — יסודות SELECT", text:"מהו התפקיד העיקרי של פקודת SELECT?",
+   options:["למחוק נתונים מהטבלה.","לעדכן נתונים קיימים.","לשלוף ולהציג נתונים מהדאטה בייס.","ליצור טבלה חדשה."],
+   correct:2, explain:"SELECT היא פקודת ה-\"קריאה\" (Read) שמשמשת אותנו <strong>לצפות במידע</strong> שקיים בטבלאות. היא לא משנה ולא מוחקת — רק מציגה."},
+
+  {num:2, section:"חלק א׳ — יסודות SELECT", text:"באיזה סימן נשתמש כדי לשלוף את כל העמודות מטבלה מסוימת?",
+   options:["#","&","* (כוכבית)","%"],
+   correct:2, explain:"הכוכבית היא קיצור ל-\"הכל\" (All). <code>SELECT *</code> שולף את כל העמודות בלי לכתוב אותן אחת אחת."},
+
+  {num:3, section:"חלק א׳ — יסודות SELECT", text:"איזו מילת מפתח מציינת את שם הטבלה שממנה נרצה לשלוף את המידע?",
+   options:["WHERE","FROM","TABLE","IN"],
+   correct:1, explain:"המבנה הבסיסי הוא: <code>SELECT</code> (מה להביא) ואז <code>FROM</code> (מאיפה להביא). FROM = מאיפה."},
+
+  {num:4, section:"חלק א׳ — יסודות SELECT", text:"איך מפרידים בין שמות של מספר עמודות בשאילתה אחת?",
+   options:["נקודה (.)","פסיק (,)","מקף (-)","רווח בלבד."],
+   correct:1, explain:"כדי לשלוף כמה עמודות ספציפיות נרשום אותן עם <strong>פסיק</strong> ביניהן: <code>SELECT name, city, phone</code>"},
+
+  {num:5, section:"חלק א׳ — יסודות SELECT", text:"מה משמעות המילה AS בשאילתת SELECT?",
+   options:["לסנן נתונים.","לתת כינוי (Alias) לעמודה בתוצאות.","למיין את הנתונים בסדר עולה.","לחבר שתי טבלאות."],
+   correct:1, explain:"<strong>AS</strong> מאפשר לשנות את השם שמוצג בראש העמודה בדוח הסופי, בלי לשנות את השם האמיתי בטבלה. למשל: <code>SELECT price AS מחיר</code>"},
+
+  // חלק ב': מילים שמורות וסינטקס
+  {num:6, section:"חלק ב׳ — מילים שמורות וסינטקס", text:"כיצד נשלוף רק ערכים ייחודיים (ללא כפילויות) מעמודה מסוימת?",
+   options:["SELECT UNIQUE","SELECT DIFFERENT","SELECT DISTINCT","SELECT ONLY"],
+   correct:2, explain:"<strong>DISTINCT</strong> מסננת שורות כפולות ומציגה כל ערך פעם אחת בלבד. <code>SELECT DISTINCT city FROM customers</code>"},
+
+  {num:7, section:"חלק ב׳ — מילים שמורות וסינטקס", text:"היכן ממוקם בדרך כלל סימן הנקודה-פסיק (;) בשאילתה?",
+   options:["בתחילת השאילתה.","בין ה-SELECT ל-FROM.","בסוף השאילתה כולה.","אחרי כל שם של עמודה."],
+   correct:2, explain:"הנקודה-פסיק <strong>מסמנת את סוף הפקודה</strong> ואומרת למנוע ה-SQL שניתן להריץ אותה."},
+
+  {num:8, section:"חלק ב׳ — מילים שמורות וסינטקס", text:"האם המילים SELECT ו-FROM חייבות להיכתב באותיות גדולות?",
+   options:["כן, אחרת השאילתה לא תעבוד.","לא, SQL אינה רגישה לאותיות גדולות/קטנות במילים השמורות שלה.","רק המילה SELECT חייבת להיות גדולה.","תלוי רק בגרסת ה-MySQL."],
+   correct:1, explain:"SQL <strong>אינה Case-Sensitive</strong> למילות מפתח. <code>select * from customers</code> עובד בדיוק כמו <code>SELECT * FROM customers</code>. הכתיבה באותיות גדולות היא מוסכמה לקריאות."},
+
+  {num:9, section:"חלק ב׳ — מילים שמורות וסינטקס", text:"מה יקרה אם נכתוב SELECT 5 + 5?",
+   options:["שגיאה, כי אין פקודת FROM.","המערכת תחזיר תוצאה של 10.","המערכת תדפיס את הטקסט '5 + 5'.","המערכת תמחק את הטבלה."],
+   correct:1, explain:"<strong>SELECT יכול לשמש כמחשבון!</strong> אם לא פונים לטבלה, הוא מחשב את הביטוי ומחזיר את התוצאה — במקרה זה 10."},
+
+  {num:10, section:"חלק ב׳ — מילים שמורות וסינטקס", text:"כיצד נכתוב הערה (Comment) של שורה אחת ב-SQL?",
+   options:["//","#","-- (שני מקפים)","גם ב' וגם ג' נכונים (תלוי בסוג הדאטה בייס)."],
+   correct:3, explain:"ברוב המערכות: <code>-- הערה</code> עובד תמיד. ב-MySQL אפשר גם <code># הערה</code>. המנוע מתעלם מהטקסט אחרי הסימן."},
+
+  // חלק ג': עמודות וחישובים
+  {num:11, section:"חלק ג׳ — עבודה עם עמודות וחישובים", text:"מה תציג השאילתה: SELECT 'Hello World';?",
+   options:["שגיאה, חסר שם טבלה.","רשימה של כל הלקוחות בעולם.","שורה אחת עם הטקסט Hello World.","את כל הטבלאות בדאטה בייס."],
+   correct:2, explain:"שימוש ב<strong>גרשיים ב-SELECT</strong> מציג מחרוזת טקסט קבועה — שורה אחת עם הערך שכתבנו."},
+
+  {num:12, section:"חלק ג׳ — עבודה עם עמודות וחישובים", text:"איך ניתן לבצע חישוב של עמודת מחיר כפול 2?",
+   options:["SELECT price * 2 FROM products","SELECT price X 2 FROM products","SELECT MULTIPLY(price, 2) FROM products","SELECT price ^ 2 FROM products"],
+   correct:0, explain:"ב-SQL משתמשים באופרטורים מתמטיים רגילים: <code>*</code> למכפלה, <code>/</code> לחילוק, <code>+</code> לחיבור, <code>-</code> לחיסור."},
+
+  {num:13, section:"חלק ג׳ — עבודה עם עמודות וחישובים", text:"אם נרצה לתת כינוי לעמודה שכולל רווח (למשל: My Price), איך נכתוב זאת?",
+   options:["AS My Price","AS 'My Price' (בתוך גרשיים)","AS My_Price","תשובות ב' ו-ג' נכונות."],
+   correct:3, explain:"אם יש <strong>רווח בשם</strong> — חייבים גרשיים: <code>AS 'My Price'</code>. אם משתמשים בקו תחתי אין צורך: <code>AS My_Price</code>. שניהם תקינים."},
+
+  {num:14, section:"חלק ג׳ — עבודה עם עמודות וחישובים", text:"מה ההבדל בין SELECT * לבין SELECT עמודה ספציפית?",
+   options:["אין הבדל בביצועים.","SELECT * תמיד מהיר יותר.","SELECT עמודה ספציפית חוסך במשאבים ומציג רק מה שצריך.","SELECT * עובד רק ב-MySQL."],
+   correct:2, explain:"תמיד <strong>עדיף לשלוף רק את העמודות שצריך</strong>. SELECT * טוען הכל לזיכרון — גם עמודות שלא נזדקק להן — מה שמאט את השאילתה."},
+
+  {num:15, section:"חלק ג׳ — עבודה עם עמודות וחישובים", text:"איזו שאילתה תחזיר את כל הנתונים מטבלת Employees?",
+   options:["GET * FROM Employees","SELECT ALL FROM Employees","SELECT * FROM Employees","SHOW Employees"],
+   correct:2, explain:"<code>SELECT * FROM Employees</code> הוא המבנה <strong>התקני והפשוט ביותר</strong> לשליפת כל המידע מטבלה."},
+
+  // חלק ד': שאלות לוגיות ומבנה
+  {num:16, section:"חלק ד׳ — שאלות לוגיות ומבנה", text:"האם ניתן להשתמש ב-SELECT בלי FROM?",
+   options:["אף פעם לא.","כן, לצורך חישובים או הצגת טקסט קבוע.","רק אם הטבלה ריקה.","רק ב-SQL Server."],
+   correct:1, explain:"<strong>כן!</strong> <code>SELECT 5 + 5</code> או <code>SELECT 'Hello'</code> עובדים ללא FROM. כשלא פונים לטבלה, אין צורך ב-FROM."},
+
+  {num:17, section:"חלק ד׳ — שאלות לוגיות ומבנה", text:"מה תהיה התוצאה של SELECT NULL + 10?",
+   options:["10","0","NULL","שגיאה."],
+   correct:2, explain:"ב-SQL, <strong>כל פעולה מתמטית עם NULL תמיד תחזיר NULL</strong>. NULL = ערך לא ידוע. אם אחד מהאיברים לא ידוע — התוצאה גם לא ידועה."},
+
+  {num:18, section:"חלק ד׳ — שאלות לוגיות ומבנה", text:"איך נשלוף שתי עמודות: Name ו-City מטבלת Customers?",
+   options:["SELECT Name City FROM Customers","SELECT Name, City FROM Customers","SELECT Name & City FROM Customers","SELECT Name; City FROM Customers"],
+   correct:1, explain:"<strong>פסיק</strong> הוא המפריד הסטנדרטי בין עמודות ב-SELECT. כל פסיק = עמודה נוספת."},
+
+  {num:19, section:"חלק ד׳ — שאלות לוגיות ומבנה", text:"מה תפקיד הפקודה LIMIT ב-MySQL (או TOP ב-SQL Server)?",
+   options:["למחוק שורות מהסוף.","להגביל את מספר השורות שמוצגות בתוצאה.","למיין את השורות.","לחפש ערך מקסימלי."],
+   correct:1, explain:"<code>LIMIT 5</code> מציג רק <strong>5 שורות ראשונות</strong>. שימושי מאוד לבדיקה מהירה כשיש מיליוני שורות."},
+
+  {num:20, section:"חלק ד׳ — שאלות לוגיות ומבנה", text:"איזו שאילתה תציג את שם המוצר ואת המחיר שלו עם תוספת מע\"מ של 17%?",
+   options:["SELECT name, price + 17 FROM products","SELECT name, price * 1.17 FROM products","SELECT name, price % 17 FROM products","SELECT name + price * 1.17 FROM products"],
+   correct:1, explain:"כפל ב-<strong>1.17</strong> מוסיף 17% לערך הקיים. 1.17 = 100% + 17%. <code>price + 17</code> מוסיף 17 שקל, לא 17 אחוז!"},
+
+  // חלק ה': תרגול מתקדם קל
+  {num:21, section:"חלק ה׳ — תרגול מתקדם קל", text:"בטבלה יש 10 שורות, בכולן העיר היא 'Tel Aviv'. כמה שורות יחזרו ב-SELECT DISTINCT city?",
+   options:["10","0","1","שגיאה."],
+   correct:2, explain:"<strong>DISTINCT מאחד כפילויות.</strong> גם אם יש 10 שורות עם Tel Aviv — הן כולן זהות, אז תוצאה אחת בלבד תוחזר."},
+
+  {num:22, section:"חלק ה׳ — תרגול מתקדם קל", text:"מה המשמעות של השאילתה SELECT 1, 2, 3;?",
+   options:["היא תציג טבלה עם 3 עמודות ובכל אחת המספר המתאים.","היא תספור עד 3.","שגיאה כי חסר FROM.","היא תציג את כל המספרים בעמודה אחת."],
+   correct:0, explain:"כל <strong>פסיק ב-SELECT יוצר עמודה חדשה</strong> בתוצאה. <code>SELECT 1, 2, 3</code> תחזיר שורה אחת עם 3 עמודות."},
+
+  {num:23, section:"חלק ה׳ — תרגול מתקדם קל", text:"איך נכון לתת כינוי לעמודה Name שיוצג כ-Customer_Name?",
+   options:["SELECT Name RENAME Customer_Name","SELECT Name AS Customer_Name","SELECT Name = Customer_Name","SELECT Name TO Customer_Name"],
+   correct:1, explain:"<strong>AS</strong> היא הדרך הסטנדרטית להגדיר Alias. <code>SELECT Name AS Customer_Name</code> — בראש העמודה יוצג 'Customer_Name'."},
+
+  {num:24, section:"חלק ה׳ — תרגול מתקדם קל", text:"מה קורה אם שוכחים לכתוב FROM בשאילתה שפונה לעמודה אמיתית בטבלה?",
+   options:["המערכת תנחש את שם הטבלה.","השאילתה תחזיר את כל הטבלאות.","המערכת תזרוק שגיאת סינטקס (Syntax Error).","השאילתה תרוץ אבל לא תציג כלום."],
+   correct:2, explain:"המנוע <strong>חייב לדעת מאיזה מקור לשלוף.</strong> בלי FROM הוא לא יודע לאן להסתכל ויזרוק שגיאת סינטקס."},
+
+  {num:25, section:"חלק ה׳ — תרגול מתקדם קל", text:"מה יוחזר בשאילתה: SELECT * FROM Employees LIMIT 0;?",
+   options:["את כל העובדים.","שגיאה.","אף שורה (רק את שמות העמודות).","את השורה הראשונה."],
+   correct:2, explain:"<strong>LIMIT 0</strong> = אפס שורות. המבנה (שמות העמודות) יופיע אבל ללא נתונים. שימושי לפעמים לבדיקת מבנה טבלה."},
+
+  // חלק ו': שאלות סיכום
+  {num:26, section:"חלק ו׳ — שאלות סיכום", text:"האם הסדר של העמודות ב-SELECT קובע את סדר הופעתן בתוצאה?",
+   options:["לא, המערכת מחליטה לבד.","כן, העמודות יופיעו לפי הסדר שכתבנו בשאילתה.","הן תמיד יופיעו לפי סדר ה-ABC.","הן תמיד יופיעו לפי הסדר שהן שמורות בטבלה."],
+   correct:1, explain:"<strong>ה-SELECT שולט על תצוגת הנתונים.</strong> הסדר שכותבים ב-SELECT הוא הסדר שיופיע בתוצאה — בלי קשר לסדר בטבלה."},
+
+  {num:27, section:"חלק ו׳ — שאלות סיכום", text:"איך נכתוב שאילתה שתציג עמודה אחת קבועה של המספר 100 לכל שורה בטבלת המוצרים?",
+   options:["SELECT 100 FROM products","SELECT * + 100 FROM products","SELECT price = 100 FROM products","SELECT ALL 100 FROM products"],
+   correct:0, explain:"כתיבת <strong>ערך קבוע ב-SELECT</strong> תגרום לו להופיע ליד כל שורה. <code>SELECT 100 FROM products</code> יציג את המספר 100 פעם אחת לכל מוצר."},
+
+  {num:28, section:"חלק ו׳ — שאלות סיכום", text:"מהו ה-Alias (כינוי) בשאילתה: SELECT price * 0.9 AS discounted_price FROM items;?",
+   options:["price","items","discounted_price","0.9"],
+   correct:2, explain:"הכינוי הוא <strong>השם שמופיע מיד אחרי המילה AS</strong>. בשאילתה זו: discounted_price הוא הכינוי שיוצג בראש העמודה."},
+
+  {num:29, section:"חלק ו׳ — שאלות סיכום", text:"איזו מילה ב-SQL נחשבת למילה שמורה (Reserved Word)?",
+   options:["SELECT","FROM","WHERE","כל התשובות נכונות."],
+   correct:3, explain:"<strong>כל מילות המפתח של SQL הן מילים שמורות</strong> — SELECT, FROM, WHERE ועוד רבות אחרות. לא כדאי להשתמש בהן כשמות של טבלאות או עמודות."},
+
+  {num:30, section:"חלק ו׳ — שאלות סיכום", text:"מה תפקיד ה-SELECT בשורה התחתונה?",
+   options:["לעדכן את המידע בדאטה בייס.","לשאול שאלה ולקבל תשובה מהנתונים.","למחוק כפילויות לצמיתות מהטבלה.","ליצור קשרים בין טבלאות."],
+   correct:1, explain:"SQL = <strong>Structured Query Language = שפת שאילתות</strong>. וה-SELECT הוא הכלי לשאול שאלות מהנתונים. הוא קורא בלבד — לא משנה ולא מוחק."},
+
+  // ===== חלק 3: WHERE =====
+  {num:31, section:"חלק ז׳ — WHERE: אופרטורים בסיסיים", text:"איזו מילת מפתח משמשת לסינון שורות ב-SQL?",
+   options:["IF","HAVING","WHERE","FILTER"],
+   correct:2, explain:"<strong>WHERE</strong> היא הפקודה הסטנדרטית לסינון שורות על בסיס תנאי. היא מגיעה אחרי FROM."},
+
+  {num:32, section:"חלק ז׳ — WHERE: אופרטורים בסיסיים", text:"איך נשלוף את כל המוצרים שמחירם שווה בדיוק ל-100?",
+   options:["WHERE price is 100","WHERE price = 100","WHERE price == 100","WHERE price 100"],
+   correct:1, explain:"ב-SQL משתמשים ב-<strong>= בודד</strong> להשוואה (בניגוד לשפות כמו Python שמשתמשות ב-==)."},
+
+  {num:33, section:"חלק ז׳ — WHERE: אופרטורים בסיסיים", text:"איך נכתוב תנאי שבודק 'לא שווה' (שונה מ-)?",
+   options:["!=","<>","NOT =","תשובות א' ו-ב' נכונות."],
+   correct:3, explain:"רוב המערכות תומכות גם ב-<code><></code> (הסימן המסורתי) וגם ב-<code>!=</code>. שניהם נכונים."},
+
+  {num:34, section:"חלק ז׳ — WHERE: אופרטורים בסיסיים", text:"מה תחזיר השאילתה: WHERE age > 18?",
+   options:["רק אנשים בני 18.","אנשים בני 18 ומעלה.","אנשים בני 19 ומעלה (גדול מ-18).","את כולם."],
+   correct:2, explain:"האופרטור <code>></code> <strong>אינו כולל</strong> את הערך עצמו. כדי לכלול 18, נשתמש ב-<code>>=</code>."},
+
+  {num:35, section:"חלק ז׳ — WHERE: אופרטורים בסיסיים", text:"איך נסנן לקוחות שגרים בעיר 'Tel Aviv'?",
+   options:["WHERE city = Tel Aviv","WHERE city = \"Tel Aviv\"","WHERE city = 'Tel Aviv'","תשובות ב' ו-ג' נכונות בדרך כלל."],
+   correct:3, explain:"ב-SQL טקסט חייב להיות עטוף בגרשיים. <strong>גרשיים בודדים</strong> הם הסטנדרט; גרשיים כפולים נתמכים ברוב המערכות."},
+
+  {num:36, section:"חלק ח׳ — WHERE: BETWEEN ו-IN", text:"מהו התפקיד של האופרטור BETWEEN?",
+   options:["לבדוק אם ערך נמצא בתוך רשימה.","לסנן ערכים בתוך טווח מסוים (כולל הקצוות).","לחבר בין שתי טבלאות.","לבחור ערך אקראי."],
+   correct:1, explain:"<code>WHERE price BETWEEN 10 AND 20</code> יחזיר את כל מה שבין 10 ל-20, <strong>כולל 10 ו-20 עצמם</strong>."},
+
+  {num:37, section:"חלק ח׳ — WHERE: BETWEEN ו-IN", text:"איזו שאילתה תחליף את: WHERE city = 'London' OR city = 'Paris' OR city = 'Berlin'?",
+   options:["WHERE city IN ('London', 'Paris', 'Berlin')","WHERE city CONTAINS ('London', 'Paris', 'Berlin')","WHERE city = ALL ('London', 'Paris', 'Berlin')","WHERE city BETWEEN 'Berlin' AND 'Paris'"],
+   correct:0, explain:"<strong>IN</strong> מאפשר לבדוק אם ערך נמצא ברשימה — קיצור נוח ונקי ל-OR מרובה."},
+
+  {num:38, section:"חלק ח׳ — WHERE: BETWEEN ו-IN", text:"האם השאילתה WHERE score BETWEEN 50 AND 100 כוללת את המספר 50?",
+   options:["כן.","לא.","תלוי בסוג הדאטה בייס.","רק אם מוסיפים INCLUDE."],
+   correct:0, explain:"BETWEEN ב-SQL הוא תמיד <strong>Inclusive</strong> — כולל את שני הקצוות (50 ו-100 שניהם נכללים)."},
+
+  {num:39, section:"חלק ח׳ — WHERE: BETWEEN ו-IN", text:"איך נשלוף עובדים שאינם עובדים במחלקות 1, 2 או 3?",
+   options:["WHERE dept_id NOT IN (1, 2, 3)","WHERE dept_id != (1, 2, 3)","WHERE dept_id NOT (1, 2, 3)","WHERE dept_id <> 1, 2, 3"],
+   correct:0, explain:"<strong>NOT IN</strong> מוציא מהתוצאות את כל מה שמופיע ברשימה. הצורה הנכונה: <code>NOT IN (1, 2, 3)</code>."},
+
+  {num:40, section:"חלק ח׳ — WHERE: BETWEEN ו-IN", text:"מה יקרה אם נכתוב WHERE price BETWEEN 100 AND 10? (המספר הגבוה ראשון)",
+   options:["המערכת תהפוך אותם לבד.","היא תחזיר את כל הערכים בין 10 ל-100.","היא לא תחזיר אף שורה (ברוב המערכות).","שגיאת סינטקס."],
+   correct:2, explain:"ב-SQL סטנדרטי, <strong>הערך הראשון ב-BETWEEN חייב להיות הקטן יותר</strong>. סדר הפוך יחזיר תוצאה ריקה."},
+
+  {num:41, section:"חלק ט׳ — WHERE: NULL", text:"איך בודקים אם עמודה היא ריקה (NULL)?",
+   options:["WHERE column = NULL","WHERE column IS NULL","WHERE column == NULL","WHERE column IS EMPTY"],
+   correct:1, explain:"NULL אינו ערך אלא 'חוסר בנתון', לכן <strong>אי אפשר להשתמש ב-=</strong>. חייבים <code>IS NULL</code>."},
+
+  {num:42, section:"חלק ט׳ — WHERE: NULL", text:"מה יחזיר התנאי WHERE phone IS NOT NULL?",
+   options:["לקוחות שאין להם מספר טלפון.","לקוחות שיש להם מספר טלפון כלשהו.","לקוחות שהטלפון שלהם הוא 0.","את כל הטבלה."],
+   correct:1, explain:"<strong>IS NOT NULL</strong> מסנן החוצה את כל השורות הריקות — נשארים רק מי שיש להם ערך בעמודה."},
+
+  {num:43, section:"חלק ט׳ — WHERE: NULL", text:"האם התנאי WHERE salary = 0 יחזיר שורות שבהן השכר הוא NULL?",
+   options:["כן, כי NULL נחשב 0.","לא, NULL ו-0 הם דברים שונים לגמרי.","רק אם נגדיר זאת בהגדרות השרת.","תלוי אם העמודה מספרית."],
+   correct:1, explain:"<strong>0 הוא מספר ידוע. NULL הוא 'לא ידוע'.</strong> הם לעולם לא שווים — WHERE salary = 0 לא יחזיר NULL."},
+
+  {num:44, section:"חלק י׳ — WHERE: LIKE", text:"מה תפקיד האופרטור LIKE?",
+   options:["לבדוק אם משתמש עשה 'לייק' למוצר.","לחפש תבנית טקסט (Pattern Matching).","למצוא ערכים דומים מספרית.","למיין נתונים."],
+   correct:1, explain:"<strong>LIKE</strong> מאפשר לחפש חלקים של מילים בתוך טקסט תוך שימוש בתווים כלליים (Wildcards)."},
+
+  {num:45, section:"חלק י׳ — WHERE: LIKE", text:"מה משמעות הסימן % בשאילתת LIKE?",
+   options:["תו בודד כלשהו.","מספר כלשהו של תווים (0 או יותר).","אחוז מהערך המספרי.","רק אותיות גדולות."],
+   correct:1, explain:"<code>%</code> = כל מספר תווים (גם אפס). <code>a%</code> = מתחיל ב-a. <code>%a</code> = מסתיים ב-a. <code>%a%</code> = מכיל a."},
+
+  {num:46, section:"חלק י׳ — WHERE: LIKE", text:"מה תמצא השאילתה: WHERE name LIKE '_a%'?",
+   options:["שמות שמתחילים ב-a.","שמות שהאות השנייה שלהם היא a.","שמות שיש בהם a בכל מקום.","שמות עם בדיוק 2 אותיות."],
+   correct:1, explain:"קו תחתי <code>_</code> = תו בודד אחד בדיוק. <code>_a%</code> = תו אחד כלשהו, אחריו האות a, ואחריו כל השאר."},
+
+  {num:47, section:"חלק י׳ — WHERE: LIKE", text:"איך נחפש לקוחות ששם המשפחה שלהם מסתיים ב-'son'?",
+   options:["LIKE 'son%'","LIKE '%son'","LIKE '%son%'","LIKE '_son'"],
+   correct:1, explain:"<code>'%son'</code> — ה-% בהתחלה = לא משנה מה כתוב קודם, וה-son חייב להיות <strong>בסוף</strong>."},
+
+  {num:48, section:"חלק י\"א — WHERE: AND, OR, NOT", text:"מתי נשתמש ב-AND?",
+   options:["כשאנחנו רוצים שאחד מהתנאים יתקיים.","כשאנחנו רוצים שכל התנאים יתקיימו בו-זמנית.","כדי לחבר שתי טבלאות.","כדי להוסיף עמודה לתוצאה."],
+   correct:1, explain:"<strong>AND</strong> = כל התנאים חייבים להתקיים. <code>WHERE city='TLV' AND age > 20</code> — רק מי שגר בת\"א וגם מעל גיל 20."},
+
+  {num:49, section:"חלק י\"א — WHERE: AND, OR, NOT", text:"מה יקרה בשאילתה: WHERE city = 'London' OR age > 30?",
+   options:["נקבל רק אנשים מעל גיל 30 מלונדון.","נקבל את כל מי שגר בלונדון וגם את כל מי שמעל גיל 30 (מכל עיר).","שגיאה, אי אפשר לערבב טקסט ומספר ב-OR.","לא נקבל אף אחד."],
+   correct:1, explain:"<strong>OR = מספיק שתנאי אחד נכון.</strong> מי שגר בלונדון ייכנס (בכל גיל) וגם מי שמעל 30 ייכנס (מכל עיר)."},
+
+  {num:50, section:"חלק י\"א — WHERE: AND, OR, NOT", text:"מהו סדר הקדימות (Precedence) בין AND ל-OR?",
+   options:["OR תמיד ראשון.","שניהם שווים.","AND תמיד מתבצע לפני OR.","תלוי בסדר הכתיבה."],
+   correct:2, explain:"כמו במתמטיקה — <strong>AND לפני OR</strong> (כמו כפל לפני חיבור). כדי לשנות: השתמש בסוגריים."},
+
+  {num:51, section:"חלק י\"א — WHERE: AND, OR, NOT", text:"מה תפקיד ה-NOT בתנאי?",
+   options:["למחוק את התנאי.","להפוך את התנאי (True הופך ל-False).","לסמן שהנתון חסר.","שגיאת כתיבה."],
+   correct:1, explain:"<strong>NOT מהפך את התנאי.</strong> <code>WHERE NOT city = 'Paris'</code> יביא את כל הערים חוץ מפריז."},
+
+  {num:52, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"איך נסנן מוצרים שמחירם בין 50 ל-100 וגם שייכים לקטגוריה 5?",
+   options:["WHERE price BETWEEN 50 AND 100 OR category = 5","WHERE price BETWEEN 50 AND 100 AND category = 5","WHERE price IN (50, 100) AND category = 5","WHERE price > 50 AND price < 100 AND category = 5"],
+   correct:1, explain:"שילוב BETWEEN (טווח) + AND (תנאי נוסף). תשובה ד' כמעט נכונה אבל לא כוללת את 50 ו-100 עצמם."},
+
+  {num:53, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"מה ההבדל בין LIKE לבין '='?",
+   options:["אין הבדל.","= מחפש התאמה מדויקת, LIKE מאפשר שימוש בתווים כלליים (Wildcards).","LIKE מהיר יותר מ-=.","LIKE עובד רק על מספרים."],
+   correct:1, explain:"<code>city = 'Tel%'</code> מחפש עיר ששמה 'Tel%' בדיוק. <strong>רק ב-LIKE הסימן % הופך לדינמי</strong>."},
+
+  {num:54, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"איך נשלוף לקוחות ששמם מתחיל ב-A או ב-B?",
+   options:["WHERE name LIKE 'A%' OR name LIKE 'B%'","WHERE name IN ('A%', 'B%')","WHERE name LIKE 'AB%'","WHERE name = 'A' OR 'B'"],
+   correct:0, explain:"<strong>אי אפשר להשתמש ב-% בתוך IN.</strong> חייבים OR עם שני LIKE נפרדים."},
+
+  {num:55, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"מה תחזיר השאילתה: WHERE 1 = 1?",
+   options:["שגיאה.","אף שורה.","את כל השורות בטבלה.","רק את השורה הראשונה."],
+   correct:2, explain:"התנאי 1=1 הוא <strong>תמיד נכון (True)</strong> לכל שורה — לכן כל השורות יוחזרו."},
+
+  {num:56, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"איך נסנן תאריכים? למשל: כל מי שנולד אחרי שנת 2000?",
+   options:["WHERE birth_date > 2000","WHERE birth_date > '2000-01-01'","WHERE birth_date > (2000)","WHERE birth_date AFTER 2000"],
+   correct:1, explain:"תאריכים ב-SQL נכתבים כמחרוזת טקסט בפורמט <strong>'YYYY-MM-DD'</strong>. <code>> '2000-01-01'</code> = אחרי ה-1 בינואר 2000."},
+
+  {num:57, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"מה תעשה השאילתה: WHERE name NOT LIKE '%a%'?",
+   options:["תמצא שמות שמתחילים ב-a.","תמצא שמות שאין בהם את האות a בכלל.","תמצא שמות שיש בהם רק אותיות a.","שגיאה."],
+   correct:1, explain:"<code>LIKE '%a%'</code> מוצא שמות שיש בהם a. <strong>NOT</strong> הופך — כלומר שמות ש<strong>אין</strong> בהם את האות a כלל."},
+
+  {num:58, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"איזו שאילתה תחזיר מוצרים שמחירם הוא 10, 20 או 30?",
+   options:["WHERE price = 10 AND price = 20 AND price = 30","WHERE price IN (10, 20, 30)","WHERE price BETWEEN 10 AND 30","WHERE price = (10, 20, 30)"],
+   correct:1, explain:"תשובה א' שגויה — מחיר לא יכול להיות 3 ערכים שונים בו-זמנית. <strong>IN</strong> הוא הדרך הנכונה לרשימת ערכים מדויקים."},
+
+  {num:59, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"האם ניתן להשתמש בכינוי (Alias) שנתנו ב-SELECT בתוך ה-WHERE?",
+   options:["כן, תמיד.","לא, ה-WHERE מתבצע לפני ה-SELECT ולכן לא מכיר את הכינוי.","רק ב-MySQL.","רק אם הכינוי בגרשיים."],
+   correct:1, explain:"סדר ביצוע SQL: FROM → WHERE → SELECT. <strong>ה-WHERE רץ לפני SELECT</strong>, לכן הכינוי עדיין לא קיים. חייבים שם מקורי."},
+
+  {num:60, section:"חלק י\"ב — WHERE: שאלות שילוב", text:"מהי הדרך הנכונה לחפש טקסט שכולל גרש (למשל השם O'neil)?",
+   options:["WHERE name = 'O'neil'","WHERE name = 'O''neil' (פעמיים גרש)","WHERE name = \"O'neil\"","תשובות ב' ו-ג' נכונות (תלוי במערכת)."],
+   correct:3, explain:"כדי 'לברוח' מגרש בתוך מחרוזת — <strong>כותבים אותו פעמיים</strong>: <code>'O''neil'</code>. ב-MySQL אפשר גם גרשיים כפולים."},
+
+  // ===== חלק 4: GROUP BY =====
+  {num:61, section:"חלק י\"ג — פונקציות אגרגציה", text:"מה עושה פונקציית COUNT(*)?",
+   options:["סוכמת את הערכים המספריים בטבלה.","סופרת את כל השורות בטבלה (כולל כפילויות ו-NULL).","מחזירה את המספר הגבוה ביותר.","בודקת אם הטבלה ריקה."],
+   correct:1, explain:"הכוכבית אומרת ל-SQL <strong>לספור שורות</strong> — ללא קשר לתוכן שלהן, כולל שורות עם NULL."},
+
+  {num:62, section:"חלק י\"ג — פונקציות אגרגציה", text:"איזו פקודה תחזיר את סך כל המחירים בטבלת המוצרים?",
+   options:["SELECT AVG(price) FROM products","SELECT COUNT(price) FROM products","SELECT SUM(price) FROM products","SELECT TOTAL(price) FROM products"],
+   correct:2, explain:"<strong>SUM</strong> היא הפונקציה לחיבור (סכימה) של ערכים מספריים. TOTAL לא קיים ב-SQL סטנדרטי."},
+
+  {num:63, section:"חלק י\"ג — פונקציות אגרגציה", text:"מהי התוצאה של AVG על עמודה שמכילה 10, 20 ו-NULL?",
+   options:["15 (הממוצע של 10 ו-20, תוך התעלמות מה-NULL).","10 (NULL נחשב 0 והממוצע מתחלק ב-3).","NULL (אי אפשר לחשב ממוצע עם נתון חסר).","שגיאה."],
+   correct:0, explain:"פונקציות אגרגציה (חוץ מ-COUNT*) <strong>מתעלמות מ-NULL</strong>. AVG של 10 ו-20 = 15."},
+
+  {num:64, section:"חלק י\"ג — פונקציות אגרגציה", text:"איך נמצא את המחיר של המוצר הזול ביותר?",
+   options:["SELECT MIN(price) FROM products","SELECT MAX(price) FROM products","SELECT LOW(price) FROM products","SELECT TOP 1 price FROM products"],
+   correct:0, explain:"<strong>MIN</strong> מחזירה את הערך המינימלי. MAX מחזיר את המקסימלי. LOW לא קיים ב-SQL."},
+
+  {num:65, section:"חלק י\"ג — פונקציות אגרגציה", text:"מה יקרה אם נפעיל MAX על עמודה של שמות (טקסט)?",
+   options:["שגיאה, MAX עובדת רק על מספרים.","היא תחזיר את השם הארוך ביותר.","היא תחזיר את השם האחרון לפי סדר ה-ABC.","היא תחזיר את השם הראשון לפי סדר ה-ABC."],
+   correct:2, explain:"MIN ו-MAX עובדות גם על טקסט — <strong>לפי סדר אלפביתי</strong>. MAX = האחרון ב-ABC, MIN = הראשון."},
+
+  {num:66, section:"חלק י\"ד — GROUP BY יסודות", text:"מתי חובה להשתמש ב-GROUP BY?",
+   options:["בכל פעם שמשתמשים ב-SELECT.","כשיש פונקציית אגרגציה לצד עמודה רגילה ב-SELECT.","רק כשיש יותר ממיליון שורות.","כשאנחנו רוצים למיין את התוצאות."],
+   correct:1, explain:"אם רוצים סכום מכירות <strong>לפי עיר</strong> — העיר חייבת להופיע ב-GROUP BY. בלי זה: שגיאה."},
+
+  {num:67, section:"חלק י\"ד — GROUP BY יסודות", text:"היכן ממוקם ה-GROUP BY בתוך השאילתה?",
+   options:["לפני ה-FROM.","לפני ה-WHERE.","אחרי ה-WHERE (אם יש) ולפני ה-ORDER BY.","תמיד בסוף השאילתה."],
+   correct:2, explain:"הסדר הוא: <strong>SELECT → FROM → WHERE → GROUP BY → ORDER BY</strong>. GROUP BY תמיד אחרי WHERE."},
+
+  {num:68, section:"חלק י\"ד — GROUP BY יסודות", text:"מה יקרה בשאילתה: SELECT city, COUNT(*) FROM users? (ללא GROUP BY)",
+   options:["תחזיר את העיר הראשונה ואת סך כל המשתמשים.","תחזיר שגיאה (ברוב המערכות).","תציג את כל הערים ואת הספירה לכל אחת.","תמחק את עמודת city."],
+   correct:1, explain:"אי אפשר להציג עמודה רגילה (עיר) לצד ספירה <strong>בלי GROUP BY</strong>. ברוב המערכות זו שגיאה."},
+
+  {num:69, section:"חלק י\"ד — GROUP BY יסודות", text:"מה תעשה השאילתה: SELECT category, SUM(price) FROM products GROUP BY category?",
+   options:["תציג את סכום המחירים עבור כל קטגוריה בנפרד.","תציג את המחיר הכי גבוה בכל קטגוריה.","תציג רק קטגוריות שיש להן מחיר.","תסכום את כל המוצרים פעם אחת."],
+   correct:0, explain:"GROUP BY <strong>מחלק לקבוצות</strong> לפי קטגוריה ומפעיל SUM על כל קבוצה בנפרד. תוצאה: שורה לכל קטגוריה."},
+
+  {num:70, section:"חלק י\"ד — GROUP BY יסודות", text:"האם ניתן לקבץ לפי יותר מעמודה אחת?",
+   options:["לא, ניתן לקבץ רק לפי עמודה אחת.","כן, מפרידים ביניהן בפסיק בתוך ה-GROUP BY.","כן, אבל רק ב-SQL Server.","רק אם משתמשים ב-UNION."],
+   correct:1, explain:"<strong>אפשר לקבץ לפי כמה עמודות</strong>: <code>GROUP BY city, gender</code> ייצור קבוצה לכל שילוב עיר+מגדר."},
+
+  {num:71, section:"חלק ט\"ו — HAVING", text:"מה ההבדל העיקרי בין WHERE ל-HAVING?",
+   options:["אין הבדל.","WHERE מסנן שורות בודדות, HAVING מסנן קבוצות אחרי הקיבוץ.","HAVING עובד רק על טקסט.","WHERE תמיד מגיע אחרי GROUP BY."],
+   correct:1, explain:"<strong>WHERE</strong> = מסנן שורות לפני הקיבוץ. <strong>HAVING</strong> = מסנן קבוצות אחרי הקיבוץ. לא ניתן לכתוב SUM() ב-WHERE."},
+
+  {num:72, section:"חלק ט\"ו — HAVING", text:"איזו שאילתה תציג קטגוריות שסכום המכירות שלהן גבוה מ-5000?",
+   options:["... WHERE SUM(sales) > 5000 GROUP BY category","... GROUP BY category HAVING SUM(sales) > 5000","... HAVING sales > 5000 GROUP BY category","... WHERE sales > 5000"],
+   correct:1, explain:"סינון של תוצאה אגרגטיבית (SUM) <strong>חייב להיות ב-HAVING</strong> אחרי הקיבוץ — לא ב-WHERE."},
+
+  {num:73, section:"חלק ט\"ו — HAVING", text:"האם ניתן להשתמש ב-WHERE וב-HAVING באותה שאילתה?",
+   options:["לא, זה יבלבל את המנוע.","כן. WHERE יסנן קודם את השורות, HAVING יסנן את הקבוצות.","רק עם Subquery.","רק ב-MySQL."],
+   correct:1, explain:"<strong>כן!</strong> WHERE מנקה נתונים גולמיים לפני החישוב, HAVING מסנן את התוצאות אחרי. שניהם יחד — שאילתה עוצמתית."},
+
+  {num:74, section:"חלק ט\"ו — HAVING", text:"מה תעשה השאילתה: SELECT city FROM users GROUP BY city? (ללא COUNT)",
+   options:["תציג רשימה של כל הערים כולל כפילויות.","תציג רשימה של ערים ייחודיות (דומה ל-DISTINCT).","שגיאה, כי חסרה פונקציית אגרגציה.","תספור כמה משתמשים יש בכל עיר."],
+   correct:1, explain:"קיבוץ ללא פונקציית סיכום <strong>מחזיר ערכים ייחודיים</strong> — פועל בדומה ל-DISTINCT אבל דרך GROUP BY."},
+
+  {num:75, section:"חלק ט\"ו — HAVING", text:"איזה תנאי ב-HAVING יחזיר קבוצות שיש בהן יותר מ-10 רשומות?",
+   options:["HAVING COUNT() > 10","HAVING ROWS > 10","HAVING SUM(1) > 10","תשובות א' ו-ג' נכונות."],
+   correct:3, explain:"<code>COUNT(*)</code> היא הדרך הסטנדרטית. טכנית גם <code>SUM(1)</code> מוסיף 1 לכל שורה ונותן אותה תוצאה."},
+
+  {num:76, section:"חלק ט\"ז — ניואנסים ב-GROUP BY", text:"מה יקרה בשאילתה: SELECT COUNT(phone) FROM users?",
+   options:["תספור את כל השורות בטבלה.","תספור רק את השורות שבהן הטלפון אינו NULL.","תחזיר שגיאה אם יש NULL.","תספור רק מספרי טלפון ייחודיים."],
+   correct:1, explain:"כשמציינים שם עמודה ב-COUNT, <strong>NULL לא נספר</strong>. רק ערכים קיימים נכללים בספירה."},
+
+  {num:77, section:"חלק ט\"ז — ניואנסים ב-GROUP BY", text:"איך נספור כמה ערים שונות (ייחודיות) יש בטבלת הלקוחות?",
+   options:["SELECT COUNT(city) FROM customers","SELECT COUNT(DISTINCT city) FROM customers","SELECT DISTINCT COUNT(city) FROM customers","SELECT SUM(city) FROM customers"],
+   correct:1, explain:"<code>COUNT(DISTINCT city)</code> — DISTINCT <strong>בתוך</strong> הסוגריים של COUNT סופר ערכים שונים בלבד."},
+
+  {num:78, section:"חלק ט\"ז — ניואנסים ב-GROUP BY", text:"האם מותר להשתמש בכינוי (Alias) בתוך ה-HAVING?",
+   options:["ברוב המערכות לא — חייבים לכתוב את הפונקציה שוב.","כן, תמיד.","רק אם הכינוי בעברית.","רק ב-WHERE."],
+   correct:0, explain:"כמו ב-WHERE, <strong>ב-HAVING המנוע בדרך כלל לא מזהה כינוי מ-SELECT</strong>. חייבים: <code>HAVING SUM(price) > 0</code> לא <code>HAVING total > 0</code>."},
+
+  {num:79, section:"חלק ט\"ז — ניואנסים ב-GROUP BY", text:"מה תציג: SELECT category, AVG(price) FROM products WHERE price > 100 GROUP BY category?",
+   options:["ממוצע כל המוצרים ורק אז תוריד מתחת ל-100.","תסנן מוצרים מעל 100 ועליהם תחשב ממוצע לכל קטגוריה.","שגיאה, אי אפשר WHERE לפני GROUP BY.","את המחיר הממוצע הגבוה ביותר."],
+   correct:1, explain:"<strong>WHERE קורה ראשון</strong> — מצמצם את הנתונים לפני הממוצע. רק מוצרים מעל 100 נכנסים לחישוב."},
+
+  {num:80, section:"חלק ט\"ז — ניואנסים ב-GROUP BY", text:"איזו פונקציה תחזיר מספר שורות בטבלה ריקה?",
+   options:["NULL","שגיאה.","0","1"],
+   correct:2, explain:"<strong>COUNT תמיד מחזירה מספר.</strong> אם אין נתונים — התוצאה היא 0, לא NULL ולא שגיאה."},
+
+  {num:81, section:"חלק י\"ז — GROUP BY תרגול", text:"בטבלה יש 5 שורות עם הערך 10 ו-5 שורות עם NULL. מה יחזיר COUNT(*)?",
+   options:["5","10","0","NULL"],
+   correct:1, explain:"<strong>COUNT(*) סופר הכל</strong> — כולל שורות עם NULL. 5 שורות + 5 שורות = 10."},
+
+  {num:82, section:"חלק י\"ז — GROUP BY תרגול", text:"באותה טבלה, מה יחזיר COUNT(column_name) (על העמודה עם הערכים)?",
+   options:["5","10","NULL","0"],
+   correct:0, explain:"COUNT(עמודה) <strong>מדלג על NULL</strong>. רק 5 השורות עם ערך 10 נספרות."},
+
+  {num:83, section:"חלק י\"ז — GROUP BY תרגול", text:"איך נמיין תוצאות GROUP BY מהגבוה לנמוך לפי סכום המכירות?",
+   options:["... GROUP BY category SORT SUM(sales)","... GROUP BY category ORDER BY SUM(sales) DESC","... GROUP BY category HAVING MAX(sales)","... ORDER BY category"],
+   correct:1, explain:"<strong>ORDER BY</strong> תמיד בסוף. ניתן להשתמש בפונקציית אגרגציה ישירות ב-ORDER BY: <code>ORDER BY SUM(sales) DESC</code>"},
+
+  {num:84, section:"חלק י\"ז — GROUP BY תרגול", text:"מה תעשה השאילתה: SELECT MAX(price) - MIN(price) FROM products?",
+   options:["שגיאה, אי אפשר לבצע חיסור בין פונקציות.","תציג את ההפרש בין המוצר היקר לזול ביותר (טווח מחירים).","תציג שתי עמודות נפרדות.","תחסיר את כל המחירים זה מזה."],
+   correct:1, explain:"<strong>ניתן לבצע פעולות חשבון על תוצאות פונקציות אגרגציה</strong>. MAX - MIN = טווח המחירים (Range)."},
+
+  {num:85, section:"חלק י\"ז — GROUP BY תרגול", text:"האם אפשר להשתמש ב-GROUP BY בלי פונקציית אגרגציה ב-SELECT?",
+   options:["כן, זה פשוט יחזיר ערכים ייחודיים.","לא, זה חסר משמעות.","רק אם יש WHERE.","רק ב-SQL Server."],
+   correct:0, explain:"<strong>טכנית אפשרי</strong> — יחזיר ערכים ייחודיים. אם כי בדרך כלל נשתמש ב-DISTINCT למטרה זו."},
+
+  {num:86, section:"חלק י\"ח — GROUP BY סיכום", text:"מה יקרה אם נכתוב: SELECT category, city, SUM(price) FROM products GROUP BY category?",
+   options:["תקבץ לפי קטגוריה ותבחר עיר אקראית.","שגיאה, כי city לא מופיע ב-GROUP BY.","תקבץ אוטומטית גם לפי עיר.","תציג את הסכום הכללי ליד כל עיר."],
+   correct:1, explain:"<strong>כלל חשוב:</strong> כל עמודה ב-SELECT שאינה בפונקציית סיכום <strong>חייבת להיות ב-GROUP BY</strong>. city חסר — שגיאה."},
+
+  {num:87, section:"חלק י\"ח — GROUP BY סיכום", text:"מה תפקיד פונקציית אגרגציה בתוך ה-HAVING?",
+   options:["לסנן את הקבוצות לפי התוצאה המחושבת שלהן.","לשנות את הערכים בתוך הקבוצה.","למיין את הקבוצות.","ליצור קבוצות חדשות."],
+   correct:0, explain:"HAVING + פונקציית אגרגציה = <strong>שומר הקבוצות</strong>. רק קבוצות שעומדות בתנאי (למשל SUM > 1000) ייכנסו לתוצאה."},
+
+  {num:88, section:"חלק י\"ח — GROUP BY סיכום", text:"איזו שאילתה תמצא את כמות ההזמנות הממוצעת ללקוח?",
+   options:["SELECT AVG(COUNT(order_id)) FROM orders","SELECT COUNT(order_id) / COUNT(DISTINCT customer_id) FROM orders","SELECT AVG(order_id) FROM orders","שגיאה, אי אפשר ממוצע של ספירה."],
+   correct:1, explain:"סה\"כ הזמנות חלקי לקוחות ייחודיים. <code>COUNT/COUNT(DISTINCT)</code>. תשובה א' — פונקציה בתוך פונקציה בדרך כלל אסורה ב-SQL ישיר."},
+
+  {num:89, section:"חלק י\"ח — GROUP BY סיכום", text:"מה ההבדל בין COUNT(DISTINCT name) לבין DISTINCT COUNT(name)?",
+   options:["אין הבדל.","הראשון סופר שמות ייחודיים, השני מנסה DISTINCT על תוצאת ספירה (תמיד מספר אחד).","השני הוא הדרך הנכונה ב-MySQL.","הראשון עובד רק על מספרים."],
+   correct:1, explain:"תמיד <strong>DISTINCT בתוך הסוגריים</strong>: <code>COUNT(DISTINCT name)</code>. DISTINCT לפני COUNT לא הגיוני — ספירה כבר מחזירה מספר אחד."},
+
+  {num:90, section:"חלק י\"ח — GROUP BY סיכום", text:"מה השלב האחרון בעיבוד שאילתת SQL הכוללת את כל הפקודות?",
+   options:["FROM","WHERE","SELECT","ORDER BY"],
+   correct:3, explain:"סדר ביצוע SQL: FROM → WHERE → GROUP BY → HAVING → SELECT → <strong>ORDER BY</strong>. המיון תמיד אחרון."},
+
+  // ===== חלק 5: JOIN =====
+  {num:91, section:"חלק י\"ט — JOIN: מושגי יסוד", text:"מהי המטרה העיקרית של פקודת JOIN ב-SQL?",
+   options:["למחוק נתונים משתי טבלאות בו-זמנית.","לחבר שורות מטבלאות שונות על בסיס עמודה משותפת.","למיין נתונים בשתי טבלאות שונות.","ליצור עותק של טבלה אחת בתוך אחרת."],
+   correct:1, explain:"JOIN <strong>מדביק שורות</strong> מטבלה א' לשורות מטבלה ב' כשיש ביניהן קשר לוגי — למשל לקוח מחובר להזמנות שלו."},
+
+  {num:92, section:"חלק י\"ט — JOIN: מושגי יסוד", text:"מהו INNER JOIN?",
+   options:["חיבור שמחזיר את כל השורות מטבלה א' גם ללא התאמה.","חיבור שמחזיר רק שורות שיש להן התאמה בשתי הטבלאות.","חיבור שמוחק שורות כפולות.","פקודה שיוצרת טבלה פנימית זמנית."],
+   correct:1, explain:"INNER JOIN = <strong>רק התאמות</strong>. אם ללקוח אין הזמנה — הוא לא יופיע בתוצאה."},
+
+  {num:93, section:"חלק י\"ט — JOIN: מושגי יסוד", text:"מה תפקיד המילה ON בשאילתת JOIN?",
+   options:["להפעיל את השאילתה על השרת.","להגדיר את תנאי החיבור (אילו עמודות להשוות).","לסנן את התוצאות הסופיות כמו WHERE.","לציין את שם הטבלה השנייה."],
+   correct:1, explain:"<code>ON</code> מגדיר <strong>איזו עמודה מטבלה א' שווה לעמודה מטבלה ב'</strong>. למשל: <code>ON orders.user_id = users.id</code>"},
+
+  {num:94, section:"חלק י\"ט — JOIN: מושגי יסוד", text:"מהו 'מפתח זר' (Foreign Key) בהקשר של JOIN?",
+   options:["עמודה ששומרת סיסמאות.","מפתח שנוצר בטבלה חיצונית בלבד.","עמודה בטבלה אחת שמתייחסת למפתח הראשי בטבלה אחרת.","עמודה שאי אפשר להשתמש בה ב-JOIN."],
+   correct:2, explain:"המפתח הזר הוא <strong>הגשר</strong> — הוא מחזיק את המזהה שמאפשר לנו למצוא מידע משלים בטבלה השנייה."},
+
+  {num:95, section:"חלק י\"ט — JOIN: מושגי יסוד", text:"האם ניתן לבצע JOIN בין טבלה לעצמה (Self Join)?",
+   options:["לא, זה יגרום ללולאה אינסופית.","כן, שימושי למשל כשיש עמודת 'מנהל' בטבלת 'עובדים'.","רק אם משכפלים את הטבלה פיזית.","רק ב-SQL Server."],
+   correct:1, explain:"<strong>Self Join אפשרי!</strong> נותנים לאותה טבלה שני כינויים שונים — למשל <code>employees e JOIN employees m ON e.manager_id = m.id</code>"},
+
+  {num:96, section:"חלק כ׳ — LEFT, RIGHT, FULL JOIN", text:"מה מחזיר LEFT JOIN?",
+   options:["רק את הצד השמאלי של הטבלה.","את כל השורות מהטבלה השמאלית + התאמות מהימנית (NULL אם אין התאמה).","רק שורות שאין להן התאמה.","את כל השורות משתי הטבלאות."],
+   correct:1, explain:"השמאלית = <strong>הראשית</strong>. מקבלים הכל ממנה, ומידע משלים מהימנית — NULL איפה שאין התאמה."},
+
+  {num:97, section:"חלק כ׳ — LEFT, RIGHT, FULL JOIN", text:"מתי נשתמש ב-LEFT JOIN במקום ב-INNER JOIN?",
+   options:["כשרוצים לראות גם לקוחות שמעולם לא ביצעו הזמנה.","כשרוצים שהתוצאות יהיו מהירות יותר.","כשיש לנו רק טבלה אחת.","כשרוצים למחוק נתונים חסרים."],
+   correct:0, explain:"INNER JOIN היה <strong>מעלים</strong> לקוחות ללא הזמנות. LEFT JOIN <strong>שומר</strong> אותם עם NULL בעמודות ההזמנה."},
+
+  {num:98, section:"חלק כ׳ — LEFT, RIGHT, FULL JOIN", text:"מה ההבדל בין LEFT JOIN ל-RIGHT JOIN?",
+   options:["אין הבדל לוגי — תלוי איזו טבלה כתבנו ראשונה.","LEFT JOIN מהיר יותר.","RIGHT JOIN לא נתמך ב-MySQL.","LEFT מחזיר טקסט, RIGHT מחזיר מספרים."],
+   correct:0, explain:"<strong>A LEFT JOIN B = B RIGHT JOIN A</strong> לוגית. אנשי דאטה מעדיפים תמיד LEFT JOIN לסדר קריאה נוח."},
+
+  {num:99, section:"חלק כ׳ — LEFT, RIGHT, FULL JOIN", text:"מה יופיע בעמודות הטבלה הימנית ב-LEFT JOIN אם אין התאמה?",
+   options:["0","רווח ריק.","NULL","שגיאה."],
+   correct:2, explain:"<strong>NULL</strong> = 'אין מידע'. כשאין שורה תואמת בחיבור חיצוני, המערכת ממלאת ב-NULL."},
+
+  {num:100, section:"חלק כ׳ — LEFT, RIGHT, FULL JOIN", text:"מה עושה FULL OUTER JOIN?",
+   options:["מחזיר את כל השורות משתי הטבלאות (NULL איפה שחסרה התאמה).","מחזיר רק שורות עם התאמה מלאה 100%.","מוחק את הטבלאות ומייצר אחת חדשה.","מחבר את כל העמודות לעמודה אחת ארוכה."],
+   correct:0, explain:"<strong>FULL JOIN = LEFT + RIGHT.</strong> לא משאיר אף שורה בחוץ. שימו לב: ב-MySQL אין FULL JOIN ישיר — עושים עם UNION."},
+
+  {num:101, section:"חלק כ\"א — JOIN: סינטקס וכינויים", text:"למה כדאי להשתמש בכינוי (Alias) לטבלאות ב-JOIN?",
+   options:["כדי שהקוד יהיה קצר וקריא יותר (למשל o במקום orders).","כי חובה לתת כינוי לכל טבלה ב-JOIN.","כדי לשנות את שם הטבלה לצמיתות.","כדי להסתיר את שמות הטבלאות האמיתיים."],
+   correct:0, explain:"כינויים <strong>מקצרים ומבהירים</strong> את הקוד. <code>o.id = c.id</code> הרבה יותר קריא מ-<code>orders.id = customers.id</code>."},
+
+  {num:102, section:"חלק כ\"א — JOIN: סינטקס וכינויים", text:"מהי השגיאה 'Ambiguous column name'?",
+   options:["שם העמודה ארוך מדי.","העמודה לא קיימת.","העמודה קיימת ביותר מטבלה אחת בחיבור — המערכת לא יודעת למי התכוונת.","שכחת לכתוב JOIN."],
+   correct:2, explain:"אם שתי טבלאות מכילות עמודה בשם <code>id</code> — חייבים לציין: <code>orders.id</code> או <code>users.id</code> לבהירות."},
+
+  {num:103, section:"חלק כ\"א — JOIN: סינטקס וכינויים", text:"האם ניתן לחבר יותר משתי טבלאות בשאילתה אחת?",
+   options:["לא, המקסימום הוא 2.","כן, אפשר לשרשר JOIN בזו אחר זו.","כן, אבל רק INNER JOIN.","רק ב-SQL Server."],
+   correct:1, explain:"<strong>אפשר לחבר 3, 4 ואפילו 20 טבלאות</strong> בשאילתה אחת — פשוט מוסיפים JOIN נוסף בכל פעם."},
+
+  {num:104, section:"חלק כ\"א — JOIN: סינטקס וכינויים", text:"מה קורה אם עושים JOIN ושוכחים לכתוב את תנאי ה-ON?",
+   options:["המערכת תבחר עמודה אקראית.","שגיאת סינטקס.","'מכפלה קרטזית' — כל שורה מ-א' מחוברת לכל שורה מ-ב'.","תחזיר רק את השורה הראשונה."],
+   correct:2, explain:"<strong>CROSS JOIN (Cartesian Product)</strong>: 10 שורות × 10 שורות = 100 שורות. בדרך כלל זו טעות יקרה מאוד!"},
+
+  {num:105, section:"חלק כ\"א — JOIN: סינטקס וכינויים", text:"מה ההבדל בין שימוש ב-ON לבין שימוש ב-USING?",
+   options:["אין הבדל.","USING משמש רק כשהעמודות בשתי הטבלאות בעלות שם זהה בדיוק.","ON מהיר יותר.","USING עובד רק ב-INNER JOIN."],
+   correct:1, explain:"<code>USING(user_id)</code> = קיצור ל-<code>ON a.user_id = b.user_id</code>. <strong>עובד רק כשהשמות זהים בשתי הטבלאות.</strong>"},
+
+  {num:106, section:"חלק כ\"ב — JOIN עם סינונים", text:"איפה ממוקם ה-WHERE בשאילתת JOIN?",
+   options:["לפני ה-JOIN.","בתוך ה-ON.","אחרי שכל ה-JOINs נכתבו.","בתחילת השאילתה."],
+   correct:2, explain:"קודם <strong>מחברים</strong> את כל הטבלאות (JOIN), ורק אז <strong>מסננים</strong> את התוצאה המאוחדת (WHERE)."},
+
+  {num:107, section:"חלק כ\"ב — JOIN עם סינונים", text:"מה ההבדל בין סינון ב-ON לבין סינון ב-WHERE ב-LEFT JOIN?",
+   options:["אין הבדל.","סינון ב-ON קובע אילו שורות יתחברו. סינון ב-WHERE מוריד שורות מהתוצאה הסופית.","WHERE מהיר יותר.","אי אפשר לסנן בתוך ON."],
+   correct:1, explain:"<strong>הבדל עדין וחשוב:</strong> סינון ב-WHERE על טבלה ימנית ב-LEFT JOIN יכול להפוך אותו ל-INNER JOIN בטעות — כי יסנן את ה-NULLים."},
+
+  {num:108, section:"חלק כ\"ב — JOIN עם סינונים", text:"איך נספור כמה הזמנות יש לכל לקוח?",
+   options:["JOIN בין הטבלאות ו-COUNT(order_id) עם GROUP BY שם הלקוח.","שימוש ב-SUM(orders).","אי אפשר לספור בתוך JOIN.","שימוש ב-DISTINCT לקוחות."],
+   correct:0, explain:"<strong>JOIN + GROUP BY + COUNT</strong> — שילוב קלאסי! מחברים לקוחות להזמנות, מקבצים לפי לקוח, וסופרים הזמנות."},
+
+  {num:109, section:"חלק כ\"ב — JOIN עם סינונים", text:"מהו CROSS JOIN?",
+   options:["חיבור שמצליב רק שורות עם ערכים דומים.","חיבור שמייצר את כל הקומבינציות האפשריות בין שתי טבלאות.","חיבור בין טבלאות משני דאטה בייסים.","פקודה לביטול JOIN."],
+   correct:1, explain:"CROSS JOIN = <strong>כל שילוב אפשרי</strong>. שימושי לדברים כמו: כל שילוב צבע × מידה של מוצר. 5×5 = 25 שורות."},
+
+  {num:110, section:"חלק כ\"ב — JOIN עם סינונים", text:"האם ניתן לבצע JOIN על יותר מעמודה אחת?",
+   options:["לא, תנאי ON חייב לכלול רק עמודה אחת.","כן, משתמשים ב-AND בתוך ה-ON.","כן, אבל רק ב-NATURAL JOIN.","רק אם יוצרים עמודה מאוחדת מראש."],
+   correct:1, explain:"<strong>אפשר!</strong> <code>ON a.first = b.first AND a.last = b.last</code> — מחברים לפי כמה עמודות עם AND."},
+
+  {num:111, section:"חלק כ\"ג — JOIN תרחישים", text:"ב-Sakila, איך נחבר בין סרט (film) לז'אנר שלו (category)?",
+   options:["חיבור ישיר בין שתי הטבלאות.","חיבור דרך טבלת מקשרת שנקראת film_category.","הז'אנר כתוב בתוך טבלת הסרטים.","אי אפשר לחבר ביניהם."],
+   correct:1, explain:"קשר <strong>רבים לרבים (N:N)</strong> — לכן יש טבלת ביניים film_category שמחזיקה את המפתחות של שניהם."},
+
+  {num:112, section:"חלק כ\"ג — JOIN תרחישים", text:"ב-WWI, איזו טבלה מחברת בין הזמנה (Orders) למוצרים (StockItems)?",
+   options:["Customers","OrderLines","Suppliers","Invoices"],
+   correct:1, explain:"<strong>OrderLines</strong> = טבלת ביניים. Orders מחזיקה פרטי הזמנה כללית, OrderLines מחזיקה כל מוצר שנקנה."},
+
+  {num:113, section:"חלק כ\"ג — JOIN תרחישים", text:"איך נמצא לקוחות שמעולם לא הזמינו?",
+   options:["INNER JOIN בין לקוחות להזמנות.","LEFT JOIN בין לקוחות להזמנות וסינון WHERE order_id IS NULL.","RIGHT JOIN בין לקוחות להזמנות.","חיפוש בטבלת ההזמנות בלבד."],
+   correct:1, explain:"<strong>טכניקה קלאסית!</strong> LEFT JOIN שומר לקוחות ללא הזמנות עם NULL, ואז <code>WHERE order_id IS NULL</code> מסנן רק אותם."},
+
+  {num:114, section:"חלק כ\"ג — JOIN תרחישים", text:"מהו NATURAL JOIN?",
+   options:["חיבור שמנחש לבד את הקשר לפי שמות עמודות זהים.","חיבור שמשתמש רק במספרים טבעיים.","חיבור שעובד ללא SELECT.","חיבור שקורה אוטומטית כשהדאטה בייס עולה."],
+   correct:0, explain:"NATURAL JOIN <strong>מנחש</strong> את עמודות החיבור לפי שמות זהים. <strong>לא מומלץ</strong> — מסוכן ולא קריא בקוד מקצועי."},
+
+  {num:115, section:"חלק כ\"ג — JOIN תרחישים", text:"כמה שורות יחזרו ב-INNER JOIN אם בטבלה א' יש 5 שורות ובטבלה ב' 0 שורות?",
+   options:["5","0","NULL","שגיאה."],
+   correct:1, explain:"INNER JOIN חייבת התאמה. <strong>אם צד אחד ריק — אין התאמות, התוצאה 0 שורות.</strong>"},
+
+  {num:116, section:"חלק כ\"ד — JOIN סיכום", text:"מה יקרה אם נעשה JOIN בין עמודת טקסט לעמודת מספר?",
+   options:["המערכת תבצע המרה אוטומטית.","שגיאת 'Data type mismatch'.","השאילתה תרוץ אבל לא תחזיר נתונים.","המערכת תמחק את שתי העמודות."],
+   correct:1, explain:"<strong>חייב להשוות סוגי נתונים תואמים</strong>. מספר לא שווה לטקסט — המערכת תזרוק שגיאת Data type mismatch."},
+
+  {num:117, section:"חלק כ\"ד — JOIN סיכום", text:"מה ההבדל בין JOIN ל-UNION?",
+   options:["JOIN מחבר עמודות (לרוחב), UNION מחבר שורות (לאורך).","UNION מהיר יותר.","JOIN דורש שמות עמודות זהים, UNION לא.","אין הבדל."],
+   correct:0, explain:"<strong>JOIN = לרוחב</strong> (מוסיף עמודות). <strong>UNION = לאורך</strong> (מדביק שורות מתחת לשורות אחרות)."},
+
+  {num:118, section:"חלק כ\"ד — JOIN סיכום", text:"האם ניתן לבצע JOIN בין טבלאות שנמצאות ב-Databases שונים?",
+   options:["לא, כל שאילתה מוגבלת לדאטה בייס אחד.","כן, על ידי ציון השם המלא (DB1.Table1 JOIN DB2.Table2).","רק אם הם באותו שרת פיזי.","רק ב-Oracle."],
+   correct:1, explain:"<strong>אפשרי!</strong> כל עוד יש הרשאות לשניהם: <code>DB1.customers JOIN DB2.orders ON ...</code>"},
+
+  {num:119, section:"חלק כ\"ד — JOIN סיכום", text:"מהי הדרך היעילה ביותר לחבר טבלאות ענק?",
+   options:["להשתמש תמיד ב-SELECT *.","לוודא שיש אינדקסים (Indexes) על עמודות ה-JOIN.","להשתמש ב-RIGHT JOIN במקום LEFT JOIN.","לחבר בתוך ה-WHERE במקום ב-ON."],
+   correct:1, explain:"<strong>אינדקסים</strong> מאפשרים למנוע לחפש ערכים מהר. בלי אינדקס — סריקה מלאה של הטבלה בכל JOIN."},
+
+  {num:120, section:"חלק כ\"ד — JOIN סיכום", text:"מה השאלה הלוגית שצריך לשאול לפני שבוחרים סוג JOIN?",
+   options:["'כמה עמודות יש בטבלה?'","'האם אני רוצה לאבד נתונים שאין להם התאמה בצד השני?'","'איזו טבלה גדולה יותר?'","'האם יש לי הרשאת מנהל?'"],
+   correct:1, explain:"<strong>שאלת המפתח:</strong> 'כן, רק התאמות' → INNER JOIN. 'לא, אני חייב לראות הכל' → LEFT JOIN."},
+
+  // ===== חלק 6: Subqueries =====
+  {num:121, section:"חלק כ\"ה — Subqueries: יסודות", text:"מהי ההגדרה הפשוטה ביותר לתת-שאילתה (Subquery)?",
+   options:["שאילתה שרצה רק בלילה.","שאילתה שנמצאת בתוך סוגריים בתוך שאילתה אחרת.","שאילתה שמחברת שתי טבלאות.","פונקציה שסופרת שורות."],
+   correct:1, explain:"תת-שאילתה היא <strong>פקודת SELECT פנימית</strong> שנמצאת בסוגריים ומספקת נתונים לשאילתה החיצונית."},
+
+  {num:122, section:"חלק כ\"ה — Subqueries: יסודות", text:"היכן בדרך כלל ממוקמת תת-השאילתה בשאילתה הראשית?",
+   options:["בתוך SELECT, FROM או WHERE.","רק בתוך ה-ORDER BY.","תמיד אחרי ה-GROUP BY.","לפני פקודת ה-SELECT הראשית."],
+   correct:0, explain:"<strong>3 מקומות נפוצים:</strong> בתוך SELECT (ערך לכל שורה), FROM (טבלה זמנית), WHERE (תנאי מחושב)."},
+
+  {num:123, section:"חלק כ\"ה — Subqueries: יסודות", text:"מה חובה לעשות כשכותבים תת-שאילתה?",
+   options:["לכתוב אותה באותיות קטנות בלבד.","להוסיף נקודה-פסיק בסוף שלה.","לעטוף אותה בסוגריים עגולים ().","להשתמש לפחות בשני JOIN-ים."],
+   correct:2, explain:"<strong>סוגריים חובה!</strong> הם מסמנים למנוע SQL שמדובר ביחידה נפרדת של שאילתה פנימית."},
+
+  {num:124, section:"חלק כ\"ה — Subqueries: יסודות", text:"מהי 'תת-שאילתה סקלרית' (Scalar Subquery)?",
+   options:["תת-שאילתה שמחזירה טבלה שלמה.","תת-שאילתה שמחזירה רק עמודה אחת.","תת-שאילתה שמחזירה ערך בודד (שורה אחת ועמודה אחת).","תת-שאילתה שאין בה FROM."],
+   correct:2, explain:"<strong>ערך בודד</strong> — כמו ממוצע או מזהה ספציפי. לכן אפשר להשתמש בה מול = ישירות."},
+
+  {num:125, section:"חלק כ\"ה — Subqueries: יסודות", text:"באיזו שאילתה נשתמש כדי למצוא מוצרים שמחירם גבוה מהממוצע?",
+   options:["WHERE price > AVG(price)","WHERE price > (SELECT AVG(price) FROM products)","SELECT AVG(price) WHERE price > AVG","WHERE price > (SELECT * FROM products)"],
+   correct:1, explain:"<strong>אי אפשר AVG ישירות ב-WHERE.</strong> חייבים לחשב בתת-שאילתה: <code>WHERE price > (SELECT AVG(price) FROM products)</code>"},
+
+  {num:126, section:"חלק כ\"ו — Subqueries: IN ו-EXISTS", text:"מתי נשתמש באופרטור IN עם תת-שאילתה?",
+   options:["כשתת-השאילתה מחזירה רשימת ערכים (עמודה אחת עם כמה שורות).","כשרוצים לחשב סכום.","רק כשיש טבלה אחת.","כשתת-השאילתה מחזירה ערך בודד בלבד."],
+   correct:0, explain:"<strong>IN</strong> בודק אם הערך נמצא ב'אוסף'. תת-השאילתה מחזירה עמודה שלמה של ערכים לבדיקה."},
+
+  {num:127, section:"חלק כ\"ו — Subqueries: IN ו-EXISTS", text:"מה עושה האופרטור EXISTS?",
+   options:["בודק אם ערך שווה ל-1.","בודק אם תת-השאילתה החזירה שורות כלשהן (לפחות שורה אחת).","מחזיר את כל הערכים הקיימים.","מוחק שורות שלא קיימות."],
+   correct:1, explain:"ל-<strong>EXISTS</strong> לא אכפת מה הערך שהוחזר — רק אם <strong>'יש תוצאה' או 'אין תוצאה'</strong>."},
+
+  {num:128, section:"חלק כ\"ו — Subqueries: IN ו-EXISTS", text:"מה ההבדל בין IN לבין EXISTS?",
+   options:["IN בודק ערכים ספציפיים, EXISTS בודק קיום של שורות.","IN מהיר יותר תמיד.","EXISTS עובד רק על מספרים.","אין הבדל."],
+   correct:0, explain:"<strong>IN</strong> = בודק ערך ברשימה. <strong>EXISTS</strong> = בודק אם יש שורות תואמות (שימושי לקשרים מורכבים)."},
+
+  {num:129, section:"חלק כ\"ו — Subqueries: IN ו-EXISTS", text:"מה תעשה: WHERE id NOT IN (SELECT id FROM blocked_users)?",
+   options:["תציג רק משתמשים חסומים.","תציג את כל המשתמשים חוץ מאלו ברשימת החסומים.","תמחק את המשתמשים החסומים.","שגיאה."],
+   correct:1, explain:"<strong>NOT IN</strong> מוציא מהתוצאה את כל הערכים שחזרו בתת-השאילתה — הפוך של IN."},
+
+  {num:130, section:"חלק כ\"ו — Subqueries: IN ו-EXISTS", text:"מה קורה אם תת-שאילתה ב-IN מחזירה ערך NULL?",
+   options:["ה-NULL מתעלמים ממנו.","השאילתה עלולה לא להחזיר אף שורה (במיוחד עם NOT IN).","המערכת מחליפה ב-0.","שגיאת סינטקס."],
+   correct:1, explain:"<strong>מלכודת NULL!</strong> השוואה מול NULL היא 'לא ידועה', מה שיכול לשבש תוצאות NOT IN לגמרי."},
+
+  {num:131, section:"חלק כ\"ז — Subqueries: SELECT ו-FROM", text:"מהי 'טבלה נגזרת' (Derived Table)?",
+   options:["תת-שאילתה שנמצאת בתוך ה-FROM ומתנהגת כמו טבלה רגילה.","טבלה שנמחקה מהדאטה בייס.","עמודה שמחושבת משתי עמודות אחרות.","קישור בין שרתים שונים."],
+   correct:0, explain:"<strong>Derived Table</strong> = SELECT בתוך FROM. מריצים SELECT על תוצאה של SELECT אחר כאילו היא טבלה אמיתית."},
+
+  {num:132, section:"חלק כ\"ז — Subqueries: SELECT ו-FROM", text:"מה חובה להוסיף לתת-שאילתה שנמצאת בתוך ה-FROM?",
+   options:["שם כינוי (Alias).","פקודת WHERE.","סדר מיון (ORDER BY).","את המילה TABLE."],
+   correct:0, explain:"<strong>Alias חובה!</strong> המערכת חייבת לדעת איך לקרוא ל'טבלה הזמנית' כדי להתייחס לעמודות שלה."},
+
+  {num:133, section:"חלק כ\"ז — Subqueries: SELECT ו-FROM", text:"מתי נשתמש בתת-שאילתה בתוך ה-SELECT?",
+   options:["כשרוצים להציג נתון מסוכם לצד כל שורה (למשל: מחיר המוצר לצד הממוצע הכללי).","כדי למחוק שורות מהתוצאה.","כדי לשנות שמות עמודות.","רק ב-GROUP BY."],
+   correct:0, explain:"תת-שאילתה ב-SELECT <strong>רצה עבור כל שורה</strong> ומביאה נתון מחוץ להקשר הישיר — כמו ממוצע כללי ליד כל מוצר."},
+
+  {num:134, section:"חלק כ\"ז — Subqueries: SELECT ו-FROM", text:"כמה עמודות יכולה להחזיר תת-שאילתה שנמצאת בתוך ה-SELECT?",
+   options:["כמה שרוצים.","עמודה אחת בלבד.","שתיים.","אף עמודה."],
+   correct:1, explain:"<strong>עמודה אחת בלבד!</strong> היא אמורה להיכנס לתוך 'תא' אחד בטבלה הסופית, לכן חייבת להחזיר ערך בודד."},
+
+  {num:135, section:"חלק כ\"ז — Subqueries: SELECT ו-FROM", text:"האם ניתן להשתמש ב-JOIN בתוך תת-שאילתה?",
+   options:["לא, תת-שאילתה חייבת להיות פשוטה.","כן, תת-שאילתה יכולה להיות מורכבת כמו כל שאילתה רגילה.","רק אם השאילתה הראשית היא JOIN.","רק ב-MySQL 8.0+."],
+   correct:1, explain:"<strong>תת-שאילתה היא עולם ומלואו!</strong> מותר לעשות בה הכל: סינונים, חיבורים, קיבוצים — כמו כל שאילתה רגילה."},
+
+  {num:136, section:"חלק כ\"ח — Correlated Subqueries", text:"מהי תת-שאילתה בקורלציה?",
+   options:["שאילתה שרצה על שני דאטה בייסים.","שאילתה פנימית שמשתמשת בנתון מהשאילתה החיצונית.","שאילתה שאין בה WHERE.","שאילתה שמחזירה רק מספרים חיוביים."],
+   correct:1, explain:"<strong>Correlated</strong> = השאילתה הפנימית 'מכירה' את השורה הנוכחית מבחוץ ומבצעת חישוב מותאם עבורה."},
+
+  {num:137, section:"חלק כ\"ח — Correlated Subqueries", text:"מה החיסרון העיקרי של תת-שאילתה בקורלציה?",
+   options:["היא פחות מאובטחת.","היא יכולה להיות איטית מאוד (רצה מחדש עבור כל שורה).","היא עובדת רק על טקסט.","אי אפשר להשתמש בה ב-SQL Server."],
+   correct:1, explain:"<strong>ביצועים!</strong> המנוע מריץ אותה שוב לכל רשומה — אם יש מיליון שורות, היא רצה מיליון פעמים."},
+
+  {num:138, section:"חלק כ\"ח — Correlated Subqueries", text:"איך נזהה תת-שאילתה בקורלציה בקוד?",
+   options:["לפי הסוגריים.","לפי שמופיע בה כינוי של טבלה מהשאילתה החיצונית בתוך ה-WHERE הפנימי.","לפי המילה CORRELATED.","לפי שיש בה GROUP BY."],
+   correct:1, explain:"<strong>הסימן:</strong> כינוי מהשאילתה החיצונית מופיע בפנים. למשל: <code>WHERE p.category = o.category</code> כש-o מגיע מבחוץ."},
+
+  {num:139, section:"חלק כ\"ח — Correlated Subqueries", text:"מהי המטרה של שאילתת קורלציה עם EXISTS?",
+   options:["למצוא את הממוצע.","לבדוק אם קיימת רשומה תואמת בטבלה אחרת עבור כל שורה.","למחוק כפילויות.","למיין את הטבלה הפנימית."],
+   correct:1, explain:"שימוש קלאסי: <strong>'הצג לקוחות שיש להם לפחות הזמנה אחת'</strong> — EXISTS בודק קיום לכל לקוח בנפרד."},
+
+  {num:140, section:"חלק כ\"ח — Correlated Subqueries", text:"האם ניתן להחליף כל תת-שאילתה ב-JOIN?",
+   options:["כן, תמיד.","לא, ישנם חישובים אגרגטיביים מורכבים שקל יותר לבצע בתת-שאילתה.","JOIN תמיד איטי יותר.","תת-שאילתה ב-FROM היא בעצם JOIN."],
+   correct:1, explain:"JOIN עדיף בביצועים, אבל <strong>תת-שאילתות מאפשרות לוגיקה</strong> שקשה מאוד לבטא בחיבור פשוט."},
+
+  {num:141, section:"חלק כ\"ט — ALL, ANY, SOME", text:"מה עושה האופרטור ALL בתת-שאילתה?",
+   options:["מחזיר את כל השורות.","בודק אם התנאי מתקיים מול כל הערכים שתת-השאילתה החזירה.","בודק אם לפחות ערך אחד מתקיים.","מחשב את הסכום הכללי."],
+   correct:1, explain:"<code>WHERE price > ALL (...)</code> = יקר יותר מ<strong>כולם</strong>. התנאי חייב להתקיים מול כל איבר ברשימה."},
+
+  {num:142, section:"חלק כ\"ט — ALL, ANY, SOME", text:"מה עושה האופרטור ANY?",
+   options:["בודק אם התנאי מתקיים מול לפחות אחד מהערכים שתת-השאילתה החזירה.","מחזיר ערך אקראי.","בודק אם אין ערכים בכלל.","שקול ל-NOT EXISTS."],
+   correct:0, explain:"<strong>ANY</strong> = מספיק שתנאי אחד מתקיים. דומה ל-IN אבל מאפשר אופרטורים כמו <code>></code>, <code><</code>."},
+
+  {num:143, section:"חלק כ\"ט — ALL, ANY, SOME", text:"האם יש הבדל בין ANY לבין SOME?",
+   options:["כן, SOME עובד רק על מספרים.","לא, הן מילים נרדפות ועובדות באותה צורה בדיוק.","ANY מהיר יותר.","SOME עובד רק ב-PostgreSQL."],
+   correct:1, explain:"<strong>ANY ו-SOME זהות לחלוטין</strong> — נועדו להפוך את ה-SQL לקריא יותר כמו שפה טבעית."},
+
+  {num:144, section:"חלק כ\"ט — ALL, ANY, SOME", text:"מה תחזיר: WHERE salary > ALL (SELECT 1000, 2000)?",
+   options:["משכורות מעל 1000.","משכורות מעל 2000 (צריכות להיות גדולות מהכל).","משכורות בין 1000 ל-2000.","שגיאה."],
+   correct:1, explain:"<strong>ALL = חייב לעלות על כולם.</strong> 2000 הוא הגבוה ביותר ברשימה, לכן רק משכורות מעל 2000 יעברו."},
+
+  {num:145, section:"חלק כ\"ט — ALL, ANY, SOME", text:"מתי תת-שאילתה ב-WHERE תחזיר שגיאה?",
+   options:["כשמחזירה יותר מערך אחד אבל השתמשנו באופרטור ערך בודד (=).","כשמחזירה 0 שורות.","כשיש בה יותר מ-JOIN אחד.","כשיש לה כינוי."],
+   correct:0, explain:"<strong>שגיאה קלאסית!</strong> <code>WHERE id = (SELECT id FROM users)</code> — אם מוחזרים שני יוזרים, המנוע לא יודע למי להשוות."},
+
+  {num:146, section:"חלק ל׳ — Subqueries: סיכום", text:"מהו הסדר שבו SQL מעבד שאילתה עם תת-שאילתה ב-WHERE?",
+   options:["קודם החיצונית, אחר כך הפנימית.","קודם הפנימית (תת-השאילתה), ואז החיצונית משתמשת בתוצאה.","שתיהן יחד.","מלמעלה למטה."],
+   correct:1, explain:"<strong>הפנימית קודם!</strong> המנוע פותר את הסוגריים → מקבל תוצאה → משתמש בה כקבוע בשאילתה החיצונית."},
+
+  {num:147, section:"חלק ל׳ — Subqueries: סיכום", text:"למה מעדיפים לפעמים תת-שאילתה ב-FROM על פני JOIN פשוט?",
+   options:["כי זה קצר יותר.","כדי לבצע GROUP BY מוקדם ולצמצם נתונים לפני החיבור.","כי זה תמיד מהיר יותר.","כי ב-FROM לא צריך כינוי."],
+   correct:1, explain:"<strong>טכניקת ביצועים!</strong> מסכמים את הטבלה הגדולה לקבוצות קטנות — ואז מחברים אותן. הרבה יותר יעיל."},
+
+  {num:148, section:"חלק ל׳ — Subqueries: סיכום", text:"האם תת-שאילתה יכולה להכיל תת-שאילתה נוספת בתוכה?",
+   options:["לא, יש הגבלה לרמה אחת.","כן, אפשר לקנן שאילתות בכמה רמות (Nested Subqueries).","רק עד 3 רמות.","רק ב-SQL Server Enterprise."],
+   correct:1, explain:"<strong>אין הגבלה טכנית</strong> — אבל ביותר מדי רמות הקוד הופך להיות קשה מאוד לקריאה. CTE עדיף אז."},
+
+  {num:149, section:"חלק ל׳ — Subqueries: סיכום", text:"מהי הדרך הטובה ביותר לבדוק אם תת-שאילתה עובדת?",
+   options:["להריץ את השאילתה המלאה ולקוות לטוב.","להעתיק את הקוד שבסוגריים ולהריץ אותו בנפרד כשאילתה רגילה.","לבדוק רק את ה-SELECT החיצוני.","לשנות את ה-SELECT הפנימי ל-COUNT."],
+   correct:1, explain:"<strong>טיפ מקצועי!</strong> תת-שאילתה היא שאילתה עצמאית — העתק אותה לחלון נפרד והרץ לבד לראות מה היא מחזירה."},
+
+  {num:150, section:"חלק ל׳ — Subqueries: סיכום", text:"מה הכלל הכי חשוב בשימוש בתת-שאילתות?",
+   options:["שתמיד יחזירו את כל העמודות (*).","לוודא שמחזירות בדיוק את מבנה הנתונים שהשאילתה החיצונית מצפה לו.","להשתמש בהן רק על מספרים.","לא להשתמש בהן בכלל."],
+   correct:1, explain:"<strong>הטעות הנפוצה ביותר</strong>: חוסר התאמה בין מה שהסוגריים מחזירים לבין האופרטור שמחכה בחוץ (= לעומת IN)."},
+];
+
+let answers = {};
+let correct = 0;
+let currentSection = null;
+
+function updateScore(){
+  const total = Object.keys(answers).length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('scoreText').textContent = correct+' / '+total;
+  document.getElementById('scoreFill').style.width = pct+'%';
+  document.getElementById('scorePct').textContent = pct+'%';
+  document.getElementById('heroAnswered').textContent = total;
+  if(total === questions.length) showFinish();
+}
+
+function selectOption(qIdx, optIdx){
+  if(answers[qIdx] !== undefined) return;
+  const q = questions[qIdx];
+  const isCorrect = optIdx === q.correct;
+  answers[qIdx] = optIdx;
+  if(isCorrect) correct++;
+  const card = document.getElementById('qcard-'+qIdx);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i === q.correct) o.classList.add('correct-ans');
+    if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+  const exp = document.getElementById('exp-'+qIdx);
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ נכון! ' : '❌ לא נכון. ') + q.explain;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = '';
+  const letters = ['א','ב','ג','ד'];
+  questions.forEach((q,i)=>{
+    if(q.section !== currentSection){
+      currentSection = q.section;
+      mc.innerHTML += `<div class="sec-label">${q.section}</div>`;
+    }
+    const opts = q.options.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    mc.innerHTML += `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">שאלה ${q.num}</div>
+          <div class="q-section">${q.section.split('—')[1]?.trim() || q.section}</div>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-body">
+        <div class="options">${opts}</div>
+        <div class="explanation" id="exp-${i}">
+          <div class="exp-label">💡 הסבר</div>
+          <div class="exp-text"></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  mc.innerHTML += `
+  <div class="finish-card" id="finishCard">
+    <div class="finish-emoji">🎉</div>
+    <div class="finish-title">סיימת את הקוויז!</div>
+    <div class="finish-score" id="finishScore">0/150</div>
+    <div id="finishGrade"></div>
+    <div class="finish-sub" id="finishSub"></div>
+    <br>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 נסה שוב</button>
+    <a href="quiz.html" class="adv-link">🧠 מוכן לקוויז המתקדם? ←</a>
+  </div>`;
+}
+
+function showFinish(){
+  const card = document.getElementById('finishCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('finishScore').textContent = correct+'/150';
+  const pct = Math.round(correct/150*100);
+  let grade, sub;
+  if(pct>=90){grade='<span class="finish-grade grade-a">⭐ מצוין! A</span>';sub='כל הכבוד! שלטת ביסודות SELECT ברמה גבוהה. אתה מוכן לנושאים הבאים!';}
+  else if(pct>=75){grade='<span class="finish-grade grade-b">👍 טוב מאוד! B</span>';sub='עבודה טובה! כדאי לחזור על השאלות שטעית בהן ואז להמשיך קדימה.';}
+  else if(pct>=60){grade='<span class="finish-grade grade-c">📚 עובר! C</span>';sub='בסיס טוב, אבל כדאי לחזור על חומר ה-SELECT לפני שממשיכים.';}
+  else{grade='<span class="finish-grade grade-d">💪 ממשיכים להתאמן! D</span>';sub='אל תתייאש — חזור לחומר הלימוד על SELECT ונסה שוב!';}
+  document.getElementById('finishGrade').innerHTML = grade;
+  document.getElementById('finishSub').textContent = sub;
+}
+
+function resetQuiz(){
+  answers = {}; correct = 0; currentSection = null;
+  buildQuiz();
+  updateScore();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+buildQuiz();
+updateScore();
+</script>
+</body>
+</html>
