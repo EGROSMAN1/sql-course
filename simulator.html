@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סימולטור SQL — Northwind</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;--border:#1e2d42;--border2:#2a3f5a;--text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;--blue:#4a9eff;--blue2:#1a6fd4;--blue3:#0a3a6e;--cyan:#00d4ff;--green:#00e676;--green2:#00a854;--orange:#ff8c42;--yellow:#ffd166;--red:#ff4757;--purple:#d2a8ff;--teal:#00d4aa;--font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace}
+body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.nav{background:rgba(6,10,15,.97);border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;align-items:center;gap:.75rem;height:46px;flex-shrink:0}
+.back{color:var(--cyan);text-decoration:none;font-size:12px;font-weight:700;font-family:var(--mono)}
+.nav-t{font-size:13px;font-weight:700;color:var(--text2)}
+.nav-links{display:flex;gap:.75rem;margin-right:auto}
+.nav-l{color:var(--text3);text-decoration:none;font-size:11.5px;font-weight:600;transition:color .15s}
+.nav-l:hover{color:var(--cyan)}
+.dbst{display:flex;align-items:center;gap:5px;font-size:11px;font-family:var(--mono);color:var(--text3)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:all .3s}
+.dot.ok{background:var(--green);box-shadow:0 0 6px rgba(0,230,118,.5)}
+.dot.load{background:var(--yellow);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.main-tabs{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;flex-shrink:0;height:36px}
+.mtab{padding:0 1.2rem;font-size:12px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;display:flex;align-items:center;gap:5px;transition:all .15s;background:none;border-top:none;border-right:none;border-left:none;font-family:var(--font)}
+.mtab:hover{color:var(--text2)}
+.mtab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.app{display:flex;flex:1;overflow:hidden}
+.sb{width:248px;min-width:248px;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-hdr{padding:.5rem .7rem;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--mono);display:flex;justify-content:space-between;align-items:center}
+.sb-rc{color:var(--teal);font-size:11px;letter-spacing:0}
+.sb-srch{padding:.35rem .6rem;border-bottom:1px solid var(--border)}
+.sb-srch input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:3px 7px;border-radius:5px;outline:none}
+.sb-srch input:focus{border-color:var(--blue)}
+.sb-srch input::placeholder{color:var(--text3)}
+.sb-body{overflow-y:auto;padding:.25rem 0;min-height:60px}
+.sb-body::-webkit-scrollbar{width:3px}
+.sb-body::-webkit-scrollbar-thumb{background:var(--border2)}
+.tn{cursor:pointer}
+.th{display:flex;align-items:center;gap:5px;padding:.28rem .6rem;transition:background .1s}
+.th:hover{background:var(--bg3)}
+.ar{font-size:9px;color:var(--text3);width:11px;transition:transform .15s;font-family:var(--mono);flex-shrink:0}
+.ar.op{transform:rotate(90deg)}
+.ti{font-size:11px;flex-shrink:0}
+.tnm{font-family:var(--mono);color:var(--cyan);font-weight:600;flex:1;font-size:11.5px}
+.tct{font-size:10px;color:var(--teal);font-family:var(--mono);font-weight:700}
+.tc{display:none;background:rgba(0,0,0,.12)}
+.tc.op{display:block}
+.cr{display:flex;align-items:center;gap:4px;padding:.18rem .5rem .18rem 1.7rem;font-size:10.5px;font-family:var(--mono);transition:background .1s}
+.cr:hover{background:var(--bg3)}
+.ci{width:12px;font-size:9px;flex-shrink:0}
+.cn{flex:1;color:var(--text2)}
+.cn.pk{color:var(--yellow)}
+.cn.fk{color:var(--orange)}
+.ct{font-size:9.5px;color:var(--text3)}
+.sb-resize{height:6px;background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);cursor:ns-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s;user-select:none}
+.sb-resize:hover,.sb-resize.dragging{background:var(--border2)}
+.sb-resize::after{content:'';width:28px;height:3px;border-radius:2px;background:var(--border2)}
+.sb-resize:hover::after,.sb-resize.dragging::after{background:var(--orange)}
+.sb-q{padding:.4rem .6rem;border-top:none;overflow-y:auto;min-height:60px;flex-shrink:0}
+.qt{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);margin-bottom:.3rem}
+.qi{display:flex;align-items:center;gap:5px;padding:.22rem .3rem;border-radius:4px;cursor:pointer;font-size:10.5px;color:var(--text2);font-family:var(--mono);transition:background .1s}
+.qi:hover{background:var(--bg3);color:var(--cyan)}
+.qa{color:var(--cyan);font-size:10px}
+.pane{display:none;flex:1;flex-direction:column;overflow:hidden;min-width:0}
+.pane.active{display:flex}
+.ex-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.4rem .7rem;flex-shrink:0}
+.ex-r1{display:flex;align-items:center;gap:.4rem;margin-bottom:.35rem}
+.exl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono)}
+.lvts{display:flex;gap:.25rem}
+.lt{padding:.18rem .55rem;border-radius:12px;font-size:10.5px;font-weight:700;cursor:pointer;border:1px solid var(--border2);color:var(--text3);background:transparent;transition:all .12s;font-family:var(--font)}
+.lt.b.on{background:rgba(0,212,170,.12);color:var(--teal);border-color:var(--teal)}
+.lt.m.on{background:rgba(255,140,66,.12);color:var(--orange);border-color:var(--orange)}
+.lt.a.on{background:rgba(210,168,255,.12);color:var(--purple);border-color:var(--purple)}
+.exr{display:flex;gap:.35rem;overflow-x:auto;padding-bottom:.15rem;scrollbar-width:none}
+.exr::-webkit-scrollbar{display:none}
+.ec{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .6rem;cursor:pointer;transition:all .12s;flex-shrink:0;max-width:210px;min-width:170px;position:relative}
+.ec:hover{border-color:var(--border2)}
+.ec.on{border-color:var(--cyan);background:rgba(0,212,255,.05)}
+.en{font-size:9px;font-family:var(--mono);color:var(--text3)}
+.et{font-size:11px;color:var(--text2);line-height:1.35;margin-top:.12rem;margin-bottom:.3rem}
+.ec-btns{display:flex;gap:.3rem;margin-top:.35rem}
+.ec-sel{flex:1;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);color:var(--cyan);font-size:10px;font-weight:700;padding:3px 0;border-radius:4px;cursor:pointer;font-family:var(--font);transition:all .12s;text-align:center}
+.ec-sel:hover{background:rgba(0,212,255,.18)}
+.ec-ans{background:rgba(210,168,255,.08);border:1px solid rgba(210,168,255,.2);color:var(--purple);font-size:10px;font-weight:700;padding:3px 7px;border-radius:4px;cursor:pointer;font-family:var(--font);transition:all .12s;white-space:nowrap}
+.ec-ans:hover{background:rgba(210,168,255,.2)}
+
+/* SOLUTION MODAL */
+.sol-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.sol-overlay.open{display:flex}
+.sol-modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;width:min(720px,92vw);max-height:82vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.sol-hdr{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;flex-shrink:0}
+.sol-hdr-left{flex:1}
+.sol-num{font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:.25rem}
+.sol-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.4}
+.sol-close{background:var(--bg3);border:1px solid var(--border2);color:var(--text3);width:30px;height:30px;border-radius:7px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.sol-close:hover{border-color:var(--red);color:var(--red)}
+.sol-hint{padding:.6rem 1.1rem;background:rgba(255,209,102,.04);border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);flex-shrink:0}
+.sol-hint span{color:var(--yellow);font-weight:700}
+.sol-body{flex:1;overflow-y:auto;padding:1rem 1.1rem}
+.sol-body::-webkit-scrollbar{width:4px}
+.sol-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.sol-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.sol-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.sol-code{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.sol-code-hdr{background:var(--bg3);border-bottom:1px solid var(--border);padding:.35rem .75rem;display:flex;align-items:center;justify-content:space-between}
+.sol-code-lang{font-size:10px;font-family:var(--mono);color:var(--cyan);font-weight:700}
+.sol-copy{background:transparent;border:none;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font);padding:2px 8px;border-radius:4px;transition:all .12s}
+.sol-copy:hover{background:var(--bg4);color:var(--text)}
+.sol-copy.ok{color:var(--green)}
+.sol-pre{padding:.85rem 1rem;font-family:var(--mono);font-size:12.5px;color:var(--purple);white-space:pre-wrap;direction:ltr;text-align:left;line-height:1.7;margin:0}
+.sol-footer{padding:.75rem 1.1rem;border-top:1px solid var(--border);display:flex;gap:.5rem;flex-shrink:0}
+.sol-run{background:var(--green2);color:#fff;border:none;padding:7px 18px;border-radius:7px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:5px}
+.sol-run:hover{background:var(--green)}
+.sol-use{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:7px 14px;border-radius:7px;font-family:var(--font);font-size:12px;cursor:pointer;transition:all .12s}
+.sol-use:hover{border-color:var(--blue);color:var(--blue)}
+.tb{background:var(--bg3);border-bottom:1px solid var(--border);padding:.4rem .65rem;display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.rb{background:var(--green2);color:#fff;border:none;padding:5px 13px;border-radius:6px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .12s}
+.rb:hover:not(:disabled){background:var(--green)}
+.rb:disabled{opacity:.4;cursor:not-allowed}
+.xb{background:transparent;border:1px solid var(--border2);color:var(--text3);padding:4px 9px;border-radius:5px;font-family:var(--font);font-size:11px;cursor:pointer;transition:all .1s}
+.xb:hover{border-color:var(--border);color:var(--text2)}
+.xb.h:hover{border-color:var(--yellow);color:var(--yellow)}
+.xb.s:hover{border-color:var(--purple);color:var(--purple)}
+.xb.c:hover{border-color:var(--red);color:var(--red)}
+.kb{font-size:10px;color:var(--text3);font-family:var(--mono);margin-right:auto}
+.inf{padding:.4rem .7rem;font-size:12px;display:none;flex-shrink:0;border-bottom:1px solid var(--border)}
+.inf.sh{display:block}
+.inf.hi{background:rgba(255,209,102,.04);border-right:3px solid var(--yellow);color:var(--text2)}
+.inf.si{background:rgba(210,168,255,.04);border-right:3px solid var(--purple)}
+.inf.si pre{font-family:var(--mono);font-size:11px;color:var(--purple);white-space:pre-wrap;direction:ltr;text-align:left}
+.ew{flex:1;display:flex;overflow:hidden;min-height:0;position:relative}
+.lns{background:var(--bg2);border-left:1px solid var(--border);padding:.5rem 0;width:34px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.55;overflow:hidden;flex-shrink:0;user-select:none}
+#sqle{flex:1;background:var(--bg);color:var(--text);border:none;outline:none;padding:.5rem .6rem .5rem .65rem;font-family:var(--mono);font-size:13px;line-height:1.55;resize:none;tab-size:2;direction:ltr;text-align:left;overflow-y:auto}
+#sqle::placeholder{color:var(--text3)}
+
+/* AUTOCOMPLETE */
+#acMenu{display:none;position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:200px;max-width:320px;max-height:220px;overflow-y:auto;z-index:999;font-family:var(--mono);font-size:12px;direction:ltr}
+#acMenu::-webkit-scrollbar{width:4px}
+#acMenu::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.ac-item{padding:.35rem .75rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;color:var(--text2);transition:background .1s;white-space:nowrap}
+.ac-item:hover,.ac-item.sel{background:var(--bg4);color:var(--cyan)}
+.ac-icon{font-size:10px;flex-shrink:0;opacity:.7}
+.ac-name{flex:1}
+.ac-type{font-size:10px;color:var(--text3)}
+.ac-cat{padding:.25rem .75rem;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;background:var(--bg3);border-bottom:1px solid var(--border)}
+.res{background:var(--bg2);border-top:none;flex-shrink:0;height:195px;display:flex;flex-direction:column;min-height:80px;max-height:70vh}
+.resize-handle{height:6px;background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);cursor:ns-resize;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s;user-select:none}
+.resize-handle:hover,.resize-handle.dragging{background:var(--border2)}
+.resize-handle::after{content:'';width:32px;height:3px;border-radius:2px;background:var(--border2)}
+.resize-handle:hover::after,.resize-handle.dragging::after{background:var(--cyan)}
+.rh{background:var(--bg3);border-bottom:1px solid var(--border);padding:.28rem .65rem;display:flex;align-items:center;gap:.6rem;font-size:11px;font-family:var(--mono);color:var(--text3);flex-shrink:0}
+.rc{color:var(--green);font-weight:700}
+.rs{flex:1;overflow:auto}
+.rs::-webkit-scrollbar{width:4px;height:4px}
+.rs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.rt{width:100%;border-collapse:collapse;font-size:11px;direction:ltr}
+.rt th{background:var(--bg4);color:var(--cyan);font-family:var(--mono);font-weight:600;padding:.28rem .55rem;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0;white-space:nowrap}
+.rt td{padding:.24rem .55rem;border-bottom:1px solid rgba(30,45,66,.35);color:var(--text2);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono)}
+.rt tr:hover td{background:rgba(255,255,255,.015)}
+.nv{color:var(--text3)!important;font-style:italic}
+.nrv{color:#79c0ff!important}
+.ev{margin:.5rem .7rem;padding:.45rem .75rem;background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-right:3px solid var(--red);border-radius:6px;font-family:var(--mono);font-size:12px;color:var(--red)}
+.emp{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);gap:.3rem;font-size:12px}
+.emp .ico{font-size:1.3rem;opacity:.3}
+.erd-w{flex:1;overflow:hidden;position:relative;background:var(--bg)}
+.ectrl{position:absolute;top:10px;left:10px;display:flex;gap:.4rem;z-index:10}
+.eb{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:5px 12px;border-radius:6px;font-family:var(--font);font-size:12px;cursor:pointer;transition:all .12s}
+.eb:hover{border-color:var(--cyan);color:var(--cyan)}
+.sp{position:absolute;top:10px;right:12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:11px;font-family:var(--mono);min-width:200px;z-index:10;max-height:80vh;overflow-y:auto}
+.sp::-webkit-scrollbar{width:3px}
+.sp-t{color:var(--text3);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.5rem}
+.sr{display:flex;justify-content:space-between;gap:1rem;margin-bottom:.18rem}
+.sl{color:var(--text3)}
+.sv{color:var(--teal);font-weight:700}
+.leg{position:absolute;bottom:10px;right:12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;font-size:11px;font-family:var(--mono)}
+.lg-t{color:var(--text3);font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-bottom:.35rem}
+.li{display:flex;align-items:center;gap:6px;color:var(--text2);margin-bottom:.18rem}
+.lpk{width:10px;height:10px;border-radius:2px;background:var(--yellow);flex-shrink:0}
+.lfk{width:10px;height:10px;border-radius:2px;background:var(--orange);flex-shrink:0}
+.lln{width:18px;height:2px;background:var(--border2);flex-shrink:0}
+#erd{width:100%;height:100%}
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  body{overflow:auto;height:auto}
+  .nav{height:auto;flex-wrap:wrap;padding:.5rem .75rem;gap:.4rem}
+  .nav-t{font-size:12px;order:1;flex:1}
+  .back{font-size:11px;order:0}
+  .nav-links{display:none}
+  .dbst{font-size:10px;order:2;width:100%}
+  .main-tabs .mtab{font-size:11px;padding:0 .75rem}
+  .app{flex-direction:column;height:auto;min-height:100vh}
+  /* Sidebar becomes horizontal scrollable strip */
+  .sb{width:100%;min-width:unset;border-left:none;border-bottom:1px solid var(--border);flex-direction:row;overflow-x:auto;overflow-y:hidden;height:auto;max-height:none;flex-shrink:0}
+  .sb-hdr{display:none}
+  .sb-srch{display:none}
+  .sb-body{flex:none;min-width:180px;overflow-y:auto;max-height:220px;padding:.2rem 0}
+  .sb-resize{display:none}
+  .sb-q{min-width:200px;border-top:none;border-right:1px solid var(--border);overflow-y:auto;max-height:220px;padding:.35rem .5rem}
+  .qt{font-size:9px}
+  .qi{font-size:10px;padding:.2rem .25rem}
+  /* Main area */
+  .pane.active{display:flex;flex-direction:column;min-height:0}
+  /* Exercise bar - scrollable */
+  .ex-bar{padding:.35rem .5rem}
+  .ex-r1{flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem}
+  .exl{font-size:9px}
+  .lt{font-size:10px;padding:.15rem .45rem}
+  .exr{gap:.25rem}
+  .ec{min-width:140px;max-width:160px;padding:.35rem .5rem}
+  .en{font-size:8px}
+  .et{font-size:10px}
+  .ec-btns{gap:.2rem}
+  .ec-sel,.ec-ans{font-size:9px;padding:2px 0}
+  /* Toolbar */
+  .tb{padding:.35rem .5rem;gap:.3rem;flex-wrap:wrap}
+  .rb{font-size:11px;padding:5px 10px}
+  .xb{font-size:10px;padding:3px 7px}
+  .kb{display:none}
+  /* Editor */
+  #sqle{font-size:12px;min-height:120px}
+  .lns{width:28px;font-size:10px}
+  /* Results */
+  .res{height:200px}
+  .rh{padding:.25rem .5rem;font-size:10px}
+  .rt th,.rt td{padding:.2rem .4rem;font-size:10px}
+  /* ERD pane */
+  .erd-w canvas{touch-action:none}
+  .ectrl{top:6px;left:6px;gap:.25rem}
+  .eb{font-size:11px;padding:4px 8px}
+  .sp{display:none}
+  /* Resize handles */
+  .resize-handle{height:8px}
+  /* Solution modal */
+  .sol-modal{width:95vw;max-height:90vh}
+  .sol-hdr{padding:.65rem .85rem}
+  .sol-title{font-size:13px}
+  .sol-body{padding:.75rem .85rem}
+  .sol-pre{font-size:11px}
+  .sol-footer{padding:.6rem .85rem;flex-wrap:wrap}
+  .sol-run,.sol-use{font-size:11px;padding:6px 12px}
+  /* Autocomplete */
+  #acMenu{max-width:85vw}
+  .ac-item{padding:.3rem .6rem;font-size:11px}
+}
+@media(max-width:480px){
+  .nav-t{font-size:11px}
+  .lt{font-size:9px;padding:.12rem .35rem}
+  .ec{min-width:130px}
+  .et{font-size:9.5px}
+  .sb{max-height:180px}
+  .sb-body,.sb-q{max-height:180px}
+  #sqle{font-size:11.5px}
+}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="index.html" class="back">← דף הבית</a>
+  <div class="nav-t">⚡ סימולטור SQL — Northwind</div>
+  <div class="nav-links">
+    <a href="practice.html" class="nav-l">✏️ תרגולים</a>
+    <a href="course.html" class="nav-l">📚 חומר לימוד</a>
+  </div>
+  <div class="dbst">
+    <div class="dot load" id="dot"></div>
+    <span id="dst">טוען מסד נתונים...</span>
+  </div>
+</div>
+<div class="main-tabs">
+  <button class="mtab active" onclick="swT('editor')">⌨️ עורך SQL</button>
+  <button class="mtab" onclick="swT('erd')">🗺️ ERD — תרשים קשרים</button>
+</div>
+<div class="app">
+  <div class="sb">
+    <div class="sb-hdr">🗄️ Northwind Enterprise<span class="sb-rc" id="sbTot"></span></div>
+    <div class="sb-srch"><input type="text" placeholder="🔍 חיפוש עמודה / טבלה..." oninput="sbF(this.value)"></div>
+    <div class="sb-body" id="sbBody"></div>
+    <div class="sb-resize" id="sbResize"></div>
+    <div class="sb-q">
+      <div class="qt">⚡ שאילתות מהירות</div>
+      <div class="qi" onclick="qQ('SELECT * FROM customers LIMIT 20;')"><span class="qa">→</span>800 לקוחות</div>
+      <div class="qi" onclick="qQ('SELECT * FROM orders ORDER BY order_date DESC LIMIT 20;')"><span class="qa">→</span>5,000 הזמנות</div>
+      <div class="qi" onclick="qQ('SELECT p.product_name, c.category_name, p.list_price, p.standard_cost FROM products p JOIN categories c ON p.category_id=c.id ORDER BY p.list_price DESC LIMIT 20;')"><span class="qa">→</span>210 מוצרים + קטגוריה</div>
+      <div class="qi" onclick="qQ('SELECT c.company, c.country_region, COUNT(o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id ORDER BY revenue DESC LIMIT 15;')"><span class="qa">→</span>הכנסות לפי לקוח</div>
+      <div class="qi" onclick="qQ('SELECT SUBSTR(o.order_date,1,7) month, COUNT(DISTINCT o.id) orders, COUNT(DISTINCT o.customer_id) customers, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY month ORDER BY month;')"><span class="qa">→</span>הכנסות לפי חודש</div>
+      <div class="qi" onclick="qQ('SELECT e.first_name||\" \"||e.last_name name, e.title, COUNT(o.id) orders, ROUND(SUM(od.quantity*od.unit_price),2) sales, e.salary FROM employees e JOIN orders o ON e.id=o.employee_id JOIN order_details od ON o.id=od.order_id GROUP BY e.id ORDER BY sales DESC;')"><span class="qa">→</span>מכירות לפי עובד</div>
+      <div class="qi" onclick="qQ('SELECT c.category_name, COUNT(p.id) products, ROUND(AVG(p.list_price),2) avg_price, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM categories c JOIN products p ON c.id=p.category_id JOIN order_details od ON p.id=od.product_id GROUP BY c.id ORDER BY revenue DESC;')"><span class="qa">→</span>הכנסות לפי קטגוריה</div>
+      <div class="qi" onclick="qQ('SELECT p.product_name, ROUND(AVG(pr.rating),2) avg_rating, COUNT(pr.id) reviews, SUM(pr.verified_purchase) verified FROM products p LEFT JOIN product_reviews pr ON p.id=pr.product_id GROUP BY p.id HAVING reviews >= 5 ORDER BY avg_rating DESC LIMIT 15;')"><span class="qa">→</span>דירוג מוצרים</div>
+      <div class="qi" onclick="qQ('SELECT i.warehouse, COUNT(*) products, SUM(i.qty_on_hand) total_stock, SUM(CASE WHEN i.qty_on_hand=0 THEN 1 ELSE 0 END) out_of_stock, ROUND(SUM(i.qty_on_hand*i.unit_cost),2) total_value FROM inventory i GROUP BY i.warehouse;')"><span class="qa">→</span>מלאי לפי מחסן</div>
+    </div>
+  </div>
+  <div class="pane active" id="pane-editor">
+    <div class="ex-bar">
+      <div class="ex-r1">
+        <span class="exl">110 תרגילים</span>
+        <div class="lvts">
+          <button class="lt b on" onclick="setLvl('b')">🌱 מתחילים (30)</button>
+          <button class="lt m" onclick="setLvl('m')">🟠 בינוני (40)</button>
+          <button class="lt a" onclick="setLvl('a')">🔴 מתקדם (40)</button>
+        </div>
+      </div>
+      <div class="exr" id="exR"></div>
+    </div>
+    <div class="tb">
+      <button class="rb" id="runBtn" onclick="runQ()" disabled>▶ הרץ</button>
+      <button class="xb c" onclick="clr()">🗑 נקה</button>
+      <button class="xb h" id="hBtn" onclick="togH()" style="display:none">💡 רמז</button>
+      <span class="kb">Ctrl+Enter · לחץ פעמיים על טבלה לפתיחה</span>
+    </div>
+    <div class="inf hi" id="hBox"></div>
+    <div class="ew">
+      <div class="lns" id="lns">1</div>
+      <textarea id="sqle" placeholder="-- כתוב שאילתת SQL&#10;-- Ctrl+Enter להרצה&#10;&#10;SELECT * FROM customers LIMIT 10;" spellcheck="false"></textarea>
+    </div>
+    <div id="acMenu"></div>
+    <div class="resize-handle" id="resizeHandle"></div>
+    <div class="res">
+      <div class="rh"><span id="rSt" class="rc">מוכן</span><span id="rTm"></span><span id="rCl" style="color:var(--text3)"></span></div>
+      <div class="rs" id="rSc"><div class="emp"><div class="ico">⚡</div><div>הרץ שאילתה לראות תוצאות</div></div></div>
+    </div>
+  </div>
+  <div class="pane" id="pane-erd">
+    <div class="erd-w">
+      <div class="ectrl">
+        <button class="eb" onclick="ez(1.15)">＋</button>
+        <button class="eb" onclick="ez(0.87)">－</button>
+        <button class="eb" onclick="eRst()">↺ איפוס</button>
+        <button class="eb" onclick="collapseAll()" title="כווץ את כל הטבלאות">⊟ כווץ הכל</button>
+        <button class="eb" onclick="expandAll()" title="פרוס את כל הטבלאות">⊞ פרוס הכל</button>
+      </div>
+      <div class="sp" id="spStats">
+        <div class="sp-t">📊 DB Statistics</div>
+        <div id="spRows"></div>
+      </div>
+      <canvas id="erd"></canvas>
+      <div class="leg">
+        <div class="lg-t">מקרא</div>
+        <div class="li"><div class="lpk"></div>Primary Key</div>
+        <div class="li"><div class="lfk"></div>Foreign Key</div>
+        <div class="li"><div class="lln"></div>קשר (FK → PK)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTION MODAL -->
+<div class="sol-overlay" id="solOverlay" onclick="if(event.target===this)closeSol()">
+  <div class="sol-modal">
+    <div class="sol-hdr">
+      <div class="sol-hdr-left">
+        <div class="sol-num" id="solNum"></div>
+        <div class="sol-title" id="solTitleTxt"></div>
+      </div>
+      <button class="sol-close" onclick="closeSol()">✕</button>
+    </div>
+    <div class="sol-hint"><span style="color:var(--yellow);font-weight:700">💡 רמז:</span> <span id="solHintTxt" style="color:var(--text2)"></span></div>
+    <div class="sol-body">
+      <div class="sol-label">פתרון SQL</div>
+      <div class="sol-code">
+        <div class="sol-code-hdr">
+          <span class="sol-code-lang">SQL · Northwind Enterprise</span>
+          <button class="sol-copy" id="solCopyBtn" onclick="copySol()">📋 העתק</button>
+        </div>
+        <pre class="sol-pre" id="solCodeTxt"></pre>
+      </div>
+    </div>
+    <div class="sol-footer">
+      <button class="sol-run" onclick="runSolAndClose()">▶ הרץ פתרון</button>
+      <button class="sol-use" onclick="useSol()">📝 העתק לעורך</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== AUTOCOMPLETE =====================
+const AC_KW=['SELECT','FROM','WHERE','JOIN','LEFT JOIN','RIGHT JOIN','INNER JOIN','ON','GROUP BY','ORDER BY','HAVING','LIMIT','AS','AND','OR','NOT','IN','NOT IN','IS NULL','IS NOT NULL','EXISTS','BETWEEN','LIKE','CASE','WHEN','THEN','ELSE','END','DISTINCT','COUNT','SUM','AVG','MIN','MAX','ROUND','COALESCE','NULLIF','SUBSTR','LENGTH','UPPER','LOWER','TRIM','REPLACE','CAST','JULIANDAY','DATE','STRFTIME','LAG','LEAD','RANK','DENSE_RANK','ROW_NUMBER','NTILE','PERCENT_RANK','SUM OVER','AVG OVER','PARTITION BY','WITH','UNION','UNION ALL'];
+let acIdx=-1, acList=[];
+
+function getWordBefore(el){
+  const before=el.value.substring(0,el.selectionStart);
+  const m=before.match(/[\w.]*$/);
+  return m?m[0]:'';
+}
+function getCtx(el){
+  const before=el.value.substring(0,el.selectionStart).toUpperCase().replace(/[\w.]+$/,'').trimEnd();
+  const m=before.match(/(FROM|JOIN|LEFT\s+JOIN|RIGHT\s+JOIN|INNER\s+JOIN|SELECT|WHERE|ON|HAVING|ORDER\s+BY|GROUP\s+BY)\s*$/i);
+  return m?m[1].replace(/\s+/g,'_').toUpperCase():null;
+}
+function buildAC(word,ctx){
+  const w=word.toLowerCase();
+  if(!w)return[];
+  const res=[];
+  // After FROM/JOIN → tables only
+  if(ctx&&(ctx.includes('FROM')||ctx.includes('JOIN'))){
+    Object.keys(SCH).forEach(t=>{if(t.startsWith(w))res.push({ic:'📋',nm:t,ty:'table',ins:t});});
+    return res;
+  }
+  // After SELECT/WHERE/ON → columns (with dot support)
+  if(ctx&&['SELECT','WHERE','ON','HAVING','ORDER_BY','GROUP_BY'].includes(ctx)){
+    if(w.includes('.')){
+      const[pre,colPart]=w.split('.');
+      // find table whose name or first-char matches alias
+      const tname=Object.keys(SCH).find(t=>t.startsWith(pre)||(pre.length<=2&&t[0]===pre[0]));
+      if(tname){SCH[tname].cols.forEach(c=>{if(c.n.startsWith(colPart||''))res.push({ic:c.pk?'🔑':c.fk?'🔗':'◦',nm:pre+'.'+c.n,ty:c.t,ins:pre+'.'+c.n});});}
+    } else {
+      const seen=new Set();
+      Object.entries(SCH).forEach(([tn,ti])=>{ti.cols.forEach(c=>{if(c.n.startsWith(w)&&!seen.has(c.n)){seen.add(c.n);res.push({ic:c.pk?'🔑':c.fk?'🔗':'◦',nm:c.n,ty:c.t+' · '+tn,ins:c.n});}});});
+      Object.keys(SCH).forEach(t=>{if(t.startsWith(w))res.push({ic:'📋',nm:t,ty:'table',ins:t});});
+    }
+    return res.slice(0,20);
+  }
+  // General - tables + keywords
+  Object.keys(SCH).forEach(t=>{if(t.startsWith(w))res.push({ic:'📋',nm:t,ty:'table',ins:t});});
+  AC_KW.forEach(k=>{if(k.toLowerCase().startsWith(w))res.push({ic:'🔵',nm:k,ty:'keyword',ins:k});});
+  if(w.length>=2){const seen=new Set();Object.entries(SCH).forEach(([tn,ti])=>{ti.cols.forEach(c=>{if(c.n.startsWith(w)&&!seen.has(c.n)){seen.add(c.n);res.push({ic:'◦',nm:c.n,ty:c.t,ins:c.n});}});});}
+  return res.slice(0,20);
+}
+function getCaretXY(el){
+  const d=document.createElement('div');
+  const s=getComputedStyle(el);
+  ['fontFamily','fontSize','fontWeight','lineHeight','padding','border','boxSizing','whiteSpace','wordWrap'].forEach(p=>d.style[p]=s[p]);
+  d.style.cssText+=';position:fixed;visibility:hidden;top:0;left:0;width:'+el.offsetWidth+'px;white-space:pre-wrap';
+  d.textContent=el.value.substring(0,el.selectionStart);
+  const sp=document.createElement('span');sp.textContent='|';d.appendChild(sp);
+  document.body.appendChild(d);
+  const r=sp.getBoundingClientRect();
+  document.body.removeChild(d);
+  return{x:r.left,y:r.top};
+}
+function showAC(items,el){
+  const menu=document.getElementById('acMenu');
+  if(!items.length){hideAC();return;}
+  acList=items;acIdx=0;
+  const lh=parseFloat(getComputedStyle(el).lineHeight)||20;
+  const {x,y}=getCaretXY(el);
+  menu.innerHTML=items.map((it,i)=>`<div class="ac-item${i===0?' sel':''}" onmousedown="applyAC(${i})" onmouseover="setACi(${i})"><span class="ac-icon">${it.ic}</span><span class="ac-name">${it.nm}</span><span class="ac-type">${it.ty}</span></div>`).join('');
+  const mw=260;
+  let mx=x, my=y+lh+2;
+  if(mx+mw>window.innerWidth-8)mx=window.innerWidth-mw-8;
+  
+  menu.style.cssText=`display:block;left:${mx}px;top:${my}px`;
+}
+function hideAC(){const m=document.getElementById('acMenu');if(m)m.style.display='none';acList=[];acIdx=-1;}
+function setACi(i){acIdx=i;document.querySelectorAll('.ac-item').forEach((el,j)=>el.classList.toggle('sel',j===i));}
+function applyAC(i){
+  if(i<0||i>=acList.length)return;
+  const el=document.getElementById('sqle');
+  const word=getWordBefore(el);
+  const pos=el.selectionStart;
+  const ins=acList[i].ins;
+  const before=el.value.substring(0,pos-word.length);
+  const after=el.value.substring(pos);
+  const suf=(!after.startsWith(' ')&&!after.startsWith('\n')&&!after.startsWith('.'))?'  ':' ';
+  el.value=before+ins+suf+after;
+  el.selectionStart=el.selectionEnd=before.length+ins.length+suf.length;
+  hideAC();updLN();el.focus();
+}
+function triggerAC(el){
+  const w=getWordBefore(el);
+  if(!w){hideAC();return;}
+  const ctx=getCtx(el);
+  const items=buildAC(w,ctx);
+  if(items.length)showAC(items,el);else hideAC();
+}
+document.addEventListener('click',e=>{if(!e.target.closest('#acMenu')&&e.target.id!=='sqle')hideAC();});
+// ===================== END AUTOCOMPLETE =====================
+
+const SCH={
+  customers:{icon:'👥',color:'#1a6fd4',cols:[{n:'id',t:'INT',pk:1},{n:'company',t:'TEXT'},{n:'last_name',t:'TEXT'},{n:'first_name',t:'TEXT'},{n:'job_title',t:'TEXT'},{n:'email',t:'TEXT'},{n:'business_phone',t:'TEXT'},{n:'fax',t:'TEXT'},{n:'city',t:'TEXT'},{n:'state_province',t:'TEXT'},{n:'country_region',t:'TEXT'},{n:'zip_code',t:'TEXT'},{n:'website',t:'TEXT'},{n:'credit_limit',t:'REAL'},{n:'customer_since',t:'DATE'}]},
+  suppliers:{icon:'🏭',color:'#00a854',cols:[{n:'id',t:'INT',pk:1},{n:'company',t:'TEXT'},{n:'contact_name',t:'TEXT'},{n:'contact_title',t:'TEXT'},{n:'email',t:'TEXT'},{n:'phone',t:'TEXT'},{n:'city',t:'TEXT'},{n:'country_region',t:'TEXT'},{n:'rating',t:'REAL'},{n:'supplier_since',t:'DATE'}]},
+  categories:{icon:'🏷️',color:'#7c4dff',cols:[{n:'id',t:'INT',pk:1},{n:'category_name',t:'TEXT'},{n:'description',t:'TEXT'}]},
+  products:{icon:'📦',color:'#ff6d00',cols:[{n:'id',t:'INT',pk:1},{n:'product_name',t:'TEXT'},{n:'supplier_id',t:'INT',fk:'suppliers'},{n:'category_id',t:'INT',fk:'categories'},{n:'standard_cost',t:'REAL'},{n:'list_price',t:'REAL'},{n:'reorder_level',t:'INT'},{n:'discontinued',t:'INT'},{n:'weight_kg',t:'REAL'}]},
+  employees:{icon:'👤',color:'#00838f',cols:[{n:'id',t:'INT',pk:1},{n:'last_name',t:'TEXT'},{n:'first_name',t:'TEXT'},{n:'title',t:'TEXT'},{n:'email',t:'TEXT'},{n:'phone',t:'TEXT'},{n:'hire_date',t:'DATE'},{n:'birth_date',t:'DATE'},{n:'city',t:'TEXT'},{n:'reports_to',t:'INT',fk:'employees'},{n:'salary',t:'REAL'},{n:'commission',t:'REAL'},{n:'extension',t:'TEXT'},{n:'department_id',t:'INT',fk:'departments'}]},
+  orders:{icon:'📋',color:'#c62828',cols:[{n:'id',t:'INT',pk:1},{n:'customer_id',t:'INT',fk:'customers'},{n:'employee_id',t:'INT',fk:'employees'},{n:'order_date',t:'DATE'},{n:'required_date',t:'DATE'},{n:'shipped_date',t:'DATE'},{n:'shipper_id',t:'INT',fk:'shippers'},{n:'ship_city',t:'TEXT'},{n:'ship_country',t:'TEXT'},{n:'freight',t:'REAL'},{n:'status',t:'TEXT'},{n:'payment_method',t:'TEXT'},{n:'notes',t:'TEXT'},{n:'ship_method',t:'TEXT'}]},
+  order_details:{icon:'📄',color:'#6a1b9a',cols:[{n:'id',t:'INT',pk:1},{n:'order_id',t:'INT',fk:'orders'},{n:'product_id',t:'INT',fk:'products'},{n:'unit_price',t:'REAL'},{n:'quantity',t:'INT'},{n:'discount',t:'REAL'}]},
+  shippers:{icon:'🚚',color:'#558b2f',cols:[{n:'id',t:'INT',pk:1},{n:'company',t:'TEXT'},{n:'phone',t:'TEXT'},{n:'rating',t:'REAL'}]},
+  regions:{icon:'🌍',color:'#00695c',cols:[{n:'id',t:'INT',pk:1},{n:'region_name',t:'TEXT'}]},
+  territories:{icon:'📍',color:'#37474f',cols:[{n:'id',t:'INT',pk:1},{n:'territory_name',t:'TEXT'},{n:'abbreviation',t:'TEXT'},{n:'region_id',t:'INT',fk:'regions'}]},
+  employee_territories:{icon:'🔗',color:'#455a64',cols:[{n:'employee_id',t:'INT',fk:'employees'},{n:'territory_id',t:'INT',fk:'territories'}]},
+  product_reviews:{icon:'⭐',color:'#f57c00',cols:[{n:'id',t:'INT',pk:1},{n:'product_id',t:'INT',fk:'products'},{n:'customer_id',t:'INT',fk:'customers'},{n:'rating',t:'INT'},{n:'review_text',t:'TEXT'},{n:'review_date',t:'DATE'},{n:'helpful_votes',t:'INT'},{n:'verified_purchase',t:'INT'}]},
+  inventory:{icon:'🏪',color:'#1565c0',cols:[{n:'id',t:'INT',pk:1},{n:'product_id',t:'INT',fk:'products'},{n:'warehouse',t:'TEXT'},{n:'qty_on_hand',t:'INT'},{n:'qty_reserved',t:'INT'},{n:'reorder_point',t:'INT'},{n:'last_counted',t:'DATE'},{n:'unit_cost',t:'REAL'}]},
+  returns:{icon:'↩️',color:'#b71c1c',cols:[{n:'id',t:'INT',pk:1},{n:'order_id',t:'INT',fk:'orders'},{n:'product_id',t:'INT',fk:'products'},{n:'quantity',t:'INT'},{n:'reason',t:'TEXT'},{n:'return_date',t:'DATE'},{n:'refund_amount',t:'REAL'},{n:'status',t:'TEXT'},{n:'approved_by',t:'INT',fk:'employees'},{n:'notes',t:'TEXT'}]},
+  promotions:{icon:'🎯',color:'#e65100',cols:[{n:'id',t:'INT',pk:1},{n:'name',t:'TEXT'},{n:'product_id',t:'INT',fk:'products'},{n:'discount_pct',t:'INT'},{n:'start_date',t:'DATE'},{n:'end_date',t:'DATE'},{n:'active',t:'INT'},{n:'budget',t:'REAL'},{n:'impressions',t:'INT'}]},
+  departments:{icon:'🏢',color:'#4a148c',cols:[{n:'id',t:'INT',pk:1},{n:'name',t:'TEXT'},{n:'description',t:'TEXT'},{n:'manager_id',t:'INT',fk:'employees'},{n:'budget',t:'REAL'}]},
+};
+const RCT={};
+
+const EX={
+b:[
+  {n:1,t:'הצג 20 לקוחות עם העיר והמדינה שלהם',h:'SELECT company, city, country_region FROM customers',s:"SELECT company, first_name, last_name, city, country_region FROM customers LIMIT 20;"},
+  {n:2,t:'מוצרים ממוינים מהיקר לזול עם שם קטגוריה',h:'JOIN products→categories, ORDER BY list_price DESC',s:'SELECT p.product_name, c.category_name, p.list_price, p.standard_cost FROM products p JOIN categories c ON p.category_id=c.id ORDER BY p.list_price DESC LIMIT 20;'},
+  {n:3,t:'כמה הזמנות יש לכל סטטוס?',h:'GROUP BY status, COUNT(*)',s:'SELECT status, COUNT(*) AS cnt, ROUND(AVG(freight),2) avg_freight FROM orders GROUP BY status ORDER BY cnt DESC;'},
+  {n:4,t:'עובדים עם המשכורת שלהם, ממוינים מגבוה לנמוך',h:'SELECT first_name, last_name, salary FROM employees',s:'SELECT first_name, last_name, title, salary, commission FROM employees ORDER BY salary DESC;'},
+  {n:5,t:'לקוחות עם אימייל Gmail בלבד',h:"WHERE email LIKE '%gmail%'",s:"SELECT company, first_name, last_name, email, city FROM customers WHERE email LIKE '%gmail%' LIMIT 20;"},
+  {n:6,t:'מוצרים שהופסקו (discontinued=1)',h:'WHERE discontinued = 1',s:'SELECT p.product_name, c.category_name, p.list_price FROM products p JOIN categories c ON p.category_id=c.id WHERE p.discontinued = 1;'},
+  {n:7,t:'הזמנות שלא נשלחו עדיין (shipped_date הוא NULL)',h:'WHERE shipped_date IS NULL',s:"SELECT id, customer_id, order_date, status, payment_method FROM orders WHERE shipped_date IS NULL AND status != 'Cancelled' LIMIT 20;"},
+  {n:8,t:'מחיר ממוצע, מינ ומקס לכל קטגוריה',h:'JOIN products→categories, GROUP BY, AVG/MIN/MAX',s:'SELECT c.category_name, COUNT(p.id) products, ROUND(AVG(p.list_price),2) avg_price, MIN(p.list_price) min_price, MAX(p.list_price) max_price FROM categories c JOIN products p ON c.id=p.category_id GROUP BY c.id ORDER BY avg_price DESC;'},
+  {n:9,t:'ספקים ממוינים לפי דירוג',h:'SELECT company, rating FROM suppliers ORDER BY rating DESC',s:'SELECT company, contact_name, city, country_region, rating FROM suppliers ORDER BY rating DESC;'},
+  {n:10,t:'לקוחות עם credit_limit מעל 50,000',h:'WHERE credit_limit > 50000',s:'SELECT company, city, country_region, credit_limit FROM customers WHERE credit_limit > 50000 ORDER BY credit_limit DESC LIMIT 20;'},
+  // === 10 תרגילים חדשים מתחילים (תאריכים, NULL, CASE, פונקציות) ===
+  {n:11,t:'שנה וחודש של כל הזמנה (SUBSTR)',h:"SUBSTR(order_date,1,4) year, SUBSTR(order_date,6,2) month",s:"SELECT id, order_date, SUBSTR(order_date,1,4) year, SUBSTR(order_date,6,2) month, status FROM orders ORDER BY order_date DESC LIMIT 20;"},
+  {n:12,t:'עובדים שאין להם עמלה (commission IS NULL)',h:'WHERE commission IS NULL',s:'SELECT first_name, last_name, title, salary FROM employees WHERE commission IS NULL ORDER BY salary DESC;'},
+  {n:13,t:'מוצרים עם רווח גולמי (list_price - standard_cost)',h:'list_price - standard_cost AS gross_profit',s:'SELECT product_name, list_price, standard_cost, ROUND(list_price-standard_cost,2) gross_profit, ROUND((list_price-standard_cost)/list_price*100,1) margin_pct FROM products ORDER BY gross_profit DESC LIMIT 20;'},
+  {n:14,t:'כמה הזמנות לכל שנה?',h:"SUBSTR(order_date,1,4), GROUP BY year",s:"SELECT SUBSTR(order_date,1,4) year, COUNT(*) orders, ROUND(AVG(freight),2) avg_freight FROM orders GROUP BY year ORDER BY year;"},
+  {n:15,t:'CASE: תווית מחיר לכל מוצר',h:"CASE WHEN list_price < 20 THEN 'זול'...",s:"SELECT product_name, list_price, CASE WHEN list_price < 20 THEN 'Budget' WHEN list_price < 50 THEN 'Mid-Range' WHEN list_price < 100 THEN 'Premium' ELSE 'Luxury' END price_label FROM products ORDER BY list_price;"},
+  {n:16,t:'לקוחות ללא אתר אינטרנט (website IS NULL)',h:'WHERE website IS NULL',s:"SELECT company, city, country_region, email FROM customers WHERE website IS NULL ORDER BY country_region LIMIT 20;"},
+  {n:17,t:'סה"כ מלאי לפי מחסן',h:'GROUP BY warehouse, SUM(qty_on_hand)',s:'SELECT warehouse, COUNT(*) product_lines, SUM(qty_on_hand) total_units, SUM(CASE WHEN qty_on_hand=0 THEN 1 ELSE 0 END) out_of_stock, ROUND(AVG(qty_on_hand),1) avg_units FROM inventory GROUP BY warehouse;'},
+  {n:18,t:'ביקורות לפי דירוג עם תיאור',h:"CASE rating WHEN 5 THEN 'מעולה'...",s:"SELECT rating, CASE rating WHEN 5 THEN '⭐⭐⭐⭐⭐ מעולה' WHEN 4 THEN '⭐⭐⭐⭐ טוב' WHEN 3 THEN '⭐⭐⭐ ממוצע' WHEN 2 THEN '⭐⭐ גרוע' ELSE '⭐ נורא' END description, COUNT(*) reviews, SUM(verified_purchase) verified FROM product_reviews GROUP BY rating ORDER BY rating DESC;"},
+  {n:19,t:'הזמנות עם freight מעל ממוצע',h:'WHERE freight > (SELECT AVG(freight) FROM orders)',s:'SELECT id, order_date, ship_city, ship_country, freight, payment_method FROM orders WHERE freight > (SELECT AVG(freight) FROM orders) ORDER BY freight DESC LIMIT 20;'},
+  {n:20,t:'COALESCE: לקוחות עם פקס או "לא ידוע"',h:'COALESCE(fax, "לא ידוע")',s:"SELECT company, business_phone, COALESCE(fax,'לא ידוע') fax_display, COALESCE(website,'אין אתר') website_display FROM customers LIMIT 20;"},
+  {n:21,t:'שנת הלידה של עובדים (SUBSTR מתאריך)',h:'SUBSTR(birth_date,1,4) AS birth_year',s:'SELECT first_name, last_name, birth_date, SUBSTR(birth_date,1,4) birth_year, CAST((JULIANDAY(date("now"))-JULIANDAY(birth_date))/365.25 AS INT) age FROM employees ORDER BY birth_date;'},
+  {n:22,t:'הזמנות לפי חודש בשנת 2023',h:"SUBSTR(order_date,6,2) month WHERE year='2023'",s:"SELECT SUBSTR(order_date,6,2) month, COUNT(*) orders, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id WHERE SUBSTR(order_date,1,4)='2023' GROUP BY month ORDER BY month;"},
+  {n:23,t:'מוצרים עם מרווח רווח > 50%',h:'(list_price - standard_cost) / list_price > 0.5',s:'SELECT product_name, standard_cost, list_price, ROUND((list_price-standard_cost)/list_price*100,1) margin_pct FROM products WHERE (list_price-standard_cost)/list_price > 0.5 ORDER BY margin_pct DESC;'},
+  {n:24,t:'COALESCE: מילוי NULL בלקוחות',h:'COALESCE(fax,"לא זמין"), COALESCE(website,"ללא אתר")',s:"SELECT company, COALESCE(fax,'לא זמין') fax_display, COALESCE(website,'ללא אתר') website_display, COALESCE(state_province,'N/A') state FROM customers LIMIT 20;"},
+  {n:25,t:'ספקים + כמות מוצרים שלהם',h:'COUNT(p.id) products, GROUP BY supplier',s:'SELECT s.company, s.country_region, COUNT(p.id) products, ROUND(AVG(p.list_price),2) avg_price FROM suppliers s JOIN products p ON s.id=p.supplier_id GROUP BY s.id ORDER BY products DESC;'},
+  {n:26,t:'הזמנות שנשלחו תוך 3 ימים',h:'JULIANDAY(shipped_date)-JULIANDAY(order_date) <= 3',s:'SELECT id, order_date, shipped_date, ROUND(JULIANDAY(shipped_date)-JULIANDAY(order_date),0) days_to_ship FROM orders WHERE shipped_date IS NOT NULL AND JULIANDAY(shipped_date)-JULIANDAY(order_date)<=3 ORDER BY order_date DESC LIMIT 20;'},
+  {n:27,t:'מחסנים + שווי מלאי כולל',h:'SUM(qty_on_hand * unit_cost) per warehouse',s:'SELECT warehouse, COUNT(*) products, SUM(qty_on_hand) total_units, ROUND(SUM(qty_on_hand*unit_cost),2) stock_value FROM inventory GROUP BY warehouse ORDER BY stock_value DESC;'},
+  {n:28,t:'ביקורות מאומתות עם דירוג גבוה',h:'WHERE verified_purchase=1 AND rating>=4',s:'SELECT p.product_name, pr.rating, pr.review_text, pr.helpful_votes, pr.review_date FROM product_reviews pr JOIN products p ON pr.product_id=p.id WHERE pr.verified_purchase=1 AND pr.rating>=4 ORDER BY pr.helpful_votes DESC LIMIT 20;'},
+  {n:29,t:'עובדים שנשכרו לפני 2018',h:"WHERE hire_date < '2018-01-01'",s:"SELECT first_name, last_name, hire_date, title, salary, CAST((JULIANDAY(date('now'))-JULIANDAY(hire_date))/365.25 AS INT) years_at_company FROM employees WHERE hire_date < '2018-01-01' ORDER BY hire_date;"},
+  {n:30,t:'UNION: ערים מלקוחות + ספקים',h:'SELECT city FROM customers UNION SELECT city FROM suppliers',s:'SELECT city, country_region, "Customer" source FROM customers WHERE city IS NOT NULL UNION SELECT city, country_region, "Supplier" FROM suppliers WHERE city IS NOT NULL ORDER BY country_region, city LIMIT 30;'}
+],
+m:[
+  {n:1,t:'לקוחות + כמות הזמנות + סה"כ הכנסות (עם הנחה)',h:'JOIN customers→orders→order_details, SUM(qty*price*(1-disc))',s:'SELECT c.company, c.country_region, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM customers c LEFT JOIN orders o ON c.id=o.customer_id LEFT JOIN order_details od ON o.id=od.order_id GROUP BY c.id ORDER BY revenue DESC LIMIT 20;'},
+  {n:2,t:'5 מוצרים נמכרים ביותר + קטגוריה + הכנסות',h:'JOIN products→order_details→categories, SUM(quantity)',s:'SELECT p.product_name, c.category_name, SUM(od.quantity) total_sold, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id GROUP BY p.id ORDER BY total_sold DESC LIMIT 5;'},
+  {n:3,t:'עובדים עם שם מנהלם (Self JOIN) + מחלקה',h:'employees e LEFT JOIN employees m ON e.reports_to=m.id',s:'SELECT e.first_name||" "||e.last_name AS emp, e.title, m.first_name||" "||m.last_name AS manager, d.name AS dept, e.salary FROM employees e LEFT JOIN employees m ON e.reports_to=m.id LEFT JOIN departments d ON e.department_id=d.id ORDER BY d.name, e.salary DESC;'},
+  {n:4,t:'הכנסות חודשיות שנתיות (2019-2024)',h:"SUBSTR(order_date,1,7), GROUP BY month",s:"SELECT SUBSTR(o.order_date,1,4) yr, SUBSTR(o.order_date,1,7) month, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY month ORDER BY month;"},
+  {n:5,t:'לקוחות שמעולם לא הזמינו + מדינה',h:'LEFT JOIN + WHERE o.id IS NULL',s:'SELECT c.company, c.first_name, c.last_name, c.city, c.country_region, c.email FROM customers c LEFT JOIN orders o ON c.id=o.customer_id WHERE o.id IS NULL ORDER BY c.country_region, c.company;'},
+  {n:6,t:'ממוצע דירוג מוצר + כמות ביקורות + verified',h:'JOIN products→product_reviews, AVG/COUNT',s:'SELECT p.product_name, c.category_name, ROUND(AVG(pr.rating),2) avg_rating, COUNT(pr.id) reviews, SUM(pr.verified_purchase) verified FROM products p JOIN categories c ON p.category_id=c.id LEFT JOIN product_reviews pr ON p.id=pr.product_id GROUP BY p.id HAVING reviews > 3 ORDER BY avg_rating DESC LIMIT 15;'},
+  {n:7,t:'מצב מלאי: מוצרים מתחת לנקודת הזמנה',h:'WHERE qty_on_hand < reorder_point, JOIN products',s:'SELECT p.product_name, c.category_name, i.warehouse, i.qty_on_hand, i.reorder_point, (i.reorder_point-i.qty_on_hand) shortage, ROUND(i.qty_on_hand*i.unit_cost,2) stock_value FROM inventory i JOIN products p ON i.product_id=p.id JOIN categories c ON p.category_id=c.id WHERE i.qty_on_hand < i.reorder_point ORDER BY shortage DESC LIMIT 20;'},
+  {n:8,t:'החזרות לפי סיבה + סטטוס + סה"כ החזר',h:'GROUP BY reason, status, SUM(refund_amount)',s:'SELECT reason, status, COUNT(*) cnt, ROUND(SUM(refund_amount),2) total_refund, ROUND(AVG(refund_amount),2) avg_refund FROM returns GROUP BY reason, status ORDER BY total_refund DESC;'},
+  {n:9,t:'מכירות לפי מדינה + כמות לקוחות ייחודיים',h:'JOIN customers→orders→order_details, GROUP BY country',s:'SELECT c.country_region, COUNT(DISTINCT c.id) customers, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.country_region ORDER BY revenue DESC LIMIT 15;'},
+  {n:10,t:'קטגוריות עם יותר מ-10 מוצרים ומחיר ממוצע',h:'HAVING COUNT > 10, AVG(list_price)',s:'SELECT c.category_name, COUNT(p.id) products, ROUND(AVG(p.list_price),2) avg_price, ROUND(MIN(p.list_price),2) min_p, ROUND(MAX(p.list_price),2) max_p, SUM(p.discontinued) discontinued FROM categories c JOIN products p ON c.id=p.category_id GROUP BY c.id HAVING products > 10 ORDER BY avg_price DESC;'},
+  // === 10 תרגילים חדשים בינוני (תאריכים + JOIN מורכב + CASE) ===
+  {n:11,t:'ממוצע ימי אספקה לפי חברת שילוח',h:'JOIN orders→shippers, AVG(JULIANDAY diff)',s:"SELECT s.company, COUNT(*) shipments, ROUND(AVG(JULIANDAY(o.shipped_date)-JULIANDAY(o.order_date)),1) avg_days, MIN(JULIANDAY(o.shipped_date)-JULIANDAY(o.order_date)) min_days, MAX(JULIANDAY(o.shipped_date)-JULIANDAY(o.order_date)) max_days, s.rating FROM shippers s JOIN orders o ON s.id=o.shipper_id WHERE o.shipped_date IS NOT NULL GROUP BY s.id ORDER BY avg_days;"},
+  {n:12,t:'הכנסות לפי רבעון ושנה (Q1-Q4)',h:"CASE WHEN SUBSTR(date,6,2) IN ('01','02','03') THEN 'Q1'...",s:"SELECT SUBSTR(order_date,1,4) yr, CASE WHEN SUBSTR(order_date,6,2) IN ('01','02','03') THEN 'Q1' WHEN SUBSTR(order_date,6,2) IN ('04','05','06') THEN 'Q2' WHEN SUBSTR(order_date,6,2) IN ('07','08','09') THEN 'Q3' ELSE 'Q4' END quarter, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY yr, quarter ORDER BY yr, quarter;"},
+  {n:13,t:'לקוחות שהזמינו ב-2023 אך לא ב-2024',h:'NOT IN subquery on 2024 orders',s:"SELECT c.company, c.city, c.country_region, MAX(o.order_date) last_order FROM customers c JOIN orders o ON c.id=o.customer_id WHERE c.id NOT IN (SELECT DISTINCT customer_id FROM orders WHERE order_date LIKE '2024%') GROUP BY c.id ORDER BY last_order DESC LIMIT 20;"},
+  {n:14,t:'ערך מלאי כולל + מחסור לפי קטגוריה',h:'JOIN inventory→products→categories, SUM value',s:'SELECT c.category_name, SUM(i.qty_on_hand) total_units, ROUND(SUM(i.qty_on_hand*i.unit_cost),2) inventory_value, SUM(CASE WHEN i.qty_on_hand < i.reorder_point THEN 1 ELSE 0 END) items_below_reorder, SUM(CASE WHEN i.qty_on_hand=0 THEN 1 ELSE 0 END) out_of_stock FROM inventory i JOIN products p ON i.product_id=p.id JOIN categories c ON p.category_id=c.id GROUP BY c.id ORDER BY inventory_value DESC;'},
+  {n:15,t:'מוצרים שנמכרו ב-2023 אך לא ב-2024',h:"product NOT IN (2024 sales)",s:"SELECT p.product_name, c.category_name, SUM(od.quantity) sold_2023, ROUND(SUM(od.quantity*od.unit_price),2) revenue_2023 FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id JOIN orders o ON od.order_id=o.id WHERE o.order_date LIKE '2023%' AND p.id NOT IN (SELECT od2.product_id FROM order_details od2 JOIN orders o2 ON od2.order_id=o2.id WHERE o2.order_date LIKE '2024%') GROUP BY p.id ORDER BY sold_2023 DESC LIMIT 15;"},
+  {n:16,t:'הזמנות שאוחרו + ימי עיכוב + עובד אחראי',h:'shipped_date > required_date, JOIN employees',s:"SELECT o.id, o.order_date, o.required_date, o.shipped_date, ROUND(JULIANDAY(o.shipped_date)-JULIANDAY(o.required_date),0) days_late, e.first_name||' '||e.last_name responsible_emp, s.company shipper FROM orders o JOIN employees e ON o.employee_id=e.id JOIN shippers s ON o.shipper_id=s.id WHERE o.shipped_date IS NOT NULL AND o.shipped_date > o.required_date ORDER BY days_late DESC LIMIT 20;"},
+  {n:17,t:'פרומוציות: ROI (הכנסות / תקציב פרמוציה)',h:'JOIN promotions→products→order_details, revenue/budget',s:"SELECT pr.name, p.product_name, c.category_name, pr.discount_pct, pr.budget, ROUND(SUM(od.quantity*od.unit_price),2) revenue, ROUND(SUM(od.quantity*od.unit_price)/pr.budget,2) roi FROM promotions pr JOIN products p ON pr.product_id=p.id JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id JOIN orders o ON od.order_id=o.id WHERE o.order_date BETWEEN pr.start_date AND pr.end_date GROUP BY pr.id ORDER BY roi DESC LIMIT 15;"},
+  {n:18,t:'לקוחות עם ביקורות: ממוצע דירוג שנתנו',h:'JOIN customers→product_reviews, AVG(rating)',s:'SELECT c.company, c.country_region, COUNT(pr.id) reviews_given, ROUND(AVG(pr.rating),2) avg_rating_given, SUM(pr.verified_purchase) verified FROM customers c JOIN product_reviews pr ON c.id=pr.customer_id GROUP BY c.id HAVING reviews_given >= 3 ORDER BY reviews_given DESC LIMIT 20;'},
+  {n:19,t:'ניתוח ביצועים: עובד + טריטוריה + מכירות',h:'JOIN employees→employee_territories→territories→orders',s:'SELECT e.first_name||" "||e.last_name emp, t.territory_name, r.region_name, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price),2) sales FROM employees e JOIN employee_territories et ON e.id=et.employee_id JOIN territories t ON et.territory_id=t.id JOIN regions r ON t.region_id=r.id LEFT JOIN orders o ON e.id=o.employee_id LEFT JOIN order_details od ON o.id=od.order_id GROUP BY e.id, t.id ORDER BY sales DESC LIMIT 20;'},
+  {n:20,t:'TOP 3 לקוחות לפי הכנסות בכל מדינה',h:'Subquery with ROW_NUMBER or RANK per country',s:"SELECT company, country_region, revenue FROM (SELECT c.company, c.country_region, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue, ROW_NUMBER() OVER(PARTITION BY c.country_region ORDER BY SUM(od.quantity*od.unit_price*(1-od.discount)) DESC) rn FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id) WHERE rn <= 3 ORDER BY country_region, revenue DESC;"},
+
+  {n:11,t:'הזמנות לפי שיטת תשלום + משלוח',h:'GROUP BY payment_method, ship_method',s:'SELECT payment_method, ship_method, COUNT(*) orders, ROUND(AVG(freight),2) avg_freight, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY payment_method, ship_method ORDER BY orders DESC LIMIT 20;'},
+  {n:12,t:'תאריכי הזמנות: שנה, חודש, רבעון',h:"SUBSTR(order_date,1,4), CASE month<=3 THEN 'Q1'...",s:"SELECT SUBSTR(order_date,1,4) yr, SUBSTR(order_date,6,2) mo, CASE WHEN CAST(SUBSTR(order_date,6,2) AS INT)<=3 THEN 'Q1' WHEN CAST(SUBSTR(order_date,6,2) AS INT)<=6 THEN 'Q2' WHEN CAST(SUBSTR(order_date,6,2) AS INT)<=9 THEN 'Q3' ELSE 'Q4' END quarter, COUNT(*) orders, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY yr, mo ORDER BY yr, mo;"},
+  {n:13,t:'CASE מורכב: סיווג הזמנות לפי ערך וסטטוס',h:'CASE WHEN value>=500 AND status=Delivered THEN...',s:"SELECT o.id, o.order_date, o.status, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) value, CASE WHEN SUM(od.quantity*od.unit_price*(1-od.discount))>=500 AND o.status='Delivered' THEN 'VIP Delivered' WHEN SUM(od.quantity*od.unit_price*(1-od.discount))>=500 THEN 'High Value' WHEN o.status='Cancelled' THEN 'Lost Sale' WHEN o.shipped_date IS NULL THEN 'Pending' ELSE 'Standard' END category FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY o.id ORDER BY value DESC LIMIT 25;"},
+  {n:14,t:'לקוחות עם COALESCE: מילוי NULL בברירת מחדל',h:'COALESCE(fax,"לא זמין"), COALESCE(website,"ללא")',s:"SELECT company, first_name, last_name, COALESCE(fax,'לא זמין') fax, COALESCE(website,'ללא אתר') website, COALESCE(state_province,'N/A') state, credit_limit FROM customers WHERE country_region='USA' ORDER BY credit_limit DESC LIMIT 20;"},
+  {n:15,t:'מוצרים + ניצולת מלאי לפי מחסן',h:'qty_reserved/qty_on_hand, CASE stock_status',s:'SELECT p.product_name, i.warehouse, i.qty_on_hand, i.reorder_point, COALESCE(i.qty_reserved,0) reserved, ROUND(100.0*COALESCE(i.qty_reserved,0)/NULLIF(i.qty_on_hand,0),1) utilization_pct, CASE WHEN i.qty_on_hand=0 THEN "Out of Stock" WHEN i.qty_on_hand<i.reorder_point THEN "Low Stock" ELSE "OK" END stock_status FROM products p JOIN inventory i ON p.id=i.product_id ORDER BY utilization_pct DESC LIMIT 20;'},
+  {n:16,t:'הזמנות מ-2024 עם ערך וסטטוס',h:"SUBSTR(order_date,1,4)='2024', JOIN customers",s:"SELECT o.id, c.company, o.order_date, o.status, o.ship_method, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) value FROM orders o JOIN customers c ON o.customer_id=c.id JOIN order_details od ON o.id=od.order_id WHERE SUBSTR(o.order_date,1,4)='2024' GROUP BY o.id ORDER BY value DESC LIMIT 25;"},
+  {n:17,t:'TOP 3 מוצרים לכל קטגוריה לפי מכירות',h:'ROW_NUMBER() OVER(PARTITION BY category_id) WHERE rn<=3',s:'SELECT category_name, product_name, total_sold, revenue FROM (SELECT c.category_name, p.product_name, SUM(od.quantity) total_sold, ROUND(SUM(od.quantity*od.unit_price),2) revenue, ROW_NUMBER() OVER(PARTITION BY p.category_id ORDER BY SUM(od.quantity) DESC) rn FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id GROUP BY p.id) WHERE rn<=3 ORDER BY category_name, total_sold DESC;'},
+  {n:18,t:'ביקורות vs. רכישות: שיעור המרה',h:'COUNT(reviews)/COUNT(purchases)*100',s:'SELECT p.product_name, c.category_name, COUNT(DISTINCT od.order_id) purchases, COUNT(pr.id) reviews, SUM(pr.verified_purchase) verified, ROUND(100.0*COUNT(pr.id)/NULLIF(COUNT(DISTINCT od.order_id),0),1) review_rate_pct, ROUND(AVG(pr.rating),2) avg_rating FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id LEFT JOIN product_reviews pr ON p.id=pr.product_id GROUP BY p.id HAVING purchases>=5 ORDER BY review_rate_pct DESC LIMIT 15;'},
+  {n:19,t:'Pivot: הכנסות לפי שנה ומדינה',h:'SUM(CASE WHEN year=X THEN value ELSE 0 END)',s:"SELECT c.country_region, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2021' THEN od.quantity*od.unit_price ELSE 0 END),0) y2021, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2022' THEN od.quantity*od.unit_price ELSE 0 END),0) y2022, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2023' THEN od.quantity*od.unit_price ELSE 0 END),0) y2023, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2024' THEN od.quantity*od.unit_price ELSE 0 END),0) y2024 FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.country_region ORDER BY y2024 DESC LIMIT 15;"},
+  {n:20,t:'ספקים + מרווח רווח ממוצע + הכנסות',h:'(list_price-standard_cost)/list_price*100',s:'SELECT s.company, s.country_region, COUNT(p.id) products, ROUND(AVG(p.list_price),2) avg_price, ROUND(AVG(p.standard_cost),2) avg_cost, ROUND(AVG((p.list_price-p.standard_cost)/p.list_price*100),1) avg_margin_pct, ROUND(SUM(od.quantity*p.list_price),2) potential_revenue FROM suppliers s JOIN products p ON s.id=p.supplier_id LEFT JOIN order_details od ON p.id=od.product_id GROUP BY s.id HAVING products>=3 ORDER BY avg_margin_pct DESC LIMIT 15;'},
+  {n:11,t:'הזמנות לפי שיטת תשלום + שיטת משלוח',h:'GROUP BY payment_method, ship_method',s:'SELECT payment_method, ship_method, COUNT(*) orders, ROUND(AVG(freight),2) avg_freight, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY payment_method, ship_method ORDER BY orders DESC LIMIT 20;'},
+  {n:12,t:'תאריכי הזמנות: שנה, חודש, רבעון',h:'SUBSTR(order_date,1,4), CAST((month+2)/3 AS INT)',s:"SELECT SUBSTR(order_date,1,4) yr, SUBSTR(order_date,6,2) mo, CASE WHEN CAST(SUBSTR(order_date,6,2) AS INT) <= 3 THEN 'Q1' WHEN CAST(SUBSTR(order_date,6,2) AS INT) <= 6 THEN 'Q2' WHEN CAST(SUBSTR(order_date,6,2) AS INT) <= 9 THEN 'Q3' ELSE 'Q4' END quarter, COUNT(*) orders, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY yr, mo ORDER BY yr, mo;"},
+  {n:13,t:'CASE מורכב: סיווג הזמנות לפי ערך וסטטוס',h:'CASE WHEN + JOIN orders→order_details',s:"SELECT o.id, o.order_date, o.status, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) value, CASE WHEN SUM(od.quantity*od.unit_price*(1-od.discount)) >= 500 AND o.status='Delivered' THEN 'VIP Delivered' WHEN SUM(od.quantity*od.unit_price*(1-od.discount)) >= 500 THEN 'High Value' WHEN o.status='Cancelled' THEN 'Lost Sale' WHEN o.shipped_date IS NULL THEN 'Pending' ELSE 'Standard' END category FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY o.id ORDER BY value DESC LIMIT 25;"},
+  {n:14,t:'לקוחות עם COALESCE: מילוי NULL בברירת מחדל',h:'COALESCE(fax,"N/A"), COALESCE(website,"none")',s:"SELECT company, first_name, last_name, COALESCE(fax,'לא זמין') fax, COALESCE(website,'ללא אתר') website, COALESCE(state_province,'N/A') state, credit_limit FROM customers WHERE country_region='USA' ORDER BY credit_limit DESC LIMIT 20;"},
+  {n:15,t:'מוצרים + ניצולת מלאי לפי מחסן',h:'JOIN inventory, qty_on_hand/MAX qty ratio',s:'SELECT p.product_name, i.warehouse, i.qty_on_hand, i.reorder_point, i.qty_reserved, COALESCE(i.qty_reserved,0) reserved, ROUND(100.0*COALESCE(i.qty_reserved,0)/NULLIF(i.qty_on_hand,0),1) utilization_pct, CASE WHEN i.qty_on_hand=0 THEN "Out of Stock" WHEN i.qty_on_hand<i.reorder_point THEN "Low Stock" ELSE "OK" END stock_status FROM products p JOIN inventory i ON p.id=i.product_id ORDER BY utilization_pct DESC LIMIT 20;'},
+  {n:16,t:'הזמנות מהשנה האחרונה (2024)',h:"SUBSTR(order_date,1,4)='2024'",s:"SELECT o.id, c.company, o.order_date, o.status, o.ship_method, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) value FROM orders o JOIN customers c ON o.customer_id=c.id JOIN order_details od ON o.id=od.order_id WHERE SUBSTR(o.order_date,1,4)='2024' GROUP BY o.id ORDER BY value DESC LIMIT 25;"},
+  {n:17,t:'TOP 3 מוצרים לכל קטגוריה לפי מכירות',h:'Subquery + WHERE rank <= 3',s:'SELECT category_name, product_name, total_sold, revenue FROM (SELECT c.category_name, p.product_name, SUM(od.quantity) total_sold, ROUND(SUM(od.quantity*od.unit_price),2) revenue, ROW_NUMBER() OVER(PARTITION BY p.category_id ORDER BY SUM(od.quantity) DESC) rn FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id GROUP BY p.id) WHERE rn <= 3 ORDER BY category_name, total_sold DESC;'},
+  {n:18,t:'ניתוח המרה: ביקורות vs. רכישות',h:'LEFT JOIN product_reviews, verified_purchase rate',s:'SELECT p.product_name, c.category_name, COUNT(DISTINCT od.order_id) purchases, COUNT(pr.id) reviews, SUM(pr.verified_purchase) verified_reviews, ROUND(100.0*COUNT(pr.id)/NULLIF(COUNT(DISTINCT od.order_id),0),1) review_rate_pct, ROUND(AVG(pr.rating),2) avg_rating FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id LEFT JOIN product_reviews pr ON p.id=pr.product_id GROUP BY p.id HAVING purchases >= 5 ORDER BY review_rate_pct DESC LIMIT 15;'},
+  {n:19,t:'הכנסות לפי שנה ומדינה (Pivot-style)',h:'SUM+CASE WHEN year=X',s:"SELECT c.country_region, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2021' THEN od.quantity*od.unit_price ELSE 0 END),0) y2021, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2022' THEN od.quantity*od.unit_price ELSE 0 END),0) y2022, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2023' THEN od.quantity*od.unit_price ELSE 0 END),0) y2023, ROUND(SUM(CASE WHEN SUBSTR(o.order_date,1,4)='2024' THEN od.quantity*od.unit_price ELSE 0 END),0) y2024 FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.country_region ORDER BY y2024 DESC LIMIT 15;"},
+  {n:20,t:'ספקים + מרווח רווח ממוצע למוצרים שלהם',h:'(list_price-standard_cost)/list_price*100',s:'SELECT s.company, s.country_region, COUNT(p.id) products, ROUND(AVG(p.list_price),2) avg_price, ROUND(AVG(p.standard_cost),2) avg_cost, ROUND(AVG((p.list_price-p.standard_cost)/p.list_price*100),1) avg_margin_pct, ROUND(SUM(od.quantity*p.list_price),2) potential_revenue FROM suppliers s JOIN products p ON s.id=p.supplier_id LEFT JOIN order_details od ON p.id=od.product_id GROUP BY s.id HAVING products >= 3 ORDER BY avg_margin_pct DESC LIMIT 15;'},
+],
+a:[
+  {n:1,t:'RFM ניתוח לקוחות: Recency, Frequency, Monetary',h:"MAX(order_date), COUNT, SUM — CASE לסגמנטציה",s:"SELECT c.company, c.country_region, MAX(o.order_date) last_order, COUNT(DISTINCT o.id) frequency, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) monetary, CASE WHEN MAX(o.order_date) >= '2024-01-01' THEN 'Active' WHEN MAX(o.order_date) >= '2023-01-01' THEN 'At Risk' ELSE 'Churned' END segment FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id ORDER BY monetary DESC LIMIT 20;"},
+  {n:2,t:'מוצרים מעל ממוצע מחיר הקטגוריה (Correlated)',h:'WHERE list_price > (SELECT AVG... WHERE category_id=p.category_id)',s:'SELECT p.product_name, c.category_name, p.list_price, ROUND((SELECT AVG(p2.list_price) FROM products p2 WHERE p2.category_id=p.category_id),2) cat_avg, ROUND(p.list_price-(SELECT AVG(p3.list_price) FROM products p3 WHERE p3.category_id=p.category_id),2) diff FROM products p JOIN categories c ON p.category_id=c.id WHERE p.list_price > (SELECT AVG(p4.list_price) FROM products p4 WHERE p4.category_id=p.category_id) ORDER BY c.category_name, p.list_price DESC;'},
+  {n:3,t:'YoY השוואת הכנסות שנתיות עם % שינוי',h:'GROUP BY SUBSTR(date,1,4) + Window Function LAG',s:"SELECT yr, orders, revenue, LAG(revenue) OVER(ORDER BY yr) prev_year, ROUND((revenue-LAG(revenue) OVER(ORDER BY yr))/LAG(revenue) OVER(ORDER BY yr)*100,1) pct_change FROM (SELECT SUBSTR(o.order_date,1,4) yr, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY yr) ORDER BY yr;"},
+  {n:4,t:'ניתוח ABC מוצרים (Top 20% = 80% הכנסות)',h:'Cumulative SUM + percentage',s:'SELECT product_name, revenue, ROUND(100.0*revenue/SUM(revenue) OVER(),2) pct, ROUND(100.0*SUM(revenue) OVER(ORDER BY revenue DESC)/SUM(revenue) OVER(),2) cum_pct, CASE WHEN 100.0*SUM(revenue) OVER(ORDER BY revenue DESC)/SUM(revenue) OVER()<=80 THEN "A" WHEN 100.0*SUM(revenue) OVER(ORDER BY revenue DESC)/SUM(revenue) OVER()<=95 THEN "B" ELSE "C" END abc FROM (SELECT p.product_name, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue FROM products p JOIN order_details od ON p.id=od.product_id GROUP BY p.id) ORDER BY revenue DESC LIMIT 25;'},
+  {n:5,t:'עובדים מעל ממוצע מכירות + עמלות',h:'HAVING sales > subquery AVG, commission calculation',s:'SELECT e.first_name||" "||e.last_name name, e.title, ROUND(SUM(od.quantity*od.unit_price),2) sales, e.salary, ROUND(COALESCE(e.commission,0)*SUM(od.quantity*od.unit_price),2) commission_earned, ROUND(e.salary+COALESCE(e.commission,0)*SUM(od.quantity*od.unit_price),2) total_comp FROM employees e JOIN orders o ON e.id=o.employee_id JOIN order_details od ON o.id=od.order_id GROUP BY e.id HAVING sales>(SELECT AVG(s) FROM (SELECT SUM(od2.quantity*od2.unit_price) s FROM employees e2 JOIN orders o2 ON e2.id=o2.employee_id JOIN order_details od2 ON o2.id=od2.order_id GROUP BY e2.id)) ORDER BY sales DESC;'},
+  {n:6,t:'ניתוח החזרות: שיעור החזרה לפי מוצר',h:'LEFT JOIN returns + order_details, return_rate',s:'SELECT p.product_name, c.category_name, COUNT(DISTINCT od.order_id) orders_with_product, COUNT(DISTINCT r.id) returns, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) sales, ROUND(COALESCE(SUM(r.refund_amount),0),2) refunds, ROUND(100.0*COUNT(DISTINCT r.id)/COUNT(DISTINCT od.order_id),2) return_rate_pct FROM products p JOIN categories c ON p.category_id=c.id JOIN order_details od ON p.id=od.product_id LEFT JOIN returns r ON p.id=r.product_id GROUP BY p.id HAVING orders_with_product >= 10 ORDER BY return_rate_pct DESC LIMIT 15;'},
+  {n:7,t:'ניתוח ביצועי ספקים: איכות + הכנסות',h:'JOIN suppliers→products→order_details→reviews',s:'SELECT s.company, s.country_region, s.rating supplier_rating, COUNT(p.id) products, ROUND(AVG(pr.rating),2) avg_review, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM suppliers s LEFT JOIN products p ON s.id=p.supplier_id LEFT JOIN order_details od ON p.id=od.product_id LEFT JOIN product_reviews pr ON p.id=pr.product_id GROUP BY s.id ORDER BY revenue DESC LIMIT 15;'},
+  {n:8,t:'חלוקת תקציב מחלקות + עלות עובדים',h:'JOIN departments→employees, SUM(salary)',s:'SELECT d.name dept, d.budget, COUNT(e.id) headcount, ROUND(SUM(e.salary),2) total_salary, ROUND(AVG(e.salary),2) avg_salary, ROUND(d.budget-SUM(e.salary),2) budget_remaining, ROUND(100.0*SUM(e.salary)/d.budget,1) salary_to_budget_pct FROM departments d LEFT JOIN employees e ON d.id=e.department_id GROUP BY d.id ORDER BY total_salary DESC;'},
+  {n:9,t:'פרמוציות פעילות + ביצועים',h:'JOIN promotions→products→categories, active=1',s:"SELECT pr.name promo, p.product_name, c.category_name, pr.discount_pct, pr.start_date, pr.end_date, pr.budget, pr.impressions, ROUND(COALESCE(pr.impressions,0)*1.0/NULLIF(pr.budget,0),2) impressions_per_dollar FROM promotions pr JOIN products p ON pr.product_id=p.id JOIN categories c ON p.category_id=c.id WHERE pr.active=1 ORDER BY pr.discount_pct DESC;"},
+  {n:10,t:'דוח מנהל מלא: מכירות + מלאי + החזרות לפי קטגוריה',h:'מספר JOINs עם LEFT JOIN, GROUP BY category',s:'SELECT c.category_name, COUNT(DISTINCT p.id) products, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue, SUM(od.quantity) units_sold, ROUND(AVG(pr.rating),2) avg_rating, SUM(inv.qty_on_hand) stock, COUNT(DISTINCT r.id) returns FROM categories c JOIN products p ON c.id=p.category_id LEFT JOIN order_details od ON p.id=od.product_id LEFT JOIN product_reviews pr ON p.id=pr.product_id LEFT JOIN inventory inv ON p.id=inv.product_id LEFT JOIN returns r ON p.id=r.product_id GROUP BY c.id ORDER BY revenue DESC;'},
+
+  // ===== PART 2 - ADVANCED SET =====
+  {n:11,t:'דירוג עובדים לפי מכירות עם RANK()',h:'RANK() OVER(ORDER BY sales DESC)',s:'SELECT e.first_name||" "||e.last_name name, e.title, ROUND(SUM(od.quantity*od.unit_price),2) sales, RANK() OVER(ORDER BY SUM(od.quantity*od.unit_price) DESC) rnk, DENSE_RANK() OVER(ORDER BY SUM(od.quantity*od.unit_price) DESC) dense_rnk FROM employees e JOIN orders o ON e.id=o.employee_id JOIN order_details od ON o.id=od.order_id GROUP BY e.id ORDER BY sales DESC;'},
+  {n:12,t:'Running Total הכנסות לפי חודש',h:'SUM() OVER(ORDER BY month) - cumulative',s:"SELECT month, revenue, ROUND(SUM(revenue) OVER(ORDER BY month),2) running_total, ROUND(AVG(revenue) OVER(ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),2) moving_avg_3m FROM (SELECT SUBSTR(o.order_date,1,7) month, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY month) ORDER BY month;"},
+  {n:13,t:'הפרש ימים בין הזמנה לשילוח',h:'JULIANDAY(shipped_date) - JULIANDAY(order_date)',s:"SELECT id, order_date, shipped_date, status, ROUND(JULIANDAY(shipped_date)-JULIANDAY(order_date),0) days_to_ship FROM orders WHERE shipped_date IS NOT NULL ORDER BY days_to_ship DESC LIMIT 20;"},
+  {n:14,t:'לקוחות שהזמינו ב-2023 אך לא ב-2024',h:'EXISTS + NOT EXISTS עם תת-שאילתות',s:"SELECT DISTINCT c.company, c.city, c.country_region FROM customers c WHERE EXISTS(SELECT 1 FROM orders o WHERE o.customer_id=c.id AND o.order_date LIKE '2023%') AND NOT EXISTS(SELECT 1 FROM orders o2 WHERE o2.customer_id=c.id AND o2.order_date LIKE '2024%') ORDER BY c.country_region;"},
+  {n:15,t:'NTILE: חלוקת לקוחות ל-4 קבוצות לפי הכנסות',h:'NTILE(4) OVER(ORDER BY revenue) — quartiles',s:'SELECT company, revenue, NTILE(4) OVER(ORDER BY revenue) quartile, CASE NTILE(4) OVER(ORDER BY revenue) WHEN 4 THEN "VIP" WHEN 3 THEN "High" WHEN 2 THEN "Medium" ELSE "Low" END tier FROM (SELECT c.company, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id) ORDER BY revenue DESC LIMIT 30;'},
+  {n:16,t:'הזמנות עם ערך מעל ממוצע + PERCENT_RANK',h:'PERCENT_RANK() OVER(ORDER BY order_value)',s:'SELECT id, order_date, total_value, ROUND(PERCENT_RANK() OVER(ORDER BY total_value)*100,1) pct_rank FROM (SELECT o.id, o.order_date, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) total_value FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY o.id) WHERE total_value > (SELECT AVG(t2.tv) FROM (SELECT SUM(od2.quantity*od2.unit_price) tv FROM order_details od2 GROUP BY od2.order_id) t2) ORDER BY total_value DESC LIMIT 20;'},
+  {n:17,t:'מוצרים עם LAG/LEAD: מחיר לפני ואחרי',h:'LAG(list_price) OVER(PARTITION BY category_id)',s:'SELECT product_name, category_id, list_price, LAG(list_price) OVER(PARTITION BY category_id ORDER BY list_price) prev_price, LEAD(list_price) OVER(PARTITION BY category_id ORDER BY list_price) next_price, ROUND(list_price - LAG(list_price) OVER(PARTITION BY category_id ORDER BY list_price),2) diff_from_prev FROM products ORDER BY category_id, list_price;'},
+  {n:18,t:'גיל עובדים + ותק בחברה',h:'JULIANDAY(date("now"))-JULIANDAY(birth_date)/365.25',s:'SELECT first_name||" "||last_name name, birth_date, hire_date, CAST((JULIANDAY(date("now"))-JULIANDAY(birth_date))/365.25 AS INT) age, CAST((JULIANDAY(date("now"))-JULIANDAY(hire_date))/365.25 AS INT) years_at_company, title, salary FROM employees ORDER BY years_at_company DESC;'},
+  {n:19,t:'חלון זמן: הכנסות 3 חודשים אחרונים Rolling',h:'SUM OVER(ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)',s:"SELECT month, revenue, ROUND(SUM(revenue) OVER(ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),2) rolling_3m, ROUND(AVG(revenue) OVER(ORDER BY month ROWS BETWEEN 5 PRECEDING AND CURRENT ROW),2) rolling_6m FROM (SELECT SUBSTR(order_date,1,7) month, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY month) ORDER BY month;"},
+  {n:20,t:'ROW_NUMBER לפי קטגוריה: מוצר יקר מ-1 לN',h:'ROW_NUMBER() OVER(PARTITION BY category_id ORDER BY list_price DESC)',s:'SELECT product_name, c.category_name, list_price, ROW_NUMBER() OVER(PARTITION BY p.category_id ORDER BY list_price DESC) row_in_cat, FIRST_VALUE(list_price) OVER(PARTITION BY p.category_id ORDER BY list_price DESC) most_expensive FROM products p JOIN categories c ON p.category_id=c.id ORDER BY c.category_name, list_price DESC;'},
+  // === 10 תרגילים חדשים מתקדמים (Window Functions + Date + Multi-table) ===
+  {n:21,t:'RANK מוצרים לפי ביקורות בתוך קטגוריה',h:'RANK() OVER(PARTITION BY category_name ORDER BY avg_rating DESC)',s:"SELECT product_name, category_name, avg_rating, review_count, RANK() OVER(PARTITION BY category_name ORDER BY avg_rating DESC) rank_in_cat FROM (SELECT p.product_name, c.category_name, ROUND(AVG(pr.rating),2) avg_rating, COUNT(pr.id) review_count FROM products p JOIN categories c ON p.category_id=c.id JOIN product_reviews pr ON p.id=pr.product_id GROUP BY p.id HAVING review_count >= 3) ORDER BY category_name, rank_in_cat;"},
+  {n:22,t:'ניתוח לקוחות: מרווח בין הזמנות (ימים)',h:'JULIANDAY(order_date) - LAG OVER PARTITION BY customer',s:"SELECT company, order_date, LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date) prev_order, ROUND(JULIANDAY(order_date)-JULIANDAY(LAG(order_date) OVER(PARTITION BY customer_id ORDER BY order_date)),0) days_between FROM (SELECT c.company, o.customer_id, o.order_date FROM customers c JOIN orders o ON c.id=o.customer_id) WHERE days_between IS NOT NULL ORDER BY days_between DESC LIMIT 20;"},
+  {n:23,t:'תת-שאילתה: לקוחות עם הכנסות מעל ממוצע מדינה',h:'HAVING revenue > (SELECT AVG... WHERE country_region=c.country_region)',s:"SELECT c.company, c.country_region, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) revenue, ROUND((SELECT AVG(t.rev) FROM (SELECT c2.id, SUM(od2.quantity*od2.unit_price) rev FROM customers c2 JOIN orders o2 ON c2.id=o2.customer_id JOIN order_details od2 ON o2.id=od2.order_id WHERE c2.country_region=c.country_region GROUP BY c2.id) t),2) country_avg FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id HAVING revenue > (SELECT AVG(t2.rev) FROM (SELECT c3.id, SUM(od3.quantity*od3.unit_price) rev FROM customers c3 JOIN orders o3 ON c3.id=o3.customer_id JOIN order_details od3 ON o3.id=od3.order_id WHERE c3.country_region=c.country_region GROUP BY c3.id) t2) ORDER BY c.country_region, revenue DESC LIMIT 25;"},
+  {n:24,t:'CASE מורכב: סיווג מוצר לפי מכירות + ביקורות + מלאי',h:'CASE WHEN sales>X AND rating>4 AND stock>50 THEN Premium...',s:"SELECT p.product_name, c.category_name, ROUND(SUM(od.quantity*od.unit_price),2) sales, ROUND(AVG(pr.rating),2) avg_rating, SUM(inv.qty_on_hand) stock, CASE WHEN SUM(od.quantity*od.unit_price)>5000 AND AVG(pr.rating)>=4 AND SUM(inv.qty_on_hand)>100 THEN 'Star Product' WHEN SUM(od.quantity*od.unit_price)>5000 THEN 'Best Seller' WHEN AVG(pr.rating)>=4.5 THEN 'Customer Favorite' WHEN SUM(inv.qty_on_hand)<20 THEN 'Low Stock' ELSE 'Standard' END product_status FROM products p JOIN categories c ON p.category_id=c.id LEFT JOIN order_details od ON p.id=od.product_id LEFT JOIN product_reviews pr ON p.id=pr.product_id LEFT JOIN inventory inv ON p.id=inv.product_id GROUP BY p.id ORDER BY sales DESC LIMIT 20;"},
+  {n:25,t:'Window SUM מצטבר של מכירות עובד לאורך זמן',h:'SUM(revenue) OVER(PARTITION BY emp ORDER BY month ROWS UNBOUNDED PRECEDING)',s:"SELECT emp_name, month, monthly_sales, ROUND(SUM(monthly_sales) OVER(PARTITION BY emp_name ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),2) cumulative_sales, ROUND(AVG(monthly_sales) OVER(PARTITION BY emp_name),2) avg_monthly FROM (SELECT e.first_name||' '||e.last_name emp_name, SUBSTR(o.order_date,1,7) month, ROUND(SUM(od.quantity*od.unit_price),2) monthly_sales FROM employees e JOIN orders o ON e.id=o.employee_id JOIN order_details od ON o.id=od.order_id GROUP BY e.id, month) ORDER BY emp_name, month;"},
+  {n:26,t:'דוח מניעת אאוטליירים: STDDEV עם Z-Score',h:'(value - AVG) / STDEV — ORDER_VALUE outliers',s:"SELECT order_id, order_value, avg_val, std_val, ROUND((order_value-avg_val)/NULLIF(std_val,0),2) z_score FROM (SELECT o.id order_id, ROUND(SUM(od.quantity*od.unit_price),2) order_value, ROUND(AVG(SUM(od.quantity*od.unit_price)) OVER(),2) avg_val, ROUND(SQRT(AVG((SUM(od.quantity*od.unit_price)-AVG(SUM(od.quantity*od.unit_price)) OVER())*(SUM(od.quantity*od.unit_price)-AVG(SUM(od.quantity*od.unit_price)) OVER())) OVER()),2) std_val FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY o.id) ORDER BY ABS(z_score) DESC LIMIT 20;"},
+  {n:27,t:'תאריך + CASE: ימי עיכוב לפי חברת שילוח ועונה',h:"CASE season, AVG(JULIANDAY diff), PARTITION BY shipper",s:"SELECT s.company shipper, CASE WHEN SUBSTR(o.order_date,6,2) IN ('12','01','02') THEN 'Winter' WHEN SUBSTR(o.order_date,6,2) IN ('03','04','05') THEN 'Spring' WHEN SUBSTR(o.order_date,6,2) IN ('06','07','08') THEN 'Summer' ELSE 'Fall' END season, COUNT(*) shipments, ROUND(AVG(JULIANDAY(o.shipped_date)-JULIANDAY(o.order_date)),1) avg_days, ROUND(MIN(JULIANDAY(o.shipped_date)-JULIANDAY(o.order_date)),0) best, ROUND(MAX(JULIANDAY(o.shipped_date)-JULIANDAY(o.order_date)),0) worst FROM shippers s JOIN orders o ON s.id=o.shipper_id WHERE o.shipped_date IS NOT NULL GROUP BY s.id, season ORDER BY s.company, season;"},
+  {n:28,t:'רשת מכירות: CROSS JOIN מוצרים × מדינות + ביצוע',h:'CROSS JOIN categories × countries + LEFT JOIN actuals',s:"SELECT c.category_name, country_region, COALESCE(ROUND(SUM(od.quantity*od.unit_price),2),0) revenue, COALESCE(COUNT(DISTINCT o.id),0) orders FROM categories c CROSS JOIN (SELECT DISTINCT country_region FROM customers WHERE country_region IS NOT NULL LIMIT 10) countries LEFT JOIN products p ON c.id=p.category_id LEFT JOIN order_details od ON p.id=od.product_id LEFT JOIN orders o ON od.order_id=o.id LEFT JOIN customers cu ON o.customer_id=cu.id AND cu.country_region=countries.country_region GROUP BY c.id, countries.country_region ORDER BY c.category_name, revenue DESC;"},
+  {n:29,t:'ניתוח basket: מוצרים שנקנו יחד הכי הרבה',h:'SELF JOIN order_details ON same order_id, COUNT pairs',s:"SELECT p1.product_name product_a, p2.product_name product_b, COUNT(*) times_bought_together FROM order_details od1 JOIN order_details od2 ON od1.order_id=od2.order_id AND od1.product_id < od2.product_id JOIN products p1 ON od1.product_id=p1.id JOIN products p2 ON od2.product_id=p2.id GROUP BY od1.product_id, od2.product_id HAVING times_bought_together >= 3 ORDER BY times_bought_together DESC LIMIT 15;"},
+  {n:30,t:'KPI Dashboard: מחזור, לקוחות, הזמנות ממוצעות, החזר',h:'Multiple aggregations + subqueries as columns',s:"SELECT ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) total_revenue, COUNT(DISTINCT o.id) total_orders, COUNT(DISTINCT o.customer_id) active_customers, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount))/COUNT(DISTINCT o.id),2) avg_order_value, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount))/COUNT(DISTINCT o.customer_id),2) revenue_per_customer, (SELECT COUNT(*) FROM returns WHERE status='Approved') approved_returns, ROUND(100.0*(SELECT COUNT(*) FROM orders WHERE shipped_date IS NOT NULL)/(SELECT COUNT(*) FROM orders),1) ship_rate_pct FROM orders o JOIN order_details od ON o.id=od.order_id;"},
+
+  // ===== נוספו תרגילים 31-40 (ADVANCED) =====
+  {n:31,t:'Cohort Analysis: ריטנשן לקוחות לפי חודש',h:'MIN(order_date) OVER(PARTITION BY customer_id) = first order cohort',s:"SELECT cohort, COUNT(DISTINCT customer_id) cohort_size, SUM(CASE WHEN months_since=0 THEN 1 ELSE 0 END) m0, SUM(CASE WHEN months_since<=1 THEN 1 ELSE 0 END) m1, SUM(CASE WHEN months_since<=3 THEN 1 ELSE 0 END) m3, SUM(CASE WHEN months_since<=6 THEN 1 ELSE 0 END) m6 FROM (SELECT customer_id, SUBSTR(MIN(order_date) OVER(PARTITION BY customer_id),1,7) cohort, CAST((JULIANDAY(order_date)-JULIANDAY(MIN(order_date) OVER(PARTITION BY customer_id)))/30 AS INT) months_since FROM orders) GROUP BY cohort ORDER BY cohort LIMIT 12;"},
+  {n:32,t:'LTV לקוחות: ערך חיי לקוח + ממוצע חודשי',h:'total_revenue / months_active = monthly_ltv',s:'SELECT c.company, COUNT(DISTINCT o.id) orders, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) total_revenue, ROUND((JULIANDAY(MAX(o.order_date))-JULIANDAY(MIN(o.order_date)))/30,1) months_active, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount))/NULLIF((JULIANDAY(MAX(o.order_date))-JULIANDAY(MIN(o.order_date)))/30,0),2) monthly_ltv FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id HAVING orders>=3 ORDER BY monthly_ltv DESC LIMIT 15;'},
+  {n:33,t:'Window FIRST_VALUE: המוצר היקר והזול בקטגוריה',h:'FIRST_VALUE() OVER(PARTITION BY category_id ORDER BY list_price DESC/ASC)',s:'SELECT DISTINCT c.category_name, FIRST_VALUE(p.product_name) OVER(PARTITION BY p.category_id ORDER BY p.list_price DESC) most_expensive, MAX(p.list_price) OVER(PARTITION BY p.category_id) max_price, FIRST_VALUE(p.product_name) OVER(PARTITION BY p.category_id ORDER BY p.list_price ASC) cheapest, MIN(p.list_price) OVER(PARTITION BY p.category_id) min_price FROM products p JOIN categories c ON p.category_id=c.id ORDER BY c.category_name;'},
+  {n:34,t:'MoM שינוי מכירות עובד עם LAG',h:'LAG(monthly_sales) OVER(PARTITION BY emp ORDER BY month)',s:"SELECT emp_name, month, monthly_sales, LAG(monthly_sales) OVER(PARTITION BY emp_id ORDER BY month) prev_month, ROUND(monthly_sales-LAG(monthly_sales) OVER(PARTITION BY emp_id ORDER BY month),2) change_abs, ROUND(100.0*(monthly_sales-LAG(monthly_sales) OVER(PARTITION BY emp_id ORDER BY month))/NULLIF(LAG(monthly_sales) OVER(PARTITION BY emp_id ORDER BY month),0),1) pct_change FROM (SELECT e.id emp_id, e.first_name||' '||e.last_name emp_name, SUBSTR(o.order_date,1,7) month, ROUND(SUM(od.quantity*od.unit_price),2) monthly_sales FROM employees e JOIN orders o ON e.id=o.employee_id JOIN order_details od ON o.id=od.order_id GROUP BY e.id, month) ORDER BY emp_id, month LIMIT 30;"},
+  {n:35,t:'Recursive CTE: היררכיית מנהלים',h:'WITH RECURSIVE org AS(SELECT...WHERE reports_to IS NULL UNION ALL SELECT...JOIN...)',s:'WITH RECURSIVE org AS(SELECT id, first_name||" "||last_name name, title, reports_to, 0 lvl, first_name||" "||last_name path FROM employees WHERE reports_to IS NULL UNION ALL SELECT e.id, e.first_name||" "||e.last_name, e.title, e.reports_to, o.lvl+1, o.path||" > "||e.first_name||" "||e.last_name FROM employees e JOIN org o ON e.reports_to=o.id) SELECT lvl, name, title, salary, path FROM employees JOIN org USING(id) ORDER BY path;'},
+  {n:36,t:'Pivot רבעוני: מכירות לפי מחלקה ב-2023',h:'SUM(CASE WHEN quarter=Q1 THEN sales ELSE 0 END)',s:"SELECT dept_name, ROUND(SUM(CASE WHEN qtr='Q1' THEN sales ELSE 0 END),0) Q1, ROUND(SUM(CASE WHEN qtr='Q2' THEN sales ELSE 0 END),0) Q2, ROUND(SUM(CASE WHEN qtr='Q3' THEN sales ELSE 0 END),0) Q3, ROUND(SUM(CASE WHEN qtr='Q4' THEN sales ELSE 0 END),0) Q4, ROUND(SUM(sales),0) total FROM (SELECT d.name dept_name, CASE WHEN CAST(SUBSTR(o.order_date,6,2) AS INT)<=3 THEN 'Q1' WHEN CAST(SUBSTR(o.order_date,6,2) AS INT)<=6 THEN 'Q2' WHEN CAST(SUBSTR(o.order_date,6,2) AS INT)<=9 THEN 'Q3' ELSE 'Q4' END qtr, SUM(od.quantity*od.unit_price) sales FROM employees e JOIN departments d ON e.department_id=d.id JOIN orders o ON e.id=o.employee_id JOIN order_details od ON o.id=od.order_id WHERE SUBSTR(o.order_date,1,4)='2023' GROUP BY d.id, qtr) GROUP BY dept_name ORDER BY total DESC;"},
+  {n:37,t:'Multi-CTE: ניתוח ביצועים חודשיים בשלבים',h:'WITH monthly AS(...), stats AS(...), ranked AS(...) SELECT...',s:'WITH monthly_rev AS(SELECT SUBSTR(order_date,1,7) month, ROUND(SUM(od.quantity*od.unit_price),2) revenue FROM orders o JOIN order_details od ON o.id=od.order_id GROUP BY month), stats AS(SELECT AVG(revenue) avg_rev, MAX(revenue) max_rev FROM monthly_rev), ranked AS(SELECT m.month, m.revenue, RANK() OVER(ORDER BY m.revenue DESC) rnk, ROUND(m.revenue/s.avg_rev*100,1) pct_of_avg FROM monthly_rev m, stats s) SELECT month, revenue, rnk, pct_of_avg, CASE WHEN pct_of_avg>=120 THEN "Excellent" WHEN pct_of_avg>=90 THEN "Normal" ELSE "Below Avg" END performance FROM ranked ORDER BY month;'},
+  {n:38,t:'Churn Analysis: ימים מאז הזמנה אחרונה',h:'JULIANDAY("now")-JULIANDAY(MAX(order_date)) > 180',s:'SELECT c.company, c.country_region, MAX(o.order_date) last_order, COUNT(DISTINCT o.id) total_orders, ROUND(SUM(od.quantity*od.unit_price),2) lifetime_value, ROUND(JULIANDAY(date("now"))-JULIANDAY(MAX(o.order_date)),0) days_inactive, CASE WHEN JULIANDAY(date("now"))-JULIANDAY(MAX(o.order_date))>365 THEN "Churned" WHEN JULIANDAY(date("now"))-JULIANDAY(MAX(o.order_date))>180 THEN "At Risk" ELSE "Active" END churn_status FROM customers c JOIN orders o ON c.id=o.customer_id JOIN order_details od ON o.id=od.order_id GROUP BY c.id ORDER BY days_inactive DESC LIMIT 20;'},
+  {n:39,t:'Market Basket: מוצרים שנקנים ביחד',h:'Self JOIN order_details ON same order AND product1 < product2',s:'SELECT p1.product_name product_a, p2.product_name product_b, COUNT(*) times_together, ROUND(100.0*COUNT(*)/MIN(c1.cnt),1) support_pct FROM order_details od1 JOIN order_details od2 ON od1.order_id=od2.order_id AND od1.product_id<od2.product_id JOIN products p1 ON od1.product_id=p1.id JOIN products p2 ON od2.product_id=p2.id JOIN (SELECT product_id, COUNT(DISTINCT order_id) cnt FROM order_details GROUP BY product_id) c1 ON od1.product_id=c1.product_id GROUP BY od1.product_id, od2.product_id HAVING times_together>=3 ORDER BY times_together DESC LIMIT 15;'},
+  {n:40,t:'KPI Executive Dashboard בשאילתה אחת',h:'Multiple subqueries, ROUND, COUNT DISTINCT, 2024 filter',s:"SELECT ROUND(SUM(od.quantity*od.unit_price*(1-od.discount)),2) total_revenue_2024, COUNT(DISTINCT o.id) total_orders, COUNT(DISTINCT o.customer_id) active_customers, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount))/COUNT(DISTINCT o.id),2) avg_order_value, ROUND(SUM(od.quantity*od.unit_price*(1-od.discount))/COUNT(DISTINCT o.customer_id),2) revenue_per_customer, (SELECT COUNT(*) FROM returns WHERE status='Approved' AND SUBSTR(return_date,1,4)='2024') approved_returns, ROUND(100.0*(SELECT COUNT(*) FROM orders WHERE shipped_date IS NOT NULL AND SUBSTR(order_date,1,4)='2024')/(SELECT COUNT(*) FROM orders WHERE SUBSTR(order_date,1,4)='2024'),1) ship_rate_pct FROM orders o JOIN order_details od ON o.id=od.order_id WHERE SUBSTR(o.order_date,1,4)='2024';"}
+]};
+
+let db=null, curL='b', curEx=null;
+function swT(t){document.querySelectorAll('.mtab').forEach((b,i)=>b.classList.toggle('active',['editor','erd'][i]===t));document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));document.getElementById('pane-'+t).classList.add('active');if(t==='erd'){drawERD();buildStats();}}
+function buildSB(f=''){
+  const body=document.getElementById('sbBody');body.innerHTML='';let tot=0;
+  Object.entries(SCH).forEach(([tn,ti])=>{
+    const mc=f?ti.cols.filter(c=>c.n.includes(f.toLowerCase())||tn.includes(f.toLowerCase())):ti.cols;
+    if(f&&mc.length===0&&!tn.includes(f.toLowerCase()))return;
+    const rc=RCT[tn]||0;tot+=rc;
+    const d=document.createElement('div');d.className='tn';
+    d.innerHTML=`<div class="th"><span class="ar${f?' op':''}">▶</span><span class="ti">${ti.icon}</span><span class="tnm">${tn}</span><span class="tct">${rc.toLocaleString()}</span></div><div class="tc${f?' op':''}">${mc.map(c=>`<div class="cr"><span class="ci">${c.pk?'🔑':c.fk?'🔗':'◦'}</span><span class="cn${c.pk?' pk':c.fk?' fk':''}">${c.n}</span><span class="ct">${c.t}${c.fk?` →${c.fk}`:''}</span></div>`).join('')}</div>`;
+    d.querySelector('.th').addEventListener('click',function(){this.querySelector('.ar').classList.toggle('op');this.nextElementSibling.classList.toggle('op');});
+    d.querySelector('.th').addEventListener('dblclick',function(){document.getElementById('sqle').value=`SELECT * FROM ${tn} LIMIT 20;`;updLN();runQ();swT('editor');});
+    body.appendChild(d);
+  });
+  document.getElementById('sbTot').textContent=tot>0?' '+tot.toLocaleString()+' rows':'';
+}
+function sbF(v){buildSB(v);}
+function setLvl(l){curL=l;curEx=null;document.querySelectorAll('.lt').forEach(t=>t.classList.remove('on'));document.querySelector('.lt.'+l).classList.add('on');renderEx();hideInf();}
+function renderEx(){document.getElementById('exR').innerHTML=EX[curL].map((ex,i)=>`<div class="ec${curEx===i?' on':''}"><div class="en">תרגיל ${ex.n}</div><div class="et">${ex.t}</div><div class="ec-btns"><button class="ec-sel" onclick="selEx(${i})">✏️ תרגל</button><button class="ec-ans" onclick="openSol(${i},event)">👁 תשובה</button></div></div>`).join('');}
+function selEx(i){curEx=i;renderEx();const ex=EX[curL][i];hideInf();document.getElementById('sqle').value=`-- ${ex.t}\n\n`;document.getElementById('sqle').focus();updLN();}
+function togH(){const b=document.getElementById('hBox');if(curEx===null)return;b.textContent='💡 רמז: '+EX[curL][curEx].h;b.classList.toggle('sh');}
+function hideInf(){document.getElementById('hBox').classList.remove('sh');}
+
+// Solution Modal
+let solIdx=null, solLvl=null;
+function openSol(i,e){
+  if(e){e.stopPropagation();}
+  solIdx=i; solLvl=curL;
+  const ex=EX[curL][i];
+  const lvlLabel={b:'🌱 מתחילים',m:'🟠 בינוני',a:'🔴 מתקדם'};
+  document.getElementById('solNum').textContent=lvlLabel[curL]+' · תרגיל '+ex.n;
+  document.getElementById('solTitleTxt').textContent=ex.t;
+  document.getElementById('solHintTxt').textContent=ex.h;
+  // Format SQL nicely
+  const formatted = ex.s
+    .replace(/\bSELECT\b/g,'SELECT')
+    .replace(/\bFROM\b/g,'\nFROM')
+    .replace(/\b(LEFT |RIGHT |INNER |OUTER )?JOIN\b/g,'\n$&')
+    .replace(/\bWHERE\b/g,'\nWHERE')
+    .replace(/\bGROUP BY\b/g,'\nGROUP BY')
+    .replace(/\bHAVING\b/g,'\nHAVING')
+    .replace(/\bORDER BY\b/g,'\nORDER BY')
+    .replace(/\bLIMIT\b/g,'\nLIMIT')
+    .replace(/\bUNION( ALL)?\b/g,'\nUNION$1\n')
+    .replace(/\bWITH\b/g,'WITH')
+    .replace(/,\s*(?=[A-Za-z_\n])/g,', ')
+    .replace(/\n{3,}/g,'\n\n')
+    .trim();
+  document.getElementById('solCodeTxt').textContent=formatted;
+  document.getElementById('solCopyBtn').textContent='📋 העתק';
+  document.getElementById('solOverlay').classList.add('open');
+}
+function closeSol(){document.getElementById('solOverlay').classList.remove('open');}
+function copySol(){
+  if(solIdx===null)return;
+  navigator.clipboard.writeText(EX[solLvl][solIdx].s).then(()=>{
+    const btn=document.getElementById('solCopyBtn');
+    btn.textContent='✅ הועתק!';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='📋 העתק';btn.classList.remove('ok');},2000);
+  });
+}
+function useSol(){
+  if(solIdx===null)return;
+  document.getElementById('sqle').value=EX[solLvl][solIdx].s;
+  updLN(); closeSol(); swT('editor');
+}
+function runSolAndClose(){
+  if(solIdx===null)return;
+  document.getElementById('sqle').value=EX[solLvl][solIdx].s;
+  updLN(); closeSol(); swT('editor');
+  setTimeout(runQ,100);
+}
+function runQ(){const sql=document.getElementById('sqle').value.trim();if(!sql||!db)return;const t0=Date.now();try{showRes(db.exec(sql),Date.now()-t0);}catch(e){showErr(e.message);}}
+function showRes(res,ms){document.getElementById('rTm').textContent=ms+'ms';const sc=document.getElementById('rSc');if(!res||!res.length){document.getElementById('rSt').textContent='✓ בוצע';document.getElementById('rCl').textContent='';sc.innerHTML='<div class="emp"><div class="ico">✅</div><div>בוצע בהצלחה</div></div>';return;}const{columns,values}=res[0];document.getElementById('rSt').textContent=`✓ ${values.length.toLocaleString()} שורות`;document.getElementById('rCl').textContent=`${columns.length} עמודות`;let h=`<table class="rt"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;values.forEach(r=>{h+='<tr>'+r.map(v=>{if(v===null)return'<td class="nv">NULL</td>';return`<td class="${typeof v==='number'?'nrv':''}" title="${String(v)}">${String(v)}</td>`;}).join('')+'</tr>';});sc.innerHTML=h+'</tbody></table>';}
+function showErr(m){document.getElementById('rSt').textContent='✗ שגיאה';document.getElementById('rTm').textContent='';document.getElementById('rCl').textContent='';document.getElementById('rSc').innerHTML=`<div class="ev">❌ ${m}</div>`;}
+function clr(){document.getElementById('sqle').value='';document.getElementById('rSc').innerHTML='<div class="emp"><div class="ico">⚡</div><div>הרץ שאילתה לראות תוצאות</div></div>';document.getElementById('rSt').textContent='מוכן';document.getElementById('rTm').textContent='';document.getElementById('rCl').textContent='';hideInf();updLN();}
+function qQ(q){document.getElementById('sqle').value=q;updLN();runQ();swT('editor');}
+function updLN(){const n=document.getElementById('sqle').value.split('\n').length;document.getElementById('lns').innerHTML=Array.from({length:Math.max(n,1)},(_,i)=>i+1).join('<br>');}
+// ERD
+const TPOS={customers:{x:20,y:60},orders:{x:265,y:60},order_details:{x:510,y:60},products:{x:510,y:330},categories:{x:510,y:580},suppliers:{x:265,y:580},employees:{x:20,y:340},departments:{x:20,y:650},shippers:{x:20,y:850},regions:{x:760,y:60},territories:{x:760,y:230},employee_territories:{x:760,y:440},product_reviews:{x:760,y:620},inventory:{x:265,y:850},returns:{x:510,y:850},promotions:{x:760,y:840}};
+const TW=185,TR=18,TH=27;
+// Collapsed state per table
+const TCOL={};  // tableName -> true if collapsed
+function tHgt(tn){return TCOL[tn]?TH+4:TH+SCH[tn].cols.length*TR+4;}
+let es=0.85,ex_=20,ey_=10;
+function ez(f){es=Math.max(0.2,Math.min(2.5,es*f));drawERD();}
+function eRst(){es=0.85;ex_=20;ey_=10;Object.assign(TPOS,{customers:{x:20,y:60},orders:{x:265,y:60},order_details:{x:510,y:60},products:{x:510,y:330},categories:{x:510,y:580},suppliers:{x:265,y:580},employees:{x:20,y:340},departments:{x:20,y:650},shippers:{x:20,y:850},regions:{x:760,y:60},territories:{x:760,y:230},employee_territories:{x:760,y:440},product_reviews:{x:760,y:620},inventory:{x:265,y:850},returns:{x:510,y:850},promotions:{x:760,y:840}});drawERD();}
+function collapseAll(){Object.keys(SCH).forEach(tn=>TCOL[tn]=true);drawERD();}
+function expandAll(){Object.keys(SCH).forEach(tn=>TCOL[tn]=false);drawERD();}
+function rr2(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
+
+// Convert canvas coords to world coords
+function canvasToWorld(cx,cy){return {x:(cx-ex_)/es, y:(cy-ey_)/es};}
+
+// Hit test: which table is at world position?
+function hitTable(wx,wy){
+  const names=Object.keys(TPOS);
+  for(let i=names.length-1;i>=0;i--){
+    const tn=names[i]; const p=TPOS[tn]; const h=tHgt(tn);
+    if(wx>=p.x&&wx<=p.x+TW&&wy>=p.y&&wy<=p.y+h) return tn;
+  }
+  return null;
+}
+// Hit test header only (for collapse toggle)
+function hitHeader(wx,wy){
+  for(const tn of Object.keys(TPOS)){
+    const p=TPOS[tn];
+    if(wx>=p.x&&wx<=p.x+TW&&wy>=p.y&&wy<=p.y+TH) return tn;
+  }
+  return null;
+}
+
+function drawERD(){
+  const canvas=document.getElementById('erd');const wrap=canvas.parentElement;
+  canvas.width=wrap.clientWidth;canvas.height=wrap.clientHeight;
+  const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.save();ctx.translate(ex_,ey_);ctx.scale(es,es);
+  // Grid
+  const g=40;ctx.strokeStyle='rgba(30,45,66,0.35)';ctx.lineWidth=0.5;
+  const ox=(-ex_/es),oy=(-ey_/es);
+  for(let x=Math.floor(ox/g)*g;x<ox+canvas.width/es+g;x+=g){ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+canvas.height/es);ctx.stroke();}
+  for(let y=Math.floor(oy/g)*g;y<oy+canvas.height/es+g;y+=g){ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+canvas.width/es,y);ctx.stroke();}
+  // Connections
+  Object.entries(SCH).forEach(([tn,ti])=>{
+    ti.cols.forEach((col,ci)=>{
+      if(!col.fk||!TPOS[col.fk])return;
+      const fp=TPOS[tn],tp=TPOS[col.fk];if(!fp)return;
+      const fy=TCOL[tn]?fp.y+TH/2:fp.y+TH+ci*TR+TR/2;
+      const ty=tp.y+tHgt(col.fk)/2;
+      const fx=fp.x+TW/2,tx=tp.x+TW/2;
+      ctx.beginPath();ctx.strokeStyle='rgba(42,63,90,0.8)';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+      ctx.moveTo(fx,fy);const mx=(fx+tx)/2;ctx.bezierCurveTo(mx,fy,mx,ty,tx,ty);ctx.stroke();ctx.setLineDash([]);
+      const ang=Math.atan2(ty-fy,tx-fx);
+      ctx.beginPath();ctx.fillStyle='rgba(42,63,90,0.8)';ctx.moveTo(tx,ty);ctx.lineTo(tx-8*Math.cos(ang-0.4),ty-8*Math.sin(ang-0.4));ctx.lineTo(tx-8*Math.cos(ang+0.4),ty-8*Math.sin(ang+0.4));ctx.closePath();ctx.fill();
+    });
+  });
+  // Tables
+  Object.entries(SCH).forEach(([tn,ti])=>{
+    const pos=TPOS[tn];if(!pos)return;const h=tHgt(tn);
+    const collapsed=TCOL[tn];
+    ctx.shadowColor='rgba(0,0,0,.55)';ctx.shadowBlur=12;ctx.shadowOffsetY=4;
+    ctx.fillStyle='#0d1420';rr2(ctx,pos.x,pos.y,TW,h,8);ctx.fill();
+    ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+    ctx.strokeStyle=collapsed?ti.color+'88':ti.color+'55';ctx.lineWidth=collapsed?2:1.5;
+    rr2(ctx,pos.x,pos.y,TW,h,8);ctx.stroke();
+    // Header bg
+    ctx.fillStyle=ti.color+(collapsed?'33':'1a');
+    ctx.beginPath();ctx.moveTo(pos.x+8,pos.y);ctx.lineTo(pos.x+TW-8,pos.y);ctx.arcTo(pos.x+TW,pos.y,pos.x+TW,pos.y+8,8);ctx.lineTo(pos.x+TW,pos.y+(collapsed?h:TH));ctx.lineTo(pos.x,pos.y+(collapsed?h:TH));ctx.lineTo(pos.x,pos.y+8);ctx.arcTo(pos.x,pos.y,pos.x+8,pos.y,8);ctx.closePath();ctx.fill();
+    if(!collapsed){ctx.beginPath();ctx.strokeStyle=ti.color+'44';ctx.lineWidth=1;ctx.moveTo(pos.x,pos.y+TH);ctx.lineTo(pos.x+TW,pos.y+TH);ctx.stroke();}
+    // Table name
+    ctx.fillStyle=ti.color;ctx.font='bold 11px IBM Plex Mono,monospace';ctx.textAlign='right';
+    ctx.fillText(ti.icon+' '+tn,pos.x+TW-22,pos.y+TH-7);
+    // Collapse arrow
+    ctx.fillStyle=ti.color+'cc';ctx.font='bold 10px IBM Plex Mono';ctx.textAlign='left';
+    ctx.fillText(collapsed?'▶':'▼',pos.x+6,pos.y+TH-7);
+    // Row count badge
+    const rc=RCT[tn]||0;
+    if(rc>0){
+      ctx.fillStyle='rgba(0,212,170,.1)';ctx.beginPath();
+      if(ctx.roundRect)ctx.roundRect(pos.x+TW-62,pos.y+5,38,16,3);else ctx.rect(pos.x+TW-62,pos.y+5,38,16);
+      ctx.fill();ctx.fillStyle='#00d4aa';ctx.font='bold 9px IBM Plex Mono';ctx.textAlign='center';
+      ctx.fillText(rc.toLocaleString(),pos.x+TW-43,pos.y+16);
+    }
+    // Columns (only if not collapsed)
+    if(!collapsed){
+      ti.cols.forEach((col,i)=>{
+        const cy=pos.y+TH+2+i*TR;
+        if(i%2===0){ctx.fillStyle='rgba(255,255,255,.016)';ctx.fillRect(pos.x+1,cy,TW-2,TR);}
+        ctx.font=col.pk?'bold 10px IBM Plex Mono':'10px IBM Plex Mono';
+        ctx.fillStyle=col.pk?'#ffd166':col.fk?'#ff8c42':'#8ba3c7';
+        ctx.textAlign='right';ctx.fillText(col.n,pos.x+TW-18,cy+12);
+        ctx.font='9px IBM Plex Mono';ctx.fillStyle='rgba(74,96,128,.7)';ctx.textAlign='left';ctx.fillText(col.t,pos.x+5,cy+12);
+        ctx.font='9px sans-serif';ctx.fillStyle=col.pk?'#ffd166':col.fk?'#ff8c42':'rgba(255,255,255,.12)';
+        ctx.textAlign='right';ctx.fillText(col.pk?'🔑':col.fk?'🔗':'',pos.x+TW-4,cy+12);
+      });
+    }
+  });
+  ctx.restore();
+}
+function buildStats(){
+  const tbls=[['customers','👥'],['orders','📋'],['order_details','📄'],['products','📦'],['product_reviews','⭐'],['inventory','🏪'],['returns','↩️'],['promotions','🎯'],['employees','👤'],['suppliers','🏭'],['territories','📍'],['departments','🏢']];
+  document.getElementById('spRows').innerHTML=tbls.map(([t,ico])=>`<div class="sr"><span class="sl">${ico} ${t}</span><span class="sv">${(RCT[t]||0).toLocaleString()}</span></div>`).join('');
+}
+// DB INIT
+async function initDB(){
+  try{
+    document.getElementById('dst').textContent='טוען SQL.js...';
+    const SQL=await initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`});
+    db=new SQL.Database();
+    document.getElementById('dst').textContent='בונה טבלאות...';
+    createTbls();
+    document.getElementById('dst').textContent='טוען נתונים (50+ טבלאות)...';
+    loadStatic();
+    document.getElementById('dst').textContent='מייצר נתונים דינמיים...';
+    genDynamic();
+    Object.keys(SCH).forEach(t=>{try{RCT[t]=db.exec(`SELECT COUNT(*) FROM ${t}`)[0].values[0][0];}catch(e){}});
+    buildSB();
+    document.getElementById('dot').className='dot ok';
+    const tot=Object.values(RCT).reduce((a,b)=>a+b,0);
+    document.getElementById('dst').textContent=`מוכן ✓ | ${tot.toLocaleString()} שורות ב-${Object.keys(SCH).length} טבלאות`;
+    document.getElementById('runBtn').disabled=false;
+  }catch(e){document.getElementById('dst').textContent='שגיאה: '+e.message;console.error(e);}
+}
+function createTbls(){
+  db.run(`
+    CREATE TABLE regions(id INTEGER PRIMARY KEY,region_name TEXT);
+    CREATE TABLE territories(id INTEGER PRIMARY KEY,territory_name TEXT,abbreviation TEXT,region_id INTEGER);
+    CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT,description TEXT,manager_id INTEGER,budget REAL);
+    CREATE TABLE categories(id INTEGER PRIMARY KEY,category_name TEXT,description TEXT);
+    CREATE TABLE suppliers(id INTEGER PRIMARY KEY,company TEXT,contact_name TEXT,contact_title TEXT,email TEXT,phone TEXT,city TEXT,country_region TEXT,rating REAL,supplier_since TEXT);
+    CREATE TABLE products(id INTEGER PRIMARY KEY,product_name TEXT,supplier_id INTEGER,category_id INTEGER,standard_cost REAL,list_price REAL,reorder_level INTEGER,discontinued INTEGER,weight_kg REAL);
+    CREATE TABLE employees(id INTEGER PRIMARY KEY,last_name TEXT,first_name TEXT,title TEXT,email TEXT,phone TEXT,hire_date TEXT,birth_date TEXT,city TEXT,reports_to INTEGER,salary REAL,commission REAL,extension TEXT,department_id INTEGER);
+    CREATE TABLE employee_territories(employee_id INTEGER,territory_id INTEGER);
+    CREATE TABLE shippers(id INTEGER PRIMARY KEY,company TEXT,phone TEXT,rating REAL);
+    CREATE TABLE customers(id INTEGER PRIMARY KEY,company TEXT,last_name TEXT,first_name TEXT,job_title TEXT,email TEXT,business_phone TEXT,fax TEXT,city TEXT,state_province TEXT,country_region TEXT,zip_code TEXT,website TEXT,credit_limit REAL,customer_since TEXT);
+    CREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,employee_id INTEGER,order_date TEXT,required_date TEXT,shipped_date TEXT,shipper_id INTEGER,ship_city TEXT,ship_country TEXT,freight REAL,status TEXT,payment_method TEXT,notes TEXT,ship_method TEXT);
+    CREATE TABLE order_details(id INTEGER PRIMARY KEY,order_id INTEGER,product_id INTEGER,unit_price REAL,quantity INTEGER,discount REAL);
+    CREATE TABLE product_reviews(id INTEGER PRIMARY KEY,product_id INTEGER,customer_id INTEGER,rating INTEGER,review_text TEXT,review_date TEXT,helpful_votes INTEGER,verified_purchase INTEGER);
+    CREATE TABLE inventory(id INTEGER PRIMARY KEY,product_id INTEGER,warehouse TEXT,qty_on_hand INTEGER,qty_reserved INTEGER,reorder_point INTEGER,last_counted TEXT,unit_cost REAL);
+    CREATE TABLE returns(id INTEGER PRIMARY KEY,order_id INTEGER,product_id INTEGER,quantity INTEGER,reason TEXT,return_date TEXT,refund_amount REAL,status TEXT,approved_by INTEGER,notes TEXT);
+    CREATE TABLE promotions(id INTEGER PRIMARY KEY,name TEXT,product_id INTEGER,discount_pct INTEGER,start_date TEXT,end_date TEXT,active INTEGER,budget REAL,impressions INTEGER);
+  `);
+}
+
+function loadStatic(){
+  db.run(`INSERT INTO regions VALUES(1,'North America'),(2,'Europe'),(3,'Asia Pacific'),(4,'Latin America'),(5,'Middle East & Africa'),(6,'Eastern US'),(7,'Western US'),(8,'Central US');`);
+  db.run(`INSERT INTO territories VALUES(1,'Boston','MA',6);`);
+  db.run(`INSERT INTO territories VALUES(2,'New York','NY',6);`);
+  db.run(`INSERT INTO territories VALUES(3,'Philadelphia','PA',6);`);
+  db.run(`INSERT INTO territories VALUES(4,'Charlotte','NC',6);`);
+  db.run(`INSERT INTO territories VALUES(5,'Atlanta','GA',6);`);
+  db.run(`INSERT INTO territories VALUES(6,'Miami','FL',6);`);
+  db.run(`INSERT INTO territories VALUES(7,'Washington DC','DC',6);`);
+  db.run(`INSERT INTO territories VALUES(8,'Baltimore','MD',6);`);
+  db.run(`INSERT INTO territories VALUES(9,'Pittsburgh','PA',6);`);
+  db.run(`INSERT INTO territories VALUES(10,'Providence','RI',6);`);
+  db.run(`INSERT INTO territories VALUES(11,'Seattle','WA',7);`);
+  db.run(`INSERT INTO territories VALUES(12,'Portland','OR',7);`);
+  db.run(`INSERT INTO territories VALUES(13,'San Francisco','CA',7);`);
+  db.run(`INSERT INTO territories VALUES(14,'Los Angeles','CA',7);`);
+  db.run(`INSERT INTO territories VALUES(15,'Phoenix','AZ',7);`);
+  db.run(`INSERT INTO territories VALUES(16,'San Diego','CA',7);`);
+  db.run(`INSERT INTO territories VALUES(17,'Las Vegas','NV',7);`);
+  db.run(`INSERT INTO territories VALUES(18,'Sacramento','CA',7);`);
+  db.run(`INSERT INTO territories VALUES(19,'Denver','CO',7);`);
+  db.run(`INSERT INTO territories VALUES(20,'Salt Lake City','UT',7);`);
+  db.run(`INSERT INTO territories VALUES(21,'Chicago','IL',8);`);
+  db.run(`INSERT INTO territories VALUES(22,'Dallas','TX',8);`);
+  db.run(`INSERT INTO territories VALUES(23,'Houston','TX',8);`);
+  db.run(`INSERT INTO territories VALUES(24,'Minneapolis','MN',8);`);
+  db.run(`INSERT INTO territories VALUES(25,'St Louis','MO',8);`);
+  db.run(`INSERT INTO territories VALUES(26,'Indianapolis','IN',8);`);
+  db.run(`INSERT INTO territories VALUES(27,'Kansas City','MO',8);`);
+  db.run(`INSERT INTO territories VALUES(28,'Milwaukee','WI',8);`);
+  db.run(`INSERT INTO territories VALUES(29,'Cincinnati','OH',8);`);
+  db.run(`INSERT INTO territories VALUES(30,'Cleveland','OH',8);`);
+  db.run(`INSERT INTO territories VALUES(31,'London','UK',2);`);
+  db.run(`INSERT INTO territories VALUES(32,'Paris','FR',2);`);
+  db.run(`INSERT INTO territories VALUES(33,'Berlin','DE',2);`);
+  db.run(`INSERT INTO territories VALUES(34,'Amsterdam','NL',2);`);
+  db.run(`INSERT INTO territories VALUES(35,'Brussels','BE',2);`);
+  db.run(`INSERT INTO territories VALUES(36,'Stockholm','SE',2);`);
+  db.run(`INSERT INTO territories VALUES(37,'Zurich','CH',2);`);
+  db.run(`INSERT INTO territories VALUES(38,'Vienna','AT',2);`);
+  db.run(`INSERT INTO territories VALUES(39,'Madrid','ES',2);`);
+  db.run(`INSERT INTO territories VALUES(40,'Rome','IT',2);`);
+  db.run(`INSERT INTO territories VALUES(41,'Tokyo','JP',3);`);
+  db.run(`INSERT INTO territories VALUES(42,'Sydney','AU',3);`);
+  db.run(`INSERT INTO territories VALUES(43,'Toronto','CA',1);`);
+  db.run(`INSERT INTO territories VALUES(44,'Singapore','SG',3);`);
+  db.run(`INSERT INTO territories VALUES(45,'Hong Kong','HK',3);`);
+  db.run(`INSERT INTO territories VALUES(46,'Mexico City','MX',4);`);
+  db.run(`INSERT INTO territories VALUES(47,'Sao Paulo','BR',4);`);
+  db.run(`INSERT INTO territories VALUES(48,'Dubai','AE',5);`);
+  db.run(`INSERT INTO territories VALUES(49,'Mumbai','IN',3);`);
+  db.run(`INSERT INTO territories VALUES(50,'Shanghai','CN',3);`);
+  db.run(`INSERT INTO categories VALUES(1,'Beverages','Soft drinks, coffees, teas, beers, and ales');`);
+  db.run(`INSERT INTO categories VALUES(2,'Condiments','Sweet and savory sauces, relishes, spreads, and seasonings');`);
+  db.run(`INSERT INTO categories VALUES(3,'Confections','Desserts, candies, and sweet breads');`);
+  db.run(`INSERT INTO categories VALUES(4,'Dairy Products','Cheeses and dairy items');`);
+  db.run(`INSERT INTO categories VALUES(5,'Grains/Cereals','Breads, crackers, pasta, and cereal');`);
+  db.run(`INSERT INTO categories VALUES(6,'Meat/Poultry','Prepared meats and poultry');`);
+  db.run(`INSERT INTO categories VALUES(7,'Produce','Dried fruit, vegetables and bean curd');`);
+  db.run(`INSERT INTO categories VALUES(8,'Seafood','Seaweed and fish products');`);
+  db.run(`INSERT INTO categories VALUES(9,'Electronics','Electronic devices and accessories');`);
+  db.run(`INSERT INTO categories VALUES(10,'Office Supplies','Stationery and office products');`);
+  db.run(`INSERT INTO categories VALUES(11,'Clothing','Apparel and accessories');`);
+  db.run(`INSERT INTO categories VALUES(12,'Furniture','Home and office furniture');`);
+  db.run(`INSERT INTO categories VALUES(13,'Toys','Games and toys for all ages');`);
+  db.run(`INSERT INTO categories VALUES(14,'Books','Educational and entertainment books');`);
+  db.run(`INSERT INTO categories VALUES(15,'Health/Beauty','Health supplements and beauty products');`);
+  db.run(`INSERT INTO suppliers VALUES(1,'Global Foods Ltd','Amanda Davis','Consultant','amanda.davis@globalfood.com','+1-959-481-5012','Los Angeles','USA',3.5,'2016-02-22');`);
+  db.run(`INSERT INTO suppliers VALUES(2,'Pacific Rim Imports','Sandra Garcia','CEO','sandra.garcia@pacificrim.com','+1-632-232-1488','Mumbai','India',3.2,'2008-09-20');`);
+  db.run(`INSERT INTO suppliers VALUES(3,'Euro Delicacies','Ashley Gonzalez','Assistant Manager','ashley.gonzalez@eurodelica.com','+1-629-425-8359','Singapore','Singapore',4.2,'2017-01-25');`);
+  db.run(`INSERT INTO suppliers VALUES(4,'Farm Fresh Direct','Christopher Hall','CTO','christopher.hall@farmfreshd.com','+1-548-484-3547','Rome','Italy',3.4,'2017-06-04');`);
+  db.run(`INSERT INTO suppliers VALUES(5,'Ocean Harvest Co','Barbara Miller','VP Sales','barbara.miller@oceanharve.com','+1-552-818-5333','Berlin','Germany',4.6,'2016-08-18');`);
+  db.run(`INSERT INTO suppliers VALUES(6,'Mountain Peak Foods','Barbara Garcia','Inside Sales Rep','barbara.garcia@mountainpe.com','+1-500-843-6925','Hong Kong','China',4.2,'2016-02-02');`);
+  db.run(`INSERT INTO suppliers VALUES(7,'Sunrise Organics','Donald Roberts','Project Manager','donald.roberts@sunriseorg.com','+1-281-438-2654','Nashville','USA',3.8,'2012-11-27');`);
+  db.run(`INSERT INTO suppliers VALUES(8,'Heritage Farms','Christopher White','Regional Director','christopher.white@heritagefa.com','+1-414-886-5374','Berlin','Germany',4.4,'2015-11-03');`);
+  db.run(`INSERT INTO suppliers VALUES(9,'Prime Select Foods','Amanda Hernandez','Purchasing Agent','amanda.hernandez@primeselec.com','+1-946-450-3677','Singapore','Singapore',3.9,'2009-11-23');`);
+  db.run(`INSERT INTO suppliers VALUES(10,'Nordic Quality','Donald Baker','Customer Service Rep','donald.baker@nordicqual.com','+1-986-994-1916','London','UK',3.5,'2005-06-13');`);
+  db.run(`INSERT INTO suppliers VALUES(11,'Asian Spice Co','William Wilson','VP Marketing','william.wilson@asianspice.com','+1-935-522-4483','Dubai','UAE',4.3,'2011-11-15');`);
+  db.run(`INSERT INTO suppliers VALUES(12,'Southern Comfort Foods','Paul Rodriguez','Business Analyst','paul.rodriguez@southernco.com','+1-962-774-9830','Minneapolis','USA',3.5,'2014-07-19');`);
+  db.run(`INSERT INTO suppliers VALUES(13,'Gourmet International','Linda Anderson','Territory Manager','linda.anderson@gourmetint.com','+1-721-705-2489','Denver','USA',4.5,'2018-02-05');`);
+  db.run(`INSERT INTO suppliers VALUES(14,'Natural Choice Ltd','Christopher Baker','Purchasing Agent','christopher.baker@naturalcho.com','+1-810-265-7304','Rome','Italy',3.8,'2012-09-09');`);
+  db.run(`INSERT INTO suppliers VALUES(15,'Premium Brands Inc','James Baker','Data Analyst','james.baker@premiumbra.com','+1-898-749-5371','Seattle','USA',4.5,'2010-02-10');`);
+  db.run(`INSERT INTO suppliers VALUES(16,'Tech Supplies Direct','Christopher Robinson','Supervisor','christopher.robinson@techsuppli.com','+1-939-936-5315','New York','USA',4.9,'2017-03-17');`);
+  db.run(`INSERT INTO suppliers VALUES(17,'Office World Ltd','Richard Green','Director','richard.green@officeworl.com','+1-854-719-4258','Sacramento','USA',3.3,'2017-03-18');`);
+  db.run(`INSERT INTO suppliers VALUES(18,'Fashion Forward Co','Margaret Smith','CFO','margaret.smith@fashionfor.com','+1-531-700-1319','Sao Paulo','Brazil',3.2,'2010-05-08');`);
+  db.run(`INSERT INTO suppliers VALUES(19,'Home Essentials Inc','Mark Torres','VP Marketing','mark.torres@homeessent.com','+1-287-949-8962','Philadelphia','USA',4.6,'2017-09-25');`);
+  db.run(`INSERT INTO suppliers VALUES(20,'Toy Kingdom Ltd','Charles Nelson','Supervisor','charles.nelson@toykingdom.com','+1-762-369-5342','Oslo','Norway',4.1,'2014-07-07');`);
+  db.run(`INSERT INTO suppliers VALUES(21,'Book Publishers United','Sandra Carter','Executive','sandra.carter@bookpublis.com','+1-930-519-7537','Miami','USA',5.0,'2015-06-15');`);
+  db.run(`INSERT INTO suppliers VALUES(22,'Health Plus Co','Margaret Lewis','Finance Manager','margaret.lewis@healthplus.com','+1-453-430-2049','Seattle','USA',3.7,'2014-09-08');`);
+  db.run(`INSERT INTO suppliers VALUES(23,'Quality Meats Ltd','Donald Smith','Purchasing Manager','donald.smith@qualitymea.com','+1-924-846-1964','Phoenix','USA',3.5,'2005-06-03');`);
+  db.run(`INSERT INTO suppliers VALUES(24,'Dairy Perfect Co','Mark Moore','Account Manager','mark.moore@dairyperfe.com','+1-419-752-3167','Zurich','Switzerland',4.5,'2014-10-16');`);
+  db.run(`INSERT INTO suppliers VALUES(25,'Seafood Masters Ltd','Angela Walker','Operations Manager','angela.walker@seafoodmas.com','+1-394-296-2588','Madrid','Spain',4.3,'2010-07-14');`);
+  db.run(`INSERT INTO suppliers VALUES(26,'Green Valley Foods','Laura Brown','Sales Representative','laura.brown@greenvalle.com','+1-262-612-6559','San Antonio','USA',4.6,'2006-04-07');`);
+  db.run(`INSERT INTO suppliers VALUES(27,'Continental Imports','Sandra Lewis','Assistant Manager','sandra.lewis@continenta.com','+1-632-387-5563','Denver','USA',3.9,'2018-02-15');`);
+  db.run(`INSERT INTO suppliers VALUES(28,'Pacific Coast Traders','Ashley Miller','Data Analyst','ashley.miller@pacificcoa.com','+1-867-753-1241','Houston','USA',4.9,'2017-04-06');`);
+  db.run(`INSERT INTO suppliers VALUES(29,'Alpine Products GmbH','Nancy Walker','Assistant Manager','nancy.walker@alpineprod.com','+1-610-260-3697','Dallas','USA',3.8,'2011-05-26');`);
+  db.run(`INSERT INTO suppliers VALUES(30,'Eastern Delights Co','Karen Jackson','Finance Manager','karen.jackson@easterndel.com','+1-913-948-8973','Rome','Italy',3.3,'2009-04-02');`);
+  db.run(`INSERT INTO suppliers VALUES(31,'Westside Distributors','Cynthia Wright','Purchasing Manager','cynthia.wright@westsidedi.com','+1-965-521-1936','Houston','USA',3.1,'2012-09-28');`);
+  db.run(`INSERT INTO suppliers VALUES(32,'Northern Harvest','Christopher Brown','VP Sales','christopher.brown@northernha.com','+1-282-390-2122','Vienna','Austria',4.2,'2015-04-13');`);
+  db.run(`INSERT INTO suppliers VALUES(33,'Mediterranean Foods','Emily Thomas','Product Manager','emily.thomas@mediterran.com','+1-808-240-2343','Mumbai','India',3.8,'2014-10-17');`);
+  db.run(`INSERT INTO suppliers VALUES(34,'Tropical Imports Ltd','Paul Wilson','Product Manager','paul.wilson@tropicalim.com','+1-444-471-7484','London','UK',3.3,'2015-05-15');`);
+  db.run(`INSERT INTO suppliers VALUES(35,'Arctic Foods Co','Kathleen Jones','VP Marketing','kathleen.jones@arcticfood.com','+1-669-836-2638','New York','USA',3.1,'2008-09-09');`);
+  db.run(`INSERT INTO suppliers VALUES(36,'Desert Sun Products','Jennifer Jones','Regional Director','jennifer.jones@desertsunp.com','+1-578-491-3584','Minneapolis','USA',3.9,'2013-12-10');`);
+  db.run(`INSERT INTO suppliers VALUES(37,'Valley Fresh Inc','Dorothy Adams','VP Sales','dorothy.adams@valleyfres.com','+1-208-883-5905','Brussels','Belgium',4.9,'2006-03-09');`);
+  db.run(`INSERT INTO suppliers VALUES(38,'Coastal Seafoods','Richard Mitchell','Inside Sales Rep','richard.mitchell@coastalsea.com','+1-359-478-5616','Hong Kong','China',4.2,'2016-06-07');`);
+  db.run(`INSERT INTO suppliers VALUES(39,'Highlands Foods','Amanda Taylor','CEO','amanda.taylor@highlandsf.com','+1-700-457-1832','Vienna','Austria',3.2,'2011-05-02');`);
+  db.run(`INSERT INTO suppliers VALUES(40,'Riverside Trading Co','Patricia Roberts','Purchasing Agent','patricia.roberts@riversidet.com','+1-852-468-3647','Denver','USA',4.5,'2013-12-14');`);
+  db.run(`INSERT INTO suppliers VALUES(41,'Summit Select Foods','James Davis','VP Marketing','james.davis@summitsele.com','+1-907-352-9938','Phoenix','USA',3.1,'2010-10-18');`);
+  db.run(`INSERT INTO suppliers VALUES(42,'Lakeside Organics','Jessica Rodriguez','Inside Sales Rep','jessica.rodriguez@lakesideor.com','+1-515-573-1653','Chicago','USA',4.8,'2008-11-08');`);
+  db.run(`INSERT INTO suppliers VALUES(43,'Prairie Foods Inc','Richard Thompson','Assistant Manager','richard.thompson@prairiefoo.com','+1-616-835-3532','Hong Kong','China',4.8,'2008-03-26');`);
+  db.run(`INSERT INTO suppliers VALUES(44,'Forest Fresh Ltd','Daniel Clark','Consultant','daniel.clark@forestfres.com','+1-383-954-6442','Los Angeles','USA',4.6,'2011-11-28');`);
+  db.run(`INSERT INTO suppliers VALUES(45,'Canyon Products Co','Dorothy Thomas','Sales Representative','dorothy.thomas@canyonprod.com','+1-363-918-2771','Detroit','USA',3.8,'2005-08-08');`);
+  db.run(`INSERT INTO suppliers VALUES(46,'Island Imports','Helen Robinson','Customer Service Rep','helen.robinson@islandimpo.com','+1-512-433-4652','Berlin','Germany',3.0,'2008-07-11');`);
+  db.run(`INSERT INTO suppliers VALUES(47,'Plateau Trading','William Roberts','CEO','william.roberts@plateautra.com','+1-559-856-9346','Detroit','USA',3.8,'2018-09-11');`);
+  db.run(`INSERT INTO suppliers VALUES(48,'Savanna Foods','Joseph Taylor','Assistant Manager','joseph.taylor@savannafoo.com','+1-794-471-1626','Portland','USA',3.2,'2011-06-24');`);
+  db.run(`INSERT INTO suppliers VALUES(49,'Tundra Products','Mary Ramirez','Outside Sales Rep','mary.ramirez@tundraprod.com','+1-723-318-7311','Sao Paulo','Brazil',4.8,'2008-05-02');`);
+  db.run(`INSERT INTO suppliers VALUES(50,'Outback Trading Co','Jessica Smith','Regional Director','jessica.smith@outbacktra.com','+1-751-903-4228','Brussels','Belgium',3.7,'2006-11-11');`);
+  db.run(`INSERT INTO products VALUES(1,'Premium Chai Tea',21,1,71.21,134.36,24,0,13.37);`);
+  db.run(`INSERT INTO products VALUES(2,'Green Tea Deluxe',21,1,47.58,83.47,13,0,13.33);`);
+  db.run(`INSERT INTO products VALUES(3,'Artisan Coffee Blend',25,1,95.96,137.08,44,0,8.18);`);
+  db.run(`INSERT INTO products VALUES(4,'Cold Brew Concentrate',1,1,35.34,64.26,42,0,6.51);`);
+  db.run(`INSERT INTO products VALUES(5,'Sparkling Water Pack',29,1,50.17,91.22,35,0,19.2);`);
+  db.run(`INSERT INTO products VALUES(6,'Organic Orange Juice',48,1,19.81,38.09,37,0,12.42);`);
+  db.run(`INSERT INTO products VALUES(7,'Energy Boost Drink',6,1,110.28,164.59,48,0,16.15);`);
+  db.run(`INSERT INTO products VALUES(8,'Craft Beer 6-Pack',10,1,5.37,9.76,35,0,15.39);`);
+  db.run(`INSERT INTO products VALUES(9,'Red Wine Select',30,1,54.92,85.82,17,0,7.74);`);
+  db.run(`INSERT INTO products VALUES(10,'White Wine Reserve',26,1,33.65,52.58,5,0,17.22);`);
+  db.run(`INSERT INTO products VALUES(11,'Kombucha Original',7,1,86.23,156.79,49,0,1.1);`);
+  db.run(`INSERT INTO products VALUES(12,'Matcha Latte Mix',16,1,97.47,183.91,13,0,13.38);`);
+  db.run(`INSERT INTO products VALUES(13,'Herbal Tea Collection',36,1,85.99,121.11,33,0,14.41);`);
+  db.run(`INSERT INTO products VALUES(14,'Iced Coffee Ready',33,1,61.75,88.21,33,0,14.9);`);
+  db.run(`INSERT INTO products VALUES(15,'Cajun Spice Mix',31,2,62.15,92.76,45,0,15.58);`);
+  db.run(`INSERT INTO products VALUES(16,'Herb Garlic Sauce',32,2,71.24,127.22,9,0,4.77);`);
+  db.run(`INSERT INTO products VALUES(17,'Hot Pepper Sauce',22,2,41.75,67.34,13,0,7.72);`);
+  db.run(`INSERT INTO products VALUES(18,'Honey Mustard',10,2,72.8,142.75,31,0,9.37);`);
+  db.run(`INSERT INTO products VALUES(19,'Balsamic Vinegar',4,2,26.74,45.33,42,0,0.49);`);
+  db.run(`INSERT INTO products VALUES(20,'Olive Oil Extra Virgin',49,2,70.36,117.26,27,0,7.86);`);
+  db.run(`INSERT INTO products VALUES(21,'Soy Sauce Premium',27,2,72.57,109.95,43,0,9.82);`);
+  db.run(`INSERT INTO products VALUES(22,'Teriyaki Sauce',18,2,45.89,89.99,26,0,15.98);`);
+  db.run(`INSERT INTO products VALUES(23,'BBQ Sauce Smokey',47,2,22.31,37.18,13,0,10.73);`);
+  db.run(`INSERT INTO products VALUES(24,'Ranch Dressing',26,2,78.27,120.42,10,0,2.8);`);
+  db.run(`INSERT INTO products VALUES(25,'Caesar Dressing',30,2,22.65,40.44,25,0,6.6);`);
+  db.run(`INSERT INTO products VALUES(26,'Sriracha Hot Sauce',49,2,98.86,176.53,31,0,1.73);`);
+  db.run(`INSERT INTO products VALUES(27,'Truffle Oil',2,2,77.04,151.06,27,0,1.47);`);
+  db.run(`INSERT INTO products VALUES(28,'Pesto Sauce Classic',42,2,6.55,12.85,20,0,0.51);`);
+  db.run(`INSERT INTO products VALUES(29,'Dark Chocolate Bar',10,3,30.91,51.52,12,0,4.44);`);
+  db.run(`INSERT INTO products VALUES(30,'Gummy Bears Assorted',45,3,31.88,54.97,43,0,14.98);`);
+  db.run(`INSERT INTO products VALUES(31,'Caramel Toffee Box',8,3,84.6,156.67,24,0,0.61);`);
+  db.run(`INSERT INTO products VALUES(32,'Marshmallow Roasters',20,3,82.1,117.28,29,0,14.33);`);
+  db.run(`INSERT INTO products VALUES(33,'Jelly Bean Mix',5,3,81.91,120.46,20,0,15.47);`);
+  db.run(`INSERT INTO products VALUES(34,'Peanut Butter Cups',44,3,64.7,122.08,41,0,7.01);`);
+  db.run(`INSERT INTO products VALUES(35,'Licorice Twists',28,3,69.68,134.0,46,0,17.01);`);
+  db.run(`INSERT INTO products VALUES(36,'Cotton Candy Bags',32,3,18.16,25.58,45,0,9.25);`);
+  db.run(`INSERT INTO products VALUES(37,'Candy Canes Pack',10,3,59.35,89.92,46,0,16.18);`);
+  db.run(`INSERT INTO products VALUES(38,'Chocolate Truffles',35,3,93.64,156.06,42,0,17.05);`);
+  db.run(`INSERT INTO products VALUES(39,'Nougat Selection',6,3,35.63,59.39,34,0,13.4);`);
+  db.run(`INSERT INTO products VALUES(40,'Fudge Brownies',22,3,7.31,10.6,16,0,7.16);`);
+  db.run(`INSERT INTO products VALUES(41,'Hazelnut Spread',17,3,49.25,71.37,49,0,11.16);`);
+  db.run(`INSERT INTO products VALUES(42,'Mochi Ice Cream',34,3,98.73,189.87,31,0,15.19);`);
+  db.run(`INSERT INTO products VALUES(43,'Aged Cheddar Block',45,4,64.57,97.84,33,0,1.95);`);
+  db.run(`INSERT INTO products VALUES(44,'Brie Wheel Premium',15,4,46.12,83.86,47,0,9.52);`);
+  db.run(`INSERT INTO products VALUES(45,'Mozzarella Fresh',34,4,51.86,72.03,40,0,14.09);`);
+  db.run(`INSERT INTO products VALUES(46,'Parmesan Grated',18,4,35.63,64.79,17,0,14.88);`);
+  db.run(`INSERT INTO products VALUES(47,'Swiss Cheese Sliced',49,4,75.37,139.58,35,0,11.83);`);
+  db.run(`INSERT INTO products VALUES(48,'Gouda Smoked',49,4,60.09,107.3,11,0,6.0);`);
+  db.run(`INSERT INTO products VALUES(49,'Cream Cheese Spread',24,4,20.0,39.99,39,0,1.01);`);
+  db.run(`INSERT INTO products VALUES(50,'Blue Cheese Crumbles',4,4,73.39,112.9,13,0,15.08);`);
+  db.run(`INSERT INTO products VALUES(51,'Feta Cheese Block',7,4,110.36,175.18,35,0,6.88);`);
+  db.run(`INSERT INTO products VALUES(52,'Ricotta Premium',4,4,37.42,54.23,12,0,8.07);`);
+  db.run(`INSERT INTO products VALUES(53,'Camembert Artisan',5,4,76.39,117.52,14,0,11.3);`);
+  db.run(`INSERT INTO products VALUES(54,'Gruyere Block',20,4,11.89,21.61,40,0,12.17);`);
+  db.run(`INSERT INTO products VALUES(55,'Manchego Aged',40,4,29.9,49.01,33,0,6.02);`);
+  db.run(`INSERT INTO products VALUES(56,'Provolone Sliced',38,4,112.89,198.06,44,0,19.21);`);
+  db.run(`INSERT INTO products VALUES(57,'Whole Wheat Bread',7,5,104.38,189.78,18,0,1.72);`);
+  db.run(`INSERT INTO products VALUES(58,'Sourdough Loaf',16,5,20.22,38.89,5,0,13.82);`);
+  db.run(`INSERT INTO products VALUES(59,'Multigrain Crackers',31,5,33.99,61.8,50,0,17.21);`);
+  db.run(`INSERT INTO products VALUES(60,'Brown Rice Organic',5,5,97.33,139.04,45,0,16.1);`);
+  db.run(`INSERT INTO products VALUES(61,'Quinoa Premium',13,5,54.5,87.9,46,0,5.39);`);
+  db.run(`INSERT INTO products VALUES(62,'Oat Flakes Natural',10,5,10.22,18.92,24,0,16.5);`);
+  db.run(`INSERT INTO products VALUES(63,'Pasta Linguine',19,5,54.38,90.63,24,0,18.86);`);
+  db.run(`INSERT INTO products VALUES(64,'Penne Rigate',33,5,66.18,110.3,43,1,8.7);`);
+  db.run(`INSERT INTO products VALUES(65,'Spaghetti Al Dente',21,5,62.59,122.72,19,0,16.74);`);
+  db.run(`INSERT INTO products VALUES(66,'Basmati Rice Long',37,5,59.74,119.49,48,0,11.57);`);
+  db.run(`INSERT INTO products VALUES(67,'Couscous Instant',49,5,91.48,152.47,46,0,5.64);`);
+  db.run(`INSERT INTO products VALUES(68,'Barley Pearled',38,5,61.2,90.0,10,0,8.23);`);
+  db.run(`INSERT INTO products VALUES(69,'Rye Bread Artisan',21,5,93.62,135.68,26,0,9.96);`);
+  db.run(`INSERT INTO products VALUES(70,'Cornbread Mix',43,5,128.73,189.31,40,1,1.85);`);
+  db.run(`INSERT INTO products VALUES(71,'Beef Tenderloin',17,6,48.31,68.04,30,0,16.52);`);
+  db.run(`INSERT INTO products VALUES(72,'Chicken Breast Pack',1,6,82.61,133.24,31,0,10.42);`);
+  db.run(`INSERT INTO products VALUES(73,'Pork Ribs BBQ',40,6,97.61,152.51,8,0,11.03);`);
+  db.run(`INSERT INTO products VALUES(74,'Lamb Chops Premium',19,6,58.78,90.43,12,1,12.64);`);
+  db.run(`INSERT INTO products VALUES(75,'Turkey Whole',16,6,81.74,143.41,5,0,1.95);`);
+  db.run(`INSERT INTO products VALUES(76,'Duck Breast',8,6,50.34,94.98,14,0,14.36);`);
+  db.run(`INSERT INTO products VALUES(77,'Beef Burger Patties',33,6,84.11,142.56,35,0,4.95);`);
+  db.run(`INSERT INTO products VALUES(78,'Chicken Wings',36,6,17.93,33.21,43,0,17.6);`);
+  db.run(`INSERT INTO products VALUES(79,'Pork Sausages',5,6,39.44,58.87,31,0,15.78);`);
+  db.run(`INSERT INTO products VALUES(80,'Beef Mince Lean',18,6,92.41,165.01,24,0,11.64);`);
+  db.run(`INSERT INTO products VALUES(81,'Veal Cutlets',43,6,53.25,100.48,39,0,6.72);`);
+  db.run(`INSERT INTO products VALUES(82,'Rabbit Portions',49,6,66.58,110.97,25,0,19.62);`);
+  db.run(`INSERT INTO products VALUES(83,'Bison Steaks',16,6,64.08,116.5,31,0,14.92);`);
+  db.run(`INSERT INTO products VALUES(84,'Elk Medallions',46,6,106.21,183.12,47,0,13.08);`);
+  db.run(`INSERT INTO products VALUES(85,'Mixed Salad Greens',10,7,51.81,101.59,37,0,6.71);`);
+  db.run(`INSERT INTO products VALUES(86,'Cherry Tomatoes Pack',7,7,105.28,175.47,38,0,0.41);`);
+  db.run(`INSERT INTO products VALUES(87,'Bell Pepper Mix',10,7,54.37,84.95,14,0,15.65);`);
+  db.run(`INSERT INTO products VALUES(88,'Baby Spinach Bag',17,7,46.16,71.02,46,0,6.64);`);
+  db.run(`INSERT INTO products VALUES(89,'Broccoli Crown',44,7,100.09,172.57,25,0,17.76);`);
+  db.run(`INSERT INTO products VALUES(90,'Asparagus Bunch',32,7,89.31,175.11,9,0,13.72);`);
+  db.run(`INSERT INTO products VALUES(91,'Avocado Ripe',19,7,131.67,199.5,32,0,15.23);`);
+  db.run(`INSERT INTO products VALUES(92,'Mango Dried Slices',46,7,105.09,175.15,49,0,0.68);`);
+  db.run(`INSERT INTO products VALUES(93,'Pineapple Chunks',21,7,89.74,160.25,28,0,4.96);`);
+  db.run(`INSERT INTO products VALUES(94,'Berry Mix Frozen',27,7,77.29,115.36,15,0,12.23);`);
+  db.run(`INSERT INTO products VALUES(95,'Banana Dried Chips',25,7,69.21,125.84,42,0,9.28);`);
+  db.run(`INSERT INTO products VALUES(96,'Apple Rings Dried',17,7,61.5,94.62,34,0,13.58);`);
+  db.run(`INSERT INTO products VALUES(97,'Kale Chips Sea Salt',11,7,13.77,19.4,42,0,19.24);`);
+  db.run(`INSERT INTO products VALUES(98,'Beet Powder Organic',45,7,37.1,53.77,17,0,17.08);`);
+  db.run(`INSERT INTO products VALUES(99,'Atlantic Salmon Fillet',7,8,32.29,51.26,41,0,14.02);`);
+  db.run(`INSERT INTO products VALUES(100,'Tuna Steak Premium',2,8,125.25,195.7,22,1,17.31);`);
+  db.run(`INSERT INTO products VALUES(101,'Shrimp Tiger Large',50,8,76.61,150.21,43,0,16.67);`);
+  db.run(`INSERT INTO products VALUES(102,'Lobster Tail',19,8,85.95,156.27,27,0,3.88);`);
+  db.run(`INSERT INTO products VALUES(103,'Sea Bass Fillet',17,8,90.53,137.16,47,0,2.82);`);
+  db.run(`INSERT INTO products VALUES(104,'Cod Fillet Fresh',7,8,115.94,181.16,24,0,0.76);`);
+  db.run(`INSERT INTO products VALUES(105,'Mackerel Smoked',24,8,76.86,147.81,23,0,8.37);`);
+  db.run(`INSERT INTO products VALUES(106,'Oysters Dozen',13,8,19.08,30.77,28,0,18.28);`);
+  db.run(`INSERT INTO products VALUES(107,'Crab Meat Lump',11,8,37.47,55.11,35,0,5.97);`);
+  db.run(`INSERT INTO products VALUES(108,'Scallops Sea',22,8,97.1,161.83,9,0,19.33);`);
+  db.run(`INSERT INTO products VALUES(109,'Tilapia Fillet',44,8,105.28,146.22,40,0,15.83);`);
+  db.run(`INSERT INTO products VALUES(110,'Trout Rainbow',1,8,29.98,56.57,28,0,13.48);`);
+  db.run(`INSERT INTO products VALUES(111,'Halibut Steak',38,8,50.75,79.3,28,0,4.75);`);
+  db.run(`INSERT INTO products VALUES(112,'Mahi Mahi Fillet',2,8,89.33,125.81,25,0,4.51);`);
+  db.run(`INSERT INTO products VALUES(113,'Wireless Mouse',5,9,77.34,128.9,49,0,8.23);`);
+  db.run(`INSERT INTO products VALUES(114,'USB Keyboard',9,9,7.06,13.84,36,0,4.77);`);
+  db.run(`INSERT INTO products VALUES(115,'HD Monitor 24',35,9,18.87,31.45,47,0,13.96);`);
+  db.run(`INSERT INTO products VALUES(116,'Laptop Stand',35,9,57.24,86.73,14,0,13.13);`);
+  db.run(`INSERT INTO products VALUES(117,'Webcam HD 1080p',32,9,88.79,125.05,22,1,7.47);`);
+  db.run(`INSERT INTO products VALUES(118,'USB Hub 7-Port',29,9,50.45,91.72,28,0,13.75);`);
+  db.run(`INSERT INTO products VALUES(119,'External SSD 1TB',35,9,115.73,180.83,8,0,3.88);`);
+  db.run(`INSERT INTO products VALUES(120,'Wireless Headphones',8,9,129.24,190.06,10,0,12.87);`);
+  db.run(`INSERT INTO products VALUES(121,'Smart Speaker',39,9,99.12,194.36,26,0,2.61);`);
+  db.run(`INSERT INTO products VALUES(122,'Tablet 10 inch',37,9,30.61,45.02,40,0,4.4);`);
+  db.run(`INSERT INTO products VALUES(123,'Phone Charger Fast',15,9,36.61,69.07,43,1,17.18);`);
+  db.run(`INSERT INTO products VALUES(124,'Screen Protector',10,9,122.49,197.57,16,0,17.34);`);
+  db.run(`INSERT INTO products VALUES(125,'Gaming Mouse RGB',9,9,5.29,7.9,20,0,0.41);`);
+  db.run(`INSERT INTO products VALUES(126,'Mechanical Keyboard',17,9,10.05,15.22,38,0,1.36);`);
+  db.run(`INSERT INTO products VALUES(127,'A4 Paper Ream',29,10,95.59,156.71,11,0,4.51);`);
+  db.run(`INSERT INTO products VALUES(128,'Ballpoint Pens Box',40,10,9.02,13.46,47,0,9.22);`);
+  db.run(`INSERT INTO products VALUES(129,'Sticky Notes Pack',2,10,10.28,16.86,30,0,2.25);`);
+  db.run(`INSERT INTO products VALUES(130,'Stapler Heavy Duty',46,10,94.84,182.39,10,0,3.05);`);
+  db.run(`INSERT INTO products VALUES(131,'File Folders Box',9,10,37.52,58.63,40,0,7.68);`);
+  db.run(`INSERT INTO products VALUES(132,'Highlighters Set',39,10,65.08,108.46,43,0,15.88);`);
+  db.run(`INSERT INTO products VALUES(133,'Whiteboard Markers',8,10,109.63,171.29,40,0,4.38);`);
+  db.run(`INSERT INTO products VALUES(134,'Correction Tape',29,10,105.13,178.18,34,0,14.62);`);
+  db.run(`INSERT INTO products VALUES(135,'Rubber Bands Box',21,10,57.34,88.22,28,0,13.77);`);
+  db.run(`INSERT INTO products VALUES(136,'Paper Clips Box',31,10,12.3,18.09,10,0,14.92);`);
+  db.run(`INSERT INTO products VALUES(137,'Binder Clips Large',24,10,101.25,163.3,42,0,11.28);`);
+  db.run(`INSERT INTO products VALUES(138,'Scissors Professional',43,10,16.73,28.84,47,0,8.52);`);
+  db.run(`INSERT INTO products VALUES(139,'Label Maker',47,10,8.42,15.03,24,0,11.6);`);
+  db.run(`INSERT INTO products VALUES(140,'Tape Dispenser',14,10,21.45,35.17,11,0,11.17);`);
+  db.run(`INSERT INTO products VALUES(141,'Cotton T-Shirt',8,11,96.84,153.71,32,0,19.49);`);
+  db.run(`INSERT INTO products VALUES(142,'Denim Jeans Classic',40,11,79.78,124.65,6,0,13.19);`);
+  db.run(`INSERT INTO products VALUES(143,'Polo Shirt Premium',45,11,30.86,57.15,49,0,18.44);`);
+  db.run(`INSERT INTO products VALUES(144,'Hoodie Fleece',23,11,4.27,6.19,41,0,1.48);`);
+  db.run(`INSERT INTO products VALUES(145,'Athletic Shorts',48,11,65.52,128.47,38,0,8.45);`);
+  db.run(`INSERT INTO products VALUES(146,'Business Shirt',22,11,20.34,35.69,25,0,11.4);`);
+  db.run(`INSERT INTO products VALUES(147,'Casual Dress',6,11,93.94,177.25,44,0,1.72);`);
+  db.run(`INSERT INTO products VALUES(148,'Running Shoes',29,11,81.79,134.08,33,0,4.39);`);
+  db.run(`INSERT INTO products VALUES(149,'Formal Trousers',33,11,16.04,27.19,23,0,11.9);`);
+  db.run(`INSERT INTO products VALUES(150,'Winter Jacket',34,11,68.9,135.09,30,0,1.19);`);
+  db.run(`INSERT INTO products VALUES(151,'Sports Socks Pack',14,11,35.08,63.78,13,0,5.86);`);
+  db.run(`INSERT INTO products VALUES(152,'Cap Baseball',8,11,4.3,6.51,16,0,10.7);`);
+  db.run(`INSERT INTO products VALUES(153,'Wool Sweater',15,11,69.73,102.55,27,0,17.25);`);
+  db.run(`INSERT INTO products VALUES(154,'Leather Belt',3,11,54.04,90.06,9,0,11.56);`);
+  db.run(`INSERT INTO products VALUES(155,'Office Chair Ergonomic',37,12,53.67,83.86,23,0,0.52);`);
+  db.run(`INSERT INTO products VALUES(156,'Standing Desk',21,12,27.35,38.52,34,0,18.4);`);
+  db.run(`INSERT INTO products VALUES(157,'Bookshelf 5-Tier',6,12,46.88,90.16,32,0,10.53);`);
+  db.run(`INSERT INTO products VALUES(158,'Filing Cabinet',26,12,115.34,174.75,19,0,3.45);`);
+  db.run(`INSERT INTO products VALUES(159,'Conference Table',33,12,79.66,128.48,17,0,7.05);`);
+  db.run(`INSERT INTO products VALUES(160,'Reception Desk',47,12,122.78,191.85,14,0,3.01);`);
+  db.run(`INSERT INTO products VALUES(161,'Monitor Arm Dual',13,12,20.58,38.83,46,0,19.03);`);
+  db.run(`INSERT INTO products VALUES(162,'Desk Lamp LED',41,12,67.9,101.35,42,0,18.49);`);
+  db.run(`INSERT INTO products VALUES(163,'Whiteboard Large',37,12,93.87,130.38,25,0,12.58);`);
+  db.run(`INSERT INTO products VALUES(164,'Storage Cabinet',10,12,54.45,90.75,45,0,5.57);`);
+  db.run(`INSERT INTO products VALUES(165,'Meeting Chair',4,12,38.29,73.63,34,0,1.23);`);
+  db.run(`INSERT INTO products VALUES(166,'Locker Unit',19,12,13.77,19.96,10,0,10.19);`);
+  db.run(`INSERT INTO products VALUES(167,'Drafting Table',30,12,83.89,118.16,7,0,16.22);`);
+  db.run(`INSERT INTO products VALUES(168,'Room Divider',42,12,26.28,41.71,37,0,1.33);`);
+  db.run(`INSERT INTO products VALUES(169,'LEGO City Set',7,13,110.94,163.14,50,0,12.96);`);
+  db.run(`INSERT INTO products VALUES(170,'Remote Car Pro',3,13,31.99,53.31,33,0,12.24);`);
+  db.run(`INSERT INTO products VALUES(171,'Board Game Classic',24,13,43.52,77.71,31,0,13.61);`);
+  db.run(`INSERT INTO products VALUES(172,'Puzzle 1000 Piece',4,13,101.7,158.9,9,0,11.2);`);
+  db.run(`INSERT INTO products VALUES(173,'Action Figure Pack',25,13,39.87,60.41,47,0,12.09);`);
+  db.run(`INSERT INTO products VALUES(174,'Dollhouse Deluxe',10,13,44.11,70.01,14,0,6.27);`);
+  db.run(`INSERT INTO products VALUES(175,'Toy Train Set',42,13,83.31,141.2,43,0,1.79);`);
+  db.run(`INSERT INTO products VALUES(176,'Science Kit Junior',36,13,52.56,78.45,13,0,16.6);`);
+  db.run(`INSERT INTO products VALUES(177,'Art Supplies Box',48,13,139.61,199.45,10,0,8.53);`);
+  db.run(`INSERT INTO products VALUES(178,'Plush Bear Large',24,13,4.87,8.55,18,0,15.35);`);
+  db.run(`INSERT INTO products VALUES(179,'Blocks Mega Set',13,13,26.07,49.18,9,0,15.78);`);
+  db.run(`INSERT INTO products VALUES(180,'Card Game Family',33,13,105.62,155.32,38,1,6.8);`);
+  db.run(`INSERT INTO products VALUES(181,'Drone Mini',50,13,79.08,125.52,14,0,16.64);`);
+  db.run(`INSERT INTO products VALUES(182,'Robot Building Kit',50,13,88.77,126.82,33,0,7.35);`);
+  db.run(`INSERT INTO products VALUES(183,'Python Programming',47,14,30.79,51.32,23,0,15.7);`);
+  db.run(`INSERT INTO products VALUES(184,'Data Science Guide',15,14,62.2,109.13,35,0,3.96);`);
+  db.run(`INSERT INTO products VALUES(185,'Business Analytics',44,14,136.58,189.69,34,0,15.58);`);
+  db.run(`INSERT INTO products VALUES(186,'SQL Mastery Course',33,14,76.57,107.85,17,0,2.85);`);
+  db.run(`INSERT INTO products VALUES(187,'Machine Learning',17,14,9.26,15.18,28,0,2.14);`);
+  db.run(`INSERT INTO products VALUES(188,'Project Management',34,14,95.75,170.98,15,0,18.12);`);
+  db.run(`INSERT INTO products VALUES(189,'Marketing Strategies',10,14,86.87,167.05,19,0,17.7);`);
+  db.run(`INSERT INTO products VALUES(190,'Finance Fundamentals',2,14,50.68,85.9,28,0,19.89);`);
+  db.run(`INSERT INTO products VALUES(191,'Leadership Skills',24,14,27.81,48.79,11,0,13.03);`);
+  db.run(`INSERT INTO products VALUES(192,'Excel Advanced',10,14,17.82,31.83,35,0,2.86);`);
+  db.run(`INSERT INTO products VALUES(193,'Statistics Basics',46,14,61.75,96.48,10,1,4.39);`);
+  db.run(`INSERT INTO products VALUES(194,'R Programming',10,14,73.93,112.02,38,0,15.55);`);
+  db.run(`INSERT INTO products VALUES(195,'JavaScript Complete',16,14,32.5,63.72,31,0,12.49);`);
+  db.run(`INSERT INTO products VALUES(196,'Cloud Computing',5,14,18.63,26.62,43,0,12.68);`);
+  db.run(`INSERT INTO products VALUES(197,'Vitamin C 1000mg',37,15,27.66,52.18,32,1,7.12);`);
+  db.run(`INSERT INTO products VALUES(198,'Omega-3 Fish Oil',37,15,56.05,86.23,10,0,7.28);`);
+  db.run(`INSERT INTO products VALUES(199,'Protein Powder Vanilla',34,15,74.44,111.1,37,0,7.87);`);
+  db.run(`INSERT INTO products VALUES(200,'Multivitamin Daily',31,15,7.96,13.49,28,0,0.42);`);
+  db.run(`INSERT INTO products VALUES(201,'Collagen Peptides',5,15,47.68,72.24,45,0,11.68);`);
+  db.run(`INSERT INTO products VALUES(202,'Probiotic Capsules',49,15,35.62,69.84,39,0,12.89);`);
+  db.run(`INSERT INTO products VALUES(203,'Shampoo Argan Oil',50,15,99.73,138.51,35,0,16.25);`);
+  db.run(`INSERT INTO products VALUES(204,'Body Lotion SPF30',5,15,102.69,144.63,7,0,0.97);`);
+  db.run(`INSERT INTO products VALUES(205,'Face Cream Anti-Age',13,15,101.31,177.73,24,0,19.78);`);
+  db.run(`INSERT INTO products VALUES(206,'Toothpaste Whitening',35,15,49.63,97.31,46,0,7.2);`);
+  db.run(`INSERT INTO products VALUES(207,'Sunscreen SPF50',50,15,9.16,14.32,22,0,7.42);`);
+  db.run(`INSERT INTO products VALUES(208,'Hand Sanitizer 500ml',26,15,104.96,149.95,29,0,3.82);`);
+  db.run(`INSERT INTO products VALUES(209,'Melatonin Sleep Aid',45,15,71.41,102.02,38,0,1.74);`);
+  db.run(`INSERT INTO products VALUES(210,'Zinc Supplement',28,15,12.85,20.39,16,0,6.49);`);
+  db.run(`INSERT INTO employees VALUES(1,'Lee','David','Inside Sales Rep','david.lee@northwind.com','(206) 555-5843','2014-08-20','1992-03-23','Austin',NULL,93192.88,0.03,"5876",7);`);
+  db.run(`INSERT INTO employees VALUES(2,'Green','Steven','Assistant Manager','steven.green@northwind.com','(206) 555-1939','2011-11-21','1990-06-17','Philadelphia',NULL,187587.94,NULL,"2439",8);`);
+  db.run(`INSERT INTO employees VALUES(3,'Rodriguez','Robert','CTO','robert.rodriguez@northwind.com','(206) 555-4866','2022-11-12','1988-07-19','Los Angeles',1,62089.79,NULL,"7471",6);`);
+  db.run(`INSERT INTO employees VALUES(4,'Carter','Sarah','CTO','sarah.carter@northwind.com','(206) 555-3255','2018-06-13','1985-11-09','Seattle',1,42068.39,NULL,"3148",7);`);
+  db.run(`INSERT INTO employees VALUES(5,'Davis','Ashley','Customer Service Rep','ashley.davis@northwind.com','(206) 555-5264','2021-08-07','1983-12-16','San Antonio',2,59309.36,NULL,"1313",8);`);
+  db.run(`INSERT INTO employees VALUES(6,'Baker','David','Specialist','david.baker@northwind.com','(206) 555-6236','2020-06-23','1969-09-18','Boston',2,171663.84,NULL,"2952",4);`);
+  db.run(`INSERT INTO employees VALUES(7,'Gonzalez','Joseph','Assistant Manager','joseph.gonzalez@northwind.com','(206) 555-3275','2013-08-01','1988-09-19','Portland',3,164174.89,NULL,NULL,2);`);
+  db.run(`INSERT INTO employees VALUES(8,'Martin','William','Business Analyst','william.martin@northwind.com','(206) 555-8842','2018-07-25','1991-10-03','Phoenix',3,138847.16,NULL,"7472",6);`);
+  db.run(`INSERT INTO employees VALUES(9,'Roberts','Charles','Purchasing Agent','charles.roberts@northwind.com','(206) 555-3981','2022-03-14','1997-01-27','Houston',4,62023.43,NULL,NULL,4);`);
+  db.run(`INSERT INTO employees VALUES(10,'King','Jennifer','Executive','jennifer.king@northwind.com','(206) 555-5653','2023-02-09','1977-11-18','Denver',4,136128.51,NULL,NULL,3);`);
+  db.run(`INSERT INTO employees VALUES(11,'Nguyen','Donna','VP Marketing','donna.nguyen@northwind.com','(206) 555-3804','2020-10-24','1986-10-02','New York',5,45137.5,NULL,"9549",4);`);
+  db.run(`INSERT INTO employees VALUES(12,'Torres','Amy','Data Analyst','amy.torres@northwind.com','(206) 555-1496','2017-11-18','1983-11-10','Minneapolis',5,164336.04,NULL,"6753",2);`);
+  db.run(`INSERT INTO employees VALUES(13,'Brown','Rebecca','Sales Manager','rebecca.brown@northwind.com','(206) 555-8202','2016-08-15','1978-06-20','Phoenix',6,173253.16,0.06,"5758",3);`);
+  db.run(`INSERT INTO employees VALUES(14,'White','Kathleen','Purchasing Manager','kathleen.white@northwind.com','(206) 555-2739','2015-04-15','1972-05-15','Seattle',6,53199.43,NULL,"4854",7);`);
+  db.run(`INSERT INTO employees VALUES(15,'Hernandez','Mark','Coordinator','mark.hernandez@northwind.com','(206) 555-6364','2019-12-11','1977-03-16','Atlanta',7,116305.27,NULL,"5155",2);`);
+  db.run(`INSERT INTO employees VALUES(16,'Allen','Elizabeth','Operations Manager','elizabeth.allen@northwind.com','(206) 555-4944','2013-10-12','1968-01-10','Minneapolis',7,176527.3,NULL,"7810",1);`);
+  db.run(`INSERT INTO employees VALUES(17,'Ramirez','Richard','VP Marketing','richard.ramirez@northwind.com','(206) 555-5333','2021-06-25','1990-06-02','Miami',8,127534.22,NULL,"3289",5);`);
+  db.run(`INSERT INTO employees VALUES(18,'Harris','William','Purchasing Manager','william.harris@northwind.com','(206) 555-8378','2022-09-09','1972-03-04','Miami',8,162798.86,NULL,"5655",6);`);
+  db.run(`INSERT INTO employees VALUES(19,'Martinez','Kathleen','Sales Representative','kathleen.martinez@northwind.com','(206) 555-9341','2016-09-02','1967-01-05','Las Vegas',4,119535.24,0.04,NULL,6);`);
+  db.run(`INSERT INTO employees VALUES(20,'Sanchez','Christopher','Regional Director','christopher.sanchez@northwind.com','(206) 555-5902','2019-06-17','1997-09-16','Nashville',3,112558.14,NULL,"372",2);`);
+  db.run(`INSERT INTO employees VALUES(21,'Nguyen','Susan','Marketing Manager','susan.nguyen@northwind.com','(206) 555-1436','2019-08-09','1979-12-02','Nashville',4,64770.39,NULL,NULL,4);`);
+  db.run(`INSERT INTO employees VALUES(22,'Torres','Robert','Outside Sales Rep','robert.torres@northwind.com','(206) 555-2800','2013-01-15','1985-07-05','Dallas',2,102429.25,0.12,"7826",1);`);
+  db.run(`INSERT INTO employees VALUES(23,'Rodriguez','Sharon','Purchasing Manager','sharon.rodriguez@northwind.com','(206) 555-4397','2018-06-22','1995-09-13','Las Vegas',2,110167.17,NULL,"8834",6);`);
+  db.run(`INSERT INTO employees VALUES(24,'Roberts','Stephanie','Specialist','stephanie.roberts@northwind.com','(206) 555-5331','2019-08-07','1980-05-18','Boston',2,185813.23,NULL,"4976",4);`);
+  db.run(`INSERT INTO employees VALUES(25,'Rivera','Rebecca','Logistics Coordinator','rebecca.rivera@northwind.com','(206) 555-6194','2017-06-18','1982-05-04','Nashville',5,97611.99,NULL,"6564",3);`);
+  db.run(`INSERT INTO employees VALUES(26,'Williams','Andrew','Marketing Manager','andrew.williams@northwind.com','(206) 555-2294','2015-08-21','1981-12-16','San Antonio',2,167988.42,NULL,"4542",5);`);
+  db.run(`INSERT INTO employees VALUES(27,'Miller','Charles','Regional Director','charles.miller@northwind.com','(206) 555-4920','2013-01-22','1979-11-08','Los Angeles',1,102888.31,NULL,NULL,3);`);
+  db.run(`INSERT INTO employees VALUES(28,'Scott','James','Supervisor','james.scott@northwind.com','(206) 555-3587','2016-11-16','1995-11-07','Boston',3,82810.21,NULL,"1069",2);`);
+  db.run(`INSERT INTO employees VALUES(29,'Torres','Melissa','Account Manager','melissa.torres@northwind.com','(206) 555-9767','2021-12-28','1967-03-14','Philadelphia',1,194555.97,0.07,NULL,5);`);
+  db.run(`INSERT INTO employees VALUES(30,'Smith','Robert','Marketing Manager','robert.smith@northwind.com','(206) 555-2758','2015-05-15','1996-03-28','Atlanta',4,80835.42,NULL,"1945",8);`);
+  db.run(`INSERT INTO employees VALUES(31,'Taylor','Melissa','Outside Sales Rep','melissa.taylor@northwind.com','(206) 555-4050','2010-12-11','1983-10-22','San Antonio',2,133919.86,0.1,"6743",6);`);
+  db.run(`INSERT INTO employees VALUES(32,'Sanchez','David','Inside Sales Rep','david.sanchez@northwind.com','(206) 555-2562','2012-03-16','1985-04-01','Denver',4,74976.84,0.12,"5500",1);`);
+  db.run(`INSERT INTO employees VALUES(33,'Adams','Paul','Project Manager','paul.adams@northwind.com','(206) 555-4871','2010-11-04','1994-05-06','Miami',5,182927.64,NULL,"5195",5);`);
+  db.run(`INSERT INTO employees VALUES(34,'Flores','Linda','Account Manager','linda.flores@northwind.com','(206) 555-4590','2012-08-05','1994-12-20','Portland',4,148204.69,0.14,"8906",4);`);
+  db.run(`INSERT INTO employees VALUES(35,'Thomas','Kathleen','Inside Sales Rep','kathleen.thomas@northwind.com','(206) 555-2341','2018-08-17','1988-02-19','Houston',1,168117.53,0.14,"3412",3);`);
+  db.run(`INSERT INTO employees VALUES(36,'Lee','Christopher','Specialist','christopher.lee@northwind.com','(206) 555-9525','2017-02-22','1978-12-19','Minneapolis',1,179125.63,NULL,"7398",8);`);
+  db.run(`INSERT INTO employees VALUES(37,'Allen','Charles','Data Analyst','charles.allen@northwind.com','(206) 555-8484','2019-01-18','1994-11-26','Boston',1,100163.95,NULL,"149",2);`);
+  db.run(`INSERT INTO employees VALUES(38,'Ramirez','Robert','Project Manager','robert.ramirez@northwind.com','(206) 555-2044','2018-01-03','1995-01-10','Dallas',2,158728.61,NULL,"6987",7);`);
+  db.run(`INSERT INTO employees VALUES(39,'Harris','Sarah','Business Analyst','sarah.harris@northwind.com','(206) 555-2314','2020-11-28','1973-11-28','Portland',1,66020.36,NULL,"8902",3);`);
+  db.run(`INSERT INTO employees VALUES(40,'Anderson','Laura','Coordinator','laura.anderson@northwind.com','(206) 555-1056','2022-01-10','1994-11-24','Detroit',4,121513.58,NULL,NULL,6);`);
+  db.run(`INSERT INTO employees VALUES(41,'Moore','Thomas','Sales Representative','thomas.moore@northwind.com','(206) 555-2848','2010-11-14','1966-04-07','Chicago',1,131249.23,0.08,NULL,1);`);
+  db.run(`INSERT INTO employees VALUES(42,'Lewis','Elizabeth','Account Manager','elizabeth.lewis@northwind.com','(206) 555-9843','2013-01-05','1997-05-08','Nashville',3,128663.55,0.12,NULL,3);`);
+  db.run(`INSERT INTO employees VALUES(43,'King','Deborah','Account Manager','deborah.king@northwind.com','(206) 555-7775','2014-05-02','1976-11-22','Dallas',5,115812.46,0.15,"6344",6);`);
+  db.run(`INSERT INTO employees VALUES(44,'Clark','Rebecca','Data Analyst','rebecca.clark@northwind.com','(206) 555-3444','2014-07-06','1995-04-28','Seattle',3,172633.97,NULL,"2465",1);`);
+  db.run(`INSERT INTO employees VALUES(45,'Clark','Ashley','Data Analyst','ashley.clark@northwind.com','(206) 555-9683','2012-07-08','1981-04-11','Chicago',4,170999.94,NULL,"1614",4);`);
+  db.run(`INSERT INTO employees VALUES(46,'Moore','Michael','Business Analyst','michael.moore@northwind.com','(206) 555-1647','2023-02-07','1978-08-07','Las Vegas',3,188252.1,NULL,NULL,4);`);
+  db.run(`INSERT INTO employees VALUES(47,'Davis','Cynthia','Consultant','cynthia.davis@northwind.com','(206) 555-8846','2013-12-20','1978-07-08','Detroit',3,159755.68,NULL,"6336",6);`);
+  db.run(`INSERT INTO employees VALUES(48,'Taylor','Kenneth','Project Manager','kenneth.taylor@northwind.com','(206) 555-9401','2017-08-04','1995-06-07','Portland',3,102987.04,NULL,"9316",3);`);
+  db.run(`INSERT INTO employees VALUES(49,'Taylor','John','Purchasing Agent','john.taylor@northwind.com','(206) 555-7841','2014-03-07','1986-04-13','Nashville',2,116390.33,NULL,"5630",8);`);
+  db.run(`INSERT INTO employees VALUES(50,'Adams','Laura','Consultant','laura.adams@northwind.com','(206) 555-9037','2017-03-24','1987-03-05','Detroit',4,66895.5,NULL,"8982",1);`);
+  db.run(`INSERT INTO employee_territories VALUES(1,3);`);
+  db.run(`INSERT INTO employee_territories VALUES(1,5);`);
+  db.run(`INSERT INTO employee_territories VALUES(1,43);`);
+  db.run(`INSERT INTO employee_territories VALUES(1,4);`);
+  db.run(`INSERT INTO employee_territories VALUES(1,49);`);
+  db.run(`INSERT INTO employee_territories VALUES(2,27);`);
+  db.run(`INSERT INTO employee_territories VALUES(3,41);`);
+  db.run(`INSERT INTO employee_territories VALUES(3,15);`);
+  db.run(`INSERT INTO employee_territories VALUES(4,46);`);
+  db.run(`INSERT INTO employee_territories VALUES(5,1);`);
+  db.run(`INSERT INTO employee_territories VALUES(5,14);`);
+  db.run(`INSERT INTO employee_territories VALUES(6,30);`);
+  db.run(`INSERT INTO employee_territories VALUES(6,24);`);
+  db.run(`INSERT INTO employee_territories VALUES(6,4);`);
+  db.run(`INSERT INTO employee_territories VALUES(6,40);`);
+  db.run(`INSERT INTO employee_territories VALUES(6,41);`);
+  db.run(`INSERT INTO employee_territories VALUES(7,31);`);
+  db.run(`INSERT INTO employee_territories VALUES(7,43);`);
+  db.run(`INSERT INTO employee_territories VALUES(7,32);`);
+  db.run(`INSERT INTO employee_territories VALUES(7,2);`);
+  db.run(`INSERT INTO employee_territories VALUES(7,1);`);
+  db.run(`INSERT INTO employee_territories VALUES(8,36);`);
+  db.run(`INSERT INTO employee_territories VALUES(8,27);`);
+  db.run(`INSERT INTO employee_territories VALUES(8,1);`);
+  db.run(`INSERT INTO employee_territories VALUES(8,2);`);
+  db.run(`INSERT INTO employee_territories VALUES(8,34);`);
+  db.run(`INSERT INTO employee_territories VALUES(9,35);`);
+  db.run(`INSERT INTO employee_territories VALUES(9,19);`);
+  db.run(`INSERT INTO employee_territories VALUES(9,2);`);
+  db.run(`INSERT INTO employee_territories VALUES(10,45);`);
+  db.run(`INSERT INTO employee_territories VALUES(10,44);`);
+  db.run(`INSERT INTO employee_territories VALUES(10,28);`);
+  db.run(`INSERT INTO employee_territories VALUES(10,12);`);
+  db.run(`INSERT INTO employee_territories VALUES(10,7);`);
+  db.run(`INSERT INTO employee_territories VALUES(11,34);`);
+  db.run(`INSERT INTO employee_territories VALUES(12,16);`);
+  db.run(`INSERT INTO employee_territories VALUES(12,13);`);
+  db.run(`INSERT INTO employee_territories VALUES(13,34);`);
+  db.run(`INSERT INTO employee_territories VALUES(13,17);`);
+  db.run(`INSERT INTO employee_territories VALUES(13,23);`);
+  db.run(`INSERT INTO employee_territories VALUES(13,18);`);
+  db.run(`INSERT INTO employee_territories VALUES(13,26);`);
+  db.run(`INSERT INTO employee_territories VALUES(14,24);`);
+  db.run(`INSERT INTO employee_territories VALUES(15,30);`);
+  db.run(`INSERT INTO employee_territories VALUES(15,37);`);
+  db.run(`INSERT INTO employee_territories VALUES(15,16);`);
+  db.run(`INSERT INTO employee_territories VALUES(15,45);`);
+  db.run(`INSERT INTO employee_territories VALUES(16,20);`);
+  db.run(`INSERT INTO employee_territories VALUES(16,44);`);
+  db.run(`INSERT INTO employee_territories VALUES(17,42);`);
+  db.run(`INSERT INTO employee_territories VALUES(18,6);`);
+  db.run(`INSERT INTO employee_territories VALUES(19,25);`);
+  db.run(`INSERT INTO employee_territories VALUES(19,36);`);
+  db.run(`INSERT INTO employee_territories VALUES(19,31);`);
+  db.run(`INSERT INTO employee_territories VALUES(19,4);`);
+  db.run(`INSERT INTO employee_territories VALUES(20,45);`);
+  db.run(`INSERT INTO employee_territories VALUES(21,6);`);
+  db.run(`INSERT INTO employee_territories VALUES(21,32);`);
+  db.run(`INSERT INTO employee_territories VALUES(22,42);`);
+  db.run(`INSERT INTO employee_territories VALUES(22,22);`);
+  db.run(`INSERT INTO employee_territories VALUES(22,37);`);
+  db.run(`INSERT INTO employee_territories VALUES(22,7);`);
+  db.run(`INSERT INTO employee_territories VALUES(23,3);`);
+  db.run(`INSERT INTO employee_territories VALUES(23,15);`);
+  db.run(`INSERT INTO employee_territories VALUES(23,14);`);
+  db.run(`INSERT INTO employee_territories VALUES(23,45);`);
+  db.run(`INSERT INTO employee_territories VALUES(23,37);`);
+  db.run(`INSERT INTO employee_territories VALUES(24,18);`);
+  db.run(`INSERT INTO employee_territories VALUES(24,3);`);
+  db.run(`INSERT INTO employee_territories VALUES(24,5);`);
+  db.run(`INSERT INTO employee_territories VALUES(24,44);`);
+  db.run(`INSERT INTO employee_territories VALUES(25,35);`);
+  db.run(`INSERT INTO employee_territories VALUES(25,37);`);
+  db.run(`INSERT INTO employee_territories VALUES(25,43);`);
+  db.run(`INSERT INTO employee_territories VALUES(26,12);`);
+  db.run(`INSERT INTO employee_territories VALUES(27,2);`);
+  db.run(`INSERT INTO employee_territories VALUES(27,14);`);
+  db.run(`INSERT INTO employee_territories VALUES(27,38);`);
+  db.run(`INSERT INTO employee_territories VALUES(28,49);`);
+  db.run(`INSERT INTO employee_territories VALUES(28,46);`);
+  db.run(`INSERT INTO employee_territories VALUES(29,5);`);
+  db.run(`INSERT INTO employee_territories VALUES(29,20);`);
+  db.run(`INSERT INTO employee_territories VALUES(29,11);`);
+  db.run(`INSERT INTO employee_territories VALUES(29,37);`);
+  db.run(`INSERT INTO employee_territories VALUES(30,37);`);
+  db.run(`INSERT INTO employee_territories VALUES(30,25);`);
+  db.run(`INSERT INTO employee_territories VALUES(31,22);`);
+  db.run(`INSERT INTO employee_territories VALUES(31,25);`);
+  db.run(`INSERT INTO employee_territories VALUES(31,49);`);
+  db.run(`INSERT INTO employee_territories VALUES(31,48);`);
+  db.run(`INSERT INTO employee_territories VALUES(31,9);`);
+  db.run(`INSERT INTO employee_territories VALUES(32,33);`);
+  db.run(`INSERT INTO employee_territories VALUES(33,4);`);
+  db.run(`INSERT INTO employee_territories VALUES(33,7);`);
+  db.run(`INSERT INTO employee_territories VALUES(33,28);`);
+  db.run(`INSERT INTO employee_territories VALUES(34,5);`);
+  db.run(`INSERT INTO employee_territories VALUES(34,22);`);
+  db.run(`INSERT INTO employee_territories VALUES(35,50);`);
+  db.run(`INSERT INTO employee_territories VALUES(35,40);`);
+  db.run(`INSERT INTO employee_territories VALUES(35,39);`);
+  db.run(`INSERT INTO employee_territories VALUES(35,26);`);
+  db.run(`INSERT INTO employee_territories VALUES(35,21);`);
+  db.run(`INSERT INTO employee_territories VALUES(36,41);`);
+  db.run(`INSERT INTO employee_territories VALUES(37,29);`);
+  db.run(`INSERT INTO employee_territories VALUES(37,32);`);
+  db.run(`INSERT INTO employee_territories VALUES(37,15);`);
+  db.run(`INSERT INTO employee_territories VALUES(38,36);`);
+  db.run(`INSERT INTO employee_territories VALUES(38,25);`);
+  db.run(`INSERT INTO employee_territories VALUES(38,28);`);
+  db.run(`INSERT INTO employee_territories VALUES(39,44);`);
+  db.run(`INSERT INTO employee_territories VALUES(39,38);`);
+  db.run(`INSERT INTO employee_territories VALUES(40,6);`);
+  db.run(`INSERT INTO employee_territories VALUES(40,50);`);
+  db.run(`INSERT INTO employee_territories VALUES(40,40);`);
+  db.run(`INSERT INTO employee_territories VALUES(40,19);`);
+  db.run(`INSERT INTO employee_territories VALUES(41,46);`);
+  db.run(`INSERT INTO employee_territories VALUES(41,5);`);
+  db.run(`INSERT INTO employee_territories VALUES(42,18);`);
+  db.run(`INSERT INTO employee_territories VALUES(43,25);`);
+  db.run(`INSERT INTO employee_territories VALUES(43,46);`);
+  db.run(`INSERT INTO employee_territories VALUES(44,48);`);
+  db.run(`INSERT INTO employee_territories VALUES(44,25);`);
+  db.run(`INSERT INTO employee_territories VALUES(45,24);`);
+  db.run(`INSERT INTO employee_territories VALUES(45,7);`);
+  db.run(`INSERT INTO employee_territories VALUES(45,6);`);
+  db.run(`INSERT INTO employee_territories VALUES(46,20);`);
+  db.run(`INSERT INTO employee_territories VALUES(47,24);`);
+  db.run(`INSERT INTO employee_territories VALUES(47,49);`);
+  db.run(`INSERT INTO employee_territories VALUES(47,18);`);
+  db.run(`INSERT INTO employee_territories VALUES(47,7);`);
+  db.run(`INSERT INTO employee_territories VALUES(48,6);`);
+  db.run(`INSERT INTO employee_territories VALUES(48,12);`);
+  db.run(`INSERT INTO employee_territories VALUES(49,29);`);
+  db.run(`INSERT INTO employee_territories VALUES(49,36);`);
+  db.run(`INSERT INTO employee_territories VALUES(49,33);`);
+  db.run(`INSERT INTO employee_territories VALUES(49,27);`);
+  db.run(`INSERT INTO employee_territories VALUES(50,2);`);
+  db.run(`INSERT INTO shippers VALUES(1,'FedEx Ground','(800) 463-3339',4.5);`);
+  db.run(`INSERT INTO shippers VALUES(2,'UPS Standard','(800) 742-5877',4.3);`);
+  db.run(`INSERT INTO shippers VALUES(3,'DHL Express','(800) 225-5345',4.6);`);
+  db.run(`INSERT INTO shippers VALUES(4,'USPS Priority Mail','(800) 275-8777',3.9);`);
+  db.run(`INSERT INTO shippers VALUES(5,'Amazon Logistics','(888) 280-4331',4.7);`);
+  db.run(`INSERT INTO shippers VALUES(6,'OnTrac','(800) 334-5000',3.8);`);
+  db.run(`INSERT INTO shippers VALUES(7,'LSO','(800) 800-8984',3.7);`);
+  db.run(`INSERT INTO shippers VALUES(8,'Spee-Dee Delivery','(800) 247-6111',4.0);`);
+  db.run(`INSERT INTO shippers VALUES(9,'LaserShip','(800) 527-3794',3.6);`);
+  db.run(`INSERT INTO shippers VALUES(10,'Lone Star Overnight','(800) 580-3646',4.2);`);
+  db.run(`INSERT INTO departments VALUES(1,'Sales','Responsible for customer acquisition and revenue generation',1,867118.01);`);
+  db.run(`INSERT INTO departments VALUES(2,'Marketing','Brand management and demand generation',32,1999008.25);`);
+  db.run(`INSERT INTO departments VALUES(3,'Operations','Supply chain and logistics management',6,1543387.55);`);
+  db.run(`INSERT INTO departments VALUES(4,'Finance','Financial planning and accounting',38,1402462.81);`);
+  db.run(`INSERT INTO departments VALUES(5,'Human Resources','Talent acquisition and employee management',10,248478.21);`);
+  db.run(`INSERT INTO departments VALUES(6,'IT','Information technology and systems',44,276933.04);`);
+  db.run(`INSERT INTO departments VALUES(7,'Customer Service','Customer support and satisfaction',32,1441087.24);`);
+  db.run(`INSERT INTO departments VALUES(8,'Product Management','Product development and roadmap',20,901052.29);`);
+}
+
+const PP=[134.36,83.47,137.08,64.26,91.22,38.09,164.59,9.76,85.82,52.58,156.79,183.91,121.11,88.21,92.76,127.22,67.34,142.75,45.33,117.26,109.95,89.99,37.18,120.42,40.44,176.53,151.06,12.85,51.52,54.97,156.67,117.28,120.46,122.08,134.0,25.58,89.92,156.06,59.39,10.6,71.37,189.87,97.84,83.86,72.03,64.79,139.58,107.3,39.99,112.9,175.18,54.23,117.52,21.61,49.01,198.06,189.78,38.89,61.8,139.04,87.9,18.92,90.63,110.3,122.72,119.49,152.47,90.0,135.68,189.31,68.04,133.24,152.51,90.43,143.41,94.98,142.56,33.21,58.87,165.01,100.48,110.97,116.5,183.12,101.59,175.47,84.95,71.02,172.57,175.11,199.5,175.15,160.25,115.36,125.84,94.62,19.4,53.77,51.26,195.7,150.21,156.27,137.16,181.16,147.81,30.77,55.11,161.83,146.22,56.57,79.3,125.81,128.9,13.84,31.45,86.73,125.05,91.72,180.83,190.06,194.36,45.02,69.07,197.57,7.9,15.22,156.71,13.46,16.86,182.39,58.63,108.46,171.29,178.18,88.22,18.09,163.3,28.84,15.03,35.17,153.71,124.65,57.15,6.19,128.47,35.69,177.25,134.08,27.19,135.09,63.78,6.51,102.55,90.06,83.86,38.52,90.16,174.75,128.48,191.85,38.83,101.35,130.38,90.75,73.63,19.96,118.16,41.71,163.14,53.31,77.71,158.9,60.41,70.01,141.2,78.45,199.45,8.55,49.18,155.32,125.52,126.82,51.32,109.13,189.69,107.85,15.18,170.98,167.05,85.9,48.79,31.83,96.48,112.02,63.72,26.62,52.18,86.23,111.1,13.49,72.24,69.84,138.51,144.63,177.73,97.31,14.32,149.95,102.02,20.39];
+
+function genDynamic(){
+  const r=()=>Math.random();
+  const ri=(n)=>Math.floor(r()*n)+1;
+  const rc=(a)=>a[Math.floor(r()*a.length)];
+  const mn=(v,p=15)=>r()*100<p?null:v;
+  const rf=(a,b)=>parseFloat((a+r()*(b-a)).toFixed(2));
+  const rdate=(y1,y2)=>{const y=y1+Math.floor(r()*(y2-y1+1));const m=String(1+Math.floor(r()*12)).padStart(2,'0');const d=String(1+Math.floor(r()*28)).padStart(2,'0');return `${y}-${m}-${d}`;};
+
+  const fnames=['James','John','Robert','Michael','William','David','Richard','Joseph','Charles','Thomas','Christopher','Daniel','Matthew','Anthony','Donald','Mark','Paul','Steven','Andrew','Kenneth','Mary','Patricia','Jennifer','Linda','Barbara','Elizabeth','Susan','Jessica','Sarah','Karen','Lisa','Nancy','Betty','Margaret','Sandra','Ashley','Emily','Donna','Michelle','Carol'];
+  const lnames=['Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Rodriguez','Martinez','Hernandez','Lopez','Gonzalez','Wilson','Anderson','Thomas','Taylor','Moore','Jackson','Martin','Lee','Perez','Thompson','White','Harris','Sanchez','Clark','Ramirez','Lewis','Robinson'];
+  const cities=[['New York','NY','USA'],['Los Angeles','CA','USA'],['Chicago','IL','USA'],['Houston','TX','USA'],['Phoenix','AZ','USA'],['Seattle','WA','USA'],['Denver','CO','USA'],['Boston','MA','USA'],['Miami','FL','USA'],['Portland','OR','USA'],['London',null,'UK'],['Paris',null,'France'],['Berlin',null,'Germany'],['Tokyo',null,'Japan'],['Sydney',null,'Australia'],['Toronto',null,'Canada'],['Madrid',null,'Spain'],['Rome',null,'Italy'],['Amsterdam',null,'Netherlands'],['Stockholm',null,'Sweden'],['Singapore',null,'Singapore'],['Dubai',null,'UAE'],['Mumbai',null,'India'],['Sao Paulo',null,'Brazil'],['Mexico City',null,'Mexico']];
+  const titles=['CEO','VP Sales','Sales Manager','Sales Representative','Account Manager','Customer Service Rep','Marketing Manager','Product Manager','Business Analyst','Operations Manager','Purchasing Manager','Director','Coordinator','Consultant'];
+  const ostats=['Shipped','Shipped','Shipped','Shipped','Delivered','Delivered','Processing','Cancelled','On Hold','Backordered'];
+  const pmts=['Credit Card','Credit Card','Credit Card','Debit Card','PayPal','Bank Transfer','Check'];
+  const notes=[null,null,null,null,'Rush order','Handle with care','Gift wrap','Fragile','Standard delivery','Express requested'];
+  const rreasons=['Defective product','Wrong item shipped','Not as described','Changed mind','Damaged in shipping','Quality issue','Size/fit issue','Duplicate order'];
+  const rstats=['Approved','Approved','Pending','Rejected','Processing'];
+  const rtexts=[null,null,null,'Great product!','Highly recommended','Good value','Excellent quality','Very satisfied','Could be better','Not what I expected','Will buy again','Worth every penny'];
+  const whs=['WH-Seattle','WH-New-York','WH-Chicago'];
+  const smethods=['Ground','Express','Overnight','2-Day','Standard','Economy'];
+  const pnames=['Summer Sale','Winter Deal','Flash Sale','Holiday Special','Member Exclusive','Clearance Event','New Launch','Anniversary Deal'];
+  const cotypes=['Corp','Inc','Ltd','LLC','Co','Group','Partners','Associates'];
+
+  // CUSTOMERS 800
+  const cs=db.prepare('INSERT INTO customers VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+  for(let i=1;i<=800;i++){
+    const fn=rc(fnames),ln=rc(lnames),ct=rc(cities);
+    const co=r()>0.25?ln+' '+rc(cotypes):mn(fn+'&Co',15);
+    const dom=rc(['gmail','yahoo','outlook','company','business']);
+    const email=fn.toLowerCase()+'.'+ln.toLowerCase()+Math.floor(r()*99)+'@'+dom+'.com';
+    const ph='('+String(200+Math.floor(r()*800))+') '+String(200+Math.floor(r()*800))+'-'+String(1000+Math.floor(r()*9000));
+    const fax=mn('('+String(200+Math.floor(r()*800))+') '+String(200+Math.floor(r()*800))+'-'+String(1000+Math.floor(r()*9000)),55);
+    const zip=ct[2]==='USA'?mn(String(10000+Math.floor(r()*90000)),25):null;
+    const web=mn('www.'+ln.toLowerCase()+rc(['corp','inc','co'])+'.com',55);
+    const cl=rc([5000,10000,25000,50000,100000,150000])*rf(0.8,1.2);
+    cs.run([i,co,ln,fn,rc(titles),email,ph,fax,ct[0],ct[1],ct[2],zip,web,cl,rdate(2010,2022)]);
+  }cs.free();
+
+  // ORDERS 5000
+  const os=db.prepare('INSERT INTO orders VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+  for(let i=1;i<=5000;i++){
+    const yr=rc([2019,2019,2020,2020,2021,2021,2022,2022,2023,2023,2024,2024]);
+    const od=rdate(yr,yr);
+    const odp=new Date(od);
+    const rdp=new Date(odp);rdp.setDate(rdp.getDate()+7+Math.floor(r()*23));
+    const req=rdp.toISOString().slice(0,10);
+    const sh=r()<0.9?(()=>{const p=new Date(odp);p.setDate(p.getDate()+1+Math.floor(r()*5));return p.toISOString().slice(0,10);})():null;
+    const ct=rc(cities);
+    os.run([i,ri(800),ri(50),od,req,sh,ri(10),ct[0],ct[2],rf(0,280),rc(ostats),rc(pmts),rc(notes),rc(smethods)]);
+  }os.free();
+
+  // ORDER_DETAILS ~13000
+  const ods=db.prepare('INSERT INTO order_details VALUES(?,?,?,?,?,?)');
+  let odid=1;
+  for(let oid=1;oid<=5000;oid++){
+    const n=rc([1,1,2,2,2,3,3,4,5]);const used=new Set();
+    for(let j=0;j<n;j++){
+      let pid;do{pid=ri(210);}while(used.has(pid));used.add(pid);
+      const up=parseFloat(((PP[pid-1]||20)*rf(0.88,1.12)).toFixed(2));
+      const qty=rc([1,1,1,2,2,3,5,10,20]);
+      const disc=rc([0,0,0,0,0,0.05,0.1,0.15,0.2,0.25]);
+      ods.run([odid++,oid,pid,up,qty,disc]);
+    }
+  }ods.free();
+
+  // PRODUCT_REVIEWS 3000
+  const prs=db.prepare('INSERT INTO product_reviews VALUES(?,?,?,?,?,?,?,?)');
+  for(let i=1;i<=3000;i++){
+    const rating=rc([1,2,3,3,4,4,4,5,5,5]);
+    const rev=mn(rc(rtexts),28);
+    const hv=mn(Math.floor(r()*100),30);
+    prs.run([i,ri(210),ri(800),rating,rev,rdate(2019,2024),hv,r()>0.2?1:0]);
+  }prs.free();
+
+  // INVENTORY 630 = 210×3
+  const invs=db.prepare('INSERT INTO inventory VALUES(?,?,?,?,?,?,?,?)');
+  let invid=1;
+  for(let pid=1;pid<=210;pid++){
+    for(const wh of whs){
+      const qoh=Math.floor(r()*800);
+      const qr=mn(Math.floor(r()*Math.max(1,qoh)),28);
+      const uc=parseFloat(((PP[pid-1]||20)*rf(0.5,0.72)).toFixed(2));
+      invs.run([invid++,pid,wh,qoh,qr,10+Math.floor(r()*70),mn(rdate(2023,2024),12),uc]);
+    }
+  }invs.free();
+
+  // RETURNS 800
+  const rets=db.prepare('INSERT INTO returns VALUES(?,?,?,?,?,?,?,?,?,?)');
+  for(let i=1;i<=800;i++){
+    const pid=ri(210);const qty=1+Math.floor(r()*4);
+    const ref=parseFloat(((PP[pid-1]||20)*qty*rf(0.7,1.0)).toFixed(2));
+    const appr=mn(ri(50),22);
+    const note=mn(rc(['Refund processed','Replacement sent','Under review','Awaiting inspection','Customer contacted']),42);
+    rets.run([i,ri(5000),pid,qty,rc(rreasons),rdate(2019,2024),ref,rc(rstats),appr,note]);
+  }rets.free();
+
+  // PROMOTIONS 400
+  const proms=db.prepare('INSERT INTO promotions VALUES(?,?,?,?,?,?,?,?,?)');
+  for(let i=1;i<=400;i++){
+    const sd=rdate(2019,2024);const sdp=new Date(sd);const edp=new Date(sdp);edp.setDate(edp.getDate()+7+Math.floor(r()*53));
+    const imp=mn(Math.floor(r()*500000)+1000,18);
+    proms.run([i,rc(pnames)+' '+String(2019+Math.floor(r()*6)),ri(210),rc([5,10,10,15,15,20,25,30,50]),sd,edp.toISOString().slice(0,10),r()>0.3?1:0,rf(1000,50000),imp]);
+  }proms.free();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const ed=document.getElementById('sqle');
+  ed.addEventListener('input',()=>{updLN();triggerAC(ed);});
+  ed.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){closeSol();hideAC();return;}
+    // Autocomplete navigation
+    const acMenu=document.getElementById('acMenu');
+    if(acMenu.style.display==='block'&&acList.length){
+      if(e.key==='ArrowDown'){e.preventDefault();setACi(Math.min(acIdx+1,acList.length-1));acMenu.querySelectorAll('.ac-item')[acIdx]?.scrollIntoView({block:'nearest'});return;}
+      if(e.key==='ArrowUp'){e.preventDefault();setACi(Math.max(acIdx-1,0));acMenu.querySelectorAll('.ac-item')[acIdx]?.scrollIntoView({block:'nearest'});return;}
+      if(e.key==='Tab'){e.preventDefault();applyAC(acIdx);return;}
+      if(e.key==='Enter'&&acIdx>=0){e.preventDefault();applyAC(acIdx);return;}
+    }
+    if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runQ();}
+    if(e.key==='Tab'&&(!document.getElementById('acMenu')||document.getElementById('acMenu').style.display!=='block')){e.preventDefault();const s=ed.selectionStart;ed.value=ed.value.substring(0,s)+'  '+ed.value.substring(ed.selectionEnd);ed.selectionStart=ed.selectionEnd=s+2;updLN();}
+  });
+  renderEx(); buildSB(); initDB(); updLN();
+
+  // ── Resize handle (drag to resize results panel) ──
+  const handle=document.getElementById('resizeHandle');
+  const resPanel=document.querySelector('.res');
+  let isRes=false, resStartY=0, resStartH=0;
+  handle.addEventListener('mousedown',e=>{isRes=true;resStartY=e.clientY;resStartH=resPanel.offsetHeight;handle.classList.add('dragging');document.body.style.cssText='cursor:ns-resize;user-select:none';});
+  document.addEventListener('mousemove',e=>{if(!isRes)return;const newH=Math.max(80,Math.min(window.innerHeight*.7,resStartH+(resStartY-e.clientY)));resPanel.style.height=newH+'px';});
+  document.addEventListener('mouseup',()=>{if(!isRes)return;isRes=false;handle.classList.remove('dragging');document.body.style.cssText='';});
+  handle.addEventListener('touchstart',e=>{isRes=true;resStartY=e.touches[0].clientY;resStartH=resPanel.offsetHeight;},{passive:true});
+  document.addEventListener('touchmove',e=>{if(!isRes)return;const newH=Math.max(80,Math.min(window.innerHeight*.7,resStartH+(resStartY-e.touches[0].clientY)));resPanel.style.height=newH+'px';},{passive:true});
+  document.addEventListener('touchend',()=>{isRes=false;});
+
+  // ── Sidebar resize (drag to split tables / quick queries) ──
+  const sbHandle=document.getElementById('sbResize');
+  const sbBody=document.querySelector('.sb-body');
+  const sbQ=document.querySelector('.sb-q');
+  let isSbRes=false, sbStartY=0, sbStartBodyH=0, sbStartQH=0;
+  sbHandle.addEventListener('mousedown',e=>{
+    isSbRes=true; sbStartY=e.clientY;
+    sbStartBodyH=sbBody.offsetHeight; sbStartQH=sbQ.offsetHeight;
+    sbHandle.classList.add('dragging');
+    document.body.style.cssText='cursor:ns-resize;user-select:none';
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!isSbRes)return;
+    const delta=e.clientY-sbStartY;
+    const newBodyH=Math.max(60,sbStartBodyH+delta);
+    const newQH=Math.max(60,sbStartQH-delta);
+    sbBody.style.height=newBodyH+'px';
+    sbBody.style.flex='none';
+    sbQ.style.height=newQH+'px';
+    sbQ.style.flex='none';
+  });
+  document.addEventListener('mouseup',()=>{
+    if(!isSbRes)return;
+    isSbRes=false; sbHandle.classList.remove('dragging');
+    document.body.style.cssText='';
+  });
+  sbHandle.addEventListener('touchstart',e=>{
+    isSbRes=true; sbStartY=e.touches[0].clientY;
+    sbStartBodyH=sbBody.offsetHeight; sbStartQH=sbQ.offsetHeight;
+  },{passive:true});
+  document.addEventListener('touchmove',e=>{
+    if(!isSbRes)return;
+    const delta=e.touches[0].clientY-sbStartY;
+    const newBodyH=Math.max(60,sbStartBodyH+delta);
+    const newQH=Math.max(60,sbStartQH-delta);
+    sbBody.style.height=newBodyH+'px'; sbBody.style.flex='none';
+    sbQ.style.height=newQH+'px'; sbQ.style.flex='none';
+  },{passive:true});
+  document.addEventListener('touchend',()=>{isSbRes=false;});
+
+  const canvas=document.getElementById('erd');
+  let pan=false, dragTbl=null, dragOX=0, dragOY=0, ps={x:0,y:0};
+  let lastClick=0, lastClickTbl=null;
+
+  canvas.addEventListener('mousedown',e=>{
+    const w=canvasToWorld(e.offsetX,e.offsetY);
+    const tn=hitTable(w.x,w.y);
+    if(tn){
+      dragTbl=tn; dragOX=w.x-TPOS[tn].x; dragOY=w.y-TPOS[tn].y;
+      canvas.style.cursor='grabbing';
+    } else {
+      pan=true; ps={x:e.clientX-ex_,y:e.clientY-ey_};
+      canvas.style.cursor='move';
+    }
+  });
+  canvas.addEventListener('mousemove',e=>{
+    if(dragTbl){
+      const w=canvasToWorld(e.offsetX,e.offsetY);
+      TPOS[dragTbl].x=w.x-dragOX; TPOS[dragTbl].y=w.y-dragOY;
+      drawERD();
+    } else if(pan){
+      ex_=e.clientX-ps.x; ey_=e.clientY-ps.y; drawERD();
+    } else {
+      // Hover cursor
+      const w=canvasToWorld(e.offsetX,e.offsetY);
+      canvas.style.cursor=hitTable(w.x,w.y)?'grab':'default';
+    }
+  });
+  canvas.addEventListener('mouseup',e=>{
+    dragTbl=null; pan=false;
+    canvas.style.cursor='default';
+  });
+  canvas.addEventListener('mouseleave',()=>{dragTbl=null;pan=false;});
+
+  // Double-click to collapse/expand table
+  canvas.addEventListener('dblclick',e=>{
+    const w=canvasToWorld(e.offsetX,e.offsetY);
+    const tn=hitHeader(w.x,w.y);
+    if(tn){TCOL[tn]=!TCOL[tn];drawERD();}
+  });
+
+  // Single click on header arrow to collapse
+  canvas.addEventListener('click',e=>{
+    const w=canvasToWorld(e.offsetX,e.offsetY);
+    const tn=hitHeader(w.x,w.y);
+    if(tn){
+      const pos=TPOS[tn];
+      // Click on the ▶/▼ arrow area (left side of header)
+      if(w.x >= pos.x && w.x <= pos.x+20){
+        TCOL[tn]=!TCOL[tn]; drawERD();
+      }
+    }
+  });
+
+  canvas.addEventListener('wheel',e=>{e.preventDefault();ez(e.deltaY<0?1.1:0.91);},{passive:false});
+  window.addEventListener('resize',()=>{if(document.getElementById('pane-erd').classList.contains('active'))drawERD();});
+});
+</script>
+</body>
+</html>

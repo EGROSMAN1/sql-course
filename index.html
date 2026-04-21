@@ -82,7 +82,7 @@ nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(6,10,15,.9);back
 .section-tag::after{content:'';flex:1;height:1px;background:var(--border)}
 .section-title{font-size:2.2rem;font-weight:900;margin-bottom:1rem}
 .bio-grid{display:grid;grid-template-columns:1fr 2fr;gap:3rem;align-items:start}
-.bio-avatar{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--bg3),var(--bg4));border-radius:16px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.bio-avatar{width:160px;height:160px;border-radius:50%;border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden;flex-shrink:0;box-shadow:0 0 30px rgba(0,212,255,.2)}
 .bio-avatar::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,.1),transparent)}
 .bio-text p{color:var(--text2);line-height:1.9;margin-bottom:1rem;font-size:15px}
 .bio-text p strong{color:var(--text);font-weight:600}
@@ -133,6 +133,23 @@ footer{padding:2rem;border-top:1px solid var(--border);text-align:center;color:v
 
 /* RESPONSIVE */
 @media(max-width:768px){
+.hero{padding:3.5rem 1rem 2rem}
+.hero-content{gap:1.5rem}
+.hero-visual{display:none}
+.hero-title{font-size:1.7rem}
+.hero-actions{flex-direction:column;align-items:stretch}
+.btn-primary,.btn-secondary{width:100%;justify-content:center;padding:12px 16px;font-size:14px}
+.stats{padding:2rem .75rem}
+.stats-inner{grid-template-columns:repeat(2,1fr);gap:.75rem}
+.stat-num{font-size:1.8rem}
+.bio{padding:2rem .75rem}
+.bio-grid{grid-template-columns:1fr}
+.bio-avatar{max-width:100px;margin:0 auto}
+.syllabus{padding:2rem .75rem}
+.syllabus-grid{grid-template-columns:1fr}
+.syl-card{padding:.9rem}
+.hero-badge{font-size:11px;padding:4px 10px}
+.nav-cta{display:none}
 nav{padding:.75rem 1rem}
 .hamburger{display:flex}
 .nav-links{display:none}
@@ -162,6 +179,24 @@ nav{padding:.75rem 1rem}
 .hero-stats{gap:1rem}
 footer{padding:1.5rem 1rem;font-size:12px}
 }
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
 </style>
 </head>
 <body>
@@ -173,9 +208,10 @@ footer{padding:1.5rem 1rem;font-size:12px}
     <li><a href="#syllabus">סילבוס</a></li>
     <li><a href="quiz.html">🧠 שאלות אמריקאיות</a></li>
     <li><a href="quiz-beginner.html">🌱 שאלות אמריקאיות למתחילים</a></li>
+    <li><a href="simulator.html">⚡ סימולטור SQL</a></li>
     <li><a href="setup.html">🛠️ התקנה</a></li>
-    <li><a href="videos.html">🎬 הדרכה מצולמת</a></li>
-    <li><a href="videos2.html">🖥️ SQL Server</a></li>
+    <li><a href="videos.html">🎬 הדרכות מצולמות מקיפות</a></li>
+    <li><a href="videos2.html">🖥️ הדרכות מצולמות מקיפות SQL Server</a></li>
     <li><a href="course.html">חומר לימוד</a></li>
     <li><a href="study.html">📖 חומר לימודי</a></li>
     <li><a href="practice.html">תרגולים</a></li>
@@ -190,9 +226,10 @@ footer{padding:1.5rem 1rem;font-size:12px}
   <a href="#syllabus" onclick="toggleMenu()">סילבוס</a>
   <a href="quiz.html">🧠 שאלות אמריקאיות</a>
   <a href="quiz-beginner.html">🌱 שאלות למתחילים</a>
+  <a href="simulator.html">⚡ סימולטור SQL</a>
   <a href="setup.html">🛠️ התקנה</a>
-  <a href="videos.html">🎬 הדרכה מצולמת</a>
-  <a href="videos2.html">🖥️ SQL Server</a>
+  <a href="videos.html">🎬 הדרכות מצולמות מקיפות</a>
+  <a href="videos2.html">🖥️ הדרכות מצולמות מקיפות SQL Server</a>
   <a href="course.html">📚 חומר לימוד</a>
   <a href="study.html">📖 חומר לימודי</a>
   <a href="practice.html">✏️ תרגולים</a>
@@ -208,11 +245,33 @@ footer{padding:1.5rem 1rem;font-size:12px}
       <h1 class="hero-title">
         שולטים ב-SQL
         <span class="name">מהבסיס ועד Window Functions</span>
-        <span class="role">מדריך: אלירן גרוסמן</span>
       </h1>
-      <p class="hero-desc">קורס מעשי ומובנה עם 11 פרקים, 70+ תרגולים, ודוגמאות מהעולם האמיתי. מתאים לכל מי שרוצה לעבוד עם נתונים ברצינות.</p>
+
+      <!-- INSTRUCTOR INFO - directly in hero -->
+      <div style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;flex-wrap:wrap">
+        <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--cyan);flex-shrink:0">
+          <img src="eliran.png" alt="אלירן גרוסמן" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--text)">אלירן גרוסמן</div>
+          <div style="font-size:13px;color:var(--text2)">מרצה SQL · מנהל אנליסטים · Partner Telecom</div>
+        </div>
+        <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:6px;background:#0a66c2;color:#fff;padding:6px 14px;border-radius:7px;text-decoration:none;font-weight:700;font-size:12px;flex-shrink:0;transition:opacity .2s"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+
+      <p class="hero-desc">המטרה שלי — <strong>להנגיש את עולם הדאטה לכולם בעברית.</strong> קורס מעשי עם 11 פרקים, 70+ תרגולים וסימולטור SQL חי. יש שאלה על דאטה, SQL או קריירה בתחום? מוזמנים לפנות אלי ישירות — דרך
+        <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" rel="noopener" style="color:var(--cyan);font-weight:700;text-decoration:none">LinkedIn</a>
+        או ב-WhatsApp:
+        <a href="https://wa.me/972507514807" target="_blank" rel="noopener" style="color:#25d366;font-weight:700;text-decoration:none">050-751-4807</a>
+        — אני פה לשירותכם בכל נושא 🙂</p>
       <div class="hero-actions">
         <a href="course.html" class="btn-primary">📚 חומר לימוד</a>
+        <a href="simulator.html" class="btn-primary" style="background:linear-gradient(135deg,#0a3a6e,#00d4ff);box-shadow:0 4px 20px rgba(0,212,255,.2)">⚡ סימולטור SQL</a>
         <a href="practice.html" class="btn-secondary">✏️ לתרגולים</a>
       </div>
     </div>
@@ -270,20 +329,39 @@ footer{padding:1.5rem 1rem;font-size:12px}
   <div class="section-tag">אודות המדריך</div>
   <div class="bio-grid">
     <div>
-      <div class="bio-avatar">👨‍💻</div>
+      <div class="bio-avatar">
+        <img src="eliran.png" alt="אלירן גרוסמן" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+      </div>
     </div>
     <div class="bio-text">
       <h2 class="section-title">אלירן גרוסמן</h2>
-      <p>מנתח נתונים ומרצה SQL בחברת <strong>Partner</strong> — אחת מחברות הטלקום המובילות בישראל. מוביל צוות אנליסטים ומלמד SQL לסטודנטים ועובדים חדשים.</p>
-      <p>מתמחה ב-<strong>SQL Server, Power BI, Excel ו-Python</strong> לצורכי Business Analytics. בניית קורס זה נולדה מהצורך להנגיש את עולם ה-SQL בצורה ברורה, מעשית ומהנה.</p>
-      <p>הקורס בנוי על מסד הנתונים <strong>Northwind ב-MySQL</strong> — מסד נתונים קלאסי ומוכר המדמה חברת מסחר אמיתית עם לקוחות, הזמנות, מוצרים וספקים.</p>
-      <div class="tech-tags">
+      <p>מרצה SQL ומנהל אנליסטים בחברת <strong>Partner</strong> עם ניסיון רב-שנתי בעולם הדאטה וה-Business Intelligence. עוסק מדי יום בניתוח נתונים, הובלת צוות אנליסטים ולימוד SQL לסטודנטים ולעובדים.</p>
+      <p><strong>המטרה שלי היא ללמד דאטה בחינם — בעברית, בצורה פשוטה ונגישה לכולם.</strong> אני מאמין שכל אחד יכול ללמוד לעבוד עם נתונים, ורציתי להביא את הניסיון הרב-שנתי שצברתי בשטח לכל מי שרוצה להתקדם בתחום — בלי עלות, בלי מחסומי שפה, ובלי סיבוכים מיותרים.</p>
+      <p>מתמחה ב-<strong>SQL Server, MySQL, Power BI, Python ו-Excel</strong>. הקורס בנוי על מסד הנתונים <strong>Northwind</strong> — מסד קלאסי המדמה חברת מסחר אמיתית.</p>
+      <div class="tech-tags" style="margin-bottom:1.25rem">
         <span class="tech-tag">SQL Server</span>
         <span class="tech-tag">MySQL</span>
         <span class="tech-tag">Power BI</span>
         <span class="tech-tag">Python</span>
         <span class="tech-tag">Excel</span>
         <span class="tech-tag">Business Analytics</span>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:1.1rem 1.3rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <div style="font-size:1.6rem;flex-shrink:0">💬</div>
+        <div style="flex:1;min-width:200px">
+          <div style="font-weight:700;color:var(--text);margin-bottom:.3rem;font-size:15px">יש שאלות? אני פה בשבילכם</div>
+          <div style="color:var(--text2);font-size:13.5px;line-height:1.6">מוזמנים לפנות אלי ישירות — דרך LinkedIn או WhatsApp. אשמח לייעץ בכל נושא של דאטה, SQL וקריירה בתחום.</div>
+        </div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;flex-shrink:0">
+          <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;background:#0a66c2;color:#fff;padding:10px 18px;border-radius:9px;text-decoration:none;font-weight:700;font-size:13px;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://wa.me/972507514807" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;background:#25d366;color:#fff;padding:10px 18px;border-radius:9px;text-decoration:none;font-weight:700;font-size:13px;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -310,12 +388,51 @@ footer{padding:1.5rem 1rem;font-size:12px}
   </div>
 </section>
 
+<!-- SIMULATOR CTA -->
+<section style="padding:4rem 2rem;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="background:linear-gradient(135deg,rgba(10,58,110,.6) 0%,rgba(13,20,32,.8) 60%,rgba(106,27,154,.3) 100%);border:1px solid var(--border2);border-radius:20px;padding:2.5rem 3rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden">
+      <!-- Glow -->
+      <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none"></div>
+      <div style="position:absolute;bottom:-40px;left:100px;width:160px;height:160px;background:radial-gradient(circle,rgba(210,168,255,.08) 0%,transparent 70%);pointer-events:none"></div>
+      <!-- Icon -->
+      <div style="font-size:4rem;flex-shrink:0">⚡</div>
+      <!-- Text -->
+      <div style="flex:1;min-width:220px">
+        <div style="font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;font-family:var(--mono);margin-bottom:.5rem">חדש</div>
+        <h2 style="font-size:1.9rem;font-weight:900;color:var(--text);margin-bottom:.6rem;line-height:1.2">סימולטור SQL</h2>
+        <p style="color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:1.2rem">כתוב ותרגל SQL ישירות בדפדפן — מסד נתונים Northwind אמיתי עם 24,000+ שורות, 16 טבלאות, 110 תרגילים ו-ERD אינטראקטיבי. ללא התקנה.</p>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.5rem">
+          <span style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--cyan);padding:3px 10px;border-radius:20px;font-size:12px;font-family:var(--mono)">24,000+ שורות</span>
+          <span style="background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);color:var(--green);padding:3px 10px;border-radius:20px;font-size:12px;font-family:var(--mono)">110 תרגילים</span>
+          <span style="background:rgba(210,168,255,.08);border:1px solid rgba(210,168,255,.2);color:var(--purple);padding:3px 10px;border-radius:20px;font-size:12px;font-family:var(--mono)">ERD אינטראקטיבי</span>
+          <span style="background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.2);color:var(--orange);padding:3px 10px;border-radius:20px;font-size:12px;font-family:var(--mono)">השלמה אוטומטית</span>
+        </div>
+        <a href="simulator.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue2),var(--cyan));color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;transition:all .2s;box-shadow:0 4px 20px rgba(0,212,255,.25)">⚡ פתח סימולטור SQL ←</a>
+      </div>
+      <!-- Mini preview -->
+      <div style="flex-shrink:0;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-family:var(--mono);font-size:12px;direction:ltr;text-align:left;min-width:240px;opacity:.9">
+        <div style="color:var(--text3);margin-bottom:.4rem;font-size:10px">SQL Editor</div>
+        <div><span style="color:#ff7b72">SELECT</span> <span style="color:#79c0ff">c.company</span>,</div>
+        <div>&nbsp;&nbsp;<span style="color:#56d364">COUNT</span>(<span style="color:#79c0ff">o.id</span>) orders,</div>
+        <div>&nbsp;&nbsp;<span style="color:#56d364">SUM</span>(<span style="color:#79c0ff">od.quantity</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;* <span style="color:#79c0ff">od.unit_price</span>) rev</div>
+        <div><span style="color:#ff7b72">FROM</span> <span style="color:#ffa657">customers</span> c</div>
+        <div><span style="color:#ff7b72">JOIN</span> <span style="color:#ffa657">orders</span> o <span style="color:#ff7b72">ON</span>...</div>
+        <div><span style="color:#ff7b72">GROUP BY</span> c.id</div>
+        <div style="color:var(--green);margin-top:.4rem;font-size:11px">▶ 800 rows · 23ms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
   <h2 class="cta-title">מוכן להתחיל?</h2>
   <p class="cta-sub">בחר את הנתיב שלך — חומר לימוד מלא או ישר לתרגולים</p>
   <div class="cta-buttons">
-    <a href="setup.html" class="btn-primary">🛠️ מדריך התקנה</a>
+    <a href="simulator.html" class="btn-primary">⚡ סימולטור SQL</a>
+    <a href="setup.html" class="btn-secondary">🛠️ מדריך התקנה</a>
     <a href="course.html" class="btn-secondary">📚 חומר לימוד</a>
     <a href="practice.html" class="btn-secondary">✏️ תרגולים</a>
   </div>

@@ -130,6 +130,19 @@ pre{background:var(--bg);padding:1rem;overflow-x:auto;font-family:var(--mono);fo
 .hamburger{display:flex}
 .topnav-links{display:none}
 .topnav-title{font-size:12px}
+.main{padding:.75rem .6rem 3rem}
+.lesson-tabs{padding:0;overflow-x:auto;flex-wrap:nowrap}
+.lesson-tab{font-size:11px;padding:.6rem .6rem;white-space:nowrap;flex-shrink:0}
+.lesson-badge{display:none}
+.section-divider{padding:.5rem .6rem;font-size:13px}
+.q-card{padding:.9rem}
+.q-text{font-size:13.5px}
+.q-hint,.q-answer{font-size:12.5px;padding:.6rem .75rem}
+.q-meta{flex-wrap:wrap;gap:.3rem}
+.score-badge{font-size:11px;padding:3px 8px}
+.hamburger{display:flex}
+.topnav-links{display:none}
+.topnav-title{font-size:12px}
 .main{padding:1rem .75rem 4rem}
 pre{font-size:11px;line-height:1.5}
 .layout{flex-direction:column}
@@ -146,6 +159,24 @@ pre{font-size:11px;line-height:1.5}
 .code-block{margin:.5rem}
 }
 
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
 </style>
 </head>
 <body>

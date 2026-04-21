@@ -119,12 +119,44 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 .mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
 
 @media(max-width:768px){
+.hero{padding:2rem .75rem 1.5rem}
+.hero-title{font-size:1.5rem}
+.hero-sub{font-size:13px}
+.hero-stats{gap:.75rem;flex-wrap:wrap}
+.hero-stat-num{font-size:1.5rem}
+.quiz-container{padding:.75rem}
+.question-card{padding:1rem}
+.q-text{font-size:14px}
+.options{gap:.5rem}
+.option-btn{font-size:13px;padding:.7rem .85rem;text-align:right}
+.explain-box{font-size:13px;padding:.65rem .85rem}
+.nav-links,.nav-cta{display:none}
+.finish-card{padding:2rem 1rem}
+.finish-score{font-size:2.5rem}
 .hamburger{display:flex}
 .topnav-links{display:none}
 .main{padding:1rem .75rem 4rem}
 .opt-text{font-size:11px}
 .score-bar{gap:.75rem}
 .score-track{min-width:80px}
+}
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
 }
 </style>
 </head>
