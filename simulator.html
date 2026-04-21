@@ -84,6 +84,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
 .ec-sel:hover{background:rgba(0,212,255,.18)}
 .ec-ans{background:rgba(210,168,255,.08);border:1px solid rgba(210,168,255,.2);color:var(--purple);font-size:10px;font-weight:700;padding:3px 7px;border-radius:4px;cursor:pointer;font-family:var(--font);transition:all .12s;white-space:nowrap}
 .ec-ans:hover{background:rgba(210,168,255,.2)}
+.ec-hint{background:rgba(255,209,102,.07);border:1px solid rgba(255,209,102,.2);color:var(--yellow);font-size:10px;font-weight:700;padding:3px 7px;border-radius:4px;cursor:pointer;font-family:var(--font);transition:all .12s;white-space:nowrap}
+.ec-hint:hover{background:rgba(255,209,102,.18)}
 
 /* SOLUTION MODAL */
 .sol-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
@@ -372,6 +374,29 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
   </div>
 </div>
 
+<!-- EXERCISE MODAL -->
+<div class="sol-overlay" id="exOverlay" onclick="if(event.target===this)closeExModal()">
+  <div class="sol-modal">
+    <div class="sol-hdr">
+      <div class="sol-hdr-left">
+        <div class="sol-num" id="exModalNum"></div>
+        <div class="sol-title" id="exModalTitle"></div>
+      </div>
+      <button class="sol-close" onclick="closeExModal()">✕</button>
+    </div>
+    <div class="sol-body" style="padding:1.2rem 1.1rem">
+      <div class="sol-label">משימה</div>
+      <div id="exModalDesc" style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1.2rem"></div>
+      <div class="sol-label">רמז</div>
+      <div id="exModalHint" style="background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow);border-radius:8px;padding:.7rem 1rem;font-family:var(--mono);font-size:12.5px;color:var(--text2)"></div>
+    </div>
+    <div class="sol-footer">
+      <button class="sol-run" onclick="startExFromModal()">✏️ התחל לתרגל</button>
+      <button class="sol-use" onclick="showSolFromModal()">👁 הצג תשובה</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===================== AUTOCOMPLETE =====================
 const AC_KW=['SELECT','FROM','WHERE','JOIN','LEFT JOIN','RIGHT JOIN','INNER JOIN','ON','GROUP BY','ORDER BY','HAVING','LIMIT','AS','AND','OR','NOT','IN','NOT IN','IS NULL','IS NOT NULL','EXISTS','BETWEEN','LIKE','CASE','WHEN','THEN','ELSE','END','DISTINCT','COUNT','SUM','AVG','MIN','MAX','ROUND','COALESCE','NULLIF','SUBSTR','LENGTH','UPPER','LOWER','TRIM','REPLACE','CAST','JULIANDAY','DATE','STRFTIME','LAG','LEAD','RANK','DENSE_RANK','ROW_NUMBER','NTILE','PERCENT_RANK','SUM OVER','AVG OVER','PARTITION BY','WITH','UNION','UNION ALL'];
@@ -417,16 +442,30 @@ function buildAC(word,ctx){
   return res.slice(0,20);
 }
 function getCaretXY(el){
-  const d=document.createElement('div');
-  const s=getComputedStyle(el);
-  ['fontFamily','fontSize','fontWeight','lineHeight','padding','border','boxSizing','whiteSpace','wordWrap'].forEach(p=>d.style[p]=s[p]);
-  d.style.cssText+=';position:fixed;visibility:hidden;top:0;left:0;width:'+el.offsetWidth+'px;white-space:pre-wrap';
-  d.textContent=el.value.substring(0,el.selectionStart);
-  const sp=document.createElement('span');sp.textContent='|';d.appendChild(sp);
-  document.body.appendChild(d);
-  const r=sp.getBoundingClientRect();
-  document.body.removeChild(d);
-  return{x:r.left,y:r.top};
+  // Get position of caret relative to viewport, aligned to the line in the editor
+  const edRect=el.getBoundingClientRect();
+  const style=getComputedStyle(el);
+  const lineH=parseFloat(style.lineHeight)||20;
+  const paddingTop=parseFloat(style.paddingTop)||0;
+  const paddingLeft=parseFloat(style.paddingLeft)||0;
+  const fontSize=parseFloat(style.fontSize)||13;
+
+  // Count lines up to cursor
+  const text=el.value.substring(0,el.selectionStart);
+  const lines=text.split('\n');
+  const currentLine=lines.length-1;
+  const currentLineText=lines[currentLine];
+
+  // Approximate x position using canvas measureText
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.font=`${fontSize}px ${style.fontFamily}`;
+  const textWidth=ctx.measureText(currentLineText).width;
+
+  const x=edRect.left+paddingLeft+textWidth;
+  const y=edRect.top+paddingTop+(currentLine+1)*lineH - el.scrollTop;
+
+  return{x:Math.min(x, edRect.right-20), y};
 }
 function showAC(items,el){
   const menu=document.getElementById('acMenu');
@@ -630,8 +669,40 @@ function buildSB(f=''){
 }
 function sbF(v){buildSB(v);}
 function setLvl(l){curL=l;curEx=null;document.querySelectorAll('.lt').forEach(t=>t.classList.remove('on'));document.querySelector('.lt.'+l).classList.add('on');renderEx();hideInf();}
-function renderEx(){document.getElementById('exR').innerHTML=EX[curL].map((ex,i)=>`<div class="ec${curEx===i?' on':''}"><div class="en">תרגיל ${ex.n}</div><div class="et">${ex.t}</div><div class="ec-btns"><button class="ec-sel" onclick="selEx(${i})">✏️ תרגל</button><button class="ec-ans" onclick="openSol(${i},event)">👁 תשובה</button></div></div>`).join('');}
+function renderEx(){document.getElementById('exR').innerHTML=EX[curL].map((ex,i)=>`<div class="ec${curEx===i?' on':''}"><div class="en">תרגיל ${ex.n}</div><div class="et">${ex.t}</div><div class="ec-btns"><button class="ec-sel" onclick="openExModal(${i},event)">✏️ תרגל</button><button class="ec-hint" onclick="openHintModal(${i},event)">💡 רמז</button><button class="ec-ans" onclick="openSol(${i},event)">👁 תשובה</button></div></div>`).join('');}
 function selEx(i){curEx=i;renderEx();const ex=EX[curL][i];hideInf();document.getElementById('sqle').value=`-- ${ex.t}\n\n`;document.getElementById('sqle').focus();updLN();}
+
+// Exercise modal
+let exModalIdx=null;
+function openExModal(i,e){
+  if(e)e.stopPropagation();
+  exModalIdx=i; curEx=i; renderEx();
+  const ex=EX[curL][i];
+  const lvlLabel={b:'🌱 מתחילים',m:'🟠 בינוני',a:'🔴 מתקדם'};
+  document.getElementById('exModalNum').textContent=lvlLabel[curL]+' · תרגיל '+ex.n;
+  document.getElementById('exModalTitle').textContent=ex.t;
+  document.getElementById('exModalDesc').textContent=ex.t;
+  document.getElementById('exModalHint').textContent=ex.h;
+  document.getElementById('exOverlay').classList.add('open');
+}
+function openHintModal(i,e){
+  if(e)e.stopPropagation();
+  // Open exercise modal showing hint directly
+  openExModal(i,e);
+}
+function closeExModal(){document.getElementById('exOverlay').classList.remove('open');}
+function startExFromModal(){
+  if(exModalIdx===null)return;
+  const ex=EX[curL][exModalIdx];
+  document.getElementById('sqle').value=`-- ${ex.t}\n\n`;
+  updLN(); closeExModal(); swT('editor');
+  document.getElementById('sqle').focus();
+}
+function showSolFromModal(){
+  if(exModalIdx===null)return;
+  closeExModal();
+  setTimeout(()=>openSol(exModalIdx,null),100);
+}
 function togH(){const b=document.getElementById('hBox');if(curEx===null)return;b.textContent='💡 רמז: '+EX[curL][curEx].h;b.classList.toggle('sh');}
 function hideInf(){document.getElementById('hBox').classList.remove('sh');}
 
@@ -1481,7 +1552,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const ed=document.getElementById('sqle');
   ed.addEventListener('input',()=>{updLN();triggerAC(ed);});
   ed.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){closeSol();hideAC();return;}
+    if(e.key==='Escape'){closeSol();closeExModal();hideAC();return;}
     // Autocomplete navigation
     const acMenu=document.getElementById('acMenu');
     if(acMenu.style.display==='block'&&acList.length){
