@@ -386,14 +386,19 @@ function resetQuiz(){
 buildQuiz();updateScore();
 </script>
 
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,signInWithPopup,signInWithRedirect,getRedirectResult,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",authDomain:"sql-course-507b5.firebaseapp.com",projectId:"sql-course-507b5",storageBucket:"sql-course-507b5.firebasestorage.app",messagingSenderId:"999664091380",appId:"1:999664091380:web:349959985ae11ce8c51ea1"});
 const auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
 let currentUser=null;window.currentUser=null;const QID='expert';
-getRedirectResult(auth).catch(e=>console.error(e));
 onAuthStateChanged(auth,async(user)=>{
   currentUser=user;window.currentUser=user;
   const li=document.getElementById('fb-login-btn'),lo=document.getElementById('fb-logout-btn'),ui=document.getElementById('fb-user-info'),hb=document.getElementById('fb-history-btn'),sb=document.getElementById('fb-save-btn');
@@ -405,10 +410,10 @@ onAuthStateChanged(auth,async(user)=>{
     await loadP();await loadH();
   }else{li.style.display='flex';lo.style.display='none';ui.style.display='none';hb.style.display='none';sb.style.display='none';}
 });
-window.fbLogin=async()=>{try{await signInWithRedirect(auth,provider);}catch(e){console.error(e);}};
-window.fbLogout=async()=>{await signOut(auth);};
-window.fbToggleHistory=()=>{const w=document.getElementById('fb-history-wrap');w.style.display=w.style.display==='none'?'block':'none';};
-window.triggerSave=async()=>{
+window._fbLogin=window.fbLogin=async()=>{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}};
+window._fbLogout=window.fbLogout=async()=>{await signOut(auth);};
+window._fbToggleHistory=window.fbToggleHistory=()=>{const w=document.getElementById('fb-history-wrap');w.style.display=w.style.display==='none'?'block':'none';};
+window._triggerSave=window.triggerSave=async()=>{
   if(!currentUser){window.fbLogin();return;}
   const txt=(document.getElementById('scoreText')?.textContent||'0 / 0').replace('✅ ','');
   const p=txt.split('/');const sc=parseInt(p[0])||0,tot=parseInt(p[1])||0;
