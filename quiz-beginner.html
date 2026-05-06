@@ -242,13 +242,67 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   pre,code{font-size:10.5px!important}
   .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
 }
+
+/* ─── FIREBASE AUTH BAR ─── */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;transition:opacity .15s;font-family:var(--font)}
+.fb-login-btn:hover{opacity:.88}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn:hover{color:var(--text)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;transition:all .3s;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 </style>
 </head>
-<body>
+<body data-quiz-id="beginner">
 
 <div class="topnav">
   <a href="index.html" class="back-btn">← דף הבית</a>
-  <div class="topnav-title">🌱 קוויז למתחילים</div>
+  <div class="topnav-title">🌱 שאלות מתחילים</div>
+  <div style="margin-right:auto;display:flex;gap:.35rem"><a href="quiz-beginner.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--aq);color:var(--aq);background:rgba(0,212,200,.1)">🌱 מתחילים</a><a href="quiz-medium.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2)">📗 בינוני</a><a href="quiz.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2)">🧠 מתקדם</a></div>
+
+<!-- FIREBASE AUTH BAR -->
+<div class="fb-bar" id="fbBar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    התחבר עם Google
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">
+    💾 שמור התקדמות
+  </button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">
+    📊 היסטוריה
+  </button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">
+    יציאה
+  </button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
   <div class="topnav-links">
     <a href="quiz.html" class="topnav-link">🧠 קוויז מתקדם</a>
     <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
@@ -977,6 +1031,7 @@ function buildQuiz(){
 }
 
 function showFinish(){
+  if(window.fbAutoSave && window.currentUser) window.fbAutoSave(correct, questions.length);
   const card = document.getElementById('finishCard');
   card.classList.add('show');
   card.scrollIntoView({behavior:'smooth',block:'center'});
@@ -1006,5 +1061,150 @@ function toggleMenu(){
 buildQuiz();
 updateScore();
 </script>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",
+  authDomain: "sql-course-507b5.firebaseapp.com",
+  projectId: "sql-course-507b5",
+  storageBucket: "sql-course-507b5.firebasestorage.app",
+  messagingSenderId: "999664091380",
+  appId: "1:999664091380:web:349959985ae11ce8c51ea1"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let currentUser = null;
+window.currentUser = null;
+const QUIZ_ID = document.body.dataset.quizId || 'quiz';
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user; window.currentUser = user;
+  const loginBtn = document.getElementById('fb-login-btn');
+  const logoutBtn = document.getElementById('fb-logout-btn');
+  const userInfo = document.getElementById('fb-user-info');
+  const histBtn = document.getElementById('fb-history-btn');
+  const saveBtn = document.getElementById('fb-save-btn');
+  if (user) {
+    document.getElementById('fb-user-name').textContent = user.displayName;
+    document.getElementById('fb-user-photo').src = user.photoURL;
+    document.getElementById('fb-user-photo').style.display = 'block';
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'flex';
+    userInfo.style.display = 'flex';
+    histBtn.style.display = 'flex';
+    saveBtn.style.display = 'flex';
+    await loadProgress();
+    await loadHistory();
+  } else {
+    loginBtn.style.display = 'flex';
+    logoutBtn.style.display = 'none';
+    userInfo.style.display = 'none';
+    histBtn.style.display = 'none';
+    saveBtn.style.display = 'none';
+  }
+});
+
+window.fbLogin = async () => {
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { console.error(e); }
+};
+
+window.fbLogout = async () => { await signOut(auth); };
+
+window.fbToggleHistory = () => {
+  const wrap = document.getElementById('fb-history-wrap');
+  wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+};
+
+window.triggerSave = async () => {
+  if (!currentUser) { fbLogin(); return; }
+  // Get current score from page
+  const scoreEl = document.getElementById('scoreText') || document.getElementById('score-display');
+  const txt = scoreEl ? scoreEl.textContent : '0 / 0';
+  const parts = txt.split('/');
+  const score = parseInt(parts[0]) || 0;
+  const total = parseInt(parts[1]) || 0;
+  if (total === 0) { showToast('⚠️ ענה על לפחות שאלה אחת קודם!'); return; }
+  await saveProgress(score, total);
+};
+
+async function saveProgress(score, total) {
+  if (!currentUser) return;
+  const pct = Math.round(score/total*100);
+  const ref = doc(db, 'users', currentUser.uid, 'quizzes', QUIZ_ID);
+  await setDoc(ref, { score, total, pct, lastUpdate: new Date().toISOString() }, { merge: true });
+  await addDoc(collection(db, 'users', currentUser.uid, 'history'), {
+    quizId: QUIZ_ID, score, total, pct, date: new Date().toISOString()
+  });
+  showToast('✅ ההתקדמות נשמרה בענן!');
+  await loadHistory();
+}
+
+window.fbAutoSave = saveProgress;
+
+async function loadProgress() {
+  if (!currentUser) return;
+  const snap = await getDoc(doc(db, 'users', currentUser.uid, 'quizzes', QUIZ_ID));
+  if (snap.exists()) {
+    const d = snap.data();
+    const el = document.getElementById('fb-saved-score');
+    el.textContent = `ניסיון אחרון: ${d.score}/${d.total} (${d.pct}%)`;
+    el.style.display = 'block';
+  }
+}
+
+async function loadHistory() {
+  if (!currentUser) return;
+  const q = query(collection(db, 'users', currentUser.uid, 'history'), orderBy('date','desc'), limit(10));
+  const snap = await getDocs(q);
+  const hist = [];
+  snap.forEach(d => hist.push(d.data()));
+  renderChart(hist.filter(h => h.quizId === QUIZ_ID));
+}
+
+function renderChart(history) {
+  const panel = document.getElementById('fb-history-panel');
+  if (!history.length) {
+    panel.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">עדיין אין היסטוריה — ענה על שאלות ושמור!</p>';
+    return;
+  }
+  const rev = [...history].reverse();
+  const best = Math.max(...history.map(h=>h.pct));
+  const avg = Math.round(history.reduce((a,h)=>a+h.pct,0)/history.length);
+  const bars = rev.map(h => {
+    const d = new Date(h.date);
+    const lbl = `${d.getDate()}/${d.getMonth()+1}`;
+    const color = h.pct>=80?'var(--aq)':h.pct>=50?'#FFB020':'#FF4060';
+    const ht = Math.max(h.pct*1.1, 8);
+    return `<div class="hbar-wrap">
+      <div class="hbar-val">${h.pct}%</div>
+      <div class="hbar" style="height:${ht}px;background:${color}"></div>
+      <div class="hbar-lbl">${lbl}</div>
+    </div>`;
+  }).join('');
+  panel.innerHTML = `
+    <div class="hstats-row">
+      <div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">שיא אישי</div></div>
+      <div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">ממוצע</div></div>
+      <div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">ניסיונות</div></div>
+    </div>
+    <div class="hchart">${bars}</div>`;
+}
+
+function showToast(msg) {
+  let t = document.getElementById('fb-toast');
+  if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+
 </body>
 </html>

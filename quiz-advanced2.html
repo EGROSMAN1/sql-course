@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שאלות אמריקאיות — רמה מתקדמת | SQL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;--bg2:#0c1518;--bg3:#111e21;
+  --border:rgba(0,212,200,.08);--border2:rgba(0,212,200,.18);
+  --text:#e8f4f5;--text2:#6b9098;--text3:#2a4048;
+  --aq:#00d4c8;--aq2:rgba(0,212,200,.12);
+  --green:#00e676;--red:#ff4757;--orange:#FFB020;--purple:#9B5CFF;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+.topnav{background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--aq);text-decoration:none;font-size:12px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:13px;font-weight:700;color:var(--text2)}
+.topnav-right{display:flex;align-items:center;gap:.5rem;margin-right:auto;flex-wrap:wrap}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);color:var(--aq);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;font-family:var(--mono)}
+.ltabs{display:flex;gap:.3rem;flex-wrap:wrap}
+.ltab{font-size:11px;font-weight:700;padding:4px 9px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2);transition:all .12s}
+.ltab:hover{color:var(--text)}
+.ltab.active{background:rgba(155,92,255,.15);border-color:var(--purple);color:var(--purple)}
+/* Firebase */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Hero */
+.hero{padding:2rem 1.5rem 1.5rem;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(155,92,255,.07),transparent 70%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(155,92,255,.12);border:1px solid rgba(155,92,255,.3);color:var(--purple);font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--mono);letter-spacing:1px;margin-bottom:.75rem}
+.hero-title{font-size:2rem;font-weight:900;color:var(--text);margin-bottom:.3rem}
+.hero-title em{color:var(--purple);font-style:normal}
+.hero-desc{color:var(--text2);font-size:.9rem;margin-bottom:1.25rem}
+.hero-stats{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-n{font-size:1.6rem;font-weight:900;font-family:var(--mono);color:var(--purple)}
+.hs-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+/* Progress */
+.prog-bar-wrap{padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:sticky;top:96px;z-index:80}
+.prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .3s}
+.prog-txt{font-size:11px;color:var(--text2);font-family:var(--mono);white-space:nowrap}
+.score-display{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--purple);white-space:nowrap}
+/* Main */
+.main{max-width:800px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);font-family:var(--mono);padding:.75rem 0 .5rem;margin-top:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+/* Cards */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:.75rem;transition:border-color .2s}
+.q-card.correct{border-color:rgba(0,230,118,.3)}
+.q-card.wrong{border-color:rgba(255,71,87,.3)}
+.q-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.q-num{font-size:10px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px;font-weight:700}
+.q-sec-tag{font-size:10px;color:var(--text3);font-weight:600}
+.q-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.55;margin-bottom:.85rem}
+.options{display:flex;flex-direction:column;gap:.4rem}
+.option{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .8rem;background:var(--bg3);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;user-select:none}
+.option:hover:not(.disabled){border-color:var(--border2);background:rgba(155,92,255,.05)}
+.option.disabled{cursor:default}
+.option.correct-ans{border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.07)}
+.option.wrong-ans{border-color:rgba(255,71,87,.4);background:rgba(255,71,87,.07)}
+.opt-letter{width:20px;height:20px;border-radius:4px;background:var(--bg);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;font-family:var(--mono)}
+.option.correct-ans .opt-letter{background:rgba(0,230,118,.2);border-color:rgba(0,230,118,.5);color:var(--green)}
+.option.wrong-ans .opt-letter{background:rgba(255,71,87,.2);border-color:rgba(255,71,87,.5);color:var(--red)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5}
+.option.correct-ans .opt-text{color:var(--text)}
+.explanation{background:var(--bg3);border-right:2px solid var(--purple);border-radius:0 6px 6px 0;padding:.6rem .85rem;margin-top:.6rem;display:none}
+.explanation.show{display:block}
+.exp-label{font-size:10px;font-weight:700;color:var(--purple);font-family:var(--mono);margin-bottom:.25rem}
+.exp-text{font-size:12.5px;color:var(--text2);line-height:1.6}
+/* Finish */
+.finish-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
+.finish-score{font-size:2.5rem;font-weight:900;font-family:var(--mono);color:var(--purple);margin-bottom:.5rem}
+.finish-grade{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.finish-sub{font-size:.9rem;color:var(--text2);margin-bottom:1.5rem}
+.retry-btn{background:var(--purple);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font)}
+.level-link{display:inline-block;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:10px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;margin-top:.5rem;transition:all .15s;margin-right:.5rem}
+.level-link:hover{border-color:var(--purple);color:var(--purple)}
+@media(max-width:768px){
+  .ltabs{display:none}
+  .hero{padding:1.25rem .75rem 1rem}
+  .hero-title{font-size:1.5rem}
+  .main{padding:1rem .5rem 3rem}
+  .q-text{font-size:13px}
+  .opt-text{font-size:12.5px}
+}
+</style>
+</head>
+<body data-quiz-id="advanced2">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">🧠 שאלות — רמה מתקדמת</div>
+  <div class="topnav-right">
+    <div class="ltabs">
+      <a href="quiz-beginner.html" class="ltab">🌱 מתחילים</a>
+      <a href="quiz-medium.html" class="ltab">📗 בינוני</a>
+      <a href="quiz-advanced2.html" class="ltab active">🧠 מתקדם</a>
+    </div>
+    <div class="score-badge" id="scoreText">✅ 0 / 0</div>
+  </div>
+</div>
+
+<!-- FIREBASE BAR -->
+<div class="fb-bar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    התחבר עם Google
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 שמור התקדמות</button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 היסטוריה</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">יציאה</button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🧠 LEVEL 3 · ADVANCED</div>
+  <h1 class="hero-title">שאלות אמריקאיות — <em>רמה מתקדמת</em></h1>
+  <p class="hero-desc">תת-שאילתות · Window Functions · פונקציות תאריך — 60 שאלות</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">נענו</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">נכונות</div></div>
+    <div class="hs"><div class="hs-n">60</div><div class="hs-l">שאלות</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">ציון</div></div>
+  </div>
+</div>
+
+<div class="prog-bar-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">0 / 60</div>
+  <div class="score-display" id="scoreDisplay">0%</div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const Q=[
+  // ── תת-שאילתות ──
+  {n:1,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מהי תת-שאילתה (Subquery)?",o:["שאילתה שרצה אחרי השאילתה הראשית.","שאילתה הממוקמת בתוך שאילתה אחרת (SELECT, INSERT, UPDATE או DELETE).","פונקציה לחיבור טבלאות.","פקודה ליצירת טבלה זמנית."],c:1,e:"תת-שאילתה היא שאילתה פנימית המעבירה תוצאות לשאילתה החיצונית."},
+  {n:2,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"היכן ניתן למקם תת-שאילתה?",o:["רק ב-WHERE.","רק ב-FROM.","ב-SELECT, FROM, WHERE ו-HAVING.","רק ב-ORDER BY."],c:2,e:"תת-שאילתות הן ורסטיליות וניתן להשתמש בהן כמעט בכל חלק בשאילתה."},
+  {n:3,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מהי תת-שאילתה מקושרת (Correlated Subquery)?",o:["תת-שאילתה שרצה פעם אחת בלבד.","תת-שאילתה שמחזירה יותר מעמודה אחת.","תת-שאילתה המסתמכת על ערכים מהשאילתה החיצונית עבור כל שורה.","תת-שאילתה שמבצעת JOIN."],c:2,e:"בשאילתה מקושרת, השאילתה הפנימית מופעלת מחדש עבור כל שורה שמעובדת על ידי השאילתה החיצונית."},
+  {n:4,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"באילו אופרטורים נשתמש כאשר תת-שאילתה ב-WHERE מחזירה יותר מערך אחד?",o:["= , < , >","IN, ANY, ALL","LIKE, BETWEEN","GROUP BY"],c:1,e:"אופרטורים כמו IN מאפשרים להשוות ערך מול רשימה שחוזרת מתת-שאילתה."},
+  {n:5,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה מחזיר האופרטור EXISTS?",o:["את הערך הראשון שנמצא.","ספירה של השורות.","ערך בוליאני (אמת/שקר) במידה וחזרו שורות מתת-שאילתה.","שגיאה אם השאילתה ריקה."],c:2,e:"EXISTS בודק נוכחות של רשומות מבלי להחזיר את הנתונים עצמם."},
+  {n:6,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מתי נשתמש בתת-שאילתה בתוך ה-FROM?",o:["כדי לסנן שורות.","כדי להתייחס לתוצאת השאילתה כאל טבלה זמנית (Inline View).","כדי לחשב ממוצע של שורה בודדת.","כדי למיין נתונים."],c:1,e:"תת-שאילתה ב-FROM מאפשרת לבצע מניפולציות על נתונים ואז לתחקר אותם שוב."},
+  {n:7,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מהי המגבלה של Scalar Subquery?",o:["היא חייבת להחזיר לפחות 10 שורות.","היא חייבת להחזיר בדיוק ערך אחד (שורה אחת ועמודה אחת).","היא עובדת רק עם מספרים.","היא לא יכולה להופיע ב-SELECT."],c:1,e:"שאילתה סקלרית משמשת כערך בודד בתוך ביטוי."},
+  {n:8,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה קורה אם תת-שאילתה ב-IN מחזירה NULL?",o:["השאילתה נכשלת.","הערך NULL נחשב כהתאמה לכל דבר.","השוואה מול NULL ב-IN עלולה להוביל לתוצאות לא צפויות (לרוב לא יוחזרו שורות).","SQL מתעלם מה-NULL באופן אוטומטי."],c:2,e:"ב-SQL, השוואה ל-NULL היא תמיד UNKNOWN."},
+  {n:9,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה ההבדל בין ANY ל-ALL?",o:["אין הבדל.","ANY בודק את כל הערכים, ALL בודק לפחות אחד.","ANY מחזיר אמת אם התנאי מתקיים עבור לפחות ערך אחד, ALL דורש שיתקיים עבור כולם.","ANY משמש רק למספרים."],c:2,e:"ANY = לפחות אחד. ALL = כולם ללא יוצא מן הכלל."},
+  {n:10,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"כיצד ניתן לכתוב שאילתת 'הצג עובדים שמרוויחים יותר מהממוצע'?",o:["WHERE salary > AVG(salary)","WHERE salary > (SELECT AVG(salary) FROM employees)","GROUP BY salary HAVING salary > AVG","JOIN (SELECT AVG...)"],c:1,e:"לא ניתן להשתמש בפונקציה אגרגטיבית ישירות ב-WHERE ללא תת-שאילתה."},
+  {n:11,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה היתרון של CTE (WITH clause) על פני תת-שאילתה ב-FROM?",o:["הוא מהיר יותר.","הוא הופך את הקוד לקריא יותר ומאפשר שימוש חוזר באותה 'טבלה זמנית' באותה שאילתה.","הוא לא דורש הרשאות.","הוא עובד רק ב-MySQL."],c:1,e:"CTE הוא דרך מודרנית ונקייה להגדיר תת-שאילתות."},
+  {n:12,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"האם תת-שאילתה יכולה להכיל ORDER BY?",o:["תמיד.","בדרך כלל לא (אלא אם משתמשים ב-TOP או LIMIT), כי קבוצת נתונים פנימית אינה דורשת סדר.","רק אם יש JOIN.","רק ב-WHERE."],c:1,e:"ORDER BY בתת-שאילתה הוא חסר משמעות אלא אם בשילוב עם TOP/LIMIT."},
+  {n:13,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה יקרה אם Scalar Subquery תחזיר בטעות שתי שורות?",o:["המערכת תיקח את הראשונה.","המערכת תחבר ביניהן.","השאילתה תיכשל עם שגיאת זמן ריצה.","יוצג NULL."],c:2,e:"Scalar Subquery שמחזירה יותר משורה אחת תגרום לשגיאה."},
+  {n:14,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מתי עדיף להשתמש ב-JOIN במקום בתת-שאילתה?",o:["תמיד.","כאשר צריך להציג עמודות משתי הטבלאות בתוצאה הסופית.","כאשר הטבלאות קטנות מאוד.","כשרוצים לסנן לפי ערך בודד."],c:1,e:"JOIN עדיף כשצריך עמודות משתי הטבלאות. Subquery עדיף לבדיקות קיום/סינון."},
+  {n:15,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה עושה האופרטור NOT EXISTS?",o:["בודק אם עמודה לא קיימת.","מחזיר אמת רק אם תת-שאילתה לא מחזירה אף שורה.","מוחק שורות שלא קיימות.","בודק ערכי NULL."],c:1,e:"NOT EXISTS = Anti-Join — מאתר שורות ללא התאמה בטבלה השנייה."},
+  {n:16,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:'מהי "Nested Subquery"?',o:["שאילתה בתוך JOIN.","תת-שאילתה שנמצאת בתוך תת-שאילתה אחרת.","שאילתה שמחזירה רשימה.","שאילתה מקבילית."],c:1,e:"Nested Subquery = שאילתה מקוננת — מאפשרת לוגיקה מורכבת אבל עלולה לפגוע בביצועים."},
+  {n:17,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"באיזה חלק בשאילתה נשתמש בתת-שאילתה כדי לעדכן נתונים בטבלה אחת לפי טבלה אחרת?",o:["SELECT","UPDATE ... SET column = (SELECT ...)","FROM","GROUP BY"],c:1,e:"UPDATE עם תת-שאילתה ב-SET מאפשר לקחת ערכים מטבלה אחרת."},
+  {n:18,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מהי תת-שאילתה ב-HAVING?",o:["סינון שורות לפני קיבוץ.","סינון קבוצות על בסיס חישוב שמתבצע בתת-שאילתה.","דרך למיין קבוצות.","פקודה לא חוקית."],c:1,e:"HAVING + Subquery = סינון קבוצות לפי חישוב מורכב מטבלה אחרת."},
+  {n:19,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"האם ניתן להשתמש ב-IN עם תת-שאילתה שמחזירה שתי עמודות?",o:["כן, תמיד.","רק אם השאילתה החיצונית משווה מול זוג עמודות (במסדי נתונים כמו PostgreSQL/Oracle).","לא, IN מקבל רק עמודה אחת.","רק אם העמודות הן מסוג טקסט."],c:1,e:"Row Subquery (עמודות מרובות) נתמך ב-PostgreSQL ו-Oracle."},
+  {n:20,s:"חלק א׳ — תת-שאילתות (Subqueries)",t:"מה ההבדל בביצועים בין IN ל-EXISTS?",o:["IN תמיד מהיר יותר.","EXISTS תמיד איטי יותר.","במערכות מודרניות האופטימייזר לרוב הופך אותם לאותה פעולה, אך EXISTS נחשב יעיל יותר לרשימות גדולות.","אין הבדל בכלל."],c:2,e:"EXISTS עדיף לרשימות גדולות כי הוא עוצר בהתאמה הראשונה."},
+  // ── Window Functions ──
+  {n:21,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה המאפיין העיקרי של פונקציית חלון?",o:["היא מצמצמת את מספר השורות (Aggregation).","היא מבצעת חישוב על קבוצת שורות מבלי לאבד את הפירוט של השורות הבודדות.","היא עובדת רק על חלונות זמן.","היא מחליפה את ה-GROUP BY."],c:1,e:"SUM() OVER() משאיר את כל השורות ומציג את הסכום לידן — בניגוד ל-GROUP BY."},
+  {n:22,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"באיזו מילת מפתח משתמשים כדי להגדיר פונקציית חלון?",o:["GROUP BY","OVER","WINDOW","PARTITION"],c:1,e:"OVER היא המילה המגדירה את ה'חלון' עליו תתבצע הפונקציה."},
+  {n:23,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה עושה הפקודה PARTITION BY?",o:["ממיינת את התוצאות.","מחלקת את השורות לקבוצות (למשל לפי מחלקה) לצורך החישוב בתוך החלון.","מוחקת מחיצות בדיסק.","מחברת טבלאות."],c:1,e:"PARTITION BY כמו GROUP BY — אבל בתוך חלון ללא קיבוץ."},
+  {n:24,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה ההבדל בין ROW_NUMBER() ל-RANK()?",o:["אין הבדל.","ROW_NUMBER נותן מספר רץ ייחודי, RANK נותן מספר זהה לערכים זהים (ומשאיר דילוג במספר הבא).","RANK לא מדלג על מספרים.","ROW_NUMBER עובד רק על תאריכים."],c:1,e:"תיקו ב-RANK: שניהם מקבלים 1, הבא מקבל 3 (ולא 2)."},
+  {n:25,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מהו הדירוג של DENSE_RANK() במקרה של תיקו?",o:["הוא מדלג על מספרים.","הוא נותן מספרים אקראיים.","הוא נותן מספר זהה לערכים זהים אך לא משאיר דילוג במספר הבא.","הוא תמיד מתחיל מ-0."],c:2,e:"תיקו ב-DENSE_RANK: שניהם מקבלים 1, הבא מקבל 2 (ולא 3)."},
+  {n:26,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה מבצעת הפונקציה LAG()?",o:["מחשבת את הממוצע של השורה הבאה.","ניגשת לערך של שורה קודמת (למשל כדי לחשב צמיחה לעומת חודש שעבר).","מעכבת את השאילתה.","מחזירה את השורה האחרונה בטבלה."],c:1,e:"LAG = מבט אחורה. LEAD = מבט קדימה."},
+  {n:27,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה מבצעת הפונקציה LEAD()?",o:["מחזירה את הערך המקסימלי.","ניגשת לערך של השורה הבאה בחלון.","מוצאת את המנהיג של הקבוצה.","ממיינת את הנתונים בסדר עולה."],c:1,e:"LEAD מאפשרת להשוות שורה נוכחית לשורה עתידית."},
+  {n:28,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מהו השימוש ב-ORDER BY בתוך ה-OVER?",o:["מיון התוצאה הסופית של השאילתה.","קביעת הסדר שבו הפונקציה תתייחס לשורות (קריטי לחישוב סכום מצטבר).","הגדרת שם העמודה.","זה לא חוקי."],c:1,e:"ORDER BY בתוך OVER קובע את סדר הסריקה של הפונקציה."},
+  {n:29,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"איך מחשבים סכום מצטבר (Running Total)?",o:["SUM(price) GROUP BY date","SUM(price) OVER (ORDER BY date)","SUM(price) OVER (PARTITION BY date)","ADD(price)"],c:1,e:"SUM() OVER(ORDER BY date) מחשב סכום מצטבר לאורך זמן."},
+  {n:30,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה עושה הפונקציה FIRST_VALUE()?",o:["מחזירה את השורה הראשונה בטבלה.","מחזירה את הערך הראשון בחלון הנתונים המוגדר.","מחזירה את הערך 1.","מוצאת את המינימום."],c:1,e:"FIRST_VALUE מאפשרת להציג את הערך הראשון לצד כל שורה."},
+  {n:31,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה ההבדל בין SUM ללא OVER לבין SUM עם OVER?",o:["אין הבדל.","ללא OVER מחזיר שגיאה.","ללא OVER מחזיר שורה אחת לכל הקבוצה, עם OVER מחזיר את הסכום לכל שורה ושורה.","OVER מהיר יותר."],c:2,e:"GROUP BY מצמצם שורות — OVER שומר עליהן."},
+  {n:32,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מהו ה-Window Frame (למשל ROWS BETWEEN...)?",o:["שם נוסף לטבלה.","הגדרה מדויקת של אילו שורות סביב השורה הנוכחית ייכללו בחישוב (למשל ממוצע נע).","פקודה לשינוי גודל המסך.","סוג של JOIN."],c:1,e:"Window Frame מגדיר את תחום השורות לחישוב — קריטי לממוצע נע."},
+  {n:33,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה המשמעות של UNBOUNDED PRECEDING?",o:["עד השורה הבאה.","מתחילת החלון (כל השורות שלפני השורה הנוכחית).","ללא גבולות בכלל.","רק השורה הקודמת."],c:1,e:"UNBOUNDED PRECEDING = מהשורה הראשונה בחלון עד השורה הנוכחית."},
+  {n:34,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"איזו פונקציה מחלקת את השורות ל-4 קבוצות שוות (רבעונים)?",o:["QUARTER()","DIVIDE(4)","NTILE(4)","PART(4)"],c:2,e:"NTILE(4) מחלקת את כל השורות ל-4 קבוצות שוות בגודלן."},
+  {n:35,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה מבצעת הפונקציה LAST_VALUE()?",o:["מחזירה NULL.","מחזירה את הערך האחרון בחלון (דורש הגדרת Frame נכונה).","מוחקת את השורה האחרונה.","מוצאת את המקסימום."],c:1,e:"LAST_VALUE דורשת ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING לתוצאה נכונה."},
+  {n:36,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"האם ניתן להשתמש בפונקציות חלון ב-WHERE?",o:["כן.","לא, הן מחושבות אחרי ה-WHERE (יש להשתמש ב-Subquery או CTE).","רק אם יש GROUP BY.","רק ב-SQL Server."],c:1,e:"פונקציות חלון מחושבות אחרי WHERE — יש לעטוף ב-CTE ואז לסנן."},
+  {n:37,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה המשמעות של CURRENT ROW בתוך הגדרת חלון?",o:["השורה הראשונה בטבלה.","השורה האחרונה שנקראה.","השורה עליה מתבצע החישוב ברגע זה.","שגיאת מערכת."],c:2,e:"CURRENT ROW = השורה הנוכחית בחישוב."},
+  {n:38,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"איזו פונקציה מחזירה את המיקום היחסי של שורה באחוזים (0 עד 1)?",o:["PERCENT()","PERCENT_RANK()","RANK_PCT()","RATIO()"],c:1,e:"PERCENT_RANK = (rank-1)/(rows-1). מחזיר 0 לראשון ו-1 לאחרון."},
+  {n:39,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מהו היתרון של LAG/LEAD על פני SELF JOIN?",o:["הם יותר יפים.","הם הרבה יותר יעילים ומהירים מבחינת ביצועים.","הם לא דורשים מפתח ראשי.","הם עובדים רק על מספרים."],c:1,e:"LAG/LEAD נכתבים בשורה אחת ויעילים מאוד — SELF JOIN מכביד על האופטימייזר."},
+  {n:40,s:"חלק ב׳ — פונקציות חלון (Window Functions)",t:"מה מחזירה: SELECT ROW_NUMBER() OVER(ORDER BY id)?",o:["את ה-ID של השורה.","מספר סידורי רץ (1, 2, 3...) לפי סדר ה-ID.","את מספר השורות הכולל.","שורות כפולות."],c:1,e:"ROW_NUMBER() OVER(ORDER BY id) מספר שורות ברצף לפי מיון."},
+  // ── תאריכים ──
+  {n:41,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"איזו פונקציה מחזירה את התאריך והשעה הנוכחיים?",o:["NOW() (ב-MySQL/Postgres)","GETDATE() (ב-SQL Server)","CURRENT_TIMESTAMP","כל התשובות נכונות (תלוי במסד הנתונים)."],c:3,e:"כל המנועים תומכים בנוסחה שלהם — NOW, GETDATE, CURRENT_TIMESTAMP."},
+  {n:42,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"כיצד ניתן לחלץ רק את השנה מתוך תאריך?",o:["YEAR(date) / EXTRACT(YEAR FROM date)","DATE_YEAR()","GET_YEAR()","SUBSTRING(date, 1, 4)"],c:0,e:"YEAR() נפוצה, EXTRACT היא התקן הסטנדרטי ANSI."},
+  {n:43,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה עושה הפונקציה DATEDIFF()?",o:["מחברת שני תאריכים.","מחשבת את ההפרש (בימים, חודשים וכו') בין שני תאריכים.","בודקת אם תאריך חוקי.","משנה פורמט תאריך."],c:1,e:"DATEDIFF(day, start, end) = מספר הימים בין שני תאריכים."},
+  {n:44,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"איך מוסיפים 10 ימים לתאריך מסוים?",o:["date + 10","DATEADD(day, 10, date) / date + INTERVAL '10 days'","ADD_DAYS(date, 10)","INSERT_TIME(10)"],c:1,e:"DATEADD ב-SQL Server, INTERVAL ב-MySQL/PostgreSQL."},
+  {n:45,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"איזו פונקציה מחזירה את היום בשבוע?",o:["DAY()","WEEK()","DAYNAME() / TO_CHAR(date, 'Day')","DATE_PART()"],c:2,e:"DAYNAME ב-MySQL, TO_CHAR ב-Oracle/PostgreSQL."},
+  {n:46,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה מבצעת הפונקציה MONTH()?",o:["מחזירה את מספר הימים בחודש.","מחזירה את מספר החודש (1-12).","מחזירה את שם החודש.","בודקת אם עבר חודש."],c:1,e:"MONTH() מחזיר מספר חודש — 1 לינואר, 12 לדצמבר."},
+  {n:47,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מהו הפורמט הסטנדרטי של תאריך ב-SQL?",o:["DD-MM-YYYY","MM-DD-YYYY","YYYY-MM-DD","YYYY-DD-MM"],c:2,e:"ISO 8601 = YYYY-MM-DD. זהו התקן הבינלאומי."},
+  {n:48,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"איך מוצאים את היום האחרון של החודש הנוכחי?",o:["LAST_DAY()","EOMONTH() (SQL Server) / LAST_DAY() (MySQL)","END_MONTH()","MONTH_LIMIT()"],c:1,e:"EOMONTH ב-SQL Server, LAST_DAY ב-MySQL."},
+  {n:49,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה עושה DATEPART(weekday, date)?",o:["מחזירה את שם היום.","מחזירה ייצוג מספרי של היום בשבוע.","מחזירה את מספר השבוע בשנה.","מחלקת את התאריך."],c:1,e:"DATEPART(weekday) מחזיר 1-7, DATEPART(week) מחזיר מספר השבוע בשנה."},
+  {n:50,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה ההבדל בין DATE ל-DATETIME?",o:["אין הבדל.","DATE מכיל רק יום/חודש/שנה, DATETIME מכיל גם שעות/דקות/שניות.","DATETIME הוא רק לעתיד.","DATE תופס יותר מקום בזיכרון."],c:1,e:"DATE = 3 בייטים. DATETIME = 8 בייטים (כולל שעה)."},
+  {n:51,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"כיצד נהפוך מחרוזת '2023-01-01' לאובייקט תאריך?",o:["CAST('2023-01-01' AS DATE) / TO_DATE()","CONVERT_TO_TIME()","MAKE_DATE()","זה קורה אוטומטית תמיד."],c:0,e:"CAST הוא תקן ANSI, TO_DATE() נפוץ ב-Oracle/PostgreSQL."},
+  {n:52,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה מחזירה EXTRACT(QUARTER FROM date)?",o:["את מספר היום ברבעון.","את מספר הרבעון בשנה (1-4).","את המכירות של הרבעון.","25% מהתאריך."],c:1,e:"EXTRACT(QUARTER) = 1 לינואר-מרץ, 2 לאפריל-יוני, 3 ליולי-ספטמבר, 4 לאוקטובר-דצמבר."},
+  {n:53,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה עושה ISDATE()?",o:["בודקת אם התאריך הוא היום.","בודקת אם מחרוזת מסוימת היא תאריך חוקי (מחזירה 1 או 0).","משנה תאריך לטקסט.","מחזירה את סוג הנתונים."],c:1,e:"ISDATE() שימושית לניקוי נתונים — לפני CAST לתאריך."},
+  {n:54,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"איך מחשבים גיל של אדם ב-SQL?",o:["YEAR(NOW()) - YEAR(birthdate)","DATEDIFF(year, birthdate, GETDATE())","השיטות לעיל נפוצות, אך יש לדייק עם התחשבות ביום ובחודש.","AGE(birthdate)"],c:2,e:"חישוב גיל מדויק דורש השוואת חודש ויום — לא רק שנה."},
+  {n:55,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה עושה TIMESTAMPDIFF?",o:["מחשבת הפרש בזמן בפורמט שניות בלבד.","מחשבת הפרש בין שני ערכי זמן ביחידות שנבחרו (שעות, דקות וכו').","יוצרת חותמת זמן חדשה.","משנה אזור זמן."],c:1,e:"TIMESTAMPDIFF(HOUR, start, end) = מספר שעות בין שני מועדים."},
+  {n:56,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מהו ה-Unix Timestamp?",o:["תאריך בפורמט טקסט.","מספר השניות שחלפו מאז ה-1 בינואר 1970.","פורמט תאריך של אפל.","שעון פנימי של SQL."],c:1,e:"Unix Timestamp = epoch time. בשימוש נרחב ב-APIs ומערכות distributed."},
+  {n:57,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"איך ניתן להציג תאריך בפורמט 'DD/MM/YYYY'?",o:["FORMAT(date, 'dd/MM/yyyy')","TO_CHAR(date, 'DD/MM/YYYY')","CONVERT(VARCHAR, date, 103)","כל התשובות נכונות (תלוי במסד הנתונים)."],c:3,e:"FORMAT ב-SQL Server, TO_CHAR ב-Oracle/PostgreSQL, CONVERT עם קוד 103 ב-SQL Server."},
+  {n:58,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה עושה SYSDATE ב-Oracle?",o:["מוחקת את תאריך המערכת.","מחזירה את התאריך והשעה הנוכחיים של השרת.","מעדכנת את השעון.","מחזירה רק את השנה."],c:1,e:"SYSDATE ב-Oracle = GETDATE() ב-SQL Server = NOW() ב-MySQL."},
+  {n:59,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מהי פונקציית DATE_TRUNC?",o:["מחיקת התאריך מהטבלה.","'עיגול' תאריך ליחידת זמן מסוימת (למשל תחילת החודש או תחילת היום).","חיתוך מחרוזת תאריך.","הארכת התאריך."],c:1,e:"DATE_TRUNC('month', date) = התאריך הראשון בחודש. שימושי לדוחות חודשיים."},
+  {n:60,s:"חלק ג׳ — פונקציות תאריך (Date Functions)",t:"מה קורה אם מוסיפים יום ל-31 בדצמבר?",o:["שגיאה.","התאריך נשאר זהה.","התאריך הופך ל-1 בינואר של השנה הבאה.","המערכת מחזירה NULL."],c:2,e:"SQL מטפל אוטומטית במעבר חודש/שנה בחישובי תאריכים."}
+];
+
+const L=['א','ב','ג','ד'];
+let answers={}, correct=0, curSec=null;
+
+function updateScore(){
+  const tot=Object.keys(answers).length;
+  const pct=tot>0?Math.round(correct/tot*100):0;
+  document.getElementById('scoreText').textContent='✅ '+correct+' / '+tot;
+  document.getElementById('scoreFill').style.width=(Math.round(correct/Q.length*100))+'%';
+  document.getElementById('progTxt').textContent=tot+' / '+Q.length;
+  document.getElementById('scoreDisplay').textContent=pct+'%';
+  document.getElementById('heroAnswered').textContent=tot;
+  document.getElementById('heroCorrect').textContent=correct;
+  document.getElementById('heroPct').textContent=pct+'%';
+  if(tot===Q.length) showFinish();
+}
+
+function selectOption(qi,oi){
+  if(answers[qi]!==undefined)return;
+  const q=Q[qi]; const ok=oi===q.c;
+  answers[qi]=oi; if(ok)correct++;
+  const card=document.getElementById('qcard-'+qi);
+  card.classList.add(ok?'correct':'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i===q.c)o.classList.add('correct-ans');
+    if(i===oi&&!ok)o.classList.add('wrong-ans');
+  });
+  const exp=document.getElementById('exp-'+qi);
+  exp.querySelector('.exp-text').innerHTML=(ok?'✅ נכון! ':'❌ לא נכון. ')+q.e;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc=document.getElementById('mainContent');
+  mc.innerHTML=''; curSec=null;
+  Q.forEach((q,i)=>{
+    if(q.s!==curSec){curSec=q.s;mc.innerHTML+=`<div class="sec-label">${q.s}</div>`;}
+    const opts=q.o.map((o,oi)=>`<div class="option" onclick="selectOption(${i},${oi})"><div class="opt-letter">${L[oi]}</div><div class="opt-text">${o}</div></div>`).join('');
+    mc.innerHTML+=`<div class="q-card" id="qcard-${i}"><div class="q-meta"><div class="q-num">שאלה ${q.n}</div><div class="q-sec-tag">${q.s.split('—')[1]?.trim()||q.s}</div></div><div class="q-text">${q.t}</div><div class="options">${opts}</div><div class="explanation" id="exp-${i}"><div class="exp-label">💡 הסבר</div><div class="exp-text"></div></div></div>`;
+  });
+  mc.innerHTML+=`<div class="finish-card" id="finishCard"><div class="finish-emoji">🏆</div><div class="finish-title">סיימת את הרמה המתקדמת!</div><div class="finish-score" id="finishScore">0/60</div><div class="finish-grade" id="finishGrade"></div><div class="finish-sub" id="finishSub"></div><br><button class="retry-btn" onclick="resetQuiz()">🔄 נסה שוב</button><a href="quiz-medium.html" class="level-link">📗 חזור לרמה הבינונית</a></div>`;
+}
+
+function showFinish(){
+  if(window.fbAutoSave&&window.currentUser)window.fbAutoSave(correct,Q.length);
+  const pct=Math.round(correct/Q.length*100);
+  document.getElementById('finishScore').textContent=correct+' / '+Q.length;
+  const grades=[[90,'🏆 מצוין!','שליטה מרשימה ברמה המתקדמת!'],[75,'⭐ טוב מאוד','עוד קצת תרגול ותגיע לשלמות!'],[60,'👍 טוב','כדאי לחזור על החומר החלש.'],[0,'💪 המשך להתאמן','חזור על הפרקים ונסה שוב!']];
+  const [,grade,sub]=grades.find(([t])=>pct>=t);
+  document.getElementById('finishGrade').textContent=grade;
+  document.getElementById('finishSub').textContent=sub;
+  const card=document.getElementById('finishCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function resetQuiz(){
+  answers={};correct=0;
+  document.getElementById('finishCard').classList.remove('show');
+  updateScore();buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuiz();updateScore();
+</script>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const app=initializeApp({apiKey:"AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",authDomain:"sql-course-507b5.firebaseapp.com",projectId:"sql-course-507b5",storageBucket:"sql-course-507b5.firebasestorage.app",messagingSenderId:"999664091380",appId:"1:999664091380:web:349959985ae11ce8c51ea1"});
+const auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
+let currentUser=null;window.currentUser=null;const QID='advanced2';
+onAuthStateChanged(auth,async(user)=>{
+  currentUser=user;window.currentUser=user;
+  const li=document.getElementById('fb-login-btn'),lo=document.getElementById('fb-logout-btn'),ui=document.getElementById('fb-user-info'),hb=document.getElementById('fb-history-btn'),sb=document.getElementById('fb-save-btn');
+  if(user){
+    document.getElementById('fb-user-name').textContent=user.displayName;
+    document.getElementById('fb-user-photo').src=user.photoURL;
+    document.getElementById('fb-user-photo').style.display='block';
+    li.style.display='none';lo.style.display='flex';ui.style.display='flex';hb.style.display='flex';sb.style.display='flex';
+    await loadProg();await loadHist();
+  }else{li.style.display='flex';lo.style.display='none';ui.style.display='none';hb.style.display='none';sb.style.display='none';}
+});
+window.fbLogin=async()=>{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}};
+window.fbLogout=async()=>{await signOut(auth);};
+window.fbToggleHistory=()=>{const w=document.getElementById('fb-history-wrap');w.style.display=w.style.display==='none'?'block':'none';};
+window.triggerSave=async()=>{
+  if(!currentUser){window.fbLogin();return;}
+  const txt=(document.getElementById('scoreText')?.textContent||'0 / 0').replace('✅ ','');
+  const p=txt.split('/');const sc=parseInt(p[0])||0,tot=parseInt(p[1])||0;
+  if(tot===0){showToast('⚠️ ענה על לפחות שאלה אחת קודם!');return;}
+  await saveProg(sc,tot);
+};
+async function saveProg(score,total){
+  if(!currentUser)return;
+  const pct=Math.round(score/total*100);
+  await setDoc(doc(db,'users',currentUser.uid,'quizzes',QID),{score,total,pct,lastUpdate:new Date().toISOString()},{merge:true});
+  await addDoc(collection(db,'users',currentUser.uid,'history'),{quizId:QID,score,total,pct,date:new Date().toISOString()});
+  showToast('✅ ההתקדמות נשמרה בענן!');await loadHist();
+}
+window.fbAutoSave=saveProg;
+async function loadProg(){
+  if(!currentUser)return;
+  const s=await getDoc(doc(db,'users',currentUser.uid,'quizzes',QID));
+  if(s.exists()){const d=s.data();const el=document.getElementById('fb-saved-score');el.textContent=`ניסיון אחרון: ${d.score}/${d.total} (${d.pct}%)`;el.style.display='block';}
+}
+async function loadHist(){
+  if(!currentUser)return;
+  const q=query(collection(db,'users',currentUser.uid,'history'),orderBy('date','desc'),limit(10));
+  const s=await getDocs(q);const hist=[];
+  s.forEach(d=>hist.push(d.data()));
+  renderChart(hist.filter(h=>h.quizId===QID));
+}
+function renderChart(h){
+  const p=document.getElementById('fb-history-panel');
+  if(!h.length){p.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">עדיין אין היסטוריה — ענה על שאלות ושמור!</p>';return;}
+  const rev=[...h].reverse();
+  const best=Math.max(...h.map(x=>x.pct)),avg=Math.round(h.reduce((a,x)=>a+x.pct,0)/h.length);
+  const bars=rev.map(x=>{const d=new Date(x.date);const lbl=`${d.getDate()}/${d.getMonth()+1}`;const col=x.pct>=80?'var(--aq)':x.pct>=50?'#FFB020':'#FF4060';return`<div class="hbar-wrap"><div class="hbar-val">${x.pct}%</div><div class="hbar" style="height:${Math.max(x.pct*1.1,8)}px;background:${col}"></div><div class="hbar-lbl">${lbl}</div></div>`;}).join('');
+  p.innerHTML=`<div class="hstats-row"><div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">שיא אישי</div></div><div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">ממוצע</div></div><div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${h.length}</div><div class="hstat-l">ניסיונות</div></div></div><div class="hchart">${bars}</div>`;
+}
+function showToast(msg){let t=document.getElementById('fb-toast');if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>
+</body>
+</html>
