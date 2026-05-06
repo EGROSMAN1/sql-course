@@ -302,11 +302,12 @@ buildQuiz();updateScore();
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getAuth,signInWithPopup,signInWithRedirect,getRedirectResult,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",authDomain:"sql-course-507b5.firebaseapp.com",projectId:"sql-course-507b5",storageBucket:"sql-course-507b5.firebasestorage.app",messagingSenderId:"999664091380",appId:"1:999664091380:web:349959985ae11ce8c51ea1"});
 const auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
 let currentUser=null;window.currentUser=null;const QID='advanced2';
+getRedirectResult(auth).catch(e=>console.error(e));
 onAuthStateChanged(auth,async(user)=>{
   currentUser=user;window.currentUser=user;
   const li=document.getElementById('fb-login-btn'),lo=document.getElementById('fb-logout-btn'),ui=document.getElementById('fb-user-info'),hb=document.getElementById('fb-history-btn'),sb=document.getElementById('fb-save-btn');
@@ -318,7 +319,7 @@ onAuthStateChanged(auth,async(user)=>{
     await loadProg();await loadHist();
   }else{li.style.display='flex';lo.style.display='none';ui.style.display='none';hb.style.display='none';sb.style.display='none';}
 });
-window.fbLogin=async()=>{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}};
+window.fbLogin=async()=>{try{await signInWithRedirect(auth,provider);}catch(e){console.error(e);}};
 window.fbLogout=async()=>{await signOut(auth);};
 window.fbToggleHistory=()=>{const w=document.getElementById('fb-history-wrap');w.style.display=w.style.display==='none'?'block':'none';};
 window.triggerSave=async()=>{
