@@ -188,50 +188,101 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 .intro-st{font-size:11px;color:var(--text3);font-family:var(--mono);direction:ltr}
 
 /* ===== MOBILE ===== */
+.sb-close{display:none}
+
+/* TABLET — 768px and below */
 @media(max-width:768px){
-  body{overflow:auto;height:auto}
-  .topbar{flex-wrap:wrap;height:auto;padding:.5rem .65rem;gap:.5rem}
-  .logo{font-size:13px}
-  .db-badge{font-size:10px;padding:.18rem .5rem}
-  .topbar-links{order:2;width:100%;margin:0}
-  .tlink{padding:.35rem .6rem;font-size:11px}
-  .back-link{font-size:10.5px;padding:.25rem .55rem}
-  .app{grid-template-columns:148px 1fr;height:auto;min-height:calc(100vh - 88px)}
-  .sb{height:100%}
-  .sb-hdr{padding:.5rem .55rem;font-size:9px;letter-spacing:1px}
-  .tbl-row{padding:.5rem .55rem;gap:.3rem;flex-wrap:nowrap}
-  .tbl-name{font-size:11px;line-height:1.2;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .tbl-cnt{font-size:9.5px;min-width:0;flex-shrink:0}
-  .tbl-run{width:18px;height:18px;font-size:8px;flex-shrink:0}
-  .tbl-cols{padding:0 .55rem .3rem .55rem}
-  .col-line{font-size:10px;padding:.15rem 0;direction:ltr;text-align:end;flex-direction:row-reverse}
+  body{overflow:auto;height:auto;-webkit-text-size-adjust:100%}
+  .topbar{flex-wrap:wrap;height:auto;padding:.55rem .7rem;gap:.5rem;min-height:50px}
+  .logo{font-size:14px}
+  .db-badge{font-size:10.5px;padding:.22rem .55rem}
+  .dbst{font-size:10.5px;width:100%;order:5;text-align:center;padding-top:.2rem;border-top:1px dashed var(--border);margin-top:.2rem}
+  .topbar-links{order:3;width:100%;margin:0;justify-content:center;border-top:1px solid var(--border);padding-top:.35rem}
+  .tlink{padding:.4rem .85rem;font-size:12px}
+  .back-link{font-size:11px;padding:.3rem .65rem}
+
+  /* Sidebar stays on right, just narrower */
+  .app{grid-template-columns:155px 1fr;height:auto;min-height:calc(100vh - 100px)}
+  .sb{height:auto;min-height:100%}
+  .sb-hdr{padding:.55rem .6rem;font-size:10px;letter-spacing:1px}
+  .tbl-row{padding:.55rem .55rem;gap:.35rem;flex-wrap:nowrap;min-height:40px}
+  .tbl-name{font-size:11.5px;line-height:1.2;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+  .tbl-cnt{font-size:10.5px;min-width:0;flex-shrink:0;font-weight:700}
+  .tbl-run{width:24px;height:24px;font-size:10px;flex-shrink:0}
+  .tbl-cols{padding:0 .55rem .35rem .55rem}
+  .col-line{font-size:10.5px;padding:.25rem 0;direction:ltr;text-align:end;flex-direction:row-reverse;min-height:24px}
   .col-line .ct{display:none}
-  .sb-quick{max-height:30%}
-  .sq-hdr{padding:.5rem .55rem .25rem;font-size:9px}
-  .sq-item{font-size:10.5px;padding:.3rem .55rem}
+  .sb-quick{max-height:35%}
+  .sq-hdr{padding:.55rem .6rem .3rem;font-size:10px}
+  .sq-item{font-size:11.5px;padding:.45rem .6rem;min-height:36px;align-items:center;line-height:1.3}
+
   /* Center pane */
-  .ex-bar{padding:.4rem .55rem}
-  .ex-label{font-size:9.5px}
-  .ex-label b{font-size:11px}
-  .lt{padding:.25rem .55rem;font-size:10px}
-  .ec{min-width:170px;max-width:185px;padding:.4rem .5rem}
-  .et{font-size:10.5px}
-  .ec-btns{gap:.18rem}
-  .ec-sel,.ec-hint,.ec-ans{font-size:9px;padding:.25rem .15rem}
-  .tb{padding:.4rem .55rem;gap:.35rem;flex-wrap:wrap}
-  .run-btn{font-size:11.5px;padding:.35rem .85rem}
-  .xbtn{font-size:10.5px;padding:.32rem .55rem}
+  .ex-bar{padding:.55rem .65rem}
+  .ex-r1{gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+  .ex-label{font-size:11px;letter-spacing:1px}
+  .ex-label b{font-size:13px}
+  .lvl-tabs{gap:.3rem}
+  .lt{padding:.4rem .7rem;font-size:11.5px;min-height:34px}
+  .exr{gap:.5rem}
+  .ec{min-width:200px;max-width:215px;padding:.55rem .65rem;gap:.4rem}
+  .en{font-size:10.5px}
+  .et{font-size:12px;line-height:1.4;-webkit-line-clamp:3}
+  .ec-btns{gap:.25rem;margin-top:.3rem}
+  .ec-sel,.ec-hint,.ec-ans{font-size:11px;padding:.4rem .2rem;min-height:32px}
+
+  /* Toolbar */
+  .tb{padding:.5rem .65rem;gap:.45rem;flex-wrap:wrap}
+  .run-btn{font-size:13px;padding:.5rem 1.1rem;min-height:40px}
+  .xbtn{font-size:11.5px;padding:.4rem .7rem;min-height:36px}
   .kb{display:none}
-  .editor-wrap{min-height:110px;height:30%}
-  .lns{font-size:11px;min-width:30px;padding:.5rem .35rem}
-  #sqle{font-size:12px;padding:.5rem .55rem}
+
+  /* Editor */
+  .editor-wrap{min-height:140px;height:auto;flex:0 0 180px}
+  .lns{font-size:12px;min-width:32px;padding:.55rem .35rem;line-height:1.6}
+  #sqle{font-size:13.5px;padding:.55rem .6rem;line-height:1.6}
   .resize-handle{display:none}
-  .rh{padding:.3rem .55rem;font-size:10px;flex-wrap:wrap;gap:.5rem}
-  .rt th,.rt td{padding:.3rem .5rem;font-size:10.5px}
-  .erd-pane{padding:.85rem}
-  .erd-grid{grid-template-columns:1fr;gap:.6rem}
-  .sol-modal{max-height:92vh}
-  .sol-pre{font-size:11px}
+
+  /* Results */
+  .rh{padding:.45rem .65rem;font-size:11px;flex-wrap:wrap;gap:.6rem;min-height:34px}
+  .rh .lbl{font-size:10px}
+  .rsc{min-height:180px}
+  .rt th{padding:.4rem .55rem;font-size:10.5px}
+  .rt td{padding:.4rem .55rem;font-size:11.5px}
+  .emp{padding:1.5rem 1rem;font-size:12.5px}
+  .emp .ico{font-size:28px}
+
+  /* ERD */
+  .erd-pane{padding:1rem .85rem}
+  .erd-title{font-size:1rem}
+  .erd-grid{grid-template-columns:1fr;gap:.7rem}
+
+  /* Modals */
+  .sol-modal{max-height:92vh;border-radius:14px}
+  .sol-hdr{padding:.85rem .9rem}
+  .sol-num{font-size:11px}
+  .sol-title{font-size:14px}
+  .sol-close{width:36px;height:36px;font-size:24px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;color:var(--text2);cursor:pointer;border-radius:6px}
+  .sol-body{padding:.85rem .9rem}
+  .sol-pre{font-size:12px;padding:.75rem}
+  .sol-footer{padding:.75rem .85rem}
+  .sol-run,.sol-use{font-size:13px;padding:.6rem 1rem;min-height:42px;flex:1;text-align:center}
+  #exModalDesc{font-size:14.5px}
+  #exModalHint{font-size:12.5px;padding:.85rem 1rem}
+}
+
+/* PHONE — extra small screens */
+@media(max-width:420px){
+  .topbar{padding:.5rem .55rem}
+  .logo{font-size:13px}
+  .db-badge{font-size:10px;padding:.18rem .45rem}
+  .app{grid-template-columns:140px 1fr}
+  .tbl-name{font-size:11px}
+  .tbl-cnt{font-size:10px}
+  .tbl-run{width:22px;height:22px}
+  .ec{min-width:185px;max-width:200px}
+  .ex-r1{flex-direction:column;align-items:stretch;gap:.45rem}
+  .lvl-tabs{justify-content:space-between}
+  .lt{flex:1;text-align:center;justify-content:center}
 }
 </style>
 </head>

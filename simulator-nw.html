@@ -133,8 +133,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
 .inf.si pre{font-family:var(--mono);font-size:11px;color:var(--purple);white-space:pre-wrap;direction:ltr;text-align:left}
 .ew{flex:1;display:flex;overflow:hidden;min-height:0;position:relative}
 .lns{background:var(--bg2);border-left:1px solid var(--border);padding:.5rem 0;width:34px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.55;overflow:hidden;flex-shrink:0;user-select:none}
-#sqle{flex:1;background:var(--bg);color:var(--text);border:none;outline:none;padding:.5rem .6rem .5rem .65rem;font-family:var(--mono);font-size:13px;line-height:1.55;resize:none;tab-size:2;direction:ltr;text-align:left;overflow-y:auto}
-#sqle::placeholder{color:var(--text3)}
+#sqle{flex:1;background:var(--bg);color:#ffffff;border:none;outline:none;padding:.5rem .6rem .5rem .65rem;font-family:var(--mono);font-size:13px;line-height:1.55;resize:none;tab-size:2;direction:ltr;text-align:left;overflow-y:auto;font-weight:500;caret-color:var(--cyan,#00d4ff)}
+#sqle::placeholder{color:rgba(255,255,255,.55);font-weight:400}
 
 /* AUTOCOMPLETE */
 #acMenu{display:none;position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,.6);min-width:200px;max-width:320px;max-height:220px;overflow-y:auto;z-index:999;font-family:var(--mono);font-size:12px;direction:ltr}
@@ -343,7 +343,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
     <div class="inf hi" id="hBox"></div>
     <div class="ew">
       <div class="lns" id="lns">1</div>
-      <textarea id="sqle" placeholder="-- כתוב שאילתת SQL&#10;-- Ctrl+Enter להרצה&#10;&#10;SELECT * FROM customers LIMIT 10;" spellcheck="false"></textarea>
+      <textarea id="sqle" spellcheck="false">-- כתוב שאילתת SQL
+-- Ctrl+Enter להרצה
+
+SELECT * FROM customers LIMIT 10;</textarea>
     </div>
     <div id="acMenu"></div>
     <div class="resize-handle" id="resizeHandle"></div>
