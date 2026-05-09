@@ -204,6 +204,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 
 /* ===== MOBILE — same approach as Northwind: sidebar becomes horizontal strip at top ===== */
 @media(max-width:768px){
+  html,body{height:auto !important;overflow:auto !important;-webkit-overflow-scrolling:touch}
   body{overflow:auto;height:auto;-webkit-text-size-adjust:100%}
   .topbar{flex-wrap:wrap;height:auto;padding:.5rem .65rem;gap:.4rem;min-height:50px}
   .logo{font-size:13px}
@@ -217,7 +218,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .app{display:flex;flex-direction:column;height:auto;min-height:calc(100vh - 100px);overflow:visible}
 
   /* IMPORTANT: allow panes to overflow naturally so body scrolls */
-  .pane.active{display:flex;flex-direction:column;min-height:0;flex:1;overflow:visible;height:auto}
+  .pane.active{display:block;flex:none;height:auto;min-height:auto;overflow:visible}
   .pane:not(.active){display:none}
 
   /* Sidebar becomes horizontal scrollable strip — KEPT SHORT so editor stays close to top */
@@ -259,16 +260,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .kb{display:none}
 
   /* Editor — bigger, with internal scroll */
-  .editor-wrap{min-height:220px;height:auto;flex:0 0 auto}
+  .editor-wrap{min-height:220px;height:auto;display:flex}
   .lns{font-size:11.5px;min-width:32px;padding:.55rem .35rem;line-height:1.6;overflow-y:auto}
-  #sqle{font-size:13.5px;padding:.55rem .65rem;line-height:1.6;overflow-y:auto}
+  #sqle{font-size:13.5px;padding:.55rem .65rem;line-height:1.6;overflow-y:auto;min-height:220px}
   .resize-handle{display:none}
 
   /* Results — both vertical and horizontal scrolling */
-  .res{display:flex;flex-direction:column;flex:1;min-height:280px;overflow:hidden}
-  .rh{padding:.4rem .55rem;font-size:10.5px;flex-wrap:wrap;gap:.6rem;min-height:30px;flex-shrink:0}
+  .res{display:block;min-height:300px}
+  .rh{padding:.4rem .55rem;font-size:10.5px;flex-wrap:wrap;gap:.6rem;min-height:30px;display:flex}
   .rh .lbl{font-size:9.5px}
-  .rsc{flex:1;min-height:230px;max-height:none;overflow:auto;-webkit-overflow-scrolling:touch}
+  .rsc{max-height:500px;min-height:230px;overflow:auto;-webkit-overflow-scrolling:touch}
   .rt{min-width:max-content}
   .rt th{padding:.35rem .5rem;font-size:10px}
   .rt td{padding:.35rem .5rem;font-size:11px}
@@ -276,9 +277,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .emp .ico{font-size:26px}
 
   /* ERD — allow body scroll, no internal trap */
-  .erd-pane{padding:.85rem .55rem;overflow:visible;height:auto}
+  .erd-pane{padding:.85rem .55rem;overflow:visible;height:auto;display:block}
   .erd-title{font-size:1rem;margin-bottom:.7rem}
-  .erd-grid{grid-template-columns:1fr;gap:.6rem}
+  .erd-grid{grid-template-columns:1fr;gap:.6rem;display:grid}
   .erd-tbl{width:100%}
 
   /* Modals */
