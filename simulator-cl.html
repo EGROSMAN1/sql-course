@@ -259,17 +259,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .xbtn{font-size:11px;padding:.38rem .7rem;min-height:32px}
   .kb{display:none}
 
-  /* Editor — bigger, with internal scroll */
-  .editor-wrap{min-height:220px;height:auto;display:flex}
+  /* Editor — compact on mobile to leave room for results */
+  .editor-wrap{min-height:170px;height:auto;display:flex;scroll-margin-top:8px}
   .lns{font-size:11.5px;min-width:32px;padding:.55rem .35rem;line-height:1.6;overflow-y:auto}
-  #sqle{font-size:13.5px;padding:.55rem .65rem;line-height:1.6;overflow-y:auto;min-height:220px}
+  #sqle{font-size:13.5px;padding:.55rem .65rem;line-height:1.6;overflow-y:auto;min-height:170px}
   .resize-handle{display:none}
 
-  /* Results — both vertical and horizontal scrolling */
-  .res{display:block;min-height:300px}
-  .rh{padding:.4rem .55rem;font-size:10.5px;flex-wrap:wrap;gap:.6rem;min-height:30px;display:flex}
+  /* Results — both vertical and horizontal scrolling, scroll-margin so it lands at top when scrolled-into-view */
+  .res{display:block;min-height:380px;scroll-margin-top:8px}
+  .rh{padding:.5rem .65rem;font-size:11px;flex-wrap:wrap;gap:.6rem;min-height:34px;display:flex;background:var(--bg2);border-bottom:2px solid var(--cyan);position:sticky;top:0;z-index:5}
   .rh .lbl{font-size:9.5px}
-  .rsc{max-height:500px;min-height:230px;overflow:auto;-webkit-overflow-scrolling:touch}
+  .rsc{max-height:none;min-height:340px;overflow:auto;-webkit-overflow-scrolling:touch}
   .rt{min-width:max-content}
   .rt th{padding:.35rem .5rem;font-size:10px}
   .rt td{padding:.35rem .5rem;font-size:11px}
@@ -823,6 +823,10 @@ function runQ() {
   const sql = document.getElementById('sqle').value.trim();
   if (!sql) return;
 
+  // Hide mobile keyboard so results are visible
+  document.getElementById('sqle').blur();
+  hideAc();
+
   document.getElementById('rSt').innerHTML = '<span class="spin"></span>מריץ...';
   document.getElementById('rSc').innerHTML = '';
 
@@ -872,6 +876,12 @@ function runQ() {
       document.getElementById('rCl').textContent = '—';
       document.getElementById('rSc').innerHTML = `<div class="ev">❌ ${escapeHtml(msg)}<br><span style="color:var(--text2);font-size:11px">${getHint(msg)}</span></div>`;
     }
+    // On mobile: scroll results into view so user sees them
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        document.querySelector('.res').scrollIntoView({behavior:'smooth', block:'start'});
+      }, 80);
+    }
   }, 30);
 }
 
@@ -904,6 +914,7 @@ function qQ(q) {
   document.getElementById('sqle').value = q;
   updLN();
   swT('editor');
+  document.getElementById('sqle').blur(); // hide mobile keyboard
   runQ();
 }
 
