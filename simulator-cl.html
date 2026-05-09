@@ -204,40 +204,41 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   /* App becomes column layout */
   .app{display:flex;flex-direction:column;height:auto;min-height:calc(100vh - 100px)}
 
-  /* Sidebar becomes horizontal scrollable strip at top */
+  /* IMPORTANT: allow panes to overflow naturally so body scrolls */
+  .pane.active{display:flex;flex-direction:column;min-height:0;flex:1;overflow:visible;height:auto}
+  .pane:not(.active){display:none}
+
+  /* Sidebar becomes horizontal scrollable strip — KEPT SHORT so editor stays close to top */
   .sb{width:100%;border-left:none;border-bottom:1px solid var(--border);display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;height:auto;max-height:none;flex-shrink:0}
   .sb-hdr{display:none}
-  .sb-body{flex:none;min-width:200px;overflow-y:auto;max-height:220px;padding:.25rem 0;border-left:1px solid var(--border)}
-  .sb-quick{min-width:210px;border-top:none;border-left:1px solid var(--border);overflow-y:auto;max-height:220px;padding:.35rem 0;flex:none}
+  .sb-body{flex:none;min-width:200px;overflow-y:auto;max-height:160px;padding:.25rem 0;border-left:1px solid var(--border)}
+  .sb-quick{min-width:210px;border-top:none;border-left:1px solid var(--border);overflow-y:auto;max-height:160px;padding:.35rem 0;flex:none}
 
   /* Schema rows in horizontal sidebar */
-  .tbl-row{padding:.45rem .65rem;gap:.35rem;flex-wrap:nowrap;min-height:36px}
+  .tbl-row{padding:.4rem .65rem;gap:.35rem;flex-wrap:nowrap;min-height:32px}
   .tbl-name{font-size:11px;line-height:1.2;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
   .tbl-cnt{font-size:10px;min-width:0;flex-shrink:0;font-weight:700}
   .tbl-run{width:22px;height:22px;font-size:9px;flex-shrink:0}
-  .tbl-cols{padding:0 .65rem .3rem .65rem}
-  .col-line{font-size:10px;padding:.18rem 0;direction:ltr;text-align:end;flex-direction:row-reverse}
+  .tbl-cols{padding:0 .65rem .25rem .65rem}
+  .col-line{font-size:10px;padding:.15rem 0;direction:ltr;text-align:end;flex-direction:row-reverse}
   .col-line .ct{display:none}
 
   /* Quick queries in horizontal sidebar */
-  .sq-hdr{padding:.5rem .65rem .25rem;font-size:9.5px;letter-spacing:1px}
-  .sq-item{font-size:10.5px;padding:.35rem .65rem;min-height:32px;align-items:center}
+  .sq-hdr{padding:.4rem .65rem .2rem;font-size:9.5px;letter-spacing:1px}
+  .sq-item{font-size:10.5px;padding:.3rem .65rem;min-height:28px;align-items:center}
 
-  /* Main pane */
-  .pane.active{display:flex;flex-direction:column;min-height:0;flex:1}
-
-  /* Exercise bar */
-  .ex-bar{padding:.4rem .55rem}
-  .ex-r1{flex-wrap:wrap;gap:.4rem;margin-bottom:.4rem}
+  /* Exercise bar — compact */
+  .ex-bar{padding:.35rem .55rem}
+  .ex-r1{flex-wrap:wrap;gap:.35rem;margin-bottom:.35rem}
   .ex-label{font-size:10px;letter-spacing:1px}
   .ex-label b{font-size:11.5px}
-  .lt{font-size:10.5px;padding:.3rem .65rem;min-height:30px}
+  .lt{font-size:10.5px;padding:.28rem .65rem;min-height:28px}
   .exr{gap:.4rem}
-  .ec{min-width:170px;max-width:185px;padding:.45rem .55rem;gap:.35rem}
+  .ec{min-width:170px;max-width:185px;padding:.4rem .55rem;gap:.3rem}
   .en{font-size:10px}
   .et{font-size:11px;line-height:1.35;-webkit-line-clamp:3}
-  .ec-btns{gap:.22rem;margin-top:.25rem}
-  .ec-sel,.ec-hint,.ec-ans{font-size:10px;padding:.32rem .15rem;min-height:28px}
+  .ec-btns{gap:.22rem;margin-top:.2rem}
+  .ec-sel,.ec-hint,.ec-ans{font-size:10px;padding:.28rem .15rem;min-height:26px}
 
   /* Toolbar */
   .tb{padding:.4rem .55rem;gap:.4rem;flex-wrap:wrap}
@@ -245,25 +246,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .xbtn{font-size:11px;padding:.38rem .7rem;min-height:32px}
   .kb{display:none}
 
-  /* Editor */
-  .editor-wrap{min-height:150px;height:auto;flex:0 0 180px}
-  .lns{font-size:11px;min-width:30px;padding:.5rem .35rem}
-  #sqle{font-size:13px;padding:.55rem .6rem;line-height:1.6}
+  /* Editor — bigger, with internal scroll */
+  .editor-wrap{min-height:220px;height:auto;flex:0 0 auto}
+  .lns{font-size:11.5px;min-width:32px;padding:.55rem .35rem;line-height:1.6;overflow-y:auto}
+  #sqle{font-size:13.5px;padding:.55rem .65rem;line-height:1.6;overflow-y:auto}
   .resize-handle{display:none}
 
   /* Results */
+  .res{flex:0 0 auto}
   .rh{padding:.4rem .55rem;font-size:10.5px;flex-wrap:wrap;gap:.6rem;min-height:30px}
   .rh .lbl{font-size:9.5px}
-  .rsc{min-height:170px}
+  .rsc{min-height:180px;max-height:none;overflow:auto}
   .rt th{padding:.35rem .5rem;font-size:10px}
   .rt td{padding:.35rem .5rem;font-size:11px}
   .emp{padding:1.5rem 1rem;font-size:12px}
   .emp .ico{font-size:26px}
 
-  /* ERD */
-  .erd-pane{padding:.85rem .55rem}
-  .erd-title{font-size:1rem}
+  /* ERD — allow body scroll, no internal trap */
+  .erd-pane{padding:.85rem .55rem;overflow:visible;height:auto}
+  .erd-title{font-size:1rem;margin-bottom:.7rem}
   .erd-grid{grid-template-columns:1fr;gap:.6rem}
+  .erd-tbl{width:100%}
 
   /* Modals */
   .sol-modal{width:95vw;max-height:90vh;margin:.5rem}
