@@ -190,6 +190,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 /* ===== MOBILE ===== */
 .sb-close{display:none}
 
+/* ===== AUTOCOMPLETE ===== */
+#acMenu{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;box-shadow:0 12px 28px rgba(0,0,0,.5);max-height:240px;overflow-y:auto;display:none;z-index:1000;min-width:220px;max-width:85vw;direction:ltr}
+#acMenu.show{display:block}
+.ac-item{padding:.45rem .75rem;font-family:var(--mono);font-size:12.5px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid rgba(30,45,66,.5);transition:background .1s}
+.ac-item:last-child{border-bottom:0}
+.ac-item:hover,.ac-item.sel{background:rgba(0,212,255,.15);color:var(--cyan)}
+.ac-text{flex:1;font-weight:600}
+.ac-type{font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:700;font-family:var(--font);padding:2px 6px;border-radius:4px}
+.ac-K .ac-type{background:rgba(0,212,255,.15);color:var(--cyan)}
+.ac-T .ac-type{background:rgba(0,230,118,.15);color:var(--green)}
+.ac-C .ac-type{background:rgba(255,209,102,.15);color:var(--yellow)}
+
 /* ===== MOBILE — same approach as Northwind: sidebar becomes horizontal strip at top ===== */
 @media(max-width:768px){
   body{overflow:auto;height:auto;-webkit-text-size-adjust:100%}
@@ -201,8 +213,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .tlink{padding:.35rem .7rem;font-size:11.5px}
   .back-link{font-size:11px;padding:.3rem .6rem}
 
-  /* App becomes column layout */
-  .app{display:flex;flex-direction:column;height:auto;min-height:calc(100vh - 100px)}
+  /* App becomes column layout — IMPORTANT: override desktop overflow:hidden */
+  .app{display:flex;flex-direction:column;height:auto;min-height:calc(100vh - 100px);overflow:visible}
 
   /* IMPORTANT: allow panes to overflow naturally so body scrolls */
   .pane.active{display:flex;flex-direction:column;min-height:0;flex:1;overflow:visible;height:auto}
@@ -252,11 +264,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   #sqle{font-size:13.5px;padding:.55rem .65rem;line-height:1.6;overflow-y:auto}
   .resize-handle{display:none}
 
-  /* Results */
-  .res{flex:0 0 auto}
-  .rh{padding:.4rem .55rem;font-size:10.5px;flex-wrap:wrap;gap:.6rem;min-height:30px}
+  /* Results — both vertical and horizontal scrolling */
+  .res{display:flex;flex-direction:column;flex:1;min-height:280px;overflow:hidden}
+  .rh{padding:.4rem .55rem;font-size:10.5px;flex-wrap:wrap;gap:.6rem;min-height:30px;flex-shrink:0}
   .rh .lbl{font-size:9.5px}
-  .rsc{min-height:180px;max-height:none;overflow:auto}
+  .rsc{flex:1;min-height:230px;max-height:none;overflow:auto;-webkit-overflow-scrolling:touch}
+  .rt{min-width:max-content}
   .rt th{padding:.35rem .5rem;font-size:10px}
   .rt td{padding:.35rem .5rem;font-size:11px}
   .emp{padding:1.5rem 1rem;font-size:12px}
@@ -399,6 +412,9 @@ SELECT * FROM seasons LIMIT 10;</textarea>
   </div>
 
 </div>
+
+<!-- AUTOCOMPLETE MENU -->
+<div id="acMenu"></div>
 
 <!-- SOLUTION MODAL -->
 <div class="sol-overlay" id="solOverlay" onclick="if(event.target===this)closeSol()">
@@ -693,6 +709,105 @@ function runSolAndClose() {
   updLN(); closeSol(); swT('editor'); runQ();
 }
 
+// ============= AUTOCOMPLETE =============
+const KEYWORDS = ['SELECT','FROM','WHERE','GROUP BY','ORDER BY','HAVING','JOIN','LEFT JOIN','RIGHT JOIN','INNER JOIN','FULL JOIN','CROSS JOIN','ON','AS','COUNT','SUM','AVG','MIN','MAX','DISTINCT','LIMIT','OFFSET','UNION','UNION ALL','INTERSECT','EXCEPT','CASE','WHEN','THEN','ELSE','END','AND','OR','NOT','IN','LIKE','BETWEEN','IS NULL','IS NOT NULL','WITH','OVER','PARTITION BY','ROW_NUMBER()','RANK()','DENSE_RANK()','LAG','LEAD','NTILE','FIRST_VALUE','LAST_VALUE','CAST','COALESCE','NULLIF','EXISTS','ASC','DESC','ALL','ANY'];
+
+let acItems = [], acIdx = 0;
+
+function getAcItems(prefix) {
+  const q = prefix.toUpperCase();
+  const seen = new Set(), out = [];
+  // Tables first (more specific)
+  Object.keys(SCH).forEach(t => {
+    if (t.toUpperCase().startsWith(q) && !seen.has(t)) { seen.add(t); out.push({text:t, type:'T', label:'Table'}); }
+  });
+  // Columns
+  Object.entries(SCH).forEach(([table, info]) => {
+    info.cols.forEach(c => {
+      const k = 'C:' + c.name;
+      if (c.name.toUpperCase().startsWith(q) && !seen.has(k)) { seen.add(k); out.push({text:c.name, type:'C', label:table}); }
+    });
+  });
+  // Keywords
+  KEYWORDS.forEach(kw => {
+    const baseUpper = kw.replace(/\(\)/g,'').toUpperCase();
+    if (baseUpper.startsWith(q) && !seen.has('K:'+kw)) { seen.add('K:'+kw); out.push({text:kw, type:'K', label:'Keyword'}); }
+  });
+  return out.slice(0, 10);
+}
+
+function showAc() {
+  const ed = document.getElementById('sqle');
+  if (document.activeElement !== ed) return;
+  const pos = ed.selectionStart;
+  const before = ed.value.slice(0, pos);
+  const match = before.match(/[A-Za-z_][A-Za-z0-9_]*$/);
+  if (!match || match[0].length < 1) { hideAc(); return; }
+
+  acItems = getAcItems(match[0]);
+  if (acItems.length === 0) { hideAc(); return; }
+
+  acIdx = 0;
+  const menu = document.getElementById('acMenu');
+  menu.innerHTML = acItems.map((item, i) => `
+    <div class="ac-item ac-${item.type} ${i === 0 ? 'sel' : ''}" onmousedown="event.preventDefault();acPick(${i})">
+      <span class="ac-text">${item.text}</span>
+      <span class="ac-type">${item.label}</span>
+    </div>
+  `).join('');
+
+  // Position menu near cursor
+  const rect = ed.getBoundingClientRect();
+  const lines = before.split('\n');
+  const lineNum = lines.length - 1;
+  const colNum = lines[lineNum].length;
+  const lineHeight = parseFloat(getComputedStyle(ed).lineHeight) || 20;
+  const charWidth = 7.5; // approximate for IBM Plex Mono 13px
+
+  let top = rect.top + (lineNum + 1) * lineHeight + 4 - ed.scrollTop;
+  let left = rect.left + colNum * charWidth + 36 /* line numbers width */;
+
+  // Keep within viewport
+  const vpW = window.innerWidth, vpH = window.innerHeight;
+  const menuW = 250, menuH = 240;
+  if (left + menuW > vpW - 8) left = Math.max(8, vpW - menuW - 8);
+  if (top + menuH > vpH - 8) top = Math.max(8, rect.top + lineNum * lineHeight - menuH - 4 - ed.scrollTop);
+
+  menu.style.top = top + 'px';
+  menu.style.left = left + 'px';
+  menu.classList.add('show');
+}
+
+function hideAc() {
+  document.getElementById('acMenu').classList.remove('show');
+  acItems = [];
+}
+
+function acPick(i) {
+  const ed = document.getElementById('sqle');
+  const pos = ed.selectionStart;
+  const before = ed.value.slice(0, pos);
+  const after = ed.value.slice(pos);
+  const match = before.match(/[A-Za-z_][A-Za-z0-9_]*$/);
+  if (!match) return;
+  const word = acItems[i].text;
+  const newBefore = before.slice(0, before.length - match[0].length) + word;
+  ed.value = newBefore + after;
+  ed.selectionStart = ed.selectionEnd = newBefore.length;
+  hideAc();
+  ed.focus();
+  updLN();
+}
+
+function acNav(dir) {
+  if (acItems.length === 0) return;
+  acIdx = (acIdx + dir + acItems.length) % acItems.length;
+  document.querySelectorAll('.ac-item').forEach((el, i) => el.classList.toggle('sel', i === acIdx));
+  // Scroll selected into view
+  const sel = document.querySelector('.ac-item.sel');
+  if (sel) sel.scrollIntoView({block:'nearest'});
+}
+
 // ============= TABS =============
 function swT(t) {
   document.getElementById('pane-editor').classList.toggle('active', t === 'editor');
@@ -797,6 +912,15 @@ function updLN() {
 }
 
 function onKey(e) {
+  // Autocomplete navigation
+  const acVisible = document.getElementById('acMenu').classList.contains('show');
+  if (acVisible) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); acNav(1); return; }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); acNav(-1); return; }
+    if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); acPick(acIdx); return; }
+    if (e.key === 'Escape')    { e.preventDefault(); hideAc(); return; }
+  }
+
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runQ(); }
   if (e.key === 'Tab') {
     e.preventDefault();
@@ -824,6 +948,18 @@ document.addEventListener('mouseup', () => { dragging = false; document.body.sty
 
 // ============= START =============
 initDB();
+
+// Autocomplete: trigger on input
+document.getElementById('sqle').addEventListener('input', () => {
+  setTimeout(showAc, 5);
+});
+document.getElementById('sqle').addEventListener('blur', () => {
+  setTimeout(hideAc, 200);
+});
+document.getElementById('sqle').addEventListener('click', hideAc);
+document.addEventListener('click', e => {
+  if (!e.target.closest('#acMenu') && !e.target.closest('#sqle')) hideAc();
+});
 </script>
 </body>
 </html>
