@@ -9,9 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 <style>
 :root {
@@ -557,6 +560,108 @@ body {
 
 .insight-text ul { padding-inline-start: 22px; margin-top: 8px; }
 .insight-text li { margin-bottom: 4px; }
+
+/* ============ EXPLANATION CARD (shown after correct answer) ============ */
+.explanation-card {
+  background: linear-gradient(135deg, rgba(97, 208, 196, 0.06), rgba(97, 208, 196, 0.02));
+  border: 1px solid rgba(97, 208, 196, 0.3);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 20px;
+  display: none;
+  animation: slideIn 0.5s ease;
+}
+.explanation-card.show { display: block; }
+
+.explanation-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.explanation-icon {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--copper);
+  color: var(--bg-base);
+  display: grid; place-items: center;
+  font-size: 14px;
+}
+.explanation-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--copper);
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.explanation-body {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.explanation-body strong { color: var(--text-primary); }
+.explanation-body em { color: var(--amber); font-style: normal; font-weight: 600; }
+.explanation-body code {
+  background: var(--bg-input);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--cyan);
+  direction: ltr;
+  display: inline-block;
+}
+.explanation-body pre {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 10px 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  direction: ltr;
+  text-align: left;
+}
+.explanation-body ul, .explanation-body ol {
+  padding-inline-start: 22px;
+  margin: 8px 0;
+}
+.explanation-body li { margin-bottom: 6px; }
+.explanation-body h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--copper);
+  margin: 14px 0 6px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.explanation-body p { margin-bottom: 10px; }
+.explanation-body p:last-child { margin-bottom: 0; }
+
+/* ============ CODEMIRROR AUTOCOMPLETE POPUP ============ */
+.CodeMirror-hints {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  padding: 4px !important;
+  max-height: 220px !important;
+  z-index: 1000 !important;
+}
+.CodeMirror-hint {
+  color: var(--text-secondary) !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+}
+.CodeMirror-hint-active {
+  background: var(--copper) !important;
+  color: var(--bg-base) !important;
+  font-weight: 600 !important;
+}
 
 .step-nav-bar {
   display: flex;
@@ -1733,6 +1838,44 @@ body {
     -webkit-overflow-scrolling: touch;
     overflow-x: auto;
   }
+
+  /* Autocomplete popup - mobile-friendly */
+  .CodeMirror-hints {
+    font-size: 15px !important;
+    max-height: 180px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+  .CodeMirror-hint {
+    padding: 10px 14px !important;
+    min-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Explanation card - mobile padding and typography */
+  .explanation-card {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+  }
+  .explanation-icon { width: 24px; height: 24px; font-size: 12px; }
+  .explanation-title { font-size: 11px; }
+  .explanation-body { font-size: 13px; line-height: 1.7; }
+  .explanation-body code { font-size: 11.5px; padding: 1px 5px; }
+  .explanation-body pre {
+    font-size: 11.5px;
+    padding: 10px 12px;
+    line-height: 1.55;
+  }
+  .explanation-body h4 { font-size: 11px; margin: 12px 0 5px; }
+  .explanation-body ul,
+  .explanation-body ol {
+    padding-inline-start: 20px;
+    margin: 6px 0;
+  }
+  .explanation-body li { margin-bottom: 4px; }
+  .explanation-body p { margin-bottom: 8px; }
+
 }
 
 /* Small phones: max 380px */
@@ -1755,6 +1898,77 @@ body {
   .sidebar-backdrop { top: 44px; }
   .CodeMirror { min-height: 120px; }
   .results-body { max-height: 200px; }
+}
+
+/* =========================================================
+   DESKTOP ENFORCEMENT - Force desktop layout for any viewport
+   wider than 768px, regardless of cache/CSS conflicts
+   ========================================================= */
+@media (min-width: 769px) {
+  .app-main {
+    grid-template-columns: 260px 1fr !important;
+    height: calc(100vh - 64px) !important;
+  }
+  .app-header {
+    height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .sidebar {
+    display: flex !important;
+    position: relative !important;
+    width: auto !important;
+    box-shadow: none !important;
+    top: auto !important;
+  }
+  .sidebar-backdrop {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  .brand-text {
+    display: flex !important;
+  }
+  .brand-mark {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 13px !important;
+  }
+  .progress-label {
+    display: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  .content-area {
+    padding: 24px 32px !important;
+  }
+  .step-title {
+    font-size: 28px !important;
+  }
+  .CodeMirror {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    min-height: auto !important;
+  }
+  .editor-toolbar {
+    position: relative !important;
+  }
+  .modal {
+    max-width: 760px !important;
+    height: auto !important;
+    max-height: 90vh !important;
+    border-radius: 12px !important;
+    margin: auto !important;
+    display: block !important;
+    overflow-y: auto !important;
+  }
+  .modal-header, .modal-body, .modal-footer {
+    position: static !important;
+    box-shadow: none !important;
+  }
+  .modal-footer .btn {
+    width: auto !important;
+  }
 }
 </style>
 </head>
@@ -1917,6 +2131,8 @@ const APP = {
     currentTable: 'customers',
     rowsToShow: 20,
   },
+  // Autocomplete schema hints (built from SCHEMA below)
+  schemaHints: {},
 };
 
 // ============ SCHEMA DEFINITION ============
@@ -1979,6 +2195,12 @@ const SCHEMA = [
   },
 ];
 
+// Build autocomplete hints from SCHEMA
+APP.schemaHints = SCHEMA.reduce((acc, tbl) => {
+  acc[tbl.name] = tbl.columns.map(c => c.name);
+  return acc;
+}, {});
+
 // ============ THE 10 STEPS ============
 // Each step has: hintText (always visible when hint opened) + hintCode (locked until first attempt)
 const STEPS = [
@@ -2003,6 +2225,14 @@ FROM customers;`,
       if (!lq.includes('count(')) return false;
       return lq.includes('churn') || lq.includes('status');
     },
+    explanation: `<p><strong>הטכניקה:</strong> שילוב של <code>COUNT(*)</code> עם <code>SUM(CASE WHEN ...)</code> מאפשר לחשב סך-כל ומדד מותנה בסריקה אחת של הטבלה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>COUNT(*)</code> — סופר את כל השורות (כל הלקוחות).</li>
+<li><code>SUM(CASE WHEN status = 'churned' THEN 1 ELSE 0 END)</code> — סופר רק את הנוטשים. ה-CASE מחזיר 1 לכל לקוח שעונה על התנאי ו-0 לאחרים, וה-SUM מצרף.</li>
+<li><code>ROUND(100.0 * churned / total, 1)</code> — חישוב אחוז. <em>שים לב ל-100.0</em>: שימוש בעשרוני מכריח חלוקה מדויקת ב-SQLite, אחרת תקבל אפס.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה הדפוס הקלאסי לחישוב מדדים מותנים — במקום שאילתה כפולה (פעם לסך-הכל, פעם לסינון), הכל בסריקה אחת. ב-50 מיליון שורות זה ההבדל בין שניות לדקות.</p>`,
     insight: `<strong>גודל הבעיה התאמת:</strong> מתוך 6,000 לקוחות, כ-<code>764</code> נטשו (~<code>12.7%</code>).
     זה אכן פי 4 משיעור הנטישה ההיסטורי של 3%. אבל זה רק התחלה — עכשיו צריך להבין <em>מתי</em>, <em>מי</em>, ו<em>למה</em>.`,
   },
@@ -2030,6 +2260,14 @@ ORDER BY month;`,
       if (!lq.includes('group by')) return false;
       return lq.includes('strftime') || lq.includes('month') || lq.includes('quarter');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>strftime('%Y-%m', date)</code> + <code>GROUP BY</code> — אגרגציה של סדרה-זמנית לפי חודש.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>strftime('%Y-%m', churn_date)</code> ממיר תאריך מלא (2026-01-15) למחרוזת חודש (<code>2026-01</code>).</li>
+<li>ה-<code>GROUP BY</code> על המחרוזת הזו אוסף את כל הנטישות מאותו חודש לקבוצה אחת.</li>
+<li><code>ORDER BY month</code> מסדר כרונולוגית — הפורמט YYYY-MM ממוין נכון גם אלפבית (זה הקסם של ISO 8601).</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> <code>strftime</code> ב-SQLite (<code>DATE_FORMAT</code> ב-MySQL, <code>TO_CHAR</code> ב-Postgres) הוא הכלי המרכזי לאגרגציה לפי תקופות. <em>כל</em> ניתוח Time-Series מתחיל מכאן.</p>`,
     insight: `<strong>הקפיצה אכן מרוכזת ב-Q1 2026:</strong> כ-<code>85%</code> מהנטישה התרחשה בינואר-מרץ 2026.
     בחודשים קודמים היו 10-15 נטישות לחודש; בינואר-מרץ זה קפץ ל-200+ לחודש.
     זה אומר ש<em>משהו השתנה</em> בסביבת הלקוחות בתקופה הזו.`,
@@ -2061,6 +2299,14 @@ ORDER BY churn_pct DESC;`,
       }
       return false;
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>JOIN</code> בין שתי טבלאות + <code>GROUP BY</code> + חישוב אחוז מותנה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>JOIN plans ON customers.plan_id = plans.plan_id</code> — מחבר כל לקוח למסלול שלו דרך מפתח זר.</li>
+<li><code>GROUP BY plan_name</code> — מקבץ את כל הלקוחות לפי המסלול שלהם.</li>
+<li>בתוך כל קבוצה — מספר הלקוחות הכולל, מספר הנוטשים, ואחוז הנטישה לפי המסלול.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> ההתבוננות הראשונה במספרים גלובליים (12.7%) מסתירה את הסיפור האמיתי — <em>חלק מהמסלולים סובלים מאוד יותר מאחרים</em>. <code>GROUP BY</code> הוא הכלי שחושף הטרוגניות. זה התבנית של "פילוח" שדרושה כמעט בכל ניתוח עסקי.</p>`,
     insight: `<strong>שני המסלולים הישנים הם המקור העיקרי לבעיה:</strong>
     <ul>
       <li><code>מסלול ותיק 10</code>: <strong>~32% נטישה</strong></li>
@@ -2093,6 +2339,14 @@ ORDER BY launched_date;`,
       if (!lq.includes('plans')) return false;
       return lq.includes('price') || lq.includes('data_gb') || lq.includes('launched') || lq.includes('monthly');
     },
+    explanation: `<p><strong>הטכניקה:</strong> השוואה בין שני סגמנטים (מסלולים ישנים מול חדשים) באמצעות <code>CASE</code> בתוך אגרגציה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>ה-<code>CASE WHEN launched_date &lt; '2023-01-01'</code> יוצר שני "דליים" (קבוצות) — ישן מול חדש.</li>
+<li>ה-<code>GROUP BY</code> על הביטוי הזה מקבץ את המסלולים לשתי קבוצות בלבד.</li>
+<li>מדדים מסכמים: ממוצע מחיר, סטטיסטיקות אחוז נטישה, ו-Data GB.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה הדפוס של <strong>Bucketing/Binning</strong> — הפיכת ערך רציף (תאריך) למספר קטגוריות חשובות (ישן/חדש). זה כלי קריטי בניתוח השוואתי. בלי הקיבוץ הזה היית רואה רק את הממוצע הכולל ולא היית רואה שיש פערים.</p>`,
     insight: `<strong>המסלולים הישנים יקרים יותר ומציעים פחות:</strong>
     <ul>
       <li><code>מסלול ותיק 5</code> (2018): 129 ₪ עבור <strong>5GB בלבד</strong> = 25.8 ₪/GB</li>
@@ -2129,6 +2383,14 @@ GROUP BY bucket;`,
       if (!lq.includes('customers')) return false;
       return lq.includes('פתוח') || lq.includes("'פתוח'") || lq.includes('group by');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>LEFT JOIN</code> + <code>COUNT</code> + <code>GROUP BY</code> כדי למפות אינטראקציות שירות לכל לקוח.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>LEFT JOIN</code> — שומר את <em>כל</em> הלקוחות, גם את אלה שלא פתחו כרטיס שירות (יקבלו NULL).</li>
+<li><code>COUNT(t.ticket_id)</code> — סופר רק כרטיסים אמיתיים (NULL מתעלם), כך שלקוח בלי פניות יקבל 0.</li>
+<li>ה-<code>GROUP BY</code> על סטטוס הלקוח חושף את המתאם בין כמות פניות לנטישה.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> ההבדל בין <code>INNER JOIN</code> ל-<code>LEFT JOIN</code> קריטי: עם INNER היית מאבד את כל הלקוחות שלא פתחו כרטיס, ומקבל תמונה מוטה. <em>תמיד שאל את עצמך</em>: "האם אני רוצה לאבד את ה-NULL או לכלול אותם?"</p>`,
     insight: `<strong>קשר חזק וברור:</strong> לקוחות עם <code>2+ פניות פתוחות</code> ב-90 הימים האחרונים
     נוטשים בשיעור של ~<code>22%</code>, לעומת ~<code>11%</code> בשאר הבסיס. <em>פי 2 סיכון</em>.
     כשפניה לא נפתרת, הלקוח מאבד אמון. זה גורם עצמאי שמצטרף לבעיית המסלולים הישנים.`,
@@ -2161,6 +2423,14 @@ GROUP BY bucket;`,
       if (!lq.includes('usage_monthly')) return false;
       return lq.includes('overage') || lq.includes('bill_amount');
     },
+    explanation: `<p><strong>הטכניקה:</strong> JOIN של 3 טבלאות (customers + plans + usage_records) + חישוב חריגה (overage) מ-2 מקורות.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>כל לקוח <em>אמור</em> לקבל data_gb שמוגדר במסלול שלו. אם הוא צרך יותר — זה overage.</li>
+<li>החיבור של 3 הטבלאות מאפשר להשוות "מה היה במסלול" מול "מה הצריך בפועל".</li>
+<li><code>AVG(data_used - data_gb)</code> נותן את הצריכה החריגה הממוצעת.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> הצלחת חישוב מדד עסקי שלא קיים כעמודה בודדת — הוא נוצר מהצלבת מקורות. <em>זה הליבה של עבודת אנליסט נתונים</em>: לא רק לקרוא נתונים, אלא להרכיב מהם תובנות חדשות.</p>`,
     insight: `<strong>גם זה גורם אמיתי:</strong> לקוחות עם <code>3+ חודשי overage</code> (חויבו מעל 50%
     מעבר לבסיס) נוטשים ב-~<code>18%</code> לעומת <code>~11%</code> בשאר. החיוב המפתיע בכל חודש שוחק את הלקוח.
     <em>שים לב</em>: זה קשור למסלולים הישנים — להם יש את הגבולות הנמוכים, אז הם מתחייבים יותר ב-overage.`,
@@ -2186,6 +2456,14 @@ ORDER BY churn_pct DESC;`,
       if (!lq.includes('city')) return false;
       return lq.includes('group by');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>GROUP BY city</code> + סינון <code>HAVING</code> + מיון לפי אחוז הנטישה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>קבוצה אחת לכל עיר עם החישובים שלה.</li>
+<li><code>HAVING COUNT(*) &gt;= 50</code> — מסנן ערים קטנות מדי שאי-אפשר ללמוד מהן (סטטיסטיקה לא יציבה).</li>
+<li><code>ORDER BY churn_pct DESC</code> — מי הכי גרוע ראשון.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> <code>HAVING</code> שונה מ-<code>WHERE</code>: <em>WHERE</em> מסנן <em>לפני</em> האגרגציה, <em>HAVING</em> מסנן <em>אחרי</em>. כאן צריך HAVING כי אנחנו רוצים לסנן לפי <em>COUNT</em> — שערך שלא קיים לפני האגרגציה. זה דפוס שמופיע בכמעט כל ניתוח גיאוגרפי או דמוגרפי.</p>`,
     insight: `<strong>חיפה בולטת כלפי מעלה:</strong> שיעור נטישה של ~<code>17-18%</code> לעומת ממוצע של 12-13%
     בשאר הערים. ההפרש קטן יותר מהאפקטים הקודמים, אבל מובהק.
     זה <em>עשוי</em> להעיד על קמפיין של מתחרה מקומי או בעיית רשת. שווה לבדוק עם הצוות התפעולי.`,
@@ -2215,6 +2493,14 @@ ORDER BY age_group;`,
       if (!lq.includes('age')) return false;
       return lq.includes('group by') || lq.includes('case when');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>CASE WHEN</code> כדי ליצור Age Bands (קבוצות גיל) + <code>GROUP BY</code> על ה-CASE.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>גיל הוא ערך רציף (16, 17, 18, ...) — לא שימושי כשלעצמו לפילוח.</li>
+<li>ה-<code>CASE</code> ממיר אותו לתיבות (18-24, 25-34, 35-44, 45+) — קטגוריות שאפשר לדבר עליהן.</li>
+<li><code>GROUP BY</code> על הביטוי כולו (לא רק על age) מקבץ לפי הקבוצות.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה דוגמה ל-<strong>Feature Engineering</strong> בתוך SQL — יצירת מימד חדש מתוך מימד קיים. <em>תזכור:</em> אם משתמשים ב-CASE ב-SELECT, חייבים לחזור עליו ב-GROUP BY (או להשתמש בכינוי דרך CTE).</p>`,
     insight: `<strong>הגיל משפיע מעט:</strong> קבוצת 60+ נוטשת בשיעור גבוה מעט יותר מהממוצע (~15%
     לעומת 12-13%). זה אפקט חלש — לא הגורם המרכזי, אבל שווה לזכור כשמעצבים את ההתערבות
     (לקוחות מבוגרים אולי צריכים גישת שירות שונה).`,
@@ -2251,6 +2537,14 @@ ORDER BY churn_pct DESC;`,
       const hasPlanCondition = lq.includes('plan_id') || lq.includes('plans');
       return hasTickets && hasPlanCondition;
     },
+    explanation: `<p><strong>הטכניקה:</strong> חיתוך <em>אופקי</em> של 3 מאפיינים — צריכת overage גבוהה <strong>וגם</strong> תלונות רבות <strong>וגם</strong> מסלול ישן.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>שאילתה מורכבת עם CTE (<code>WITH</code>) או תת-שאילתות, שמחשבות לכל לקוח 3 מדדים.</li>
+<li>סינון לפי 3 התנאים יחד — חיתוך של 3 הסגמנטים.</li>
+<li>החישוב חושף את "סגמנט הסיכון העליון" — האנשים שכל הסיגנלים נפגעים בהם.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> ב-Customer Analytics, <em>סגמנטציה של סיכון</em> היא הליבה של כל מערכת התראה (Churn Prediction). הרעיון: לא צריך לחזות נטישה לכל לקוח — מספיק לדעת מי הקבוצה ה-X% הכי בסיכון ולהציל אותם.</p>`,
     insight: `<strong>הסגמנט הקטסטרופלי:</strong> לקוחות שמשלבים <code>מסלול ישן</code> + <code>2+ פניות פתוחות</code>
     נוטשים בשיעור של ~<code>43%</code> — מעל פי 3 מהממוצע!
     הסגמנט הזה קטן יחסית (~150-200 לקוחות), אבל הוא ההזדמנות המיידית: <em>כל לקוח שמטפלים בו פה
@@ -2291,6 +2585,14 @@ ORDER BY rank_simple;`,
       if (!lq.includes('over')) return false;
       return lq.includes('plan') || lq.includes('churn');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>RANK() OVER (PARTITION BY ... ORDER BY ...)</code> — Window Function לדירוג בתוך קבוצות.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>PARTITION BY plan_name</code> — מחלק את הנתונים לחלוקים נפרדים, אחד לכל מסלול.</li>
+<li><code>ORDER BY churn_pct DESC</code> — בתוך כל חלוקה, ממיין מהגרוע (אחוז נטישה גבוה) לטוב.</li>
+<li><code>RANK()</code> — נותן מספר דירוג, עם <em>אותו דירוג לערכים שווים</em> (1, 1, 3 במקום 1, 2, 3).</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> Window Functions הן הסיבה ש-SQL לא נשאר ב-1990. הן מאפשרות לחשב מדדים תלויי-קונטקסט (מיקום בתוך קבוצה) <em>בלי</em> לאבד את הפירוט. אלטרנטיבות: <code>DENSE_RANK</code> (1, 1, 2) או <code>ROW_NUMBER</code> (1, 2, 3 תמיד שונים).</p>`,
     insight: `<strong>הכרת את כוח ה-Window Functions!</strong>
     <code>מסלול ותיק 10</code> ומסלול ותיק 5</code> תופסים את שני המקומות הראשונים.
     <ul>
@@ -2338,6 +2640,14 @@ ORDER BY month;`,
       if (!lq.includes('over')) return false;
       return lq.includes('churn') || lq.includes('month');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>LAG()</code> Window Function — שולף ערך משורה קודמת בלי JOIN עצמי.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>LAG(churns) OVER (ORDER BY month)</code> — לכל חודש, מביא את ה-churns של החודש הקודם.</li>
+<li>השווה חודש נוכחי לחודש קודם — חישוב שינוי באחוזים.</li>
+<li>בלי <code>LAG</code> היית צריך JOIN עצמי או תת-שאילתה מסובכת לכל שורה.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> LAG/LEAD הן הכלי לניתוח מגמות זמן (Trend Analysis). כל פעם שרואים "<em>שיעור גידול חודש-על-חודש</em>" מתחת לדוח — מתחת לכסות זה LAG. דפוס דומה: <code>FIRST_VALUE</code>, <code>LAST_VALUE</code>, <code>NTH_VALUE</code>.</p>`,
     insight: `<strong>הקפיצה זועקת מהנתונים:</strong>
     <ul>
       <li>אוקטובר → נובמבר → דצמבר 2025: מספרים יציבים, שינויים קטנים</li>
@@ -2384,6 +2694,14 @@ LIMIT 10;`,
       if (selectCount < 2) return false;
       return lq.includes('support_tickets') && (lq.includes('churned') || lq.includes('churn_date'));
     },
+    explanation: `<p><strong>הטכניקה:</strong> <strong>Correlated Subquery</strong> — תת-שאילתה שמופעלת לכל שורה בנפרד, עם הקשר לשורה החיצונית.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>השאילתה החיצונית עוברת על כל לקוח.</li>
+<li>לכל לקוח, התת-שאילתה רצה: <code>SELECT AVG(...) FROM usage WHERE customer_id = c.customer_id</code>.</li>
+<li>זה <em>קורלטיבי</em> כי התת-שאילתה תלויה בערך של השורה החיצונית.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> Correlated Subqueries הן עוצמתיות אבל <em>איטיות</em> — הן רצות פעם לכל שורה. ב-1000 שורות זה בסדר, ב-1 מיליון זה איטי. <em>אלטרנטיבה</em>: לעתים קרובות אפשר להמיר ל-JOIN + GROUP BY שרץ פעם אחת בלבד. תדע מתי להשתמש בכל אחד.</p>`,
     insight: `<strong>הכוח של Correlated Subqueries:</strong> לכל נוטש קיבלת ניתוח אישי משלו.
     הנוטשים הקיצוניים החזיקו 3-5 פניות פתוחות בחודש שלפני הנטישה — <em>סימן מוקדם שאפשר היה לתפוס</em>.
     <strong>אפליקטיבית</strong>: הניתוח הזה הוא הבסיס למודל retention proactive —
@@ -2412,10 +2730,16 @@ LIMIT 10;`,
 ג. ...`,
     starter: null,
     validate: () => false,
+    explanation: `<p><strong>שלב הסיכום:</strong> כאן אתה לא כותב SQL — אתה מתרגם את כל מה שגילית לתשובה עסקית.</p>
+<p><strong>איך לבנות תשובה טובה:</strong></p>
+<ul>
+<li><strong>השערה (Hypothesis):</strong> טענה תמציתית על הסיבה השורש. דוגמה: "<em>הקפיצה ב-churn נובעת בעיקר מ-X, Y, Z</em>".</li>
+<li><strong>ממצאים (Findings):</strong> 3-5 בולטים, כל אחד עם מספר ספציפי. <em>אל תכתוב "המסלולים הישנים בעייתיים"</em> — תכתוב "<em>מסלול X עם 32% churn מול 6% במסלולים החדשים</em>".</li>
+<li><strong>המלצה (Recommendation):</strong> פעולה ספציפית עם מדידת השפעה. <em>אל תכתוב "לשפר את השירות"</em> — תכתוב "<em>להעביר את 1,200 לקוחות הסיכון העליון למסלול B עם הנחה של 15% — צפי הצלת churn: 4-6%</em>".</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> ראיון אנליסט נתונים <em>אף פעם</em> לא נגמר בשאילתה — תמיד באמת העסקית. אנליסט שיודע SQL אבל לא יודע לסכם הוא מהנדס נתונים. אנליסט שיודע לסכם בלי SQL הוא יועץ. רק שילוב של שניהם הוא <strong>Data Analyst</strong>.</p>`,
   },
 ];
-
-// ============ INIT ============
 async function init() {
   try {
     setLoaderText('מאתחל SQL.js...');
@@ -2655,6 +2979,14 @@ function setupStep(idx) {
         <div class="insight-text">${step.insight}</div>
       </div>
 
+      <div class="explanation-card ${isComplete?'show':''}" id="explanation-card">
+        <div class="explanation-header">
+          <div class="explanation-icon">📘</div>
+          <div class="explanation-title">הסבר השאילתה — איך זה עובד</div>
+        </div>
+        <div class="explanation-body">${step.explanation || '<em style="color:var(--text-muted)">אין הסבר זמין לשלב זה.</em>'}</div>
+      </div>
+
       <div class="step-nav-bar">
         <button class="btn btn-ghost btn-large" id="btn-prev" ${idx===0?'disabled':''}>◂ קודם</button>
         <button class="skip-link" id="btn-skip">סמן כהושלם ידנית →</button>
@@ -2668,7 +3000,22 @@ function setupStep(idx) {
       lineNumbers: true,
       indentUnit: 2,
       matchBrackets: true,
-      extraKeys: { 'Ctrl-Enter': runQuery, 'Cmd-Enter': runQuery },
+      hintOptions: {
+        tables: APP.schemaHints || {},
+        completeSingle: false,
+      },
+      extraKeys: {
+        'Ctrl-Enter': runQuery,
+        'Cmd-Enter': runQuery,
+        'Ctrl-Space': 'autocomplete',
+      },
+    });
+
+    // Auto-trigger autocomplete on typing (after letters)
+    APP.editor.on('inputRead', function(cm, change) {
+      if (change.text[0].match(/[\w.]/) && !cm.state.completionActive) {
+        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+      }
     });
 
     if (state.lastResultCols.length) {
@@ -2682,6 +3029,8 @@ function setupStep(idx) {
     document.getElementById('btn-skip').onclick = () => {
       APP.stepState[idx].complete = true;
       document.getElementById('insight-card').classList.add('show');
+      const ec = document.getElementById('explanation-card');
+      if (ec) ec.classList.add('show');
       renderProgress();
       renderStepNav();
     };
@@ -2764,6 +3113,8 @@ function runQuery() {
         APP.stepState[idx].complete = true;
         const insight = document.getElementById('insight-card');
         if (insight) insight.classList.add('show');
+        const explanation = document.getElementById('explanation-card');
+        if (explanation) explanation.classList.add('show');
         renderProgress();
         renderStepNav();
         const badge = document.querySelector('.step-badge');

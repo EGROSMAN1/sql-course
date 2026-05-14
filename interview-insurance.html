@@ -9,9 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 <style>
 :root {
@@ -557,6 +560,108 @@ body {
 
 .insight-text ul { padding-inline-start: 22px; margin-top: 8px; }
 .insight-text li { margin-bottom: 4px; }
+
+/* ============ EXPLANATION CARD (shown after correct answer) ============ */
+.explanation-card {
+  background: linear-gradient(135deg, rgba(97, 208, 196, 0.06), rgba(97, 208, 196, 0.02));
+  border: 1px solid rgba(97, 208, 196, 0.3);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 20px;
+  display: none;
+  animation: slideIn 0.5s ease;
+}
+.explanation-card.show { display: block; }
+
+.explanation-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.explanation-icon {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--copper);
+  color: var(--bg-base);
+  display: grid; place-items: center;
+  font-size: 14px;
+}
+.explanation-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--copper);
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.explanation-body {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.explanation-body strong { color: var(--text-primary); }
+.explanation-body em { color: var(--amber); font-style: normal; font-weight: 600; }
+.explanation-body code {
+  background: var(--bg-input);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--cyan);
+  direction: ltr;
+  display: inline-block;
+}
+.explanation-body pre {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin: 10px 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  direction: ltr;
+  text-align: left;
+}
+.explanation-body ul, .explanation-body ol {
+  padding-inline-start: 22px;
+  margin: 8px 0;
+}
+.explanation-body li { margin-bottom: 6px; }
+.explanation-body h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--copper);
+  margin: 14px 0 6px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.explanation-body p { margin-bottom: 10px; }
+.explanation-body p:last-child { margin-bottom: 0; }
+
+/* ============ CODEMIRROR AUTOCOMPLETE POPUP ============ */
+.CodeMirror-hints {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  padding: 4px !important;
+  max-height: 220px !important;
+  z-index: 1000 !important;
+}
+.CodeMirror-hint {
+  color: var(--text-secondary) !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+}
+.CodeMirror-hint-active {
+  background: var(--copper) !important;
+  color: var(--bg-base) !important;
+  font-weight: 600 !important;
+}
 
 .step-nav-bar {
   display: flex;
@@ -1733,6 +1838,44 @@ body {
     -webkit-overflow-scrolling: touch;
     overflow-x: auto;
   }
+
+  /* Autocomplete popup - mobile-friendly */
+  .CodeMirror-hints {
+    font-size: 15px !important;
+    max-height: 180px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+  .CodeMirror-hint {
+    padding: 10px 14px !important;
+    min-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Explanation card - mobile padding and typography */
+  .explanation-card {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+  }
+  .explanation-icon { width: 24px; height: 24px; font-size: 12px; }
+  .explanation-title { font-size: 11px; }
+  .explanation-body { font-size: 13px; line-height: 1.7; }
+  .explanation-body code { font-size: 11.5px; padding: 1px 5px; }
+  .explanation-body pre {
+    font-size: 11.5px;
+    padding: 10px 12px;
+    line-height: 1.55;
+  }
+  .explanation-body h4 { font-size: 11px; margin: 12px 0 5px; }
+  .explanation-body ul,
+  .explanation-body ol {
+    padding-inline-start: 20px;
+    margin: 6px 0;
+  }
+  .explanation-body li { margin-bottom: 4px; }
+  .explanation-body p { margin-bottom: 8px; }
+
 }
 
 /* Small phones: max 380px */
@@ -1755,6 +1898,77 @@ body {
   .sidebar-backdrop { top: 44px; }
   .CodeMirror { min-height: 120px; }
   .results-body { max-height: 200px; }
+}
+
+/* =========================================================
+   DESKTOP ENFORCEMENT - Force desktop layout for any viewport
+   wider than 768px, regardless of cache/CSS conflicts
+   ========================================================= */
+@media (min-width: 769px) {
+  .app-main {
+    grid-template-columns: 260px 1fr !important;
+    height: calc(100vh - 64px) !important;
+  }
+  .app-header {
+    height: 64px !important;
+    padding: 0 20px !important;
+  }
+  .sidebar {
+    display: flex !important;
+    position: relative !important;
+    width: auto !important;
+    box-shadow: none !important;
+    top: auto !important;
+  }
+  .sidebar-backdrop {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  .brand-text {
+    display: flex !important;
+  }
+  .brand-mark {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 13px !important;
+  }
+  .progress-label {
+    display: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  .content-area {
+    padding: 24px 32px !important;
+  }
+  .step-title {
+    font-size: 28px !important;
+  }
+  .CodeMirror {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    min-height: auto !important;
+  }
+  .editor-toolbar {
+    position: relative !important;
+  }
+  .modal {
+    max-width: 760px !important;
+    height: auto !important;
+    max-height: 90vh !important;
+    border-radius: 12px !important;
+    margin: auto !important;
+    display: block !important;
+    overflow-y: auto !important;
+  }
+  .modal-header, .modal-body, .modal-footer {
+    position: static !important;
+    box-shadow: none !important;
+  }
+  .modal-footer .btn {
+    width: auto !important;
+  }
 }
 </style>
 </head>
@@ -1928,6 +2142,7 @@ const APP = {
     currentTable: 'savings_records',
     rowsToShow: 20,
   },
+  schemaHints: {},
 };
 
 // ============ SCHEMA ============
@@ -1949,6 +2164,12 @@ const SCHEMA = [
     ]
   },
 ];
+
+// Build autocomplete hints from SCHEMA
+APP.schemaHints = SCHEMA.reduce((acc, tbl) => {
+  acc[tbl.name] = tbl.columns.map(c => c.name);
+  return acc;
+}, {});
 
 // ============ THE 13 STEPS ============
 const STEPS = [
@@ -1975,6 +2196,14 @@ FROM savings_records;`,
       if (!lq.includes('count(')) return false;
       return lq.includes('distinct');
     },
+    explanation: `<p><strong>הטכניקה:</strong> שאילתות <strong>גילוי</strong> בסיסיות — <code>COUNT</code>, <code>COUNT DISTINCT</code>, <code>MIN/MAX</code> לפני שאתה ניגש לשאלות הקשות.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>COUNT(*)</code> — כמה רשומות (1,143).</li>
+<li><code>COUNT(DISTINCT member_id)</code> — כמה עמיתים ייחודיים (819). הפער מצביע על עמיתים עם יותר מרשומה אחת.</li>
+<li><code>MIN(join_date), MAX(join_date)</code> — טווח התאריכים בנתונים.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> <em>זה השלב שמדלגים עליו ומתחרטים</em>. לפני שאתה כותב שאילתה מורכבת, חייב להבין: כמה שורות יש, מה הטווח, איפה ה-NULL, מה היחס בין מפתחות. 5 דקות פה חוסכים שעה של דיבאג בהמשך.</p>`,
     insight: `<strong>אנחנו עובדים עם דאטה ממוקד וקומפקטי:</strong>
     <ul>
       <li><code>1,143</code> רשומות</li>
@@ -2006,6 +2235,14 @@ ORDER BY records DESC;`,
       if (!lq.includes('employer')) return false;
       return lq.includes('group by');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>GROUP BY</code> פשוט עם <code>COUNT</code> ו-<code>COUNT DISTINCT</code> לזיהוי טווח קבוצות.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>GROUP BY employer_id, employer_name</code> — מסכם לכל מעסיק את כל הרשומות שלו.</li>
+<li><code>COUNT(*)</code> נותן כמות רשומות, <code>COUNT(DISTINCT member_id)</code> נותן כמות עמיתים ייחודיים.</li>
+<li>הפער ביניהם מצביע על עמיתים עם יותר ממוצר אחד אצל אותו מעסיק.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> כאן רואים שיש 4 מעסיקים בלבד. <em>גודל המשתנה משפיע על הניתוח</em>: 4 ערכים = הצגה ידנית. 400 ערכים = צריך לפלח ולמיין. תמיד תזהה את ה-cardinality (גודל הקבוצה הייחודית) של כל מימד.</p>`,
     insight: `<strong>4 מעסיקים בסדר גודל דומה:</strong>
     <code>ש.ש. פיתוח תשתיות</code> (367 רשומות), <code>חץ פיננסים</code> (282),
     <code>ג.ד. שירותי ניהול</code> (269), <code>א.ב. השקעות</code> (225).
@@ -2036,6 +2273,13 @@ ORDER BY total_accumulation DESC;`,
       if (!lq.includes('group by')) return false;
       return lq.includes('sum(') || lq.includes('accumulation');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>GROUP BY</code> על שני שדות (product_name, employer_name) לחשיפת מטריצת זמינות.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>קיבוץ לפי שילוב (מוצר × מעסיק) — כל שילוב הופך לשורה.</li>
+<li>גילוי: לא כל מוצר זמין אצל כל מעסיק — יש מוצרים שמופיעים רק אצל מעסיקים מסוימים.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה השלב שמגלה את ה-<strong>data sparsity</strong> — הנתונים לא דחוסים אחיד. בניתוח דמי ניהול, לפעמים מחיר נמוך אצל מעסיק X זה לא הצלחה שיווקית — זה פשוט המעסיק היחיד שמציע את המוצר. סינטקס שימושי: <code>GROUP BY a, b</code> + <code>ORDER BY a, b</code>.</p>`,
     insight: `<strong>המוצר המוביל בצבירה: <code>קרן השתלמות</code> עם ~10.9 מיליון ש"ח.</strong>
     אחריו <code>קופת גמל</code> (~7.4M), <code>פנסיה</code> (~4M).
     <em>הערה חשובה</em>: <code>קרן חיסכון צבא קבע</code> רק 4 רשומות (67K צבירה) - מוצר נישה. זה הולך להיות רלוונטי בשאלה 9.`,
@@ -2068,6 +2312,13 @@ ORDER BY employer_name, max_accumulation_fee_pct DESC;`,
       if (!lq.includes('max(')) return false;
       return lq.includes('employer') && lq.includes('product');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>MAX</code> על שני מדדים שונים בו-זמנית, או שאילתה עם <code>WHERE</code> שמסננת לערכים הגבוהים.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>שתי גישות אפשריות: <code>SELECT MAX(deposit_fee_pct), MAX(accumulation_fee_pct)</code> — שורה אחת עם המקסימום של כל אחד.</li>
+<li>אלטרנטיבה: <code>WHERE deposit_fee_pct = (SELECT MAX(deposit_fee_pct) FROM savings_records)</code> — להציג את כל הרשומות עם הערך המקסימלי.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> <em>תנאי הסף</em> בנתונים פיננסיים הוא קריטי — דמי ניהול של 6% מהפקדה זו אנומליה שדורשת חקירה (היה צריך להיות 3-4% מקסימום). ב-SQL, MAX/MIN הם הצעד הראשון לאיתור outliers.</p>`,
     insight: `<strong>תובנה עסקית:</strong> ה-MAX חושף את <em>הקיצון</em> בכל קבוצה — איפה החברה גובה הכי הרבה.
     יש לקוחות שמשלמים <strong>עד 6% מהפקדה</strong> ו-<strong>עד 2% מצבירה</strong> — שיעורים גבוהים מאוד.
     ההנהלה צריכה להחליט: לאחד מדיניות? להוריד את הקיצוניים שעלולים לעזוב? להעלות לאן שאפשר?
@@ -2101,6 +2352,14 @@ ORDER BY actual_fee_nis DESC;`,
       if (!lq.includes('/ 100') && !lq.includes('/100') && !lq.includes('* 0.01')) return false;
       return lq.includes('sum(');
     },
+    explanation: `<p><strong>הטכניקה:</strong> חישוב הכנסה — <code>SUM(accumulation × accumulation_fee_pct / 100)</code> — הכפלת בסיס בשיעור.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>דמי ניהול מצבירה הם <em>אחוז שנתי</em> מהיתרה הנצברת.</li>
+<li>לכן ההכנסה השנתית = <code>צבירה × שיעור / 100</code> לכל רשומה.</li>
+<li><code>SUM</code> על כל הרשומות נותן את ההכנסה הכוללת השנתית.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה הדפוס הקלאסי של <strong>חישוב הכנסות בתעשייה הפיננסית</strong> — מכפילים בסיס (נכסים מנוהלים) בשיעור (Take Rate). <em>שים לב</em>: בלי החילוק ב-100 תקבל מספר פי 100 מהאמת — הוא אחוז ולא יחס.</p>`,
     insight: `<strong>זוהי הכנסה אמיתית של החברה מהקבוצה הזו</strong>.
     הצירוף של <code>קרן השתלמות</code> × מעסיק גדול = הכי רווחי בעמודה הזו.
     <em>מסקנת רווחיות</em>: מוצרים עם הרבה צבירה <em>וגם</em> דמי ניהול בינוניים מייצרים יותר מאשר מוצרים עם דמי ניהול גבוהים אבל מעט צבירה.
@@ -2132,6 +2391,14 @@ ORDER BY employer_name, gender;`,
       if (!lq.includes('employer')) return false;
       return lq.includes('group by') && (lq.includes('avg(') || lq.includes('sum('));
     },
+    explanation: `<p><strong>הטכניקה:</strong> פילוח לפי מימד דמוגרפי (gender) + השוואת מדדים בין הסגמנטים.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>GROUP BY gender</code> — שתי קבוצות (זכר/נקבה).</li>
+<li>לכל קבוצה: ממוצע צבירה, ממוצע דמי ניהול, מספר עמיתים.</li>
+<li>השוואה בין השורות חושפת פערים.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> ניתוח דמוגרפי הוא כלי בסיסי באנליטיקה — לפעמים הפער בין הסגמנטים חושף הזדמנות עסקית (גברים עם פוטנציאל הפקדה גבוה יותר?), ולפעמים בעיה (הטיית שירות?). <em>החוקיות:</em> ערך ממוצע בלבד מסתיר אי-שוויון. תוסיף MEDIAN או רבעונים לתמונה מלאה.</p>`,
     insight: `<strong>במידה ויש פער מגדרי - ההנהלה חייבת לדעת.</strong>
     הבדיקה הזו חשובה גם רגולטורית וגם תדמיתית. בדאטה שלנו: הפערים בין גברים לנשים <em>קטנים</em>
     בכל מעסיק - בסדרי גודל של 0.1-0.3%, ולא בכיוון עקבי.
@@ -2174,6 +2441,14 @@ ORDER BY employer_name, product_name;`,
       if (!lq.includes('row_number') && !lq.includes('rank')) return false;
       return lq.includes('partition by') && lq.includes('join_date');
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ...)</code> — דירוג בלעדי בתוך קבוצה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>PARTITION BY member_id</code> — מחלק את הרשומות לקבוצות, אחת לכל עמית.</li>
+<li><code>ORDER BY join_date ASC</code> — בתוך כל קבוצה, ממיין מהמוקדם למאוחר.</li>
+<li><code>ROW_NUMBER() = 2</code> מסנן את <em>השני מההתחלה</em>. לקבל את <em>השני מהסוף</em> — צריך ORDER BY DESC.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> <code>ROW_NUMBER</code> הוא <em>הכלי</em> לבחירת רשומה ספציפית מתוך קבוצה ("המוצר השני שכל לקוח קנה", "ההזמנה האחרונה לפני 2024"). בלעדיו צריך JOINים מסובכים. הוא <em>שונה מ-RANK</em> בכך שאין שוויון — תמיד 1, 2, 3 ייחודיים.</p>`,
     insight: `<strong>למדת את הכלי המתקדם ביותר ב-SQL.</strong>
     <code>PARTITION BY</code> מחלק את הנתונים לקבוצות (employer + product).
     <code>ROW_NUMBER() OVER (... ORDER BY ...)</code> נותן מספר רץ בתוך כל קבוצה.
@@ -2206,6 +2481,14 @@ ORDER BY num_employers DESC, member_id;`,
       if (!lq.includes('member_id')) return false;
       return lq.includes('employer') && (lq.includes('count(distinct') || lq.includes('count( distinct'));
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>GROUP BY</code> עם <code>HAVING COUNT(DISTINCT ...) &gt; 1</code> — סינון לאחר אגרגציה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>GROUP BY member_id</code> — מקבץ את הרשומות לפי עמית.</li>
+<li><code>HAVING COUNT(DISTINCT employer_id) &gt; 1</code> — שומר רק את העמיתים שיש להם יותר ממעסיק אחד.</li>
+<li><em>HAVING ולא WHERE</em>: WHERE מסנן לפני האגרגציה, HAVING מסנן אחרי. כאן צריך לסנן לפי מדד מאוגרג (COUNT DISTINCT).</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זיהוי <em>עמיתים שעברו ממקום עבודה למקום עבודה</em> — קהל חשוב לחברת ביטוח (יש להם תיק יותר עשיר, הם דורשים שירות יותר טוב). הדפוס הזה (COUNT DISTINCT > 1) הוא כל מי שמופיע אצל יותר ממקור אחד — לקוחות רב-ערוצים, מוצרים רב-קטגוריים וכו'.</p>`,
     insight: `<strong>52 עמיתים</strong> עובדים אצל יותר ממעסיק אחד.
     זו אוכלוסיה קטנה אבל חשובה - הם מקבלים תקשורת מהחברה כפליים (פעם מכל מעסיק),
     ויש להם <em>הזדמנות לאיחוד חשבונות</em> שיכול לחסוך להם דמי ניהול.
@@ -2244,6 +2527,14 @@ ORDER BY num_products DESC, num_employers DESC;`,
       // Must reference both employer (to filter multi) and product (to count)
       return lq.includes('having') && (lq.includes('with') || lq.includes('in (select'));
     },
+    explanation: `<p><strong>הטכניקה:</strong> בניית שאילתת-משנה (<code>IN</code> או CTE) שמוצאת את הקבוצה הרלוונטית, ואז שאילתה ראשית שעובדת רק עליה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li>שלב 1: מצא את העמיתים המתאימים (אלה עם יותר ממעסיק אחד) — תת-שאילתה.</li>
+<li>שלב 2: לכל עמית כזה, ספור כמה מוצרים שונים יש לו.</li>
+<li>הפלט: רשימת עמיתים + מספר המוצרים שלהם.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה דפוס של <strong>שאילתה היררכית</strong> — קודם מצמצמים את היקף האוכלוסייה, אחר-כך חוקרים אותה. אלטרנטיבות: CTE עם <code>WITH</code>, או <code>JOIN</code> לתת-שאילתה. <em>CTE לרוב יותר קריא</em>.</p>`,
     insight: `<strong>רוב העמיתים המרובים מחזיקים 2 מוצרים</strong> (אחד לכל מעסיק).
     <em>הזדמנות עסקית</em>: לכל עמית עם 2 מוצרים בחברה יש פוטנציאל cross-sell ל-3,4,5 מוצרים.
     ה-CTE (<code>WITH</code>) מאפשר לבנות שאילתה בשלבים - קוראים אותה כמו סיפור.`,
@@ -2273,6 +2564,14 @@ LIMIT 3;`,
       if (!lq.includes('sum(')) return false;
       return lq.includes('group by') && (lq.includes('order by') || lq.includes('max'));
     },
+    explanation: `<p><strong>הטכניקה:</strong> <code>SUM</code> + <code>GROUP BY</code> + <code>ORDER BY DESC</code> + <code>LIMIT</code> — דירוג Top-N.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>SUM(accumulation)</code> מחושב לכל מוצר.</li>
+<li>מיון יורד — הגדול ראשון.</li>
+<li><code>LIMIT 1</code> שולף רק את המוצר הראשון.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> <em>Top-N analysis</em> זה אחד הניתוחים הנפוצים בעסק: "המוצר הכי מוצלח", "5 הסניפים הכי טובים", "10% מהלקוחות שמייצרים 80% מההכנסה". מבנה השאילתה הזה הוא הליבה. <em>טיפ</em>: לפעמים LIMIT לא מספיק — אם רוצים "כל המוצרים שמייצרים 50% מהצבירה" צריך window function עם <code>SUM() OVER (ORDER BY ...)</code>.</p>`,
     insight: `<strong>המנצח: <code>קרן השתלמות</code> עם ~10.9 מיליון ש"ח.</strong>
     אחריו <code>קופת גמל</code> (~7.4M). <em>אבל</em> - זה לא בהכרח אומר שהוא הכי רווחי.
     הצבירה לבד לא קובעת - דמי הניהול × הצבירה זה מה שמייצר הכנסה. נראה את זה בשלב 12.`,
@@ -2304,6 +2603,14 @@ ORDER BY avg_per_member DESC;`,
       // Must use either AVG or SUM/COUNT pattern
       return (lq.includes('avg(') || (lq.includes('sum(') && lq.includes('count('))) && lq.includes('group by');
     },
+    explanation: `<p><strong>הטכניקה:</strong> אגרגציה ברמת עמית (<code>GROUP BY member_id</code>) ואז דירוג של הממוצעים.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>GROUP BY member_id</code> — סוכם את הצבירה של כל עמית על פני כל הרשומות שלו.</li>
+<li>חישוב הממוצע פר-עמית.</li>
+<li>אפשר גם להוסיף <code>ORDER BY total DESC</code> לראות את העמית עם הצבירה הגבוהה ביותר.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> לא להתבלבל בין <em>רמת רשומה</em> (כל שורה במסד) לבין <em>רמת ישות עסקית</em> (עמית). 1,143 רשומות הן 819 עמיתים. אנליסטים טובים תמיד יודעים <strong>על איזה רמה הם עובדים</strong> — שורה? עמית? תיק? קבוצה משפחתית?</p>`,
     insight: `<strong>המוצר עם ה<em>ממוצע</em> הגבוה ביותר לעמית הוא בדרך כלל <code>קופת גמל</code></strong> - 
     בגלל שזה מוצר חיסכון ארוך-טווח שמצטבר.
     קרן השתלמות מובילה בסך (כי יש בה הרבה עמיתים) - אבל הממוצע לעמית לא בהכרח הכי גבוה.
@@ -2339,6 +2646,14 @@ ORDER BY annual_revenue_nis DESC;`,
       if (!lq.includes('/ 100') && !lq.includes('/100') && !lq.includes('* 0.01')) return false;
       return lq.includes('קרן השתלמות') || lq.includes('צבא קבע');
     },
+    explanation: `<p><strong>הטכניקה:</strong> סינון מותנה (<code>WHERE</code>) + חישוב הכנסה מותנית + סכימה.</p>
+<p><strong>איך זה עובד:</strong></p>
+<ul>
+<li><code>WHERE product_name IN ('קרן השתלמות', 'צבא קבע')</code> — מצמצם רק למוצרים הרלוונטיים.</li>
+<li>לכל רשומה, חישוב ההכנסה: <code>accumulation * accumulation_fee_pct / 100</code>.</li>
+<li><code>SUM</code> נותן את ההכנסה השנתית הכוללת מהמוצרים האלה.</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> זה <strong>What-If Analysis</strong> — "מה תהיה ההשפעה אם נשנה את דמי הניהול של מוצר X?", "מה ההכנסה משלוש המוצרים הכי רווחיים?". שילוב של WHERE + SUM + חישוב חשבונאי הוא הליבה של מודלי הכנסות וחישובי ROI.</p>`,
     insight: `<strong>ההכנסות השנתיות מ-2 המוצרים האלה:</strong>
     <ul>
       <li><code>קרן השתלמות</code>: <strong>~₪59,090</strong></li>
@@ -2370,10 +2685,16 @@ ORDER BY annual_revenue_nis DESC;`,
 ג. ...`,
     starter: null,
     validate: () => false,
+    explanation: `<p><strong>שלב הסיכום העסקי:</strong> כל מה שגילית בשלבים 1-12 צריך להתכנס לטענה עסקית קוהרנטית.</p>
+<p><strong>איך לבנות תשובה טובה:</strong></p>
+<ul>
+<li><strong>השערה:</strong> טענה חדה על מצב הביזנס. דוגמה: "<em>שני המעסיקים החזקים שלנו (X ו-Y) מייצרים 75% מההכנסה, אבל אנחנו תלויים בעוד 4 מוצרים שלהם בסיכון תחרותי</em>".</li>
+<li><strong>ממצאים:</strong> נתונים ספציפיים. <em>אל תכתוב "יש פערים בין מעסיקים"</em>. תכתוב "<em>מעסיק X: 350 עמיתים, ממוצע צבירה ₪127,000. מעסיק Y: 280 עמיתים, ממוצע ₪85,000</em>".</li>
+<li><strong>המלצה:</strong> פעולה עם השפעה כמותית. <em>אל תכתוב "להגדיל מוצרים"</em>. תכתוב "<em>להציע חבילת בריאות + פנסיה משלימה ל-150 העמיתים בקרן השתלמות בלבד — צפי הכנסה נוספת: ₪400K-500K לשנה</em>".</li>
+</ul>
+<p><strong>למה זה חשוב:</strong> במבחן בית של אנליסט, ה-SQL הוא 30% מהציון. <strong>הסיכום העסקי הוא 70%</strong>. מי שכותב SQL נכון אבל לא יודע לסכם — ייפסל. מי שמסכם נכון עם SQL בינוני — ייקבל את התפקיד. זה ההבדל בין "מבצע שאילתות" ל"אנליסט".</p>`,
   },
 ];
-
-// ============ INIT ============
 async function init() {
   try {
     setLoaderText('מאתחל SQL.js...');
@@ -2607,6 +2928,14 @@ function setupStep(idx) {
         <div class="insight-text">${step.insight}</div>
       </div>
 
+      <div class="explanation-card ${isComplete?'show':''}" id="explanation-card">
+        <div class="explanation-header">
+          <div class="explanation-icon">📘</div>
+          <div class="explanation-title">הסבר השאילתה — איך זה עובד</div>
+        </div>
+        <div class="explanation-body">${step.explanation || '<em style="color:var(--text-muted)">אין הסבר זמין לשלב זה.</em>'}</div>
+      </div>
+
       <div class="step-nav-bar">
         <button class="btn btn-ghost btn-large" id="btn-prev" ${idx===0?'disabled':''}>◂ קודם</button>
         <button class="skip-link" id="btn-skip">סמן כהושלם ידנית →</button>
@@ -2620,7 +2949,22 @@ function setupStep(idx) {
       lineNumbers: true,
       indentUnit: 2,
       matchBrackets: true,
-      extraKeys: { 'Ctrl-Enter': runQuery, 'Cmd-Enter': runQuery },
+      hintOptions: {
+        tables: APP.schemaHints || {},
+        completeSingle: false,
+      },
+      extraKeys: {
+        'Ctrl-Enter': runQuery,
+        'Cmd-Enter': runQuery,
+        'Ctrl-Space': 'autocomplete',
+      },
+    });
+
+    // Auto-trigger autocomplete on typing (after letters)
+    APP.editor.on('inputRead', function(cm, change) {
+      if (change.text[0].match(/[\w.]/) && !cm.state.completionActive) {
+        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+      }
     });
 
     if (state.lastResultCols.length) {
@@ -2634,6 +2978,8 @@ function setupStep(idx) {
     document.getElementById('btn-skip').onclick = () => {
       APP.stepState[idx].complete = true;
       document.getElementById('insight-card').classList.add('show');
+      const ec = document.getElementById('explanation-card');
+      if (ec) ec.classList.add('show');
       renderProgress();
       renderStepNav();
     };
@@ -2706,6 +3052,8 @@ function runQuery() {
         APP.stepState[idx].complete = true;
         const insight = document.getElementById('insight-card');
         if (insight) insight.classList.add('show');
+        const explanation = document.getElementById('explanation-card');
+        if (explanation) explanation.classList.add('show');
         renderProgress();
         renderStepNav();
         const badge = document.querySelector('.step-badge');
