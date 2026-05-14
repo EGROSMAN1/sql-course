@@ -3,345 +3,690 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>קורס SQL | אלירן גרוסמן</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<title>תרגול ראיון עבודה מלא | קורס SQL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#070d0f;
-  --bg2:#0c1518;
-  --bg3:#111e21;
-  --border:rgba(0,212,200,.08);
-  --border2:rgba(0,212,200,.18);
-  --text:#e8f4f5;
-  --text2:#6b9098;
-  --text3:#2a4048;
-  --aq:#00d4c8;
-  --aq2:rgba(0,212,200,.12);
-  --font:'Heebo',sans-serif;
-  --mono:'IBM Plex Mono',monospace;
-  --sb:260px;
-}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;display:flex;flex-direction:column}
-
-/* TOPBAR */
-.top{position:fixed;top:0;right:0;left:0;height:48px;z-index:300;background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
-.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.logo em{color:var(--aq);font-style:normal}
-.top-nav{display:flex;gap:.1rem;list-style:none;flex:1;overflow-x:auto;scrollbar-width:none}
-.top-nav::-webkit-scrollbar{display:none}
-.top-nav a{color:var(--text2);text-decoration:none;font-size:12px;font-weight:600;padding:4px 9px;border-radius:4px;white-space:nowrap;display:block;transition:color .12s}
-.top-nav a:hover{color:var(--aq)}
-.hbg{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:6px}
-.hbg span{width:18px;height:2px;background:var(--text2);border-radius:2px;display:block}
-
-/* SIDEBAR */
-.sb{position:fixed;top:48px;right:0;width:var(--sb);bottom:0;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;z-index:200}
-.sb-hdr{padding:1.2rem 1.3rem .9rem;border-bottom:1px solid var(--border)}
-.sb-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.4rem}
-.sb-title{font-size:14px;font-weight:700;color:var(--text)}
-.sb-body{padding:.6rem 0 3rem}
-.sb-group{padding:.6rem 1.3rem .2rem;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono)}
-.sb-link{display:flex;align-items:center;gap:.6rem;padding:.45rem 1.3rem;text-decoration:none;transition:all .12s}
-.sb-link:hover,.sb-link.on{background:var(--aq2)}
-.sb-link:hover .sl-dot,.sb-link.on .sl-dot{background:var(--aq);border-color:var(--aq)}
-.sb-link:hover .sl-txt,.sb-link.on .sl-txt{color:var(--text)}
-.sl-dot{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0}
-.sl-txt{font-size:12.5px;color:var(--text2)}
-
-/* MAIN */
-.main{margin-top:48px;margin-right:var(--sb);padding:2.5rem 2.5rem 4rem;min-height:calc(100vh - 48px)}
-
-/* HERO */
-.hero{background:var(--bg2);border:1px solid var(--border);border-top:2px solid var(--aq);border-radius:12px;padding:2rem 2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
-.hero-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--aq);font-family:var(--mono);margin-bottom:.6rem}
-.hero h1{font-size:2.2rem;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:.5rem}
-.hero h1 em{color:var(--aq);font-style:normal}
-.hero-desc{font-size:.9rem;color:var(--text2);line-height:1.7;max-width:460px}
-.hero-desc strong{color:var(--text)}
-.hero-about{font-size:.85rem;color:var(--text2);line-height:1.75;max-width:480px;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)}
-.hero-about strong{color:var(--aq)}
-.hero-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--aq);flex-shrink:0}
-.hero-photo-ph{width:80px;height:80px;border-radius:50%;background:var(--bg3);border:2px solid var(--aq);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
-
-/* INSTRUCTOR ROW */
-.inst{display:flex;align-items:center;gap:.7rem;margin-top:1.1rem;flex-wrap:wrap}
-.inst-name{font-size:13px;font-weight:700;color:var(--text)}
-.inst-role{font-size:11.5px;color:var(--text2)}
-.inst-sep{color:var(--text3)}
-.ilink{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;text-decoration:none}
-.ilink.li{background:#0a66c2;color:#fff}
-.ilink.wa{background:#25d366;color:#fff}
-
-/* STATS ROW */
-.stats{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1.1rem;display:flex;align-items:center;gap:.65rem;flex:1;min-width:110px}
-.stat-val{font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--aq);line-height:1}
-.stat-lbl{font-size:11px;color:var(--text2);font-weight:600}
-
-/* NAV CARDS */
-.cards-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.75rem}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.5rem}
-.card{display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);transition:all .15s}
-.card:hover{border-color:var(--border2);background:var(--bg3)}
-.card.feat{border-color:var(--border2);border-right:2px solid var(--aq)}
-.card-ico{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
-.card-title{font-size:13px;font-weight:700;color:var(--text)}
-.card.feat .card-title{color:var(--aq)}
-.card-arr{font-size:12px;color:var(--text3);margin-right:auto;transition:transform .12s}
-.card:hover .card-arr{transform:translateX(-3px);color:var(--text2)}
-
-/* MOBILE */
-.mob-nav{display:none;position:fixed;top:48px;right:0;left:0;bottom:0;background:var(--bg);z-index:250;padding:1rem;flex-direction:column;gap:.15rem;overflow-y:auto;border-top:1px solid var(--border)}
-.mob-nav.open{display:flex}
-.mob-nav a{color:var(--text2);text-decoration:none;font-size:14px;padding:10px 14px;border-radius:7px;display:block}
-.mob-nav a:hover{background:var(--bg2);color:var(--text)}
-
-@media(max-width:860px){
-  :root{--sb:0px}
-  .sb{display:none}
-  .hbg{display:flex}
-  .top-nav{display:none}
-  .main{padding:1.5rem 1rem 3rem}
-  .hero{grid-template-columns:1fr;gap:1rem}
-  .hero-photo,.hero-photo-ph{display:none}
-  .hero h1{font-size:1.7rem}
-  .cards{grid-template-columns:1fr}
+:root {
+  --bg-base: #0f1419;
+  --bg-elevated: #181f29;
+  --bg-panel: #1f2733;
+  --bg-input: #131922;
+  --border: #2a3441;
+  --border-strong: #3a4757;
+  --text-primary: #e6edf3;
+  --text-secondary: #97a4b5;
+  --text-muted: #5d6b7d;
+  --aqua: #2dd4c0;
+  --aqua-dim: #1a9a8a;
+  --amber: #e9b949;
+  --cyan: #61d0c4;
+  --green: #7cc47c;
+  --red: #e06c75;
+  --purple: #c678dd;
 }
 
-/* LEVEL SELECTOR */
-.level-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:.5rem}
-.lcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;transition:all .2s;position:relative;overflow:hidden}
-.lcard:hover{transform:translateY(-3px)}
-.lcard::after{content:'';position:absolute;bottom:0;right:0;left:0;height:3px;background:var(--lc,var(--aq))}
-.lcard-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:.2rem}
-.lc-icon{font-size:1.6rem}
-.lc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);background:var(--bg3);padding:2px 8px;border-radius:4px}
-.lc-title{font-size:17px;font-weight:800;color:var(--text)}
-.lc-num{font-size:2.4rem;font-weight:900;font-family:var(--mono);color:var(--lc,var(--aq));line-height:1.1}
-.lc-sub{font-size:12px;color:var(--text2);font-weight:600;margin-top:-.2rem}
-.lc-topics{font-size:11.5px;color:var(--text2);line-height:1.5;margin-top:.3rem}
-.lc1{--lc:#00e5a0}.lc1:hover{border-color:rgba(0,229,160,.35)}
-.lc2{--lc:#4a9eff}.lc2:hover{border-color:rgba(74,158,255,.35)}
-.lc3{--lc:#9B5CFF}.lc3:hover{border-color:rgba(155,92,255,.35)}
-.lc4{--lc:#FFB020}.lc4:hover{border-color:rgba(255,176,32,.5)}
-.lcard.feat{border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04)}
-.lc-hot{position:absolute;top:36px;right:8px;background:rgba(255,176,32,.15);color:#FFB020;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(255,176,32,.3)}
-/* MOBILE */
-@media(max-width:768px){
-  .level-selector{grid-template-columns:repeat(2,1fr);gap:.6rem}
-  .lc-topics{font-size:11px}
-  .lc-num{font-size:2rem}
-  .lc-title{font-size:15px}
-  .lcard{padding:1rem .85rem}
-}
-@media(max-width:400px){
-  .level-selector{grid-template-columns:1fr 1fr;gap:.5rem}
-  .lc-topics{display:none}
-  .lc-badge{display:none}
-  .lc-num{font-size:1.75rem}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  font-family: 'Heebo', system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top right, rgba(45, 212, 192, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(45, 212, 192, 0.05) 0%, transparent 50%),
+    var(--bg-base);
+  line-height: 1.6;
+}
+
+/* ============ HEADER ============ */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: rgba(24, 31, 41, 0.92);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  display: grid;
+  place-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--bg-base);
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+
+.brand-text { display: flex; flex-direction: column; }
+.brand-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+}
+
+.back-link:hover {
+  border-color: var(--aqua);
+  color: var(--aqua);
+  background: rgba(45, 212, 192, 0.05);
+  transform: translateX(2px);
+}
+
+.back-link-arrow {
+  transition: transform 0.18s ease;
+}
+
+.back-link:hover .back-link-arrow {
+  transform: translateX(3px);
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 64px 32px 40px;
+  text-align: center;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(45, 212, 192, 0.1);
+  border: 1px solid rgba(45, 212, 192, 0.3);
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--aqua);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--aqua);
+  box-shadow: 0 0 8px var(--aqua);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.4; }
+}
+
+.hero-title {
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--aqua) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.2vw, 19px);
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+
+.hero-subtitle strong { color: var(--text-primary); font-weight: 600; }
+.hero-subtitle em { color: var(--aqua); font-style: normal; font-weight: 600; }
+
+.hero-features {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.hero-feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hero-feature-icon {
+  color: var(--aqua);
+  font-size: 14px;
+}
+
+/* ============ CASES GRID ============ */
+.cases-section {
+  padding: 32px 32px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: -0.01em;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 22px;
+}
+
+.case-card {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.case-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--aqua), transparent);
+  opacity: 0.4;
+  transition: opacity 0.25s ease;
+}
+
+.case-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(45, 212, 192, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  opacity: 0.6;
+}
+
+.case-card:hover {
+  border-color: rgba(45, 212, 192, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(45, 212, 192, 0.1);
+}
+
+.case-card:hover::before { opacity: 1; }
+.case-card:hover::after { opacity: 1; }
+
+.case-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.case-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--aqua);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(45, 212, 192, 0.25);
+}
+
+.case-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.case-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+
+.case-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.case-description strong { color: var(--text-primary); font-weight: 600; }
+
+.case-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--bg-panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.case-stat { text-align: center; }
+.case-stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--aqua);
+  line-height: 1.1;
+}
+.case-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.case-techniques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.case-technique {
+  padding: 4px 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.case-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  border-radius: 8px;
+  color: var(--bg-base);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.18s ease;
+}
+
+.case-cta-arrow {
+  transition: transform 0.18s ease;
+  font-size: 18px;
+}
+
+.case-card:hover .case-cta {
+  box-shadow: 0 4px 14px rgba(45, 212, 192, 0.4);
+}
+
+.case-card:hover .case-cta-arrow {
+  transform: translateX(-4px);
+}
+
+/* ============ ABOUT SECTION ============ */
+.about-section {
+  padding: 16px 32px 64px;
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.about-item { text-align: center; }
+.about-item-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.about-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.about-item-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============ FOOTER ============ */
+.site-footer {
+  padding: 28px 32px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.footer-link {
+  color: var(--aqua);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+/* ============ MOBILE ============ */
+@media (max-width: 700px) {
+  .site-header { padding: 14px 18px; }
+  .brand-text { display: none; }
+  .hero { padding: 40px 20px 28px; }
+  .cases-section { padding: 20px 16px 56px; }
+  .case-card { padding: 22px; }
+  .case-card-header { gap: 12px; }
+  .case-icon { width: 48px; height: 48px; font-size: 22px; }
+  .case-title { font-size: 19px; }
+  .case-stats { gap: 6px; padding: 12px; }
+  .case-stat-value { font-size: 16px; }
+  .about-section { padding: 8px 16px 48px; }
+  .about-card { padding: 22px; }
+  .footer-content { flex-direction: column; gap: 8px; }
+}
+
+/* Subtle entry animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero, .cases-grid, .about-card {
+  animation: fadeUp 0.6s ease-out;
+}
+
+.cases-grid { animation-delay: 0.1s; animation-fill-mode: backwards; }
+.about-card { animation-delay: 0.2s; animation-fill-mode: backwards; }
 </style>
-
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CKNNVS2HVB');
-</script>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<header class="top">
-  <a href="index.html" class="logo">SQL<em>.course</em></a>
-  <ul class="top-nav">
-    <li><a href="course.html">חומר לימוד</a></li>
-    <li><a href="practice.html">תרגולים</a></li>
-    <li><a href="simulator.html">⚡ סימולטור</a></li>
-    <li><a href="reference.html">מאגר פונקציות</a></li>
-    <li><a href="quiz-beginner.html">שאלות מתחילים</a></li>
-    <li><a href="quiz.html">שאלות מתקדמות</a></li>
-    <li><a href="videos.html">MySQL</a></li>
-    <li><a href="videos2.html">SQL Server</a></li>
-    <li><a href="setup.html">התקנה</a></li>
-  </ul>
-  <button class="hbg" onclick="toggleMob()"><span></span><span></span><span></span></button>
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">DA</div>
+    <div class="brand-text">
+      <div class="brand-title">תרגול ראיון עבודה</div>
+      <div class="brand-sub">SQL Practice Lab</div>
+    </div>
+  </div>
+  <a class="back-link" href="https://egrosman1.github.io/sql-course/">
+    <span class="back-link-arrow">→</span>
+    <span>חזרה לקורס SQL</span>
+  </a>
 </header>
 
-<!-- MOBILE MENU -->
-<div class="mob-nav" id="mobNav">
-  <a href="course.html">📚 חומר לימוד</a>
-  <a href="practice.html">✏️ תרגולים</a>
-  <a href="simulator.html">⚡ סימולטור SQL</a>
-  <a href="reference.html">📘 מאגר פונקציות</a>
-  <a href="quiz-beginner.html">🌱 שאלות למתחילים</a>
-  <a href="quiz.html">🧠 שאלות מתקדמות</a>
-  <a href="videos.html">🎬 הדרכות MySQL</a>
-  <a href="videos2.html">🖥️ הדרכות SQL Server</a>
-  <a href="setup.html">🛠️ מדריך התקנה</a>
-</div>
-
-<!-- SIDEBAR -->
-<aside class="sb">
-  <div class="sb-hdr">
-    <div class="sb-label">כלים</div>
-    <div class="sb-title">SQL.course</div>
+<section class="hero">
+  <div class="hero-tag">
+    <span>Interview Lab · Real Business Cases</span>
   </div>
-  <div class="sb-body">
-    <a href="simulator.html" class="sb-link on"><div class="sl-dot"></div><div class="sl-txt">⚡ סימולטור SQL</div></a>
-    <a href="reference.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📘 מאגר פונקציות</div></a>
-    <a href="practice.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">✏️ תרגולים</div></a>
-    <a href="quiz-beginner.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🌱 שאלות מתחילים</div></a>
-    <a href="quiz-medium.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📗 שאלות בינוני</div></a>
-    <a href="quiz-advanced2.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 שאלות מתקדם</div></a>
-    <a href="quiz-expert.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🏆 שאלות מומחה</div></a>
-    <a href="quiz.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 שאלות מתקדמות</div></a>
+  <h1 class="hero-title">תרגול ראיון עבודה מלא</h1>
+  <p class="hero-subtitle">
+    <strong>2 Case Studies עסקיים בעברית</strong> שמדמים תרגיל בית של אנליסט נתונים בכיר.
+    כל case בנוי כניתוח אמיתי — דאטה ריאליסטי, <em>13 שלבים מובנים</em>, ולידציה אוטומטית של השאילתות,
+    וציון בסוף. בדיוק כמו שתפגוש בראיון אמיתי.
+  </p>
+  <div class="hero-features">
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> דאטה אמיתי</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> SQL חי בדפדפן</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> Window Functions</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> ציון אוטומטי</div>
   </div>
-</aside>
+</section>
 
-<!-- MAIN -->
-<main class="main">
+<section class="cases-section">
+  <div class="section-eyebrow">בחר את ה-Case</div>
+  <h2 class="section-title">2 תרחישים עסקיים</h2>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div>
-      <div class="hero-tag">● קורס SQL חינמי · עברית</div>
-      <h1>שולטים ב<em>SQL</em></h1>
-      <p class="hero-desc">מהבסיס ועד <strong>רמת ראיונות עבודה</strong> — קורס מעשי וחינמי עם סימולטור SQL חי.</p>
-      <p class="hero-about">מרצה SQL ומנהל אנליסטים בחברת <strong>Partner</strong> עם ניסיון רב-שנתי בעולם הדאטה.<br>
-      המטרה שלי — <strong>ללמד דאטה בחינם, בעברית, בצורה פשוטה ונגישה לכולם</strong> — ולהביא את הניסיון מהשטח לכל מי שרוצה להתקדם בתחום ולהצליח בראיונות עבודה.</p>
-      <div class="inst">
-        <img src="eliran.png" alt="אלירן גרוסמן" width="32" height="32"
-             style="border-radius:50%;border:1.5px solid var(--aq);object-fit:cover;flex-shrink:0"
-             onerror="this.style.display='none'">
-        <span class="inst-name">אלירן גרוסמן</span>
-        <span class="inst-sep">·</span>
-        <span class="inst-role">מרצה SQL · Partner</span>
-        <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" class="ilink li">LinkedIn</a>
-        <a href="https://wa.me/972507514807" target="_blank" class="ilink wa">WhatsApp</a>
+  <div class="cases-grid">
+
+    <a class="case-card" href="case_study_simulator_v2.html">
+      <div class="case-card-header">
+        <div>
+          <div class="case-tag">CASE #01 · TELECOM</div>
+        </div>
+        <div class="case-icon">📊</div>
+      </div>
+      <div class="case-title">קפיצה ב-Customer Churn</div>
+      <div class="case-subtitle">חברת טלקום · Q1 2026</div>
+      <div class="case-description">
+        ה-CMO זיהה <strong>קפיצה של 4× בנטישת לקוחות</strong> ברבעון האחרון.
+        עליך לחקור את הסיבות, לזהות את הסגמנט הקריטי, ולבנות תוכנית פעולה.
+        ניתוח מבוסס דאטה של 6,000 לקוחות, 8,900 פניות שירות, ו-35,000 רשומות שימוש חודשי.
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-value">50K+</div>
+          <div class="case-stat-label">שורות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">5</div>
+          <div class="case-stat-label">טבלאות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">13</div>
+          <div class="case-stat-label">שלבים</div>
+        </div>
+      </div>
+      <div class="case-techniques">
+        <span class="case-technique">GROUP BY</span>
+        <span class="case-technique">CTE</span>
+        <span class="case-technique">RANK() OVER</span>
+        <span class="case-technique">LAG()</span>
+        <span class="case-technique">Subquery</span>
+      </div>
+      <div class="case-cta">
+        <span>התחל את ה-Case</span>
+        <span class="case-cta-arrow">←</span>
+      </div>
+    </a>
+
+    <a class="case-card" href="case_study_simulator_insurance.html">
+      <div class="case-card-header">
+        <div>
+          <div class="case-tag">CASE #02 · INSURANCE</div>
+        </div>
+        <div class="case-icon">🏛️</div>
+      </div>
+      <div class="case-title">החלטות דמי ניהול — חברת ביטוח</div>
+      <div class="case-subtitle">חברת ביטוח · מבחן בית</div>
+      <div class="case-description">
+        ההנהלה מתלבטת לגבי <strong>מדיניות דמי הניהול</strong> שגובה חברת ביטוח גדולה.
+        עליך לחקור 1,143 רשומות של 819 עמיתים ב-4 מעסיקים שונים, לענות על 9 שאלות עסקיות,
+        ולתת המלצות אסטרטגיות מבוססות נתונים.
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-value">1,143</div>
+          <div class="case-stat-label">רשומות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">9</div>
+          <div class="case-stat-label">שאלות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">13</div>
+          <div class="case-stat-label">שלבים</div>
+        </div>
+      </div>
+      <div class="case-techniques">
+        <span class="case-technique">GROUP BY</span>
+        <span class="case-technique">HAVING</span>
+        <span class="case-technique">ROW_NUMBER OVER</span>
+        <span class="case-technique">PARTITION BY</span>
+        <span class="case-technique">CTE</span>
+      </div>
+      <div class="case-cta">
+        <span>התחל את ה-Case</span>
+        <span class="case-cta-arrow">←</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-card">
+    <h3 style="font-size: 18px; margin-bottom: 6px;">מה הופך את התרגול הזה לשונה?</h3>
+    <p style="font-size: 13px; color: var(--text-secondary);">
+      לא תרגילים יבשים — תרחישים עסקיים אמיתיים עם פידבק מיידי בכל שלב.
+    </p>
+    <div class="about-grid">
+      <div class="about-item">
+        <div class="about-item-icon">🎯</div>
+        <div class="about-item-title">פידבק מיידי</div>
+        <div class="about-item-desc">כל שאילתה מקבלת תשובה: נכון, לא נכון, או שגיאה</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">🔒</div>
+        <div class="about-item-title">תשובות נעולות</div>
+        <div class="about-item-desc">הקוד לדוגמה נפתח רק אחרי שניסית בעצמך</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">🗄️</div>
+        <div class="about-item-title">מבט על הנתונים</div>
+        <div class="about-item-desc">תצוגת הטבלאות והדאטה תמיד זמינה</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">📊</div>
+        <div class="about-item-title">ציון 0-100</div>
+        <div class="about-item-desc">בסוף - ניתוח מפורט עם המלצות אידיאליות להשוואה</div>
       </div>
     </div>
-    <img src="eliran.png" alt="אלירן גרוסמן" class="hero-photo"
-         onerror="this.outerHTML='<div class=hero-photo-ph>👨‍💻</div>'">
   </div>
+</section>
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">פרקי לימוד</div></div>
-    <div class="stat"><div class="stat-val">110+</div><div class="stat-lbl">תרגולים</div></div>
-    <div class="stat"><div class="stat-val">24K</div><div class="stat-lbl">שורות בסימולטור</div></div>
-    <div class="stat"><div class="stat-val">🆓</div><div class="stat-lbl">חינם לחלוטין</div></div>
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-text">
+      © 2026 · קורס SQL · אלירן גרוסמן
+    </div>
+    <div class="footer-text">
+      <a class="footer-link" href="https://egrosman1.github.io/sql-course/">← לאתר הקורס המלא</a>
+    </div>
   </div>
+</footer>
 
-  <!-- NAV CARDS -->
-  <div class="cards-label">שאלות אמריקאיות — בחר רמה</div>
-  <div class="level-selector">
-    <a href="quiz-beginner.html" class="lcard lc1">
-      <div class="lcard-top">
-        <div class="lc-icon">🌱</div>
-        <div class="lc-badge">LEVEL 1</div>
-      </div>
-      <div class="lc-title">מתחילים</div>
-      <div class="lc-num">150</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">SELECT · WHERE · GROUP BY · JOINs</div>
-    </a>
-    <a href="quiz-medium.html" class="lcard lc2">
-      <div class="lcard-top">
-        <div class="lc-icon">📗</div>
-        <div class="lc-badge">LEVEL 2</div>
-      </div>
-      <div class="lc-title">בינוני</div>
-      <div class="lc-num">80</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">מחרוזות · אגרגציה · JOINs מתקדם</div>
-    </a>
-    <a href="quiz-advanced2.html" class="lcard lc3">
-      <div class="lcard-top">
-        <div class="lc-icon">🧠</div>
-        <div class="lc-badge">LEVEL 3</div>
-      </div>
-      <div class="lc-title">מתקדם</div>
-      <div class="lc-num">60</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">Subqueries · Window Functions</div>
-    </a>
-    <a href="quiz-expert.html" class="lcard lc4 feat">
-      <div class="lc-hot">🔥 הכי קשה</div>
-      <div class="lcard-top">
-        <div class="lc-icon">🏆</div>
-        <div class="lc-badge">LEVEL 4</div>
-      </div>
-      <div class="lc-title">מומחה</div>
-      <div class="lc-num">20</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">בחר את השאילתה הנכונה</div>
-    </a>
-  </div>
-
-  <div class="cards-label" style="margin-top:1.5rem">כלים נוספים</div>
-  <div class="cards">
-    <a href="simulator.html" class="card feat">
-      <span class="card-ico">⚡</span>
-      <span class="card-title">סימולטור SQL</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="course.html" class="card">
-      <span class="card-ico">📚</span>
-      <span class="card-title">חומר לימוד</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="practice.html" class="card">
-      <span class="card-ico">✏️</span>
-      <span class="card-title">תרגולים</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="quiz-beginner.html" class="card">
-      <span class="card-ico">🌱</span>
-      <span class="card-title">שאלות אמריקאיות — מתחילים</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="quiz.html" class="card">
-      <span class="card-ico">🧠</span>
-      <span class="card-title">שאלות אמריקאיות — מתקדם</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="reference.html" class="card">
-      <span class="card-ico">📘</span>
-      <span class="card-title">מאגר פונקציות</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="videos.html" class="card">
-      <span class="card-ico">🎬</span>
-      <span class="card-title">הדרכות מצולמות — MySQL</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="videos2.html" class="card">
-      <span class="card-ico">🖥️</span>
-      <span class="card-title">הדרכות מצולמות — SQL Server</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="setup.html" class="card">
-      <span class="card-ico">🛠️</span>
-      <span class="card-title">מדריך התקנה</span>
-      <span class="card-arr">←</span>
-    </a>
-  </div>
-
-</main>
-
-<script>
-function toggleMob(){document.getElementById('mobNav').classList.toggle('open');}
-document.addEventListener('click',e=>{
-  const m=document.getElementById('mobNav');
-  if(m.classList.contains('open')&&!e.target.closest('#mobNav')&&!e.target.closest('.hbg'))
-    m.classList.remove('open');
-});
-</script>
 </body>
 </html>
