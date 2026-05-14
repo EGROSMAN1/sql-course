@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תרגול ראיון עבודה מלא | קורס SQL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-base: #0f1419;
+  --bg-elevated: #181f29;
+  --bg-panel: #1f2733;
+  --bg-input: #131922;
+  --border: #2a3441;
+  --border-strong: #3a4757;
+  --text-primary: #e6edf3;
+  --text-secondary: #97a4b5;
+  --text-muted: #5d6b7d;
+  --aqua: #2dd4c0;
+  --aqua-dim: #1a9a8a;
+  --amber: #e9b949;
+  --cyan: #61d0c4;
+  --green: #7cc47c;
+  --red: #e06c75;
+  --purple: #c678dd;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Heebo', system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top right, rgba(45, 212, 192, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(45, 212, 192, 0.05) 0%, transparent 50%),
+    var(--bg-base);
+  line-height: 1.6;
+}
+
+/* ============ HEADER ============ */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: rgba(24, 31, 41, 0.92);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  display: grid;
+  place-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--bg-base);
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+
+.brand-text { display: flex; flex-direction: column; }
+.brand-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+}
+
+.back-link:hover {
+  border-color: var(--aqua);
+  color: var(--aqua);
+  background: rgba(45, 212, 192, 0.05);
+  transform: translateX(2px);
+}
+
+.back-link-arrow {
+  transition: transform 0.18s ease;
+}
+
+.back-link:hover .back-link-arrow {
+  transform: translateX(3px);
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 64px 32px 40px;
+  text-align: center;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(45, 212, 192, 0.1);
+  border: 1px solid rgba(45, 212, 192, 0.3);
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--aqua);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--aqua);
+  box-shadow: 0 0 8px var(--aqua);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.4; }
+}
+
+.hero-title {
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--aqua) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.2vw, 19px);
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+
+.hero-subtitle strong { color: var(--text-primary); font-weight: 600; }
+.hero-subtitle em { color: var(--aqua); font-style: normal; font-weight: 600; }
+
+.hero-features {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.hero-feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hero-feature-icon {
+  color: var(--aqua);
+  font-size: 14px;
+}
+
+/* ============ CASES GRID ============ */
+.cases-section {
+  padding: 32px 32px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: -0.01em;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 22px;
+}
+
+.case-card {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.case-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--aqua), transparent);
+  opacity: 0.4;
+  transition: opacity 0.25s ease;
+}
+
+.case-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(45, 212, 192, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  opacity: 0.6;
+}
+
+.case-card:hover {
+  border-color: rgba(45, 212, 192, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(45, 212, 192, 0.1);
+}
+
+.case-card:hover::before { opacity: 1; }
+.case-card:hover::after { opacity: 1; }
+
+.case-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.case-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--aqua);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(45, 212, 192, 0.25);
+}
+
+.case-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.case-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+
+.case-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.case-description strong { color: var(--text-primary); font-weight: 600; }
+
+.case-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--bg-panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.case-stat { text-align: center; }
+.case-stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--aqua);
+  line-height: 1.1;
+}
+.case-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.case-techniques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.case-technique {
+  padding: 4px 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.case-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  border-radius: 8px;
+  color: var(--bg-base);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.18s ease;
+}
+
+.case-cta-arrow {
+  transition: transform 0.18s ease;
+  font-size: 18px;
+}
+
+.case-card:hover .case-cta {
+  box-shadow: 0 4px 14px rgba(45, 212, 192, 0.4);
+}
+
+.case-card:hover .case-cta-arrow {
+  transform: translateX(-4px);
+}
+
+/* ============ ABOUT SECTION ============ */
+.about-section {
+  padding: 16px 32px 64px;
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.about-item { text-align: center; }
+.about-item-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.about-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.about-item-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============ FOOTER ============ */
+.site-footer {
+  padding: 28px 32px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.footer-link {
+  color: var(--aqua);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+/* ============ MOBILE ============ */
+@media (max-width: 700px) {
+  .site-header { padding: 14px 18px; }
+  .brand-text { display: none; }
+  .hero { padding: 40px 20px 28px; }
+  .cases-section { padding: 20px 16px 56px; }
+  .case-card { padding: 22px; }
+  .case-card-header { gap: 12px; }
+  .case-icon { width: 48px; height: 48px; font-size: 22px; }
+  .case-title { font-size: 19px; }
+  .case-stats { gap: 6px; padding: 12px; }
+  .case-stat-value { font-size: 16px; }
+  .about-section { padding: 8px 16px 48px; }
+  .about-card { padding: 22px; }
+  .footer-content { flex-direction: column; gap: 8px; }
+}
+
+/* Subtle entry animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero, .cases-grid, .about-card {
+  animation: fadeUp 0.6s ease-out;
+}
+
+.cases-grid { animation-delay: 0.1s; animation-fill-mode: backwards; }
+.about-card { animation-delay: 0.2s; animation-fill-mode: backwards; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">DA</div>
+    <div class="brand-text">
+      <div class="brand-title">תרגול ראיון עבודה</div>
+      <div class="brand-sub">SQL Practice Lab</div>
+    </div>
+  </div>
+  <a class="back-link" href="https://egrosman1.github.io/sql-course/">
+    <span class="back-link-arrow">→</span>
+    <span>חזרה לקורס SQL</span>
+  </a>
+</header>
+
+<section class="hero">
+  <div class="hero-tag">
+    <span>Interview Lab · Real Business Cases</span>
+  </div>
+  <h1 class="hero-title">תרגול ראיון עבודה מלא</h1>
+  <p class="hero-subtitle">
+    <strong>2 Case Studies עסקיים בעברית</strong> שמדמים תרגיל בית של אנליסט נתונים בכיר.
+    כל case בנוי כניתוח אמיתי — דאטה ריאליסטי, <em>13 שלבים מובנים</em>, ולידציה אוטומטית של השאילתות,
+    וציון בסוף. בדיוק כמו שתפגוש בראיון אמיתי.
+  </p>
+  <div class="hero-features">
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> דאטה אמיתי</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> SQL חי בדפדפן</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> Window Functions</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> ציון אוטומטי</div>
+  </div>
+</section>
+
+<section class="cases-section">
+  <div class="section-eyebrow">בחר את ה-Case</div>
+  <h2 class="section-title">2 תרחישים עסקיים</h2>
+
+  <div class="cases-grid">
+
+    <a class="case-card" href="case_study_simulator_v2.html">
+      <div class="case-card-header">
+        <div>
+          <div class="case-tag">CASE #01 · TELECOM</div>
+        </div>
+        <div class="case-icon">📊</div>
+      </div>
+      <div class="case-title">קפיצה ב-Customer Churn</div>
+      <div class="case-subtitle">חברת טלקום · Q1 2026</div>
+      <div class="case-description">
+        ה-CMO זיהה <strong>קפיצה של 4× בנטישת לקוחות</strong> ברבעון האחרון.
+        עליך לחקור את הסיבות, לזהות את הסגמנט הקריטי, ולבנות תוכנית פעולה.
+        ניתוח מבוסס דאטה של 6,000 לקוחות, 8,900 פניות שירות, ו-35,000 רשומות שימוש חודשי.
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-value">50K+</div>
+          <div class="case-stat-label">שורות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">5</div>
+          <div class="case-stat-label">טבלאות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">13</div>
+          <div class="case-stat-label">שלבים</div>
+        </div>
+      </div>
+      <div class="case-techniques">
+        <span class="case-technique">GROUP BY</span>
+        <span class="case-technique">CTE</span>
+        <span class="case-technique">RANK() OVER</span>
+        <span class="case-technique">LAG()</span>
+        <span class="case-technique">Subquery</span>
+      </div>
+      <div class="case-cta">
+        <span>התחל את ה-Case</span>
+        <span class="case-cta-arrow">←</span>
+      </div>
+    </a>
+
+    <a class="case-card" href="case_study_simulator_insurance.html">
+      <div class="case-card-header">
+        <div>
+          <div class="case-tag">CASE #02 · INSURANCE</div>
+        </div>
+        <div class="case-icon">🏛️</div>
+      </div>
+      <div class="case-title">החלטות דמי ניהול — חברת ביטוח</div>
+      <div class="case-subtitle">חברת ביטוח · מבחן בית</div>
+      <div class="case-description">
+        ההנהלה מתלבטת לגבי <strong>מדיניות דמי הניהול</strong> שגובה חברת ביטוח גדולה.
+        עליך לחקור 1,143 רשומות של 819 עמיתים ב-4 מעסיקים שונים, לענות על 9 שאלות עסקיות,
+        ולתת המלצות אסטרטגיות מבוססות נתונים.
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-value">1,143</div>
+          <div class="case-stat-label">רשומות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">9</div>
+          <div class="case-stat-label">שאלות</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">13</div>
+          <div class="case-stat-label">שלבים</div>
+        </div>
+      </div>
+      <div class="case-techniques">
+        <span class="case-technique">GROUP BY</span>
+        <span class="case-technique">HAVING</span>
+        <span class="case-technique">ROW_NUMBER OVER</span>
+        <span class="case-technique">PARTITION BY</span>
+        <span class="case-technique">CTE</span>
+      </div>
+      <div class="case-cta">
+        <span>התחל את ה-Case</span>
+        <span class="case-cta-arrow">←</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-card">
+    <h3 style="font-size: 18px; margin-bottom: 6px;">מה הופך את התרגול הזה לשונה?</h3>
+    <p style="font-size: 13px; color: var(--text-secondary);">
+      לא תרגילים יבשים — תרחישים עסקיים אמיתיים עם פידבק מיידי בכל שלב.
+    </p>
+    <div class="about-grid">
+      <div class="about-item">
+        <div class="about-item-icon">🎯</div>
+        <div class="about-item-title">פידבק מיידי</div>
+        <div class="about-item-desc">כל שאילתה מקבלת תשובה: נכון, לא נכון, או שגיאה</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">🔒</div>
+        <div class="about-item-title">תשובות נעולות</div>
+        <div class="about-item-desc">הקוד לדוגמה נפתח רק אחרי שניסית בעצמך</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">🗄️</div>
+        <div class="about-item-title">מבט על הנתונים</div>
+        <div class="about-item-desc">תצוגת הטבלאות והדאטה תמיד זמינה</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">📊</div>
+        <div class="about-item-title">ציון 0-100</div>
+        <div class="about-item-desc">בסוף - ניתוח מפורט עם המלצות אידיאליות להשוואה</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-text">
+      © 2026 · קורס SQL · אלירן גרוסמן
+    </div>
+    <div class="footer-text">
+      <a class="footer-link" href="https://egrosman1.github.io/sql-course/">← לאתר הקורס המלא</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
