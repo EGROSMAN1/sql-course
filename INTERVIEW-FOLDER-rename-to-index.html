@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>תרגול ראיון עבודה מלא | קורס SQL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -491,20 +491,174 @@ body {
 .footer-link:hover { text-decoration: underline; }
 
 /* ============ MOBILE ============ */
+/* =========================================================
+   MOBILE OPTIMIZATIONS - Comprehensive responsive design
+   ========================================================= */
+
+/* Better touch targets on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .back-link, .case-card { min-height: 44px; }
+}
+
+/* Tablets and small laptops */
+@media (max-width: 900px) {
+  .site-header { padding: 16px 20px; }
+  .hero { padding: 48px 24px 32px; }
+  .hero-title { font-size: clamp(32px, 7vw, 44px); }
+  .hero-subtitle { font-size: 16px; }
+  .cases-section { padding: 28px 20px 64px; }
+  .cases-grid { gap: 18px; }
+}
+
+/* Phones */
 @media (max-width: 700px) {
-  .site-header { padding: 14px 18px; }
+  .site-header {
+    padding: 12px 14px;
+    /* Safe area for iPhone notch */
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  .brand-mark { width: 32px; height: 32px; font-size: 12px; }
   .brand-text { display: none; }
-  .hero { padding: 40px 20px 28px; }
-  .cases-section { padding: 20px 16px 56px; }
-  .case-card { padding: 22px; }
-  .case-card-header { gap: 12px; }
-  .case-icon { width: 48px; height: 48px; font-size: 22px; }
-  .case-title { font-size: 19px; }
-  .case-stats { gap: 6px; padding: 12px; }
+  .back-link {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+
+  /* Hero - tighter padding, better readable */
+  .hero {
+    padding: 32px 18px 24px;
+  }
+  .hero-tag {
+    font-size: 10px;
+    padding: 5px 12px;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: clamp(28px, 8vw, 36px);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .hero-subtitle {
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .hero-features {
+    gap: 12px 16px;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .hero-feature { font-size: 11px; }
+
+  /* Cases section */
+  .cases-section { padding: 16px 14px 40px; }
+  .section-eyebrow {
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+  .cases-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Case cards - critical for the interview entry */
+  .case-card {
+    padding: 20px 18px;
+    border-radius: 12px;
+  }
+  .case-card-header {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .case-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    border-radius: 10px;
+  }
+  .case-tag { font-size: 9px; padding: 3px 10px; }
+  .case-title {
+    font-size: 18px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+  .case-subtitle {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  .case-description {
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .case-stats {
+    padding: 12px 8px;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
   .case-stat-value { font-size: 16px; }
-  .about-section { padding: 8px 16px 48px; }
-  .about-card { padding: 22px; }
-  .footer-content { flex-direction: column; gap: 8px; }
+  .case-stat-label { font-size: 9px; }
+  .case-techniques {
+    gap: 5px;
+    margin-bottom: 16px;
+  }
+  .case-technique {
+    padding: 3px 9px;
+    font-size: 10px;
+  }
+  .case-cta {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+  .case-cta-arrow { font-size: 16px; }
+
+  /* About section */
+  .about-section { padding: 4px 14px 32px; }
+  .about-card { padding: 20px 18px; border-radius: 12px; }
+  .about-card h3 { font-size: 16px !important; }
+  .about-card > p { font-size: 12px !important; }
+  .about-grid { gap: 16px; margin-top: 18px; }
+  .about-item-icon { font-size: 24px; margin-bottom: 6px; }
+  .about-item-title { font-size: 13px; }
+  .about-item-desc { font-size: 11px; }
+
+  /* Footer */
+  .site-footer {
+    padding: 20px 16px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .footer-content {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  .footer-text { font-size: 11px; }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+  .site-header { padding: 10px 12px; gap: 8px; }
+  .back-link { padding: 7px 10px; font-size: 11px; }
+  .back-link-arrow { font-size: 14px; }
+  .hero { padding: 24px 14px 20px; }
+  .hero-title { font-size: 26px; }
+  .hero-subtitle { font-size: 13px; }
+  .hero-features { gap: 10px; }
+  .hero-feature { font-size: 10px; }
+  .cases-section { padding: 14px 12px 32px; }
+  .section-title { font-size: 20px; margin-bottom: 18px; }
+  .case-card { padding: 16px 14px; }
+  .case-icon { width: 42px; height: 42px; font-size: 19px; }
+  .case-title { font-size: 17px; }
+  .case-description { font-size: 12.5px; }
+  .case-stat-value { font-size: 15px; }
+  .case-cta { padding: 11px 14px; font-size: 13px; }
 }
 
 /* Subtle entry animation */
