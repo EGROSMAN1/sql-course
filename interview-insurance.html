@@ -146,7 +146,7 @@ body {
   font-weight: 500;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .btn-label-text { display: none; }
 }
 
@@ -1385,8 +1385,8 @@ body {
   .modal-close { width: 44px; height: 44px; font-size: 24px; }
 }
 
-/* Tablets and small laptops: max 900px */
-@media (max-width: 900px) {
+/* Mobile / Tablet portrait: max 768px (desktop stays desktop above this) */
+@media (max-width: 768px) {
   .app-header { padding: 0 12px; height: 56px; gap: 8px; }
   .brand-mark { width: 32px; height: 32px; font-size: 12px; }
   .brand-text { display: none; }
@@ -1748,7 +1748,7 @@ body {
 }
 
 /* Landscape phone — handle horizontal mode */
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
   .app-header { height: 44px; }
   .app-main { height: calc(100vh - 44px); }
   .sidebar { top: 44px; }
@@ -2800,7 +2800,7 @@ function renderResults(cols, rows, elapsed) {
 
 // Auto-scroll to results on mobile after running a query
 function autoScrollToResults() {
-  if (window.innerWidth <= 900) {
+  if (window.innerWidth <= 768) {
     setTimeout(() => {
       const resultsBlock = document.querySelector('.results-block');
       if (resultsBlock) {
