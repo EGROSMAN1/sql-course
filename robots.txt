@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://egrosman1.github.io/sql-course/sitemap.xml
