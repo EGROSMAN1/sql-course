@@ -1581,6 +1581,75 @@ body {
   .content-area { padding: 14px; }
   .step-title { font-size: 22px; line-height: 1.25; }
   .step-question { font-size: 14px; line-height: 1.6; }
+
+  /* ============ BRIEFING MODAL — MOBILE OVERRIDE (FULL-WIDTH PHONES) ============ */
+  /* Highest specificity + !important to defeat .briefing-fullscreen desktop rules */
+  body .modal-overlay.briefing-fullscreen {
+    padding: 0 !important;
+    align-items: flex-start !important;
+  }
+  body .modal-overlay.briefing-fullscreen .modal {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  body .modal-overlay.briefing-fullscreen .modal-header {
+    padding: 12px 14px !important;
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    background: var(--bg-elevated) !important;
+  }
+  body .modal-overlay.briefing-fullscreen .modal-title {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+  }
+  body .modal-overlay.briefing-fullscreen .modal-body {
+    padding: 14px !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  /* Briefing hero: vertical stack on mobile */
+  body .modal-overlay.briefing-fullscreen .briefing-hero {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 16px !important;
+    gap: 10px !important;
+  }
+  body .modal-overlay.briefing-fullscreen .briefing-hero > *:first-child {
+    margin: 0 auto !important;
+  }
+  /* Footer at bottom with full-width button */
+  body .modal-overlay.briefing-fullscreen .modal-footer {
+    padding: 12px 14px !important;
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 2 !important;
+    background: var(--bg-panel) !important;
+    border-top: 1px solid var(--border-strong) !important;
+    justify-content: stretch !important;
+    box-shadow: 0 -8px 16px -8px rgba(0, 0, 0, 0.5) !important;
+  }
+  body .modal-overlay.briefing-fullscreen .modal-footer .btn {
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+  }
+
 }
 
 /* Phones: max 600px */
