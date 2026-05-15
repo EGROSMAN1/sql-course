@@ -138,6 +138,40 @@ body {
 
 .btn-ghost { background: transparent; color: var(--text-secondary); border-color: var(--border); }
 .btn-ghost:hover { background: var(--bg-panel); color: var(--text-primary); }
+
+/* Back-to-home button - clearly visible everywhere */
+.btn-back-home {
+  background: rgba(45, 212, 192, 0.1);
+  color: var(--copper);
+  border-color: rgba(45, 212, 192, 0.4);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-back-home:hover {
+  background: var(--copper);
+  color: var(--bg-base);
+  border-color: var(--copper);
+}
+
+/* Back-to-start (פתיח) button - amber theme to distinguish from home */
+.btn-back-start {
+  background: rgba(233, 185, 73, 0.1);
+  color: var(--amber);
+  border-color: rgba(233, 185, 73, 0.4);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.btn-back-start:hover {
+  background: var(--amber);
+  color: var(--bg-base);
+  border-color: var(--amber);
+}
 .btn-primary { background: var(--copper); color: #fff; }
 .btn-primary:hover { background: var(--copper-dim); }
 .btn-primary:disabled { background: var(--bg-input); color: var(--text-muted); cursor: not-allowed; }
@@ -1565,11 +1599,11 @@ body {
   .header-actions { gap: 2px; }
   .header-actions .btn {
     padding: 0;
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     display: grid;
     place-items: center;
-    font-size: 16px;
+    font-size: 15px;
   }
   .header-actions .btn .btn-label-text,
   .header-actions .btn span:nth-child(2) { display: none; }
@@ -1876,6 +1910,73 @@ body {
   .explanation-body li { margin-bottom: 4px; }
   .explanation-body p { margin-bottom: 8px; }
 
+
+  /* ============ BRIEFING MODAL — STRONG MOBILE OVERRIDE ============ */
+  /* Override the .briefing-fullscreen desktop rules with !important */
+  .modal-overlay.briefing-fullscreen {
+    padding: 0 !important;
+    align-items: flex-start !important;
+  }
+  .modal-overlay.briefing-fullscreen .modal {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  .modal-overlay.briefing-fullscreen .modal-header {
+    padding: 12px 14px !important;
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    background: var(--bg-elevated) !important;
+  }
+  .modal-overlay.briefing-fullscreen .modal-title {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+  }
+  .modal-overlay.briefing-fullscreen .modal-body {
+    padding: 14px !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  /* Hero: stack vertically on mobile */
+  .briefing-hero {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center !important;
+    padding: 16px !important;
+    gap: 10px !important;
+  }
+  .briefing-hero-icon {
+    align-self: center !important;
+    margin: 0 auto !important;
+  }
+  /* Footer always at bottom, button full width */
+  .modal-overlay.briefing-fullscreen .modal-footer {
+    padding: 12px 14px !important;
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 2 !important;
+    background: var(--bg-panel) !important;
+    border-top: 1px solid var(--border-strong) !important;
+  }
+  .modal-overlay.briefing-fullscreen .modal-footer .btn {
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+  }
+
 }
 
 /* Small phones: max 380px */
@@ -1993,6 +2094,8 @@ body {
   <div class="progress-label" id="progress-label">0/10</div>
 
   <div class="header-actions">
+    <a href="index.html" class="btn btn-back-home" title="חזרה לדף הבית"><span>🏠</span><span class="btn-label-text">דף הבית</span></a>
+    <button class="btn btn-back-start" id="btn-back-start" title="חזרה לפתיח / שלב 1"><span>🏁</span><span class="btn-label-text">פתיח</span></button>
     <button class="btn btn-ghost" id="btn-database" title="מבט על הטבלאות"><span>🗄️</span><span class="btn-label-text">מבט על הטבלאות</span></button>
     <button class="btn btn-ghost" id="btn-briefing" title="תדריך">📋</button>
     <button class="btn btn-ghost" id="btn-reset" title="אפס">↻</button>
@@ -3500,6 +3603,10 @@ function closeAllModals() {
 function bindEvents() {
   document.getElementById('btn-briefing').onclick = () => openModal('briefing-modal');
   document.getElementById('btn-database').onclick = openDatabaseViewer;
+  document.getElementById('btn-back-start').onclick = () => {
+    setupStep(0);
+    openModal('briefing-modal');
+  };
   document.getElementById('btn-reset').onclick = () => {
     if (confirm('לאפס את החקירה? כל ההתקדמות תימחק.')) {
       for (const i in APP.stepState) {
