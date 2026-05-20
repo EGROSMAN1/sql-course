@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>קוויז למתחילים — SQL</title>
@@ -270,6 +279,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 #fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 </style>
+
+<meta name="description" content="מבחן SQL למתחילים בעברית — שאלות עם משוב מיידי לבדיקת יסודות ה-SQL.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-beginner.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-beginner.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="קוויז למתחילים — SQL">
+<meta property="og:description" content="מבחן SQL למתחילים בעברית — שאלות עם משוב מיידי לבדיקת יסודות ה-SQL.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="קוויז למתחילים — SQL">
+<meta name="twitter:description" content="מבחן SQL למתחילים בעברית — שאלות עם משוב מיידי לבדיקת יסודות ה-SQL.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 </head>
 <body data-quiz-id="beginner">
 
@@ -308,7 +331,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
     <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט">
     <span></span><span></span><span></span>
   </button>
 </div>
@@ -980,7 +1003,7 @@ function selectOption(qIdx, optIdx){
     if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
   });
   const exp = document.getElementById('exp-'+qIdx);
-  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ נכון! ' : '❌ לא נכון. ') + q.explain;
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ נכון! ' : '❌ טעית — התשובה הנכונה מסומנת בירוק. ') + q.explain;
   exp.classList.add('show');
   updateScore();
 }

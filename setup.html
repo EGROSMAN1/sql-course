@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מדריך התקנה — MySQL Northwind</title>
@@ -240,6 +249,20 @@ pre{font-size:11px;line-height:1.5}
   .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
 }
 </style>
+
+<meta name="description" content="מדריך התקנה בעברית: MySQL ומסדי הנתונים Northwind ו-Sakila, שלב אחר שלב.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/setup.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/setup.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="מדריך התקנה — MySQL Northwind">
+<meta property="og:description" content="מדריך התקנה בעברית: MySQL ומסדי הנתונים Northwind ו-Sakila, שלב אחר שלב.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="מדריך התקנה — MySQL Northwind">
+<meta name="twitter:description" content="מדריך התקנה בעברית: MySQL ומסדי הנתונים Northwind ו-Sakila, שלב אחר שלב.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 </head>
 <body>
 
@@ -261,7 +284,7 @@ pre{font-size:11px;line-height:1.5}
     <a href="course.html" class="video-btn video-btn-secondary">📚 לחומר הלימוד</a>
     <a href="practice.html" class="video-btn video-btn-secondary">✏️ לתרגולים</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט">
     <span></span><span></span><span></span>
   </button>
 </div>

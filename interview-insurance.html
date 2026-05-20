@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>סימולטור Case Study - חברת ביטוח | אנליסט נתונים</title>
@@ -2141,8 +2150,25 @@ body {
   }
 }
 </style>
+
+<meta name="description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח דמי ניהול בחברת ביטוח ב-SQL.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/interview-insurance.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/interview-insurance.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="סימולטור Case Study - חברת ביטוח | אנליסט נתונים">
+<meta property="og:description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח דמי ניהול בחברת ביטוח ב-SQL.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="סימולטור Case Study - חברת ביטוח | אנליסט נתונים">
+<meta name="twitter:description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח דמי ניהול בחברת ביטוח ב-SQL.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
 </head>
 <body>
+<h1 class="sr-only">סימולטור ראיון — דמי ניהול בביטוח</h1>
 
 <div class="loader-overlay" id="loader">
   <div class="loader-spinner"></div>
@@ -2356,11 +2382,7 @@ const STEPS = [
   COUNT(DISTINCT employer_id)    AS employers,
   COUNT(DISTINCT product_name)   AS products
 FROM savings_records;`,
-    starter: `-- שלב 1: היכרות עם הדאטה
--- מטרה: לספור רשומות, עמיתים ייחודיים, מעסיקים ומוצרים
--- טיפ: השתמש ב-COUNT(*) ו-COUNT(DISTINCT ...)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('savings_records')) return false;
@@ -2397,10 +2419,7 @@ FROM savings_records;`,
 FROM savings_records
 GROUP BY employer_name
 ORDER BY records DESC;`,
-    starter: `-- שלב 2: מיפוי המעסיקים
--- מטרה: לכל מעסיק - מספר רשומות ומספר עמיתים ייחודיים
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('employer')) return false;
@@ -2433,11 +2452,7 @@ ORDER BY records DESC;`,
 FROM savings_records
 GROUP BY product_name
 ORDER BY total_accumulation DESC;`,
-    starter: `-- שלב 3: מיפוי המוצרים
--- מטרה: לכל מוצר - רשומות, עמיתים, וסך הצבירה
--- טיפ: השתמש ב-SUM(accumulation) עם ROUND()
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('product_name')) return false;
@@ -2472,11 +2487,7 @@ ORDER BY total_accumulation DESC;`,
 FROM savings_records
 GROUP BY employer_name, product_name
 ORDER BY employer_name, max_accumulation_fee_pct DESC;`,
-    starter: `-- שלב 4 [שאלה 1]: דמי ניהול מקסימליים לפי מעסיק וקרן
--- מטרה: לכל צירוף מעסיק × מוצר - MAX של שני סוגי דמי הניהול
--- טיפ: GROUP BY על שני שדות, MAX על שני שדות
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('group by')) return false;
@@ -2511,12 +2522,7 @@ ORDER BY employer_name, max_accumulation_fee_pct DESC;`,
 FROM savings_records
 GROUP BY employer_name, product_name
 ORDER BY actual_fee_nis DESC;`,
-    starter: `-- שלב 5 [שאלה 2]: דמי ניהול מצבירה בפועל בש"ח
--- מטרה: לחשב כמה כסף בפועל החברה גובה - לכל מעסיק × מוצר
--- חישוב: accumulation * accumulation_fee_pct / 100
--- (חלוקה ב-100 כי הערך באחוזים!)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('accumulation_fee_pct')) return false;
@@ -2552,10 +2558,7 @@ ORDER BY actual_fee_nis DESC;`,
 FROM savings_records
 GROUP BY employer_name, gender
 ORDER BY employer_name, gender;`,
-    starter: `-- שלב 6 [שאלה 3]: הבדל בדמי ניהול בין גברים לנשים
--- מטרה: לכל מעסיק - השוואת AVG דמי ניהול בין זכר לנקבה
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('gender')) return false;
@@ -2601,11 +2604,7 @@ SELECT
 FROM ranked
 GROUP BY employer_name, product_name
 ORDER BY employer_name, product_name;`,
-    starter: `-- שלב 7 [שאלה 4]: תאריך שני מההתחלה ושני מהסוף
--- מטרה: לכל מעסיק × מוצר - התאריך השני מההתחלה והשני מהסוף
--- חובה: WINDOW FUNCTION (ROW_NUMBER, RANK, או דומה)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('over')) return false;
@@ -2615,7 +2614,7 @@ ORDER BY employer_name, product_name;`,
     explanation: `<p><strong>הטכניקה:</strong> <code>ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ...)</code> — דירוג בלעדי בתוך קבוצה.</p>
 <p><strong>איך זה עובד:</strong></p>
 <ul>
-<li><code>PARTITION BY member_id</code> — מחלק את הרשומות לקבוצות, אחת לכל עמית.</li>
+<li><code>PARTITION BY employer_name, product_name</code> — מחלק את הרשומות לקבוצות, אחת לכל צירוף מעסיק × מוצר.</li>
 <li><code>ORDER BY join_date ASC</code> — בתוך כל קבוצה, ממיין מהמוקדם למאוחר.</li>
 <li><code>ROW_NUMBER() = 2</code> מסנן את <em>השני מההתחלה</em>. לקבל את <em>השני מהסוף</em> — צריך ORDER BY DESC.</li>
 </ul>
@@ -2641,11 +2640,7 @@ FROM savings_records
 GROUP BY member_id
 HAVING COUNT(DISTINCT employer_id) > 1
 ORDER BY num_employers DESC, member_id;`,
-    starter: `-- שלב 8 [שאלה 5]: עמיתים עם יותר ממעסיק אחד
--- מטרה: לאתר עמיתים שמופיעים אצל יותר ממעסיק אחד
--- טיפ: GROUP BY member_id, HAVING COUNT(DISTINCT employer_id) > 1
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('having')) return false;
@@ -2686,11 +2681,7 @@ FROM savings_records s
 WHERE s.member_id IN (SELECT member_id FROM multi_employer_members)
 GROUP BY s.member_id
 ORDER BY num_products DESC, num_employers DESC;`,
-    starter: `-- שלב 9 [שאלה 6]: כמה מוצרים מחזיק כל עמית כפול-מעסיק
--- מטרה: לעמיתים מהשלב הקודם - לספור מוצרים ייחודיים
--- טיפ: CTE עם רשימת העמיתים, ואז COUNT DISTINCT product_name
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('product_name')) return false;
@@ -2725,10 +2716,7 @@ FROM savings_records
 GROUP BY product_name
 ORDER BY total_accumulation DESC
 LIMIT 3;`,
-    starter: `-- שלב 10 [שאלה 7]: מוצר עם הצבירה הגבוהה ביותר בסך
--- מטרה: למצוא את המוצר עם SUM(accumulation) המקסימלי
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('product_name')) return false;
@@ -2763,11 +2751,7 @@ LIMIT 3;`,
 FROM savings_records
 GROUP BY product_name
 ORDER BY avg_per_member DESC;`,
-    starter: `-- שלב 11 [שאלה 8]: מוצר עם הצבירה הגבוהה ביותר לעמית
--- מטרה: ממוצע צבירה לעמית בכל מוצר
--- טיפ: SUM(accumulation) / COUNT(DISTINCT member_id)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('product_name')) return false;
@@ -2804,12 +2788,7 @@ FROM savings_records
 WHERE product_name IN ('קרן השתלמות', 'קרן חיסכון צבא קבע קרן השתלמות')
 GROUP BY product_name
 ORDER BY annual_revenue_nis DESC;`,
-    starter: `-- שלב 12 [שאלה 9]: הכנסות שנתיות מהחברה - 2 מוצרים
--- מטרה: לחשב הכנסה שנתית מדמי ניהול מצבירה עבור 2 מוצרים ספציפיים
--- חישוב: SUM(accumulation * accumulation_fee_pct / 100)
--- סינון: WHERE product_name IN (...)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('product_name')) return false;

@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>בחן את עצמך — SQL Quiz</title>
@@ -279,6 +288,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 #fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 </style>
+
+<meta name="description" content="מבחני SQL בעברית בארבע רמות — ממתחילים ועד מומחים. בדוק את הידע שלך עם משוב מיידי.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="בחן את עצמך — SQL Quiz">
+<meta property="og:description" content="מבחני SQL בעברית בארבע רמות — ממתחילים ועד מומחים. בדוק את הידע שלך עם משוב מיידי.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="בחן את עצמך — SQL Quiz">
+<meta name="twitter:description" content="מבחני SQL בעברית בארבע רמות — ממתחילים ועד מומחים. בדוק את הידע שלך עם משוב מיידי.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 </head>
 <body data-quiz-id="advanced">
 
@@ -316,7 +339,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     <a href="course.html" class="topnav-link">📚 חומר לימוד</a>
     <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט">
     <span></span><span></span><span></span>
   </button>
 </div>
@@ -826,7 +849,7 @@ function buildQuiz(){
       <div class="q-body">
         <div class="options">${optsHtml}</div>
         <div class="explanation" id="exp-${i}">
-          <p>${q.correct === answers[i] ? '✅' : '❌'} <strong>${q.correct === answers[i] ? 'נכון!' : 'לא נכון.'}</strong> ${q.explain}</p>
+          <p>${q.correct === answers[i] ? '✅' : '❌'} <strong>${q.correct === answers[i] ? 'נכון!' : 'טעית — התשובה הנכונה מסומנת בירוק.'}</strong> ${q.explain}</p>
         </div>
       </div>
     </div>`;

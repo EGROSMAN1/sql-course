@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>תרגולים SQL</title>
@@ -271,8 +280,25 @@ pre{font-size:11px;line-height:1.5}
   .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
 }
 </style>
+
+<meta name="description" content="310+ תרגילי SQL אינטראקטיביים בעברית עם פתרונות מלאים — מ-SELECT בסיסי ועד שאילתות מורכבות.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/practice.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/practice.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="תרגולים SQL">
+<meta property="og:description" content="310+ תרגילי SQL אינטראקטיביים בעברית עם פתרונות מלאים — מ-SELECT בסיסי ועד שאילתות מורכבות.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="תרגולים SQL">
+<meta name="twitter:description" content="310+ תרגילי SQL אינטראקטיביים בעברית עם פתרונות מלאים — מ-SELECT בסיסי ועד שאילתות מורכבות.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
 </head>
 <body>
+<h1 class="sr-only">תרגולי SQL אינטראקטיביים</h1>
 
 <div class="topnav">
   <a href="index.html" class="back-btn">← דף הבית</a>
@@ -300,7 +326,7 @@ pre{font-size:11px;line-height:1.5}
     <span>📕</span> תרגול שיעור 4
     <span class="lesson-badge" id="badge-3">35 שאלות</span>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט">
     <span></span><span></span><span></span>
   </button>
 </div>
@@ -312,9 +338,64 @@ pre{font-size:11px;line-height:1.5}
   <a href="practice.html">✏️ תרגולים</a>
 </div>
 
+<!-- SCHEMA REFERENCE PANEL -->
+<style>
+.schema-wrap{max-width:1100px;margin:.6rem auto 0;padding:0 1rem}
+.schema-bar{display:flex;align-items:center;gap:.6rem;background:var(--bg3);border:1px solid var(--text3);border-radius:10px;padding:.7rem 1rem;cursor:pointer;user-select:none;transition:border-color .2s}
+.schema-bar:hover{border-color:var(--blue)}
+.schema-bar .s-title{font-weight:700;color:var(--text);font-size:14.5px}
+.schema-bar .s-sub{color:var(--text2);font-size:12px;font-weight:400}
+.schema-bar .s-chev{margin-inline-start:auto;color:var(--cyan);transition:transform .25s;font-size:13px}
+.schema-wrap.open .s-chev{transform:rotate(180deg)}
+.schema-body{display:none;margin-top:.6rem;background:var(--bg2);border:1px solid var(--text3);border-radius:10px;padding:1rem}
+.schema-wrap.open .schema-body{display:block}
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.7rem}
+.tbl-card{background:var(--bg3);border:1px solid var(--text3);border-radius:8px;overflow:hidden}
+.tbl-card h4{margin:0;padding:.5rem .7rem;background:var(--bg4);color:var(--cyan);font-family:var(--mono,monospace);font-size:13.5px;border-bottom:1px solid var(--text3);display:flex;align-items:center;gap:.4rem}
+.tbl-card ul{list-style:none;margin:0;padding:.4rem .7rem}
+.tbl-card li{font-family:var(--mono,monospace);font-size:12.5px;color:var(--text2);padding:.12rem 0;display:flex;align-items:center;gap:.4rem}
+.tbl-card li .pk{color:var(--orange)}
+.tbl-card li .fk{color:var(--purple)}
+.tbl-card li .ct{color:var(--text3);font-size:11px;margin-inline-start:auto}
+.schema-legend{margin-top:.7rem;font-size:12px;color:var(--text2);display:flex;gap:1.2rem;flex-wrap:wrap}
+.schema-note{margin-top:.5rem;font-size:11.5px;color:var(--text3);line-height:1.6}
+</style>
+<div class="schema-wrap" id="schemaWrap">
+  <div class="schema-bar" onclick="document.getElementById('schemaWrap').classList.toggle('open')">
+    <span style="font-size:16px">📋</span>
+    <span class="s-title">מבנה הטבלאות <span class="s-sub">— מסד הנתונים Northwind (העמודות שבהן משתמשות השאלות)</span></span>
+    <span class="s-chev">▼</span>
+  </div>
+  <div class="schema-body">
+    <div class="schema-grid" id="schemaGrid"></div>
+    <div class="schema-legend">
+      <span>🔑 מפתח ראשי</span><span>🔗 מפתח זר (מקשר לטבלה אחרת)</span>
+      <span><span style="color:var(--text3)">TEXT/INT/REAL</span> = סוג הנתון</span>
+    </div>
+    <div class="schema-note">💡 טיפ: כל שאלה מציינת מאיזו טבלה לשלוף. אם חסר לך שם עמודה — חפש אותו כאן. שמות העמודות תלויי-אותיות-קטנות (lowercase).</div>
+  </div>
+</div>
+
 <div class="main" id="mainContent"></div>
 
 <script>
+const SCHEMA=[
+ {t:"products",ico:"📦",cols:[["id","INT","pk"],["product_name","TEXT"],["category","TEXT"],["category_id","INT","fk→categories"],["list_price","REAL"],["standard_cost","REAL"],["supplier_id","INT","fk→suppliers"],["discontinued","INT"]]},
+ {t:"customers",ico:"👤",cols:[["id","INT","pk"],["company","TEXT"],["last_name","TEXT"],["first_name","TEXT"],["job_title","TEXT"],["email_address","TEXT"],["city","TEXT"],["country_region","TEXT"]]},
+ {t:"employees",ico:"🧑‍💼",cols:[["id","INT","pk"],["last_name","TEXT"],["first_name","TEXT"],["job_title","TEXT"],["email_address","TEXT"],["hire_date","TEXT"],["city","TEXT"],["salary","REAL"]]},
+ {t:"orders",ico:"🧾",cols:[["id","INT","pk"],["customer_id","INT","fk→customers"],["employee_id","INT","fk→employees"],["shipper_id","INT","fk→shippers"],["order_date","TEXT"],["shipped_date","TEXT"],["required_date","TEXT"],["ship_city","TEXT"],["ship_country_region","TEXT"],["shipping_fee","REAL"]]},
+ {t:"order_details",ico:"📋",cols:[["id","INT","pk"],["order_id","INT","fk→orders"],["product_id","INT","fk→products"],["quantity","INT"],["unit_price","REAL"],["discount","REAL"]]},
+ {t:"shippers",ico:"🚚",cols:[["id","INT","pk"],["company","TEXT"],["phone","TEXT"]]}
+];
+(function(){
+  const g=document.getElementById('schemaGrid');
+  g.innerHTML=SCHEMA.map(tb=>`<div class="tbl-card"><h4>${tb.ico} ${tb.t}</h4><ul>`+
+    tb.cols.map(c=>{
+      const key=c[2]==='pk'?'<span class="pk">🔑</span>':(c[2]&&c[2].indexOf('fk')===0?'<span class="fk">🔗</span>':'<span style="width:14px;display:inline-block"></span>');
+      const ref=c[2]&&c[2].indexOf('fk')===0?` <span style="color:var(--text3);font-size:10px">${c[2].replace('fk','')}</span>`:'';
+      return `<li>${key}<span>${c[0]}</span>${ref}<span class="ct">${c[1]}</span></li>`;
+    }).join('')+`</ul></div>`).join('');
+})();
 const lessons=[
 {
 title:"תרגול שיעור 1",

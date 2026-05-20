@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>סימולטור Case Study - 10 שלבים | אנליסט נתונים</title>
@@ -2141,8 +2150,25 @@ body {
   }
 }
 </style>
+
+<meta name="description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח נטישת לקוחות בחברת טלקום ב-SQL, 10 שלבים.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/interview-telecom.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/interview-telecom.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="סימולטור Case Study - 10 שלבים | אנליסט נתונים">
+<meta property="og:description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח נטישת לקוחות בחברת טלקום ב-SQL, 10 שלבים.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="סימולטור Case Study - 10 שלבים | אנליסט נתונים">
+<meta name="twitter:description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח נטישת לקוחות בחברת טלקום ב-SQL, 10 שלבים.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
 </head>
 <body>
+<h1 class="sr-only">סימולטור ראיון — נטישת לקוחות בטלקום</h1>
 
 <div class="loader-overlay" id="loader">
   <div class="loader-spinner"></div>
@@ -2386,11 +2412,7 @@ const STEPS = [
   SUM(CASE WHEN status = 'churned' THEN 1 ELSE 0 END) AS churned,
   ROUND(100.0 * SUM(CASE WHEN status = 'churned' THEN 1 ELSE 0 END) / COUNT(*), 1) AS churn_pct
 FROM customers;`,
-    starter: `-- שלב 1: גודל הבעיה
--- מטרה: לחשב את סך הלקוחות, כמה מהם נטשו, ומהו אחוז הנטישה.
--- שדות שימושיים: customers.status  (active / churned)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('customers')) return false;
@@ -2420,12 +2442,7 @@ FROM customers;`,
 FROM churn_events
 GROUP BY month
 ORDER BY month;`,
-    starter: `-- שלב 2: מתי הקפיצה?
--- מטרה: להציג את כמות הנטישות לפי חודש (או רבעון).
--- שדות שימושיים: churn_events.churn_date
--- שימושית במיוחד: הפונקציה strftime('%Y-%m', ...) של SQLite
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('churn_events') && !lq.includes('churn_date')) return false;
@@ -2459,15 +2476,14 @@ FROM customers c
 JOIN plans p ON c.plan_id = p.plan_id
 GROUP BY p.plan_name
 ORDER BY churn_pct DESC;`,
-    starter: `-- שלב 3: נטישה לפי מסלול
--- כתוב שאילתה שמראה את אחוז הנטישה לכל מסלול`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('plans') || !lq.includes('customers')) return false;
       if (!lq.includes('group by')) return false;
       if (rows && rows.length >= 2) {
-        const firstRowStr = JSON.stringify(rows[0]);
-        return firstRowStr.includes('מסלול ותיק 10') || firstRowStr.includes('מסלול ותיק 5');
+        // accept any correct per-plan grouping, regardless of row order
+        return JSON.stringify(rows).includes('מסלול');
       }
       return false;
     },
@@ -2501,11 +2517,7 @@ ORDER BY churn_pct DESC;`,
   launched_date
 FROM plans
 ORDER BY launched_date;`,
-    starter: `-- שלב 4: מה מיוחד במסלולים הישנים?
--- מטרה: להשוות בין כל המסלולים — מחיר, דאטה, תאריך השקה.
--- שדות שימושיים: plans.monthly_price, data_gb, launched_date
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('plans')) return false;
@@ -2547,8 +2559,7 @@ SELECT
 FROM customers c
 LEFT JOIN open_recent o ON c.customer_id = o.customer_id
 GROUP BY bucket;`,
-    starter: `-- שלב 5: השפעת פניות שירות
--- השווה churn rate בין לקוחות עם 2+ פניות פתוחות לאחרים`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('support_tickets')) return false;
@@ -2588,21 +2599,20 @@ SELECT
 FROM overage o
 JOIN customers c USING(customer_id)
 GROUP BY bucket;`,
-    starter: `-- שלב 6: חיובי overage
--- האם לקוחות עם הרבה חיובים נוספים נוטשים יותר?`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('usage_monthly')) return false;
       return lq.includes('overage') || lq.includes('bill_amount');
     },
-    explanation: `<p><strong>הטכניקה:</strong> JOIN של 3 טבלאות (customers + plans + usage_records) + חישוב חריגה (overage) מ-2 מקורות.</p>
+    explanation: `<p><strong>הטכניקה:</strong> CTE שמצליב <code>usage_monthly</code> עם <code>customers</code> ו-<code>plans</code>, סופר חודשי חריגה לכל לקוח, ואז מצליב מול הנטישה.</p>
 <p><strong>איך זה עובד:</strong></p>
 <ul>
-<li>כל לקוח <em>אמור</em> לקבל data_gb שמוגדר במסלול שלו. אם הוא צרך יותר — זה overage.</li>
-<li>החיבור של 3 הטבלאות מאפשר להשוות "מה היה במסלול" מול "מה הצריך בפועל".</li>
-<li><code>AVG(data_used - data_gb)</code> נותן את הצריכה החריגה הממוצעת.</li>
+<li><code>JOIN</code> בין <code>usage_monthly</code>, <code>customers</code> ו-<code>plans</code> — מאפשר להשוות את ה-<code>overage_charges</code> של כל חודש מול ה-<code>monthly_price</code> של המסלול.</li>
+<li><code>SUM(CASE WHEN overage_charges &gt; 0.5 * monthly_price THEN 1 ELSE 0 END)</code> — סופר לכל לקוח כמה חודשים הוא חויב מעל 50% מעבר לבסיס.</li>
+<li>ה-<code>CASE</code> החיצוני מחלק לקבוצות (3+ חודשי overage מול פחות), וה-<code>GROUP BY</code> משווה את שיעור הנטישה ביניהן.</li>
 </ul>
-<p><strong>למה זה חשוב:</strong> הצלחת חישוב מדד עסקי שלא קיים כעמודה בודדת — הוא נוצר מהצלבת מקורות. <em>זה הליבה של עבודת אנליסט נתונים</em>: לא רק לקרוא נתונים, אלא להרכיב מהם תובנות חדשות.</p>`,
+<p><strong>למה זה חשוב:</strong> הצלחת חישוב מדד עסקי שלא קיים כעמודה בודדת — הוא נוצר מהצלבת מקורות וספירה מותנית. <em>זה הליבה של עבודת אנליסט נתונים</em>: לא רק לקרוא נתונים, אלא להרכיב מהם תובנות חדשות.</p>`,
     insight: `<strong>גם זה גורם אמיתי:</strong> לקוחות עם <code>3+ חודשי overage</code> (חויבו מעל 50%
     מעבר לבסיס) נוטשים ב-~<code>18%</code> לעומת <code>~11%</code> בשאר. החיוב המפתיע בכל חודש שוחק את הלקוח.
     <em>שים לב</em>: זה קשור למסלולים הישנים — להם יש את הגבולות הנמוכים, אז הם מתחייבים יותר ב-overage.`,
@@ -2621,8 +2631,7 @@ FROM customers
 GROUP BY city
 HAVING COUNT(*) >= 100
 ORDER BY churn_pct DESC;`,
-    starter: `-- שלב 7: ניתוח גיאוגרפי
--- האם יש עיר עם churn גבוה במיוחד?`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('city')) return false;
@@ -2632,7 +2641,7 @@ ORDER BY churn_pct DESC;`,
 <p><strong>איך זה עובד:</strong></p>
 <ul>
 <li>קבוצה אחת לכל עיר עם החישובים שלה.</li>
-<li><code>HAVING COUNT(*) &gt;= 50</code> — מסנן ערים קטנות מדי שאי-אפשר ללמוד מהן (סטטיסטיקה לא יציבה).</li>
+<li><code>HAVING COUNT(*) &gt;= 100</code> — מסנן ערים קטנות מדי שאי-אפשר ללמוד מהן (סטטיסטיקה לא יציבה).</li>
 <li><code>ORDER BY churn_pct DESC</code> — מי הכי גרוע ראשון.</li>
 </ul>
 <p><strong>למה זה חשוב:</strong> <code>HAVING</code> שונה מ-<code>WHERE</code>: <em>WHERE</em> מסנן <em>לפני</em> האגרגציה, <em>HAVING</em> מסנן <em>אחרי</em>. כאן צריך HAVING כי אנחנו רוצים לסנן לפי <em>COUNT</em> — שערך שלא קיים לפני האגרגציה. זה דפוס שמופיע בכמעט כל ניתוח גיאוגרפי או דמוגרפי.</p>`,
@@ -2658,8 +2667,7 @@ ORDER BY churn_pct DESC;`,
 FROM customers
 GROUP BY age_group
 ORDER BY age_group;`,
-    starter: `-- שלב 8: פילוח דמוגרפי לפי גיל
--- חלק לקבוצות גיל ובדוק churn rate`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('age')) return false;
@@ -2669,7 +2677,7 @@ ORDER BY age_group;`,
 <p><strong>איך זה עובד:</strong></p>
 <ul>
 <li>גיל הוא ערך רציף (16, 17, 18, ...) — לא שימושי כשלעצמו לפילוח.</li>
-<li>ה-<code>CASE</code> ממיר אותו לתיבות (18-24, 25-34, 35-44, 45+) — קטגוריות שאפשר לדבר עליהן.</li>
+<li>ה-<code>CASE</code> ממיר אותו לתיבות (18-29, 30-44, 45-59, 60+) — קטגוריות שאפשר לדבר עליהן.</li>
 <li><code>GROUP BY</code> על הביטוי כולו (לא רק על age) מקבץ לפי הקבוצות.</li>
 </ul>
 <p><strong>למה זה חשוב:</strong> זה דוגמה ל-<strong>Feature Engineering</strong> בתוך SQL — יצירת מימד חדש מתוך מימד קיים. <em>תזכור:</em> אם משתמשים ב-CASE ב-SELECT, חייבים לחזור עליו ב-GROUP BY (או להשתמש בכינוי דרך CTE).</p>`,
@@ -2701,20 +2709,19 @@ SELECT
 FROM risk
 GROUP BY is_legacy, has_tickets
 ORDER BY churn_pct DESC;`,
-    starter: `-- שלב 9: סגמנט הסיכון העליון
--- מצא את הצומת של מסלול ישן + פניות פתוחות`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       const hasTickets = lq.includes('support_tickets');
       const hasPlanCondition = lq.includes('plan_id') || lq.includes('plans');
       return hasTickets && hasPlanCondition;
     },
-    explanation: `<p><strong>הטכניקה:</strong> חיתוך <em>אופקי</em> של 3 מאפיינים — צריכת overage גבוהה <strong>וגם</strong> תלונות רבות <strong>וגם</strong> מסלול ישן.</p>
+    explanation: `<p><strong>הטכניקה:</strong> חיתוך <em>אופקי</em> של שני מאפיינים — מסלול ישן <strong>וגם</strong> 2+ פניות שירות פתוחות.</p>
 <p><strong>איך זה עובד:</strong></p>
 <ul>
-<li>שאילתה מורכבת עם CTE (<code>WITH</code>) או תת-שאילתות, שמחשבות לכל לקוח 3 מדדים.</li>
-<li>סינון לפי 3 התנאים יחד — חיתוך של 3 הסגמנטים.</li>
-<li>החישוב חושף את "סגמנט הסיכון העליון" — האנשים שכל הסיגנלים נפגעים בהם.</li>
+<li>CTE (<code>WITH</code>) שמחשב לכל לקוח שני דגלים: <code>is_legacy</code> (מסלול 1 או 2) ומספר הפניות הפתוחות ב-90 הימים האחרונים (תת-שאילתה מקושרת).</li>
+<li><code>GROUP BY is_legacy, has_tickets</code> — מקבץ את הלקוחות ל-4 חיתוכים אפשריים של שני התנאים.</li>
+<li>החישוב חושף את "סגמנט הסיכון העליון" — הלקוחות שבהם שני הסיגנלים נפגעים יחד.</li>
 </ul>
 <p><strong>למה זה חשוב:</strong> ב-Customer Analytics, <em>סגמנטציה של סיכון</em> היא הליבה של כל מערכת התראה (Churn Prediction). הרעיון: לא צריך לחזות נטישה לכל לקוח — מספיק לדעת מי הקבוצה ה-X% הכי בסיכון ולהציל אותם.</p>`,
     insight: `<strong>הסגמנט הקטסטרופלי:</strong> לקוחות שמשלבים <code>מסלול ישן</code> + <code>2+ פניות פתוחות</code>
@@ -2746,27 +2753,23 @@ SELECT
   DENSE_RANK() OVER (ORDER BY churn_pct DESC) AS rank_dense
 FROM plan_stats
 ORDER BY rank_simple;`,
-    starter: `-- שלב 10: דירוג עם Window Function
--- מטרה: לדרג את המסלולים לפי churn rate בעזרת RANK() / DENSE_RANK()
--- טיפ: השתמש ב-CTE לחישוב churn_pct, ואז הוסף עמודה: RANK() OVER (...)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('rank') && !lq.includes('row_number')) return false;
       if (!lq.includes('over')) return false;
       return lq.includes('plan') || lq.includes('churn');
     },
-    explanation: `<p><strong>הטכניקה:</strong> <code>RANK() OVER (PARTITION BY ... ORDER BY ...)</code> — Window Function לדירוג בתוך קבוצות.</p>
+    explanation: `<p><strong>הטכניקה:</strong> <code>RANK() OVER (ORDER BY ...)</code> — Window Function שמדרגת את כל השורות לפי ערך, בלי לצמצם אותן.</p>
 <p><strong>איך זה עובד:</strong></p>
 <ul>
-<li><code>PARTITION BY plan_name</code> — מחלק את הנתונים לחלוקים נפרדים, אחד לכל מסלול.</li>
-<li><code>ORDER BY churn_pct DESC</code> — בתוך כל חלוקה, ממיין מהגרוע (אחוז נטישה גבוה) לטוב.</li>
-<li><code>RANK()</code> — נותן מספר דירוג, עם <em>אותו דירוג לערכים שווים</em> (1, 1, 3 במקום 1, 2, 3).</li>
+<li>קודם CTE שמחשב <code>churn_pct</code> לכל מסלול (כמו בשלב 3).</li>
+<li><code>OVER (ORDER BY churn_pct DESC)</code> — מגדיר את החלון: כל המסלולים יחד, ממוינים מהגרוע (אחוז נטישה גבוה) לטוב. כאן <em>אין</em> <code>PARTITION BY</code> כי מדרגים את כל המסלולים בקבוצה אחת.</li>
+<li><code>RANK()</code> — נותן מספר דירוג, עם <em>אותו דירוג לערכים שווים</em> (1, 1, 3 במקום 1, 2, 3). <code>DENSE_RANK()</code> דומה אך בלי דילוג (1, 1, 2).</li>
 </ul>
 <p><strong>למה זה חשוב:</strong> Window Functions הן הסיבה ש-SQL לא נשאר ב-1990. הן מאפשרות לחשב מדדים תלויי-קונטקסט (מיקום בתוך קבוצה) <em>בלי</em> לאבד את הפירוט. אלטרנטיבות: <code>DENSE_RANK</code> (1, 1, 2) או <code>ROW_NUMBER</code> (1, 2, 3 תמיד שונים).</p>`,
     insight: `<strong>הכרת את כוח ה-Window Functions!</strong>
-    <code>מסלול ותיק 10</code> ומסלול ותיק 5</code> תופסים את שני המקומות הראשונים.
+    <code>מסלול ותיק 10</code> ו-<code>מסלול ותיק 5</code> תופסים את שני המקומות הראשונים.
     <ul>
       <li><code>RANK()</code> — נותן אותו דירוג במקרי שוויון, אבל "מדלג" (1, 1, 3, 4...)</li>
       <li><code>DENSE_RANK()</code> — אותו דירוג בשוויון, בלי דילוג (1, 1, 2, 3...)</li>
@@ -2801,11 +2804,7 @@ SELECT
   ) AS pct_change
 FROM monthly
 ORDER BY month;`,
-    starter: `-- שלב 11: מגמה חודש על חודש עם LAG()
--- מטרה: לכל חודש, הצג כמות נטישות + כמות בחודש הקודם + אחוז שינוי
--- טיפ: השתמש ב-LAG(value) OVER (ORDER BY month)
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       if (!lq.includes('lag') && !lq.includes('lead')) return false;
@@ -2854,12 +2853,7 @@ FROM customers c
 WHERE c.status = 'churned'
 ORDER BY open_tickets_30d_before DESC, c.churn_date DESC
 LIMIT 10;`,
-    starter: `-- שלב 12: ניתוח אישי עם Correlated Subquery
--- מטרה: לכל לקוח שנטש, ספור פניות פתוחות ב-30 ימים לפני הנטישה
--- טיפ: השתמש ב-(SELECT COUNT(*) FROM support_tickets WHERE ...) כעמודה
--- ה-subquery חייבת להתייחס ל-c.customer_id ול-c.churn_date
-
-`,
+    starter: ``,
     validate: (q, cols, rows) => {
       const lq = q.toLowerCase();
       const selectCount = (lq.match(/select/g) || []).length;
@@ -2870,7 +2864,7 @@ LIMIT 10;`,
 <p><strong>איך זה עובד:</strong></p>
 <ul>
 <li>השאילתה החיצונית עוברת על כל לקוח.</li>
-<li>לכל לקוח, התת-שאילתה רצה: <code>SELECT AVG(...) FROM usage WHERE customer_id = c.customer_id</code>.</li>
+<li>לכל לקוח, התת-שאילתה רצה: <code>SELECT COUNT(*) FROM support_tickets t WHERE t.customer_id = c.customer_id AND ...</code> — וסופרת את הפניות הפתוחות ב-30 הימים שלפני תאריך הנטישה <em>שלו</em>.</li>
 <li>זה <em>קורלטיבי</em> כי התת-שאילתה תלויה בערך של השורה החיצונית.</li>
 </ul>
 <p><strong>למה זה חשוב:</strong> Correlated Subqueries הן עוצמתיות אבל <em>איטיות</em> — הן רצות פעם לכל שורה. ב-1000 שורות זה בסדר, ב-1 מיליון זה איטי. <em>אלטרנטיבה</em>: לעתים קרובות אפשר להמיר ל-JOIN + GROUP BY שרץ פעם אחת בלבד. תדע מתי להשתמש בכל אחד.</p>`,

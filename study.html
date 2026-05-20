@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>חומר לימודי — קורס SQL</title>
@@ -239,6 +248,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
 }
 </style>
+
+<meta name="description" content="חומרי לימוד וסיכומים ל-SQL בעברית — להעמקה, חזרה והכנה למבחנים.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/study.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/study.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="חומר לימודי — קורס SQL">
+<meta property="og:description" content="חומרי לימוד וסיכומים ל-SQL בעברית — להעמקה, חזרה והכנה למבחנים.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="חומר לימודי — קורס SQL">
+<meta name="twitter:description" content="חומרי לימוד וסיכומים ל-SQL בעברית — להעמקה, חזרה והכנה למבחנים.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 </head>
 <body>
 
@@ -250,7 +273,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     <a href="practice.html" class="topnav-link">✏️ תרגולים</a>
     <a href="quiz.html" class="topnav-link">🧠 קוויז</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט">
     <span></span><span></span><span></span>
   </button>
 </div>

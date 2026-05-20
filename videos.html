@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>הדרכות מצולמות מקיפות</title>
@@ -114,7 +123,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   pre,code{font-size:10.5px!important}
   .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
 }
-</style>הדרכות מצולמות מקיפות</head>
+</style>הדרכות מצולמות מקיפות
+<meta name="description" content="הדרכות SQL מצולמות בעברית — סרטוני וידאו מקיפים ללימוד שלב אחר שלב.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/videos.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/videos.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="הדרכות מצולמות מקיפות">
+<meta property="og:description" content="הדרכות SQL מצולמות בעברית — סרטוני וידאו מקיפים ללימוד שלב אחר שלב.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="הדרכות מצולמות מקיפות">
+<meta name="twitter:description" content="הדרכות SQL מצולמות בעברית — סרטוני וידאו מקיפים ללימוד שלב אחר שלב.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+</head>
 <body>
 
 <div class="topnav">
@@ -136,7 +159,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     <div class="hero-stat"><div class="hero-stat-num">13</div><div class="hero-stat-label">סרטונים</div></div>
     <div class="hero-stat"><div class="hero-stat-num" id="watchedCount">0</div><div class="hero-stat-label">נצפו</div></div>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט">
     <span></span><span></span><span></span>
   </button>
 </div>

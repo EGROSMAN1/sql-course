@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>שאלות אמריקאיות — רמה בינונית | SQL</title>
@@ -130,6 +139,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   .finish-score{font-size:2rem}
 }
 </style>
+
+<meta name="description" content="מבחן SQL ברמה בינונית בעברית — JOIN, קיבוצים ותתי-שאילתות.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-medium.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-medium.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="שאלות אמריקאיות — רמה בינונית | SQL">
+<meta property="og:description" content="מבחן SQL ברמה בינונית בעברית — JOIN, קיבוצים ותתי-שאילתות.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="שאלות אמריקאיות — רמה בינונית | SQL">
+<meta name="twitter:description" content="מבחן SQL ברמה בינונית בעברית — JOIN, קיבוצים ותתי-שאילתות.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 </head>
 <body data-quiz-id="medium">
 
@@ -304,7 +327,7 @@ function selectOption(qIdx, optIdx){
     if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
   });
   const exp = document.getElementById('exp-'+qIdx);
-  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ נכון! ' : '❌ לא נכון. ') + q.e;
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ נכון! ' : '❌ טעית — התשובה הנכונה מסומנת בירוק. ') + q.e;
   exp.classList.add('show');
   updateScore();
 }
