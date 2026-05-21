@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>סימולטור Case Study - 10 שלבים | אנליסט נתונים</title>
+<title>סימולציית ראיון אנליסט דאטה — Customer Churn ב-SQL | SQL.course</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -2151,21 +2151,73 @@ body {
 }
 </style>
 
-<meta name="description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח נטישת לקוחות בחברת טלקום ב-SQL, 10 שלבים.">
+<meta name="description" content="סימולציית ראיון עבודה לאנליסט דאטה בעברית: פתרו Case Study אמיתי של נטישת לקוחות (Churn) בחברת טלקום ב-13 שלבי SQL, מ-COUNT ועד Window Functions.">
 <link rel="canonical" href="https://egrosman1.github.io/sql-course/interview-telecom.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="he_IL">
 <meta property="og:url" content="https://egrosman1.github.io/sql-course/interview-telecom.html">
 <meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
 <meta property="og:title" content="סימולטור Case Study - 10 שלבים | אנליסט נתונים">
-<meta property="og:description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח נטישת לקוחות בחברת טלקום ב-SQL, 10 שלבים.">
-<meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<meta property="og:description" content="סימולציית ראיון עבודה לאנליסט דאטה בעברית: פתרו Case Study אמיתי של נטישת לקוחות (Churn) בחברת טלקום ב-13 שלבי SQL, מ-COUNT ועד Window Functions.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="סימולטור Case Study - 10 שלבים | אנליסט נתונים">
-<meta name="twitter:description" content="סימולטור Case Study לראיון עבודה לאנליסט נתונים — ניתוח נטישת לקוחות בחברת טלקום ב-SQL, 10 שלבים.">
+<meta name="twitter:description" content="סימולציית ראיון עבודה לאנליסט דאטה בעברית: פתרו Case Study אמיתי של נטישת לקוחות (Churn) בחברת טלקום ב-13 שלבי SQL, מ-COUNT ועד Window Functions.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "דף הבית",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "סימולציית ראיון — טלקום",
+        "item": "https://egrosman1.github.io/sql-course/interview-telecom.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "סימולציית ראיון אנליסט דאטה — Customer Churn ב-SQL | SQL.course",
+    "description": "סימולציית ראיון עבודה לאנליסט דאטה בעברית: פתרו Case Study אמיתי של נטישת לקוחות (Churn) בחברת טלקום ב-13 שלבי SQL, מ-COUNT ועד Window Functions.",
+    "url": "https://egrosman1.github.io/sql-course/interview-telecom.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Simulation",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "אלירן גרוסמן",
+      "jobTitle": "מרצה SQL ומנהל אנליסטים, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "קורס SQL חינם בעברית",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
 </head>
 <body>
 <h1 class="sr-only">סימולטור ראיון — נטישת לקוחות בטלקום</h1>

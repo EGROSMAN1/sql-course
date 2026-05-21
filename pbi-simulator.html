@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>סימולטור Power BI — NBA Analytics</title>
-  <meta name="description" content="סימולטור Power BI אינטראקטיבי בעברית — לימוד DAX מאפס, בניית דשבורדים בגרירת שדות, ותרגול מעשי על נתוני NBA.">
+<title>סימולטור Power BI בעברית — לימוד DAX ודשבורדים חינם | SQL.course</title>
+  <meta name="description" content="סימולטור Power BI אינטראקטיבי בעברית: לימוד DAX מאפס, בניית דשבורדים בגרירת שדות ותרגול מעשי על נתוני NBA — הכל בדפדפן וללא התקנה. חינם.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='14' width='4' height='8' fill='%23f2c811'/%3E%3Crect x='8' y='9' width='4' height='13' fill='%23f2c811'/%3E%3Crect x='14' y='4' width='4' height='18' fill='%23f2c811'/%3E%3Crect x='20' y='1' width='2' height='21' fill='%23f2c811'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@2.3.1/dist/chartjs-chart-treemap.umd.min.js"></script>
@@ -901,11 +905,16 @@ body.dragging-field .field-zone{background:rgba(76,201,240,.05);outline:2px dash
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://egrosman1.github.io/sql-course/pbi-simulator.html">
   <meta property="og:title" content="סימולטור Power BI בעברית — DAX ודשבורדים | אלירן גרוסמן">
-  <meta property="og:description" content="סימולטור Power BI אינטראקטיבי בעברית — לימוד DAX מאפס, בניית דשבורדים בגרירת שדות, ותרגול מעשי על נתוני NBA. חלק מקורס הדאטה החינמי של אלירן גרוסמן.">
-  <meta property="og:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+  <meta property="og:site_name" content="SQL.course — קורס SQL בעברית">
+  <meta property="og:description" content="סימולטור Power BI אינטראקטיבי בעברית: לימוד DAX מאפס, בניית דשבורדים בגרירת שדות ותרגול מעשי על נתוני NBA — הכל בדפדפן וללא התקנה. חינם.">
+  <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta name="twitter:title" content="סימולטור Power BI בעברית — DAX ודשבורדים | אלירן גרוסמן">
-  <meta name="twitter:description" content="סימולטור Power BI אינטראקטיבי בעברית — לימוד DAX מאפס, בניית דשבורדים בגרירת שדות, ותרגול מעשי על נתוני NBA. חלק מקורס הדאטה החינמי של אלירן גרוסמן.">
+  <meta name="twitter:description" content="סימולטור Power BI אינטראקטיבי בעברית: לימוד DAX מאפס, בניית דשבורדים בגרירת שדות ותרגול מעשי על נתוני NBA — הכל בדפדפן וללא התקנה. חינם.">
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
   <script>
@@ -914,6 +923,55 @@ body.dragging-field .field-zone{background:rgba(76,201,240,.05);outline:2px dash
     gtag('js', new Date());
     gtag('config', 'G-CKNNVS2HVB');
   </script>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "דף הבית",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "סימולטור Power BI",
+        "item": "https://egrosman1.github.io/sql-course/pbi-simulator.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "סימולטור Power BI בעברית — לימוד DAX ודשבורדים חינם | SQL.course",
+    "description": "סימולטור Power BI אינטראקטיבי בעברית: לימוד DAX מאפס, בניית דשבורדים בגרירת שדות ותרגול מעשי על נתוני NBA — הכל בדפדפן וללא התקנה. חינם.",
+    "url": "https://egrosman1.github.io/sql-course/pbi-simulator.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Simulation",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "אלירן גרוסמן",
+      "jobTitle": "מרצה SQL ומנהל אנליסטים, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "קורס SQL חינם בעברית",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
 </head>
 <body>
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>
