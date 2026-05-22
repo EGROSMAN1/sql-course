@@ -9,15 +9,15 @@
 <meta name="author" content="אלירן גרוסמן">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="theme-color" content="#0b0f17">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/tirgul-makif.html">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/sql-simulator.html">
 <!-- ====== Open Graph ====== -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="קורס SQL בעברית — אלירן גרוסמן">
 <meta property="og:locale" content="he_IL">
 <meta property="og:title" content="תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית">
 <meta property="og:description" content="135 שאלות SQL אינטראקטיביות בעברית, עורך שרץ בדפדפן ללא התקנה, פתרונות מלאים והכנה לראיון אנליסט נתונים.">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/tirgul-makif.html">
-<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-tirgul-makif.png">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/sql-simulator.html">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="תרגול מקיף ב-SQL בעברית">
@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית">
 <meta name="twitter:description" content="135 שאלות SQL אינטראקטיביות בעברית, עורך שרץ בדפדפן, פתרונות מלאים והכנה לראיון אנליסט נתונים.">
-<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/og-tirgul-makif.png">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
 <!-- ====== Favicon (inline SVG) ====== -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f17'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='700' fill='%232dd4bf' text-anchor='middle'%3ESQL%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,8 +64,6 @@ body{
 /* ============ SCREEN: SELECT ============ */
 #screen-select{padding:48px 0 60px}
 .intro{text-align:center;margin-bottom:38px}
-.site-back{display:inline-flex;align-items:center;gap:6px;color:var(--teal);text-decoration:none;font-size:.88rem;font-weight:700;margin-bottom:20px}
-.site-back:hover{color:var(--cyan)}
 .intro .tag{display:inline-block;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;border:1px solid var(--line2);border-radius:999px;padding:6px 15px;margin-bottom:16px}
 .intro h1{font-size:clamp(1.55rem,5vw,2.7rem);font-weight:800;letter-spacing:-.01em;margin-bottom:10px;line-height:1.18;text-wrap:balance}
 .intro p{color:var(--muted);font-size:1.02rem;max-width:520px;margin:0 auto}
@@ -368,9 +366,9 @@ table.res tr:last-child td{border-bottom:none}
   "@graph": [
     {
       "@type": "WebApplication",
-      "@id": "https://egrosman1.github.io/sql-course/tirgul-makif.html#app",
+      "@id": "https://egrosman1.github.io/sql-course/sql-simulator.html#app",
       "name": "תרגול מקיף — תרגול SQL אינטראקטיבי בעברית",
-      "url": "https://egrosman1.github.io/sql-course/tirgul-makif.html",
+      "url": "https://egrosman1.github.io/sql-course/sql-simulator.html",
       "description": "תרגול מקיף וחינמי ב-SQL בעברית עם 135 שאלות אינטראקטיביות, עורך SQL שרץ בדפדפן ללא התקנה, ופתרונות מלאים.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web (כל דפדפן)",
@@ -406,7 +404,7 @@ table.res tr:last-child td{border-bottom:none}
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "קורס SQL בעברית", "item": "https://egrosman1.github.io/sql-course/" },
-        { "@type": "ListItem", "position": 2, "name": "תרגול מקיף", "item": "https://egrosman1.github.io/sql-course/tirgul-makif.html" }
+        { "@type": "ListItem", "position": 2, "name": "תרגול מקיף", "item": "https://egrosman1.github.io/sql-course/sql-simulator.html" }
       ]
     }
   ]
@@ -420,7 +418,6 @@ table.res tr:last-child td{border-bottom:none}
 
 <!-- ============ SCREEN 1: SELECT ============ -->
 <main id="screen-select" class="wrap" role="main">
-  <a class="site-back" href="index.html">← לדף הבית של הקורס</a>
   <header class="intro">
     <span class="tag">// תרגול מקיף</span>
     <h1>תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית</h1>
@@ -477,7 +474,7 @@ table.res tr:last-child td{border-bottom:none}
   </section>
 
   <footer class="site-footer">
-    <p>נבנה על ידי <strong>אלירן גרוסמן</strong> · חלק מ<a href="index.html">קורס ה-SQL בעברית — לדף הבית</a></p>
+    <p>נבנה על ידי <strong>אלירן גרוסמן</strong> · חלק מ<a href="https://egrosman1.github.io/sql-course/" rel="noopener">קורס ה-SQL בעברית</a></p>
     <p class="muted-fine">תרגול SQL חינמי · SELECT · JOIN · GROUP BY · פונקציות חלון · הכנה לראיון אנליסט נתונים</p>
   </footer>
 </main>
