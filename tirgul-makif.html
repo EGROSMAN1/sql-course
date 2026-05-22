@@ -108,8 +108,8 @@ body{
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--cyan));width:0;transition:width .3s;border-radius:999px}
 .pcount{font-family:var(--mono);font-size:.82rem;color:var(--muted);flex-shrink:0;min-width:62px;text-align:center}
 
-.pstage{flex:1;padding:26px 0 30px}
-.qcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px 24px 22px;animation:fade .25s ease}
+.pstage{flex:1;padding:26px 0 30px;min-width:0}
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px 24px 22px;animation:fade .25s ease;min-width:0;overflow:hidden}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .qcard.solved{border-color:var(--teal-d)}
 .qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -129,7 +129,10 @@ body{
 .qtext{font-size:1.18rem;font-weight:600;line-height:1.55;white-space:pre-line;margin-bottom:20px}
 
 /* editor */
-.editor-shell{border:1px solid var(--line2);border-radius:12px;overflow:hidden;direction:ltr}
+.editor-shell{border:1px solid var(--line2);border-radius:12px;overflow:hidden;direction:ltr;max-width:100%}
+.CodeMirror,.CodeMirror-scroll,.CodeMirror-sizer{max-width:100%!important}
+.CodeMirror-placeholder{color:var(--dim)!important;direction:rtl;text-align:right;font-family:var(--font)!important;opacity:.8}
+.CodeMirror-sizer{min-width:0!important}
 .CodeMirror{height:auto;min-height:120px;font-family:var(--mono)!important;font-size:.92rem;background:#0c1119!important}
 .CodeMirror-gutters{background:#0a0f17!important;border-right:1px solid var(--line)!important}
 .CodeMirror-scroll{overflow-x:hidden!important}            /* lineWrapping is on → no horizontal scroll needed */
@@ -138,7 +141,7 @@ body{
 .editor-shell ::-webkit-scrollbar{width:10px;height:0}
 .editor-shell ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
 .editor-shell ::-webkit-scrollbar-track,.editor-shell ::-webkit-scrollbar-corner{background:#0c1119}
-.actions{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;align-items:center}
+.actions{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;align-items:center;min-width:0}
 .btn{border:none;border-radius:10px;padding:11px 18px;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .15s}
 .btn-run{background:var(--teal);color:#04231f}
 .btn-run:hover{background:var(--cyan)}
@@ -153,12 +156,15 @@ body{
 .result.show{display:block}
 .status{font-size:.95rem;font-weight:600;margin-bottom:10px}
 .status.ok{color:var(--green)} .status.err{color:var(--red)} .status.neutral{color:var(--muted)}
-.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;direction:ltr}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:11px;direction:ltr;max-width:100%}
+.tbl-scroll::-webkit-scrollbar{height:9px}
+.tbl-scroll::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+.tbl-scroll::-webkit-scrollbar-track{background:var(--bg2);border-radius:6px}
 table.res{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.84rem}
 table.res th{background:var(--bg2);color:var(--teal);text-align:left;padding:9px 13px;border-bottom:1px solid var(--line2);white-space:nowrap;position:sticky;top:0}
 table.res td{padding:8px 13px;border-bottom:1px solid var(--line);color:#d4deec;white-space:nowrap}
 table.res tr:last-child td{border-bottom:none}
-.errmsg{font-family:var(--mono);font-size:.85rem;color:var(--red);background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.28);border-radius:11px;padding:12px 15px;direction:ltr;text-align:left;white-space:pre-wrap}
+.errmsg{font-family:var(--mono);font-size:.85rem;color:var(--red);background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.28);border-radius:11px;padding:12px 15px;direction:ltr;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere}
 .errhint{font-size:.9rem;color:#e8c45a;background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.22);border-radius:10px;padding:11px 14px;margin:10px 0;line-height:1.55}
 
 /* data preview */
@@ -168,11 +174,33 @@ table.res tr:last-child td{border-bottom:none}
 .datapanel>summary::before{content:'▸ ';display:inline-block;transition:transform .15s;color:var(--dim)}
 .datapanel[open]>summary::before{content:'▾ '}
 .datapanel[open]>summary{border-bottom:1px solid var(--line)}
-.dp-body{padding:12px 13px;display:flex;flex-direction:column;gap:14px;max-height:340px;overflow-y:auto}
+.dp-body{padding:12px 13px;display:flex;flex-direction:column;gap:14px;max-height:340px;overflow-y:auto;min-width:0}
 .dp-name{font-family:var(--mono);font-size:.8rem;color:var(--cyan);margin-bottom:6px;font-weight:600}
+.dp-table{min-width:0}
 .dp-table .tbl-scroll{max-height:none}
 .dp-table table.res{font-size:.78rem}
 .dp-table table.res th{padding:6px 10px}
+/* table-name list with + to reveal each table's data on demand */
+.dp-list{margin:16px 0 4px;min-width:0}
+.dp-list-title{font-size:.84rem;color:var(--dim);margin-bottom:10px;font-weight:600}
+.tbl-acc{background:var(--bg2);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden;min-width:0}
+.tbl-acc>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;user-select:none}
+.tbl-acc>summary::-webkit-details-marker{display:none}
+.tbl-acc-name{font-family:var(--mono);color:var(--cyan);font-weight:700;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbl-acc-meta{color:var(--dim);font-size:.76rem;font-family:var(--mono);white-space:nowrap}
+.tbl-acc-plus{margin-inline-start:auto;flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:700;line-height:1;transition:transform .18s,border-color .15s}
+.tbl-acc[open] .tbl-acc-plus{transform:rotate(45deg);border-color:var(--teal)}
+.tbl-acc[open]>summary{border-bottom:1px solid var(--line)}
+.tbl-acc-body{padding:12px 14px;min-width:0}
+.tbl-acc.rel{border-color:rgba(45,212,191,.55)}
+.tbl-acc.rel .tbl-acc-name::before{content:'● ';color:var(--teal);font-size:.62em;vertical-align:middle}
+.dp-rel-note{color:var(--teal);font-weight:500}
+.fld-head{font-size:.78rem;color:var(--dim);margin-bottom:8px;font-weight:600}
+.fld-list{list-style:none;margin:0;padding:0}
+.fld{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 2px;border-bottom:1px solid var(--line);font-family:var(--mono)}
+.fld:last-child{border-bottom:none}
+.fld-name{color:var(--cyan);font-weight:700;font-size:.92rem}
+.fld-type{color:var(--dim);font-size:.76rem;white-space:nowrap}
 .dp-table table.res td{padding:5px 10px}
 .tbl-note{font-size:.76rem;color:var(--dim);padding:7px 4px 2px;text-align:right}
 
@@ -195,7 +223,7 @@ table.res tr:last-child td{border-bottom:none}
 .sol-toggle:hover{color:var(--teal)}
 .sol-code{display:none;margin-top:11px;background:#0c1119;border:1px solid var(--line);border-radius:11px;padding:14px 16px;direction:ltr;text-align:left}
 .sol-code.show{display:block}
-.sol-code code{font-family:var(--mono);font-size:.87rem;color:#d4deec;white-space:pre-wrap;line-height:1.7}
+.sol-code code{font-family:var(--mono);font-size:.87rem;color:#d4deec;white-space:pre-wrap;line-height:1.7;overflow-wrap:anywhere}
 
 /* nav */
 .pnav{display:flex;gap:11px;margin-top:22px;align-items:center}
@@ -220,6 +248,10 @@ table.res tr:last-child td{border-bottom:none}
 
 /* schema chip */
 .schema-link{background:none;border:none;color:var(--dim);font-family:inherit;font-size:.82rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pre-editor{margin-bottom:10px}
+.tbl-view-btn{text-decoration:none!important;display:inline-flex;align-items:center;gap:7px;background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.4)!important;color:var(--teal)!important;padding:9px 15px!important;border-radius:10px;font-weight:700;font-size:.86rem!important;transition:background .15s,border-color .15s}
+.tbl-view-btn:hover{background:rgba(45,212,191,.18);border-color:var(--teal)!important}
+.tbl-view-btn:active{transform:scale(.98)}
 .schema-link:hover{color:var(--teal)}
 .drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:80;display:none;backdrop-filter:blur(3px)}
 .drawer-bg.show{display:block}
@@ -299,11 +331,11 @@ table.res tr:last-child td{border-bottom:none}
   .topics{grid-template-columns:1fr}
   .topic .td{min-height:0}
 
-  .pbar-inner{flex-wrap:wrap;padding:8px 12px;gap:7px 9px}
-  .pbar .ptitle{flex:1;font-size:.88rem;min-width:40px}
+  .pbar-inner{flex-wrap:wrap;padding:7px 12px 9px;gap:6px 9px}
+  .pbar .ptitle{flex:1;font-size:.86rem;min-width:40px;white-space:normal;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .progress-wrap{order:5;flex-basis:100%;min-width:0}
   .hnav-group{order:6;flex-basis:100%;gap:9px}
-  .hnav{flex:1;padding:10px;font-size:.88rem}
+  .hnav{flex:1;padding:8px 10px;font-size:.85rem;border-radius:8px}
   .back-btn{padding:7px 10px;font-size:.8rem}
   .pcount{min-width:46px;font-size:.74rem}
   .pscore{font-size:.74rem}
@@ -321,13 +353,21 @@ table.res tr:last-child td{border-bottom:none}
   .btn-run{flex-basis:100%}
   .kbd-hint{display:none}
 
-  /* data preview compact + horizontally scrollable */
-  .dp-body{max-height:200px;padding:9px;gap:11px}
-  .dp-table table.res{font-size:.74rem}
-  .datapanel>summary{padding:11px 13px;font-size:.86rem}
-  .tbl-note{font-size:.72rem}
-
-  table.res th,table.res td{padding:7px 10px;font-size:.8rem}
+  /* table-name list + accordions */
+  .tbl-acc>summary{padding:13px 14px}
+  .tbl-acc-name{font-size:.9rem}
+  .tbl-acc-body{padding:10px 12px}
+  .tbl-note{font-size:.74rem}
+  /* NEW APPROACH: each row becomes a stacked card — no horizontal scroll, all columns readable */
+  .tbl-scroll{overflow:visible;border:none;border-radius:0}
+  table.res{display:block;width:100%}
+  table.res thead{display:none}
+  table.res tbody{display:block}
+  table.res tr{display:block;border:1px solid var(--line2);border-radius:10px;margin-bottom:8px;background:var(--bg2);overflow:hidden}
+  table.res tr:last-child{margin-bottom:0}
+  table.res td{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:6px 12px;border-bottom:1px solid var(--line);white-space:normal;overflow-wrap:anywhere;font-size:.88rem;direction:ltr;text-align:right}
+  table.res tr td:last-child{border-bottom:none}
+  table.res td::before{content:attr(data-label);color:var(--teal);font-weight:700;font-family:var(--mono);font-size:.8rem;flex-shrink:0;text-align:left}
 
   .opt{padding:13px 14px;font-size:.95rem;gap:10px}
   .opt .mark{width:24px;height:24px}
@@ -443,7 +483,7 @@ table.res tr:last-child td{border-bottom:none}
   <div class="topics" id="topics"></div>
 
   <div style="text-align:center;margin-top:28px">
-    <button class="schema-link" id="schemaBtn1">הצג את מבנה הטבלאות</button>
+    <button class="schema-link" id="schemaBtn1">📋 לצפייה בטבלאות</button>
   </div>
 
   <section class="seo" aria-label="מידע על התרגול המקיף">
@@ -503,8 +543,8 @@ table.res tr:last-child td{border-bottom:none}
 <div class="drawer-bg" id="drawerBg"></div>
 <aside class="drawer" id="drawer" aria-label="מבנה הטבלאות">
   <button class="drawer-close" id="drawerClose" aria-label="סגור">×</button>
-  <h3>מבנה מסד הנתונים</h3>
-  <p>הטבלאות הזמינות לתרגול. הנתונים נטענים מחדש לפני כל הרצה.</p>
+  <h3>טבלאות מסד הנתונים</h3>
+  <p>כל הטבלאות הזמינות לתרגול. לחצו על + ליד טבלה כדי לראות את השדות שלה.</p>
   <div id="schemaContent"></div>
 </aside>
 
@@ -531,6 +571,7 @@ table.res tr:last-child td{border-bottom:none}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/display/placeholder.min.js"></script>
 <script>
 // 800+ SQL — נתוני סימולטור
 // type "query": שאלת תרגול שמריצים בפועל (SQLite). solution = פתרון לדוגמה.
@@ -1192,8 +1233,8 @@ function startCategory(cid){
 }
 function startMode(kind){
   let items;
-  if(kind==='all'){ items=byDiff(flat(()=>true)); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'מסלול מדורג — מהקל לקשה'}; }
-  else { items=byDiff(flat(q=>q.type==='query')); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'שאילתות — מהקל לקשה'}; }
+  if(kind==='all'){ items=byDiff(flat(()=>true)); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'מסלול מדורג'}; }
+  else { items=byDiff(flat(q=>q.type==='query')); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'שאילתות SQL'}; }
   enterPractice();
 }
 function enterPractice(){
@@ -1239,6 +1280,12 @@ function renderCurrent(){
   else mountMcq(q);
   // focus management
   const card=host.querySelector('.qcard'); if(card) card.setAttribute('tabindex','-1'),card.focus({preventScroll:true});
+  // lazy-load each table's data only when its + is opened
+  host.querySelectorAll('.tbl-acc').forEach(function(ac){
+    ac.addEventListener('toggle',function(){
+      if(ac.open){ const b=ac.querySelector('.tbl-acc-body'); if(b&&!b.dataset.loaded){ b.innerHTML=tableDataHtml(b.dataset.table); b.dataset.loaded='1'; } }
+    });
+  });
 }
 function navButtons(){
   const last=session.idx>=session.items.length-1;
@@ -1259,7 +1306,7 @@ function queryCard(q,cat){
   return '<div class="qcard'+solvedCls+'" id="qcard">'+
     '<div class="qhead"><span class="qbadge query">SQL</span><span style="color:var(--dim);font-size:.8rem;font-family:var(--mono)">'+esc(cat.title)+'</span>'+diffBadge(q)+'<span class="qsolvedmark">✓ נפתר</span></div>'+
     '<div class="qtext">'+esc(q.q)+'</div>'+
-    dataPreview(cat)+
+    '<div class="pre-editor"><button class="schema-link tbl-view-btn" id="schemaBtn2">📋 לצפייה בטבלאות</button></div>'+
     '<div class="editor-shell"><textarea id="cmEditor"></textarea></div>'+
     '<div class="actions">'+
       '<button class="btn btn-run" id="runBtn">הרץ שאילתה ▶</button>'+
@@ -1272,8 +1319,7 @@ function queryCard(q,cat){
     '<div class="result" id="result"></div>'+
     '<div class="sol-reveal"><button class="sol-toggle" id="solToggle">הצג פתרון לדוגמה</button>'+
       '<div class="sol-code" id="solCode"><code>'+esc(q.solution)+'</code></div></div>'+
-    navButtons()+
-    '<div style="text-align:center;margin-top:14px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">מבנה הטבלאות</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+    '<div style="text-align:center;margin-top:18px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
 }
 function mcqCard(q,cat){
   const solvedCls=session.solved.has(itemKey())?' solved':'';
@@ -1283,8 +1329,7 @@ function mcqCard(q,cat){
     '<div class="qtext">'+esc(q.q)+'</div>'+
     '<div class="opts" id="opts">'+opts+'</div>'+
     '<div class="explain" id="explain"><b>הסבר:</b> '+esc(q.explain)+'</div>'+
-    navButtons()+
-    '<div style="text-align:center;margin-top:14px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">מבנה הטבלאות</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+    '<div style="text-align:center;margin-top:18px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">📋 לצפייה בטבלאות</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
 }
 function gradeBand(pct){
   if(pct>=90)return {t:'מצוין! 🏆',c:'var(--green)'};
@@ -1376,7 +1421,7 @@ function acMove(d){
 }
 function mountEditor(q){
   const ta=document.getElementById('cmEditor');
-  const cm=CodeMirror.fromTextArea(ta,{mode:'text/x-sql',theme:'material-darker',lineNumbers:true,lineWrapping:true,direction:'ltr',
+  const cm=CodeMirror.fromTextArea(ta,{mode:'text/x-sql',theme:'material-darker',lineNumbers:true,lineWrapping:true,direction:'ltr',placeholder:'כתוב כאן את השאילתה שלך…',
     extraKeys:{
       "Ctrl-Space":c=>acShow(c), "Cmd-Space":c=>acShow(c),
       "Ctrl-Enter":runQuery, "Cmd-Enter":runQuery,
@@ -1434,30 +1479,40 @@ function tablesEqual(a,b,ordered){
 function execAll(db,sql){const r=db.exec(sql);return (r&&r.length)?r[r.length-1]:null;}
 function resultTable(res,cap){
   const rows=res.values, lim=cap||rows.length, show=rows.slice(0,lim);
-  let h='<div class="tbl-scroll"><table class="res"><thead><tr>';
+  let h='<div class="tbl-scroll" dir="ltr"><table class="res"><thead><tr>';
   res.columns.forEach(c=>h+='<th>'+esc(c)+'</th>'); h+='</tr></thead><tbody>';
-  show.forEach(r=>{h+='<tr>';r.forEach(v=>h+='<td>'+esc(v)+'</td>');h+='</tr>';}); h+='</tbody></table></div>';
+  show.forEach(r=>{h+='<tr>';r.forEach((v,ci)=>h+='<td data-label="'+esc(res.columns[ci])+'">'+esc(v)+'</td>');h+='</tr>';}); h+='</tbody></table></div>';
   if(rows.length>lim)h+='<div class="tbl-note">מציג '+lim+' מתוך '+rows.length.toLocaleString('en-US')+' שורות שהוחזרו</div>';
   return h;
 }
-function tablePreview(tableName,limit){
+function tableDataHtml(tableName){
   if(!viewerDb)return '';
-  const lim=limit||8; let total=0,res=null;
+  let cols=[];
   try{
-    const c=viewerDb.exec('SELECT COUNT(*) FROM "'+tableName+'"'); total=c[0].values[0][0];
-    const r=viewerDb.exec('SELECT * FROM "'+tableName+'" LIMIT '+lim); res=r[0];
-  }catch(e){return '';}
-  if(!res)return '';
-  let h='<div class="dp-table"><div class="dp-name">'+esc(tableName)+' · '+Number(total).toLocaleString('en-US')+' שורות</div>'+resultTable(res);
-  if(total>res.values.length)h+='<div class="tbl-note">מציג '+res.values.length+' שורות ראשונות — לתצוגה רחבה לחצו על "מבנה הטבלאות"</div>';
-  return h+'</div>';
+    const r=viewerDb.exec('PRAGMA table_info("'+tableName+'")');
+    if(r[0]) cols=r[0].values.map(function(row){return {name:row[1],type:row[2],pk:row[5]};});
+  }catch(e){return '<div class="tbl-note">לא ניתן לטעון.</div>';}
+  if(!cols.length)return '';
+  return '<div class="fld-head">השדות בטבלה ('+cols.length+'):</div><ul class="fld-list">'+
+    cols.map(function(c){
+      return '<li class="fld"><span class="fld-name">'+(c.pk?'🔑 ':'')+esc(c.name)+'</span>'+
+        '<span class="fld-type">'+esc((c.type||'').toUpperCase())+'</span></li>';
+    }).join('')+'</ul>';
 }
 function dataPreview(cat){
-  if(!viewerDb||!cat.tables||!cat.tables.length)return '';
-  const mobile=window.innerWidth<=600;
-  const inner=cat.tables.map(t=>tablePreview(t,mobile?5:8)).join('');
-  if(!inner)return '';
-  return '<details class="datapanel"><summary>📋 לחץ כאן לצפייה בטבלאות</summary><div class="dp-body">'+inner+'</div></details>';
+  if(!viewerDb||!ALL_TABLES||!ALL_TABLES.length)return '';
+  const rel=(cat&&cat.tables)?cat.tables.filter(function(t){return ALL_TABLES.indexOf(t)>-1;}):[];
+  const others=ALL_TABLES.filter(function(t){return rel.indexOf(t)<0;});
+  const ordered=rel.concat(others), relSet={};rel.forEach(function(t){relSet[t]=1;});
+  const items=ordered.map(function(t){
+    let total=0; try{ total=viewerDb.exec('SELECT COUNT(*) FROM "'+t+'"')[0].values[0][0]; }catch(e){}
+    return '<details class="tbl-acc'+(relSet[t]?' rel':'')+'"><summary>'+
+      '<span class="tbl-acc-name">'+esc(t)+'</span>'+
+      '<span class="tbl-acc-meta">'+Number(total).toLocaleString('en-US')+' שורות</span>'+
+      '<span class="tbl-acc-plus" aria-hidden="true">+</span></summary>'+
+      '<div class="tbl-acc-body" data-table="'+esc(t)+'"></div></details>';
+  }).join('');
+  return '<div class="dp-list"><div class="dp-list-title">📋 כל הטבלאות במסד הנתונים — לחצו על + לצפייה בשדות <span class="dp-rel-note">(● = רלוונטית לשאלה)</span></div>'+items+'</div>';
 }
 function friendlyErr(msg){
   const m=String(msg);
@@ -1486,7 +1541,7 @@ function runQuery(){
   if(!q.noResult){let e=freshDb();try{expRes=execAll(e,q.solution);}catch(_){}e.close();}
   let html='';
   const uvHasRows=!!(userRes&&userRes.values&&userRes.values.length);
-  if(userRes&&userRes.values&&userRes.values.length)html+=resultTable(userRes,window.innerWidth<=600?50:200);
+  if(userRes&&userRes.values&&userRes.values.length)html+=resultTable(userRes,window.innerWidth<=600?20:200);
   else if(q.noResult){resEl.innerHTML='<div class="status ok">✓ הפקודה רצה בהצלחה.</div>';markSolved();return;}
   else html+='<div class="status neutral">השאילתה רצה אך לא החזירה שורות.</div>';
   if(!q.noResult&&expRes){
@@ -1526,9 +1581,15 @@ document.getElementById('qhost').addEventListener('click',e=>{
   if(e.target.closest('#nextBtn')){ goNext(); return; }
   if(e.target.closest('#schemaBtn2'))return openDrawer();
   if(e.target.closest('#erdBtnCard'))return openErd();
+  const sm=e.target.closest('summary');
+  if(sm&&sm.parentElement&&sm.parentElement.classList.contains('tbl-acc')){
+    const ac=sm.parentElement;
+    setTimeout(function(){ const b=ac.querySelector('.tbl-acc-body'); if(b&&!b.dataset.loaded&&ac.open){ b.innerHTML=tableDataHtml(b.dataset.table); b.dataset.loaded='1'; } },0);
+  }
 });
 
 /* ---- mode + back ---- */
+(function(){var rEl=document.getElementById('result');if(rEl&&window.MutationObserver){new MutationObserver(function(){requestAnimationFrame(function(){rEl.querySelectorAll('.tbl-scroll').forEach(function(s){s.scrollLeft=0;});});}).observe(rEl,{childList:true});}})();
 document.getElementById('mode-all').onclick=()=>startMode('all');
 document.getElementById('mode-queries').onclick=()=>startMode('queries');
 document.getElementById('backBtn').onclick=exitPractice;
@@ -1537,20 +1598,10 @@ document.getElementById('hNext').onclick=goNext;
 
 /* ---- drawer ---- */
 function buildSchema(){
-  if(!viewerDb){
-    const t=[['EmployeeDetail','עובדים'],['ProjectDetail','פרויקטים'],['Members2023 / Members2024','דמו ל-JOIN'],['FuelDetail','דלק']];
-    document.getElementById('schemaContent').innerHTML=t.map(x=>'<div class="tbl"><h4>'+x[0]+'</h4><p style="margin:0;color:var(--dim);font-size:.81rem">'+x[1]+'</p></div>').join('');
-    return;
-  }
-  const tables=ALL_TABLES;
-  const lim=window.innerWidth<=600?20:50;
-  document.getElementById('schemaContent').innerHTML=tables.map(name=>{
-    let total=0,res=null;
-    try{total=viewerDb.exec('SELECT COUNT(*) FROM "'+name+'"')[0].values[0][0];res=viewerDb.exec('SELECT * FROM "'+name+'" LIMIT '+lim)[0];}catch(e){return '';}
-    if(!res)return '';
-    return '<div class="tbl"><h4>'+esc(name)+' · '+Number(total).toLocaleString('en-US')+' שורות</h4>'+
-      '<div class="cols">'+res.columns.map(esc).join(', ')+'</div>'+resultTable(res,lim)+'</div>';
-  }).join('');
+  const el=document.getElementById('schemaContent');
+  if(!viewerDb){ el.innerHTML='<div class="tbl-note">טוען…</div>'; return; }
+  const cur=(session&&session.items&&session.items[session.idx])?session.items[session.idx].cat:null;
+  el.innerHTML=dataPreview(cur);
 }
 const drawer=document.getElementById('drawer'),drawerBg=document.getElementById('drawerBg');
 function openDrawer(){buildSchema();drawer.classList.add('show');drawerBg.classList.add('show');}
@@ -1559,6 +1610,7 @@ document.getElementById('schemaBtn1').onclick=openDrawer;
 document.getElementById('drawerClose').onclick=closeDrawer;
 drawerBg.onclick=closeDrawer;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();closeErd();}});
+document.addEventListener('click',function(e){var sm=e.target.closest('summary');if(sm&&sm.parentElement&&sm.parentElement.classList.contains('tbl-acc')){var ac=sm.parentElement;setTimeout(function(){var b=ac.querySelector('.tbl-acc-body');if(b&&!b.dataset.loaded&&ac.open){b.innerHTML=tableDataHtml(b.dataset.table);b.dataset.loaded='1';}},0);}});
 
 /* ---- ERD (entity-relationship diagram) ---- */
 // קשרים לוגיים (מפתחות זרים). הדגל 'soft' = קשר רעיוני (לא FK אמיתי).
