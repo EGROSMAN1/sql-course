@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Installing MySQL & Northwind — Step-by-Step Guide | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(74,158,255,.06) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);color:var(--green);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2.2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:15px;max-width:600px;margin:0 auto 1.5rem}
+.video-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.video-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s;cursor:pointer;border:none}
+.video-btn-primary{background:var(--red);color:#fff}
+.video-btn-primary:hover{background:#e03040;transform:translateY(-1px)}
+.video-btn-secondary{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}
+.video-btn-secondary:hover{border-color:var(--blue);color:var(--blue)}
+
+/* MAIN */
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* STEP CARD */
+.step-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.5rem;overflow:hidden}
+.step-header{padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid var(--border)}
+.step-num{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue3),var(--blue2));color:var(--blue);font-size:1.1rem;font-weight:900;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-num.green{background:linear-gradient(135deg,rgba(0,168,84,.2),rgba(0,168,84,.1));color:var(--green)}
+.step-num.orange{background:linear-gradient(135deg,rgba(255,140,66,.2),rgba(255,140,66,.1));color:var(--orange)}
+.step-num.cyan{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,212,255,.05));color:var(--cyan)}
+.step-title{font-size:1.1rem;font-weight:900}
+.step-subtitle{font-size:12px;color:var(--text3);margin-top:2px}
+.step-body{padding:1.25rem 1.5rem}
+.step-body p{color:var(--text2);font-size:14px;line-height:1.8;margin-bottom:.75rem}
+.step-body p:last-child{margin-bottom:0}
+.step-body strong{color:var(--text);font-weight:600}
+
+/* FILE BOX */
+.file-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+.file-box{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:.75rem}
+.file-box.required{border-color:rgba(255,140,66,.3);background:rgba(255,140,66,.04)}
+.file-icon{font-size:1.5rem;flex-shrink:0}
+.file-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:.2rem}
+.file-desc{font-size:12px;color:var(--text3)}
+.required-badge{display:inline-flex;background:rgba(255,140,66,.15);color:var(--orange);border:1px solid rgba(255,140,66,.3);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:.3rem;letter-spacing:.3px}
+
+/* STEP IMAGE */
+.step-img{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem;margin:1rem 0;text-align:center}
+.step-img img{max-width:100%;border-radius:6px;opacity:.9}
+.step-img .img-caption{font-size:12px;color:var(--text3);margin-top:.5rem}
+
+/* ACTION ROW */
+.action-row{display:flex;align-items:center;gap:.75rem;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0}
+.action-icon{font-size:1.2rem;flex-shrink:0}
+.action-text{font-size:13px;color:var(--text2);flex:1}
+.action-text strong{color:var(--text)}
+.action-kbd{background:var(--bg4);border:1px solid var(--border2);color:var(--yellow);font-family:var(--mono);font-size:12px;padding:2px 8px;border-radius:4px;white-space:nowrap}
+
+/* SUCCESS BOX */
+.success-box{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-right:4px solid var(--green);border-radius:10px;padding:1rem 1.25rem;margin:1rem 0}
+.success-box p{color:var(--text2);font-size:13.5px;line-height:1.7}
+.success-box p strong{color:var(--green)}
+
+/* WARNING BOX */
+.warning-box{background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:4px solid var(--yellow);border-radius:10px;padding:1rem 1.25rem;margin:1rem 0}
+.warning-box p{color:var(--text2);font-size:13px;line-height:1.7}
+.warning-box p strong{color:var(--yellow)}
+
+/* PROGRESS */
+.progress-nav{display:flex;gap:0;margin-bottom:2rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.prog-step{flex:1;padding:.7rem .5rem;text-align:center;font-size:11px;color:var(--text3);border-left:1px solid var(--border);cursor:pointer;transition:all .2s;font-weight:600}
+.prog-step:last-child{border-left:none}
+.prog-step:hover{background:var(--bg3);color:var(--text2)}
+.prog-step.done{color:var(--green)}
+.prog-step span{display:block;font-size:1rem;margin-bottom:2px}
+
+/* SECTION TITLE */
+.section-title{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px;transition:all .2s}
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.topnav-title{font-size:12px}
+.main{padding:1rem .75rem 4rem}
+pre{font-size:11px;line-height:1.5}
+.layout{flex-direction:column}
+.sidebar{display:none}
+.video-grid{grid-template-columns:1fr}
+.filter-row{flex-wrap:wrap;gap:.4rem}
+.lesson-tabs{padding:0}
+.lesson-tab{font-size:11px;padding:.6rem .4rem}
+.progress-section{flex-direction:column;gap:1rem}
+.step-body p{font-size:13px}
+.file-grid{grid-template-columns:1fr}
+.section-divider{padding:.6rem .75rem}
+.q-text{font-size:13px}
+.code-block{margin:.5rem}
+}
+
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+</style>
+
+<meta name="description" content="A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/setup.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/setup.html">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="Setup Guide — MySQL Northwind">
+<meta property="og:description" content="A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Setup Guide — MySQL Northwind">
+<meta name="twitter:description" content="A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "MySQL Setup Guide",
+        "item": "https://egrosman1.github.io/sql-course/setup.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "Installing MySQL & Northwind — Step-by-Step Guide | SQL.course",
+    "description": "A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.",
+    "url": "https://egrosman1.github.io/sql-course/setup.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Guide",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "Free SQL Course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Is MySQL free to use?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. MySQL Community Edition is completely free, open-source software, and so is MySQL Workbench for managing and editing queries. No paid license is required to learn and practice SQL."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What is the Northwind database?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Northwind is a sample database for a fictional trading company, with tables for customers, orders, products, suppliers, and employees. It is widely used for learning SQL because it is realistic and lets you practice JOINs, GROUP BY, and complex queries."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "How do I load Northwind into MySQL?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Download the Northwind SQL file, open it in MySQL Workbench via File \u2192 Open SQL Script, and run it. This guide walks you through every step with screenshots, from installation to your first query."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← Home</a>
+  <div class="topnav-title">🛠️ Setup Guide — MySQL Northwind</div>
+  <div class="topnav-links">
+    <a href="course.html" class="topnav-link">📚 Learn</a>
+    <a href="../setup.html" class="topnav-link" title="עברית">🇮🇱 עברית</a><a href="setup.html" class="topnav-link" title="English" aria-current="page">🇺🇸 English</a>
+    <a href="practice.html" class="topnav-link">✏️ Practice</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🎬 Includes video tutorials</div>
+  <h1 class="hero-title">Building Your Work Environment</h1>
+  <p class="hero-sub">A technical guide to installing MySQL Workbench and setting up the Northwind database — from download to your first query</p>
+  <div class="video-btns">
+    <a href="course.html" class="video-btn video-btn-secondary">📚 Learning Material</a>
+    <a href="practice.html" class="video-btn video-btn-secondary">✏️ Practice</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="tirgul-makif.html">🎯 Full Practice</a>
+  <a href="setup.html">🛠️ Setup</a>
+  <a href="../videos.html">🎬 Video Tutorials</a>
+  <a href="course.html">📚 Learning Material</a>
+  <a href="practice.html">✏️ Practice</a>
+</div>
+
+<div class="main">
+
+  <!-- PROGRESS NAV -->
+  <div class="progress-nav">
+    <div class="prog-step" onclick="scrollToStep('step0')"><span>📦</span>Step 0</div>
+    <div class="prog-step" onclick="scrollToStep('step1')"><span>🏗️</span>Step 1</div>
+    <div class="prog-step" onclick="scrollToStep('step2')"><span>💾</span>Step 2</div>
+    <div class="prog-step" onclick="scrollToStep('step3')"><span>✅</span>Verify</div>
+  </div>
+
+  <!-- STEP 0 -->
+  <div class="step-card" id="step0">
+    <div class="step-header">
+      <div class="step-num green">0</div>
+      <div>
+        <div class="step-title">📦 Step 0 — Prepare the Source Files</div>
+        <div class="step-subtitle">Download two SQL files from Google Drive</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Before you open anything, make sure the following two files have been downloaded from <strong>Google Drive</strong> and are saved on your computer:</p>
+      <div class="file-grid">
+        <div class="file-box">
+          <div class="file-icon">📄</div>
+          <div>
+            <div class="file-name">NORTHWIND(4).sql</div>
+            <div class="file-desc">The structure file — builds the empty tables</div>
+          </div>
+        </div>
+        <div class="file-box required">
+          <div class="file-icon">📊</div>
+          <div>
+            <div class="file-name">northwind-data.sql</div>
+            <div class="file-desc">The data file — inserts the actual data</div>
+            <div class="required-badge">⚠️ Required file</div>
+          </div>
+        </div>
+      </div>
+      <div class="warning-box">
+        <p><strong>Note:</strong> the <strong>northwind-data.sql</strong> file is the most important one. Make sure you pick it and not a similarly named file.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step-card" id="step1">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">🏗️ Step 1 — Lay the Foundation (Structure)</div>
+        <div class="step-subtitle">Open the structure file in MySQL Workbench</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Open <strong>MySQL Workbench</strong>.</p>
+
+      <div class="action-row">
+        <div class="action-icon">📂</div>
+        <div class="action-text">In the top menu, click <strong>File</strong> and then choose: <span class="action-kbd">Open SQL Script...</span></div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">🖱️</div>
+        <div class="action-text">In the dialog that opens, navigate to the folder where you saved the files. Select the first file: <span class="action-kbd">NORTHWIND(4).sql</span></div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">⚡</div>
+        <div class="action-text">Once you select the file, the code appears on screen. Click the <strong>lightning-bolt icon</strong> in the top toolbar to run the script and build the tables.</div>
+      </div>
+
+      <div class="warning-box">
+        <p><strong>* Note:</strong> this file builds the empty tables. It is the skeleton of the database.</p>
+      </div>
+
+      <div class="success-box">
+        <p><strong>✓ Step 1 complete:</strong> the tables were created successfully. The structure now exists but is empty. The next step brings in the data.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-card" id="step2">
+    <div class="step-header">
+      <div class="step-num orange">2</div>
+      <div>
+        <div class="step-title">💾 Step 2 — Import the Data</div>
+        <div class="step-subtitle">Load the data file into the tables</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="action-row">
+        <div class="action-icon">📂</div>
+        <div class="action-text">Repeat the same process: <strong>File</strong> → <span class="action-kbd">Open SQL Script...</span></div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">🖱️</div>
+        <div class="action-text">This time select the second file: <span class="action-kbd">northwind-data.sql</span> — <strong>not the schema file from before</strong></div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">⚡</div>
+        <div class="action-text">The new code appears on screen (replacing the previous code). Click the <strong>lightning-bolt icon</strong> again to insert the data into the tables you created.</div>
+      </div>
+
+      <div class="warning-box">
+        <p><strong>Note:</strong> this step may take a few seconds — the script inserts thousands of rows. Wait until you see a success message.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 / VERIFY -->
+  <div class="step-card" id="step3">
+    <div class="step-header">
+      <div class="step-num cyan">✓</div>
+      <div>
+        <div class="step-title">✅ Quality Check — Verify the Result</div>
+        <div class="step-subtitle">Make sure Northwind appears in the Schemas list</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Once the process is complete, here is how you know everything worked:</p>
+
+      <div class="action-row">
+        <div class="action-icon">👈</div>
+        <div class="action-text">Go to the <strong>Schemas</strong> panel on the left and click the <strong>Refresh</strong> button.</div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">🔍</div>
+        <div class="action-text">You will now see <span class="action-kbd">Northwind</span> in the list, shown in bold. That means the database is ready!</div>
+      </div>
+
+      <div class="success-box">
+        <p><strong>🎉 Congratulations!</strong> Your environment is ready. You can now start writing SQL queries on the Northwind database.</p>
+        <p style="margin-top:.5rem">Click <strong>Northwind</strong> in the list to set it as the active database, and you are good to go.</p>
+      </div>
+
+      <div class="warning-box" style="margin-top:1rem">
+        <p><strong>Common issue:</strong> if Northwind does not appear — make sure you clicked Refresh and that you ran <strong>both</strong> files (NORTHWIND(4).sql and northwind-data.sql).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK TEST -->
+  <div class="section-title">Quick Test — Your First Query</div>
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num green">🚀</div>
+      <div>
+        <div class="step-title">Check it works — run your first query</div>
+        <div class="step-subtitle">If you get results — you did it!</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Open a new Query Editor in Workbench and run:</p>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:13px;line-height:1.8;margin:.75rem 0">
+        <span style="color:#ff7b72">USE</span> <span style="color:#7ee787">Northwind</span>;<br>
+        <span style="color:#ff7b72">SELECT</span> * <span style="color:#ff7b72">FROM</span> <span style="color:#7ee787">customers</span> <span style="color:#ff7b72">LIMIT</span> <span style="color:#79c0ff">5</span>;
+      </div>
+      <p>If you get a table with 5 customers — the database is working perfectly! 🎉</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function scrollToStep(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Video button placeholders - replace href with actual YouTube/Drive links
+document.getElementById('btn-video1').addEventListener('click', function(e){
+  e.preventDefault();
+  alert('Add a link to video 1 (software installation)\nEdit the file and change the href of btn-video1');
+});
+document.getElementById('btn-video2').addEventListener('click', function(e){
+  e.preventDefault();
+  alert('Add a link to video 2 (database installation)\nEdit the file and change the href of btn-video2');
+});
+</script>
+<script>
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

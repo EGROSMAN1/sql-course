@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- =============================================== -->
+<!-- SEO META TAGS - Primary                         -->
+<!-- =============================================== -->
+<title>Free SQL Course | 310+ Exercises, Live Simulators & Job-Interview Prep | Eliran Grossman</title>
+<meta name="title" content="Free SQL Course | 310+ Exercises, Live Simulators & Interview Prep">
+<meta name="description" content="A completely free SQL course with 310+ interactive exercises, 4 live SQL simulators (NBA, Champions League, Northwind), a full function reference, and case-study interview simulations for data analysts.">
+<meta name="keywords" content="SQL, SQL course, learn SQL, free SQL course, SQL exercises, SQL simulator, Window Functions, Northwind, JOIN, GROUP BY, data analyst, SQL interview, MySQL, SQL Server, data, BI">
+<meta name="author" content="Eliran Grossman">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="language" content="English">
+<meta name="geo.region" content="US">
+<meta name="geo.placename" content="Global">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/">
+
+<!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="Free SQL Course | 310+ Exercises & Live Simulators">
+<meta property="og:description" content="A completely free SQL course. 310+ exercises, 4 simulators, a function reference, and real interview prep for data analysts.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+<meta property="og:image:alt" content="Eliran Grossman - SQL Instructor">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free SQL Course | 310+ Exercises">
+<meta name="twitter:description" content="A completely free SQL course with exercises, simulators, and interview prep.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<!-- Theme color -->
+<meta name="theme-color" content="#00d4c8">
+
+<!-- =============================================== -->
+<!-- JSON-LD Structured Data - Course Schema         -->
+<!-- =============================================== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Course",
+      "@id": "https://egrosman1.github.io/sql-course/#course",
+      "name": "Free SQL Course",
+      "description": "A comprehensive, completely free SQL course. Includes 11 lessons, 310+ hands-on exercises, 4 live SQL simulators, a function reference, four-level quizzes, and case-study interview simulations.",
+      "url": "https://egrosman1.github.io/sql-course/en/",
+      "image": "https://egrosman1.github.io/sql-course/eliran.png",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "educationalLevel": "Beginner to Expert",
+      "teaches": [
+        "SQL",
+        "SELECT statements",
+        "JOIN operations",
+        "GROUP BY and aggregation",
+        "Window Functions",
+        "Subqueries",
+        "Data Analysis",
+        "SQL Interview Preparation"
+      ],
+      "audience": {
+        "@type": "EducationalAudience",
+        "educationalRole": "student"
+      },
+      "provider": {
+        "@type": "Person",
+        "@id": "https://egrosman1.github.io/sql-course/#instructor"
+      },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "PT40H",
+        "inLanguage": "en"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "category": "free"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://egrosman1.github.io/sql-course/#instructor",
+      "name": "Eliran Grossman",
+      "alternateName": "Eliran Grossman",
+      "jobTitle": "Data Analyst & SQL Instructor",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Partner Communications"
+      },
+      "image": "https://egrosman1.github.io/sql-course/eliran.png",
+      "sameAs": [
+        "https://www.linkedin.com/in/eliran-grossman-17a84b245/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://egrosman1.github.io/sql-course/#website",
+      "url": "https://egrosman1.github.io/sql-course/en/",
+      "name": "Free SQL Course",
+      "description": "A free SQL course with exercises, simulators, and interview prep",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://egrosman1.github.io/sql-course/#instructor"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://egrosman1.github.io/sql-course/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- FAQ Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is the course really free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the course is completely free \u2014 including all exercises, simulators, quizzes, and interview simulations. No sign-up or payment required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is the course for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The course suits absolute beginners in data, analysts who want to sharpen their SQL, and candidates preparing for data job interviews. The material is built in four levels \u2014 from beginner to expert."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What makes this course unique?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The course offers 4 interactive SQL simulators on real datasets (NBA, Champions League, Northwind) plus case-study interview simulations for the insurance and telecom industries \u2014 unique content you won\u2019t find in other courses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does the course take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "At 3\u20135 hours per week, you can finish the material in 6\u201310 weeks and reach a beginner-to-intermediate data analyst level."
+      }
+    }
+  ]
+}
+</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;
+  --bg2:#0c1518;
+  --bg3:#111e21;
+  --border:rgba(0,212,200,.08);
+  --border2:rgba(0,212,200,.18);
+  --text:#e8f4f5;
+  --text2:#6b9098;
+  --text3:#2a4048;
+  --aq:#00d4c8;
+  --aq2:rgba(0,212,200,.12);
+  --font:'Heebo',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --sb:260px;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.top{position:fixed;top:0;right:0;left:0;height:48px;z-index:300;background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
+.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
+.lang-flags{display:flex;gap:5px;align-items:center}
+.lang-flags a{font-size:13px;font-weight:600;color:#fff;line-height:1;display:inline-flex;align-items:center;gap:5px;text-decoration:none;padding:4px 9px;border-radius:6px;opacity:.6;border:1px solid transparent;transition:all .12s}
+.lang-flags a:hover{opacity:1;background:var(--bg2)}
+.lang-flags a.on{opacity:1;border-color:var(--aq);background:var(--aq2)}
+.logo em{color:var(--aq);font-style:normal}
+.top-nav{display:flex;gap:.1rem;list-style:none;flex:1;overflow-x:auto;scrollbar-width:none}
+.top-nav::-webkit-scrollbar{display:none}
+.top-nav a{color:var(--text2);text-decoration:none;font-size:12px;font-weight:600;padding:4px 9px;border-radius:4px;white-space:nowrap;display:block;transition:color .12s}
+.top-nav a:hover{color:var(--aq)}
+.hbg{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:6px}
+.hbg span{width:18px;height:2px;background:var(--text2);border-radius:2px;display:block}
+
+/* SIDEBAR */
+.sb{position:fixed;top:48px;left:0;width:var(--sb);bottom:0;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;z-index:200}
+.sb-hdr{padding:1.2rem 1.3rem .9rem;border-bottom:1px solid var(--border)}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.4rem}
+.sb-title{font-size:14px;font-weight:700;color:var(--text)}
+.sb-body{padding:.6rem 0 3rem}
+.sb-group{padding:.6rem 1.3rem .2rem;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono)}
+.sb-link{display:flex;align-items:center;gap:.6rem;padding:.45rem 1.3rem;text-decoration:none;transition:all .12s}
+.sb-link:hover,.sb-link.on{background:var(--aq2)}
+.sb-link:hover .sl-dot,.sb-link.on .sl-dot{background:var(--aq);border-color:var(--aq)}
+.sb-link:hover .sl-txt,.sb-link.on .sl-txt{color:var(--text)}
+.sl-dot{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0}
+.sl-txt{font-size:12.5px;color:var(--text2)}
+
+/* MAIN */
+.main{margin-top:48px;margin-left:var(--sb);padding:2.5rem 2.5rem 4rem;min-height:calc(100vh - 48px)}
+
+/* HERO */
+.hero{background:var(--bg2);border:1px solid var(--border);border-top:2px solid var(--aq);border-radius:12px;padding:2rem 2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
+.hero-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--aq);font-family:var(--mono);margin-bottom:.6rem}
+.hero h1{font-size:2.2rem;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:.5rem}
+.hero h1 em{color:var(--aq);font-style:normal}
+.hero-desc{font-size:.9rem;color:var(--text2);line-height:1.7;max-width:460px}
+.hero-desc strong{color:var(--text)}
+.hero-about{font-size:.85rem;color:var(--text2);line-height:1.75;max-width:480px;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)}
+.hero-about strong{color:var(--aq)}
+.hero-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--aq);flex-shrink:0}
+.hero-photo-ph{width:80px;height:80px;border-radius:50%;background:var(--bg3);border:2px solid var(--aq);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
+
+/* INSTRUCTOR ROW */
+.inst{display:flex;align-items:center;gap:.7rem;margin-top:1.1rem;flex-wrap:wrap}
+.inst-name{font-size:13px;font-weight:700;color:var(--text)}
+.inst-role{font-size:11.5px;color:var(--text2)}
+.inst-sep{color:var(--text3)}
+.ilink{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;text-decoration:none}
+.ilink.li{background:#0a66c2;color:#fff}
+.ilink.wa{background:#25d366;color:#fff}
+
+/* STATS ROW */
+.stats{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1.1rem;display:flex;align-items:center;gap:.65rem;flex:1;min-width:110px}
+.stat-val{font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--aq);line-height:1}
+.stat-lbl{font-size:11px;color:var(--text2);font-weight:600}
+
+/* NAV CARDS */
+.cards-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.75rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.5rem}
+.card{display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);transition:all .15s}
+.card:hover{border-color:var(--border2);background:var(--bg3)}
+.card.feat{border-color:var(--border2);border-left:2px solid var(--aq)}
+.card-ico{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
+.card-title{font-size:13px;font-weight:700;color:var(--text)}
+.card.feat .card-title{color:var(--aq)}
+.card-arr{font-size:12px;color:var(--text3);margin-left:auto;transition:transform .12s}
+.card:hover .card-arr{transform:translateX(3px);color:var(--text2)}
+
+/* MOBILE */
+.mob-nav{display:none;position:fixed;top:48px;right:0;left:0;bottom:0;background:var(--bg);z-index:250;padding:1rem;flex-direction:column;gap:.15rem;overflow-y:auto;border-top:1px solid var(--border)}
+.mob-nav.open{display:flex}
+.mob-nav a{color:var(--text2);text-decoration:none;font-size:14px;padding:10px 14px;border-radius:7px;display:block}
+.mob-nav a:hover{background:var(--bg2);color:var(--text)}
+
+@media(max-width:860px){
+  :root{--sb:0px}
+  .sb{display:none}
+  .hbg{display:flex}
+  .top-nav{display:none}
+  .main{padding:1.5rem 1rem 3rem}
+  .hero{grid-template-columns:1fr;gap:1rem}
+  .hero-photo,.hero-photo-ph{display:none}
+  .hero h1{font-size:1.7rem}
+  .cards{grid-template-columns:1fr}
+}
+
+/* LEVEL SELECTOR */
+.level-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:.5rem}
+.lcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;transition:all .2s;position:relative;overflow:hidden}
+.lcard:hover{transform:translateY(-3px)}
+.lcard::after{content:'';position:absolute;bottom:0;right:0;left:0;height:3px;background:var(--lc,var(--aq))}
+.lcard-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:.2rem}
+.lc-icon{font-size:1.6rem}
+.lc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);background:var(--bg3);padding:2px 8px;border-radius:4px}
+.lc-title{font-size:17px;font-weight:800;color:var(--text)}
+.lc-num{font-size:2.4rem;font-weight:900;font-family:var(--mono);color:var(--lc,var(--aq));line-height:1.1}
+.lc-sub{font-size:12px;color:var(--text2);font-weight:600;margin-top:-.2rem}
+.lc-topics{font-size:11.5px;color:var(--text2);line-height:1.5;margin-top:.3rem}
+.lc1{--lc:#00e5a0}.lc1:hover{border-color:rgba(0,229,160,.35)}
+.lc2{--lc:#4a9eff}.lc2:hover{border-color:rgba(74,158,255,.35)}
+.lc3{--lc:#9B5CFF}.lc3:hover{border-color:rgba(155,92,255,.35)}
+.lc4{--lc:#FFB020}.lc4:hover{border-color:rgba(255,176,32,.5)}
+.lcard.feat{border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04)}
+.lc-hot{position:absolute;top:36px;left:8px;background:rgba(255,176,32,.15);color:#FFB020;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(255,176,32,.3)}
+/* MOBILE */
+@media(max-width:768px){
+  .level-selector{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .lc-topics{font-size:11px}
+  .lc-num{font-size:2rem}
+  .lc-title{font-size:15px}
+  .lcard{padding:1rem .85rem}
+}
+@media(max-width:400px){
+  .level-selector{grid-template-columns:1fr 1fr;gap:.5rem}
+  .lc-topics{display:none}
+  .lc-badge{display:none}
+  .lc-num{font-size:1.75rem}
+}
+
+</style>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="top">
+  <a href="index.html" class="logo">SQL<em>.course</em></a>
+  <ul class="top-nav">
+    <li><a href="course.html">Learn</a></li>
+    <li><a href="practice.html">Practice</a></li>
+    <li><a href="simulator.html">⚡ Simulator</a></li>
+    <li><a href="tirgul-makif.html">🎯 Full Practice</a></li>
+    <li><a href="../pbi-simulator.html">📊 Power BI</a></li>
+    <li><a href="reference.html">Functions</a></li>
+    <li><a href="quiz-beginner.html">Beginner Quiz</a></li>
+    <li><a href="quiz.html">Advanced Quiz</a></li>
+    <li><a href="videos.html">MySQL</a></li>
+    <li><a href="videos2.html">SQL Server</a></li>
+    <li><a href="setup.html">Setup</a></li>
+  </ul>
+  <div class="lang-flags"><a href="../index.html" title="עברית">🇮🇱 עברית</a><a href="index.html" class="on" title="English">🇺🇸 English</a></div>
+  <button class="hbg" onclick="toggleMob()" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mob-nav" id="mobNav">
+  <a href="course.html">📚 Learning Material</a>
+  <a href="practice.html">✏️ Practice</a>
+  <a href="simulator.html">⚡ SQL Simulator</a>
+  <a href="tirgul-makif.html">🎯 Full Practice</a>
+  <a href="../pbi-simulator.html">📊 Power BI Simulator</a>
+  <a href="reference.html">📘 Function Reference</a>
+  <a href="quiz-beginner.html">🌱 Beginner Questions</a>
+  <a href="quiz.html">🧠 Advanced Questions</a>
+  <a href="videos.html">🎬 MySQL Tutorials</a>
+  <a href="videos2.html">🖥️ SQL Server Tutorials</a>
+  <a href="setup.html">🛠️ Setup Guide</a>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-hdr">
+    <div class="sb-label">Tools</div>
+    <div class="sb-title">SQL.course</div>
+  </div>
+  <div class="sb-body">
+    <a href="simulator.html" class="sb-link on"><div class="sl-dot"></div><div class="sl-txt">⚡ SQL Simulator</div></a>
+    <a href="tirgul-makif.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🎯 Full Practice</div></a>
+    <a href="../pbi-simulator.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📊 Power BI Simulator</div></a>
+    <a href="reference.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📘 Function Reference</div></a>
+    <a href="practice.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">✏️ Practice</div></a>
+    <a href="quiz-beginner.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🌱 Beginner Questions</div></a>
+    <a href="quiz-medium.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📗 Intermediate Questions</div></a>
+    <a href="quiz-advanced2.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 Advanced Questions</div></a>
+    <a href="quiz-expert.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🏆 Expert Questions</div></a>
+    <a href="quiz.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 Advanced Questions</div></a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-tag">● Free SQL Course · 310+ Exercises · Built by an Analyst</div>
+      <h1>Free <em>SQL</em> Course</h1>
+      <p class="hero-desc">From the basics all the way to <strong>job-interview level</strong> — a practical, free SQL course with 4 interactive simulators, 310+ exercises, and case-study simulations for analysts.</p>
+      <p class="hero-about">SQL instructor and analytics team lead at <strong>Partner</strong>, with years of hands-on experience in data.<br>
+      My goal — <strong>to teach data for free, simply and accessibly to everyone</strong> — and to bring real-world experience to anyone who wants to grow in the field and succeed in job interviews.</p>
+      <div class="inst">
+        <img src="../eliran.png" alt="Eliran Grossman" width="32" height="32"
+             style="border-radius:50%;border:1.5px solid var(--aq);object-fit:cover;flex-shrink:0"
+             onerror="this.style.display='none'">
+        <span class="inst-name">Eliran Grossman</span>
+        <span class="inst-sep">·</span>
+        <span class="inst-role">SQL Instructor · Partner</span>
+        <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" class="ilink li">LinkedIn</a>
+        <a href="https://wa.me/972507514807" target="_blank" class="ilink wa">WhatsApp</a>
+      </div>
+    </div>
+    <img src="../eliran.png" alt="Eliran Grossman" class="hero-photo"
+         onerror="this.outerHTML='<div class=hero-photo-ph>👨‍💻</div>'">
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">Lessons</div></div>
+    <div class="stat"><div class="stat-val">110+</div><div class="stat-lbl">Exercises</div></div>
+    <div class="stat"><div class="stat-val">24K</div><div class="stat-lbl">Rows in simulator</div></div>
+    <div class="stat"><div class="stat-val">🆓</div><div class="stat-lbl">Completely free</div></div>
+  </div>
+
+  <!-- NAV CARDS -->
+  <div class="cards-label">Multiple-Choice Questions — Pick a Level</div>
+  <div class="level-selector">
+    <a href="quiz-beginner.html" class="lcard lc1">
+      <div class="lcard-top">
+        <div class="lc-icon">🌱</div>
+        <div class="lc-badge">LEVEL 1</div>
+      </div>
+      <div class="lc-title">Beginner</div>
+      <div class="lc-num">150</div>
+      <div class="lc-sub">questions</div>
+      <div class="lc-topics">SELECT · WHERE · GROUP BY · JOINs</div>
+    </a>
+    <a href="quiz-medium.html" class="lcard lc2">
+      <div class="lcard-top">
+        <div class="lc-icon">📗</div>
+        <div class="lc-badge">LEVEL 2</div>
+      </div>
+      <div class="lc-title">Intermediate</div>
+      <div class="lc-num">80</div>
+      <div class="lc-sub">questions</div>
+      <div class="lc-topics">Strings · Aggregation · Advanced JOINs</div>
+    </a>
+    <a href="quiz-advanced2.html" class="lcard lc3">
+      <div class="lcard-top">
+        <div class="lc-icon">🧠</div>
+        <div class="lc-badge">LEVEL 3</div>
+      </div>
+      <div class="lc-title">Advanced</div>
+      <div class="lc-num">60</div>
+      <div class="lc-sub">questions</div>
+      <div class="lc-topics">Subqueries · Window Functions</div>
+    </a>
+    <a href="quiz-expert.html" class="lcard lc4 feat">
+      <div class="lc-hot">🔥 Hardest</div>
+      <div class="lcard-top">
+        <div class="lc-icon">🏆</div>
+        <div class="lc-badge">LEVEL 4</div>
+      </div>
+      <div class="lc-title">Expert</div>
+      <div class="lc-num">20</div>
+      <div class="lc-sub">questions</div>
+      <div class="lc-topics">Choose the correct query</div>
+    </a>
+  </div>
+
+  <div class="cards-label" style="margin-top:1.5rem">More Tools</div>
+  <div class="cards">
+    <a href="tirgul-makif.html" class="card feat">
+      <span class="card-ico">🎯</span>
+      <span class="card-title">Full Practice — 135 interactive SQL questions</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="simulator.html" class="card feat">
+      <span class="card-ico">⚡</span>
+      <span class="card-title">SQL Simulator</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="../pbi-simulator.html" class="card feat">
+      <span class="card-ico">📊</span>
+      <span class="card-title">Power BI Simulator — DAX & dashboards</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="interview-telecom.html" class="card">
+      <span class="card-ico">🎯</span>
+      <span class="card-title">Interview Practice — Customer Churn (Telecom)</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="interview-insurance.html" class="card">
+      <span class="card-ico">🏛️</span>
+      <span class="card-title">Interview Practice — Management Fees (Insurance)</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="course.html" class="card">
+      <span class="card-ico">📚</span>
+      <span class="card-title">Learning Material</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="practice.html" class="card">
+      <span class="card-ico">✏️</span>
+      <span class="card-title">Practice Exercises</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="quiz-beginner.html" class="card">
+      <span class="card-ico">🌱</span>
+      <span class="card-title">Multiple-Choice — Beginner</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="quiz.html" class="card">
+      <span class="card-ico">🧠</span>
+      <span class="card-title">Multiple-Choice — Advanced</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="reference.html" class="card">
+      <span class="card-ico">📘</span>
+      <span class="card-title">Function Reference</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="videos.html" class="card">
+      <span class="card-ico">🎬</span>
+      <span class="card-title">Video Tutorials — MySQL</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="videos2.html" class="card">
+      <span class="card-ico">🖥️</span>
+      <span class="card-title">Video Tutorials — SQL Server</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="setup.html" class="card">
+      <span class="card-ico">🛠️</span>
+      <span class="card-title">Setup Guide</span>
+      <span class="card-arr">→</span>
+    </a>
+  </div>
+
+</main>
+
+<script>
+function toggleMob(){document.getElementById('mobNav').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobNav');
+  if(m.classList.contains('open')&&!e.target.closest('#mobNav')&&!e.target.closest('.hbg'))
+    m.classList.remove('open');
+});
+</script>
+</body>
+</html>

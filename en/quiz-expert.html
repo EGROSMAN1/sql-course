@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expert SQL Questions — Free Quiz | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;--bg2:#0c1518;--bg3:#111e21;
+  --border:rgba(255,176,32,.08);--border2:rgba(255,176,32,.2);
+  --text:#e8f4f5;--text2:#6b9098;--text3:#2a4048;
+  --aq:#00d4c8;--gold:#FFB020;--green:#00e676;--red:#ff4757;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+.topnav{background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--gold);text-decoration:none;font-size:12px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:13px;font-weight:700;color:var(--text2)}
+.topnav-right{display:flex;align-items:center;gap:.5rem;margin-right:auto;flex-wrap:wrap}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;font-family:var(--mono)}
+.ltabs{display:flex;gap:.3rem;flex-wrap:wrap}
+.ltab{font-size:11px;font-weight:700;padding:4px 9px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2);transition:all .12s}
+.ltab:hover{color:var(--text)}
+.ltab.active{background:rgba(255,176,32,.12);border-color:var(--gold);color:var(--gold)}
+/* Firebase */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid rgba(255,255,255,.1);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--gold)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--gold);font-family:var(--mono);background:rgba(255,176,32,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--gold);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid rgba(255,255,255,.1);padding:5px 10px;border-radius:6px;font-size:11.5px;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--gold)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Hero */
+.hero{padding:2rem 1.5rem 1.5rem;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(255,176,32,.06),transparent 70%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,176,32,.1);border:1px solid rgba(255,176,32,.25);color:var(--gold);font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--mono);letter-spacing:1px;margin-bottom:.75rem}
+.hero-title{font-size:2rem;font-weight:900;color:var(--text);margin-bottom:.3rem}
+.hero-title em{color:var(--gold);font-style:normal}
+.hero-desc{color:var(--text2);font-size:.9rem;margin-bottom:1.25rem}
+.hero-stats{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-n{font-size:1.6rem;font-weight:900;font-family:var(--mono);color:var(--gold)}
+.hs-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+/* Progress */
+.prog-bar-wrap{padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:sticky;top:96px;z-index:80}
+.prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .3s}
+.prog-txt{font-size:11px;color:var(--text2);font-family:var(--mono);white-space:nowrap}
+.score-display{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--gold);white-space:nowrap}
+/* Main */
+.main{max-width:800px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-family:var(--mono);padding:.75rem 0 .5rem;margin-top:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+/* Code block */
+.q-code{background:var(--bg);border:1px solid var(--border2);border-radius:7px;padding:.65rem 1rem;font-family:var(--mono);font-size:12px;direction:ltr;text-align:left;margin-bottom:.85rem;overflow-x:auto;line-height:1.7;color:#e8f4f5}
+.kw{color:#ff7b72}.fn{color:#56d364}.tbl{color:#ffa657}.col{color:#79c0ff}.str{color:#a5d6ff}.num{color:#f2cc60}.cmt{color:#3d5a6b;font-style:italic}
+/* Cards */
+.q-card{background:var(--bg2);border:1px solid rgba(255,176,32,.06);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:.75rem;transition:border-color .2s}
+.q-card.correct{border-color:rgba(0,230,118,.3)}
+.q-card.wrong{border-color:rgba(255,71,87,.3)}
+.q-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.q-num{font-size:10px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px;font-weight:700}
+.q-sec-tag{font-size:10px;color:var(--text3);font-weight:600}
+.q-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.55;margin-bottom:.75rem}
+.q-mission{font-size:12.5px;color:var(--gold);font-weight:700;margin-bottom:.6rem;padding:.4rem .75rem;background:rgba(255,176,32,.06);border-radius:5px;border-right:2px solid var(--gold)}
+.options{display:flex;flex-direction:column;gap:.4rem}
+.option{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .8rem;background:var(--bg3);border:1px solid rgba(255,255,255,.04);border-radius:7px;cursor:pointer;transition:all .15s;user-select:none}
+.option:hover:not(.disabled){border-color:rgba(255,176,32,.2);background:rgba(255,176,32,.04)}
+.option.disabled{cursor:default}
+.option.correct-ans{border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.07)}
+.option.wrong-ans{border-color:rgba(255,71,87,.4);background:rgba(255,71,87,.07)}
+.opt-letter{width:20px;height:20px;border-radius:4px;background:var(--bg);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;font-family:var(--mono)}
+.option.correct-ans .opt-letter{background:rgba(0,230,118,.2);border-color:rgba(0,230,118,.5);color:var(--green)}
+.option.wrong-ans .opt-letter{background:rgba(255,71,87,.2);border-color:rgba(255,71,87,.5);color:var(--red)}
+.opt-text{font-size:12.5px;color:var(--text2);line-height:1.5;font-family:var(--mono);direction:ltr;text-align:left}
+.option.correct-ans .opt-text{color:var(--text)}
+.explanation{background:var(--bg3);border-right:2px solid var(--gold);border-radius:0 6px 6px 0;padding:.6rem .85rem;margin-top:.6rem;display:none}
+.explanation.show{display:block}
+.exp-label{font-size:10px;font-weight:700;color:var(--gold);font-family:var(--mono);margin-bottom:.25rem}
+.exp-text{font-size:12.5px;color:var(--text2);line-height:1.6;direction:rtl;text-align:right}
+/* Finish */
+.finish-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
+.finish-score{font-size:2.5rem;font-weight:900;font-family:var(--mono);color:var(--gold);margin-bottom:.5rem}
+.finish-grade{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.finish-sub{font-size:.9rem;color:var(--text2);margin-bottom:1.5rem}
+.retry-btn{background:var(--gold);color:var(--bg);border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font)}
+.level-link{display:inline-block;background:transparent;color:var(--text2);border:1px solid rgba(255,255,255,.1);padding:10px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;margin-top:.5rem;margin-right:.5rem;transition:all .15s}
+.level-link:hover{border-color:var(--gold);color:var(--gold)}
+@media(max-width:768px){
+  .ltabs{display:none}
+  .hero{padding:1.25rem .75rem 1rem}
+  .hero-title{font-size:1.5rem}
+  .main{padding:1rem .5rem 3rem}
+  .q-text{font-size:13px}
+  .opt-text{font-size:11px}
+  .q-code{font-size:11px}
+}
+</style>
+
+<meta name="description" content="An expert-level SQL quiz: the hardest questions with explanations — RANK, LAG, correlated subqueries, and optimization. For anyone preparing for tough interviews.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-expert.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-expert.html">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="Multiple-Choice Questions — Expert | SQL">
+<meta property="og:description" content="An expert-level SQL quiz: the hardest questions with explanations — RANK, LAG, correlated subqueries, and optimization. For anyone preparing for tough interviews.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Multiple-Choice Questions — Expert | SQL">
+<meta name="twitter:description" content="An expert-level SQL quiz: the hardest questions with explanations — RANK, LAG, correlated subqueries, and optimization. For anyone preparing for tough interviews.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL Expert Quiz",
+        "item": "https://egrosman1.github.io/sql-course/quiz-expert.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "Expert SQL Questions — Free Quiz | SQL.course",
+    "description": "An expert-level SQL quiz: the hardest questions with explanations — RANK, LAG, correlated subqueries, and optimization. For anyone preparing for tough interviews.",
+    "url": "https://egrosman1.github.io/sql-course/quiz-expert.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Quiz",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "Free SQL Course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body data-quiz-id="expert">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← Home</a>
+  <div class="topnav-title">🏆 Questions — Expert</div>
+  <div class="topnav-right">
+    <div class="ltabs">
+      <a href="quiz-beginner.html" class="ltab">🌱 Beginner</a>
+      <a href="quiz-medium.html" class="ltab">📗 Intermediate</a>
+      <a href="quiz-advanced2.html" class="ltab">🧠 Advanced</a>
+      <a href="quiz-expert.html" class="ltab active">🏆 Expert</a>
+      <a href="../quiz-expert.html" class="ltab" title="עברית">🇮🇱 עברית</a><a href="quiz-expert.html" class="ltab" title="English" aria-current="page">🇺🇸 English</a>
+    </div>
+    <div class="score-badge" id="scoreText">✅ 0 / 0</div>
+  </div>
+</div>
+
+<div class="fb-bar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Sign in with Google
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 Save progress</button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 History</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">Sign out</button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🏆 LEVEL 4 · EXPERT</div>
+  <h1 class="hero-title">Pick the <em>correct query</em></h1>
+  <p class="hero-desc">Each question has a task — pick the correct SQL query. 20 challenging questions.</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">answered</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">correct</div></div>
+    <div class="hs"><div class="hs-n">20</div><div class="hs-l">questions</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">score</div></div>
+  </div>
+</div>
+
+<div class="prog-bar-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">0 / 20</div>
+  <div class="score-display" id="scoreDisplay">0%</div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const Q=[
+  {n:1,m:"Show the employee name and the length of their name.",o:[
+    "SELECT name, COUNT(name) FROM employees;",
+    "SELECT name, LENGTH(name) FROM employees;",
+    "SELECT name, SIZE(name) FROM employees;",
+    "SELECT name, SUM(CHAR) FROM employees;"
+  ],c:1,e:"LENGTH (or LEN) is the function for measuring characters. COUNT counts rows, not characters."},
+  {n:2,m:"Show all customers whose name starts with A.",o:[
+    "SELECT * FROM customers WHERE name = 'A%';",
+    "SELECT * FROM customers WHERE name LIKE '%A';",
+    "SELECT * FROM customers WHERE name LIKE 'A%';",
+    "SELECT * FROM customers WHERE name IN ('A*');"
+  ],c:2,e:"LIKE with a trailing % searches for the start of a string. Answer A would look for a name that is exactly 'A%'."},
+  {n:3,m:"Compute the average salary by department, only for departments with an average above 5000.",o:[
+    "SELECT dept, AVG(salary) FROM emp WHERE AVG(salary) > 5000 GROUP BY dept;",
+    "SELECT dept, AVG(salary) FROM emp GROUP BY dept HAVING AVG(salary) > 5000;",
+    "SELECT dept, AVG(salary) FROM emp GROUP BY dept WHERE AVG(salary) > 5000;",
+    "SELECT dept, AVG(salary) FROM emp HAVING AVG(salary) > 5000;"
+  ],c:1,e:"You cannot use WHERE on an aggregate function — only HAVING. You also need GROUP BY."},
+  {n:4,m:"Join orders with customers and also show customers with no orders.",o:[
+    "SELECT * FROM Customers c INNER JOIN Orders o ON c.id = o.cust_id;",
+    "SELECT * FROM Customers c LEFT JOIN Orders o ON c.id = o.cust_id;",
+    "SELECT * FROM Customers c RIGHT JOIN Orders o ON c.id = o.cust_id;",
+    "SELECT * FROM Customers c CROSS JOIN Orders o;"
+  ],c:1,e:"A LEFT JOIN keeps all the rows from the left table (Customers), even without a match."},
+  {n:5,m:"Show the 3 employees with the highest salary (SQL Server).",o:[
+    "SELECT * FROM emp ORDER BY salary DESC LIMIT 3;",
+    "SELECT TOP 3 * FROM emp ORDER BY salary ASC;",
+    "SELECT * FROM emp WHERE salary = MAX(salary) LIMIT 3;",
+    "SELECT TOP 3 * FROM emp ORDER BY salary DESC;"
+  ],c:3,e:"You need ORDER BY DESC so the highest are on top, then TOP 3. Answer B sorts ascending — wrong."},
+  {n:6,m:"Retrieve employees who work in departments that exist in the 'offices' table.",o:[
+    "SELECT * FROM emp WHERE dept_id EXISTS (SELECT id FROM offices);",
+    "SELECT * FROM emp WHERE dept_id IN (SELECT id FROM offices);",
+    "SELECT * FROM emp WHERE dept_id = (SELECT id FROM offices);",
+    "SELECT * FROM emp WHERE dept_id LIKE (SELECT id FROM offices);"
+  ],c:1,e:"The subquery returns a list — use IN. Answer C would fail if more than one office is returned."},
+  {n:7,m:"Show the name, salary, and the company-wide average salary next to each employee (without collapsing rows).",o:[
+    "SELECT name, salary, AVG(salary) FROM employees;",
+    "SELECT name, salary, AVG(salary) OVER() FROM employees;",
+    "SELECT name, salary, AVG(salary) GROUP BY name;",
+    "SELECT name, salary, AVG(salary) OVER(PARTITION BY name) FROM employees;"
+  ],c:1,e:"An empty OVER() = a window over the whole table. It shows the company average next to each row without collapsing."},
+  {n:8,m:"Replace all occurrences of '2023' with '2024' in the year column.",o:[
+    "SELECT REPLACE(year_col, '2023', '2024') FROM table;",
+    "SELECT SUBSTITUTE(year_col, '2023', '2024') FROM table;",
+    "SELECT year_col LIKE '2024' FROM table;",
+    "SELECT year_col = '2024' FROM table;"
+  ],c:0,e:"REPLACE is the standard function for replacing a substring. SUBSTITUTE does not exist in SQL."},
+  {n:9,m:"Find the day of the week of the order date (SQL Server).",o:[
+    "SELECT DAY(order_date) FROM orders;",
+    "SELECT DATEPART(weekday, order_date) FROM orders;",
+    "SELECT WEEK(order_date) FROM orders;",
+    "SELECT EXTRACT(DAY FROM order_date) FROM orders;"
+  ],c:1,e:"DATEPART(weekday) returns the day of the week (1-7). DAY() returns the day of the month (1-31)."},
+  {n:10,m:"Retrieve all products that have no price (NULL).",o:[
+    "SELECT * FROM products WHERE price = NULL;",
+    "SELECT * FROM products WHERE price IS EMPTY;",
+    "SELECT * FROM products WHERE price IS NULL;",
+    "SELECT * FROM products WHERE price NOT EXISTS;"
+  ],c:2,e:"In SQL you do not use = against NULL. The correct operator is IS NULL."},
+  {n:11,m:"Joining a table to itself to find an employee and their manager.",o:[
+    "SELECT e.name, m.name FROM emp e JOIN emp m ON e.mgr_id = m.emp_id;",
+    "SELECT name FROM emp WHERE id = mgr_id;",
+    "SELECT * FROM emp SELF JOIN emp;",
+    "SELECT e.name + m.name FROM emp e, emp m;"
+  ],c:0,e:"A SELF JOIN is done by referencing the same table with two different aliases and joining them."},
+  {n:12,m:"Show a running row number for each employee by join date.",o:[
+    "SELECT name, COUNT(*) OVER(ORDER BY join_date) FROM emp;",
+    "SELECT name, ROW_NUMBER() OVER(ORDER BY join_date) FROM emp;",
+    "SELECT name, RANK() OVER(PARTITION BY join_date) FROM emp;",
+    "SELECT name, LINE_ID() FROM emp;"
+  ],c:1,e:"ROW_NUMBER() is the dedicated function for a unique running sequence number."},
+  {n:13,m:"Show employees whose salary is higher than the average salary in their department.",o:[
+    "SELECT * FROM emp e WHERE salary > (SELECT AVG(salary) FROM emp);",
+    "SELECT * FROM emp e WHERE salary > (SELECT AVG(salary) FROM emp WHERE dept_id = e.dept_id);",
+    "SELECT * FROM emp GROUP BY dept_id HAVING salary > AVG(salary);",
+    "SELECT * FROM emp WHERE salary > AVG(salary) OVER(PARTITION BY dept_id);"
+  ],c:1,e:"This is a correlated subquery — it compares each employee to the average of their specific department."},
+  {n:14,m:"Find the difference in days between the shipping date and the order date.",o:[
+    "SELECT shipping_date - order_date FROM orders;",
+    "SELECT DATEDIFF(day, order_date, shipping_date) FROM orders;",
+    "SELECT DATE_SUB(shipping_date, order_date) FROM orders;",
+    "SELECT AGE(shipping_date, order_date) FROM orders;"
+  ],c:1,e:"DATEDIFF(day, start, end) is a common function for computing differences in SQL Server."},
+  {n:15,m:"Combine the results of two similar tables without duplicates.",o:[
+    "SELECT name FROM table1 JOIN SELECT name FROM table2;",
+    "SELECT name FROM table1 UNION ALL SELECT name FROM table2;",
+    "SELECT name FROM table1 UNION SELECT name FROM table2;",
+    "SELECT name FROM table1 + SELECT name FROM table2;"
+  ],c:2,e:"UNION combines and removes duplicates. UNION ALL keeps duplicates (faster)."},
+  {n:16,m:"Retrieve the first 3 characters of a product code.",o:[
+    "SELECT SUBSTRING(code, 1, 3) FROM products;",
+    "SELECT LEFT(code, 3) FROM products;",
+    "SELECT code(1,3) FROM products;",
+    "Answers A and B are correct."
+  ],c:3,e:"Both LEFT and SUBSTRING can do the task — both are valid."},
+  {n:17,m:"Compute the total orders per customer, including customers who did not order.",o:[
+    "SELECT c.name, SUM(o.amount) FROM Customers c INNER JOIN Orders o ON c.id = o.cid GROUP BY c.name;",
+    "SELECT c.name, SUM(o.amount) FROM Customers c LEFT JOIN Orders o ON c.id = o.cid GROUP BY c.name;",
+    "SELECT c.name, SUM(o.amount) FROM Customers c LEFT JOIN Orders o ON c.id = o.cid;",
+    "SELECT c.name, SUM(o.amount) FROM Orders o RIGHT JOIN Customers c ON o.cid = c.id;"
+  ],c:1,e:"You need a LEFT JOIN to include customers with no orders, and GROUP BY to use SUM."},
+  {n:18,m:"Find the value of the next row in the 'price' column.",o:[
+    "SELECT price, PREVIOUS(price) OVER(ORDER BY id) FROM products;",
+    "SELECT price, LAG(price) OVER(ORDER BY id) FROM products;",
+    "SELECT price, LEAD(price) OVER(ORDER BY id) FROM products;",
+    "SELECT price, NEXT(price) FROM products;"
+  ],c:2,e:"LEAD brings a value from a row ahead, LAG brings a value from a row behind. PREVIOUS and NEXT do not exist."},
+  {n:19,m:"Show only the year from a date (PostgreSQL/Standard SQL).",o:[
+    "SELECT EXTRACT(YEAR FROM order_date) FROM orders;",
+    "SELECT YEAR_ONLY(order_date) FROM orders;",
+    "SELECT DATEPART(y, order_date) FROM orders;",
+    "SELECT SUBSTR(order_date, 1, 4) FROM orders;"
+  ],c:0,e:"EXTRACT is the standard ANSI form for extracting a part of a date."},
+  {n:20,m:"Check whether a customer placed at least one order without returning the order data.",o:[
+    "SELECT * FROM Customers WHERE id IN (SELECT cust_id FROM Orders);",
+    "SELECT * FROM Customers WHERE EXISTS (SELECT 1 FROM Orders WHERE Orders.cust_id = Customers.id);",
+    "SELECT * FROM Customers c JOIN Orders o ON c.id = o.cust_id;",
+    "Answers A and B are logically correct."
+  ],c:3,e:"Both IN and EXISTS check existence. Answer C would return duplicates (a row per order)."}
+];
+
+const L=['A','B','C','D'];
+let answers={},correct=0;
+
+function updateScore(){
+  const tot=Object.keys(answers).length;
+  const pct=tot>0?Math.round(correct/tot*100):0;
+  document.getElementById('scoreText').textContent='✅ '+correct+' / '+tot;
+  document.getElementById('scoreFill').style.width=(Math.round(correct/Q.length*100))+'%';
+  document.getElementById('progTxt').textContent=tot+' / '+Q.length;
+  document.getElementById('scoreDisplay').textContent=pct+'%';
+  document.getElementById('heroAnswered').textContent=tot;
+  document.getElementById('heroCorrect').textContent=correct;
+  document.getElementById('heroPct').textContent=pct+'%';
+  if(tot===Q.length) showFinish();
+}
+
+function selectOption(qi,oi){
+  if(answers[qi]!==undefined)return;
+  const q=Q[qi];const ok=oi===q.c;
+  answers[qi]=oi;if(ok)correct++;
+  const card=document.getElementById('qcard-'+qi);
+  card.classList.add(ok?'correct':'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i===q.c)o.classList.add('correct-ans');
+    if(i===oi&&!ok)o.classList.add('wrong-ans');
+  });
+  const exp=document.getElementById('exp-'+qi);
+  exp.querySelector('.exp-text').innerHTML=(ok?'✅ Correct! ':'❌ Wrong — the correct answer is marked in green. ')+q.e;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc=document.getElementById('mainContent');
+  mc.innerHTML='';
+  mc.innerHTML+='<div class="sec-label">Pick the correct SQL query</div>';
+  Q.forEach((q,i)=>{
+    const opts=q.o.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${L[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    mc.innerHTML+=`
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-meta">
+        <div class="q-num">Question ${q.n}</div>
+        <div class="q-sec-tag">Pick the correct query</div>
+      </div>
+      <div class="q-mission">📋 Task: ${q.m}</div>
+      <div class="options">${opts}</div>
+      <div class="explanation" id="exp-${i}">
+        <div class="exp-label">💡 Explanation</div>
+        <div class="exp-text"></div>
+      </div>
+    </div>`;
+  });
+  mc.innerHTML+=`
+  <div class="finish-card" id="finishCard">
+    <div class="finish-emoji">🏆</div>
+    <div class="finish-title">You finished the expert level!</div>
+    <div class="finish-score" id="finishScore">0/20</div>
+    <div class="finish-grade" id="finishGrade"></div>
+    <div class="finish-sub" id="finishSub"></div>
+    <br>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 Try again</button>
+    <a href="quiz-advanced2.html" class="level-link">🧠 Back to the advanced level</a>
+  </div>`;
+}
+
+function showFinish(){
+  if(window.fbAutoSave&&window.currentUser)window.fbAutoSave(correct,Q.length);
+  const pct=Math.round(correct/Q.length*100);
+  document.getElementById('finishScore').textContent=correct+' / '+Q.length;
+  const grades=[[90,'🏆 SQL Master!','Perfect command of the expert level!'],[75,'⭐ Excellent','Almost perfect — a little more practice!'],[60,'👍 Good','Worth reviewing the queries you missed.'],[0,'💪 Keep practicing','Every mistake is a chance to learn!']];
+  const [,grade,sub]=grades.find(([t])=>pct>=t);
+  document.getElementById('finishGrade').textContent=grade;
+  document.getElementById('finishSub').textContent=sub;
+  document.getElementById('finishCard').classList.add('show');
+  document.getElementById('finishCard').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function resetQuiz(){
+  answers={};correct=0;
+  document.getElementById('finishCard').classList.remove('show');
+  updateScore();buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuiz();updateScore();
+</script>
+
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const app=initializeApp({apiKey:"AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",authDomain:"sql-course-507b5.firebaseapp.com",projectId:"sql-course-507b5",storageBucket:"sql-course-507b5.firebasestorage.app",messagingSenderId:"999664091380",appId:"1:999664091380:web:349959985ae11ce8c51ea1"});
+const auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
+let currentUser=null;window.currentUser=null;const QID='expert';
+onAuthStateChanged(auth,async(user)=>{
+  currentUser=user;window.currentUser=user;
+  const li=document.getElementById('fb-login-btn'),lo=document.getElementById('fb-logout-btn'),ui=document.getElementById('fb-user-info'),hb=document.getElementById('fb-history-btn'),sb=document.getElementById('fb-save-btn');
+  if(user){
+    document.getElementById('fb-user-name').textContent=user.displayName;
+    document.getElementById('fb-user-photo').src=user.photoURL;
+    document.getElementById('fb-user-photo').style.display='block';
+    li.style.display='none';lo.style.display='flex';ui.style.display='flex';hb.style.display='flex';sb.style.display='flex';
+    await loadP();await loadH();
+  }else{li.style.display='flex';lo.style.display='none';ui.style.display='none';hb.style.display='none';sb.style.display='none';}
+});
+window._fbLogin=window.fbLogin=async()=>{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}};
+window._fbLogout=window.fbLogout=async()=>{await signOut(auth);};
+window._fbToggleHistory=window.fbToggleHistory=()=>{const w=document.getElementById('fb-history-wrap');w.style.display=w.style.display==='none'?'block':'none';};
+window._triggerSave=window.triggerSave=async()=>{
+  if(!currentUser){window.fbLogin();return;}
+  const txt=(document.getElementById('scoreText')?.textContent||'0 / 0').replace('✅ ','');
+  const p=txt.split('/');const sc=parseInt(p[0])||0,tot=parseInt(p[1])||0;
+  if(tot===0){showT('⚠️ Answer at least one question first!');return;}
+  await saveP(sc,tot);
+};
+async function saveP(score,total){
+  if(!currentUser)return;
+  const pct=Math.round(score/total*100);
+  await setDoc(doc(db,'users',currentUser.uid,'quizzes',QID),{score,total,pct,lastUpdate:new Date().toISOString()},{merge:true});
+  await addDoc(collection(db,'users',currentUser.uid,'history'),{quizId:QID,score,total,pct,date:new Date().toISOString()});
+  showT('✅ Progress saved to the cloud!');await loadH();
+}
+window.fbAutoSave=saveP;
+async function loadP(){
+  if(!currentUser)return;
+  const s=await getDoc(doc(db,'users',currentUser.uid,'quizzes',QID));
+  if(s.exists()){const d=s.data();const el=document.getElementById('fb-saved-score');el.textContent=`Last attempt: ${d.score}/${d.total} (${d.pct}%)`;el.style.display='block';}
+}
+async function loadH(){
+  if(!currentUser)return;
+  const q=query(collection(db,'users',currentUser.uid,'history'),orderBy('date','desc'),limit(10));
+  const s=await getDocs(q);const hist=[];
+  s.forEach(d=>hist.push(d.data()));
+  renderC(hist.filter(h=>h.quizId===QID));
+}
+function renderC(h){
+  const p=document.getElementById('fb-history-panel');
+  if(!h.length){p.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">No history yet — answer and save!</p>';return;}
+  const rev=[...h].reverse();
+  const best=Math.max(...h.map(x=>x.pct)),avg=Math.round(h.reduce((a,x)=>a+x.pct,0)/h.length);
+  const bars=rev.map(x=>{const d=new Date(x.date);const lbl=`${d.getDate()}/${d.getMonth()+1}`;const col=x.pct>=80?'var(--gold)':x.pct>=50?'var(--aq)':'#FF4060';return`<div class="hbar-wrap"><div class="hbar-val">${x.pct}%</div><div class="hbar" style="height:${Math.max(x.pct*1.1,8)}px;background:${col}"></div><div class="hbar-lbl">${lbl}</div></div>`;}).join('');
+  p.innerHTML=`<div class="hstats-row"><div class="hstat-mini"><div class="hstat-n" style="color:var(--gold)">${best}%</div><div class="hstat-l">Personal best</div></div><div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${avg}%</div><div class="hstat-l">Average</div></div><div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${h.length}</div><div class="hstat-l">Attempts</div></div></div><div class="hchart">${bars}</div>`;
+}
+function showT(msg){let t=document.getElementById('fb-toast');if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>
+</body>
+</html>

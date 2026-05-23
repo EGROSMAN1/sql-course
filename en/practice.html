@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Practice Online — 110+ Free Exercises | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-right{margin-right:auto}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 16px;font-size:12px;font-family:var(--mono);color:var(--yellow);font-weight:700}
+
+/* LESSON TABS */
+.lesson-tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;gap:0;overflow-x:auto}
+.lesson-tab{padding:1rem 1.5rem;font-size:14px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.lesson-tab:hover{color:var(--text2)}
+.lesson-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.lesson-badge{font-size:10px;background:var(--bg4);padding:2px 8px;border-radius:10px;font-family:var(--mono)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* LESSON HEADER */
+.lesson-header{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.lesson-header::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:linear-gradient(to bottom,var(--cyan),var(--blue2))}
+.lesson-title{font-size:1.4rem;font-weight:900;margin-bottom:.4rem}
+.lesson-desc{color:var(--text2);font-size:14px;line-height:1.7}
+.lesson-topics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.topic-tag{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:3px 12px;border-radius:12px;font-size:11px;font-family:var(--mono);font-weight:600}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-info{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:.5rem}
+.progress-track{background:var(--bg3);border-radius:4px;height:6px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue2),var(--cyan));border-radius:4px;transition:width .4s ease}
+
+/* DIFFICULTY FILTER */
+.filter-row{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:12px;color:var(--text3);font-weight:600}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.filter-btn:hover{border-color:var(--border2)}
+.filter-btn.active-f{background:var(--blue3);border-color:var(--blue);color:var(--blue)}
+.f-b.active-f{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.4);color:var(--green)}
+.f-m.active-f{background:rgba(255,140,66,.1);border-color:rgba(255,140,66,.4);color:var(--orange)}
+.f-a.active-f{background:rgba(210,168,255,.1);border-color:rgba(210,168,255,.4);color:var(--purple)}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:1rem;overflow:hidden;transition:border-color .2s}
+.q-card.solved{border-color:var(--green2)}
+.q-card.hidden-q{display:none}
+.q-head{padding:1rem 1.1rem;display:flex;align-items:flex-start;gap:.85rem;cursor:pointer}
+.q-head:hover{background:rgba(255,255,255,.02)}
+.q-num{width:28px;height:28px;border-radius:8px;background:var(--bg4);color:var(--text3);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.q-card.solved .q-num{background:var(--green2);color:#fff}
+.q-text{flex:1;font-size:14px;line-height:1.6;color:var(--text)}
+.q-right{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
+.diff-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.db-b{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.db-m{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.25)}
+.db-a{background:rgba(210,168,255,.1);color:var(--purple);border:1px solid rgba(210,168,255,.25)}
+.check-icon{font-size:16px;opacity:0;transition:opacity .2s}
+.q-card.solved .check-icon{opacity:1}
+
+/* ANSWER REVEAL */
+.q-body{display:none;border-top:1px solid var(--border)}
+.q-card.open .q-body{display:block}
+.hint-box{background:rgba(74,158,255,.04);border-right:3px solid var(--blue2);padding:.75rem 1rem;margin:.75rem 1rem 0}
+.hint-box p{color:var(--text2);font-size:13px;line-height:1.6}
+.hint-box p strong{color:var(--text);font-weight:600}
+.code-block{margin:.75rem 1rem;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.code-hdr{background:var(--bg4);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600}
+.code-actions{display:flex;gap:.5rem}
+.copy-btn{background:transparent;border:1px solid var(--border);color:var(--text2);cursor:pointer;font-size:11px;font-family:var(--font);padding:3px 10px;border-radius:4px;transition:all .15s}
+.copy-btn:hover{border-color:var(--border2);color:var(--text)}
+.copy-btn.ok{color:var(--green);border-color:var(--green2)}
+.mark-btn{background:var(--green2);border:1px solid var(--green);color:#fff;cursor:pointer;font-size:11px;font-family:var(--font);padding:3px 10px;border-radius:4px;font-weight:700;transition:all .15s}
+.mark-btn:hover{background:var(--green)}
+.q-card.solved .mark-btn{background:var(--bg4);border-color:var(--border);color:var(--text3)}
+pre{background:var(--bg);padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+/* SYNTAX COLORS */
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.num{color:#79c0ff}
+.cmt{color:#4a6080;font-style:italic}.tbl{color:#7ee787}.col{color:#e6edf3}.op{color:#ffa657}
+
+/* LESSON PANE */
+.lesson-pane{display:none}
+.lesson-pane.active{display:block}
+
+/* FINISH BANNER */
+.finish-banner{background:linear-gradient(135deg,rgba(0,230,118,.08),rgba(0,168,84,.05));border:1px solid var(--green2);border-radius:14px;padding:2rem;text-align:center;margin-top:2rem;display:none}
+.finish-banner.show{display:block}
+
+/* SECTION DIVIDER */
+.section-divider{background:linear-gradient(135deg,rgba(74,158,255,.08),rgba(0,212,255,.05));border:1px solid rgba(74,158,255,.2);border-right:4px solid var(--cyan);border-radius:10px;padding:.9rem 1.2rem;margin:1.5rem 0 .75rem;display:flex;align-items:center;gap:.75rem}
+.section-divider-icon{font-size:1.3rem}
+.section-divider-text{flex:1}
+.section-divider-title{font-size:.95rem;font-weight:700;color:var(--cyan);margin-bottom:.15rem}
+.section-divider-sub{font-size:12px;color:var(--text3)}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.4rem;font-weight:900;color:var(--green);margin-bottom:.5rem}
+.finish-sub{color:var(--text2);font-size:14px}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px;transition:all .2s}
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.topnav-title{font-size:12px}
+.main{padding:.75rem .6rem 3rem}
+.lesson-tabs{padding:0;overflow-x:auto;flex-wrap:nowrap}
+.lesson-tab{font-size:11px;padding:.6rem .6rem;white-space:nowrap;flex-shrink:0}
+.lesson-badge{display:none}
+.section-divider{padding:.5rem .6rem;font-size:13px}
+.q-card{padding:.9rem}
+.q-text{font-size:13.5px}
+.q-hint,.q-answer{font-size:12.5px;padding:.6rem .75rem}
+.q-meta{flex-wrap:wrap;gap:.3rem}
+.score-badge{font-size:11px;padding:3px 8px}
+.hamburger{display:flex}
+.topnav-links{display:none}
+.topnav-title{font-size:12px}
+.main{padding:1rem .75rem 4rem}
+pre{font-size:11px;line-height:1.5}
+.layout{flex-direction:column}
+.sidebar{display:none}
+.video-grid{grid-template-columns:1fr}
+.filter-row{flex-wrap:wrap;gap:.4rem}
+.lesson-tabs{padding:0}
+.lesson-tab{font-size:11px;padding:.6rem .4rem}
+.progress-section{flex-direction:column;gap:1rem}
+.step-body p{font-size:13px}
+.file-grid{grid-template-columns:1fr}
+.section-divider{padding:.6rem .75rem}
+.q-text{font-size:13px}
+.code-block{margin:.5rem}
+}
+
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+</style>
+
+<meta name="description" content="Free online SQL practice: 110+ interactive exercises on the Northwind database, with full solutions and table schemas. From the basics to job-interview questions.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/practice.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/practice.html">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="SQL Practice">
+<meta property="og:description" content="Free online SQL practice: 110+ interactive exercises on the Northwind database, with full solutions and table schemas. From the basics to job-interview questions.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SQL Practice">
+<meta name="twitter:description" content="Free online SQL practice: 110+ interactive exercises on the Northwind database, with full solutions and table schemas. From the basics to job-interview questions.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL Practice",
+        "item": "https://egrosman1.github.io/sql-course/practice.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "SQL Practice Online — 110+ Free Exercises | SQL.course",
+    "description": "Free online SQL practice: 110+ interactive exercises on the Northwind database, with full solutions and table schemas. From the basics to job-interview questions.",
+    "url": "https://egrosman1.github.io/sql-course/practice.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Exercise",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "Free SQL Course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "How can I practice SQL for free?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "The practice page offers 110+ interactive SQL exercises, organized by difficulty, with a full solution and the table schema for every question. All free, no signup required."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Which database do the exercises use?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "The exercises are based on the Northwind database — customers, orders, products, employees, and suppliers. The table-schema panel on the page shows every column so you know what to write against."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Is this practice suitable for job-interview prep?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. The exercises build up gradually from the basics to data-analyst interview-level questions, including JOIN, GROUP BY, subqueries, and Window Functions."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<h1 class="sr-only">Interactive SQL Practice</h1>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← Home</a>
+  <div class="topnav-title">✏️ Practice</div>
+  <a href="../practice.html" class="topnav-link" title="עברית" style="margin-inline-start:auto">🇮🇱 עברית</a><a href="practice.html" class="topnav-link" title="English" style="margin-inline-start:auto" aria-current="page">🇺🇸 English</a>
+  <div class="topnav-right">
+    <div class="score-badge" id="globalScore">✅ 0 / 105</div>
+  </div>
+</div>
+
+<!-- LESSON TABS -->
+<div class="lesson-tabs">
+  <div class="lesson-tab active" onclick="showLesson(0)" id="tab-0">
+    <span>📗</span> Lesson 1 Practice
+    <span class="lesson-badge" id="badge-0">30 questions</span>
+  </div>
+  <div class="lesson-tab" onclick="showLesson(1)" id="tab-1">
+    <span>📘</span> Lesson 2 Practice
+    <span class="lesson-badge" id="badge-1">20 questions</span>
+  </div>
+  <div class="lesson-tab" onclick="showLesson(2)" id="tab-2">
+    <span>📙</span> Lesson 3 Practice
+    <span class="lesson-badge" id="badge-2">20 questions</span>
+  </div>
+  <div class="lesson-tab" onclick="showLesson(3)" id="tab-3">
+    <span>📕</span> Lesson 4 Practice
+    <span class="lesson-badge" id="badge-3">35 questions</span>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="tirgul-makif.html">🎯 Full Practice</a>
+  <a href="setup.html">🛠️ Setup</a>
+  <a href="videos.html">🎬 Video Course</a>
+  <a href="course.html">📚 Learning Material</a>
+  <a href="practice.html">✏️ Practice</a>
+</div>
+
+<!-- SCHEMA REFERENCE PANEL -->
+<style>
+.schema-wrap{max-width:1100px;margin:.6rem auto 0;padding:0 1rem}
+.schema-bar{display:flex;align-items:center;gap:.6rem;background:var(--bg3);border:1px solid var(--text3);border-radius:10px;padding:.7rem 1rem;cursor:pointer;user-select:none;transition:border-color .2s}
+.schema-bar:hover{border-color:var(--blue)}
+.schema-bar .s-title{font-weight:700;color:var(--text);font-size:14.5px}
+.schema-bar .s-sub{color:var(--text2);font-size:12px;font-weight:400}
+.schema-bar .s-chev{margin-inline-start:auto;color:var(--cyan);transition:transform .25s;font-size:13px}
+.schema-wrap.open .s-chev{transform:rotate(180deg)}
+.schema-body{display:none;margin-top:.6rem;background:var(--bg2);border:1px solid var(--text3);border-radius:10px;padding:1rem}
+.schema-wrap.open .schema-body{display:block}
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.7rem}
+.tbl-card{background:var(--bg3);border:1px solid var(--text3);border-radius:8px;overflow:hidden}
+.tbl-card h4{margin:0;padding:.5rem .7rem;background:var(--bg4);color:var(--cyan);font-family:var(--mono,monospace);font-size:13.5px;border-bottom:1px solid var(--text3);display:flex;align-items:center;gap:.4rem}
+.tbl-card ul{list-style:none;margin:0;padding:.4rem .7rem}
+.tbl-card li{font-family:var(--mono,monospace);font-size:12.5px;color:var(--text2);padding:.12rem 0;display:flex;align-items:center;gap:.4rem}
+.tbl-card li .pk{color:var(--orange)}
+.tbl-card li .fk{color:var(--purple)}
+.tbl-card li .ct{color:var(--text3);font-size:11px;margin-inline-start:auto}
+.schema-legend{margin-top:.7rem;font-size:12px;color:var(--text2);display:flex;gap:1.2rem;flex-wrap:wrap}
+.schema-note{margin-top:.5rem;font-size:11.5px;color:var(--text3);line-height:1.6}
+</style>
+<div class="schema-wrap" id="schemaWrap">
+  <div class="schema-bar" onclick="document.getElementById('schemaWrap').classList.toggle('open')">
+    <span style="font-size:16px">📋</span>
+    <span class="s-title">Table Schemas <span class="s-sub">— the Northwind database (the columns the questions use)</span></span>
+    <span class="s-chev">▼</span>
+  </div>
+  <div class="schema-body">
+    <div class="schema-grid" id="schemaGrid"></div>
+    <div class="schema-legend">
+      <span>🔑 Primary key</span><span>🔗 Foreign key (links to another table)</span>
+      <span><span style="color:var(--text3)">TEXT/INT/REAL</span> = data type</span>
+    </div>
+    <div class="schema-note">💡 Tip: each question states which table to query. If you're missing a column name — look it up here. Column names are lowercase (case-sensitive).</div>
+  </div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const SCHEMA=[
+ {t:"products",ico:"📦",cols:[["id","INT","pk"],["product_name","TEXT"],["category","TEXT"],["category_id","INT","fk→categories"],["list_price","REAL"],["standard_cost","REAL"],["supplier_id","INT","fk→suppliers"],["discontinued","INT"]]},
+ {t:"customers",ico:"👤",cols:[["id","INT","pk"],["company","TEXT"],["last_name","TEXT"],["first_name","TEXT"],["job_title","TEXT"],["email_address","TEXT"],["city","TEXT"],["country_region","TEXT"]]},
+ {t:"employees",ico:"🧑‍💼",cols:[["id","INT","pk"],["last_name","TEXT"],["first_name","TEXT"],["job_title","TEXT"],["email_address","TEXT"],["hire_date","TEXT"],["city","TEXT"],["salary","REAL"]]},
+ {t:"orders",ico:"🧾",cols:[["id","INT","pk"],["customer_id","INT","fk→customers"],["employee_id","INT","fk→employees"],["shipper_id","INT","fk→shippers"],["order_date","TEXT"],["shipped_date","TEXT"],["required_date","TEXT"],["ship_city","TEXT"],["ship_country_region","TEXT"],["shipping_fee","REAL"]]},
+ {t:"order_details",ico:"📋",cols:[["id","INT","pk"],["order_id","INT","fk→orders"],["product_id","INT","fk→products"],["quantity","INT"],["unit_price","REAL"],["discount","REAL"]]},
+ {t:"shippers",ico:"🚚",cols:[["id","INT","pk"],["company","TEXT"],["phone","TEXT"]]}
+];
+(function(){
+  const g=document.getElementById('schemaGrid');
+  g.innerHTML=SCHEMA.map(tb=>`<div class="tbl-card"><h4>${tb.ico} ${tb.t}</h4><ul>`+
+    tb.cols.map(c=>{
+      const key=c[2]==='pk'?'<span class="pk">🔑</span>':(c[2]&&c[2].indexOf('fk')===0?'<span class="fk">🔗</span>':'<span style="width:14px;display:inline-block"></span>');
+      const ref=c[2]&&c[2].indexOf('fk')===0?` <span style="color:var(--text3);font-size:10px">${c[2].replace('fk','')}</span>`:'';
+      return `<li>${key}<span>${c[0]}</span>${ref}<span class="ct">${c[1]}</span></li>`;
+    }).join('')+`</ul></div>`).join('');
+})();
+const lessons=[
+{
+title:"Lesson 1 Practice",
+desc:"Text functions, numbers, sorting, and dates (Part A) + WHERE with combined functions (Part B) — 30 questions.",
+topics:["UPPER","LENGTH","ROUND","DISTINCT","LIMIT","YEAR","MONTH","DATE_FORMAT","DATEDIFF","DATE_ADD","WHERE","LOWER","<>"],
+questions:[
+// Level 1 — Warm-up
+{q:"Show all product names (product_name) in uppercase from products.",diff:"b",
+hint:"UPPER() wraps the column name. No matter what was entered — the output will be uppercase.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">product_name</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"Retrieve the length (LENGTH) of each employee's last name (last_name) from employees.",diff:"b",
+hint:"LENGTH() returns a number — how many characters are in the string. It's worth also showing last_name for clarity.",
+code:`<span class="kw">SELECT</span> <span class="col">last_name</span>, <span class="fn">LENGTH</span>(<span class="col">last_name</span>)\n<span class="kw">FROM</span> <span class="tbl">employees</span>;`},
+{q:"Show the price (list_price) of all products rounded to a whole number (ROUND) from products.",diff:"b",
+hint:"ROUND(column, 0) rounds to zero decimal places = a whole number. You can also use ROUND(column) without the second parameter.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="fn">ROUND</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">rounded_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"Retrieve the list of unique cities (city) from customers.",diff:"b",
+hint:"DISTINCT removes duplicates. Place it after SELECT and before the column name.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>;`},
+{q:"Retrieve the first 5 customers from customers, sorted by company name in ascending order (A-Z).",diff:"b",
+hint:"ORDER BY company ASC (ASC is the default). Then LIMIT 5.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">company</span> <span class="kw">ASC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+// Level 2 — Dates
+{q:"Show the year (YEAR) each order was placed, from orders.",diff:"b",
+hint:"YEAR(order_date) extracts only the year. Add id too for context.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_year</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Show the month (MONTH) each order was placed, from orders.",diff:"b",
+hint:"MONTH() returns a number 1-12. Include id to know which order it refers to.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_month</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Show the current date and time (NOW) together with today's date (CURDATE).",diff:"b",
+hint:"NOW() includes the time, CURDATE() only the date. Can be run without FROM.",
+code:`<span class="kw">SELECT</span> <span class="fn">NOW</span>() <span class="kw">AS</span> <span class="str">current_datetime</span>, <span class="fn">CURDATE</span>() <span class="kw">AS</span> <span class="str">today</span>;`},
+{q:"Show the order date (order_date) in 'DD/MM/YYYY' format for all orders in orders.",diff:"b",
+hint:"DATE_FORMAT(column, '%d/%m/%Y'). %d=day, %m=month, %Y=4-digit year.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">il_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Show the 3 most recent orders (by order_date) from orders.",diff:"b",
+hint:"ORDER BY order_date DESC = newest to oldest. Then LIMIT 3.",
+code:`<span class="kw">SELECT</span> *\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">ORDER BY</span> <span class="col">order_date</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">3</span>;`},
+// Level 3 — Combinations
+{q:"Retrieve product names and their price after a 10% discount, rounded to 2 decimals. (products)",diff:"m",
+hint:"A 10% discount = multiply by 0.9. ROUND(list_price * 0.9, 2) for two decimals.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">0.9</span>, <span class="num">2</span>) <span class="kw">AS</span> <span class="str">discounted_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"Show unique job titles (job_title) from employees, sorted alphabetically.",diff:"m",
+hint:"DISTINCT removes duplicates; ORDER BY job_title ASC sorts alphabetically.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">job_title</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="col">job_title</span> <span class="kw">ASC</span>;`},
+{q:"Retrieve employees' first names in lowercase (LOWER), sorted by name length (shortest to longest). (employees)",diff:"m",
+hint:"LOWER() for lowercase. ORDER BY LENGTH(first_name) ASC = shortest to longest.",
+code:`<span class="kw">SELECT</span> <span class="fn">LOWER</span>(<span class="col">first_name</span>) <span class="kw">AS</span> <span class="str">lower_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="fn">LENGTH</span>(<span class="col">first_name</span>) <span class="kw">ASC</span>;`},
+{q:"Compute shipping days: DATEDIFF between shipped_date and order_date for each order. (orders)",diff:"m",
+hint:"DATEDIFF(later, earlier). Here: DATEDIFF(shipped_date, order_date). The order must be correct!",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">shipping_days</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Payment forecast: show the order date + 30 days (DATE_ADD) for each order. (orders)",diff:"m",
+hint:"DATE_ADD(order_date, INTERVAL 30 DAY). Exact syntax matters!",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+// Level 4 — Advanced
+{q:"Find the 5 slowest shipments: shipping days from highest to lowest, limit to 5. (orders)",diff:"a",
+hint:"DATEDIFF(shipped_date, order_date) then ORDER BY DESC LIMIT 5. Filter out NULL if needed.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">days_diff</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">ORDER BY</span> <span class="str">days_diff</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"Products with the longest names: name + length, descending, limit to 10. (products)",diff:"a",
+hint:"LENGTH(product_name) in two places — in SELECT and in ORDER BY. You can define an alias and use it in ORDER BY.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">LENGTH</span>(<span class="col">product_name</span>) <span class="kw">AS</span> <span class="str">name_length</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="fn">LENGTH</span>(<span class="col">product_name</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">10</span>;`},
+{q:"Show the month name ('January', etc.) of the order date, for the 5 oldest orders. (orders)",diff:"a",
+hint:"DATE_FORMAT(order_date, '%M') returns the month name in English. ORDER BY order_date ASC for the oldest.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%M'</span>) <span class="kw">AS</span> <span class="str">month_name</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">ORDER BY</span> <span class="col">order_date</span> <span class="kw">ASC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"Customer cities in UPPER, without duplicates, sorted in reverse order (Z-A). (customers)",diff:"a",
+hint:"SELECT DISTINCT UPPER(city). ORDER BY city DESC — sort by the original column, not the UPPER.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="fn">UPPER</span>(<span class="col">city</span>) <span class="kw">AS</span> <span class="str">upper_city</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">city</span> <span class="kw">DESC</span>;`},
+{q:"Cheap-products report: name, original price, sale price (half price rounded to a whole number). Sort cheapest to most expensive, limit to 20. (products)",diff:"a",
+hint:"ROUND(list_price * 0.5) = half price. ORDER BY list_price ASC = cheapest first. LIMIT 20.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">0.5</span>) <span class="kw">AS</span> <span class="str">sale_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">ASC</span>\n<span class="kw">LIMIT</span> <span class="num">20</span>;`},
+// ===== Part B: WHERE with combined functions =====
+{q:"⭐ Part B — product names in UPPER, only for products priced over 50. (products)",diff:"m",
+hint:"UPPER(product_name) in SELECT, and WHERE list_price > 50 to filter. The function operates on the rows that remain after filtering.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">product_name</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
+{q:"Show company and city from customers — only from 'London', sorted by company name A-Z. (customers)",diff:"m",
+hint:"WHERE city = 'London' + ORDER BY company ASC.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">city</span> = <span class="str">'London'</span>\n<span class="kw">ORDER BY</span> <span class="col">company</span> <span class="kw">ASC</span>;`},
+{q:"Order ID + date in DD/MM/YYYY format — only orders from 2006. (orders)",diff:"m",
+hint:"WHERE YEAR(order_date) = 2006 + DATE_FORMAT(order_date, '%d/%m/%Y') in SELECT.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">israel_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>) = <span class="num">2006</span>;`},
+{q:"First name and its length — only employees who are not 'Sales Representative'. (<> or !=) (employees)",diff:"m",
+hint:"WHERE job_title <> 'Sales Representative'. <> and != are identical in SQL.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="fn">LENGTH</span>(<span class="col">first_name</span>) <span class="kw">AS</span> <span class="str">name_len</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">job_title</span> <> <span class="str">'Sales Representative'</span>;`},
+{q:"The 5 most recent orders placed in December (month 12). (orders)",diff:"m",
+hint:"WHERE MONTH(order_date) = 12, then ORDER BY order_date DESC, LIMIT 5.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>) = <span class="num">12</span>\n<span class="kw">ORDER BY</span> <span class="col">order_date</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"Products priced >= 100: name, original price, and price after a 25% discount, rounded. (products)",diff:"m",
+hint:"WHERE list_price >= 100 + ROUND(list_price * 0.75) = a 25% discount.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">0.75</span>) <span class="kw">AS</span> <span class="str">discounted_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> >= <span class="num">100</span>;`},
+{q:"ID + order date + ship date — only orders with a gap > 10 days. (orders + DATEDIFF)",diff:"a",
+hint:"WHERE DATEDIFF(shipped_date, order_date) > 10. Filters directly by the DATEDIFF result.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>, <span class="col">shipped_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) > <span class="num">10</span>;`},
+{q:"Unique cities in LOWER — only cities whose length is 5 characters or fewer. (customers)",diff:"a",
+hint:"WHERE LENGTH(city) <= 5 filters by length. SELECT DISTINCT LOWER(city) shows it without duplicates.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="fn">LOWER</span>(<span class="col">city</span>)\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="fn">LENGTH</span>(<span class="col">city</span>) <= <span class="num">5</span>;`},
+{q:"Orders from '2006-03-15' only: ID + payment due (a month later). (orders + DATE_ADD)",diff:"a",
+hint:"WHERE order_date = '2006-03-15'. DATE_ADD(order_date, INTERVAL 1 MONTH) = one month forward.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">1</span> <span class="kw">MONTH</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">order_date</span> = <span class="str">'2006-03-15'</span>;`},
+{q:"Cheap-products report (price < 20): name in UPPER + rounded price, sorted most-expensive to cheapest, limit to 10. (products)",diff:"a",
+hint:"WHERE list_price < 20 + UPPER(product_name) + ROUND(list_price) + ORDER BY list_price DESC LIMIT 10.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">product_name</span>), <span class="fn">ROUND</span>(<span class="col">list_price</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> < <span class="num">20</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">10</span>;`},
+]
+},
+
+{
+title:"Lesson 2 Practice",
+desc:"WHERE, IN, BETWEEN, LIKE, IS NULL, GROUP BY, COUNT, SUM, AVG — 20 questions.",
+topics:["WHERE","AND/OR","IN","BETWEEN","LIKE","IS NULL","GROUP BY","COUNT","SUM","AVG","HAVING","ORDER BY"],
+questions:[
+// Level 1
+{q:"Retrieve products priced (list_price) over 50 from products.",diff:"b",
+hint:"WHERE list_price > 50. Simple and fast. You can add product_name alongside it.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
+{q:"Retrieve customers from the USA only, from customers.",diff:"b",
+hint:"WHERE country_region = 'USA'. Note the quotes around the text.",
+code:`<span class="kw">SELECT</span> *\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>;`},
+{q:"Retrieve products from the 'Beverages' or 'Condiments' categories. (products)",diff:"b",
+hint:"IN ('Beverages','Condiments') = shorthand for OR. Readable and efficient.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">category</span> <span class="kw">IN</span> (<span class="str">'Beverages'</span>, <span class="str">'Condiments'</span>);`},
+{q:"Retrieve orders with a shipping fee between 20 and 50. (orders)",diff:"b",
+hint:"BETWEEN includes the endpoints. Equivalent to >= 20 AND <= 50.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipping_fee</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span>;`},
+{q:"Retrieve orders not yet shipped (shipped_date empty/NULL). (orders)",diff:"b",
+hint:"IS NULL, not = NULL! A classic beginner mistake to remember.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;`},
+// Level 2
+{q:"Retrieve employees whose email address contains 'northwindtraders'. (employees)",diff:"b",
+hint:"LIKE '%northwindtraders%' — % on both sides searches within the string.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>, <span class="col">email_address</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders%'</span>;`},
+{q:"How many products are in each category? (products + GROUP BY)",diff:"b",
+hint:"GROUP BY category; COUNT(*) counts rows in each group.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
+{q:"What is the total shipping fee per shipping company? (orders, GROUP BY shipper_id)",diff:"b",
+hint:"SUM(shipping_fee) totals. GROUP BY shipper_id splits into groups.",
+code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
+{q:"What is the average price of products in each category? (products)",diff:"b",
+hint:"AVG(list_price) + GROUP BY category.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
+{q:"Show suppliers and their highest price, sorted from most to least expensive. (products)",diff:"b",
+hint:"MAX(list_price) + GROUP BY supplier_ids + ORDER BY MAX(list_price) DESC.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_ids</span>,\n       <span class="fn">MAX</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">max_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_ids</span>\n<span class="kw">ORDER BY</span> <span class="str">max_price</span> <span class="kw">DESC</span>;`},
+// Level 3
+{q:"Show categories that have more than 3 products. (HAVING)",diff:"m",
+hint:"HAVING COUNT(*) > 3 — filters groups after grouping. You can't use WHERE with COUNT.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">3</span>;`},
+{q:"Retrieve customers from France and Germany only. (customers)",diff:"m",
+hint:"IN ('France','Germany') = a more convenient shorthand than OR.",
+code:`<span class="kw">SELECT</span> *\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> <span class="kw">IN</span> (<span class="str">'France'</span>, <span class="str">'Germany'</span>);`},
+{q:"Show products priced between 10 and 30 and from the 'Beverages' category. (AND + BETWEEN)",diff:"m",
+hint:"Two conditions with AND: BETWEEN for price, and = for category.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> <span class="kw">BETWEEN</span> <span class="num">10</span> <span class="kw">AND</span> <span class="num">30</span>\n  <span class="kw">AND</span> <span class="col">category</span> = <span class="str">'Beverages'</span>;`},
+{q:"WHERE before GROUP BY: average price per supplier — only products over 20. (products)",diff:"m",
+hint:"WHERE list_price > 20 filters before GROUP BY. The average is computed only from the remaining rows.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_ids</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_ids</span>;`},
+{q:"Show order IDs that have more than 3 distinct items. (order_details + HAVING)",diff:"m",
+hint:"GROUP BY order_id, HAVING COUNT(*) > 3. Counting items in each order.",
+code:`<span class="kw">SELECT</span> <span class="col">order_id</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">items_count</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span>\n<span class="kw">GROUP BY</span> <span class="col">order_id</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">3</span>;`},
+// Level 4
+{q:"The 3 suppliers with the most products: supplier + count, descending, limit to 3. (products)",diff:"a",
+hint:"GROUP BY supplier_ids, COUNT(*), ORDER BY COUNT(*) DESC, LIMIT 3.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_ids</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_ids</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(*) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">3</span>;`},
+{q:"Show cities that have more than 2 customers, sorted by count (descending). (customers)",diff:"a",
+hint:"HAVING COUNT(*) > 2, ORDER BY COUNT(*) DESC.",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">customer_count</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">2</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(*) <span class="kw">DESC</span>;`},
+{q:"Products priced above their category average: name + category + price. (Correlated Subquery)",diff:"a",
+hint:"Correlated Subquery: WHERE list_price > (SELECT AVG... FROM products p2 WHERE p2.category = p1.category). Give an alias to both products references.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p1</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > (\n  <span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>)\n  <span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p2</span>\n  <span class="kw">WHERE</span> <span class="col">p2.category</span> = <span class="col">p1.category</span>\n);`},
+{q:"Orders shipped to a city starting with 'S' — how many in each city? (LIKE + GROUP BY)",diff:"a",
+hint:"WHERE ship_city LIKE 'S%' filters cities starting with S. Then GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="col">ship_city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">orders_count</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">ship_city</span> <span class="kw">LIKE</span> <span class="str">'S%'</span>\n<span class="kw">GROUP BY</span> <span class="col">ship_city</span>\n<span class="kw">ORDER BY</span> <span class="str">orders_count</span> <span class="kw">DESC</span>;`},
+{q:"The most expensive category on average — show the ID and average price, limit to 1 result. (products)",diff:"a",
+hint:"GROUP BY category, ORDER BY AVG(list_price) DESC, LIMIT 1.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>\n<span class="kw">ORDER BY</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">1</span>;`},
+]
+},
+
+{
+title:"Lesson 3 Practice",
+desc:"Advanced GROUP BY with text functions, dates, HAVING, sorting, and reports — 20 questions.",
+topics:["GROUP BY","COUNT","AVG","MAX","MIN","SUM","UPPER","LOWER","WHERE + GROUP BY","HAVING","YEAR","MONTH","ORDER BY"],
+questions:[
+{q:"Show a list of cities (city) in UPPER, and next to each city the number of customers living there. (customers)",diff:"b",
+hint:"UPPER(city) in SELECT and in GROUP BY. COUNT(id) counts.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">city</span>) <span class="kw">AS</span> <span class="str">city_upper</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">customer_count</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>;`},
+{q:"Show job titles (job_title) in LOWER and count employees in each role. (employees)",diff:"b",
+hint:"LOWER(job_title) in SELECT, GROUP BY job_title (the original).",
+code:`<span class="kw">SELECT</span> <span class="fn">LOWER</span>(<span class="col">job_title</span>) <span class="kw">AS</span> <span class="str">title_lower</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">count</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">GROUP BY</span> <span class="col">job_title</span>;`},
+{q:"Show category_id and the average price (AVG) per category. (products)",diff:"b",
+hint:"GROUP BY category_id, AVG(list_price).",
+code:`<span class="kw">SELECT</span> <span class="col">category_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category_id</span>;`},
+{q:"Show supplier_id and the highest price (MAX) each supplier charges. (products)",diff:"b",
+hint:"GROUP BY supplier_id, MAX(list_price).",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">MAX</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">max_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
+{q:"Total shipping fees (SUM of shipping_fee) per shipper_id. (orders)",diff:"b",
+hint:"GROUP BY shipper_id, SUM(shipping_fee).",
+code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>, <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_fee</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
+{q:"Cities in UPPER + number of customers — only from France. (customers + WHERE)",diff:"b",
+hint:"WHERE country = 'France' first, then GROUP BY city. UPPER only in SELECT.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">city</span>), <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country</span> = <span class="str">'France'</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>;`},
+{q:"Average price per supplier — only products priced > 20. (products + WHERE)",diff:"m",
+hint:"WHERE list_price > 20 before GROUP BY supplier_id. Filtering happens before grouping.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
+{q:"How many orders were shipped to each city (ship_city)? Exclude 'London'. (orders)",diff:"m",
+hint:"WHERE ship_city <> 'London' (not equal) — then GROUP BY ship_city.",
+code:`<span class="kw">SELECT</span> <span class="col">ship_city</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">ship_city</span> <> <span class="str">'London'</span>\n<span class="kw">GROUP BY</span> <span class="col">ship_city</span>;`},
+{q:"Minimum price per category — only products under 50. (products + WHERE + MIN)",diff:"m",
+hint:"WHERE list_price < 50, GROUP BY category_id, MIN(list_price).",
+code:`<span class="kw">SELECT</span> <span class="col">category_id</span>, <span class="fn">MIN</span>(<span class="col">list_price</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> < <span class="num">50</span>\n<span class="kw">GROUP BY</span> <span class="col">category_id</span>;`},
+{q:"Count employees by city — only 'Sales Representative'. (employees)",diff:"m",
+hint:"WHERE job_title = 'Sales Representative', GROUP BY city.",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">job_title</span> = <span class="str">'Sales Representative'</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>;`},
+{q:"How many orders were placed in each year? (YEAR + GROUP BY + orders)",diff:"m",
+hint:"YEAR(order_date) inside GROUP BY. In MySQL you can put a function directly in GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">yr</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>);`},
+{q:"Month number + order count — only for 2006. (MONTH + WHERE + GROUP BY)",diff:"m",
+hint:"WHERE YEAR(order_date) = 2006 first, then GROUP BY MONTH(order_date).",
+code:`<span class="kw">SELECT</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">mo</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="fn">YEAR</span>(<span class="col">order_date</span>) = <span class="num">2006</span>\n<span class="kw">GROUP BY</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>);`},
+{q:"For each customer — the latest order date (MAX). (orders + GROUP BY customer_id)",diff:"m",
+hint:"GROUP BY customer_id, MAX(order_date) = each customer's most recent order.",
+code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="fn">MAX</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">last_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">customer_id</span>;`},
+{q:"How many employees were hired in each year? (YEAR(hire_date) + GROUP BY)",diff:"m",
+hint:"Same principle as orders — YEAR(hire_date) in SELECT and in GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="fn">YEAR</span>(<span class="col">hire_date</span>) <span class="kw">AS</span> <span class="str">hire_year</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">GROUP BY</span> <span class="fn">YEAR</span>(<span class="col">hire_date</span>);`},
+{q:"How many customers in each country+city combination? Country in UPPER, city in LOWER. (customers)",diff:"a",
+hint:"GROUP BY country, city (the originals). SELECT UPPER(country), LOWER(city). Both in GROUP BY.",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">country</span>), <span class="fn">LOWER</span>(<span class="col">city</span>), <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">country</span>, <span class="col">city</span>;`},
+{q:"Group employees by city and role: show city, role, count. (employees)",diff:"a",
+hint:"GROUP BY two columns: city, job_title. Count = COUNT(id).",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="col">job_title</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>, <span class="col">job_title</span>;`},
+{q:"How many products does each supplier have in each category? (GROUP BY both)",diff:"a",
+hint:"GROUP BY supplier_id, category_id — grouping by two columns together.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="col">category_id</span>, <span class="fn">COUNT</span>(<span class="col">id</span>)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>, <span class="col">category_id</span>;`},
+{q:"3 suppliers with the most products: supplier + count, descending, limit to 3. (products)",diff:"a",
+hint:"GROUP BY supplier_id, COUNT(*) DESC, LIMIT 3.",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">3</span>;`},
+{q:"The most expensive category on average: category_id + average price, limit to 1. (products)",diff:"a",
+hint:"ORDER BY AVG(list_price) DESC, LIMIT 1 — takes only the first.",
+code:`<span class="kw">SELECT</span> <span class="col">category_id</span>,\n       <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category_id</span>\n<span class="kw">ORDER BY</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">1</span>;`},
+{q:"Employees with employee_id < 5: ID, order count, latest order — sorted by ascending count. (orders)",diff:"a",
+hint:"WHERE employee_id < 5, GROUP BY employee_id, COUNT(id), MAX(order_date), ORDER BY COUNT(id) ASC.",
+code:`<span class="kw">SELECT</span> <span class="col">employee_id</span>,\n       <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">orders_count</span>,\n       <span class="fn">MAX</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">last_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">employee_id</span> < <span class="num">5</span>\n<span class="kw">GROUP BY</span> <span class="col">employee_id</span>\n<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">ASC</span>;`},
+]
+}
+,
+{
+title:"Lesson 4 Practice",
+desc:"JOIN with GROUP BY + subqueries + CASE WHEN — 35 questions, from beginner to expert.",
+topics:["JOIN","GROUP BY","COUNT","SUM","AVG","HAVING","LEFT JOIN","Subquery","NOT IN","EXISTS","Correlated","CASE WHEN","ORDER BY CASE"],
+questions:[
+// Part A: JOIN + GROUP BY (10 questions)
+{q:"Customers and order counts: company name + total orders, sorted highest to lowest.",diff:"m",section:{icon:"🔗",title:"Part A — JOIN + GROUP BY",sub:"10 questions · joining tables and grouping data"},
+hint:"JOIN customers to orders via customer_id. COUNT(o.id) + GROUP BY c.company + ORDER BY DESC.",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="fn">COUNT</span>(<span class="col">o.id</span>) <span class="kw">AS</span> <span class="str">total_orders</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">GROUP BY</span> <span class="col">c.company</span>\n<span class="kw">ORDER BY</span> <span class="str">total_orders</span> <span class="kw">DESC</span>;`},
+{q:"Shipping summary: shipping-company name + total shipping fees.",diff:"m",
+hint:"JOIN shippers to orders via shipper_id. SUM(o.shipping_fee) + GROUP BY s.company.",
+code:`<span class="kw">SELECT</span> <span class="col">s.company</span>, <span class="fn">SUM</span>(<span class="col">o.shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">shippers</span> <span class="col">s</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">s.id</span> = <span class="col">o.shipper_id</span>\n<span class="kw">GROUP BY</span> <span class="col">s.company</span>;`},
+{q:"Statistics by category: average price + product count — only categories with more than 5 products.",diff:"m",
+hint:"GROUP BY category, AVG(list_price), COUNT(id), HAVING COUNT(id) > 5. No JOIN needed here.",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(<span class="col">id</span>) > <span class="num">5</span>;`},
+{q:"Employee performance: full name + order count — only orders shipped to 'New York'.",diff:"m",
+hint:"JOIN employees to orders, WHERE ship_city = 'New York', GROUP BY e.id, e.first_name, e.last_name.",
+code:`<span class="kw">SELECT</span> <span class="col">e.first_name</span>, <span class="col">e.last_name</span>, <span class="fn">COUNT</span>(<span class="col">o.id</span>) <span class="kw">AS</span> <span class="str">ny_orders</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span> <span class="col">e</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">e.id</span> = <span class="col">o.employee_id</span>\n<span class="kw">WHERE</span> <span class="col">o.ship_city</span> = <span class="str">'New York'</span>\n<span class="kw">GROUP BY</span> <span class="col">e.id</span>, <span class="col">e.first_name</span>, <span class="col">e.last_name</span>;`},
+{q:"The 5 best-selling products: product name + total quantity sold.",diff:"m",
+hint:"JOIN products to order_details via product_id. SUM(od.quantity), ORDER BY DESC, LIMIT 5.",
+code:`<span class="kw">SELECT</span> <span class="col">p.product_name</span>, <span class="fn">SUM</span>(<span class="col">od.quantity</span>) <span class="kw">AS</span> <span class="str">total_sold</span>\n<span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">p.id</span> = <span class="col">od.product_id</span>\n<span class="kw">GROUP BY</span> <span class="col">p.id</span>, <span class="col">p.product_name</span>\n<span class="kw">ORDER BY</span> <span class="str">total_sold</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{q:"Revenue per customer: company name + total revenue (quantity × unit_price), sorted highest first.",diff:"a",
+hint:"3 tables: customers → orders → order_details. SUM(od.quantity * od.unit_price), GROUP BY c.id.",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">total_revenue</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">GROUP BY</span> <span class="col">c.id</span>, <span class="col">c.company</span>\n<span class="kw">ORDER BY</span> <span class="str">total_revenue</span> <span class="kw">DESC</span>;`},
+{q:"Active cities: cities with more than 2 orders + average shipping fee.",diff:"a",
+hint:"GROUP BY ship_city, COUNT(id) > 2 in HAVING, AVG(shipping_fee).",
+code:`<span class="kw">SELECT</span> <span class="col">ship_city</span>, <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">orders_count</span>, <span class="fn">AVG</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">avg_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">ship_city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(<span class="col">id</span>) > <span class="num">2</span>;`},
+{q:"'Dormant' customers: customers who never placed an order. (LEFT JOIN)",diff:"a",
+hint:"LEFT JOIN orders — customers with no orders get NULL. WHERE o.id IS NULL filters them out.",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">WHERE</span> <span class="col">o.id</span> <span class="kw">IS NULL</span>;`},
+{q:"Annual bonus 2006: employee + total sales in 2006 only.",diff:"a",
+hint:"3 tables. WHERE YEAR(o.order_date) = 2006. GROUP BY e.id. ORDER BY total DESC.",
+code:`<span class="kw">SELECT</span> <span class="col">e.first_name</span>, <span class="col">e.last_name</span>,\n       <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">total_2006</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span> <span class="col">e</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">e.id</span> = <span class="col">o.employee_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">WHERE</span> <span class="fn">YEAR</span>(<span class="col">o.order_date</span>) = <span class="num">2006</span>\n<span class="kw">GROUP BY</span> <span class="col">e.id</span>, <span class="col">e.first_name</span>, <span class="col">e.last_name</span>\n<span class="kw">ORDER BY</span> <span class="str">total_2006</span> <span class="kw">DESC</span>;`},
+{q:"Nancy Freehafer: products she sold for over $500. (4 tables + HAVING)",diff:"a",
+hint:"4 tables: employees → orders → order_details → products. WHERE first_name='Nancy'. HAVING SUM > 500.",
+code:`<span class="kw">SELECT</span> <span class="col">p.product_name</span>,\n       <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">revenue</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span> <span class="col">e</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">e.id</span> = <span class="col">o.employee_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>\n<span class="kw">WHERE</span> <span class="col">e.first_name</span> = <span class="str">'Nancy'</span> <span class="kw">AND</span> <span class="col">e.last_name</span> = <span class="str">'Freehafer'</span>\n<span class="kw">GROUP BY</span> <span class="col">p.id</span>, <span class="col">p.product_name</span>\n<span class="kw">HAVING</span> <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) > <span class="num">500</span>;`},
+// Part B: Subqueries (15 questions)
+{q:"⭐ Part B — products cheaper than the overall average. (Subquery in WHERE)",diff:"m",section:{icon:"🧩",title:"Part B — Subqueries",sub:"15 questions · queries within queries"},
+hint:"WHERE list_price < (SELECT AVG(list_price) FROM products). The inner parentheses compute the average.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> < (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">FROM</span> <span class="tbl">products</span>);`},
+{q:"The first order: the ID and date of the oldest order.",diff:"m",
+hint:"WHERE order_date = (SELECT MIN(order_date) FROM orders). The subquery returns a single date.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">order_date</span> = (<span class="kw">SELECT</span> <span class="fn">MIN</span>(<span class="col">order_date</span>) <span class="kw">FROM</span> <span class="tbl">orders</span>);`},
+{q:"Customers with an unusual name: a company name longer than average. (LENGTH + Subquery)",diff:"m",
+hint:"WHERE LENGTH(company) > (SELECT AVG(LENGTH(company)) FROM customers).",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="fn">LENGTH</span>(<span class="col">company</span>) > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="fn">LENGTH</span>(<span class="col">company</span>)) <span class="kw">FROM</span> <span class="tbl">customers</span>);`},
+{q:"Products in the same category as 'Northwind Traders Chai'.",diff:"m",
+hint:"WHERE category = (SELECT category FROM products WHERE product_name = 'Northwind Traders Chai').",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">category</span> = (\n  <span class="kw">SELECT</span> <span class="col">category</span> <span class="kw">FROM</span> <span class="tbl">products</span>\n  <span class="kw">WHERE</span> <span class="col">product_name</span> = <span class="str">'Northwind Traders Chai'</span>\n);`},
+{q:"Employees in the same city as employee number 1 (ID=1).",diff:"m",
+hint:"WHERE city = (SELECT city FROM employees WHERE id = 1). Returns employee 1's city.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">city</span> = (<span class="kw">SELECT</span> <span class="col">city</span> <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">1</span>);`},
+{q:"Who ordered chocolate? Customers who ordered 'Northwind Traders Chocolate'.",diff:"m",
+hint:"A subquery finds the product_id. JOIN customers → orders → order_details with a WHERE on product_id.",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">c.company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">WHERE</span> <span class="col">od.product_id</span> = (\n  <span class="kw">SELECT</span> <span class="col">id</span> <span class="kw">FROM</span> <span class="tbl">products</span>\n  <span class="kw">WHERE</span> <span class="col">product_name</span> = <span class="str">'Northwind Traders Chocolate'</span>\n);`},
+{q:"Orders with above-average shipping fees.",diff:"m",
+hint:"WHERE shipping_fee > (SELECT AVG(shipping_fee) FROM orders).",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipping_fee</span> > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">shipping_fee</span>) <span class="kw">FROM</span> <span class="tbl">orders</span>);`},
+{q:"Customers with no orders — the NOT IN approach.",diff:"m",
+hint:"WHERE id NOT IN (SELECT DISTINCT customer_id FROM orders). Note: NOT IN with NULL can cause problems.",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">id</span> <span class="kw">NOT IN</span> (<span class="kw">SELECT DISTINCT</span> <span class="col">customer_id</span> <span class="kw">FROM</span> <span class="tbl">orders</span>);`},
+{q:"The most expensive product ever ordered (by unit_price in order_details).",diff:"a",
+hint:"WHERE id = (SELECT product_id FROM order_details ORDER BY unit_price DESC LIMIT 1).",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">id</span> = (\n  <span class="kw">SELECT</span> <span class="col">product_id</span> <span class="kw">FROM</span> <span class="tbl">order_details</span>\n  <span class="kw">ORDER BY</span> <span class="col">unit_price</span> <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="num">1</span>\n);`},
+{q:"Employees with the same first letter as employee number 2. (LEFT + Subquery)",diff:"a",
+hint:"WHERE LEFT(first_name, 1) = (SELECT LEFT(first_name, 1) FROM employees WHERE id = 2).",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="fn">LEFT</span>(<span class="col">first_name</span>, <span class="num">1</span>) = (\n  <span class="kw">SELECT</span> <span class="fn">LEFT</span>(<span class="col">first_name</span>, <span class="num">1</span>) <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">2</span>\n);`},
+{q:"Large categories: categories with more products than 'Beverages'.",diff:"a",
+hint:"HAVING COUNT(*) > (SELECT COUNT(*) FROM products WHERE category = 'Beverages').",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*)\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > (\n  <span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">FROM</span> <span class="tbl">products</span>\n  <span class="kw">WHERE</span> <span class="col">category</span> = <span class="str">'Beverages'</span>\n);`},
+{q:"The 'star' customer: the customer with the most orders.",diff:"a",
+hint:"WHERE id = (SELECT customer_id FROM orders GROUP BY customer_id ORDER BY COUNT(*) DESC LIMIT 1).",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">id</span> = (\n  <span class="kw">SELECT</span> <span class="col">customer_id</span> <span class="kw">FROM</span> <span class="tbl">orders</span>\n  <span class="kw">GROUP BY</span> <span class="col">customer_id</span>\n  <span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(*) <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="num">1</span>\n);`},
+{q:"Products more expensive than the average in their category. (Correlated Subquery)",diff:"a",
+hint:"WHERE list_price > (SELECT AVG(list_price) FROM products p2 WHERE p2.category = p1.category). A correlated subquery.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p1</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > (\n  <span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>)\n  <span class="kw">FROM</span> <span class="tbl">products</span> <span class="col">p2</span>\n  <span class="kw">WHERE</span> <span class="col">p2.category</span> = <span class="col">p1.category</span>\n);`},
+{q:"Cities with more customers than the average per city.",diff:"a",
+hint:"HAVING COUNT(*) > (SELECT COUNT(*)/COUNT(DISTINCT city) FROM customers). The average customers per city.",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > (\n  <span class="kw">SELECT</span> <span class="fn">COUNT</span>(*)<span class="op">/</span><span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="col">city</span>) <span class="kw">FROM</span> <span class="tbl">customers</span>\n);`},
+{q:"Total payment for orders from 'Company C' customers. (IN + Subquery)",diff:"a",
+hint:"WHERE o.customer_id IN (SELECT id FROM customers WHERE company LIKE 'Company C%').",
+code:`<span class="kw">SELECT</span> <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span> <span class="col">od</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">od.order_id</span> = <span class="col">o.id</span>\n<span class="kw">WHERE</span> <span class="col">o.customer_id</span> <span class="kw">IN</span> (\n  <span class="kw">SELECT</span> <span class="col">id</span> <span class="kw">FROM</span> <span class="tbl">customers</span>\n  <span class="kw">WHERE</span> <span class="col">company</span> <span class="kw">LIKE</span> <span class="str">'Company C%'</span>\n);`},
+// ===== Part C: CASE WHEN =====
+{q:"⭐ Part C — classify products by price: Low (under 20) / High (20 and up).",diff:"b",section:{icon:"🔀",title:"Part C — CASE WHEN",sub:"10 questions · conditional logic and classifying data"},
+hint:"CASE WHEN list_price < 20 THEN 'Low' ELSE 'High' END AS Price_Category.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">list_price</span> < <span class="num">20</span> <span class="kw">THEN</span> <span class="str">'Low'</span>\n  <span class="kw">ELSE</span> <span class="str">'High'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Price_Category</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"Rate the shipping fee: Free / Regular (up to 50) / Expensive (over 50).",diff:"b",
+hint:"CASE WHEN shipping_fee = 0 THEN 'Free' WHEN shipping_fee <= 50 THEN 'Regular' ELSE 'Expensive' END.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">shipping_fee</span> = <span class="num">0</span> <span class="kw">THEN</span> <span class="str">'Free'</span>\n  <span class="kw">WHEN</span> <span class="col">shipping_fee</span> <= <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'Regular'</span>\n  <span class="kw">ELSE</span> <span class="str">'Expensive'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Shipping_Level</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Product status: discontinued=1 → 'Discontinued', discontinued=0 → 'Active'.",diff:"b",
+hint:"CASE WHEN discontinued = 1 THEN 'Discontinued' WHEN discontinued = 0 THEN 'Active' ELSE 'Unknown' END.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">discontinued</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">discontinued</span> = <span class="num">1</span> <span class="kw">THEN</span> <span class="str">'Discontinued'</span>\n  <span class="kw">WHEN</span> <span class="col">discontinued</span> = <span class="num">0</span> <span class="kw">THEN</span> <span class="str">'Active'</span>\n  <span class="kw">ELSE</span> <span class="str">'Unknown'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Product_Status</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{q:"Export vs domestic: USA → 'Domestic', all other countries → 'Export'.",diff:"b",
+hint:"CASE WHEN ship_country_region = 'USA' THEN 'Domestic' ELSE 'Export' END.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">ship_country_region</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">ship_country_region</span> = <span class="str">'USA'</span> <span class="kw">THEN</span> <span class="str">'Domestic'</span>\n  <span class="kw">ELSE</span> <span class="str">'Export'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Destination_Type</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Classify employees by role: a role containing 'Sales' → 'Sales Dept', otherwise → 'Operations'.",diff:"b",
+hint:"CASE WHEN job_title LIKE '%Sales%' THEN 'Sales Dept' ELSE 'Operations' END. LIKE with % searches within the string.",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>, <span class="col">job_title</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">job_title</span> <span class="kw">LIKE</span> <span class="str">'%Sales%'</span> <span class="kw">THEN</span> <span class="str">'Sales Dept'</span>\n  <span class="kw">ELSE</span> <span class="str">'Operations'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Department</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>;`},
+{q:"Order size by quantity: Small (≤10) / Medium (11-40) / Large (>40). (order_details)",diff:"m",
+hint:"CASE WHEN quantity <= 10 THEN 'Small' WHEN quantity BETWEEN 11 AND 40 THEN 'Medium' ELSE 'Large' END.",
+code:`<span class="kw">SELECT</span> <span class="col">order_id</span>, <span class="col">product_id</span>, <span class="col">quantity</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">quantity</span> <= <span class="num">10</span> <span class="kw">THEN</span> <span class="str">'Small'</span>\n  <span class="kw">WHEN</span> <span class="col">quantity</span> <span class="kw">BETWEEN</span> <span class="num">11</span> <span class="kw">AND</span> <span class="num">40</span> <span class="kw">THEN</span> <span class="str">'Medium'</span>\n  <span class="kw">ELSE</span> <span class="str">'Large'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Size</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span>;`},
+{q:"Split into halves of the year: months 1-6 → 'First Half', 7-12 → 'Second Half'. (orders)",diff:"m",
+hint:"CASE WHEN MONTH(order_date) BETWEEN 1 AND 6 THEN 'First Half' ELSE 'Second Half' END.",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">BETWEEN</span> <span class="num">1</span> <span class="kw">AND</span> <span class="num">6</span> <span class="kw">THEN</span> <span class="str">'First Half'</span>\n  <span class="kw">ELSE</span> <span class="str">'Second Half'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Year_Part</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{q:"Discount in words: discount=0 → 'Full Price', otherwise → 'Discounted Item'. (order_details)",diff:"m",
+hint:"CASE WHEN discount = 0 THEN 'Full Price' ELSE 'Discounted Item' END AS Discount_Note.",
+code:`<span class="kw">SELECT</span> <span class="col">order_id</span>, <span class="col">unit_price</span>, <span class="col">discount</span>,\n<span class="kw">CASE</span>\n  <span class="kw">WHEN</span> <span class="col">discount</span> = <span class="num">0</span> <span class="kw">THEN</span> <span class="str">'Full Price'</span>\n  <span class="kw">ELSE</span> <span class="str">'Discounted Item'</span>\n<span class="kw">END</span> <span class="kw">AS</span> <span class="str">Discount_Note</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span>;`},
+{q:"Custom sort: USA customers first, the rest after — CASE inside ORDER BY.",diff:"m",
+hint:"ORDER BY CASE WHEN country_region = 'USA' THEN 1 ELSE 2 END, company. A very handy trick!",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">country_region</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span>\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">country_region</span> = <span class="str">'USA'</span> <span class="kw">THEN</span> <span class="num">1</span>\n    <span class="kw">ELSE</span> <span class="num">2</span>\n  <span class="kw">END</span>, <span class="col">company</span>;`},
+{q:"Group by price category: how many Low (<20) and how many High (≥20)? CASE inside GROUP BY.",diff:"a",
+hint:"SELECT CASE WHEN list_price < 20 THEN 'Low' ELSE 'High' END AS Price_Range, COUNT(id) ... GROUP BY the same CASE.",
+code:`<span class="kw">SELECT</span>\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> < <span class="num">20</span> <span class="kw">THEN</span> <span class="str">'Low'</span>\n    <span class="kw">ELSE</span> <span class="str">'High'</span>\n  <span class="kw">END</span> <span class="kw">AS</span> <span class="str">Price_Range</span>,\n  <span class="fn">COUNT</span>(<span class="col">id</span>) <span class="kw">AS</span> <span class="str">Total_Products</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span>\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> < <span class="num">20</span> <span class="kw">THEN</span> <span class="str">'Low'</span>\n    <span class="kw">ELSE</span> <span class="str">'High'</span>\n  <span class="kw">END</span>;`},
+]
+}
+];
+
+// STATE
+let solved=[{},{},{},{}];
+let activeLesson=0;
+let activeFilter={0:'all',1:'all',2:'all',3:'all'};
+
+function totalSolved(){
+return Object.keys(solved[0]).length+Object.keys(solved[1]).length+Object.keys(solved[2]).length+Object.keys(solved[3]).length;
+}
+function lessonSolved(li){return Object.keys(solved[li]).length;}
+function updateScore(){
+document.getElementById('globalScore').textContent=`✅ ${totalSolved()} / 105`;
+[0,1,2,3].forEach(li=>{
+const s=lessonSolved(li);
+const t=lessons[li].questions.length;
+document.getElementById('badge-'+li).textContent=`${s}/${t}`;
+const prog=document.getElementById('prog-'+li);
+if(prog)prog.style.width=`${Math.round(s/t*100)}%`;
+const pct=document.getElementById('pct-'+li);
+if(pct)pct.textContent=`${s}/${t} (${Math.round(s/t*100)}%)`;
+const banner=document.getElementById('finish-'+li);
+if(banner)banner.classList.toggle('show',s===t);
+});
+}
+
+function showLesson(idx){
+activeLesson=idx;
+document.querySelectorAll('.lesson-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+document.querySelectorAll('.lesson-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+function toggleQ(li,qi){
+const el=document.getElementById(`q-${li}-${qi}`);
+el.classList.toggle('open');
+}
+
+function markSolved(li,qi){
+if(solved[li][qi]){
+delete solved[li][qi];
+document.getElementById(`q-${li}-${qi}`).classList.remove('solved');
+} else {
+solved[li][qi]=true;
+document.getElementById(`q-${li}-${qi}`).classList.add('solved');
+}
+updateScore();
+}
+
+function copyCode(li,qi,btn){
+const text=document.getElementById(`code-${li}-${qi}`).innerText;
+navigator.clipboard.writeText(text).then(()=>{
+btn.textContent='✅ Copied';btn.classList.add('ok');
+setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('ok')},2000);
+});
+}
+
+function filterDiff(li,diff){
+activeFilter[li]=diff;
+document.querySelectorAll(`.filter-btn[data-lesson="${li}"]`).forEach(b=>{
+b.classList.toggle('active-f', b.dataset.diff===diff);
+});
+lessons[li].questions.forEach((_,qi)=>{
+const el=document.getElementById(`q-${li}-${qi}`);
+if(!el)return;
+const d=lessons[li].questions[qi].diff;
+el.classList.toggle('hidden-q', diff!=='all' && d!==diff);
+});
+}
+
+function diffLabel(d){
+if(d==='b')return`<span class="diff-badge db-b">Warm-up</span>`;
+if(d==='m')return`<span class="diff-badge db-m">Intermediate</span>`;
+return`<span class="diff-badge db-a">Advanced</span>`;
+}
+
+function build(){
+const mc=document.getElementById('mainContent');
+lessons.forEach((ls,li)=>{
+let h=`<div class="lesson-pane${li===0?' active':''}" id="pane-${li}">`;
+// header
+h+=`<div class="lesson-header">
+<div class="lesson-title">${ls.title}</div>
+<div class="lesson-desc">${ls.desc}</div>
+<div class="lesson-topics">${ls.topics.map(t=>`<span class="topic-tag">${t}</span>`).join('')}</div>
+</div>`;
+// progress
+h+=`<div class="progress-wrap">
+<div class="progress-info"><span>Progress</span><span id="pct-${li}">0/${ls.questions.length} (0%)</span></div>
+<div class="progress-track"><div class="progress-fill" id="prog-${li}" style="width:0%"></div></div>
+</div>`;
+// filter
+h+=`<div class="filter-row">
+<span class="filter-label">Filter by level:</span>
+<button class="filter-btn active-f" data-lesson="${li}" data-diff="all" onclick="filterDiff(${li},'all')">All</button>
+<button class="filter-btn f-b" data-lesson="${li}" data-diff="b" onclick="filterDiff(${li},'b')">🟢 Warm-up</button>
+<button class="filter-btn f-m" data-lesson="${li}" data-diff="m" onclick="filterDiff(${li},'m')">🟠 Intermediate</button>
+<button class="filter-btn f-a" data-lesson="${li}" data-diff="a" onclick="filterDiff(${li},'a')">🟣 Advanced</button>
+</div>`;
+// questions
+ls.questions.forEach((q,qi)=>{
+if(q.section){
+h+=`<div class="section-divider">
+  <div class="section-divider-icon">${q.section.icon}</div>
+  <div class="section-divider-text">
+    <div class="section-divider-title">${q.section.title}</div>
+    <div class="section-divider-sub">${q.section.sub}</div>
+  </div>
+</div>`;
+}
+h+=`<div class="q-card" id="q-${li}-${qi}">
+<div class="q-head" onclick="toggleQ(${li},${qi})">
+  <span class="q-num">${qi+1}</span>
+  <span class="q-text">${q.q}</span>
+  <div class="q-right">
+    ${diffLabel(q.diff)}
+    <span class="check-icon">✅</span>
+  </div>
+</div>
+<div class="q-body">
+  <div class="hint-box"><p><strong>💡 Hint:</strong> ${q.hint}</p></div>
+  <div class="code-block">
+    <div class="code-hdr">
+      <span class="code-lang">SQL — Solution</span>
+      <div class="code-actions">
+        <button class="copy-btn" onclick="copyCode(${li},${qi},this)">📋 Copy</button>
+        <button class="mark-btn" onclick="markSolved(${li},${qi})">✅ Solved</button>
+      </div>
+    </div>
+    <pre id="code-${li}-${qi}">${q.code}</pre>
+  </div>
+</div>
+</div>`;
+});
+// finish banner
+h+=`<div class="finish-banner" id="finish-${li}">
+<div class="finish-emoji">🎉</div>
+<div class="finish-title">Great job!</div>
+<div class="finish-sub">You've finished all ${ls.questions.length} questions in this lesson. On to the next!</div>
+</div>`;
+h+='</div>';
+mc.innerHTML+=h;
+});
+updateScore();
+}
+
+build();
+</script>
+<script>
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

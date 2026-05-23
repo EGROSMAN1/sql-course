@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Comprehensive SQL Practice — 135 Interactive Questions | SQL Course</title>
+<meta name="description" content="Free comprehensive SQL practice — 135 interactive questions (SELECT, JOIN, GROUP BY, window functions), an SQL editor that runs in the browser with no installation, full solutions, and data analyst interview prep.">
+<meta name="keywords" content="SQL practice, SQL course, SQL simulator, SQL queries, learn SQL, SELECT, JOIN, GROUP BY, data analyst interview, MySQL, SQLite, data analyst, Data Analyst">
+<meta name="author" content="Eliran Grossman">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="theme-color" content="#0b0f17">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/sql-simulator.html">
+<!-- ====== Open Graph ====== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Free SQL Course — Eliran Grossman">
+<meta property="og:locale" content="he_IL">
+<meta property="og:title" content="Comprehensive SQL Practice — 135 Interactive Questions">
+<meta property="og:description" content="135 interactive SQL questions, a browser-based editor with no installation, full solutions, and data analyst interview prep.">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/sql-simulator.html">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Comprehensive SQL Practice">
+<!-- ====== Twitter ====== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Comprehensive SQL Practice — 135 Interactive Questions">
+<meta name="twitter:description" content="135 interactive SQL questions, a browser-based editor, full solutions, and data analyst interview prep.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+<!-- ====== Favicon (inline SVG) ====== -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f17'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='700' fill='%232dd4bf' text-anchor='middle'%3ESQL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+<style>
+:root{
+  --bg:#0b0f17; --bg2:#111824; --panel:#141c2a; --panel2:#1a2434;
+  --line:#243248; --line2:#30425c;
+  --txt:#eef3f9; --muted:#a7b6cc; --dim:#8094ac;
+  --teal:#2dd4bf; --teal-d:#14b8a6; --cyan:#38bdf8;
+  --green:#4ade80; --red:#fb7185; --amber:#fcd34d;
+  --glow:rgba(45,212,191,.13);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Heebo',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+button{color:inherit}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:var(--bg); color:var(--txt); font-family:var(--sans);
+  line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1100px 600px at 80% -10%, var(--glow), transparent 70%);
+  background-attachment:fixed; min-height:100vh; padding-bottom:env(safe-area-inset-bottom);
+  overflow-x:clip;
+}
+.wrap{max-width:840px;margin:0 auto;padding:0 20px}
+*:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ============ SCREEN: SELECT ============ */
+#screen-select{padding:48px 0 60px}
+.intro{text-align:center;margin-bottom:38px}
+.intro .tag{display:inline-block;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;border:1px solid var(--line2);border-radius:999px;padding:6px 15px;margin-bottom:16px}
+.intro h1{font-size:clamp(1.55rem,5vw,2.7rem);font-weight:800;letter-spacing:-.01em;margin-bottom:10px;line-height:1.18;text-wrap:balance}
+.intro p{color:var(--muted);font-size:1.02rem;max-width:520px;margin:0 auto}
+
+.mode-row{display:flex;gap:10px;justify-content:center;margin:26px 0 30px;flex-wrap:wrap}
+.mode-card{flex:1;min-width:220px;max-width:300px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;text-align:right;transition:all .16s;color:inherit;font-family:inherit}
+.mode-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.mode-card h3{font-size:1.05rem;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.mode-card .ic{width:30px;height:30px;border-radius:9px;background:var(--bg2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;color:var(--teal);font-family:var(--mono);font-size:.95rem}
+.mode-card p{color:var(--muted);font-size:.86rem;line-height:1.5}
+
+.sec-label{font-size:.82rem;color:var(--dim);font-weight:600;letter-spacing:.04em;margin:0 4px 14px;text-transform:uppercase}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px}
+.topic{position:relative;text-align:right;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;transition:all .15s;font-family:inherit;color:inherit;width:100%}
+.topic:hover{border-color:var(--teal-d);transform:translateY(-2px);background:var(--panel2)}
+.topic h3{font-size:.98rem;font-weight:700;margin-bottom:3px}
+.topic .td{font-size:.8rem;color:var(--muted);line-height:1.45;margin-bottom:9px;min-height:34px}
+.topic .meta{display:flex;gap:7px;font-family:var(--mono);font-size:.7rem}
+.topic .pill{border-radius:6px;padding:2px 8px;border:1px solid var(--line)}
+.topic .pill.q{color:var(--cyan)} .topic .pill.m{color:var(--amber)}
+.topic .go{position:absolute;top:15px;left:16px;color:var(--dim);font-size:1.1rem;transition:transform .15s}
+.topic:hover .go{transform:translateX(-4px);color:var(--teal)}
+
+/* ============ SCREEN: PRACTICE ============ */
+#screen-practice{display:none;min-height:100vh;flex-direction:column}
+.pbar{position:sticky;top:0;z-index:40;background:rgba(11,15,23,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.pbar-inner{max-width:840px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back-btn{background:var(--panel);border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:8px 13px;font-family:inherit;font-size:.86rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;flex-shrink:0}
+.back-btn:hover{border-color:var(--teal);color:var(--txt)}
+.hnav-group{display:flex;gap:7px;flex-shrink:0}
+.hnav{background:var(--panel);border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.hnav:hover:not(:disabled){border-color:var(--teal);color:var(--txt)}
+.hnav.primary{background:var(--teal);color:#04231f;border-color:var(--teal)}
+.hnav.primary:hover:not(:disabled){background:var(--cyan)}
+.hnav:disabled{opacity:.38;cursor:default}
+.pbar .ptitle{font-weight:700;font-size:.98rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbar .ptopic{color:var(--dim);font-size:.82rem}
+.progress-wrap{flex:1;min-width:60px}
+.progress-track{height:7px;background:var(--bg2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--cyan));width:0;transition:width .3s;border-radius:999px}
+.pcount{font-family:var(--mono);font-size:.82rem;color:var(--muted);flex-shrink:0;min-width:62px;text-align:center}
+
+.pstage{flex:1;padding:26px 0 30px}
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px 24px 22px;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qcard.solved{border-color:var(--teal-d)}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.qbadge{font-family:var(--mono);font-size:.68rem;font-weight:700;border-radius:7px;padding:4px 9px}
+.qbadge.query{color:var(--cyan);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3)}
+.qbadge.mcq{color:var(--amber);background:rgba(252,211,77,.12);border:1px solid rgba(252,211,77,.3)}
+.qhead .qsolvedmark{margin-inline-start:auto;color:var(--green);font-size:.84rem;font-weight:600;display:none}
+.qdiff{display:inline-flex;align-items:center;gap:6px;margin-inline-start:8px}
+.qdiff .dot{width:7px;height:7px;border-radius:50%;background:var(--line2)}
+.qdiff-lbl{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.02em}
+.qdiff.l1 .dot.on,.qdiff.l2 .dot.on{background:var(--green)}
+.qdiff.l1 .qdiff-lbl,.qdiff.l2 .qdiff-lbl{color:var(--green)}
+.qdiff.l3 .dot.on{background:var(--amber)} .qdiff.l3 .qdiff-lbl{color:var(--amber)}
+.qdiff.l4 .dot.on,.qdiff.l5 .dot.on{background:var(--red)}
+.qdiff.l4 .qdiff-lbl,.qdiff.l5 .qdiff-lbl{color:var(--red)}
+.qcard.solved .qsolvedmark{display:inline}
+.qtext{font-size:1.18rem;font-weight:600;line-height:1.55;white-space:pre-line;margin-bottom:20px}
+
+/* editor */
+.editor-shell{border:1px solid var(--line2);border-radius:12px;overflow:hidden;direction:ltr}
+.CodeMirror{height:auto;min-height:120px;font-family:var(--mono)!important;font-size:.92rem;background:#0c1119!important}
+.CodeMirror-gutters{background:#0a0f17!important;border-right:1px solid var(--line)!important}
+.CodeMirror-scroll{overflow-x:hidden!important}            /* lineWrapping is on → no horizontal scroll needed */
+.CodeMirror-hscrollbar{display:none!important;height:0!important}
+.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{background:#0c1119!important}
+.editor-shell ::-webkit-scrollbar{width:10px;height:0}
+.editor-shell ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+.editor-shell ::-webkit-scrollbar-track,.editor-shell ::-webkit-scrollbar-corner{background:#0c1119}
+.actions{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;align-items:center}
+.btn{border:none;border-radius:10px;padding:11px 18px;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-run{background:var(--teal);color:#04231f}
+.btn-run:hover{background:var(--cyan)}
+.btn-ghost{background:var(--bg2);color:var(--muted);border:1px solid var(--line2)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--txt)}
+.kbd-hint{margin-inline-start:auto;font-size:.76rem;color:var(--dim)}
+.kbd-hint kbd{font-family:var(--mono);background:var(--bg2);border:1px solid var(--line2);border-radius:5px;padding:1px 6px;font-size:.72rem}
+.hintline{font-size:.86rem;color:#e8c45a;margin-top:13px;background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.22);border-radius:10px;padding:11px 14px;display:none}
+.hintline.show{display:block}
+
+.result{margin-top:14px;display:none}
+.result.show{display:block}
+.status{font-size:.95rem;font-weight:600;margin-bottom:10px}
+.status.ok{color:var(--green)} .status.err{color:var(--red)} .status.neutral{color:var(--muted)}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;direction:ltr}
+table.res{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.84rem}
+table.res th{background:var(--bg2);color:var(--teal);text-align:left;padding:9px 13px;border-bottom:1px solid var(--line2);white-space:nowrap;position:sticky;top:0}
+table.res td{padding:8px 13px;border-bottom:1px solid var(--line);color:#d4deec;white-space:nowrap}
+table.res tr:last-child td{border-bottom:none}
+.errmsg{font-family:var(--mono);font-size:.85rem;color:var(--red);background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.28);border-radius:11px;padding:12px 15px;direction:ltr;text-align:left;white-space:pre-wrap}
+.errhint{font-size:.9rem;color:#e8c45a;background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.22);border-radius:10px;padding:11px 14px;margin:10px 0;line-height:1.55}
+
+/* data preview */
+.datapanel{margin:14px 0 4px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.datapanel>summary{cursor:pointer;list-style:none;padding:11px 15px;font-size:.88rem;font-weight:600;color:var(--teal);user-select:none}
+.datapanel>summary::-webkit-details-marker{display:none}
+.datapanel>summary::before{content:'▸ ';display:inline-block;transition:transform .15s;color:var(--dim)}
+.datapanel[open]>summary::before{content:'▾ '}
+.datapanel[open]>summary{border-bottom:1px solid var(--line)}
+.dp-body{padding:12px 13px;display:flex;flex-direction:column;gap:14px;max-height:340px;overflow-y:auto}
+.dp-name{font-family:var(--mono);font-size:.8rem;color:var(--cyan);margin-bottom:6px;font-weight:600}
+.dp-table .tbl-scroll{max-height:none}
+.dp-table table.res{font-size:.78rem}
+.dp-table table.res th{padding:6px 10px}
+.dp-table table.res td{padding:5px 10px}
+.tbl-note{font-size:.76rem;color:var(--dim);padding:7px 4px 2px;text-align:right}
+
+/* mcq */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{text-align:right;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:14px 17px;font-family:inherit;font-size:1rem;color:var(--txt);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:12px;width:100%}
+.opt:hover:not(.locked){border-color:var(--teal);background:var(--panel2)}
+.opt .mark{flex-shrink:0;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line2);font-family:var(--mono);font-size:.82rem;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+.opt.correct{border-color:var(--green);background:rgba(74,222,128,.12)}
+.opt.correct .mark{background:var(--green);border-color:var(--green);color:#04231f}
+.opt.wrong{border-color:var(--red);background:rgba(251,113,133,.12)}
+.opt.wrong .mark{background:var(--red);border-color:var(--red);color:#2a0a0a}
+.opt.locked{cursor:default}
+.explain{margin-top:15px;background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.24);border-radius:12px;padding:14px 17px;font-size:.94rem;display:none}
+.explain.show{display:block}
+.explain b{color:var(--teal)}
+
+.sol-reveal{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.sol-toggle{background:none;border:none;color:var(--dim);font-family:inherit;font-size:.86rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.sol-toggle:hover{color:var(--teal)}
+.sol-code{display:none;margin-top:11px;background:#0c1119;border:1px solid var(--line);border-radius:11px;padding:14px 16px;direction:ltr;text-align:left}
+.sol-code.show{display:block}
+.sol-code code{font-family:var(--mono);font-size:.87rem;color:#d4deec;white-space:pre-wrap;line-height:1.7}
+
+/* nav */
+.pnav{display:flex;gap:11px;margin-top:22px;align-items:center}
+.nav-btn{flex:1;background:var(--panel);border:1px solid var(--line2);color:var(--txt);border-radius:12px;padding:13px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .15s}
+.nav-btn:hover:not(:disabled){border-color:var(--teal);background:var(--panel2)}
+.nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.nav-btn.primary{background:var(--teal);color:#04231f;border-color:var(--teal);flex:1.4}
+.nav-btn.primary:hover{background:var(--cyan)}
+
+.done-card{text-align:center;padding:40px 24px;background:var(--panel);border:1px solid var(--teal-d);border-radius:18px}
+.done-card .big{font-size:2.4rem;margin-bottom:8px}
+.done-card h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.done-card p{color:var(--muted);margin-bottom:20px}
+.done-card .score{font-family:var(--mono);font-size:1.1rem;color:var(--teal);margin-bottom:20px}
+.score-ring{width:128px;height:128px;border-radius:50%;margin:6px auto 14px;display:flex;align-items:center;justify-content:center;transition:background .4s}
+.score-inner{width:98px;height:98px;border-radius:50%;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-pct{font-family:var(--mono);font-size:1.9rem;font-weight:800;line-height:1}
+.score-sub{font-size:.74rem;color:var(--dim);margin-top:3px}
+.grade-label{font-size:1.15rem;font-weight:800;margin-bottom:6px}
+.score-detail{color:var(--muted);font-family:var(--mono);font-size:.92rem;margin-bottom:22px}
+.pscore{font-family:var(--mono);font-size:.8rem;color:var(--teal);flex-shrink:0;font-weight:700}
+
+/* schema chip */
+.schema-link{background:none;border:none;color:var(--dim);font-family:inherit;font-size:.82rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.schema-link:hover{color:var(--teal)}
+.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:80;display:none;backdrop-filter:blur(3px)}
+.drawer-bg.show{display:block}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(430px,92vw);background:var(--bg2);border-right:1px solid var(--line2);z-index:81;transform:translateX(-100%);transition:transform .25s;overflow-y:auto;padding:24px}
+.drawer.show{transform:translateX(0)}
+.drawer h3{font-size:1.15rem;margin-bottom:6px}
+.drawer>p{color:var(--muted);font-size:.87rem;margin-bottom:18px}
+.drawer .tbl{margin-bottom:18px}
+.drawer .tbl h4{font-family:var(--mono);color:var(--teal);font-size:.9rem;margin-bottom:5px}
+.drawer .tbl .cols{font-family:var(--mono);font-size:.77rem;color:#9fb0c6;direction:ltr;text-align:left;background:#0c1119;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.drawer-close{position:absolute;top:15px;left:15px;background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1}
+
+#loading-ov{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--muted)}
+.spinner{width:36px;height:36px;border:3px solid var(--line2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ ERD ============ */
+.erd-fab{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;background:var(--teal);color:#04231f;border:none;border-radius:999px;padding:11px 17px;font-family:var(--sans);font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:all .15s}
+.erd-fab:hover{background:var(--cyan);transform:translateY(-2px)}
+.erd-overlay{position:fixed;inset:0;z-index:90;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.erd-overlay.show{display:flex}
+.erd-bar{display:flex;align-items:center;gap:7px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--bg2);flex-shrink:0}
+.erd-title{font-weight:700;font-size:.92rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.erd-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--line2);color:var(--muted);border-radius:9px;font-size:1.2rem;line-height:1;cursor:pointer;font-family:inherit}
+.erd-icon:hover{border-color:var(--teal);color:var(--txt)}
+.erd-hint{flex-shrink:0;padding:7px 14px;font-size:.76rem;color:var(--muted);background:var(--bg2);border-bottom:1px solid var(--line);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.erd-canvas{flex:1;position:relative;overflow:auto;background:
+  radial-gradient(circle, rgba(48,66,92,.5) 1px, transparent 1px) 0 0/26px 26px,
+  var(--bg);min-height:0}
+.erd-viewport{position:relative}
+.erd-stage{position:relative;transform-origin:0 0;width:1180px;height:1180px}
+.erd-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible}
+.erd-box{position:absolute;width:184px;background:var(--panel);border:1px solid var(--line2);border-radius:11px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:none;cursor:grab;user-select:none;z-index:2}
+.erd-box:active{cursor:grabbing}
+.erd-box-h{background:var(--panel2);color:var(--teal);font-family:var(--mono);font-weight:700;font-size:.84rem;padding:9px 12px;border-bottom:1px solid var(--line2)}
+.erd-col{font-family:var(--mono);font-size:.76rem;color:#c4d2e4;padding:5px 12px;direction:ltr;text-align:left;border-bottom:1px solid rgba(36,50,72,.5);display:flex;align-items:center;gap:5px}
+.erd-col:last-child{border-bottom:none}
+.erd-col.fk{color:var(--cyan)}
+.erd-pk{font-size:.72rem}
+.erd-fklink{margin-inline-start:auto;opacity:.7;font-size:.7rem}
+
+/* ---- autocomplete dropdown ---- */
+.ac-box{position:fixed;z-index:300;max-height:230px;overflow-y:auto;background:var(--panel2);border:1px solid var(--teal-d);border-radius:9px;box-shadow:0 10px 28px rgba(0,0,0,.55);font-family:var(--mono);font-size:.9rem;min-width:150px;display:none}
+.ac-item{padding:9px 13px;color:#c4d2e4;cursor:pointer;direction:ltr;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(36,50,72,.4)}
+.ac-item:last-child{border-bottom:none}
+.ac-item.sel{background:var(--teal);color:#04231f;font-weight:700}
+
+/* ---- SEO content / FAQ / footer (landing only) ---- */
+.seo{max-width:760px;margin:46px auto 0;padding:26px 22px;background:var(--panel);border:1px solid var(--line);border-radius:16px;color:var(--muted);line-height:1.7}
+.seo h2{color:var(--txt);font-size:1.12rem;font-weight:800;margin:22px 0 8px}
+.seo h2:first-child{margin-top:0}
+.seo strong{color:#c4d2e4;font-weight:700}
+.seo p{margin-bottom:6px}
+.seo-list{list-style:none;margin:6px 0 4px;padding:0}
+.seo-list li{padding:7px 2px;border-bottom:1px solid var(--line2)}
+.seo-list li:last-child{border-bottom:none}
+.faq{margin-top:6px}
+.faq details{border:1px solid var(--line2);border-radius:10px;margin-bottom:9px;background:var(--bg2);overflow:hidden}
+.faq summary{cursor:pointer;padding:13px 16px;font-weight:600;color:var(--txt);list-style:none;display:flex;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:'+';color:var(--teal);font-weight:800;margin-inline-end:10px;font-family:var(--mono)}
+.faq details[open] summary::before{content:'\2212'}
+.faq details p{padding:0 16px 14px;color:var(--muted);line-height:1.65;margin:0}
+.site-footer{max-width:760px;margin:26px auto 0;text-align:center;color:var(--dim);font-size:.86rem;line-height:1.7}
+.site-footer a{color:var(--teal);text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
+.muted-fine{font-size:.76rem;color:#5b6b82;margin-top:4px}
+
+@media (max-width:600px){
+  body{font-size:15px}
+  .wrap{padding:0 12px}
+  #screen-select{padding:30px 0 48px}
+  .intro{margin-bottom:26px}
+  .intro .tag{font-size:.68rem;padding:5px 12px;margin-bottom:12px}
+  .mode-row{flex-direction:column;gap:9px;margin:20px 0 24px}
+  .mode-card{max-width:none;min-width:0;padding:15px 16px}
+  .topics{grid-template-columns:1fr}
+  .topic .td{min-height:0}
+
+  .pbar-inner{flex-wrap:wrap;padding:8px 12px;gap:7px 9px}
+  .pbar .ptitle{flex:1;font-size:.88rem;min-width:40px}
+  .progress-wrap{order:5;flex-basis:100%;min-width:0}
+  .hnav-group{order:6;flex-basis:100%;gap:9px}
+  .hnav{flex:1;padding:10px;font-size:.88rem}
+  .back-btn{padding:7px 10px;font-size:.8rem}
+  .pcount{min-width:46px;font-size:.74rem}
+  .pscore{font-size:.74rem}
+
+  .pstage{padding:16px 0 26px}
+  .qcard{padding:16px 13px;border-radius:14px}
+  .qhead{flex-wrap:wrap;gap:7px}
+  .qdiff{margin-inline-start:4px}
+  .qtext{font-size:1.04rem;margin-bottom:14px}
+
+  /* editor: 16px font prevents iOS auto-zoom on focus */
+  .CodeMirror{font-size:16px!important;min-height:104px}
+  .actions{gap:8px}
+  .actions .btn{flex:1 1 auto;padding:12px 14px;font-size:.9rem}
+  .btn-run{flex-basis:100%}
+  .kbd-hint{display:none}
+
+  /* data preview compact + horizontally scrollable */
+  .dp-body{max-height:200px;padding:9px;gap:11px}
+  .dp-table table.res{font-size:.74rem}
+  .datapanel>summary{padding:11px 13px;font-size:.86rem}
+  .tbl-note{font-size:.72rem}
+
+  table.res th,table.res td{padding:7px 10px;font-size:.8rem}
+
+  .opt{padding:13px 14px;font-size:.95rem;gap:10px}
+  .opt .mark{width:24px;height:24px}
+  .explain{font-size:.9rem;padding:13px 14px}
+
+  .pnav{flex-wrap:wrap;gap:9px}
+  .nav-btn{padding:13px;font-size:.92rem}
+  .nav-btn.primary{flex:1.2}
+
+  .drawer{width:100vw;padding:20px 16px}
+  .done-card{padding:30px 18px}
+
+  /* landing SEO content / FAQ / footer */
+  .intro p{font-size:.92rem;line-height:1.55;max-width:none;padding:0 4px}
+  .seo{margin-top:28px;padding:18px 15px;border-radius:14px;font-size:.92rem;line-height:1.65}
+  .seo h2{font-size:1.02rem;margin:17px 0 7px}
+  .seo-list li{padding:8px 2px;font-size:.9rem}
+  .faq summary{padding:12px 13px;font-size:.91rem}
+  .faq details p{padding:0 13px 12px;font-size:.88rem}
+  .site-footer{margin-top:18px;font-size:.82rem;padding:0 6px}
+  .muted-fine{font-size:.72rem}
+}
+@media (max-width:380px){
+  .actions .btn{font-size:.85rem;padding:11px 10px}
+  .qtext{font-size:1rem}
+  .nav-btn{font-size:.88rem;padding:12px}
+  .qdiff-lbl{display:none}
+  .pbar .ptitle{font-size:.85rem}
+}
+/* larger tap targets on touch devices */
+@media (hover:none){
+  .sol-toggle,.schema-link{padding:6px 0;display:inline-block}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://egrosman1.github.io/sql-course/sql-simulator.html#app",
+      "name": "Comprehensive Practice — Interactive SQL Practice",
+      "url": "https://egrosman1.github.io/sql-course/sql-simulator.html",
+      "description": "Free comprehensive SQL practice with 135 interactive questions, a browser-based SQL editor with no installation, and full solutions.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web (any browser)",
+      "inLanguage": "he",
+      "isAccessibleForFree": true,
+      "educationalUse": "practice, job interview prep",
+      "teaches": ["SQL", "SELECT", "WHERE", "JOIN", "GROUP BY", "subqueries", "window functions"],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "ILS" },
+      "author": {
+        "@type": "Person",
+        "name": "Eliran Grossman",
+        "jobTitle": "Data Analyst & SQL Instructor"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is the practice free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is completely free to use, with no registration and no payment." } },
+        { "@type": "Question", "name": "Do I need to install software or a database?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The SQLite engine runs directly in the browser (sql.js), so you can write and run real queries with no installation at all." } },
+        { "@type": "Question", "name": "Which SQL topics are covered in the practice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "SELECT, filtering with WHERE, sorting and limiting, GROUP BY and aggregations, JOIN types, subqueries, window functions such as ROW_NUMBER and RANK, and text and date functions." } },
+        { "@type": "Question", "name": "Is the practice suitable for preparing for a data analyst job interview?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. There are dedicated categories of common SQL interview questions, organized by difficulty level." } },
+        { "@type": "Question", "name": "How many questions are in the practice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "135 questions, of which 76 are queries you run in the SQL editor, organized from easy to hard." } },
+        { "@type": "Question", "name": "Which database do you practice on?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A database with 14 linked tables (employees, departments, orders, products, customers, and more) holding up to 30,000 records." } }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Free SQL Course", "item": "https://egrosman1.github.io/sql-course/" },
+        { "@type": "ListItem", "position": 2, "name": "Comprehensive Practice", "item": "https://egrosman1.github.io/sql-course/sql-simulator.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<noscript><style>#loading-ov{display:none!important}</style></noscript>
+
+<div id="loading-ov"><div class="spinner"></div><div>Loading the SQL engine and building the database…</div></div>
+
+<!-- ============ SCREEN 1: SELECT ============ -->
+<main id="screen-select" class="wrap" role="main">
+  <header class="intro">
+    <span class="tag">// Comprehensive practice</span> <a href="../sql-simulator.html" title="עברית" style="text-decoration:none;font-size:1.15rem">🇮🇱 עברית</a><a href="sql-simulator.html" title="English" style="text-decoration:none;font-size:1.15rem" aria-current="page">🇺🇸 English</a>
+    <h1>Comprehensive SQL Practice — 135 Interactive Questions</h1>
+    <p>Pick a topic and start practicing: one question at a time — you write a query and actually run it on a real database in the browser, or answer a multiple-choice question with a full explanation. 135 questions from easy to hard, free and with no installation.</p>
+  </header>
+
+  <div class="sec-label">Quick mode</div>
+  <div class="mode-row">
+    <button class="mode-card" id="mode-all">
+      <h3><span class="ic">↗</span> Graded track</h3>
+      <p>All <span id="cntAll">—</span> questions in ascending order — from easy to hard. The recommended way to learn.</p>
+    </button>
+    <button class="mode-card" id="mode-queries">
+      <h3><span class="ic">▶</span> Queries only</h3>
+      <p><span id="cntQ">—</span> questions you run in the SQL editor, also from easy to hard.</p>
+    </button>
+  </div>
+
+  <div class="sec-label">Or pick a specific topic</div>
+  <div class="topics" id="topics"></div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="schema-link" id="schemaBtn1">Show the table structure</button>
+  </div>
+
+  <section class="seo" aria-label="About the comprehensive practice">
+    <h2>What you will find in the comprehensive practice</h2>
+    <p>The comprehensive practice lets you practice <strong>SQL queries</strong> directly in the browser — without installing a database. Every query runs on a real <strong>SQLite</strong> engine, gets a score, and comes with a sample solution and an explanation.</p>
+    <ul class="seo-list">
+      <li><strong>SELECT and filtering:</strong> selecting columns, WHERE, DISTINCT, LIKE, IN, BETWEEN.</li>
+      <li><strong>Sorting and limiting:</strong> ORDER BY, LIMIT, OFFSET.</li>
+      <li><strong>Grouping and aggregation:</strong> GROUP BY, HAVING, COUNT, SUM, AVG, MIN, MAX.</li>
+      <li><strong>JOIN:</strong> INNER and LEFT JOIN, anti-join, and tricky joins.</li>
+      <li><strong>Advanced:</strong> subqueries, CASE, window functions (ROW_NUMBER, RANK, DENSE_RANK).</li>
+      <li><strong>Text and date:</strong> UPPER/LOWER, TRIM, REPLACE, strftime, and more.</li>
+      <li><strong>Interview prep:</strong> common SQL questions in data analyst interviews, by difficulty level.</li>
+    </ul>
+
+    <h2>Who the practice is for</h2>
+    <p>For anyone learning <strong>SQL from scratch</strong>, for students, and for job seekers preparing for a <strong>data analyst interview (Data Analyst)</strong>. The questions are organized from easy to hard, so you can progress gradually.</p>
+
+    <h2>The practice database</h2>
+    <p>The practice runs on a database with <strong>14 linked tables</strong> — employees, departments, attendance, orders, order items, products, suppliers, categories, customers, and payments — holding up to <strong>30,000 records</strong>. You can view the full structure and the relationship diagram (ERD) from within the practice.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>Is the practice free?</summary><p>Yes. It is completely free to use, with no registration and no payment.</p></details>
+      <details><summary>Do I need to install software or a database?</summary><p>No. The SQLite engine runs directly in the browser (sql.js), so you can write and run real queries with no installation at all.</p></details>
+      <details><summary>Which SQL topics are covered in the practice?</summary><p>SELECT, filtering with WHERE, sorting and limiting, GROUP BY and aggregations, JOIN types, subqueries, window functions such as ROW_NUMBER and RANK, and text and date functions.</p></details>
+      <details><summary>Is the practice suitable for preparing for a data analyst job interview?</summary><p>Yes. There are dedicated categories of common SQL interview questions, organized by difficulty level.</p></details>
+      <details><summary>How many questions are in the practice?</summary><p>135 questions, of which 76 are queries you run in the SQL editor, organized from easy to hard.</p></details>
+      <details><summary>Which database do you practice on?</summary><p>A database with 14 linked tables (employees, departments, orders, products, customers, and more) holding up to 30,000 records.</p></details>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Built by <strong>Eliran Grossman</strong> · part of <a href="https://egrosman1.github.io/sql-course/" rel="noopener">the SQL course</a></p>
+    <p class="muted-fine">Free SQL practice · SELECT · JOIN · GROUP BY · window functions · data analyst interview prep</p>
+  </footer>
+</main>
+
+<!-- ============ SCREEN 2: PRACTICE ============ -->
+<section id="screen-practice" aria-live="polite">
+  <div class="pbar">
+    <div class="pbar-inner">
+      <button class="back-btn" id="backBtn" aria-label="Back to topic selection">→ Topics</button>
+      <div class="hnav-group">
+        <button class="hnav" id="hPrev" aria-label="Previous question">Previous</button>
+        <button class="hnav primary" id="hNext" aria-label="Next question">Next ←</button>
+      </div>
+      <div class="ptitle" id="pTitle">Topic</div>
+      <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="pFill"></div></div></div>
+      <div class="pcount" id="pCount">0 / 0</div>
+      <div class="pscore" id="pScore" title="Current score">✓ 0</div>
+    </div>
+  </div>
+  <div class="pstage wrap"><div id="qhost"></div></div>
+</section>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" aria-label="Table structure">
+  <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
+  <h3>Database structure</h3>
+  <p>The tables available for practice. The data is reloaded before each run.</p>
+  <div id="schemaContent"></div>
+</aside>
+
+<!-- ============ FLOATING ERD BUTTON (visible everywhere) ============ -->
+<button class="erd-fab" id="erdFab" aria-label="Open relationship map">🗺️ ERD</button>
+
+<!-- ============ ERD OVERLAY ============ -->
+<div class="erd-overlay" id="erdOverlay" aria-label="Relationship map between the tables">
+  <div class="erd-bar">
+    <div class="erd-title">🗺️ Relationship map (ERD)</div>
+    <button class="erd-icon" id="erdZoomOut" title="Zoom out" aria-label="Zoom out">−</button>
+    <button class="erd-icon" id="erdZoomIn" title="Zoom in" aria-label="Zoom in">+</button>
+    <button class="erd-icon" id="erdFitBtn" title="Fit to screen" aria-label="Fit to screen">⤢</button>
+    <button class="erd-icon" id="erdReset" title="Re-arrange" aria-label="Re-arrange">⟲</button>
+    <button class="erd-icon" id="erdClose" title="Close" aria-label="Close">×</button>
+  </div>
+  <div class="erd-hint" id="erdHint">Drag tables · +/− buttons to zoom · 🔑 primary key · 🔗 foreign key</div>
+  <div class="erd-canvas" id="erdCanvas">
+    <div class="erd-viewport" id="erdViewport"><div class="erd-stage" id="erdStage"></div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
+<script>
+// 800+ SQL — simulator data
+// type "query": a practice question you actually run (SQLite). solution = sample solution.
+// type "mcq":   multiple choice. options[], correct (index), explain.
+// execution dialect: SQLite (sql.js). The solutions were converted from MS SQL Server to SQLite.
+
+const CATEGORIES = [
+  {
+    id: "basic", title: "Basic queries",
+    desc: "SELECT, WHERE, LIKE, basic string functions",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Return all the employee details from the EmployeeDetail table.", hint:"An asterisk returns all the columns.", solution:"SELECT * FROM EmployeeDetail" },
+      { type:"query", q:"Return only the FirstName column from the EmployeeDetail table.", hint:"Specify the column name instead of an asterisk.", solution:"SELECT FirstName FROM EmployeeDetail" },
+      { type:"query", q:"Return FirstName in uppercase under the alias \"First Name\".", hint:"UPPER() to convert to uppercase, AS for the alias.", solution:"SELECT UPPER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
+      { type:"query", q:"Return FirstName in lowercase under the alias \"First Name\".", hint:"LOWER() to convert to lowercase.", solution:"SELECT LOWER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
+      { type:"query", q:"Combine FirstName and LastName and show them under \"Name\" (with a space between).", hint:"In SQLite you concatenate strings with ||", solution:"SELECT FirstName || ' ' || LastName AS \"Name\" FROM EmployeeDetail" },
+      { type:"query", q:"Return the details of the employee named \"Vikas\".", hint:"WHERE with an equality comparison.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName = 'Vikas'" },
+      { type:"query", q:"Return employees whose FirstName starts with the letter 'a' (case-insensitive).", hint:"LIKE with % at the end. In SQLite LIKE is case-insensitive by default.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE 'a%'" },
+      { type:"query", q:"Return employees whose FirstName contains the letter 'k'.", hint:"% on both sides.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%k%'" },
+      { type:"query", q:"Return employees whose FirstName ends with the letter 'h'.", hint:"% before the character.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%h'" },
+      { type:"query", q:"Return employees whose FirstName starts with a single character in the lowercase range 'a-p'.", hint:"In SQLite you use GLOB with brackets: '[a-p]*' (GLOB is case-sensitive).", solution:"SELECT * FROM EmployeeDetail WHERE FirstName GLOB '[a-p]*'" },
+      { type:"query", q:"Return employees whose Gender ends with 'le' and is 4 characters long.", hint:"In LIKE the _ character represents a single character. Two underscores + le.", solution:"SELECT * FROM EmployeeDetail WHERE Gender LIKE '__le'" },
+      { type:"query", q:"Return the list of distinct departments.", hint:"DISTINCT removes duplicates.", solution:"SELECT DISTINCT Department FROM EmployeeDetail" },
+      { type:"query", q:"Return the highest salary.", hint:"The MAX aggregate function.", solution:"SELECT MAX(Salary) FROM EmployeeDetail" },
+      { type:"query", q:"Return the lowest salary.", hint:"The MIN aggregate function.", solution:"SELECT MIN(Salary) FROM EmployeeDetail" },
+      { type:"mcq", q:"Which character in LIKE represents any sequence of characters (zero or more)?",
+        options:["_ (underscore)","% (percent)","* (asterisk)","? (question mark)"], correct:1,
+        explain:"In LIKE the % character represents a sequence of zero or more characters, and the _ character represents a single character. The asterisk * is used in GLOB, not in LIKE." }
+    ]
+  },
+  {
+    id: "datetime", title: "Date and time",
+    desc: "strftime, julianday — working with dates in SQLite",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Show JoiningDate in the format \"yyyy/mm/dd\".", hint:"strftime with a format pattern.", solution:"SELECT strftime('%Y/%m/%d', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Show only the time part (HH:MM:SS) of JoiningDate.", hint:"strftime with %H:%M:%S", solution:"SELECT strftime('%H:%M:%S', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Return only the year part of JoiningDate.", hint:"strftime('%Y', ...)", solution:"SELECT strftime('%Y', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Return only the month part of JoiningDate.", hint:"strftime('%m', ...)", solution:"SELECT strftime('%m', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Return the current date.", hint:"date('now') in SQLite.", solution:"SELECT date('now')" },
+      { type:"query", q:"Return employees whose joining year is 2013.", hint:"Filter by strftime('%Y', ...).", solution:"SELECT * FROM EmployeeDetail WHERE strftime('%Y', JoiningDate) = '2013'" },
+      { type:"query", q:"Return employees whose joining month is January (01).", hint:"strftime('%m', ...) = '01'", solution:"SELECT * FROM EmployeeDetail WHERE strftime('%m', JoiningDate) = '01'" },
+      { type:"query", q:"Return employees whose joining date is between 2013-01-01 and 2013-12-01.", hint:"BETWEEN for a date range.", solution:"SELECT * FROM EmployeeDetail WHERE JoiningDate BETWEEN '2013-01-01' AND '2013-12-01'" },
+      { type:"query", q:"How many employees joined in 2014?", hint:"Filter by strftime('%Y', JoiningDate) = '2014' and count with COUNT(*).", solution:"SELECT COUNT(*) FROM EmployeeDetail WHERE strftime('%Y', JoiningDate) = '2014'" },
+      { type:"mcq", q:"Which function in SQLite returns the current date and time?",
+        options:["GETDATE()","NOW()","datetime('now')","SYSDATE"], correct:2,
+        explain:"In SQLite: datetime('now') (or date('now') / time('now')). GETDATE() belongs to SQL Server, NOW() to MySQL, and SYSDATE to Oracle." }
+    ]
+  },
+  {
+    id: "salary", title: "Filtering, sorting, and limiting",
+    desc: "IN / NOT IN, BETWEEN, CASE, LIMIT/OFFSET — and the second-highest value",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Return only one row (the first).", hint:"In SQLite you use LIMIT, not TOP.", solution:"SELECT * FROM EmployeeDetail LIMIT 1" },
+      { type:"query", q:"Return employees named \"Vikas\", \"Ashish\", or \"Nikhil\".", hint:"IN with a list of values.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName IN ('Vikas','Ashish','Nikhil')" },
+      { type:"query", q:"Return employees whose name is *not* \"Vikas\", \"Ashish\", or \"Nikhil\".", hint:"NOT IN.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName NOT IN ('Vikas','Ashish','Nikhil')" },
+      { type:"query", q:"Return FirstName after trimming spaces from the right.", hint:"RTRIM() removes spaces from the right.", solution:"SELECT RTRIM(FirstName) AS FirstName FROM EmployeeDetail" },
+      { type:"query", q:"Show name and gender as M/F (male=M, female=F).", hint:"CASE WHEN ... THEN ... END.", solution:"SELECT FirstName, CASE WHEN Gender='Male' THEN 'M' WHEN Gender='Female' THEN 'F' END AS Gender FROM EmployeeDetail" },
+      { type:"query", q:"Show FirstName with the prefix \"Hello \".", hint:"Concatenation with ||", solution:"SELECT 'Hello ' || FirstName FROM EmployeeDetail" },
+      { type:"query", q:"Return employees whose salary is greater than 600000.", hint:"The > operator", solution:"SELECT * FROM EmployeeDetail WHERE Salary > 600000" },
+      { type:"query", q:"Return employees whose salary is between 500000 and 600000.", hint:"BETWEEN.", solution:"SELECT * FROM EmployeeDetail WHERE Salary BETWEEN 500000 AND 600000" },
+      { type:"query", q:"Return the second-highest salary.", hint:"In SQLite: LIMIT 1 OFFSET 1 on a descending sorted list.", solution:"SELECT Salary FROM EmployeeDetail ORDER BY Salary DESC LIMIT 1 OFFSET 1" },
+      { type:"mcq", q:"How do you limit the number of rows returned in SQLite (instead of SQL Server's TOP)?",
+        options:["TOP n","LIMIT n","ROWNUM <= n","FETCH FIRST n"], correct:1,
+        explain:"In SQLite (and MySQL) you use LIMIT n. TOP belongs to SQL Server, ROWNUM to Oracle, and FETCH FIRST is the ANSI standard." }
+    ]
+  },
+  {
+    id: "groupby", title: "Grouping (GROUP BY)",
+    desc: "Aggregate functions: MIN/MAX/SUM/AVG/COUNT, GROUP BY and HAVING",
+    tables: ["EmployeeDetail","ProjectDetail"],
+    questions: [
+      { type:"query", q:"Return the department and the total salaries in each department.", hint:"GROUP BY + SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"Return the department and total salaries, sorted ascending by the total.", hint:"ORDER BY on SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY SUM(Salary) ASC" },
+      { type:"query", q:"Return the department, the number of employees in it, and the total salaries.", hint:"COUNT(*) and SUM in the same GROUP BY.", solution:"SELECT Department, COUNT(*) AS \"Dept Counts\", SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"Return the average salary per department, sorted ascending.", hint:"AVG.", solution:"SELECT Department, AVG(Salary) AS \"Average Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY AVG(Salary) ASC" },
+      { type:"query", q:"Return the maximum salary per department.", hint:"MAX in each group.", solution:"SELECT Department, MAX(Salary) AS \"Max Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"Return the names of projects assigned to more than one employee.", hint:"GROUP BY + HAVING COUNT(*) > 1.", solution:"SELECT ProjectName, COUNT(*) AS NoofEmp FROM ProjectDetail GROUP BY ProjectName HAVING COUNT(*) > 1" },
+      { type:"mcq", q:"What is the main difference between WHERE and HAVING?",
+        options:["No difference, they are interchangeable","WHERE filters rows before grouping, HAVING filters groups after grouping","HAVING is always faster","WHERE works only on numbers"], correct:1,
+        explain:"WHERE filters individual rows before GROUP BY and cannot use aggregate functions. HAVING filters the groups after grouping and can use SUM, COUNT, etc." }
+    ]
+  },
+  {
+    id: "joins", title: "JOINs",
+    desc: "INNER / LEFT JOIN, IFNULL, subqueries",
+    tables: ["EmployeeDetail","ProjectDetail"],
+    questions: [
+      { type:"query", q:"Return the employee name and project name only for employees assigned to a project, sorted by name.", hint:"INNER JOIN on EmployeeID = EmployeeDetailID.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A INNER JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"Return the employee name and project name for all employees, including those without a project.", hint:"LEFT JOIN keeps the entire left table.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"Same as before, but if there is no project show '-No Project Assigned'.", hint:"In SQLite you use IFNULL (not ISNULL).", solution:"SELECT FirstName, IFNULL(ProjectName,'-No Project Assigned') FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"Find employees not assigned to any project.", hint:"LEFT JOIN + WHERE ProjectName IS NULL.", solution:"SELECT FirstName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID WHERE ProjectName IS NULL" },
+      { type:"query", q:"Return employees assigned to more than one project.", hint:"A subquery with GROUP BY ... HAVING COUNT(*) > 1.", solution:"SELECT EmployeeID, FirstName, ProjectName FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID WHERE EmployeeID IN (SELECT EmployeeDetailID FROM ProjectDetail GROUP BY EmployeeDetailID HAVING COUNT(*) > 1)" },
+      { type:"mcq", q:"Which JOIN returns all the rows from the left table, even if there is no match in the right table?",
+        options:["INNER JOIN","LEFT JOIN","CROSS JOIN","Self JOIN"], correct:1,
+        explain:"LEFT JOIN keeps all the rows of the left table; where there is no match, the right table's columns get NULL." }
+    ]
+  },
+  {
+    id: "tricky-joins", title: "Tricky JOINs",
+    desc: "Members2023 vs Members2024 — who renewed, who left, the behavior of conditions and NULL",
+    tables: ["Members2023","Members2024"],
+    questions: [
+      { type:"query", q:"Find the members who appear in both Members2023 and Members2024 (renewed membership) by ID. Show 4 columns (INNER JOIN).", hint:"INNER JOIN ON A.ID = B.ID.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID" },
+      { type:"query", q:"Find the members who were in Members2023 but did not renew in Members2024 (left) — by ID.", hint:"LEFT JOIN + WHERE B.ID IS NULL.", solution:"SELECT A.ID, A.Name FROM Members2023 A LEFT JOIN Members2024 B ON A.ID = B.ID WHERE B.ID IS NULL" },
+      { type:"query", q:"INNER JOIN with a double condition: match on both ID and Name (exactly the same person in both years).", hint:"ON A.ID = B.ID AND A.Name = B.Name.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID AND A.Name = B.Name" },
+      { type:"mcq", q:"Given an INNER JOIN with the condition ON A.ID = B.ID OR A.Name = B.Name — how does the result change compared to AND?",
+        options:["The result narrows","The result grows — it is enough that one condition holds","No change","Throws an error"], correct:1,
+        explain:"OR broadens the matches: a row is included if at least one condition holds. AND narrows it because both conditions must hold together." },
+      { type:"mcq", q:"What is the correct pattern for finding rows that exist in Members2023 but not in Members2024 (anti-join)?",
+        options:["INNER JOIN only","LEFT JOIN + WHERE B.ID IS NULL","CROSS JOIN","RIGHT JOIN only"], correct:1,
+        explain:"LEFT JOIN keeps all the rows of A; where there is no match in B the columns get NULL, so WHERE B.ID IS NULL isolates exactly those rows." }
+    ]
+  },
+  {
+    id: "ddl", title: "DDL — defining structure",
+    desc: "CREATE TABLE, PRIMARY KEY, FOREIGN KEY, AUTOINCREMENT",
+    tables: [],
+    questions: [
+      { type:"query", q:"Create a table called NewEmp with an auto-increment id column (primary key) and a text name column. (Run it — if there's no error, you succeeded)", hint:"In SQLite: INTEGER PRIMARY KEY AUTOINCREMENT.", solution:"CREATE TABLE NewEmp (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)", noResult:true },
+      { type:"mcq", q:"How do you define an auto-increment column in SQLite?",
+        options:["INT IDENTITY(1,1)","AUTO_INCREMENT","INTEGER PRIMARY KEY AUTOINCREMENT","SEQUENCE"], correct:2,
+        explain:"In SQLite: INTEGER PRIMARY KEY AUTOINCREMENT. IDENTITY(1,1) belongs to SQL Server, AUTO_INCREMENT to MySQL, and SEQUENCE to Oracle/PostgreSQL." },
+      { type:"mcq", q:"What is the purpose of a FOREIGN KEY constraint?",
+        options:["To speed up queries","To reference a key column in another table and enforce referential integrity","To prevent NULL values","To encrypt data"], correct:1,
+        explain:"A FOREIGN KEY points to a PRIMARY KEY in another table and prevents operations that would break the relationships — enforcing referential integrity." }
+    ]
+  },
+  {
+    id: "tricky", title: "Short, tricky questions",
+    desc: "The behavior of SELECT, NULL, aggregation — a comprehension test",
+    tables: [],
+    questions: [
+      { type:"query", q:"Run: SELECT 15", hint:"SELECT without FROM returns the expression as a constant.", solution:"SELECT 15" },
+      { type:"query", q:"Run a query that returns 'VIKAS1' by concatenating 'VIKAS' and '1'.", hint:"Concatenation with ||", solution:"SELECT 'VIKAS' || '1'" },
+      { type:"query", q:"Run: SELECT COUNT(*) without FROM. How many will be returned?", hint:"The single 'empty row' is counted.", solution:"SELECT COUNT(*)" },
+      { type:"mcq", q:"What is the output of: SELECT NULL + 5",
+        options:["5","0","NULL","Error"], correct:2,
+        explain:"Any arithmetic operation with NULL returns NULL. NULL represents 'unknown', so 'unknown' + 5 = 'unknown'." },
+      { type:"mcq", q:"What is the output of: SELECT 1 WHERE NULL = NULL",
+        options:["1","NULL","0 rows (nothing)","Error"], correct:2,
+        explain:"NULL = NULL is not TRUE but UNKNOWN — NULL is not even equal to itself. To check for NULL you use IS NULL." },
+      { type:"mcq", q:"What is the output of: SELECT SUM(NULL)",
+        options:["0","NULL","Error","1"], correct:1,
+        explain:"When there are no non-NULL values to aggregate, SUM returns NULL. If there is at least one valid value, SUM ignores the NULLs and aggregates the rest." },
+      { type:"mcq", q:"What is the output of integer division: SELECT 0/9 (in SQLite)",
+        options:["0","NULL","Division-by-zero error","0.0"], correct:0,
+        explain:"0 divided by 9 in integer division is 0. In contrast, 9/0 in SQLite returns NULL (unlike SQL Server, which throws an error)." }
+    ]
+  },
+  {
+    id: "advanced", title: "Advanced queries",
+    desc: "group_concat, sequence analysis, CTE and window functions (ROW_NUMBER/DENSE_RANK)",
+    tables: ["EmployeeDetail","ProjectDetail","FuelDetail"],
+    questions: [
+      { type:"query", q:"Show all the employee names in a single cell, separated by commas.", hint:"In SQLite you use group_concat (instead of STUFF/FOR XML).", solution:"SELECT group_concat(FirstName, ', ') AS \"All Emp Name\" FROM EmployeeDetail" },
+      { type:"query", q:"For each project, show the names of the employees working on it, separated by commas.", hint:"JOIN + GROUP BY ProjectName + group_concat.", solution:"SELECT P.ProjectName, group_concat(E.FirstName, ', ') AS \"Employee Name\" FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID GROUP BY P.ProjectName" },
+      { type:"query", q:"In the FuelDetail table, find the moments when the fuel amount rose compared to the previous measurement (refueling). Show ID, Fuel, Date.", hint:"A self join by adjacent ID. Filter where Fuel increased.", solution:"SELECT FD.ID, FD.Fuel, FD.Date FROM FuelDetail FD INNER JOIN FuelDetail FD1 ON FD1.ID = FD.ID - 1 WHERE FD.Fuel > FD1.Fuel" },
+      { type:"query", q:"Using a recursive CTE, produce the numbers 1 to 10.", hint:"WITH RECURSIVE cte(n) AS (SELECT 1 ... UNION ALL ... WHERE n<10).", solution:"WITH RECURSIVE cte(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM cte WHERE n < 10) SELECT n FROM cte" },
+      { type:"mcq", q:"Which function in SQLite concatenates values from multiple rows into a single string (like STUFF/FOR XML in SQL Server)?",
+        options:["CONCAT_WS","group_concat","STRING_AGG","STUFF"], correct:1,
+        explain:"In SQLite: group_concat(col, sep). Modern SQL Server has STRING_AGG. CONCAT_WS concatenates columns in the same row, not rows." }
+    ]
+  },
+  {
+    id: "tcs", title: "Tricky questions (TCS)",
+    desc: "swapping values, counting characters, CAST, Cartesian product",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Select a random record from the EmployeeDetail table.", hint:"ORDER BY RANDOM() LIMIT 1 (in SQLite RANDOM(), not NEWID()).", solution:"SELECT * FROM EmployeeDetail ORDER BY RANDOM() LIMIT 1" },
+      { type:"query", q:"Count how many times the (uppercase) letter 'A' appears in the string 'VIKASAAA'.", hint:"Trick: original length minus the length after removing the character.", solution:"SELECT LENGTH('VIKASAAA') - LENGTH(REPLACE('VIKASAAA','A',''))" },
+      { type:"query", q:"For 5/2, get the result 2.5 (and not integer division).", hint:"Cast to REAL before the division.", solution:"SELECT CAST(5 AS REAL) / 2" },
+      { type:"mcq", q:"How do you select a random row in SQLite (instead of SQL Server's ORDER BY NEWID())?",
+        options:["ORDER BY RAND() LIMIT 1","ORDER BY RANDOM() LIMIT 1","SELECT TOP 1 ... ORDER BY NEWID()","SAMPLE 1"], correct:1,
+        explain:"In SQLite: ORDER BY RANDOM() LIMIT 1. In MySQL it's RAND(), and in SQL Server it's NEWID() with TOP 1." },
+      { type:"mcq", q:"How many rows will a Cartesian product of a table with 100 rows and a table with 0 rows return?",
+        options:["100","0","Error","Infinity"], correct:1,
+        explain:"A Cartesian product = 100 × 0 = 0 rows. Any JOIN against an empty table returns an empty result." }
+    ]
+  },
+  {
+    id: "datatypes", title: "Data types",
+    desc: "char/varchar, Unicode, datetime, timestamp, storage",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"What are the two main character data types that SQL Server supports?",
+        options:["Short and Long","Regular and Unicode","Fixed and Float","ASCII and Binary"], correct:1,
+        explain:"Regular (CHAR, VARCHAR) and Unicode (NCHAR, NVARCHAR). Unicode types prefix the literal with N, e.g. N'text', and take 2 bytes per character." },
+      { type:"mcq", q:"What is the difference between DATETIME and TIMESTAMP in SQL Server?",
+        options:["They are identical","DATETIME is a regular date-time type; TIMESTAMP (ROWVERSION) is a binary number that updates on every change to the row","TIMESTAMP is more precise","DATETIME does not store time"], correct:1,
+        explain:"DATETIME stores a date and time. TIMESTAMP (renamed ROWVERSION) is a unique number that auto-updates on every change to the row — for version control, not for time. Its size is 8 bytes." },
+      { type:"mcq", q:"What is the maximum size of varchar(max) in SQL Server?",
+        options:["8000 bytes","2GB (about 2 billion characters)","4000 characters","No limit"], correct:1,
+        explain:"varchar(max) stores up to 2GB (2^31-1 characters). Up to 8000 bytes the data is in the row; beyond that it is stored as a LOB with a pointer." },
+      { type:"mcq", q:"When working only with a time in a DATETIME type (without a date), what date does SQL Server fill in?",
+        options:["The current date","January 1, 1900","January 1, 1970","NULL"], correct:1,
+        explain:"SQL Server fills the date part as January 1, 1900 when you provide only a time." },
+      { type:"mcq", q:"How do you express a string literal in a Unicode (NVARCHAR) column in SQL Server?",
+        options:["With single quotes only","With the prefix N before the string: N'text'","With U'text'","With double quotes"], correct:1,
+        explain:"You prefix the string with N, e.g. N'hello'. In a regular column 'text' with single quotes is enough." }
+    ]
+  },
+  {
+    id: "views", title: "Views",
+    desc: "definition, goals, SCHEMABINDING, encryption",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Create a View called vIT that shows the name and salary only for IT department employees, then select from it.", hint:"CREATE VIEW ... AS SELECT ...; SELECT * FROM vIT", solution:"CREATE VIEW vIT AS SELECT FirstName, Salary FROM EmployeeDetail WHERE Department='IT'; SELECT * FROM vIT" },
+      { type:"mcq", q:"What is a View in SQL?",
+        options:["An additional physical table","A virtual table whose content is defined by a saved SELECT query","A backup copy of a table","A special index"], correct:1,
+        explain:"A View is a virtual table — essentially a saved SELECT statement that behaves like a table. It usually has no physical storage of its own." },
+      { type:"mcq", q:"What are the main purposes of creating a View?",
+        options:["Only for speed","Security, simplifying complex queries, and quick response","Only for backup","To replace procedures"], correct:1,
+        explain:"A View is used for security (restricting access), simplifying complex queries, and quick responses. A View does not take parameters — unlike a procedure." },
+      { type:"mcq", q:"How do you encrypt a View in SQL Server so its code cannot be seen?",
+        options:["WITH PASSWORD","WITH ENCRYPTION","SET HIDDEN","ENCRYPT VIEW"], correct:1,
+        explain:"You use WITH ENCRYPTION when creating the View. Under SCHEMABINDING, by the way, you may not use SELECT* — you must specify column names." }
+    ]
+  },
+  {
+    id: "indexes", title: "Indexes",
+    desc: "Clustered vs Non-Clustered, B-Tree, Fill Factor",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Create an index called idx_dept on the Department column of the EmployeeDetail table.", hint:"CREATE INDEX name ON table(column).", solution:"CREATE INDEX idx_dept ON EmployeeDetail(Department)", noResult:true },
+      { type:"query", q:"Create a unique index called idx_uid on the EmployeeID column.", hint:"CREATE UNIQUE INDEX.", solution:"CREATE UNIQUE INDEX idx_uid ON EmployeeDetail(EmployeeID)", noResult:true },
+      { type:"mcq", q:"How many clustered indexes can there be in a single table?",
+        options:["Only one","Up to 249","No limit","Two"], correct:0,
+        explain:"Only one. The clustered index determines the physical order of the rows on disk, so there cannot be more than one. Non-clustered indexes can be many (up to 999)." },
+      { type:"mcq", q:"What is the main difference between a Clustered and a Non-Clustered Index?",
+        options:["No difference","Clustered determines the physical order of the rows; Non-Clustered defines a logical order with pointers to the data","Non-Clustered is always faster","Clustered takes less space"], correct:1,
+        explain:"Clustered sorts and stores the rows physically by the key (hence only one). Non-Clustered holds a key value + a pointer to the data, and defines a logical order that does not necessarily match the physical order." },
+      { type:"mcq", q:"What is the Fill Factor of an index?",
+        options:["The number of columns in the index","The percentage of space in each leaf page to be filled with data","The index size in MB","The number of rows in a page"], correct:1,
+        explain:"Fill Factor sets the fill percentage of each leaf page. The default of 100 fills the maximum rows. A lower value leaves room for updates and reduces page splits." }
+    ]
+  },
+  {
+    id: "sp", title: "Stored procedures (SP)",
+    desc: "definition, advantages, recursion, TRY-CATCH, SP vs View",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"What is a Stored Procedure?",
+        options:["A virtual table","A named group of SQL statements, saved on the server in advance and accepting parameters","An index","A kind of View"], correct:1,
+        explain:"An SP is a named group of SQL statements stored on the server. It takes parameters, reduces network traffic, and improves performance (reuse of execution plans)." },
+      { type:"mcq", q:"What is a significant advantage of a stored procedure in terms of security?",
+        options:["It encrypts all the data","It can prevent SQL Injection attacks","It hides the database","It has no security advantage"], correct:1,
+        explain:"Using procedures with parameters prevents SQL Injection, because the input is handled as a parameter and not as code. In addition, the DBA controls who is allowed to run it." },
+      { type:"mcq", q:"How many levels can stored procedures be nested (including recursion)?",
+        options:["8","16","32","No limit"], correct:2,
+        explain:"Up to 32 levels. T-SQL supports recursion, so a procedure can call itself." },
+      { type:"mcq", q:"Where can you use TRY-CATCH?",
+        options:["In a procedure and a function (UDF)","Only in a stored procedure, not in a function","Only in a function","In neither of them"], correct:1,
+        explain:"TRY-CATCH is supported in procedures but not in user-defined functions (UDFs) — one of the limitations of functions." },
+      { type:"mcq", q:"What is the main difference between a Stored Procedure and a View?",
+        options:["No difference","An SP takes parameters and can contain logic and changes; a View takes no parameters and is a SELECT only","A View is always faster","An SP cannot return data"], correct:1,
+        explain:"A View is a saved SELECT with no parameters. An SP takes parameters, contains logic (IF/loops), and can modify tables. You can use a View inside an SP, but not the other way around." }
+    ]
+  },
+  {
+    id: "temp", title: "Temporary tables (Temp Tables)",
+    desc: "Local vs Global, Table Variables, tempdb",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"What are the two types of temporary tables in SQL Server?",
+        options:["Fast and Slow","Local (#) and Global (##)","Public and Private","Memory and Disk"], correct:1,
+        explain:"A local one is marked with a single # and is visible only to the session that created it. A global one is marked with ## and is visible to all connections. Both are dropped when the session closes." },
+      { type:"mcq", q:"In which database are temporary tables created?",
+        options:["master","tempdb","model","msdb"], correct:1,
+        explain:"All temporary tables are created in the tempdb database." },
+      { type:"mcq", q:"What is a unique feature of a Table Variable compared to a Temp Table?",
+        options:["It is always in memory only","ROLLBACK does not affect it and it does not participate in transactions/locks","It is always fast","It has detailed statistics"], correct:1,
+        explain:"A Table Variable is not affected by ROLLBACK, does not participate in transactions/locks, DML operations on it are not logged, and it has no statistics." },
+      { type:"mcq", q:"Can you create a FOREIGN KEY on a temporary table?",
+        options:["Yes, always","No","Only on Global","Only on Local"], correct:1,
+        explain:"You cannot create FOREIGN KEY constraints on temporary tables." }
+    ]
+  },
+  {
+    id: "constraints", title: "Constraints",
+    desc: "PRIMARY/FOREIGN KEY, UNIQUE, CHECK, DEFAULT",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"How many Primary Keys can exist in a table?",
+        options:["Only one","Up to two","No limit","Depends on the table"], correct:0,
+        explain:"Only one primary key (but it can be composed of several columns). In contrast, you can have several UNIQUE constraints." },
+      { type:"mcq", q:"What is the difference between a Primary Key and a Unique Key?",
+        options:["No difference","A Unique allows one NULL value and you can have several per table; a Primary Key does not allow NULL and there is only one","A Primary Key allows NULL","A Unique allows duplicates"], correct:1,
+        explain:"A Unique allows one NULL value, and you can have several Unique constraints. A Primary Key = NOT NULL + UNIQUE, and there is only one per table." },
+      { type:"mcq", q:"When you create a Primary Key, which index is created automatically by default (in SQL Server)?",
+        options:["Non-Clustered","Clustered","No index","Unique only"], correct:1,
+        explain:"A Primary Key creates a Clustered index by default. A Unique Key creates a Non-Clustered index by default." },
+      { type:"mcq", q:"What are the three types of data integrity?",
+        options:["High/Medium/Low","Domain, Entity, Referential","Read/Write/Execute","Primary/Secondary/Tertiary"], correct:1,
+        explain:"Domain Integrity (type, CHECK), Entity Integrity (Primary Key, Unique), and Referential Integrity (Foreign Key)." }
+    ]
+  },
+  {
+    id: "storage", title: "Storage and sizes",
+    desc: "Page 8K, limits, LENGTH vs length in bytes",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"Return the length of the string 'A value' (the number of characters).", hint:"In SQLite LENGTH() returns the number of characters.", solution:"SELECT LENGTH('A value')" },
+      { type:"mcq", q:"What is the basic storage unit in SQL Server data files, and its size?",
+        options:["A 4K Block","An 8K Page","A 512B Sector","A 64K Extent"], correct:1,
+        explain:"The basic unit is a Page of 8K. Eight consecutive pages make up an Extent (64K)." },
+      { type:"mcq", q:"What is the difference between LEN() and DATALENGTH() in SQL Server?",
+        options:["They are identical","LEN returns characters without trailing spaces; DATALENGTH returns bytes including trailing spaces","DATALENGTH is faster","LEN works only on numbers"], correct:1,
+        explain:"LEN returns the length in characters without trailing spaces. DATALENGTH returns the length in bytes including trailing spaces. For Unicode each character = 2 bytes." },
+      { type:"mcq", q:"How much space does a NULL value take in a variable-width field?",
+        options:["Like a full value","Takes no space","Always 1 byte","Always 8 bytes"], correct:1,
+        explain:"In a variable-width field NULL takes no space. In a fixed-width field NULL takes the same space as any other value." }
+    ]
+  },
+  {
+    id: "concepts", title: "Fundamental concepts",
+    desc: "locks, backups, DELETE/TRUNCATE, UNION, normalization",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"What is the difference between DELETE and TRUNCATE?",
+        options:["They are identical","DELETE allows WHERE and is logged row by row; TRUNCATE removes everything unconditionally and is faster","TRUNCATE allows WHERE","DELETE is faster"], correct:1,
+        explain:"DELETE removes rows selectively (with WHERE) and is logged row by row. TRUNCATE removes everything unconditionally, is faster, and is minimally logged. TRUNCATE is DDL and DELETE is DML." },
+      { type:"mcq", q:"What is the difference between UNION and UNION ALL?",
+        options:["They are identical","UNION removes duplicates (slower); UNION ALL does not (faster)","UNION ALL removes duplicates","UNION works only on two tables"], correct:1,
+        explain:"UNION removes duplicate rows (requires sorting, slower). UNION ALL returns everything including duplicates, so it is faster." },
+      { type:"mcq", q:"What is the difference between a DDL Trigger and a DML Trigger?",
+        options:["No difference","DDL fires on structure changes (CREATE/ALTER/DROP); DML on data changes (INSERT/UPDATE/DELETE)","DML is fired manually","DDL works only on Views"], correct:1,
+        explain:"A DDL Trigger responds to structure changes. A DML Trigger responds to data changes." },
+      { type:"mcq", q:"What are the four transaction isolation levels?",
+        options:["Low/Medium/High/Max","Read Committed, Read Uncommitted, Repeatable Read, Serializable","Fast/Slow/Safe/Risky","A/C/I/D"], correct:1,
+        explain:"Read Uncommitted, Read Committed, Repeatable Read, and Serializable — from the weakest isolation to the strongest." },
+      { type:"mcq", q:"What are the main purposes of normalization?",
+        options:["To speed up reads","To reduce data redundancy and prevent INSERT/UPDATE/DELETE anomalies","To add redundancy","To encrypt data"], correct:1,
+        explain:"Normalization reduces redundancy, prevents anomalies during changes, and splits large tables into stable subsets. Denormalization is the opposite." }
+    ]
+  },
+  {
+    id: "modern", title: "SQL Server 2016/2017",
+    desc: "JSON, Temporal, RLS, Adaptive Query, TRANSLATE",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"What is the new type/support introduced in SQL Server 2016 as an alternative to XML?",
+        options:["YAML","JSON","CSV","Protobuf"], correct:1,
+        explain:"JSON. It is more lightweight than XML and does not require a dedicated parser — it can be parsed with a standard JavaScript function, so it is faster and simpler." },
+      { type:"mcq", q:"What is Row-Level Security (RLS) introduced in SQL Server 2016?",
+        options:["Row encryption","Controlling access to rows by the execution context (e.g. the user identity)","Row backup","Fast row deletion"], correct:1,
+        explain:"RLS lets you restrict access to rows by the execution context — for example, showing a user only the rows belonging to their department, even if everyone runs SELECT * from the same table." },
+      { type:"mcq", q:"What is the TRANSLATE function introduced in SQL Server 2017?",
+        options:["Language translation","Replacing several characters with several corresponding characters (saving nested REPLACE)","Type conversion","Code translation"], correct:1,
+        explain:"TRANSLATE replaces each character in the source list with the corresponding character in the target. For example TRANSLATE('[3+4]','[]','()') ⇒ '(3+4)'. It returns an error if the lists are different lengths." },
+      { type:"mcq", q:"What is the Temporal Tables feature in SQL Server 2016?",
+        options:["Temporary tables","Built-in support for the state of data at any point in the past","Fast tables","Encrypted tables"], correct:1,
+        explain:"Temporal Tables keep a change history and let you query the state of the data at any point in the past. Introduced in ANSI SQL 2011." }
+    ]
+  },
+  {
+    id: "interview", title: "Theory for interviews",
+    desc: "RDBMS, ACID, ranking (RANK/DENSE_RANK), ISNULL/COALESCE, CTE — theory",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"mcq", q:"What is an RDBMS?",
+        options:["A programming language","A relational database management system — data in tables linked by keys","A kind of index","A network protocol"], correct:1,
+        explain:"Relational Database Management System — a system where the data is stored in tables (relations) linked by keys. Examples: SQL Server, MySQL, Oracle, SQLite." },
+      { type:"mcq", q:"What does the ACID property guarantee?",
+        options:["Speed","Transaction reliability: Atomicity, Consistency, Isolation, Durability","Security","Compression"], correct:1,
+        explain:"ACID: Atomicity (all or nothing), Consistency, Isolation, and Durability (permanence after commit)." },
+      { type:"query", q:"Find the second-highest salary using DENSE_RANK.", hint:"DENSE_RANK() OVER (ORDER BY Salary DESC) in a subquery, then filter to rank 2.", solution:"SELECT Salary FROM (SELECT Salary, DENSE_RANK() OVER (ORDER BY Salary DESC) AS rnk FROM EmployeeDetail) WHERE rnk = 2" },
+      { type:"query", q:"Add a running row number (ROW_NUMBER) to each employee by descending salary. Show FirstName, Salary, and the number.", hint:"ROW_NUMBER() OVER (ORDER BY Salary DESC).", solution:"SELECT FirstName, Salary, ROW_NUMBER() OVER (ORDER BY Salary DESC) AS rn FROM EmployeeDetail" },
+      { type:"mcq", q:"What is the difference between ROW_NUMBER, RANK, and DENSE_RANK on ties?",
+        options:["They are identical","ROW_NUMBER is always unique; RANK skips after a tie (1,2,2,4); DENSE_RANK does not skip (1,2,2,3)","RANK is always unique","DENSE_RANK skips"], correct:1,
+        explain:"ROW_NUMBER gives a unique running number. RANK gives a ranking with skips on ties (1,2,2,4). DENSE_RANK gives a continuous ranking with no skips (1,2,2,3)." },
+      { type:"mcq", q:"What is the difference between ISNULL and COALESCE?",
+        options:["They are completely identical","ISNULL takes 2 arguments; COALESCE (the ANSI standard) takes several arguments and returns the first non-NULL one","COALESCE takes only 2","ISNULL is more flexible"], correct:1,
+        explain:"ISNULL(a,b) returns a if it is not NULL, otherwise b. COALESCE(a,b,c,...) is the ANSI standard that takes several arguments and returns the first non-NULL one — more flexible and portable." },
+      { type:"mcq", q:"What is a CTE (Common Table Expression) and what is one of its main advantages?",
+        options:["A physical table","A named temporary intermediate result (WITH) that improves readability and supports recursion","An index","A kind of JOIN"], correct:1,
+        explain:"A CTE is a temporary intermediate result defined in WITH and used in the query that follows it. Advantages: readability, reuse, and support for recursion (tree/hierarchy structures)." }
+    ]
+  },
+  {
+    id: "sales", title: "Sales — JOINs and aggregation",
+    desc: "Customers, Orders, OrderItems, Products — joins, grouping, and top-N",
+    tables: ["Customers","Orders","OrderItems","Products"],
+    questions: [
+      { type:"query", q:"Return all the customers from the Customers table.", hint:"SELECT * from the table.", solution:"SELECT * FROM Customers" },
+      { type:"query", q:"Return the customers from Israel (Country = 'Israel').", hint:"WHERE on the Country column, a string in single quotes.", solution:"SELECT * FROM Customers WHERE Country = 'Israel'" },
+      { type:"query", q:"Return the name and stock of products whose stock is less than 20.", hint:"WHERE Stock < 20.", solution:"SELECT ProductName, Stock FROM Products WHERE Stock < 20" },
+      { type:"query", q:"How many orders are there in each status? Show status and count.", hint:"GROUP BY Status with COUNT(*).", solution:"SELECT Status, COUNT(*) AS cnt FROM Orders GROUP BY Status" },
+      { type:"query", q:"For each customer, show their name and their number of orders (INNER JOIN).", hint:"Customers joined to Orders on CustomerID, then GROUP BY.", solution:"SELECT C.CustomerName, COUNT(*) AS Orders FROM Customers C INNER JOIN Orders O ON C.CustomerID = O.CustomerID GROUP BY C.CustomerID" },
+      { type:"query", q:"Compute the revenue for each order (the sum of quantity × unit price) from the OrderItems table.", hint:"SUM(Quantity * UnitPrice) with GROUP BY OrderID.", solution:"SELECT OrderID, SUM(Quantity * UnitPrice) AS Revenue FROM OrderItems GROUP BY OrderID" },
+      { type:"query", q:"What are the 5 products sold in the largest quantity? Show name and total quantity.", hint:"JOIN to OrderItems, SUM(Quantity), GROUP BY, ORDER BY descending, LIMIT 5.", solution:"SELECT P.ProductName, SUM(OI.Quantity) AS Qty FROM Products P INNER JOIN OrderItems OI ON P.ProductID = OI.ProductID GROUP BY P.ProductID ORDER BY Qty DESC LIMIT 5" },
+      { type:"mcq", q:"To compute the revenue per order from the OrderItems table, what is correct?",
+        options:["SUM(Quantity) only","SUM(Quantity * UnitPrice) with GROUP BY OrderID","COUNT(*) with GROUP BY OrderID","AVG(UnitPrice)"], correct:1,
+        explain:"The revenue per item = quantity × unit price. You sum the product with SUM and group by OrderID to get the revenue per order." }
+    ]
+  },
+  {
+    id: "analytics", title: "Business analysis",
+    desc: "subqueries, HAVING, time-based slicing, revenue by category",
+    tables: ["Orders","OrderItems","Products","Categories"],
+    questions: [
+      { type:"query", q:"How many orders are there in total in the Orders table?", hint:"COUNT(*).", solution:"SELECT COUNT(*) FROM Orders" },
+      { type:"query", q:"Find customers (CustomerID) with more than 10 orders. Show the ID and count.", hint:"GROUP BY CustomerID with HAVING COUNT(*) > 10.", solution:"SELECT CustomerID, COUNT(*) AS c FROM Orders GROUP BY CustomerID HAVING COUNT(*) > 10" },
+      { type:"query", q:"What is the average revenue per order? (Compute revenue per order and then the average).", hint:"A subquery: sum per order, then AVG on the result.", solution:"SELECT AVG(rev) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS rev FROM OrderItems GROUP BY OrderID)" },
+      { type:"query", q:"How many orders were placed in each month of 2023? Show month and count, sorted by month.", hint:"Filter to the year with strftime('%Y',...) = '2023', and group by strftime('%m',...).", solution:"SELECT strftime('%m', OrderDate) AS Month, COUNT(*) AS Orders FROM Orders WHERE strftime('%Y', OrderDate) = '2023' GROUP BY Month ORDER BY Month" },
+      { type:"query", q:"Which employee handled the most orders? Show name and number of orders (the top employee).", hint:"JOIN between EmployeeDetail and Orders on EmployeeID, GROUP BY, ORDER BY descending, LIMIT 1.", solution:"SELECT E.FirstName, COUNT(*) AS Handled FROM EmployeeDetail E INNER JOIN Orders O ON E.EmployeeID = O.EmployeeID GROUP BY O.EmployeeID ORDER BY Handled DESC LIMIT 1" },
+      { type:"query", q:"Compute the total revenue for each product category, sorted from highest to lowest.", hint:"Three joins: Categories with Products with OrderItems, then SUM(Quantity*UnitPrice) by category.", solution:"SELECT Cat.CategoryName, SUM(OI.Quantity * OI.UnitPrice) AS Revenue FROM Categories Cat INNER JOIN Products P ON P.CategoryID = Cat.CategoryID INNER JOIN OrderItems OI ON OI.ProductID = P.ProductID GROUP BY Cat.CategoryID ORDER BY Revenue DESC" },
+      { type:"mcq", q:"You want only customers with more than 10 orders. Where do you place the COUNT(*) > 10 condition?",
+        options:["In WHERE","In HAVING after GROUP BY","In SELECT","In ORDER BY"], correct:1,
+        explain:"A condition on the result of an aggregate function (like COUNT) must come in HAVING, after GROUP BY. WHERE acts on individual rows before grouping and cannot use COUNT." }
+    ]
+  }
+];
+
+// ===== Difficulty levels (1=easiest, 5=hardest) — mapped by the original order of each category =====
+// Enables sorting "easy to hard" within each topic and in the graded track, without changing the questions themselves.
+const DIFF = {
+  basic:[1,1,3,3,3,2,3,3,3,4,4,2,2,2,3],
+  datetime:[3,2,2,2,1,3,3,3,1,2],
+  salary:[2,2,3,2,4,2,2,3,4,2],
+  groupby:[3,3,3,3,3,4,3],
+  joins:[3,3,4,4,5,3],
+  'tricky-joins':[3,4,3,4,4],
+  ddl:[3,3,4],
+  tricky:[1,2,3,3,4,4,3],
+  advanced:[4,5,5,5,4],
+  tcs:[3,4,3,3,4],
+  datatypes:[3,4,4,4,3],
+  views:[3,2,3,4],
+  indexes:[3,3,4,4,5],
+  sp:[3,4,4,5,4],
+  temp:[3,3,5,4],
+  constraints:[3,4,4,5],
+  storage:[2,4,4,5],
+  concepts:[3,3,4,5,4],
+  modern:[3,5,4,5],
+  interview:[2,3,5,4,4,4,3],
+  sales:[1,2,2,3,3,4,4,3],
+  analytics:[2,4,4,4,4,5,3]
+};
+CATEGORIES.forEach(c=>{const d=DIFF[c.id]||[];c.questions.forEach((q,i)=>{q.diff=d[i]||q.diff||3;});});
+
+// ===== Topic reassignment: moving questions to the right home by the construct they teach =====
+// (done after assigning difficulty levels, so each question carries its level with it)
+const TOPIC_REMAP = {
+  'basic#12':'groupby',     // MAX(Salary)        → aggregation
+  'basic#13':'groupby',     // MIN(Salary)        → aggregation
+  'salary#3':'basic',       // RTRIM(...)         → basic string function
+  'salary#5':"basic",       // 'Hello ' || ...    → basic string function
+  'interview#2':'advanced', // DENSE_RANK (query) → advanced queries
+  'interview#3':'advanced'  // ROW_NUMBER (query) → advanced queries
+};
+(function applyTopicRemap(){
+  const byId={}; CATEGORIES.forEach(c=>byId[c.id]=c);
+  const moves=[];
+  Object.keys(TOPIC_REMAP).forEach(k=>{
+    const p=k.split('#'), c=byId[p[0]]; if(!c)return;
+    const q=c.questions[+p[1]], to=byId[TOPIC_REMAP[k]];
+    if(q&&to) moves.push({q,from:c,to});
+  });
+  // resolve all source questions first (by identity), then remove, then append — index-shift safe
+  moves.forEach(m=>{ m.from.questions=m.from.questions.filter(x=>x!==m.q); });
+  moves.forEach(m=>{ m.to.questions.push(m.q); });
+})();
+
+</script>
+<script id="schema-sql" type="text/plain">-- ===== EmployeeDetail =====
+CREATE TABLE EmployeeDetail (
+  EmployeeID INTEGER PRIMARY KEY,
+  FirstName  TEXT,
+  LastName   TEXT,
+  Salary     REAL,
+  JoiningDate TEXT,
+  Department TEXT,
+  Gender     TEXT
+);
+INSERT INTO EmployeeDetail VALUES
+ (1,'Vikas','Ahlawat',600000.00,'2013-02-15 11:16:28','IT','Male'),
+ (2,'nikita','Jain',530000.00,'2014-01-09 17:31:07','HR','Female'),
+ (3,'Ashish','Kumar',1000000.00,'2014-01-09 10:05:07','IT','Male'),
+ (4,'Nikhil','Sharma',480000.00,'2014-01-09 09:00:07','HR','Male'),
+ (5,'anish','kadian',500000.00,'2014-01-09 09:31:07','Payroll','Male');
+
+-- ===== ProjectDetail =====
+CREATE TABLE ProjectDetail (
+  ProjectDetailID  INTEGER PRIMARY KEY,
+  EmployeeDetailID INTEGER,
+  ProjectName      TEXT
+);
+INSERT INTO ProjectDetail VALUES
+ (1,1,'Task Track'),
+ (2,1,'CLP'),
+ (3,1,'Survey Managment'),
+ (4,2,'HR Managment'),
+ (5,3,'Task Track'),
+ (6,3,'GRS'),
+ (7,3,'DDS'),
+ (8,4,'HR Managment'),
+ (9,6,'GL Managment');
+
+-- ===== Members2023 / Members2024 (JOIN demos) =====
+CREATE TABLE Members2023 (ID INTEGER, Name TEXT);
+INSERT INTO Members2023 VALUES (1,'Vikas Ahlawat'),(2,'Sachin Aggarwal'),(3,'Manoj Kumar');
+CREATE TABLE Members2024 (ID INTEGER, Name TEXT);
+INSERT INTO Members2024 VALUES (1,'Vikas Ahlawat'),(4,'Sanjay Kumar'),(5,'Sachin Aggarwal'),(3,'Sandeep Kumar');
+
+-- ===== FuelDetail =====
+CREATE TABLE FuelDetail (ID INTEGER PRIMARY KEY, Fuel INTEGER, Date TEXT);
+INSERT INTO FuelDetail VALUES
+ (1,10,'2014-04-25 10:00:00'),(2,9,'2014-04-25 11:00:00'),(3,8,'2014-04-25 12:00:00'),
+ (4,6,'2014-04-25 13:00:00'),(5,12,'2014-04-25 14:00:00'),(6,11,'2014-04-25 15:00:00'),
+ (7,10,'2014-04-25 16:00:00'),(8,9,'2014-04-25 17:00:00'),(9,8,'2014-04-25 18:00:00'),
+ (10,10,'2014-04-25 19:00:00'),(11,9,'2014-04-25 20:00:00'),(12,8,'2014-04-25 21:00:00'),
+ (13,7,'2014-04-25 22:00:00'),(14,15,'2014-04-25 23:00:00');
+
+-- ===== 9 new tables (sales + HR schema) — the data is generated at runtime =====
+CREATE TABLE Departments (DeptID INTEGER PRIMARY KEY, DeptName TEXT, Location TEXT, Budget INTEGER);
+CREATE TABLE Categories  (CategoryID INTEGER PRIMARY KEY, CategoryName TEXT);
+CREATE TABLE Suppliers   (SupplierID INTEGER PRIMARY KEY, SupplierName TEXT, Country TEXT);
+CREATE TABLE Customers   (CustomerID INTEGER PRIMARY KEY, CustomerName TEXT, City TEXT, Country TEXT, SignupDate TEXT);
+CREATE TABLE Products    (ProductID INTEGER PRIMARY KEY, ProductName TEXT, CategoryID INTEGER, SupplierID INTEGER, Price REAL, Stock INTEGER);
+CREATE TABLE Orders      (OrderID INTEGER PRIMARY KEY, CustomerID INTEGER, EmployeeID INTEGER, OrderDate TEXT, Status TEXT);
+CREATE TABLE OrderItems  (OrderItemID INTEGER PRIMARY KEY, OrderID INTEGER, ProductID INTEGER, Quantity INTEGER, UnitPrice REAL);
+CREATE TABLE Payments    (PaymentID INTEGER PRIMARY KEY, OrderID INTEGER, PaidDate TEXT, Method TEXT, Amount REAL);
+CREATE TABLE Attendance  (AttID INTEGER PRIMARY KEY, EmployeeID INTEGER, WorkDate TEXT, HoursWorked REAL);
+</script>
+<script>
+const SCHEMA_SQL=document.getElementById('schema-sql').textContent;
+let SCHEMA_HINT={EmployeeDetail:["EmployeeID","FirstName","LastName","Salary","JoiningDate","Department","Gender"],ProjectDetail:["ProjectDetailID","EmployeeDetailID","ProjectName"],Members2023:["ID","Name"],Members2024:["ID","Name"],FuelDetail:["ID","Fuel","Date"]};
+const SQL_KEYWORDS=['SELECT','FROM','WHERE','GROUP BY','ORDER BY','HAVING','LIMIT','OFFSET','DISTINCT','AS','AND','OR','NOT','NULL','IS NULL','IS NOT NULL','IN','LIKE','GLOB','BETWEEN','JOIN','INNER JOIN','LEFT JOIN','ON','UNION','UNION ALL','INSERT INTO','VALUES','UPDATE','SET','DELETE FROM','CREATE TABLE','CREATE VIEW','CREATE INDEX','CASE','WHEN','THEN','ELSE','END','CAST','ASC','DESC','COUNT','SUM','AVG','MIN','MAX','ROUND','ABS','UPPER','LOWER','LENGTH','REPLACE','TRIM','RTRIM','LTRIM','IFNULL','COALESCE','strftime','date','datetime','group_concat','ROW_NUMBER','RANK','DENSE_RANK','OVER','PARTITION BY','WITH','RECURSIVE','RANDOM','INTEGER','TEXT','REAL','PRIMARY KEY'];
+let SQL=null;
+let DB_BYTES=null;      // snapshot of the fully-seeded 30k-row database
+let viewerDb=null;      // shared read-only connection for previews / counts
+const BIG_ROWS=30000;   // EmployeeDetail size
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+// session state
+let session={items:[],idx:0,solved:new Set(),answers:{},code:{},editor:null};
+
+function loadSqlJs(){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.min.js";
+    s.onload=()=>initSqlJs({locateFile:f=>"https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/"+f}).then(res).catch(rej);
+    s.onerror=rej; document.head.appendChild(s);
+  });
+}
+
+// deterministic PRNG so the generated data is identical every run
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const FN=['Vikas','Ashish','Nikhil','Nikita','Anish','Rahul','Priya','Amit','Sneha','Karan','Pooja','Rohit','Neha','Arjun','Divya','Manoj','Sachin','Sanjay','Sandeep','Ankit','Meera','Kiran','Deepak','Riya','Varun','Tara','Yash','Isha','Gaurav','Bhavna'];
+const LN=['Ahlawat','Jain','Kumar','Sharma','Kadian','Verma','Gupta','Singh','Patel','Mehta','Reddy','Nair','Bose','Iyer','Chopra','Malhotra','Das','Rao'];
+const DEPTS=['IT','HR','Payroll','Finance','Sales','Marketing','Support','Operations'];
+
+function buildBigDb(){
+  const db=new SQL.Database();
+  db.run(SCHEMA_SQL);                 // creates tables + small seed rows (incl. IDs 1..5)
+  const rnd=mulberry32(20240522);
+  const pick=a=>a[Math.floor(rnd()*a.length)];
+  db.run('BEGIN');
+  const stmt=db.prepare('INSERT INTO EmployeeDetail VALUES (?,?,?,?,?,?,?)');
+  for(let id=6;id<=BIG_ROWS;id++){
+    const sal=Math.round((300000+rnd()*900000)/1000)*1000;        // 300k–1.2M, round thousands
+    const y=2013+Math.floor(rnd()*4);                              // 2013..2016
+    const mo=String(1+Math.floor(rnd()*12)).padStart(2,'0');
+    const da=String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    const hh=String(Math.floor(rnd()*24)).padStart(2,'0');
+    const mi=String(Math.floor(rnd()*60)).padStart(2,'0');
+    const date=y+'-'+mo+'-'+da+' '+hh+':'+mi+':00';
+    stmt.run([id,pick(FN),pick(LN),sal,date,pick(DEPTS),rnd()<0.5?'Male':'Female']);
+  }
+  stmt.free();
+  db.run('COMMIT');
+
+  // ===== The 9 new tables =====
+  const CATS=['Electronics','Books','Clothing','Home & Kitchen','Toys','Sports','Beauty','Food'];
+  const COUNTRIES=['USA','UK','Germany','India','Israel','France','Japan','Canada','Brazil','Spain'];
+  const CITIES=['New York','London','Berlin','Mumbai','Tel Aviv','Paris','Tokyo','Toronto','Sao Paulo','Madrid'];
+  const SUPN=['Acme Corp','Globex','Initech','Umbrella','Stark Inc','Wayne Ent','Wonka Co','Soylent','Hooli','Vandelay','Massive Dynamic','Cyberdyne'];
+  const PADJ=['Pro','Max','Mini','Ultra','Classic','Eco','Smart','Lite','Prime','Deluxe'];
+  const PNOUN=['Widget','Gadget','Device','Kit','Set','Tool','Pack','Unit','Gear','Box'];
+  const STAT=['Pending','Shipped','Delivered','Delivered','Cancelled'];
+  const PAYM=['Credit Card','PayPal','Wire','Cash'];
+  const DLOC=['Tel Aviv','Haifa','Jerusalem','Beer Sheva','Tel Aviv','Haifa','Jerusalem','Tel Aviv'];
+  const NSUP=12,NC=600,NP=150,NO=4000,NA=6000;
+
+  db.run('BEGIN');
+  let s;
+  s=db.prepare('INSERT INTO Departments VALUES (?,?,?,?)');
+  DEPTS.forEach((n,i)=>s.run([i+1,n,DLOC[i],Math.round((500000+rnd()*4000000)/10000)*10000])); s.free();
+  s=db.prepare('INSERT INTO Categories VALUES (?,?)');
+  CATS.forEach((n,i)=>s.run([i+1,n])); s.free();
+  s=db.prepare('INSERT INTO Suppliers VALUES (?,?,?)');
+  for(let i=1;i<=NSUP;i++)s.run([i,SUPN[i-1],pick(COUNTRIES)]); s.free();
+  s=db.prepare('INSERT INTO Customers VALUES (?,?,?,?,?)');
+  for(let i=1;i<=NC;i++){const ci=Math.floor(rnd()*CITIES.length);
+    const sd=(2018+Math.floor(rnd()*6))+'-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([i,pick(FN)+' '+pick(LN),CITIES[ci],COUNTRIES[ci],sd]);} s.free();
+  const PRICE=[];
+  s=db.prepare('INSERT INTO Products VALUES (?,?,?,?,?,?)');
+  for(let i=1;i<=NP;i++){const pr=Math.round((5+rnd()*495)*100)/100;PRICE[i]=pr;
+    s.run([i,pick(PADJ)+' '+pick(PNOUN),1+Math.floor(rnd()*CATS.length),1+Math.floor(rnd()*NSUP),pr,Math.floor(rnd()*500)]);} s.free();
+  const OSTAT=[];
+  s=db.prepare('INSERT INTO Orders VALUES (?,?,?,?,?)');
+  for(let i=1;i<=NO;i++){const st=pick(STAT);OSTAT[i]=st;
+    const od=(2022+Math.floor(rnd()*3))+'-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([i,1+Math.floor(rnd()*NC),1+Math.floor(rnd()*400),od,st]);} s.free();
+  const OTOT=[]; let oiId=1;
+  s=db.prepare('INSERT INTO OrderItems VALUES (?,?,?,?,?)');
+  for(let o=1;o<=NO;o++){const n=1+Math.floor(rnd()*4);let tot=0;
+    for(let k=0;k<n;k++){const pid=1+Math.floor(rnd()*NP),qty=1+Math.floor(rnd()*10),up=PRICE[pid];tot+=qty*up;
+      s.run([oiId++,o,pid,qty,up]);}
+    OTOT[o]=Math.round(tot*100)/100;} s.free();
+  s=db.prepare('INSERT INTO Payments VALUES (?,?,?,?,?)'); let payId=1;
+  for(let o=1;o<=NO;o++){if(OSTAT[o]==='Cancelled'||rnd()<0.05)continue;
+    const pd=(2022+Math.floor(rnd()*3))+'-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([payId++,o,pd,pick(PAYM),OTOT[o]]);} s.free();
+  s=db.prepare('INSERT INTO Attendance VALUES (?,?,?,?)');
+  for(let i=1;i<=NA;i++){const wd='2024-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([i,1+Math.floor(rnd()*500),wd,Math.round((4+rnd()*6)*10)/10]);} s.free();
+  db.run('COMMIT');
+
+  const bytes=db.export();
+  db.close();
+  return bytes;
+}
+
+// fresh, independent, writable clone of the seeded DB (for running user / solution queries)
+function freshDb(){return new SQL.Database(DB_BYTES);}
+
+/* ---- topics screen ---- */
+function renderTopics(){
+  document.getElementById('topics').innerHTML=CATEGORIES.map(c=>{
+    const nq=c.questions.filter(q=>q.type==='query').length;
+    const nm=c.questions.filter(q=>q.type==='mcq').length;
+    return '<button class="topic" data-cat="'+c.id+'">'+
+      '<span class="go" aria-hidden="true">‹</span>'+
+      '<h3>'+esc(c.title)+'</h3><div class="td">'+esc(c.desc)+'</div>'+
+      '<div class="meta">'+(nq?'<span class="pill q">'+nq+' queries</span>':'')+(nm?'<span class="pill m">'+nm+' multiple choice</span>':'')+'</div>'+
+      '</button>';
+  }).join('');
+  document.querySelectorAll('.topic').forEach(t=>t.addEventListener('click',()=>startCategory(t.dataset.cat)));
+}
+
+/* ---- build sessions ---- */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function byDiff(items){return items.slice().sort((a,b)=>(a.q.diff||3)-(b.q.diff||3));} // stable: ties keep authored order
+function flat(filterFn){
+  let out=[];
+  CATEGORIES.forEach(c=>c.questions.forEach(q=>{ if(filterFn(q,c)) out.push({q,cat:c}); }));
+  return out;
+}
+function startCategory(cid){
+  const c=CATEGORIES.find(x=>x.id===cid);
+  session={items:byDiff(c.questions.map(q=>({q,cat:c}))),idx:0,solved:new Set(),answers:{},code:{},editor:null,label:c.title};
+  enterPractice();
+}
+function startMode(kind){
+  let items;
+  if(kind==='all'){ items=byDiff(flat(()=>true)); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'Graded track — easy to hard'}; }
+  else { items=byDiff(flat(q=>q.type==='query')); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'Queries — easy to hard'}; }
+  enterPractice();
+}
+function enterPractice(){
+  document.getElementById('screen-select').style.display='none';
+  document.getElementById('screen-practice').style.display='flex';
+  document.getElementById('pTitle').textContent=session.label;
+  window.scrollTo(0,0);
+  renderCurrent();
+}
+function exitPractice(){
+  if(session.editor){try{session.editor.toTextArea();}catch(e){}}
+  session.editor=null;
+  document.getElementById('screen-practice').style.display='none';
+  document.getElementById('screen-select').style.display='block';
+  window.scrollTo(0,0);
+}
+
+/* ---- render one question ---- */
+function updateProgress(){
+  const n=session.items.length, i=session.idx+1, s=session.solved.size;
+  document.getElementById('pCount').textContent=i+' / '+n;
+  document.getElementById('pFill').style.width=(s/n*100)+'%';
+  const ps=document.getElementById('pScore');
+  if(ps) ps.textContent='✓ '+s+' ('+(n?Math.round(s/n*100):0)+'%)';
+  const hp=document.getElementById('hPrev'), hn=document.getElementById('hNext');
+  if(hp) hp.disabled = session.idx===0;
+  if(hn) hn.textContent = (session.idx>=n-1) ? 'Finish' : 'Next ←';
+}
+function saveCode(){
+  const it=session.items[session.idx];
+  if(session.editor && it && it.q.type==='query'){ try{session.code[itemKey()]=session.editor.getValue();}catch(e){} }
+}
+function goPrev(){ saveCode(); if(session.idx>0){ session.idx--; renderCurrent(); window.scrollTo({top:0,behavior:'smooth'}); } }
+function goNext(){ saveCode(); session.idx++; renderCurrent(); window.scrollTo({top:0,behavior:'smooth'}); }
+function renderCurrent(){
+  if(session.editor){try{session.editor.toTextArea();}catch(e){}session.editor=null;}
+  const host=document.getElementById('qhost');
+  if(session.idx>=session.items.length){ renderDone(); return; }
+  const {q,cat}=session.items[session.idx];
+  updateProgress();
+  host.innerHTML = (q.type==='query'?queryCard(q,cat):mcqCard(q,cat));
+  if(q.type==='query') mountEditor(q);
+  else mountMcq(q);
+  // focus management
+  const card=host.querySelector('.qcard'); if(card) card.setAttribute('tabindex','-1'),card.focus({preventScroll:true});
+}
+function navButtons(){
+  const last=session.idx>=session.items.length-1;
+  return '<div class="pnav">'+
+    '<button class="nav-btn" id="prevBtn"'+(session.idx===0?' disabled':'')+'>Previous</button>'+
+    '<button class="nav-btn primary" id="nextBtn">'+(last?'Finish':'Next ←')+'</button>'+
+    '</div>';
+}
+function itemKey(){ const {q,cat}=session.items[session.idx]; return cat.id+'::'+cat.questions.indexOf(q); }
+function diffBadge(q){
+  const d=q.diff||3, lbl=['','Very easy','Easy','Medium','Hard','Very hard'][d];
+  let dots=''; for(let i=1;i<=5;i++)dots+='<span class="dot'+(i<=d?' on':'')+'"></span>';
+  return '<span class="qdiff l'+d+'" title="Difficulty: '+lbl+' ('+d+'/5)" aria-label="Difficulty '+d+' of 5">'+dots+'<span class="qdiff-lbl">'+lbl+'</span></span>';
+}
+
+function queryCard(q,cat){
+  const solvedCls=session.solved.has(itemKey())?' solved':'';
+  return '<div class="qcard'+solvedCls+'" id="qcard">'+
+    '<div class="qhead"><span class="qbadge query">SQL</span><span style="color:var(--dim);font-size:.8rem;font-family:var(--mono)">'+esc(cat.title)+'</span>'+diffBadge(q)+'<span class="qsolvedmark">✓ Solved</span></div>'+
+    '<div class="qtext">'+esc(q.q)+'</div>'+
+    dataPreview(cat)+
+    '<div class="editor-shell"><textarea id="cmEditor"></textarea></div>'+
+    '<div class="actions">'+
+      '<button class="btn btn-run" id="runBtn">Run query ▶</button>'+
+      '<button class="btn btn-ghost" id="acBtn">💡 Autocomplete</button>'+
+      '<button class="btn btn-ghost" id="hintBtn">Hint</button>'+
+      '<button class="btn btn-ghost" id="clearBtn">Clear</button>'+
+      '<span class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> run · <kbd>Ctrl</kbd>+<kbd>Space</kbd> autocomplete</span>'+
+    '</div>'+
+    '<div class="hintline" id="hintLine">'+esc(q.hint||'')+'</div>'+
+    '<div class="result" id="result"></div>'+
+    '<div class="sol-reveal"><button class="sol-toggle" id="solToggle">Show sample solution</button>'+
+      '<div class="sol-code" id="solCode"><code>'+esc(q.solution)+'</code></div></div>'+
+    navButtons()+
+    '<div style="text-align:center;margin-top:14px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">Table structure</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+}
+function mcqCard(q,cat){
+  const solvedCls=session.solved.has(itemKey())?' solved':'';
+  const opts=q.options.map((o,i)=>'<button class="opt" data-i="'+i+'"><span class="mark">'+String.fromCharCode(65+i)+'</span><span>'+esc(o)+'</span></button>').join('');
+  return '<div class="qcard'+solvedCls+'" id="qcard">'+
+    '<div class="qhead"><span class="qbadge mcq">Multiple choice</span><span style="color:var(--dim);font-size:.8rem;font-family:var(--mono)">'+esc(cat.title)+'</span>'+diffBadge(q)+'<span class="qsolvedmark">✓ Solved</span></div>'+
+    '<div class="qtext">'+esc(q.q)+'</div>'+
+    '<div class="opts" id="opts">'+opts+'</div>'+
+    '<div class="explain" id="explain"><b>Explanation:</b> '+esc(q.explain)+'</div>'+
+    navButtons()+
+    '<div style="text-align:center;margin-top:14px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">Table structure</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+}
+function gradeBand(pct){
+  if(pct>=90)return {t:'Excellent! 🏆',c:'var(--green)'};
+  if(pct>=75)return {t:'Very good 👏',c:'var(--green)'};
+  if(pct>=60)return {t:'Good 👍',c:'var(--amber)'};
+  if(pct>=40)return {t:'A basic level — worth reviewing 📚',c:'var(--amber)'};
+  return {t:'Needs more practice 💪',c:'var(--red)'};
+}
+function renderDone(){
+  if(session.editor){try{session.editor.toTextArea();}catch(e){}session.editor=null;}
+  const n=session.items.length, s=session.solved.size;
+  const pct=n?Math.round(s/n*100):0, g=gradeBand(pct);
+  const deg=Math.round(pct*3.6);
+  document.getElementById('pCount').textContent=n+' / '+n;
+  document.getElementById('pFill').style.width='100%';
+  document.getElementById('qhost').innerHTML=
+    '<div class="done-card">'+
+      '<div class="big">🎉</div><h2>You finished the set!</h2>'+
+      '<p>'+esc(session.label)+'</p>'+
+      '<div class="score-ring" style="background:conic-gradient('+g.c+' '+deg+'deg, var(--line) '+deg+'deg)">'+
+        '<div class="score-inner"><div class="score-pct" style="color:'+g.c+'">'+pct+'%</div><div class="score-sub">Score</div></div>'+
+      '</div>'+
+      '<div class="grade-label" style="color:'+g.c+'">'+g.t+'</div>'+
+      '<div class="score-detail">You answered '+s+' of '+n+' questions correctly</div>'+
+      '<div class="pnav" style="max-width:380px;margin:0 auto">'+
+        '<button class="nav-btn" id="restartBtn">Start over</button>'+
+        '<button class="nav-btn primary" id="toTopicsBtn">Another topic</button>'+
+      '</div>'+
+    '</div>';
+  document.getElementById('restartBtn').onclick=()=>{session.idx=0;session.solved=new Set();session.answers={};session.code={};renderCurrent();};
+  document.getElementById('toTopicsBtn').onclick=exitPractice;
+}
+
+/* ---- query logic ---- */
+/* ---- self-contained SQL autocomplete (no external addon dependency) ---- */
+let acItems=[],acIdx=-1,acFrom=null,acTo=null,acCm=null;
+function acOpen(){ const b=document.getElementById('acBox'); return !!(b && b.style.display==='block' && acItems.length); }
+function acClose(){ const b=document.getElementById('acBox'); if(b)b.style.display='none'; acItems=[]; acIdx=-1; acCm=null; }
+function acPool(cm){
+  const cur=cm.getCursor(), line=cm.getLine(cur.line);
+  let start=cur.ch;
+  while(start>0 && /\w/.test(line.charAt(start-1))) start--;
+  const word=line.slice(start,cur.ch);
+  const dot=line.slice(0,start).match(/([A-Za-z_]\w*)\.\s*$/);  // "Table." → that table's columns
+  let pool;
+  if(dot && SCHEMA_HINT[dot[1]]) pool=SCHEMA_HINT[dot[1]].slice();
+  else { pool=SQL_KEYWORDS.slice(); Object.keys(SCHEMA_HINT).forEach(t=>{pool.push(t);SCHEMA_HINT[t].forEach(c=>pool.push(c));}); pool=[...new Set(pool)]; }
+  const lw=word.toLowerCase();
+  let list = word ? pool.filter(x=>x.toLowerCase().startsWith(lw)) : pool;
+  if(word && !list.length) list = pool.filter(x=>x.toLowerCase().includes(lw)); // contains fallback
+  return {list:list.slice(0,50), start, end:cur.ch, line:cur.line, word};
+}
+function acEnsureBox(){
+  let b=document.getElementById('acBox');
+  if(!b){
+    b=document.createElement('div'); b.id='acBox'; b.className='ac-box';
+    document.body.appendChild(b);
+    b.addEventListener('pointerdown',e=>{ const it=e.target.closest('.ac-item'); if(it){ e.preventDefault(); e.stopPropagation(); acPick(+it.dataset.i); } });
+  }
+  return b;
+}
+function acShow(cm){
+  const r=acPool(cm);
+  if(!r.list.length){ acClose(); return; }
+  acCm=cm; acItems=r.list; acIdx=0;
+  acFrom=CodeMirror.Pos(r.line,r.start); acTo=CodeMirror.Pos(r.line,r.end);
+  const box=acEnsureBox();
+  box.innerHTML=acItems.map((x,i)=>'<div class="ac-item'+(i===0?' sel':'')+'" data-i="'+i+'">'+esc(x)+'</div>').join('');
+  box.style.display='block'; box.scrollTop=0;
+  const co=cm.cursorCoords(true,'window');
+  let left=co.left, top=co.bottom+3;
+  const bw=box.offsetWidth, bh=box.offsetHeight, vw=window.innerWidth, vh=window.innerHeight;
+  if(left+bw>vw-8) left=Math.max(8,vw-bw-8);
+  if(top+bh>vh-8) top=Math.max(8,co.top-bh-3);   // flip above if no room below (keyboard)
+  box.style.left=left+'px'; box.style.top=top+'px';
+}
+function acPick(i){
+  if(!acCm||i<0||i>=acItems.length){ acClose(); return; }
+  const cm=acCm, word=acItems[i];
+  cm.replaceRange(word, acFrom, acTo, '+complete');
+  acClose(); cm.focus();
+}
+function acMove(d){
+  if(!acItems.length)return;
+  acIdx=(acIdx+d+acItems.length)%acItems.length;
+  const box=document.getElementById('acBox'); if(!box)return;
+  [...box.children].forEach((c,i)=>c.classList.toggle('sel',i===acIdx));
+  const sel=box.children[acIdx]; if(sel&&sel.scrollIntoView)sel.scrollIntoView({block:'nearest'});
+}
+function mountEditor(q){
+  const ta=document.getElementById('cmEditor');
+  const cm=CodeMirror.fromTextArea(ta,{mode:'text/x-sql',theme:'material-darker',lineNumbers:true,lineWrapping:true,direction:'ltr',
+    extraKeys:{
+      "Ctrl-Space":c=>acShow(c), "Cmd-Space":c=>acShow(c),
+      "Ctrl-Enter":runQuery, "Cmd-Enter":runQuery,
+      "Down":c=>{ if(acOpen()){acMove(1);return;} return CodeMirror.Pass; },
+      "Up":c=>{ if(acOpen()){acMove(-1);return;} return CodeMirror.Pass; },
+      "Enter":c=>{ if(acOpen()){acPick(acIdx);return;} return CodeMirror.Pass; },
+      "Tab":c=>{ if(acOpen()){acPick(acIdx);return;} return CodeMirror.Pass; },
+      "Esc":c=>{ if(acOpen()){acClose();return;} return CodeMirror.Pass; },
+      "Backspace":c=>{ if(!acOpen()) return CodeMirror.Pass; c.execCommand('delCharBefore'); acShow(c); }
+    }});
+  // auto-popup from the first letter typed (or after a dot)
+  cm.on("inputRead",(c,ch)=>{
+    const t=ch.text&&ch.text[0];
+    if(t && /[A-Za-z_.]/.test(t)) acShow(c); else acClose();
+  });
+  // PRIMARY trigger: native DOM input event on the editor's field — fires for
+  // every input method (mobile/predictive/IME keyboards) where inputRead is unreliable.
+  const fld=cm.getInputField&&cm.getInputField();
+  if(fld) fld.addEventListener('input',()=>setTimeout(()=>{
+    if(!cm.hasFocus())return;
+    const cur=cm.getCursor(), ch=cm.getLine(cur.line).charAt(cur.ch-1);
+    if(ch && /[A-Za-z_.]/.test(ch)) acShow(cm); else acClose();
+  },0));
+  cm.on("blur",()=>setTimeout(()=>{ if(!cm.hasFocus()) acClose(); },200));
+  cm.on("scroll",acClose);
+  session.editor=cm;
+  // restore the user's previously typed query for this question (don't lose work on navigation)
+  const saved=session.code&&session.code[itemKey()];
+  if(saved){ cm.setValue(saved); }
+  setTimeout(()=>{cm.refresh();if(window.innerWidth>760)cm.focus();},30);
+}
+function mountMcq(q){
+  const prev=session.answers[itemKey()];
+  if(prev!==undefined){ revealMcq(q,prev); return; }
+  document.querySelectorAll('#opts .opt').forEach(b=>b.addEventListener('click',()=>answerMcq(+b.dataset.i)));
+}
+function revealMcq(q,chosen){
+  document.querySelectorAll('#opts .opt').forEach((b,i)=>{b.classList.add('locked');if(i===q.correct)b.classList.add('correct');if(i===chosen&&chosen!==q.correct)b.classList.add('wrong');});
+  document.getElementById('explain').classList.add('show');
+}
+function normCell(v){
+  if(v===null||v===undefined)return '\u0000';
+  if(typeof v==='number'&&!Number.isInteger(v))return String(Math.round(v*1e6)/1e6);
+  const n=Number(v);
+  if(typeof v==='string'&&v.trim()!==''&&!isNaN(n)&&!Number.isInteger(n))return String(Math.round(n*1e6)/1e6);
+  return String(v).trim();
+}
+function rowKey(r){return r.map(normCell).join('\u0001');}
+function tablesEqual(a,b,ordered){
+  if(!a&&!b)return true; if(!a||!b)return false; if(a.length!==b.length)return false;
+  if(ordered){ for(let i=0;i<a.length;i++)if(rowKey(a[i])!==rowKey(b[i]))return false; return true; }
+  const ka=a.map(rowKey).sort(), kb=b.map(rowKey).sort();
+  for(let i=0;i<ka.length;i++)if(ka[i]!==kb[i])return false; return true;
+}
+function execAll(db,sql){const r=db.exec(sql);return (r&&r.length)?r[r.length-1]:null;}
+function resultTable(res,cap){
+  const rows=res.values, lim=cap||rows.length, show=rows.slice(0,lim);
+  let h='<div class="tbl-scroll"><table class="res"><thead><tr>';
+  res.columns.forEach(c=>h+='<th>'+esc(c)+'</th>'); h+='</tr></thead><tbody>';
+  show.forEach(r=>{h+='<tr>';r.forEach(v=>h+='<td>'+esc(v)+'</td>');h+='</tr>';}); h+='</tbody></table></div>';
+  if(rows.length>lim)h+='<div class="tbl-note">Showing '+lim+' of '+rows.length.toLocaleString('en-US')+' rows returned</div>';
+  return h;
+}
+function tablePreview(tableName,limit){
+  if(!viewerDb)return '';
+  const lim=limit||8; let total=0,res=null;
+  try{
+    const c=viewerDb.exec('SELECT COUNT(*) FROM "'+tableName+'"'); total=c[0].values[0][0];
+    const r=viewerDb.exec('SELECT * FROM "'+tableName+'" LIMIT '+lim); res=r[0];
+  }catch(e){return '';}
+  if(!res)return '';
+  let h='<div class="dp-table"><div class="dp-name">'+esc(tableName)+' · '+Number(total).toLocaleString('en-US')+' rows</div>'+resultTable(res);
+  if(total>res.values.length)h+='<div class="tbl-note">Showing '+res.values.length+' first rows — for a wide view click "Table structure"</div>';
+  return h+'</div>';
+}
+function dataPreview(cat){
+  if(!viewerDb||!cat.tables||!cat.tables.length)return '';
+  const mobile=window.innerWidth<=600;
+  const inner=cat.tables.map(t=>tablePreview(t,mobile?5:8)).join('');
+  if(!inner)return '';
+  return '<details class="datapanel"><summary>📋 Click here to view the tables</summary><div class="dp-body">'+inner+'</div></details>';
+}
+function friendlyErr(msg){
+  const m=String(msg);
+  if(/no such table/i.test(m))return 'There is no table with that name. Check the exact spelling — click "Table structure" to see the names (e.g. EmployeeDetail, ProjectDetail).';
+  if(/no such column/i.test(m))return 'There is no column with that name. Check the column names in "Table structure". Remember that SQLite distinguishes a column name from a string (wrap a string in single quotes).';
+  if(/no such function/i.test(m))return 'This function does not exist in SQLite. Note the differences from SQL Server (e.g. IFNULL instead of ISNULL, RANDOM instead of NEWID).';
+  if(/syntax error/i.test(m))return 'Syntax error. Check commas, quotes, and the keyword order: SELECT … FROM … WHERE …';
+  if(/ambiguous/i.test(m))return 'A column name appears in two tables — prefix it with the table name/alias (e.g. A.ID).';
+  return null;
+}
+function runQuery(){
+  const {q}=session.items[session.idx];
+  const userSql=session.editor.getValue().trim();
+  const resEl=document.getElementById('result'); resEl.classList.add('show');
+  if(!userSql){resEl.innerHTML='<div class="status neutral">Write a query first.</div>';return;}
+  let userRes=null,err=null,db=freshDb();
+  try{userRes=execAll(db,userSql);}catch(e){err=e.message;} db.close();
+  if(err){
+    const fr=friendlyErr(err);
+    resEl.innerHTML='<div class="status err">✗ The query failed</div>'+
+      (fr?'<div class="errhint">💡 '+esc(fr)+'</div>':'')+
+      '<div class="errmsg">'+esc(err)+'</div>';
+    return;
+  }
+  let expRes=null;
+  if(!q.noResult){let e=freshDb();try{expRes=execAll(e,q.solution);}catch(_){}e.close();}
+  let html='';
+  const uvHasRows=!!(userRes&&userRes.values&&userRes.values.length);
+  if(userRes&&userRes.values&&userRes.values.length)html+=resultTable(userRes,window.innerWidth<=600?50:200);
+  else if(q.noResult){resEl.innerHTML='<div class="status ok">✓ The command ran successfully.</div>';markSolved();return;}
+  else html+='<div class="status neutral">The query ran but returned no rows.</div>';
+  if(!q.noResult&&expRes){
+    const nondet=/random\s*\(\)/i.test(q.solution);
+    if(nondet){
+      if(uvHasRows){html='<div class="status ok">✓ Ran and returned a row. (random result — cannot be compared exactly)</div>'+html;markSolved();}
+      resEl.innerHTML=html;return;
+    }
+    const ordered=/\border\s+by\b/i.test(q.solution);
+    const uv=userRes&&userRes.values;
+    if(tablesEqual(uv,expRes.values,ordered)){html='<div class="status ok">✓ Correct! The result matches the solution.</div>'+html;markSolved();}
+    else if(ordered && tablesEqual(uv,expRes.values,false)){
+      html='<div class="status neutral">↻ The values are correct — but the order differs. In this question order matters, check the ORDER BY.</div>'+html;
+    }
+    else html='<div class="status neutral">↻ The query ran, but the result differs from the solution. Compare with the table below or show the solution.</div>'+html;
+  }
+  resEl.innerHTML=html;
+}
+function answerMcq(chosen){
+  const {q}=session.items[session.idx];
+  if(session.answers[itemKey()]!==undefined)return;
+  session.answers[itemKey()]=chosen;
+  revealMcq(q,chosen);
+  if(chosen===q.correct)markSolved();
+}
+function markSolved(){session.solved.add(itemKey());const c=document.getElementById('qcard');if(c)c.classList.add('solved');updateProgress();}
+
+/* ---- delegated events in practice ---- */
+document.getElementById('qhost').addEventListener('click',e=>{
+  if(e.target.closest('#runBtn'))return runQuery();
+  if(e.target.closest('#acBtn')){ if(session.editor){session.editor.focus();acShow(session.editor);} return; }
+  if(e.target.closest('#hintBtn'))return document.getElementById('hintLine').classList.toggle('show');
+  if(e.target.closest('#clearBtn')){session.editor.setValue('');session.editor.focus();const r=document.getElementById('result');r.classList.remove('show');r.innerHTML='';return;}
+  const st=e.target.closest('#solToggle');
+  if(st){const el=document.getElementById('solCode');el.classList.toggle('show');st.textContent=el.classList.contains('show')?'Hide solution':'Show sample solution';return;}
+  if(e.target.closest('#prevBtn')){ goPrev(); return; }
+  if(e.target.closest('#nextBtn')){ goNext(); return; }
+  if(e.target.closest('#schemaBtn2'))return openDrawer();
+  if(e.target.closest('#erdBtnCard'))return openErd();
+});
+
+/* ---- mode + back ---- */
+document.getElementById('mode-all').onclick=()=>startMode('all');
+document.getElementById('mode-queries').onclick=()=>startMode('queries');
+document.getElementById('backBtn').onclick=exitPractice;
+document.getElementById('hPrev').onclick=goPrev;
+document.getElementById('hNext').onclick=goNext;
+
+/* ---- drawer ---- */
+function buildSchema(){
+  if(!viewerDb){
+    const t=[['EmployeeDetail','Employees'],['ProjectDetail','Projects'],['Members2023 / Members2024','JOIN demo'],['FuelDetail','Fuel']];
+    document.getElementById('schemaContent').innerHTML=t.map(x=>'<div class="tbl"><h4>'+x[0]+'</h4><p style="margin:0;color:var(--dim);font-size:.81rem">'+x[1]+'</p></div>').join('');
+    return;
+  }
+  const tables=ALL_TABLES;
+  const lim=window.innerWidth<=600?20:50;
+  document.getElementById('schemaContent').innerHTML=tables.map(name=>{
+    let total=0,res=null;
+    try{total=viewerDb.exec('SELECT COUNT(*) FROM "'+name+'"')[0].values[0][0];res=viewerDb.exec('SELECT * FROM "'+name+'" LIMIT '+lim)[0];}catch(e){return '';}
+    if(!res)return '';
+    return '<div class="tbl"><h4>'+esc(name)+' · '+Number(total).toLocaleString('en-US')+' rows</h4>'+
+      '<div class="cols">'+res.columns.map(esc).join(', ')+'</div>'+resultTable(res,lim)+'</div>';
+  }).join('');
+}
+const drawer=document.getElementById('drawer'),drawerBg=document.getElementById('drawerBg');
+function openDrawer(){buildSchema();drawer.classList.add('show');drawerBg.classList.add('show');}
+function closeDrawer(){drawer.classList.remove('show');drawerBg.classList.remove('show');}
+document.getElementById('schemaBtn1').onclick=openDrawer;
+document.getElementById('drawerClose').onclick=closeDrawer;
+drawerBg.onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();closeErd();}});
+
+/* ---- ERD (entity-relationship diagram) ---- */
+// Logical relationships (foreign keys). The 'soft' flag = a conceptual relationship (not a real FK).
+const ERD_RELS=[
+  ['ProjectDetail','EmployeeDetailID','EmployeeDetail','EmployeeID'],
+  ['Orders','CustomerID','Customers','CustomerID'],
+  ['Orders','EmployeeID','EmployeeDetail','EmployeeID'],
+  ['OrderItems','OrderID','Orders','OrderID'],
+  ['OrderItems','ProductID','Products','ProductID'],
+  ['Products','CategoryID','Categories','CategoryID'],
+  ['Products','SupplierID','Suppliers','SupplierID'],
+  ['Payments','OrderID','Orders','OrderID'],
+  ['Attendance','EmployeeID','EmployeeDetail','EmployeeID'],
+  ['Departments','DeptName','EmployeeDetail','Department','soft'],
+  ['Members2024','ID','Members2023','ID','soft']
+];
+const ERD_POS={
+  EmployeeDetail:[30,30], ProjectDetail:[30,360], Attendance:[30,620], Departments:[30,880], FuelDetail:[30,1120],
+  Orders:[320,30], OrderItems:[320,330], Payments:[320,640], Customers:[320,900],
+  Products:[610,30], Categories:[610,320], Suppliers:[610,520], Members2023:[610,720], Members2024:[610,940]
+};
+let erdBuilt=false;
+let erdZoom=1, erdW=1180, erdH=1180;
+function erdBuild(){
+  const stage=document.getElementById('erdStage');
+  if(!viewerDb){stage.innerHTML='<div style="padding:24px;color:var(--muted)">The engine is still loading… open again in a moment.</div>';return;}
+  const fkset={}; ERD_RELS.forEach(r=>fkset[r[0]+'.'+r[1]]=true);
+  let html='<svg id="erdSvg" class="erd-svg"></svg>';
+  ALL_TABLES.forEach(t=>{
+    let ti; try{ti=viewerDb.exec('PRAGMA table_info("'+t+'")')[0];}catch(e){return;}
+    if(!ti)return;
+    const pos=ERD_POS[t]||[40,40];
+    html+='<div class="erd-box" data-t="'+t+'" style="left:'+pos[0]+'px;top:'+pos[1]+'px">';
+    html+='<div class="erd-box-h">'+esc(t)+'</div>';
+    ti.values.forEach(c=>{ const name=c[1], pk=c[5]>0, fk=fkset[t+'.'+name];
+      html+='<div class="erd-col'+(fk?' fk':'')+'">'+(pk?'<span class="erd-pk">🔑</span>':'')+'<span>'+esc(name)+'</span>'+(fk?'<span class="erd-fklink">🔗</span>':'')+'</div>';
+    });
+    html+='</div>';
+  });
+  stage.innerHTML=html;
+  erdBuilt=true;
+}
+function erdMeasure(){
+  const stage=document.getElementById('erdStage');
+  stage.style.zoom=1;                 // measure in unscaled coordinates
+  let maxR=300,maxB=300;
+  stage.querySelectorAll('.erd-box').forEach(b=>{
+    maxR=Math.max(maxR,b.offsetLeft+b.offsetWidth);
+    maxB=Math.max(maxB,b.offsetTop+b.offsetHeight);
+  });
+  erdW=maxR+40; erdH=maxB+40;
+  stage.style.width=erdW+'px'; stage.style.height=erdH+'px';
+  const svg=document.getElementById('erdSvg');
+  if(svg){svg.setAttribute('width',erdW);svg.setAttribute('height',erdH);}
+}
+function erdApplyZoom(){
+  // CSS `zoom` scales layout natively — avoids the transform-inside-scroll
+  // rendering bug seen in mobile WebViews (which produced a blank canvas).
+  document.getElementById('erdStage').style.zoom=erdZoom;
+}
+function erdSetZoom(z){ erdZoom=Math.min(2,Math.max(0.2,z)); erdApplyZoom(); }
+function erdFit(){
+  const cv=document.getElementById('erdCanvas');
+  if(!cv.clientWidth||!erdW)return;
+  const z=Math.min((cv.clientWidth-12)/erdW,(cv.clientHeight-12)/erdH);
+  erdSetZoom(Math.max(0.2,Math.min(1,z)));
+  cv.scrollTo(0,0);
+}
+function erdDraw(){
+  const svg=document.getElementById('erdSvg'); if(!svg)return;
+  const stage=document.getElementById('erdStage');
+  let lines='';
+  ERD_RELS.forEach(r=>{
+    const a=stage.querySelector('.erd-box[data-t="'+r[0]+'"]'), b=stage.querySelector('.erd-box[data-t="'+r[2]+'"]');
+    if(!a||!b)return;
+    const ax=a.offsetLeft+a.offsetWidth/2, ay=a.offsetTop+a.offsetHeight/2;
+    const bx=b.offsetLeft+b.offsetWidth/2, by=b.offsetTop+b.offsetHeight/2;
+    const soft=r[4]==='soft';
+    lines+='<line x1="'+ax+'" y1="'+ay+'" x2="'+bx+'" y2="'+by+'" stroke="'+(soft?'#5b6b82':'#2dd4bf')+'" stroke-width="2" stroke-opacity="'+(soft?.7:.85)+'"'+(soft?' stroke-dasharray="6 5"':'')+' />';
+  });
+  svg.innerHTML=lines;
+}
+// drag — coordinates converted to stage space using current zoom
+let erdDragEl=null, erdOff=[0,0];
+function erdStageXY(e){
+  const cv=document.getElementById('erdCanvas'), cr=cv.getBoundingClientRect();
+  return [ (e.clientX-cr.left+cv.scrollLeft)/erdZoom, (e.clientY-cr.top+cv.scrollTop)/erdZoom ];
+}
+function erdDown(e){
+  const box=e.target.closest('.erd-box'); if(!box)return;
+  erdDragEl=box; const p=erdStageXY(e);
+  erdOff=[p[0]-box.offsetLeft, p[1]-box.offsetTop]; box.style.zIndex=20;
+  if(box.setPointerCapture&&e.pointerId!=null){try{box.setPointerCapture(e.pointerId);}catch(_){}}
+  e.preventDefault();
+}
+function erdMove(e){
+  if(!erdDragEl)return;
+  const p=erdStageXY(e);
+  erdDragEl.style.left=Math.max(0,p[0]-erdOff[0])+'px';
+  erdDragEl.style.top=Math.max(0,p[1]-erdOff[1])+'px';
+  erdDraw();
+}
+function erdUp(){ if(erdDragEl){erdDragEl.style.zIndex='';erdDragEl=null;} }
+function erdRefresh(){ erdMeasure(); erdDraw(); erdFit(); }
+function openErd(){
+  const ov=document.getElementById('erdOverlay');
+  ov.classList.add('show');
+  // build & size only once the overlay is actually laid out (avoids empty/black canvas)
+  setTimeout(()=>{ if(!erdBuilt)erdBuild(); erdRefresh(); requestAnimationFrame(erdRefresh); },30);
+}
+function closeErd(){ document.getElementById('erdOverlay').classList.remove('show'); }
+document.getElementById('erdFab').onclick=openErd;
+document.getElementById('erdClose').onclick=closeErd;
+document.getElementById('erdReset').onclick=()=>{erdBuilt=false;erdBuild();erdRefresh();};
+document.getElementById('erdZoomIn').onclick=()=>erdSetZoom(erdZoom*1.25);
+document.getElementById('erdZoomOut').onclick=()=>erdSetZoom(erdZoom*0.8);
+document.getElementById('erdFitBtn').onclick=erdFit;
+(function(){
+  const cv=document.getElementById('erdCanvas');
+  cv.addEventListener('pointerdown',erdDown);
+  document.addEventListener('pointermove',erdMove);
+  document.addEventListener('pointerup',erdUp);
+  cv.addEventListener('pointercancel',erdUp);
+  cv.addEventListener('wheel',e=>{ if(e.ctrlKey){e.preventDefault();erdSetZoom(erdZoom*(e.deltaY<0?1.1:0.9));} },{passive:false});
+})();
+
+/* ---- init ---- */
+let ALL_TABLES=['EmployeeDetail','ProjectDetail','Members2023','Members2024','FuelDetail'];
+(function setCounts(){
+  const all=flat(()=>true).length, qs=flat(q=>q.type==='query').length;
+  document.getElementById('cntAll').textContent=all;
+  document.getElementById('cntQ').textContent=qs;
+})();
+renderTopics();buildSchema();
+function loadSchemaMeta(){
+  try{
+    const r=viewerDb.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+    ALL_TABLES=r.length?r[0].values.map(v=>v[0]):ALL_TABLES;
+    const hint={};
+    ALL_TABLES.forEach(t=>{
+      const ti=viewerDb.exec('PRAGMA table_info("'+t+'")');
+      hint[t]=ti.length?ti[0].values.map(v=>v[1]):[];
+    });
+    SCHEMA_HINT=hint;
+  }catch(e){}
+}
+loadSqlJs().then(s=>{
+  SQL=s;
+  DB_BYTES=buildBigDb();
+  viewerDb=new SQL.Database(DB_BYTES);
+  loadSchemaMeta();
+  document.getElementById('loading-ov').style.display='none';
+})
+.catch(()=>{document.getElementById('loading-ov').innerHTML='<div style="color:var(--red);text-align:center;padding:20px">Error loading the SQL engine.<br>Check your internet connection and try refreshing.</div>';});
+</script>
+</body>
+</html>

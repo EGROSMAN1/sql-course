@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Study Material — Summaries & Examples | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(74,158,255,.06) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.25);color:var(--blue);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px}
+
+/* TABS */
+.tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;position:sticky;top:49px;z-index:90}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.85rem 1.2rem;font-size:13px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-right:none;border-left:none;font-family:var(--font)}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* SECTION HEADER */
+.sec-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.sec-header::before{content:'';position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle,rgba(0,212,255,.05) 0%,transparent 70%)}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.sec-title{font-size:1.6rem;font-weight:900;margin-bottom:.5rem}
+.sec-desc{color:var(--text2);font-size:14px;line-height:1.8}
+
+/* CONTENT SECTION */
+.content-sec{margin-bottom:2.5rem}
+.content-sec-title{font-size:.95rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.content-sec-title::before{content:'';display:block;width:3px;height:16px;background:var(--yellow);border-radius:2px;flex-shrink:0}
+
+/* CONCEPT BOX */
+.concept{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.concept-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-body{color:var(--text2);font-size:14px;line-height:1.85}
+.concept-body strong{color:var(--text);font-weight:600}
+.concept-body code{background:var(--bg3);border:1px solid var(--border);color:var(--cyan);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
+
+/* HIGHLIGHT */
+.hl{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;display:flex;gap:.75rem;align-items:flex-start}
+.hl.info{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-right:3px solid var(--blue)}
+.hl.tip{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-right:3px solid var(--green2)}
+.hl.warn{background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow)}
+.hl-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.hl-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.hl-text strong{color:var(--text)}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
+.data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.65rem 1rem;text-align:right;border:1px solid var(--border)}
+.data-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.6}
+.data-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.data-table .pk{color:var(--yellow);font-family:var(--mono);font-size:11px;font-weight:700}
+.data-table .fk{color:var(--orange);font-family:var(--mono);font-size:11px;font-weight:700}
+.data-table .good{color:var(--green)}
+.data-table .bad{color:var(--red)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:.6rem;margin:.75rem 0}
+.step{display:flex;gap:.75rem;align-items:flex-start}
+.step-n{width:28px;height:28px;border-radius:8px;background:var(--blue3);color:var(--blue);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-t{font-size:13.5px;color:var(--text2);line-height:1.6;flex:1}
+.step-t strong{color:var(--text)}
+
+/* NORTHWIND DIAGRAM */
+.diagram-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:.75rem 0}
+.diagram-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.75rem 1rem;font-size:13px;font-weight:700;color:var(--text2)}
+.diagram-body{padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
+.db-table{background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.db-table-header{padding:.5rem .75rem;font-size:12px;font-weight:700;font-family:var(--mono);text-align:center}
+.db-table-header.blue{background:rgba(74,158,255,.2);color:var(--blue)}
+.db-table-header.green{background:rgba(0,230,118,.15);color:var(--green)}
+.db-table-header.orange{background:rgba(255,140,66,.15);color:var(--orange)}
+.db-table-header.purple{background:rgba(210,168,255,.15);color:var(--purple)}
+.db-table-header.cyan{background:rgba(0,212,255,.15);color:var(--cyan)}
+.db-table-header.red{background:rgba(255,71,87,.15);color:var(--red)}
+.db-table-header.yellow{background:rgba(255,209,102,.15);color:var(--yellow)}
+.db-table-header.teal{background:rgba(0,168,150,.15);color:#00d4aa}
+.db-col{padding:.3rem .75rem;font-size:11.5px;color:var(--text3);font-family:var(--mono);border-top:1px solid var(--border)}
+.db-col.pk-col{color:var(--yellow)}
+.db-col.fk-col{color:var(--orange)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.diagram-body{grid-template-columns:repeat(2,1fr)}
+.tab-btn{font-size:11px;padding:.65rem .75rem}
+.data-table{font-size:11px}
+}
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+</style>
+
+<meta name="description" content="Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/study.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/study.html">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="Study Material — SQL Course">
+<meta property="og:description" content="Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Study Material — SQL Course">
+<meta name="twitter:description" content="Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Study Material",
+        "item": "https://egrosman1.github.io/sql-course/study.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "SQL Study Material — Summaries & Examples | SQL.course",
+    "description": "Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.",
+    "url": "https://egrosman1.github.io/sql-course/study.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Course",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "Free SQL Course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← Home</a>
+  <div class="topnav-title">📖 Study Material</div>
+  <div class="topnav-links">
+    <a href="course.html" class="topnav-link">📚 Learn</a>
+    <a href="../study.html" class="topnav-link" title="עברית">🇮🇱 עברית</a><a href="study.html" class="topnav-link" title="English" aria-current="page">🇺🇸 English</a>
+    <a href="practice.html" class="topnav-link">✏️ Practice</a>
+    <a href="quiz.html" class="topnav-link">🧠 Quiz</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="tirgul-makif.html">🎯 Full Practice</a>
+  <a href="course.html">📚 Learning Material</a>
+  <a href="practice.html">✏️ Practice</a>
+  <a href="quiz.html">🧠 Quiz</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">📖 Organized Study Material</div>
+  <h1 class="hero-title">Study Material — SQL Course</h1>
+  <p class="hero-sub">In-depth explanations of databases, the Northwind structure, and SQL fundamentals</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab(0)">🗄️ What is a Database?</button>
+  <button class="tab-btn" onclick="showTab(1)">🏗️ Northwind Structure</button>
+  <button class="tab-btn" onclick="showTab(2)">🔑 Keys & Relationships</button>
+  <button class="tab-btn" onclick="showTab(3)">📊 SQL vs Excel</button>
+</div>
+
+<div class="main">
+
+<!-- ===================== TAB 1: What is a DB ===================== -->
+<div class="tab-pane active" id="tab-0">
+  <div class="sec-header">
+    <div class="sec-num">Part 1</div>
+    <div class="sec-title">🗄️ What is a Database?</div>
+    <div class="sec-desc">The easiest way to understand a database is to picture it as a <strong>huge, sophisticated digital library</strong>. While an Excel file is like a single sheet of paper, a database is the structure that holds thousands of "notebooks," keeps them organized, and lets you find information in a fraction of a second.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🏛️ What is a database and what does it do?</div>
+    <div class="concept">
+      <div class="concept-lbl">Definition</div>
+      <div class="concept-body">
+        A database is an <strong>organized collection of information stored electronically</strong>. The system that manages the data is called a <strong>DBMS (Database Management System)</strong> — such as MySQL, SQL Server, or Oracle.
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-lbl">5 Main Roles</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Storing huge volumes</strong> — unlike Excel, which starts to "choke" at a million rows, a database handles <strong>billions of rows</strong> with ease.</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Fast retrieval</strong> — with SQL you can find a specific value among millions <strong>in milliseconds</strong>.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Security and permissions</strong> — defining exactly who can view, edit, and delete data.</div></div>
+          <div class="step"><div class="step-n">4</div><div class="step-t"><strong>Data Integrity</strong> — preventing duplicates and contradictions (e.g., two customers with the same ID number).</div></div>
+          <div class="step"><div class="step-n">5</div><div class="step-t"><strong>Concurrent access</strong> — hundreds of users read and write at the same time without "the file getting locked."</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🏗️ The Database Hierarchy</div>
+    <div class="concept">
+      <div class="concept-lbl">From the Highest Level to the Lowest</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">☁️</div><div class="step-t"><strong>Server / Instance</strong> — the computer or cloud the software runs on.</div></div>
+          <div class="step"><div class="step-n">🗄️</div><div class="step-t"><strong>Database</strong> — the main "warehouse." For example: "a sales system."</div></div>
+          <div class="step"><div class="step-n">📁</div><div class="step-t"><strong>Schema</strong> — a logical division within the warehouse (like departments in a supermarket: customers, finance...).</div></div>
+          <div class="step"><div class="step-n">📋</div><div class="step-t"><strong>Tables</strong> — the basic units where the data is actually stored.</div></div>
+          <div class="step"><div class="step-n">🔍</div><div class="step-t"><strong>Additional objects</strong> — Views (saved queries), Procedures (workflows).</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📋 Table Structure — the Heart of the Database</div>
+    <div class="concept">
+      <div class="concept-lbl">Explanation</div>
+      <div class="concept-body">
+        A table is built as a grid — but unlike Excel, it's <strong>rigid</strong>: every column has a predefined role and data type.
+      </div>
+    </div>
+    <table class="data-table">
+      <tr><th>Component</th><th>Description</th><th>Example</th></tr>
+      <tr>
+        <td><strong>Column / Field</strong></td>
+        <td>Defines the data type. Every column has a name and a type (number, text, date)</td>
+        <td>A "customer name" or "product price" column</td>
+      </tr>
+      <tr>
+        <td><strong>Row / Record</strong></td>
+        <td>Represents a single instance of an entity. Each row is one complete "object"</td>
+        <td>All the details of a specific customer</td>
+      </tr>
+      <tr>
+        <td><span class="pk">🔑 Primary Key</span></td>
+        <td>A column that must be unique for each row — the record's "ID card"</td>
+        <td>CustomerID</td>
+      </tr>
+      <tr>
+        <td><span class="fk">🔗 Foreign Key</span></td>
+        <td>A column that links to a primary key in another table — creates relationships between tables</td>
+        <td>CustomerID in the Orders table</td>
+      </tr>
+    </table>
+
+    <div class="concept">
+      <div class="concept-lbl">A Visual Example — the Products Table</div>
+      <div class="concept-body">
+        <table class="data-table">
+          <tr>
+            <th><span class="pk">🔑 ProductID (PK)</span></th>
+            <th>ProductName</th>
+            <th><span class="fk">🔗 CategoryID (FK)</span></th>
+            <th>ListPrice</th>
+          </tr>
+          <tr><td>101</td><td>Laptop</td><td>1</td><td>3,500</td></tr>
+          <tr><td>102</td><td>Mouse</td><td>2</td><td>150</td></tr>
+          <tr><td>103</td><td>Keyboard</td><td>2</td><td>250</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text">
+        <strong>About this example:</strong><br>
+        • <strong>Primary Key</strong>: ProductID ensures no two products share the same number<br>
+        • <strong>Foreign Key</strong>: CategoryID links to the Categories table — where category 1 = "Computers", 2 = "Peripherals"<br>
+        • <strong>Types</strong>: ListPrice is always a number, ProductName is always text
+      </div>
+    </div>
+  </div>
+
+  <div class="hl info">
+    <div class="hl-icon">🎯</div>
+    <div class="hl-text"><strong>In summary:</strong> a database is the engine behind every app and website you know. It stores information in linked tables and lets you quickly extract complex business insights.</div>
+  </div>
+</div>
+
+<!-- ===================== TAB 2: Northwind ===================== -->
+<div class="tab-pane" id="tab-1">
+  <div class="sec-header">
+    <div class="sec-num">Part 2</div>
+    <div class="sec-title">🏪 The Northwind Database Structure</div>
+    <div class="sec-desc">Northwind is a classic database that simulates a <strong>trading company</strong>. It includes 8 central tables linked to one another. This is the database we'll use throughout the course.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🗂️ The 8 Tables of Northwind</div>
+    <div class="diagram-wrap">
+      <div class="diagram-header">📊 Table Structure — Northwind</div>
+      <div class="diagram-body">
+
+        <div class="db-table">
+          <div class="db-table-header blue">🏢 Customers</div>
+          <div class="db-col pk-col">🔑 CustomerID</div>
+          <div class="db-col">CompanyName</div>
+          <div class="db-col">ContactTitle</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+          <div class="db-col">Region</div>
+          <div class="db-col">PostalCode</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header green">📦 Orders</div>
+          <div class="db-col pk-col">🔑 OrderID</div>
+          <div class="db-col fk-col">🔗 CustomerID</div>
+          <div class="db-col fk-col">🔗 EmployeeID</div>
+          <div class="db-col">OrderDate</div>
+          <div class="db-col">RequiredDate</div>
+          <div class="db-col">ShippedDate</div>
+          <div class="db-col fk-col">🔗 ShipVia</div>
+          <div class="db-col">Freight</div>
+          <div class="db-col">ShipCity</div>
+          <div class="db-col">ShipCountry</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header red">📋 Order Details</div>
+          <div class="db-col pk-col">🔑 OrderID</div>
+          <div class="db-col fk-col">🔗 ProductID</div>
+          <div class="db-col">UnitPrice</div>
+          <div class="db-col">Quantity</div>
+          <div class="db-col">Discount</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header orange">🛒 Products</div>
+          <div class="db-col pk-col">🔑 ProductID</div>
+          <div class="db-col">ProductName</div>
+          <div class="db-col fk-col">🔗 SupplierID</div>
+          <div class="db-col fk-col">🔗 CategoryID</div>
+          <div class="db-col">UnitPrice</div>
+          <div class="db-col">UnitsInStock</div>
+          <div class="db-col">Discontinued</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header purple">👤 Employees</div>
+          <div class="db-col pk-col">🔑 EmployeeID</div>
+          <div class="db-col">LastName</div>
+          <div class="db-col">FirstName</div>
+          <div class="db-col">Title</div>
+          <div class="db-col">BirthDate</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header cyan">🏭 Suppliers</div>
+          <div class="db-col pk-col">🔑 SupplierID</div>
+          <div class="db-col">CompanyName</div>
+          <div class="db-col">ContactTitle</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+          <div class="db-col">PostalCode</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header yellow">🏷️ Categories</div>
+          <div class="db-col pk-col">🔑 CategoryID</div>
+          <div class="db-col">CategoryName</div>
+          <div class="db-col">Description</div>
+          <div class="db-col">Picture</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header teal">🚚 Shippers</div>
+          <div class="db-col pk-col">🔑 ShipperID</div>
+          <div class="db-col fk-col">🔗 CompanyName</div>
+          <div class="db-col">Phone</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔗 Relationships Between the Tables</div>
+    <table class="data-table">
+      <tr><th>From Table</th><th>Linked Via</th><th>To Table</th><th>Meaning</th></tr>
+      <tr><td>Orders</td><td>CustomerID</td><td>Customers</td><td>Every order belongs to a customer</td></tr>
+      <tr><td>Orders</td><td>EmployeeID</td><td>Employees</td><td>Every order was handled by an employee</td></tr>
+      <tr><td>Orders</td><td>ShipVia</td><td>Shippers</td><td>Every order was shipped by a shipping company</td></tr>
+      <tr><td>Order Details</td><td>OrderID</td><td>Orders</td><td>The line items of each order</td></tr>
+      <tr><td>Order Details</td><td>ProductID</td><td>Products</td><td>Which product was ordered</td></tr>
+      <tr><td>Products</td><td>SupplierID</td><td>Suppliers</td><td>Who supplies the product</td></tr>
+      <tr><td>Products</td><td>CategoryID</td><td>Categories</td><td>Which category the product belongs to</td></tr>
+    </table>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text"><strong>Tip:</strong> the <strong>Orders</strong> table is the heart of Northwind — it links to 4 other tables. Most of the JOIN queries we write will go through it.</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🎯 Your First Query on Northwind</div>
+    <div class="concept">
+      <div class="concept-lbl">Basic SELECT</div>
+      <div class="concept-body">
+        Once you connect to Northwind, you can retrieve data:<br><br>
+        <code>USE Northwind;</code><br>
+        <code>SELECT * FROM customers LIMIT 5;</code><br><br>
+        If you see 5 rows of customers — the database is working perfectly! 🎉
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 3: Keys ===================== -->
+<div class="tab-pane" id="tab-2">
+  <div class="sec-header">
+    <div class="sec-num">Part 3</div>
+    <div class="sec-title">🔑 Keys & Relationships</div>
+    <div class="sec-desc">Keys are the foundation of relationships between tables — they're what turns a collection of separate tables into a real database.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔑 Primary Key</div>
+    <div class="concept">
+      <div class="concept-lbl">Definition & Rules</div>
+      <div class="concept-body">
+        A column (or combination of columns) that identifies each row <strong>completely uniquely</strong>.<br><br>
+        <strong>3 rules:</strong><br>
+        1. No two values can be identical<br>
+        2. It cannot be NULL<br>
+        3. It doesn't change over time<br><br>
+        <strong>Example:</strong> <code>CustomerID</code> in the customers table — every customer has their own unique number.
+      </div>
+    </div>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text">A Primary Key is the <strong>"ID card"</strong> of every row in a table — just as no two ID cards can share the same number.</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔗 Foreign Key</div>
+    <div class="concept">
+      <div class="concept-lbl">Definition</div>
+      <div class="concept-body">
+        A column in one table that points to a Primary Key <strong>in another table</strong>. It creates the relationship between the tables.<br><br>
+        <strong>Example:</strong> <code>CustomerID</code> in the orders table points to <code>CustomerID</code> in the customers table.<br><br>
+        Meaning: "every order has a defined customer that can be found in the customers table."
+      </div>
+    </div>
+    <div class="hl warn">
+      <div class="hl-icon">⚠️</div>
+      <div class="hl-text"><strong>Referential Integrity:</strong> you can't create an order with a CustomerID that doesn't exist in the customers table. The database keeps the relationships valid.</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📊 Types of Relationships</div>
+    <table class="data-table">
+      <tr><th>Relationship Type</th><th>Explanation</th><th>Example in Northwind</th></tr>
+      <tr>
+        <td><strong>1:N (One-to-Many)</strong></td>
+        <td>One row in table A is linked to many in table B</td>
+        <td>One customer → many orders</td>
+      </tr>
+      <tr>
+        <td><strong>N:N (Many-to-Many)</strong></td>
+        <td>Requires a junction table — many to many</td>
+        <td>Orders ↔ Products (via Order Details)</td>
+      </tr>
+      <tr>
+        <td><strong>1:1 (One-to-One)</strong></td>
+        <td>One row in table A = one row in table B</td>
+        <td>Less common — e.g., separate contact details</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔄 How Does This Relate to JOIN?</div>
+    <div class="concept">
+      <div class="concept-lbl">The Direct Connection</div>
+      <div class="concept-body">
+        The JOIN command uses exactly these primary-key/foreign-key relationships to combine tables:<br><br>
+        <code>JOIN orders ON customers.CustomerID = orders.CustomerID</code><br><br>
+        Every JOIN we write combines tables through the columns that define the relationship between them.
+      </div>
+    </div>
+    <div class="hl info">
+      <div class="hl-icon">🎯</div>
+      <div class="hl-text"><strong>The rule:</strong> before every JOIN, ask yourself — <strong>through which column are the tables linked?</strong> The answer is usually the primary/foreign key.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 4: SQL vs Excel ===================== -->
+<div class="tab-pane" id="tab-3">
+  <div class="sec-header">
+    <div class="sec-num">Part 4</div>
+    <div class="sec-title">📊 SQL vs Excel</div>
+    <div class="sec-desc">Two excellent tools — but for different uses. Understanding the difference will help you know when to use each.</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">⚡ Full Comparison</div>
+    <table class="data-table">
+      <tr><th>Criterion</th><th>Excel</th><th>SQL</th></tr>
+      <tr>
+        <td><strong>Data volume</strong></td>
+        <td class="bad">up to ~1M rows</td>
+        <td class="good">billions of rows</td>
+      </tr>
+      <tr>
+        <td><strong>Speed</strong></td>
+        <td class="bad">slow with large files</td>
+        <td class="good">very fast at any size</td>
+      </tr>
+      <tr>
+        <td><strong>Sharing & accessibility</strong></td>
+        <td class="bad">files passed around, conflicting versions</td>
+        <td class="good">one central database for everyone</td>
+      </tr>
+      <tr>
+        <td><strong>Data security</strong></td>
+        <td class="bad">anyone can edit</td>
+        <td class="good">precise permissions per user</td>
+      </tr>
+      <tr>
+        <td><strong>Human error</strong></td>
+        <td class="bad">easy to enter a wrong value</td>
+        <td class="good">a rigid structure prevents mistakes</td>
+      </tr>
+      <tr>
+        <td><strong>Concurrent work</strong></td>
+        <td class="bad">the file locks — one person at a time</td>
+        <td class="good">hundreds of users at once</td>
+      </tr>
+      <tr>
+        <td><strong>Visual flexibility</strong></td>
+        <td class="good">charts and colors with ease</td>
+        <td class="bad">requires a separate BI tool</td>
+      </tr>
+      <tr>
+        <td><strong>Accessibility for the average user</strong></td>
+        <td class="good">an intuitive graphical interface</td>
+        <td class="bad">requires learning a language</td>
+      </tr>
+      <tr>
+        <td><strong>Precise retrieval</strong></td>
+        <td class="bad">loads the whole file into memory</td>
+        <td class="good">retrieves only what's needed</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🎯 When to Use Each One?</div>
+    <div class="concept">
+      <div class="concept-lbl">Use Excel When You Want</div>
+      <div class="concept-body">
+        ✅ A one-off analysis of small files (up to a few hundred thousand rows)<br>
+        ✅ Quick visualization — charts, Pivot Tables<br>
+        ✅ Working with data already exported from the database<br>
+        ✅ Easy sharing with managers who don't know SQL
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-lbl">Use SQL When You Want</div>
+      <div class="concept-body">
+        ✅ Working with millions of rows and up<br>
+        ✅ Complex queries that join multiple tables<br>
+        ✅ Reports that refresh automatically<br>
+        ✅ Maintaining the "single source of truth" — correct, centralized data<br>
+        ✅ Automation and running repeated processes
+      </div>
+    </div>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text"><strong>In practice:</strong> analysts use SQL to pull data from the database — then bring it into Excel, Power BI, or Python for analysis and visualization. <strong>The two complement each other!</strong></div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📈 Conclusion — Why Learn SQL?</div>
+    <div class="concept">
+      <div class="concept-lbl">3 Key Reasons</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>A universal language</strong> — SQL works with MySQL, SQL Server, Oracle, PostgreSQL, and more. Learn it once — use it everywhere.</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Market demand</strong> — SQL is one of the most sought-after skills in any Data, BI, Analytics, or Product role.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Analytical independence</strong> — instead of waiting for IT to prepare a report, you pull the data you need exactly when you need it.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showTab(idx){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

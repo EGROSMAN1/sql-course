@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online SQL Simulators — Live In-Browser Practice | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
+  --border:#1e2d42;--border2:#2a3f5a;
+  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
+  --aq:#00d4c8;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.5}
+
+/* Topbar */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.7rem 1.2rem;display:flex;align-items:center;gap:1rem;height:54px;position:sticky;top:0;z-index:50}
+.logo{display:flex;align-items:center;gap:.4rem;font-weight:900;font-size:1.05rem}
+.logo-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--aq),#4a9eff);box-shadow:0 0 12px var(--aq)}
+.back{margin-right:auto;color:var(--text2);text-decoration:none;font-size:12.5px;font-weight:600;padding:.4rem .8rem;border-radius:6px;border:1px solid var(--border);transition:all .15s}
+.back:hover{color:var(--aq);border-color:var(--aq)}
+
+/* Hero */
+.hero{text-align:center;padding:3.5rem 1.5rem 2rem;max-width:760px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(0,212,200,.1);border:1px solid rgba(0,212,200,.3);color:var(--aq);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.4rem 1rem;border-radius:99px;margin-bottom:1.2rem;font-family:var(--mono)}
+.hero h1{font-size:2.6rem;font-weight:900;margin-bottom:.85rem;letter-spacing:-.7px;line-height:1.15}
+.hero h1 span{background:linear-gradient(135deg,var(--aq),#4a9eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text2);font-size:1.05rem;line-height:1.65;max-width:560px;margin:0 auto}
+
+/* Cards grid */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.4rem;max-width:1200px;margin:1rem auto 4rem;padding:0 1.5rem}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.5rem;display:flex;flex-direction:column;gap:.85rem;text-decoration:none;color:inherit;transition:all .25s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--cc,var(--aq))}
+.card:hover{transform:translateY(-7px);border-color:var(--cc,var(--aq));box-shadow:0 24px 48px rgba(0,0,0,.5)}
+
+.card-icon{font-size:3rem;line-height:1}
+.card-name{font-size:1.4rem;font-weight:900;color:var(--text)}
+.card-desc{font-size:.88rem;color:var(--text2);line-height:1.6;flex:1}
+
+.stats{display:flex;gap:.75rem;flex-wrap:wrap}
+.stat{background:var(--bg3);border-radius:8px;padding:.4rem .85rem;text-align:center;min-width:70px}
+.stat-n{font-size:1.2rem;font-weight:900;font-family:var(--mono);color:var(--cc,var(--aq))}
+.stat-l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+
+.tags{display:flex;flex-wrap:wrap;gap:.3rem}
+.tag{font-size:10.5px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:3px 8px;border-radius:4px;border:1px solid var(--border)}
+
+.btn{background:var(--cc,var(--aq));color:#070d0f;border:none;padding:.65rem 1.5rem;border-radius:8px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:var(--font);text-align:center;margin-top:.25rem;transition:opacity .15s;display:block}
+.card:hover .btn{opacity:.88}
+
+/* Card colors */
+.nw{--cc:#00d4c8}
+.nba{--cc:#e85d04}
+.cl{--cc:#ffb81c}
+.pbi{--cc:#f2c811}
+
+@media(max-width:820px){
+  .hero{padding:2.2rem 1rem 1.5rem}
+  .hero h1{font-size:2rem}
+  .hero p{font-size:.95rem}
+  .cards{grid-template-columns:1fr;gap:1rem;padding:0 1rem;margin:.5rem auto 2.5rem}
+  .card{padding:1.3rem 1.2rem}
+  .card-icon{font-size:2.5rem}
+  .card-name{font-size:1.2rem}
+}
+</style>
+
+<meta name="description" content="Live SQL simulators that run in your browser with no installation: practice real queries on NBA data, the Champions League, and Northwind. Completely free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/simulator.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/simulator.html">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="Choose a SQL Simulator">
+<meta property="og:description" content="Live SQL simulators that run in your browser with no installation: practice real queries on NBA data, the Champions League, and Northwind. Completely free.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Choose a SQL Simulator">
+<meta name="twitter:description" content="Live SQL simulators that run in your browser with no installation: practice real queries on NBA data, the Champions League, and Northwind. Completely free.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL Simulators",
+        "item": "https://egrosman1.github.io/sql-course/simulator.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "Online SQL Simulators — Live In-Browser Practice | SQL.course",
+    "description": "Live SQL simulators that run in your browser with no installation: practice real queries on NBA data, the Champions League, and Northwind. Completely free.",
+    "url": "https://egrosman1.github.io/sql-course/simulator.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Simulation",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "Free SQL Course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Do I need to install anything to run SQL in the simulator?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. The simulators run directly in your browser using a local SQL engine \u2014 write a query, hit Run, and see real results, with no installation and no server."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What data can I practice on in the simulators?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "There are three live SQL simulators: real NBA data, 33 seasons of the Champions League, and the classic Northwind database. There is also a Power BI simulator for learning DAX and dashboards."
+   }
+  }
+ ]
+}
+</script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"><div class="logo-dot"></div>SQL Simulator</div>
+  <a href="index.html" class="back">← Home</a> <a href="../simulator.html" class="back" style="margin-inline-start:auto" title="עברית">🇮🇱 עברית</a><a href="simulator.html" class="back" style="margin-inline-start:auto" title="English" aria-current="page">🇺🇸 English</a>
+</div>
+
+<div class="hero">
+  <div class="badge">🗄 Choose a database</div>
+  <h1>Choose a <span>SQL Simulator</span></h1>
+  <p>3 interactive simulators — practice SQL on real databases, from the basics to Window Functions and CTEs</p>
+</div>
+
+<div class="cards">
+
+  <!-- Northwind -->
+  <a href="simulator-nw.html" class="card nw">
+    <div class="card-icon">🛒</div>
+    <div class="card-name">Northwind</div>
+    <div class="card-desc">The classic sales-company database — customers, orders, products, suppliers, and employees. The go-to for learning SQL from the basics to Window Functions.</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">16</div><div class="stat-l">tables</div></div>
+      <div class="stat"><div class="stat-n">24K</div><div class="stat-l">rows</div></div>
+      <div class="stat"><div class="stat-n">110</div><div class="stat-l">exercises</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">customers</span>
+      <span class="tag">orders</span>
+      <span class="tag">products</span>
+      <span class="tag">employees</span>
+      <span class="tag">suppliers</span>
+    </div>
+    <div class="btn">Open simulator →</div>
+  </a>
+
+  <!-- NBA -->
+  <a href="simulator-nba.html" class="card nba">
+    <div class="card-icon">🏀</div>
+    <div class="card-name">NBA Boxscore</div>
+    <div class="card-desc">Real NBA data — 12,000 games and 305,000 rows of player statistics from 2013 to today. Perfect for sports analytics and complex aggregations.</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">3</div><div class="stat-l">tables</div></div>
+      <div class="stat"><div class="stat-n">305K</div><div class="stat-l">rows</div></div>
+      <div class="stat"><div class="stat-n">110</div><div class="stat-l">exercises</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">game_info</span>
+      <span class="tag">player_stats</span>
+      <span class="tag">team_stats</span>
+    </div>
+    <div class="btn">Open simulator →</div>
+  </a>
+
+  <!-- Champions League -->
+  <a href="simulator-cl.html" class="card cl">
+    <div class="card-icon">⚽</div>
+    <div class="card-name">UEFA Champions League</div>
+    <div class="card-desc">33 seasons of the Champions League (1991–2024) — teams, players, squads, group stages, and knockouts. Perfect for complex JOINs, Window Functions, and CTEs.</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">7</div><div class="stat-l">tables</div></div>
+      <div class="stat"><div class="stat-n">30K</div><div class="stat-l">rows</div></div>
+      <div class="stat"><div class="stat-n">112</div><div class="stat-l">exercises</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">seasons</span>
+      <span class="tag">teams</span>
+      <span class="tag">players_list</span>
+      <span class="tag">squads</span>
+      <span class="tag">knock_out_stage</span>
+    </div>
+    <div class="btn">Open simulator →</div>
+  </a>
+
+  <!-- Power BI -->
+  <a href="../pbi-simulator.html" class="card" style="border-color:rgba(242,200,17,.4)">
+    <div class="card-icon">📊</div>
+    <div class="card-name">Power BI — NBA Analytics</div>
+    <div class="card-desc">Not SQL — a visual Power BI simulator. Learn DAX from scratch, build dashboards by dragging fields, and practice hands-on with NBA data. Part of the full data workshop.</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">DAX</div><div class="stat-l">formulas</div></div>
+      <div class="stat"><div class="stat-n">📊</div><div class="stat-l">dashboards</div></div>
+      <div class="stat"><div class="stat-n">NBA</div><div class="stat-l">data</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">DAX</span>
+      <span class="tag">Measures</span>
+      <span class="tag">Dashboard</span>
+      <span class="tag">Visuals</span>
+    </div>
+    <div class="btn">Open simulator →</div>
+  </a>
+
+</div>
+
+</body>
+</html>
