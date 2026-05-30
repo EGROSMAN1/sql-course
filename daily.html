@@ -684,7 +684,7 @@
       const challenge = window.DAILY_CHALLENGES.find(c => c.day === d);
       const isDone = completed.includes(d);
       const isToday = d === currentDay;
-      const isLocked = d > currentDay;
+      const isLocked = false; // FIXED: all 30 days accessible from the start
       
       const cls = [
         'day-cell',
