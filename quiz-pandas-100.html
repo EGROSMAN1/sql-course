@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>🐼 חידון Pandas 100 | קורס דאטה</title>
+<meta name="description" content="100 שאלות Pandas בעברית עם בדיקת קוד אוטומטית וניקוד מצטבר. סגנון LeetCode.">
+<meta name="theme-color" content="#150458">
+
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+<style>
+  :root {
+    --bg: #0a0d1f; --bg2: #121530; --bg3: #1a1f3a; --bg4: #252a52;
+    --border: #2a2f5c; --border2: #353a6b;
+    --text: #f8fafc; --text2: #aab; --text3: #888fa6;
+    --cyan: #00d4c8; --green: #00e5a0; --gold: #ffd700; --orange: #ff8800;
+    --purple: #8b5cf6; --pink: #ec4899; --red: #ef4444;
+    --easy: #10b981; --medium: #f59e0b; --hard: #ef4444;
+    --panda: #8b5cf6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+  -webkit-tap-highlight-color: rgba(0,212,200,0.2);
+  -webkit-text-size-adjust: 100%;
+    font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    direction: rtl; line-height: 1.5;
+  }
+
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .home-btn {
+    background: linear-gradient(135deg, var(--panda), #6b21a8);
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .score-pill {
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #2a1f0a, #4a3a1f);
+    border: 1.5px solid var(--gold);
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .reset-score-btn {
+    background: rgba(239,68,68,0.1);
+    color: var(--red);
+    border: 1px solid rgba(239,68,68,0.3);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .progress-strip {
+    background: var(--bg2);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 11.5px;
+  }
+  .progress-stat {
+    display: flex; align-items: center; gap: 4px; color: var(--text2);
+  }
+  .progress-stat .val { font-weight: 700; }
+  .progress-stat.easy .val { color: var(--easy); }
+  .progress-stat.medium .val { color: var(--medium); }
+  .progress-stat.hard .val { color: var(--hard); }
+  .progress-bar-wrap {
+    flex: 1; height: 6px; background: var(--bg);
+    border-radius: 3px; overflow: hidden; margin-inline-start: 8px;
+  }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--panda), var(--cyan));
+    transition: width .5s;
+  }
+
+  .filter-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-bar::-webkit-scrollbar { height: 0; }
+  .filter-pill {
+    padding: 6px 12px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    color: var(--text2);
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+  .filter-pill.active {
+    background: var(--panda); color: #fff; border-color: var(--panda); font-weight: 700;
+  }
+  .filter-pill.diff-easy.active { background: var(--easy); border-color: var(--easy); color: #000; }
+  .filter-pill.diff-medium.active { background: var(--medium); border-color: var(--medium); color: #000; }
+  .filter-pill.diff-hard.active { background: var(--hard); border-color: var(--hard); color: #fff; }
+  .filter-search {
+    flex: 1; min-width: 130px;
+    padding: 6px 12px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 12px;
+    font-family: inherit;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 14px;
+  }
+
+  .question-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .q-num {
+    background: linear-gradient(135deg, var(--panda), #6b21a8);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .q-topic { flex: 1; font-size: 13px; color: var(--text); font-weight: 600; }
+  .q-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+  .badge {
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-diff-easy { background: rgba(16,185,129,0.18); color: var(--easy); }
+  .badge-diff-medium { background: rgba(245,158,11,0.18); color: var(--medium); }
+  .badge-diff-hard { background: rgba(239,68,68,0.18); color: var(--hard); }
+  .badge-points {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,136,0,0.15));
+    color: var(--gold);
+    border: 1px solid rgba(255,215,0,0.4);
+  }
+  .badge-earned {
+    background: linear-gradient(135deg, var(--green), #00a884);
+    color: #000;
+  }
+
+  .question-text {
+    background: rgba(139,92,246,0.06);
+    border-inline-start: 3px solid var(--panda);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+  .question-text code {
+    background: rgba(139,92,246,0.2);
+    color: #c4b5fd;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: "SF Mono", Monaco, Menlo, monospace;
+    font-size: 12.5px;
+  }
+  .question-text b { color: var(--cyan); }
+
+  .editor-label {
+    font-size: 11.5px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .code-editor {
+    width: 100%;
+    background: #0a0d1f;
+    color: #e0e6ff;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SF Mono", Monaco, Menlo, "Courier New", monospace;
+    font-size: 14px;
+    direction: ltr;
+    text-align: left;
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 140px;
+    tab-size: 4;
+    user-select: text;
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
+  }
+  .code-editor:focus { outline: none; border-color: var(--panda); }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform .15s;
+  }
+  .btn:hover, .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.6; cursor: wait; }
+  .btn-run { background: linear-gradient(135deg, var(--green), #00a884); color: #000; }
+  .btn-solution { background: linear-gradient(135deg, var(--gold), var(--orange)); color: #1a1a2e; }
+  .btn-reset { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  .output-section { margin-top: 12px; display: none; }
+  .output-section.show { display: block; }
+  .output-box {
+    background: #0a0d1f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SF Mono", Monaco, Menlo, monospace;
+    font-size: 13px;
+    color: #e0e6ff;
+    white-space: pre-wrap;
+    direction: ltr;
+    text-align: left;
+    max-height: 280px;
+    overflow-y: auto;
+    min-height: 40px;
+  }
+  .output-box.error { color: #ff6b6b; }
+
+  .verdict {
+    margin-top: 10px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+  }
+  .verdict.show { display: block; animation: pop .4s ease; }
+  @keyframes pop {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .verdict.success {
+    background: linear-gradient(135deg, rgba(0,229,160,0.15), rgba(139,92,246,0.15));
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+  .verdict.fail {
+    background: rgba(255,176,32,0.1);
+    color: var(--orange);
+    border: 1px solid rgba(255,176,32,0.3);
+  }
+  .verdict .points-earned {
+    display: block;
+    font-size: 22px;
+    margin: 4px 0;
+    color: var(--gold);
+  }
+
+  .solution-section {
+    margin-top: 18px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,136,0,0.04));
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 12px;
+    padding: 16px;
+    display: none;
+  }
+  .solution-section.show { display: block; animation: slide-in .4s ease; }
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .solution-warning {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: var(--red);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  .solution-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+  .solution-header h3 { margin: 0; font-size: 17px; color: var(--gold); }
+  .copy-btn {
+    margin-inline-start: auto;
+    background: rgba(255,215,0,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(255,215,0,0.3);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .solution-code {
+    background: #0a0d1f;
+    border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 8px;
+    padding: 12px;
+    overflow-x: auto;
+  }
+  .solution-code pre {
+    margin: 0;
+    color: var(--gold);
+    font-family: "SF Mono", Monaco, Menlo, monospace;
+    font-size: 13.5px;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  .nav-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: space-between;
+  }
+  .nav-btn {
+    background: var(--bg4);
+    color: var(--text);
+    border: 1px solid var(--border2);
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .confetti {
+    position: fixed;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 10px; }
+    .question-card { padding: 11px; }
+    .q-num { font-size: 13px; padding: 3px 10px; }
+    .q-topic { font-size: 12px; }
+    .badge { font-size: 11px; padding: 2px 7px; }
+    .question-text { font-size: 13.5px; padding: 10px 13px; }
+    .code-editor { font-size: 13px; padding: 10px; min-height: 110px; }
+    .btn { padding: 9px 14px; font-size: 12.5px; }
+    .solution-code pre { font-size: 12px; }
+    .progress-strip { flex-wrap: wrap; gap: 6px; }
+    .score-pill { padding: 4px 10px; font-size: 11px; }
+  }
+
+  /* === CODE EDITOR TOOLBAR === */
+  .editor-wrap {
+    position: relative;
+  }
+  .editor-toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    flex-wrap: wrap;
+  }
+  .editor-toolbar .tb-btn {
+    background: var(--bg3);
+    color: var(--text2);
+    border: 1px solid var(--border2);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    -webkit-tap-highlight-color: rgba(0,212,200,0.2);
+  }
+  .editor-toolbar .tb-btn:hover, .editor-toolbar .tb-btn:active {
+    background: var(--cyan);
+    color: #000;
+    border-color: var(--cyan);
+  }
+  .editor-toolbar .tb-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .editor-toolbar .tb-btn.copied {
+    background: var(--green);
+    color: #000;
+    border-color: var(--green);
+  }
+  .editor-wrap .code-editor {
+    border-radius: 0 0 8px 8px !important;
+    border-top: none !important;
+  }
+  
+  @media (max-width: 480px) {
+    .editor-toolbar { padding: 5px; gap: 3px; }
+    .editor-toolbar .tb-btn { padding: 5px 8px; font-size: 11px; }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="home-btn">🏠 דף הבית</a>
+  <button class="reset-score-btn" id="reset-score-btn">🔄 איפוס</button>
+  <div class="score-pill">
+    🐼 <span id="total-score">0</span> / <span id="max-score">2000</span>
+  </div>
+</div>
+
+<div class="progress-strip">
+  <div class="progress-stat easy">🟢 <span class="val" id="easy-done">0</span>/30</div>
+  <div class="progress-stat medium">🟡 <span class="val" id="medium-done">0</span>/50</div>
+  <div class="progress-stat hard">🔴 <span class="val" id="hard-done">0</span>/20</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-pill active" data-filter-type="diff" data-filter="all">הכל (100)</button>
+  <button class="filter-pill diff-easy" data-filter-type="diff" data-filter="easy">🟢 קל (30)</button>
+  <button class="filter-pill diff-medium" data-filter-type="diff" data-filter="medium">🟡 בינוני (50)</button>
+  <button class="filter-pill diff-hard" data-filter-type="diff" data-filter="hard">🔴 קשה (20)</button>
+  <button class="filter-pill" data-filter-type="status" data-filter="todo">⭕ לא נפתרו</button>
+  <button class="filter-pill" data-filter-type="status" data-filter="done">✅ נפתרו</button>
+  <input type="search" class="filter-search" id="search" placeholder="🔍 חפש לפי נושא..." autocomplete="off">
+</div>
+
+<div class="container">
+  <div id="content">טוען...</div>
+</div>
+
+<script>
+// ============== DATA ==============
+window.PANDAS_QUIZ = [{"num": 1, "difficulty": "easy", "topic": "יצירת DataFrame", "q": "צור <code>DataFrame</code> עם 2 עמודות: <code>name</code> עם \"Avi\" ו-\"Bni\", ו-<code>age</code> עם 30 ו-25. הדפס את הטבלה.", "starter": "", "solution": "df = DataFrame({\"name\": [\"Avi\", \"Bni\"], \"age\": [30, 25]})\nprint(df)", "check": "(out, code) => /Avi/.test(out) && /30/.test(out) && /DataFrame\\(/.test(code)"}, {"num": 2, "difficulty": "easy", "topic": "יצירת DataFrame", "q": "צור DataFrame של 3 ערים: עמודה <code>city</code> עם \"TLV\", \"JLM\", \"HFA\", ועמודה <code>pop</code> עם 460000, 920000, 280000. הדפס.", "starter": "", "solution": "df = DataFrame({\"city\": [\"TLV\", \"JLM\", \"HFA\"], \"pop\": [460000, 920000, 280000]})\nprint(df)", "check": "(out, code) => /TLV/.test(out) && /920000/.test(out)"}, {"num": 3, "difficulty": "easy", "topic": "יצירת DataFrame", "q": "מ-<b>רשימת מילונים</b>: <code>[{\"x\":1,\"y\":2}, {\"x\":3,\"y\":4}]</code> - צור DataFrame והדפס.", "starter": "", "solution": "df = DataFrame([{\"x\":1,\"y\":2}, {\"x\":3,\"y\":4}])\nprint(df)", "check": "(out, code) => /x/.test(out) && /y/.test(out) && /3/.test(out)"}, {"num": 4, "difficulty": "easy", "topic": "shape ו-columns", "q": "טען את הדאטהסט <code>cities-weather</code>. הדפס את <code>shape</code> של הטבלה.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nprint(df.shape)", "check": "(out) => /\\(6,\\s*4\\)/.test(out)"}, {"num": 5, "difficulty": "easy", "topic": "shape ו-columns", "q": "טען <code>students</code> והדפס את שמות העמודות (<code>columns</code>).", "starter": "", "solution": "df = data.load(\"students\")\nprint(df.columns)", "check": "(out) => /name/.test(out) && /math/.test(out)"}, {"num": 6, "difficulty": "easy", "topic": "head ו-tail", "q": "טען <code>students</code> והדפס את <b>3 השורות הראשונות</b>.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df.head(3))", "check": "(out) => /גל/.test(out) || /תומר/.test(out) || /יעל/.test(out)"}, {"num": 7, "difficulty": "easy", "topic": "head ו-tail", "q": "טען <code>sales</code> והדפס את <b>2 השורות האחרונות</b>.", "starter": "", "solution": "df = data.load(\"sales\")\nprint(df.tail(2))", "check": "(out) => /נובמבר/.test(out) || /דצמבר/.test(out)"}, {"num": 8, "difficulty": "easy", "topic": "גישה לעמודה", "q": "מ-<code>students</code>: הדפס את עמודת <code>math</code> בלבד.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df[\"math\"])", "check": "(out, code) => /df\\[\"math\"\\]/.test(code)"}, {"num": 9, "difficulty": "easy", "topic": "גישה לעמודה", "q": "מ-<code>real-estate</code>: הדפס את עמודות <code>neighborhood</code> ו-<code>price_m</code> בלבד.", "starter": "", "solution": "df = data.load(\"real-estate\")\nprint(df[[\"neighborhood\", \"price_m\"]])", "check": "(out, code) => /\\[\\[\\\"neighborhood\\\",\\s*\\\"price_m\\\"\\]\\]/.test(code) || (/neighborhood/.test(code) && /price_m/.test(code))"}, {"num": 10, "difficulty": "easy", "topic": "דאטהסטים מובנים", "q": "השתמש ב-<code>data.list()</code> כדי להדפיס את כל הדאטהסטים הזמינים.", "starter": "", "solution": "data.list()", "check": "(out) => /cities-weather/.test(out) || /students/.test(out)"}, {"num": 11, "difficulty": "easy", "topic": "מיון", "q": "טען <code>salaries</code> ומיין מהשכר הגבוה לנמוך. הדפס.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.sort_values(\"salary\", ascending=False)\nprint(result)", "check": "(out, code) => /sort_values/.test(code) && /ascending=False/.test(code)"}, {"num": 12, "difficulty": "easy", "topic": "מיון", "q": "טען <code>real-estate</code> ומיין מהדירה הזולה ליקרה לפי <code>price_m</code>. הדפס.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.sort_values(\"price_m\", ascending=True)\nprint(result)", "check": "(out, code) => /sort_values\\(\"price_m\"/.test(code)"}, {"num": 13, "difficulty": "easy", "topic": "מיון + head", "q": "מ-<code>football</code>: מצא את הקבוצה עם הכי הרבה נקודות (<code>points</code>). הדפס שורה אחת.", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.sort_values(\"points\", ascending=False).head(1)\nprint(result)", "check": "(out) => /מכבי תל אביב/.test(out) || /55/.test(out)"}, {"num": 14, "difficulty": "easy", "topic": "מיון + head", "q": "מ-<code>sales</code>: מצא את החודש עם המכירות הנמוכות ביותר. הדפס.", "starter": "", "solution": "df = data.load(\"sales\")\nresult = df.sort_values(\"revenue\", ascending=True).head(1)\nprint(result)", "check": "(out) => /פברואר/.test(out) || /38000/.test(out)"}, {"num": 15, "difficulty": "easy", "topic": "סינון", "q": "מ-<code>students</code>: סנן רק תלמידים עם <code>math &gt; 85</code>. הדפס.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.filter(\"math\", \">\", 85)\nprint(result)", "check": "(out, code) => /\\.filter\\(/.test(code) && /math/.test(code) && (/יעל/.test(out) || /מאיה/.test(out))"}, {"num": 16, "difficulty": "easy", "topic": "סינון", "q": "מ-<code>real-estate</code>: סנן דירות עם <code>rooms &gt;= 4</code>. הדפס.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.filter(\"rooms\", \">=\", 4)\nprint(result)", "check": "(out, code) => /filter\\(\"rooms\",\\s*\">=\",\\s*4/.test(code)"}, {"num": 17, "difficulty": "easy", "topic": "סינון", "q": "מ-<code>salaries</code>: סנן עובדים שמחלקתם היא \"R&D\".", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.filter(\"department\", \"==\", \"R&D\")\nprint(result)", "check": "(out, code) => /R&D/.test(code) && (/בני/.test(out) || /חני/.test(out))"}, {"num": 18, "difficulty": "easy", "topic": "סינון", "q": "מ-<code>telecom-churn</code>: סנן רק לקוחות שנטשו (<code>churn == 1</code>). הדפס.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df.filter(\"churn\", \"==\", 1)\nprint(churners)", "check": "(out, code) => /churn/.test(code) && /==/.test(code) && /1/.test(code)"}, {"num": 19, "difficulty": "easy", "topic": "len", "q": "מ-<code>telecom-churn</code>: כמה לקוחות יש סה\"כ? השתמש ב-<code>shape</code>.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nprint(df.shape[0])", "check": "(out) => /15/.test(out)"}, {"num": 20, "difficulty": "easy", "topic": "len", "q": "מ-<code>football</code>: כמה קבוצות בליגה?", "starter": "", "solution": "df = data.load(\"football\")\nprint(df.shape[0])", "check": "(out) => /5/.test(out)"}, {"num": 21, "difficulty": "easy", "topic": "mean", "q": "מ-<code>students</code>: חשב את <b>ממוצע</b> ציוני <code>math</code>.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df[\"math\"].mean())", "check": "(out, code) => /\\.mean\\(/.test(code) && /math/.test(code)"}, {"num": 22, "difficulty": "easy", "topic": "sum", "q": "מ-<code>sales</code>: חשב את <b>סך ההכנסות השנתיות</b> (<code>revenue</code>).", "starter": "", "solution": "df = data.load(\"sales\")\nprint(df[\"revenue\"].sum())", "check": "(out) => /781000|780/.test(out)"}, {"num": 23, "difficulty": "easy", "topic": "max", "q": "מ-<code>cities-weather</code>: מה הטמפרטורה הגבוהה ביותר?", "starter": "", "solution": "df = data.load(\"cities-weather\")\nprint(df[\"temp\"].max())", "check": "(out) => /31/.test(out)"}, {"num": 24, "difficulty": "easy", "topic": "min", "q": "מ-<code>salaries</code>: מה השכר הנמוך ביותר?", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"salary\"].min())", "check": "(out) => /12000/.test(out)"}, {"num": 25, "difficulty": "easy", "topic": "count", "q": "מ-<code>real-estate</code>: כמה שכונות יש (<code>nunique</code> של <code>neighborhood</code>)?", "starter": "", "solution": "df = data.load(\"real-estate\")\nprint(df[\"neighborhood\"].nunique())", "check": "(out) => /8/.test(out)"}, {"num": 26, "difficulty": "easy", "topic": "describe", "q": "מ-<code>students</code>: הדפס <code>describe()</code> של הטבלה (סטטיסטיקה מלאה).", "starter": "", "solution": "df = data.load(\"students\")\nprint(df.describe())", "check": "(out, code) => /describe\\(/.test(code) && /math/.test(out)"}, {"num": 27, "difficulty": "easy", "topic": "value_counts", "q": "מ-<code>salaries</code>: ספור כמה עובדים בכל <code>department</code>.", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"department\"].value_counts())", "check": "(out, code) => /value_counts/.test(code) && (/Sales/.test(out))"}, {"num": 28, "difficulty": "easy", "topic": "value_counts", "q": "מ-<code>telecom-churn</code>: ספור כמה לקוחות בכל סוג <code>plan</code>.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nprint(df[\"plan\"].value_counts())", "check": "(out) => /basic/.test(out) && /premium/.test(out)"}, {"num": 29, "difficulty": "easy", "topic": "unique", "q": "מ-<code>salaries</code>: מצא רשימת המחלקות הייחודיות (<code>unique()</code>).", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"department\"].unique())", "check": "(out, code) => /unique\\(/.test(code) && /Sales/.test(out)"}, {"num": 30, "difficulty": "easy", "topic": "גישה לערך", "q": "מ-<code>cities-weather</code>: הדפס את <b>הטמפרטורה של תל אביב</b>. השתמש ב-filter ואז [\"temp\"][0].", "starter": "", "solution": "df = data.load(\"cities-weather\")\ntlv = df.filter(\"city\", \"==\", \"תל אביב\")\nprint(tlv[\"temp\"][0])", "check": "(out) => /24/.test(out)"}, {"num": 31, "difficulty": "medium", "topic": "GroupBy", "q": "מ-<code>salaries</code>: קבץ לפי <code>department</code> וחשב <b>ממוצע שכר</b> לכל מחלקה.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").mean()\nprint(result)", "check": "(out, code) => /groupby/.test(code) && /mean/.test(code)"}, {"num": 32, "difficulty": "medium", "topic": "GroupBy", "q": "מ-<code>salaries</code>: קבץ לפי <code>department</code> וספור עובדים בכל מחלקה (<code>count</code>).", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").count()\nprint(result)", "check": "(out, code) => /groupby/.test(code) && /\\.count\\(/.test(code)"}, {"num": 33, "difficulty": "medium", "topic": "GroupBy", "q": "מ-<code>telecom-churn</code>: קבץ לפי <code>plan</code> וחשב ממוצע <code>monthly_bill</code>.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nresult = df.groupby(\"plan\").mean()\nprint(result)", "check": "(out, code) => /groupby\\(\"plan\"\\)/.test(code) && /mean/.test(code)"}, {"num": 34, "difficulty": "medium", "topic": "GroupBy", "q": "מ-<code>salaries</code>: קבץ לפי מחלקה וחשב <b>סך השכר</b> בכל מחלקה (<code>sum</code>).", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").sum()\nprint(result)", "check": "(out, code) => /groupby/.test(code) && /\\.sum\\(/.test(code)"}, {"num": 35, "difficulty": "medium", "topic": "GroupBy + Max", "q": "מ-<code>salaries</code>: קבץ לפי מחלקה והדפס את <b>שכר הגבוה ביותר</b> בכל מחלקה (<code>max</code>).", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").max()\nprint(result)", "check": "(out, code) => /groupby/.test(code) && /\\.max\\(/.test(code)"}, {"num": 36, "difficulty": "medium", "topic": "GroupBy + Size", "q": "מ-<code>football</code>: קבץ לפי כל קבוצה והדפס את גודל הקבוצה (<code>size</code>). (כל שורה היא קבוצה אחת).", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.groupby(\"team\").size()\nprint(result)", "check": "(out, code) => /groupby/.test(code) && (/\\.size\\(/.test(code) || /count/.test(code))"}, {"num": 37, "difficulty": "medium", "topic": "תנאי מרובה", "q": "מ-<code>students</code>: השתמש ב-<code>where</code> עם lambda - תלמידים עם <b>math &gt; 80</b> וגם <b>english &gt; 80</b>.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.where(lambda r: r[\"math\"] > 80 and r[\"english\"] > 80)\nprint(result)", "check": "(out, code) => /where/.test(code) && /lambda/.test(code) && /and/.test(code)"}, {"num": 38, "difficulty": "medium", "topic": "תנאי מרובה", "q": "מ-<code>telecom-churn</code>: סנן לקוחות עם <code>monthly_bill &gt; 100</code> ו-<code>tenure_months &gt; 40</code>.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nresult = df.where(lambda r: r[\"monthly_bill\"] > 100 and r[\"tenure_months\"] > 40)\nprint(result)", "check": "(out, code) => /where/.test(code) && /monthly_bill/.test(code) && /tenure/.test(code)"}, {"num": 39, "difficulty": "medium", "topic": "תנאי או", "q": "מ-<code>cities-weather</code>: סנן ערים עם <code>temp &gt; 25</code> <b>או</b> <code>humidity &gt; 65</code>.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nresult = df.where(lambda r: r[\"temp\"] > 25 or r[\"humidity\"] > 65)\nprint(result)", "check": "(out, code) => /or/.test(code) && /temp/.test(code) && /humidity/.test(code)"}, {"num": 40, "difficulty": "medium", "topic": "in operator", "q": "מ-<code>real-estate</code>: סנן דירות בשכונות \"פלורנטין\" או \"רוטשילד\" (השתמש ב-<code>filter</code> עם <code>\"in\"</code>).", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.filter(\"neighborhood\", \"in\", [\"פלורנטין\", \"רוטשילד\"])\nprint(result)", "check": "(out, code) => /filter\\(/.test(code) && /\"in\"/.test(code) && /פלורנטין/.test(code)"}, {"num": 41, "difficulty": "medium", "topic": "עמודה חדשה", "q": "מ-<code>students</code>: הוסף עמודה <code>total</code> שהיא <b>סכום</b> math + english + history. בנה ידנית ב-loop.", "starter": "", "solution": "df = data.load(\"students\")\ntotals = []\nfor i in range(df.shape[0]):\n    t = df[\"math\"][i] + df[\"english\"][i] + df[\"history\"][i]\n    totals.append(t)\ndf[\"total\"] = totals\nprint(df)", "check": "(out, code) => /df\\[\"total\"\\]/.test(code) && /math/.test(code)"}, {"num": 42, "difficulty": "medium", "topic": "עמודה חדשה", "q": "מ-<code>real-estate</code>: הוסף עמודה <code>price_per_sqm</code> = price_m * 1000000 / sqm.", "starter": "", "solution": "df = data.load(\"real-estate\")\nprices = []\nfor i in range(df.shape[0]):\n    p = df[\"price_m\"][i] * 1000000 / df[\"sqm\"][i]\n    prices.append(round(p))\ndf[\"price_per_sqm\"] = prices\nprint(df)", "check": "(out, code) => /price_per_sqm/.test(code)"}, {"num": 43, "difficulty": "medium", "topic": "עמודה חדשה - תנאי", "q": "מ-<code>students</code>: הוסף עמודה <code>grade</code> שהיא \"A\" אם math &gt; 90, אחרת \"B\".", "starter": "", "solution": "df = data.load(\"students\")\ngrades = []\nfor i in range(df.shape[0]):\n    g = \"A\" if df[\"math\"][i] > 90 else \"B\"\n    grades.append(g)\ndf[\"grade\"] = grades\nprint(df)", "check": "(out, code) => /grade/.test(code) && /\"A\"/.test(code)"}, {"num": 44, "difficulty": "medium", "topic": "עמודה חדשה - חישוב", "q": "מ-<code>football</code>: הוסף עמודה <code>goal_diff</code> = goals_for - goals_against.", "starter": "", "solution": "df = data.load(\"football\")\ndiffs = []\nfor i in range(df.shape[0]):\n    diffs.append(df[\"goals_for\"][i] - df[\"goals_against\"][i])\ndf[\"goal_diff\"] = diffs\nprint(df)", "check": "(out, code) => /goal_diff/.test(code) && /goals_for/.test(code)"}, {"num": 45, "difficulty": "medium", "topic": "apply", "q": "מ-<code>students</code>: השתמש ב-<code>apply</code> על עמודת math - הוסף עמודה <code>math_pct</code> שהיא math/100.", "starter": "", "solution": "df = data.load(\"students\")\nseries = df[\"math\"]\npcts = series.apply(lambda x: x/100)\ndf[\"math_pct\"] = list(pcts)\nprint(df)", "check": "(out, code) => /apply/.test(code) || /math_pct/.test(code)"}, {"num": 46, "difficulty": "medium", "topic": "apply + map", "q": "מ-<code>cities-weather</code>: הוסף עמודה <code>temp_f</code> = temp * 9/5 + 32 (פרנהייט). השתמש ב-loop.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nf_temps = []\nfor i in range(df.shape[0]):\n    f_temps.append(round(df[\"temp\"][i] * 9/5 + 32, 1))\ndf[\"temp_f\"] = f_temps\nprint(df)", "check": "(out, code) => /temp_f/.test(code) && /9/.test(code) && /32/.test(code)"}, {"num": 47, "difficulty": "medium", "topic": "mean conditional", "q": "מ-<code>telecom-churn</code>: חשב <b>ממוצע monthly_bill</b> רק עבור לקוחות שנטשו (churn=1). הדפס.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df.filter(\"churn\", \"==\", 1)\nprint(churners[\"monthly_bill\"].mean())", "check": "(out, code) => /filter.*churn/.test(code) && /mean/.test(code)"}, {"num": 48, "difficulty": "medium", "topic": "אחוז", "q": "מ-<code>telecom-churn</code>: חשב את <b>אחוז הלקוחות שנטשו</b> מתוך הכל. הדפס מספר.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df.filter(\"churn\", \"==\", 1)\npct = churners.shape[0] / df.shape[0] * 100\nprint(round(pct, 1))", "check": "(out, code) => /shape\\[0\\]/.test(code) && /100/.test(code)"}, {"num": 49, "difficulty": "medium", "topic": "rate", "q": "מ-<code>football</code>: לכל קבוצה - חשב <code>win_rate</code> = wins / (wins+draws+losses). הוסף כעמודה.", "starter": "", "solution": "df = data.load(\"football\")\nrates = []\nfor i in range(df.shape[0]):\n    total = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    rates.append(round(df[\"wins\"][i] / total, 2))\ndf[\"win_rate\"] = rates\nprint(df)", "check": "(out, code) => /win_rate/.test(code) && /wins/.test(code)"}, {"num": 50, "difficulty": "medium", "topic": "התקדמות", "q": "מ-<code>covid-israel</code>: הוסף עמודה <code>positive_rate</code> = positive / tested * 100 (מעוגל ל-2 ספרות).", "starter": "", "solution": "df = data.load(\"covid-israel\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append(round(df[\"positive\"][i] / df[\"tested\"][i] * 100, 2))\ndf[\"positive_rate\"] = rates\nprint(df)", "check": "(out, code) => /positive_rate/.test(code) && /tested/.test(code)"}, {"num": 51, "difficulty": "medium", "topic": "Top N", "q": "מ-<code>salaries</code>: מצא את <b>3 בעלי השכר הגבוה ביותר</b>. הדפס שמות ושכר.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.sort_values(\"salary\", ascending=False).head(3)\nprint(result[[\"name\", \"salary\"]])", "check": "(out, code) => /sort_values.*salary/.test(code) && /head\\(3/.test(code)"}, {"num": 52, "difficulty": "medium", "topic": "Top N", "q": "מ-<code>real-estate</code>: <b>2 השכונות הזולות</b> ביותר במחיר למ\"ר. חשב price_per_sqm ומיין.", "starter": "", "solution": "df = data.load(\"real-estate\")\npps = []\nfor i in range(df.shape[0]):\n    pps.append(df[\"price_m\"][i] * 1000000 / df[\"sqm\"][i])\ndf[\"price_per_sqm\"] = pps\nresult = df.sort_values(\"price_per_sqm\").head(2)\nprint(result[[\"neighborhood\", \"price_per_sqm\"]])", "check": "(out, code) => /head\\(2/.test(code) && /price_per_sqm/.test(code)"}, {"num": 53, "difficulty": "medium", "topic": "Bottom N", "q": "מ-<code>students</code>: <b>3 התלמידים החלשים ביותר</b> ב-math. הדפס name + math.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.sort_values(\"math\", ascending=True).head(3)\nprint(result[[\"name\", \"math\"]])", "check": "(out, code) => /sort_values.*math/.test(code) && /ascending=True/.test(code)"}, {"num": 54, "difficulty": "medium", "topic": "מיון לפי שמות", "q": "מ-<code>real-estate</code>: מיין שכונות לפי שם <b>אלפבית</b>. הדפס neighborhood.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.sort_values(\"neighborhood\", ascending=True)\nprint(result[\"neighborhood\"])", "check": "(out, code) => /sort_values\\(\"neighborhood\"/.test(code)"}, {"num": 55, "difficulty": "medium", "topic": "pct_change", "q": "מ-<code>sales</code>: חשב את <code>pct_change</code> של revenue (אחוזי שינוי בין חודשים). הדפס את ה-Series.", "starter": "", "solution": "df = data.load(\"sales\")\nchanges = df[\"revenue\"].pct_change()\nprint(changes)", "check": "(out, code) => /pct_change/.test(code)"}, {"num": 56, "difficulty": "medium", "topic": "cumsum", "q": "מ-<code>sales</code>: חשב את <code>cumsum</code> של revenue (סכום מצטבר). הדפס.", "starter": "", "solution": "df = data.load(\"sales\")\ncum = df[\"revenue\"].cumsum()\nprint(cum)", "check": "(out, code) => /cumsum/.test(code)"}, {"num": 57, "difficulty": "medium", "topic": "נוסחה מורכבת", "q": "מ-<code>football</code>: לכל קבוצה - חשב <code>efficiency</code> = goals_for / (wins+draws+losses). הוסף כעמודה.", "starter": "", "solution": "df = data.load(\"football\")\neffs = []\nfor i in range(df.shape[0]):\n    total = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    effs.append(round(df[\"goals_for\"][i] / total, 2))\ndf[\"efficiency\"] = effs\nprint(df[[\"team\", \"efficiency\"]])", "check": "(out, code) => /efficiency/.test(code) && /goals_for/.test(code)"}, {"num": 58, "difficulty": "medium", "topic": "נוסחה מורכבת", "q": "מ-<code>covid-israel</code>: חשב <b>ממוצע positive_rate</b> שבוע ראשון מול שבוע אחרון. השתמש ב-head(4).tail(4).", "starter": "", "solution": "df = data.load(\"covid-israel\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append(df[\"positive\"][i] / df[\"tested\"][i] * 100)\ndf[\"rate\"] = rates\nfirst = df.head(4)\nlast = df.tail(4)\nprint(\"First 4 avg:\", first[\"rate\"].mean())\nprint(\"Last 4 avg:\", last[\"rate\"].mean())", "check": "(out, code) => /head\\(4/.test(code) && /tail\\(4/.test(code)"}, {"num": 59, "difficulty": "medium", "topic": "groupby + sort", "q": "מ-<code>salaries</code>: קבץ לפי department, חשב ממוצע, ומיין מהמחלקה הגבוהה לנמוכה.", "starter": "", "solution": "df = data.load(\"salaries\")\ngrouped = df.groupby(\"department\").mean()\nresult = grouped.sort_values(\"salary\", ascending=False)\nprint(result)", "check": "(out, code) => /groupby/.test(code) && /sort_values/.test(code)"}, {"num": 60, "difficulty": "medium", "topic": "groupby + filter", "q": "מ-<code>telecom-churn</code>: קבץ churners (churn=1) לפי plan וספור. הדפס.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df.filter(\"churn\", \"==\", 1)\nresult = churners.groupby(\"plan\").count()\nprint(result)", "check": "(out, code) => /filter.*churn/.test(code) && /groupby/.test(code)"}, {"num": 61, "difficulty": "medium", "topic": "drop", "q": "מ-<code>students</code>: הסר את עמודת <code>history</code>. הדפס.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.drop(columns=[\"history\"])\nprint(result)", "check": "(out, code) => /drop\\(/.test(code) && /history/.test(code)"}, {"num": 62, "difficulty": "medium", "topic": "rename", "q": "מ-<code>students</code>: שנה את שם עמודת <code>math</code> ל-<code>math_score</code>. הדפס.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.rename(columns={\"math\": \"math_score\"})\nprint(result)", "check": "(out, code) => /rename/.test(code) && /math_score/.test(code)"}, {"num": 63, "difficulty": "medium", "topic": "fillna", "q": "צור DataFrame עם ערכי <code>None</code>: <code>{\"a\": [1, None, 3], \"b\": [4, 5, None]}</code>. מלא None ב-0 והדפס.", "starter": "", "solution": "df = DataFrame({\"a\": [1, None, 3], \"b\": [4, 5, None]})\nresult = df.fillna(0)\nprint(result)", "check": "(out, code) => /fillna\\(0\\)/.test(code)"}, {"num": 64, "difficulty": "medium", "topic": "dropna", "q": "צור DataFrame: <code>{\"a\": [1, None, 3], \"b\": [4, 5, 6]}</code>. הסר שורות עם None.", "starter": "", "solution": "df = DataFrame({\"a\": [1, None, 3], \"b\": [4, 5, 6]})\nresult = df.dropna()\nprint(result)", "check": "(out, code) => /dropna/.test(code)"}, {"num": 65, "difficulty": "medium", "topic": "drop_duplicates", "q": "צור DataFrame: <code>{\"a\": [1, 2, 1, 3], \"b\": [4, 5, 4, 6]}</code>. הסר כפילויות.", "starter": "", "solution": "df = DataFrame({\"a\": [1, 2, 1, 3], \"b\": [4, 5, 4, 6]})\nresult = df.drop_duplicates()\nprint(result)", "check": "(out, code) => /drop_duplicates/.test(code)"}, {"num": 66, "difficulty": "medium", "topic": "astype", "q": "מ-<code>football</code>: המר את עמודת <code>points</code> ל-<code>float</code>. השתמש ב-<code>astype</code>.", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.astype(\"points\", float)\nprint(result[\"points\"])", "check": "(out, code) => /astype/.test(code) && /points/.test(code)"}, {"num": 67, "difficulty": "medium", "topic": "clip", "q": "מ-<code>salaries</code>: הגבל את עמודת <code>salary</code> בין 15000 ל-25000 (clip).", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.clip(\"salary\", lower=15000, upper=25000)\nprint(result)", "check": "(out, code) => /clip\\(/.test(code) && /15000/.test(code)"}, {"num": 68, "difficulty": "medium", "topic": "nunique", "q": "מ-<code>salaries</code>: כמה מחלקות שונות יש?", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"department\"].nunique())", "check": "(out) => /3/.test(out)"}, {"num": 69, "difficulty": "medium", "topic": "set_index", "q": "מ-<code>football</code>: הפוך את עמודת <code>team</code> לאינדקס (<code>set_index</code>).", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.set_index(\"team\")\nprint(result)", "check": "(out, code) => /set_index/.test(code) && /team/.test(code)"}, {"num": 70, "difficulty": "medium", "topic": "isna", "q": "צור DataFrame עם None: <code>{\"x\": [1, None, 3]}</code>. בדוק עם <code>isna()</code> והדפס.", "starter": "", "solution": "df = DataFrame({\"x\": [1, None, 3]})\nprint(df.isna())", "check": "(out, code) => /isna/.test(code)"}, {"num": 71, "difficulty": "medium", "topic": "Merge", "q": "צור 2 טבלאות וחבר אותן ב-<code>merge</code>: employees={name:[\"Avi\",\"Bni\"], dept_id:[1,2]} ו-departments={dept_id:[1,2], dept_name:[\"Sales\",\"R&D\"]}.", "starter": "", "solution": "employees = DataFrame({\"name\": [\"Avi\", \"Bni\"], \"dept_id\": [1, 2]})\ndepartments = DataFrame({\"dept_id\": [1, 2], \"dept_name\": [\"Sales\", \"R&D\"]})\nresult = employees.merge(departments, on=\"dept_id\")\nprint(result)", "check": "(out, code) => /merge/.test(code) && /dept_id/.test(code)"}, {"num": 72, "difficulty": "medium", "topic": "Merge left", "q": "אותן 2 טבלאות - השתמש ב-<code>how=\"left\"</code>. הוסף שורה ל-employees: dept_id=99 (לא קיים). הדפס.", "starter": "", "solution": "employees = DataFrame({\"name\": [\"Avi\", \"Bni\", \"Carmel\"], \"dept_id\": [1, 2, 99]})\ndepartments = DataFrame({\"dept_id\": [1, 2], \"dept_name\": [\"Sales\", \"R&D\"]})\nresult = employees.merge(departments, on=\"dept_id\", how=\"left\")\nprint(result)", "check": "(out, code) => /how=\"left\"/.test(code) && /Carmel/.test(code)"}, {"num": 73, "difficulty": "medium", "topic": "concat", "q": "צור 2 DataFrames זהים ב-columns וחבר אותם אנכית (<code>concat</code>): df1={a:[1,2]} ו-df2={a:[3,4]}.", "starter": "", "solution": "df1 = DataFrame({\"a\": [1, 2]})\ndf2 = DataFrame({\"a\": [3, 4]})\nresult = DataFrame.concat([df1, df2])\nprint(result)", "check": "(out, code) => /concat/.test(code)"}, {"num": 74, "difficulty": "medium", "topic": "תאריכים", "q": "מ-<code>sales</code>: השווה <code>revenue</code> בחודשי קיץ (יוני,יולי,אוגוסט) לחורף (דצמבר,ינואר,פברואר). הדפס סכומים.", "starter": "", "solution": "df = data.load(\"sales\")\nsummer = df.filter(\"month\", \"in\", [\"יוני\",\"יולי\",\"אוגוסט\"])\nwinter = df.filter(\"month\", \"in\", [\"דצמבר\",\"ינואר\",\"פברואר\"])\nprint(\"Summer:\", summer[\"revenue\"].sum())\nprint(\"Winter:\", winter[\"revenue\"].sum())", "check": "(out, code) => /יוני/.test(code) && /sum/.test(code)"}, {"num": 75, "difficulty": "medium", "topic": "ייצוג ויזואלי", "q": "מ-<code>cities-weather</code>: מצא את העיר עם <b>היחס הגבוה ביותר</b> בין humidity ל-temp. חשב יחס, מיין, הדפס שם עיר.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nratios = []\nfor i in range(df.shape[0]):\n    ratios.append(df[\"humidity\"][i] / df[\"temp\"][i])\ndf[\"ratio\"] = ratios\nresult = df.sort_values(\"ratio\", ascending=False).head(1)\nprint(result[\"city\"][0])", "check": "(out, code) => /ratio/.test(code) && /sort_values/.test(code)"}, {"num": 76, "difficulty": "medium", "topic": "apply on series", "q": "מ-<code>students</code>: עבור עמודת math, צור Series חדש שמראה רק \"Pass\" אם > 80, אחרת \"Fail\". השתמש ב-<code>apply</code>.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df[\"math\"].apply(lambda x: \"Pass\" if x > 80 else \"Fail\")\nprint(result)", "check": "(out, code) => /apply/.test(code) && /Pass/.test(code)"}, {"num": 77, "difficulty": "medium", "topic": "map", "q": "מ-<code>salaries</code>: השתמש ב-<code>map</code> על עמודת department - החזר Series של אייקונים: Sales→💼, R&D→🔬, Marketing→📢.", "starter": "", "solution": "df = data.load(\"salaries\")\nicons = {\"Sales\": \"💼\", \"R&D\": \"🔬\", \"Marketing\": \"📢\"}\nresult = df[\"department\"].map(icons)\nprint(result)", "check": "(out, code) => /\\.map\\(/.test(code) && /Sales/.test(code)"}, {"num": 78, "difficulty": "medium", "topic": "rounding", "q": "מ-<code>real-estate</code>: עגל את עמודת price_m לעמודה חדשה <code>price_rounded</code> (ל-1 ספרה).", "starter": "", "solution": "df = data.load(\"real-estate\")\nrounded = []\nfor i in range(df.shape[0]):\n    rounded.append(round(df[\"price_m\"][i], 1))\ndf[\"price_rounded\"] = rounded\nprint(df)", "check": "(out, code) => /round/.test(code) && /price_rounded/.test(code)"}, {"num": 79, "difficulty": "medium", "topic": "min/max combine", "q": "מ-<code>students</code>: מצא את <b>הציון הכולל הגבוה ביותר</b> מבין math/english/history של כל תלמיד. הדפס את שמו.", "starter": "", "solution": "df = data.load(\"students\")\ntotals = []\nfor i in range(df.shape[0]):\n    t = df[\"math\"][i] + df[\"english\"][i] + df[\"history\"][i]\n    totals.append(t)\ndf[\"total\"] = totals\nresult = df.sort_values(\"total\", ascending=False).head(1)\nprint(result[\"name\"][0])", "check": "(out, code) => /sort_values.*total/.test(code) && /head\\(1/.test(code)"}, {"num": 80, "difficulty": "medium", "topic": "reset_index", "q": "מ-<code>football</code>: השתמש ב-<code>reset_index</code> כדי להוסיף עמודת מספור.", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.reset_index()\nprint(result)", "check": "(out, code) => /reset_index/.test(code)"}, {"num": 81, "difficulty": "hard", "topic": "מסע מורכב", "q": "מ-<code>telecom-churn</code>: מצא את <b>המחלקה (plan)</b> עם <b>ה-churn rate הגבוה ביותר</b>. הדפס שם plan.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\ngrouped = df.groupby(\"plan\").mean()\nsorted_df = grouped.sort_values(\"churn\", ascending=False)\nprint(sorted_df[\"plan\"][0])", "check": "(out, code) => /groupby/.test(code) && /churn/.test(code) && /sort_values/.test(code)"}, {"num": 82, "difficulty": "hard", "topic": "ניתוח כפול", "q": "מ-<code>students</code>: לכל תלמיד חשב <b>שונות</b> (max - min) של 3 הציונים שלו. מצא את התלמיד עם השונות הגדולה ביותר.", "starter": "", "solution": "df = data.load(\"students\")\nspreads = []\nfor i in range(df.shape[0]):\n    scores = [df[\"math\"][i], df[\"english\"][i], df[\"history\"][i]]\n    spreads.append(max(scores) - min(scores))\ndf[\"spread\"] = spreads\nresult = df.sort_values(\"spread\", ascending=False).head(1)\nprint(result[[\"name\", \"spread\"]])", "check": "(out, code) => /spread/.test(code) && /max\\(/.test(code) && /min\\(/.test(code)"}, {"num": 83, "difficulty": "hard", "topic": "נוסחה מורכבת", "q": "מ-<code>football</code>: חשב <code>points_per_game</code> = points / (wins+draws+losses) ומיין. הדפס Top 3.", "starter": "", "solution": "df = data.load(\"football\")\nppgs = []\nfor i in range(df.shape[0]):\n    games = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    ppgs.append(round(df[\"points\"][i] / games, 2))\ndf[\"ppg\"] = ppgs\nresult = df.sort_values(\"ppg\", ascending=False).head(3)\nprint(result[[\"team\", \"ppg\"]])", "check": "(out, code) => /ppg/.test(code) && /head\\(3/.test(code)"}, {"num": 84, "difficulty": "hard", "topic": "multi-aggregation", "q": "מ-<code>salaries</code>: לכל מחלקה - הדפס: מספר עובדים, ממוצע שכר, סטיית תקן. בנה ידנית.", "starter": "", "solution": "df = data.load(\"salaries\")\ndepts = df[\"department\"].unique()\nfor d in depts:\n    sub = df.filter(\"department\", \"==\", d)\n    avg = sub[\"salary\"].mean()\n    print(d, \"count:\", sub.shape[0], \"avg:\", round(avg, 0))", "check": "(out, code) => /unique/.test(code) && /filter/.test(code)"}, {"num": 85, "difficulty": "hard", "topic": "merge + groupby", "q": "צור 2 טבלאות, merge אותן, ואז groupby. employees={name:[\"Avi\",\"Bni\",\"Galit\"], dept_id:[1,2,1], salary:[15000,22000,18000]} ו-departments={dept_id:[1,2], dept_name:[\"Sales\",\"R&D\"]}. אחרי merge - חשב ממוצע שכר לפי dept_name.", "starter": "", "solution": "employees = DataFrame({\"name\": [\"Avi\",\"Bni\",\"Galit\"], \"dept_id\": [1,2,1], \"salary\": [15000,22000,18000]})\ndepartments = DataFrame({\"dept_id\": [1,2], \"dept_name\": [\"Sales\",\"R&D\"]})\nmerged = employees.merge(departments, on=\"dept_id\")\nresult = merged.groupby(\"dept_name\").mean()\nprint(result)", "check": "(out, code) => /merge/.test(code) && /groupby.*dept_name/.test(code)"}, {"num": 86, "difficulty": "hard", "topic": "pct change", "q": "מ-<code>sales</code>: לאיזה חודש היה <b>הקפיצה הגדולה ביותר</b> ב-revenue לעומת החודש הקודם? הדפס שם חודש.", "starter": "", "solution": "df = data.load(\"sales\")\nchanges = df[\"revenue\"].pct_change()\ndf[\"change\"] = list(changes)\nresult = df.sort_values(\"change\", ascending=False).head(1)\nprint(result[\"month\"][0])", "check": "(out, code) => /pct_change/.test(code) && /sort_values/.test(code)"}, {"num": 87, "difficulty": "hard", "topic": "multi-filter + agg", "q": "מ-<code>telecom-churn</code>: עבור לקוחות עם <code>tenure_months &gt; 30</code> - מה ה-churn rate? הדפס אחוז.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nveterans = df.filter(\"tenure_months\", \">\", 30)\nchurn_rate = veterans[\"churn\"].mean() * 100\nprint(round(churn_rate, 1))", "check": "(out, code) => /tenure_months/.test(code) && /\\.mean/.test(code)"}, {"num": 88, "difficulty": "hard", "topic": "segmentation", "q": "מ-<code>salaries</code>: סגמנט עובדים לקטגוריות: Junior (years &lt; 3), Mid (3-5), Senior (&gt;5). הוסף כעמודה.", "starter": "", "solution": "df = data.load(\"salaries\")\nsegments = []\nfor i in range(df.shape[0]):\n    y = df[\"years\"][i]\n    if y < 3: segments.append(\"Junior\")\n    elif y <= 5: segments.append(\"Mid\")\n    else: segments.append(\"Senior\")\ndf[\"segment\"] = segments\nprint(df)", "check": "(out, code) => /Junior/.test(code) && /Senior/.test(code)"}, {"num": 89, "difficulty": "hard", "topic": "top by group", "q": "מ-<code>salaries</code>: בכל מחלקה - מצא את העובד עם השכר הגבוה ביותר. הדפס name, department, salary.", "starter": "", "solution": "df = data.load(\"salaries\")\ndepts = df[\"department\"].unique()\nfor d in depts:\n    sub = df.filter(\"department\", \"==\", d)\n    top = sub.sort_values(\"salary\", ascending=False).head(1)\n    print(top[\"name\"][0], \"-\", d, \"-\", top[\"salary\"][0])", "check": "(out, code) => /unique/.test(code) && /sort_values.*salary/.test(code)"}, {"num": 90, "difficulty": "hard", "topic": "distance analysis", "q": "מ-<code>cities-weather</code>: מצא את <b>שתי הערים</b> שהפער ביניהן ב-<code>temp</code> הוא הגדול ביותר. הדפס שמותיהן.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nsorted_df = df.sort_values(\"temp\", ascending=True)\nhottest = sorted_df[\"city\"][df.shape[0]-1]\ncoldest = sorted_df[\"city\"][0]\nprint(\"Coldest:\", coldest, \"Hottest:\", hottest)", "check": "(out) => /אילת/.test(out) && /צפת/.test(out)"}, {"num": 91, "difficulty": "hard", "topic": "correlation", "q": "מ-<code>football</code>: בדוק האם יש קשר בין wins ל-goals_for. חשב אם הקבוצות עם הכי הרבה ניצחונות הן גם בעלות הכי הרבה שערים. השווה Top 3.", "starter": "", "solution": "df = data.load(\"football\")\ntop_wins = df.sort_values(\"wins\", ascending=False).head(3)\ntop_goals = df.sort_values(\"goals_for\", ascending=False).head(3)\nprint(\"Top by wins:\", top_wins[\"team\"].unique())\nprint(\"Top by goals:\", top_goals[\"team\"].unique())", "check": "(out, code) => /sort_values.*wins/.test(code) && /sort_values.*goals_for/.test(code)"}, {"num": 92, "difficulty": "hard", "topic": "final analysis", "q": "מ-<code>real-estate</code>: לכל שכונה - חשב <b>price_per_sqm</b> ואז סטטיסטיקה: ממוצע + מינ + מקס.", "starter": "", "solution": "df = data.load(\"real-estate\")\npps = []\nfor i in range(df.shape[0]):\n    pps.append(df[\"price_m\"][i] * 1000000 / df[\"sqm\"][i])\ndf[\"pps\"] = pps\nprint(\"Mean:\", round(df[\"pps\"].mean()))\nprint(\"Min:\", round(df[\"pps\"].min()))\nprint(\"Max:\", round(df[\"pps\"].max()))", "check": "(out, code) => /pps/.test(code) && /mean/.test(code) && /min/.test(code) && /max/.test(code)"}, {"num": 93, "difficulty": "hard", "topic": "aggregation 2-step", "q": "מ-<code>telecom-churn</code>: לכל plan, חשב <b>ממוצע tenure_months</b> רק עבור לקוחות שנטשו. הדפס.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df.filter(\"churn\", \"==\", 1)\nresult = churners.groupby(\"plan\").mean()\nprint(result[[\"plan\", \"tenure_months\"]])", "check": "(out, code) => /filter.*churn/.test(code) && /groupby.*plan/.test(code)"}, {"num": 94, "difficulty": "hard", "topic": "multi-criteria", "q": "מ-<code>students</code>: מצא תלמידים שהם <b>טובים בהכל</b> - math &gt; 80 וגם english &gt; 80 וגם history &gt; 80. ספור כמה.", "starter": "", "solution": "df = data.load(\"students\")\ngood = df.where(lambda r: r[\"math\"] > 80 and r[\"english\"] > 80 and r[\"history\"] > 80)\nprint(\"Count:\", good.shape[0])", "check": "(out, code) => /and/.test(code) && /80/.test(code)"}, {"num": 95, "difficulty": "hard", "topic": "data quality", "q": "מ-<code>covid-israel</code>: בדוק - האם יש שבועות בהם <code>positive_rate</code> &gt; 12%? אם כן - מי הם?", "starter": "", "solution": "df = data.load(\"covid-israel\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append(df[\"positive\"][i] / df[\"tested\"][i] * 100)\ndf[\"positive_rate\"] = rates\nhigh = df.where(lambda r: r[\"positive_rate\"] > 12)\nprint(high[[\"date\", \"positive_rate\"]])", "check": "(out, code) => /positive_rate/.test(code) && /12/.test(code)"}, {"num": 96, "difficulty": "hard", "topic": "מקרה רגיש", "q": "מ-<code>real-estate</code>: מצא <b>דירה שזולה מ-3 מ' שח</b> ועם <b>5+ חדרים</b>. הדפס שם השכונה (אם לא קיים - הדפס \"אין\").", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.where(lambda r: r[\"price_m\"] < 3 and r[\"rooms\"] >= 5)\nif result.shape[0] > 0:\n    print(result[\"neighborhood\"][0])\nelse:\n    print(\"אין\")", "check": "(out) => /אין/.test(out) || /[א-ת]{2,}/.test(out)"}, {"num": 97, "difficulty": "hard", "topic": "time series", "q": "מ-<code>sales</code>: מצא את <b>3 החודשים</b> שתרמו לסך השנתי <b>הכי הרבה אחוז</b> (מיין יורד).", "starter": "", "solution": "df = data.load(\"sales\")\ntotal = df[\"revenue\"].sum()\npcts = []\nfor i in range(df.shape[0]):\n    pcts.append(round(df[\"revenue\"][i] / total * 100, 1))\ndf[\"pct_of_year\"] = pcts\nresult = df.sort_values(\"pct_of_year\", ascending=False).head(3)\nprint(result[[\"month\", \"pct_of_year\"]])", "check": "(out, code) => /pct_of_year/.test(code) && /sort_values/.test(code)"}, {"num": 98, "difficulty": "hard", "topic": "cross-table", "q": "מ-<code>football</code>: חשב <b>אחוז ניצחונות</b> + <b>גול ממוצע למשחק</b> לכל קבוצה. מי הקבוצה עם המאזן הטוב ביותר (סכום שניהם)?", "starter": "", "solution": "df = data.load(\"football\")\nscores = []\nfor i in range(df.shape[0]):\n    total = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    win_pct = df[\"wins\"][i] / total\n    avg_goals = df[\"goals_for\"][i] / total\n    scores.append(win_pct + avg_goals)\ndf[\"score\"] = scores\nresult = df.sort_values(\"score\", ascending=False).head(1)\nprint(result[\"team\"][0])", "check": "(out, code) => /win_pct|win_rate/.test(code) || (/wins/.test(code) && /goals_for/.test(code))"}, {"num": 99, "difficulty": "hard", "topic": "complete analysis", "q": "מ-<code>telecom-churn</code>: דו\"ח מנהלים: סך לקוחות, % churn, ממוצע bill, ממוצע tenure. הדפס.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df.filter(\"churn\", \"==\", 1)\nprint(\"Total customers:\", df.shape[0])\nprint(\"Churn rate:\", round(churners.shape[0] / df.shape[0] * 100, 1), \"%\")\nprint(\"Avg bill:\", round(df[\"monthly_bill\"].mean(), 1))\nprint(\"Avg tenure:\", round(df[\"tenure_months\"].mean(), 1))", "check": "(out) => /Total/.test(out) && /Churn/.test(out) && /Avg/.test(out)"}, {"num": 100, "difficulty": "hard", "topic": "🏆 אתגר סיום", "q": "🏆 <b>אתגר סיום</b>: מ-<code>salaries</code>: 1) הוסף עמודה <code>annual_bonus</code> = salary * (years/10) 2) קבץ לפי department וחשב סך bonus 3) מצא את המחלקה עם הbonus הכולל הגבוה ביותר. הדפס שם.", "starter": "", "solution": "df = data.load(\"salaries\")\nbonuses = []\nfor i in range(df.shape[0]):\n    b = df[\"salary\"][i] * (df[\"years\"][i] / 10)\n    bonuses.append(round(b))\ndf[\"annual_bonus\"] = bonuses\ngrouped = df.groupby(\"department\").sum()\nresult = grouped.sort_values(\"annual_bonus\", ascending=False).head(1)\nprint(result[\"department\"][0])", "check": "(out, code) => /annual_bonus/.test(code) && /groupby/.test(code) && /sort_values/.test(code)"}];
+window.PYTHON_PRELUDE = "# =============================================================\n# MINI-PANDAS v2 - Extended DataFrame API for Skulpt\n# Auto-injected into Playground + pandas course\n# =============================================================\n\nclass DataFrame:\n    \"\"\"Minimal DataFrame implementation with ~95% of pandas common ops.\"\"\"\n    \n    def __init__(self, data):\n        if isinstance(data, list):\n            if len(data) == 0:\n                self._data = {}\n                self._columns = []\n            else:\n                self._columns = list(data[0].keys())\n                self._data = {}\n                for col in self._columns:\n                    self._data[col] = [row.get(col) for row in data]\n        else:\n            self._data = dict(data)\n            self._columns = list(self._data.keys())\n        if self._data:\n            first_col = self._columns[0]\n            self._nrows = len(self._data[first_col])\n        else:\n            self._nrows = 0\n    \n    @property\n    def shape(self):\n        return (self._nrows, len(self._columns))\n    \n    @property\n    def columns(self):\n        return list(self._columns)\n    \n    @property\n    def values(self):\n        \"\"\"Return list of rows (each row is a list of values).\"\"\"\n        result = []\n        for i in range(self._nrows):\n            row = []\n            for c in self._columns:\n                row.append(self._data[c][i])\n            result.append(row)\n        return result\n    \n    def head(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][:n]\n        return DataFrame(new_data)\n    \n    def tail(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][-n:]\n        return DataFrame(new_data)\n    \n    def __len__(self):\n        return self._nrows\n    \n    def __getitem__(self, key):\n        if isinstance(key, str):\n            return Series(self._data[key], name=key)\n        if isinstance(key, list):\n            # Boolean mask?\n            if len(key) == self._nrows and len(key) > 0 and isinstance(key[0], bool):\n                new_data = {}\n                for c in self._columns:\n                    new_data[c] = []\n                    for i in range(self._nrows):\n                        if key[i]:\n                            new_data[c].append(self._data[c][i])\n                return DataFrame(new_data)\n            # Column selection\n            new_data = {}\n            for c in key:\n                if c in self._data:\n                    new_data[c] = self._data[c]\n            return DataFrame(new_data)\n        raise TypeError(\"Invalid key type\")\n    \n    def __setitem__(self, key, value):\n        if isinstance(value, Series):\n            value = value._data\n        if isinstance(value, list):\n            if len(value) != self._nrows:\n                raise ValueError(\"Length mismatch\")\n            self._data[key] = list(value)\n        else:\n            self._data[key] = [value] * self._nrows\n        if key not in self._columns:\n            self._columns.append(key)\n    \n    def sort_values(self, by, ascending=True):\n        col_data = self._data[by]\n        indices = list(range(self._nrows))\n        # Handle None values - put at end\n        def sort_key(i):\n            v = col_data[i]\n            if v is None:\n                return (1, 0) if ascending else (0, 0)\n            return (0, v)\n        indices.sort(key=sort_key, reverse=not ascending)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in indices]\n        return DataFrame(new_data)\n    \n    def filter(self, col, op, value):\n        \"\"\"SQL-like filter: df.filter('age', '>', 18)\"\"\"\n        mask = []\n        col_data = self._data[col]\n        for v in col_data:\n            if v is None:\n                mask.append(False); continue\n            if op == \">\": mask.append(v > value)\n            elif op == \"<\": mask.append(v < value)\n            elif op == \">=\": mask.append(v >= value)\n            elif op == \"<=\": mask.append(v <= value)\n            elif op == \"==\": mask.append(v == value)\n            elif op == \"!=\": mask.append(v != value)\n            elif op == \"in\":\n                if isinstance(value, list): mask.append(v in value)\n                else: mask.append(False)\n            else:\n                raise ValueError(\"Unknown operator: \" + op)\n        return self[mask]\n    \n    def where(self, fn):\n        \"\"\"Filter rows: df.where(lambda row: row['age'] > 18)\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = []\n        for i in range(self._nrows):\n            row = {}\n            for c in self._columns:\n                row[c] = self._data[c][i]\n            if fn(row):\n                for c in self._columns:\n                    new_data[c].append(self._data[c][i])\n        return DataFrame(new_data)\n    \n    def apply(self, fn, axis=0):\n        \"\"\"Apply function. axis=0: per column. axis=1: per row.\"\"\"\n        if axis == 1:\n            # Per row - returns Series\n            result = []\n            for i in range(self._nrows):\n                row = {}\n                for c in self._columns:\n                    row[c] = self._data[c][i]\n                result.append(fn(row))\n            return Series(result)\n        # Per column\n        result = {}\n        for c in self._columns:\n            result[c] = fn(self._data[c])\n        return result\n    \n    def mean(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals) / len(vals)\n        return result\n    \n    def sum(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals)\n        return result\n    \n    def min(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = min(vals)\n        return result\n    \n    def max(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = max(vals)\n        return result\n    \n    def count(self):\n        \"\"\"Count non-null per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            cnt = 0\n            for v in self._data[c]:\n                if v is not None:\n                    cnt += 1\n            result[c] = cnt\n        return result\n    \n    def describe(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = {\n                    \"count\": len(vals),\n                    \"mean\": round(sum(vals)/len(vals), 2),\n                    \"min\": min(vals),\n                    \"max\": max(vals)\n                }\n        return result\n    \n    def to_dict(self):\n        return dict(self._data)\n    \n    # ===== Data cleaning =====\n    \n    def drop(self, columns=None, index=None):\n        \"\"\"Drop columns or rows.\"\"\"\n        if columns is not None:\n            cols_to_drop = columns if isinstance(columns, list) else [columns]\n            new_data = {}\n            new_cols = []\n            for c in self._columns:\n                if c not in cols_to_drop:\n                    new_data[c] = self._data[c]\n                    new_cols.append(c)\n            result = DataFrame(new_data)\n            result._columns = new_cols\n            return result\n        if index is not None:\n            indices = index if isinstance(index, list) else [index]\n            new_data = {}\n            for c in self._columns:\n                new_data[c] = []\n                for i in range(self._nrows):\n                    if i not in indices:\n                        new_data[c].append(self._data[c][i])\n            return DataFrame(new_data)\n        return DataFrame(self._data)\n    \n    def drop_duplicates(self):\n        \"\"\"Remove duplicate rows.\"\"\"\n        seen = []\n        keep_indices = []\n        for i in range(self._nrows):\n            row_tuple = tuple(self._data[c][i] for c in self._columns)\n            if row_tuple not in seen:\n                seen.append(row_tuple)\n                keep_indices.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep_indices]\n        return DataFrame(new_data)\n    \n    def isna(self):\n        \"\"\"Return df of booleans where values are None.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [v is None for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def fillna(self, value):\n        \"\"\"Replace None values.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [value if v is None else v for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def dropna(self):\n        \"\"\"Drop rows with any None.\"\"\"\n        keep = []\n        for i in range(self._nrows):\n            has_none = False\n            for c in self._columns:\n                if self._data[c][i] is None:\n                    has_none = True; break\n            if not has_none:\n                keep.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep]\n        return DataFrame(new_data)\n    \n    def rename(self, columns):\n        \"\"\"Rename columns: df.rename({'old':'new'})\"\"\"\n        new_data = {}\n        new_cols = []\n        for c in self._columns:\n            new_name = columns.get(c, c)\n            new_data[new_name] = self._data[c]\n            new_cols.append(new_name)\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def astype(self, col, dtype):\n        \"\"\"Convert column to type. dtype: int, float, str.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None)\n            elif dtype == int or dtype == \"int\":\n                new_vals.append(int(v))\n            elif dtype == float or dtype == \"float\":\n                new_vals.append(float(v))\n            elif dtype == str or dtype == \"str\":\n                new_vals.append(str(v))\n            else:\n                new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def clip(self, col, lower=None, upper=None):\n        \"\"\"Clip values in column to range.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None); continue\n            if lower is not None and v < lower: v = lower\n            if upper is not None and v > upper: v = upper\n            new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def nunique(self):\n        \"\"\"Count unique values per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            seen = []\n            for v in self._data[c]:\n                if v not in seen:\n                    seen.append(v)\n            result[c] = len(seen)\n        return result\n    \n    # ===== Grouping / aggregation =====\n    \n    def groupby(self, by):\n        \"\"\"Group by column.\"\"\"\n        return GroupBy(self, by)\n    \n    # ===== Merging =====\n    \n    def merge(self, other, on, how=\"inner\"):\n        \"\"\"Merge two DataFrames on a key column. how: 'inner' or 'left'.\"\"\"\n        # Build index for other df\n        other_index = {}\n        for i in range(other._nrows):\n            k = other._data[on][i]\n            if k not in other_index:\n                other_index[k] = []\n            other_index[k].append(i)\n        \n        # New columns: my cols + other cols (without duplicate 'on')\n        my_cols = list(self._columns)\n        other_cols = [c for c in other._columns if c != on]\n        new_data = {}\n        for c in my_cols:\n            new_data[c] = []\n        for c in other_cols:\n            new_data[c] = []\n        \n        for i in range(self._nrows):\n            key = self._data[on][i]\n            if key in other_index:\n                for j in other_index[key]:\n                    for c in my_cols:\n                        new_data[c].append(self._data[c][i])\n                    for c in other_cols:\n                        new_data[c].append(other._data[c][j])\n            elif how == \"left\":\n                for c in my_cols:\n                    new_data[c].append(self._data[c][i])\n                for c in other_cols:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    # ===== Concat =====\n    \n    @staticmethod\n    def concat(dfs):\n        \"\"\"Concatenate list of DataFrames vertically.\"\"\"\n        if not dfs: return DataFrame({})\n        new_data = {}\n        cols = dfs[0]._columns\n        for c in cols:\n            new_data[c] = []\n        for df in dfs:\n            for c in cols:\n                if c in df._data:\n                    new_data[c].extend(df._data[c])\n                else:\n                    new_data[c].extend([None] * df._nrows)\n        return DataFrame(new_data)\n    \n    # ===== Set/reset index =====\n    \n    def set_index(self, col):\n        \"\"\"Make a column the row index (for display only - we don't really track indices).\"\"\"\n        # Just move that column to first position\n        if col not in self._columns:\n            raise ValueError(\"Column not found: \" + col)\n        new_cols = [col] + [c for c in self._columns if c != col]\n        new_data = {}\n        for c in new_cols:\n            new_data[c] = self._data[c]\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def reset_index(self):\n        \"\"\"Add an index column.\"\"\"\n        new_data = {\"index\": list(range(self._nrows))}\n        for c in self._columns:\n            new_data[c] = self._data[c]\n        return DataFrame(new_data)\n    \n    # ===== Info =====\n    \n    def info(self):\n        \"\"\"Print summary.\"\"\"\n        print(\"DataFrame: \" + str(self._nrows) + \" rows x \" + str(len(self._columns)) + \" columns\")\n        print(\"Columns:\")\n        for c in self._columns:\n            non_null = 0\n            for v in self._data[c]:\n                if v is not None: non_null += 1\n            sample = self._data[c][0] if self._nrows > 0 else None\n            type_name = type(sample).__name__ if sample is not None else \"unknown\"\n            print(\"  \" + c + \" (\" + type_name + \"): \" + str(non_null) + \" non-null\")\n    \n    def __str__(self):\n        return self._render_text()\n    \n    def __repr__(self):\n        return self._render_text()\n    \n    def _render_text(self):\n        if not self._columns:\n            return \"Empty DataFrame\"\n        lines = []\n        header = \"__DATAFRAME__|\" + \"|\".join([str(c) for c in self._columns])\n        lines.append(header)\n        for i in range(self._nrows):\n            row_vals = []\n            for c in self._columns:\n                row_vals.append(str(self._data[c][i]))\n            lines.append(\"__DATAROW__|\" + \"|\".join(row_vals))\n        lines.append(\"__DATAFRAME_END__\")\n        return \"\\n\".join(lines)\n\n\nclass GroupBy:\n    \"\"\"Result of df.groupby(col). Supports .mean(), .sum(), .count(), .agg().\"\"\"\n    def __init__(self, df, by):\n        self._df = df\n        self._by = by\n        # Build groups\n        self._groups = {}\n        col_data = df._data[by]\n        for i in range(df._nrows):\n            key = col_data[i]\n            if key not in self._groups:\n                self._groups[key] = []\n            self._groups[key].append(i)\n    \n    def _agg(self, fn):\n        \"\"\"Apply agg function per group, return DataFrame.\"\"\"\n        other_cols = [c for c in self._df._columns if c != self._by]\n        new_data = {self._by: []}\n        for c in other_cols:\n            new_data[c] = []\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            for c in other_cols:\n                vals = []\n                for i in indices:\n                    v = self._df._data[c][i]\n                    if isinstance(v, (int, float)) and not isinstance(v, bool):\n                        vals.append(v)\n                if vals:\n                    new_data[c].append(fn(vals))\n                else:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    def mean(self):\n        return self._agg(lambda v: round(sum(v)/len(v), 2))\n    \n    def sum(self):\n        return self._agg(sum)\n    \n    def max(self):\n        return self._agg(max)\n    \n    def min(self):\n        return self._agg(min)\n    \n    def count(self):\n        \"\"\"Count rows per group.\"\"\"\n        new_data = {self._by: [], \"count\": []}\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            new_data[\"count\"].append(len(indices))\n        return DataFrame(new_data)\n    \n    def size(self):\n        \"\"\"Same as count - rows per group.\"\"\"\n        return self.count()\n\n\nclass Series:\n    \"\"\"A column from a DataFrame.\"\"\"\n    def __init__(self, data, name=None):\n        self._data = list(data)\n        self.name = name\n    \n    def __len__(self):\n        return len(self._data)\n    \n    def __getitem__(self, i):\n        return self._data[i]\n    \n    def __iter__(self):\n        return iter(self._data)\n    \n    def gt(self, other): return [v > other for v in self._data if v is not None] if False else [v > other if v is not None else False for v in self._data]\n    def lt(self, other): return [v < other if v is not None else False for v in self._data]\n    def ge(self, other): return [v >= other if v is not None else False for v in self._data]\n    def le(self, other): return [v <= other if v is not None else False for v in self._data]\n    def eq(self, other): return [v == other for v in self._data]\n    \n    def mean(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        if nums: return sum(nums) / len(nums)\n        return 0\n    \n    def sum(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        return sum(nums)\n    \n    def max(self):\n        vals = [v for v in self._data if v is not None]\n        return max(vals) if vals else None\n    \n    def min(self):\n        vals = [v for v in self._data if v is not None]\n        return min(vals) if vals else None\n    \n    def unique(self):\n        seen = []\n        for v in self._data:\n            if v not in seen:\n                seen.append(v)\n        return seen\n    \n    def nunique(self):\n        return len(self.unique())\n    \n    def count(self):\n        cnt = 0\n        for v in self._data:\n            if v is not None: cnt += 1\n        return cnt\n    \n    def value_counts(self):\n        counts = {}\n        for v in self._data:\n            if v in counts: counts[v] += 1\n            else: counts[v] = 1\n        # Sort by count descending\n        items = list(counts.items())\n        items.sort(key=lambda x: -x[1])\n        result = {}\n        for k, v in items:\n            result[k] = v\n        return result\n    \n    def isna(self):\n        return [v is None for v in self._data]\n    \n    def fillna(self, value):\n        return Series([value if v is None else v for v in self._data], name=self.name)\n    \n    def apply(self, fn):\n        return Series([fn(v) for v in self._data], name=self.name)\n    \n    def map(self, mapping):\n        \"\"\"Map values via dict or function.\"\"\"\n        if isinstance(mapping, dict):\n            return Series([mapping.get(v, v) for v in self._data], name=self.name)\n        return Series([mapping(v) for v in self._data], name=self.name)\n    \n    def round(self, n=0):\n        return Series([round(v, n) if isinstance(v, (int, float)) else v for v in self._data], name=self.name)\n    \n    def cumsum(self):\n        result = []\n        total = 0\n        for v in self._data:\n            if isinstance(v, (int, float)):\n                total += v\n            result.append(total)\n        return Series(result, name=self.name)\n    \n    def pct_change(self):\n        result = [None]\n        for i in range(1, len(self._data)):\n            prev = self._data[i-1]\n            curr = self._data[i]\n            if prev and isinstance(prev, (int, float)) and isinstance(curr, (int, float)):\n                result.append((curr - prev) / prev)\n            else:\n                result.append(None)\n        return Series(result, name=self.name)\n    \n    def __str__(self):\n        return str(self._data)\n    \n    def __repr__(self):\n        return \"Series(\" + str(self._data) + \")\"\n\n\n# =============================================================\n# DATASETS - Israeli context for learning\n# =============================================================\n\n_DATASETS = {\n    \"cities-weather\": {\n        \"name\": \"מזג אוויר בערים בישראל\",\n        \"desc\": \"טמפרטורות ולחות\",\n        \"data\": {\n            \"city\": [\"תל אביב\", \"ירושלים\", \"חיפה\", \"באר שבע\", \"אילת\", \"צפת\"],\n            \"temp\": [24, 19, 23, 27, 31, 17],\n            \"humidity\": [68, 50, 72, 40, 55, 45],\n            \"rain_mm\": [0, 2, 0, 0, 0, 5]\n        }\n    },\n    \"real-estate\": {\n        \"name\": \"מחירי דירות בתל אביב\",\n        \"desc\": \"8 דירות\",\n        \"data\": {\n            \"neighborhood\": [\"פלורנטין\", \"רוטשילד\", \"נווה צדק\", \"יפו\", \"רמת אביב\", \"בבלי\", \"קרית שלום\", \"הצפון הישן\"],\n            \"rooms\": [3, 4, 4, 3, 5, 4, 3, 4],\n            \"sqm\": [75, 95, 110, 70, 130, 100, 65, 90],\n            \"price_m\": [3.2, 5.1, 6.8, 2.9, 4.5, 4.1, 1.9, 4.7]\n        }\n    },\n    \"football\": {\n        \"name\": \"ליגת העל - 5 קבוצות\",\n        \"desc\": \"סטטיסטיקה\",\n        \"data\": {\n            \"team\": [\"מכבי תל אביב\", \"הפועל ב-ש\", \"מכבי חיפה\", \"הפועל ת-א\", \"ביתר\"],\n            \"points\": [55, 52, 48, 42, 38],\n            \"wins\": [17, 16, 14, 12, 10],\n            \"draws\": [4, 4, 6, 6, 8],\n            \"losses\": [3, 4, 4, 6, 6],\n            \"goals_for\": [54, 49, 41, 38, 32],\n            \"goals_against\": [21, 22, 25, 30, 33]\n        }\n    },\n    \"students\": {\n        \"name\": \"ציוני סטודנטים\",\n        \"desc\": \"ציונים ב-3 מקצועות\",\n        \"data\": {\n            \"name\": [\"גל\", \"תומר\", \"יעל\", \"נועה\", \"אביב\", \"מאיה\", \"דניאל\", \"שירה\", \"איתי\", \"רוני\"],\n            \"math\": [88, 76, 92, 84, 70, 95, 81, 89, 73, 86],\n            \"english\": [78, 85, 88, 90, 72, 84, 79, 91, 68, 82],\n            \"history\": [85, 80, 90, 86, 76, 88, 84, 92, 70, 87]\n        }\n    },\n    \"sales\": {\n        \"name\": \"מכירות חודשיות\",\n        \"desc\": \"מחזור בחנות\",\n        \"data\": {\n            \"month\": [\"ינואר\", \"פברואר\", \"מרץ\", \"אפריל\", \"מאי\", \"יוני\", \"יולי\", \"אוגוסט\", \"ספטמבר\", \"אוקטובר\", \"נובמבר\", \"דצמבר\"],\n            \"revenue\": [45000, 38000, 52000, 49000, 61000, 72000, 68000, 71000, 58000, 53000, 64000, 89000],\n            \"units\": [120, 95, 140, 130, 165, 195, 180, 192, 155, 140, 170, 240]\n        }\n    },\n    \"covid-israel\": {\n        \"name\": \"נתוני קורונה ישראל\",\n        \"desc\": \"מקרים בחודש\",\n        \"data\": {\n            \"date\": [\"01/01\", \"08/01\", \"15/01\", \"22/01\", \"29/01\", \"05/02\", \"12/02\", \"19/02\"],\n            \"positive\": [3200, 4500, 6100, 8200, 7800, 5300, 3900, 2400],\n            \"tested\": [45000, 52000, 60000, 67000, 65000, 50000, 41000, 35000],\n            \"hospitalized\": [180, 230, 320, 410, 380, 290, 220, 160]\n        }\n    },\n    \"eurovision\": {\n        \"name\": \"אירוויזיון - ישראל\",\n        \"desc\": \"תוצאות\",\n        \"data\": {\n            \"year\": [2018, 2019, 2021, 2022, 2023, 2024],\n            \"place\": [1, 23, 17, 13, 3, 5],\n            \"points\": [529, 35, 93, 61, 362, 375],\n            \"song\": [\"Toy\", \"Home\", \"Set Me Free\", \"I.M\", \"Unicorn\", \"Hurricane\"]\n        }\n    },\n    \"telecom-churn\": {\n        \"name\": \"נטישת לקוחות טלקום\",\n        \"desc\": \"15 לקוחות עם נתוני נטישה\",\n        \"data\": {\n            \"customer_id\": [101,102,103,104,105,106,107,108,109,110,111,112,113,114,115],\n            \"age\": [25, 45, 32, 58, 29, 41, 36, 52, 27, 48, 33, 60, 30, 44, 38],\n            \"monthly_bill\": [45.5, 120.0, 80.3, 150.0, 35.0, 95.0, 70.5, 130.0, 50.0, 110.0, 65.0, 140.0, 55.0, 100.0, 75.0],\n            \"tenure_months\": [12, 60, 24, 84, 6, 36, 18, 72, 8, 48, 30, 96, 14, 42, 22],\n            \"churn\": [0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0],\n            \"plan\": [\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\"]\n        }\n    },\n    \"salaries\": {\n        \"name\": \"משכורות לפי מחלקה\",\n        \"desc\": \"12 עובדים\",\n        \"data\": {\n            \"name\": [\"אבי\",\"בני\",\"גלית\",\"דנה\",\"הילה\",\"ויקטור\",\"זוהר\",\"חני\",\"טל\",\"יוסי\",\"כרמל\",\"ליאת\"],\n            \"department\": [\"Sales\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"R&D\",\"Marketing\",\"Sales\"],\n            \"salary\": [15000, 22000, 18000, 13000, 25000, 16000, 14000, 28000, 17000, 23000, 12000, 19000],\n            \"years\": [2, 5, 3, 1, 7, 4, 2, 8, 3, 6, 1, 4]\n        }\n    }\n}\n\n\nclass _Datasets:\n    \"\"\"Pre-loaded datasets. Usage: df = data.load('cities-weather')\"\"\"\n    \n    def list(self):\n        \"\"\"List all available datasets.\"\"\"\n        for key in _DATASETS:\n            info = _DATASETS[key]\n            print(\"  \" + key + \": \" + info[\"name\"] + \" - \" + info[\"desc\"])\n    \n    def load(self, name):\n        \"\"\"Load a dataset as a DataFrame.\"\"\"\n        if name not in _DATASETS:\n            keys = list(_DATASETS.keys())\n            raise ValueError(\"Dataset not found: \" + name)\n        return DataFrame(_DATASETS[name][\"data\"])\n    \n    def info(self, name):\n        \"\"\"Show info about a dataset.\"\"\"\n        if name not in _DATASETS:\n            print(\"Dataset not found: \" + name)\n            return\n        info = _DATASETS[name]\n        print(\"DATASET: \" + info[\"name\"])\n        print(\"  \" + info[\"desc\"])\n        df = DataFrame(info[\"data\"])\n        print(\"  shape: \" + str(df.shape[0]) + \" rows x \" + str(df.shape[1]) + \" cols\")\n\n\ndata = _Datasets()\n";
+
+// ============== APP ==============
+(function() {
+  'use strict';
+  
+  const STORAGE_KEY = 'pandas_quiz_100_scores';
+  const POINTS = { easy: 10, medium: 20, hard: 30 };
+  const BONUS = { easy: 5, medium: 10, hard: 15 };  // first-try
+  
+  const allQuestions = window.PANDAS_QUIZ;
+  let filtered = allQuestions.slice();
+  let currentIdx = 0;
+  let currentDiff = 'all';
+  let currentStatus = null;
+  let searchQuery = '';
+  
+  const attempts = {};
+  const solutionViewed = new Set();
+  
+  function getScores() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch(e) { return {}; }
+  }
+  function saveScore(num, points) {
+    const scores = getScores();
+    if (!scores[num] || scores[num].points < points) {
+      scores[num] = { points, time: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+    }
+  }
+  function getScore(num) { return getScores()[num] || null; }
+  function getTotalScore() {
+    return Object.values(getScores()).reduce((s, x) => s + x.points, 0);
+  }
+  function getMaxScore() {
+    return allQuestions.reduce((s, q) => s + POINTS[q.difficulty] + BONUS[q.difficulty], 0);
+  }
+  function getCounts() {
+    const scores = getScores();
+    const r = { easy: 0, medium: 0, hard: 0 };
+    allQuestions.forEach(q => {
+      if (scores[q.num]) r[q.difficulty]++;
+    });
+    return r;
+  }
+  
+  function updateHeader() {
+    document.getElementById('total-score').textContent = getTotalScore();
+    document.getElementById('max-score').textContent = getMaxScore();
+    const c = getCounts();
+    document.getElementById('easy-done').textContent = c.easy;
+    document.getElementById('medium-done').textContent = c.medium;
+    document.getElementById('hard-done').textContent = c.hard;
+    const total = c.easy + c.medium + c.hard;
+    document.getElementById('progress-fill').style.width = (total / 100 * 100) + '%';
+  }
+  
+  function applyFilters() {
+    filtered = allQuestions.filter(q => {
+      if (currentDiff !== 'all' && q.difficulty !== currentDiff) return false;
+      if (currentStatus === 'done' && !getScore(q.num)) return false;
+      if (currentStatus === 'todo' && getScore(q.num)) return false;
+      if (searchQuery) {
+        const text = (q.q + ' ' + q.topic).toLowerCase();
+        if (!text.includes(searchQuery.toLowerCase())) return false;
+      }
+      return true;
+    });
+    currentIdx = 0;
+    render();
+  }
+  
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"\']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+  
+  
+  // === CODE EDITOR TOOLBAR (copy/paste/cut/select) ===
+  function wireEditorToolbar() {
+    const editor = document.getElementById('code-input');
+    if (!editor) return;
+    
+    const copyBtn = document.getElementById('tb-copy');
+    const pasteBtn = document.getElementById('tb-paste');
+    const cutBtn = document.getElementById('tb-cut');
+    const selectBtn = document.getElementById('tb-select');
+    const clearBtn = document.getElementById('tb-clear');
+    
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const text = editor.value;
+        if (!text) return;
+        const showCopied = () => {
+          copyBtn.classList.add('copied');
+          copyBtn.innerHTML = '✅ הועתק';
+          setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = '📋 העתק';
+          }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+            // Fallback
+            editor.select();
+            document.execCommand('copy');
+            showCopied();
+          });
+        } else {
+          editor.select();
+          document.execCommand('copy');
+          showCopied();
+        }
+      });
+    }
+    
+    if (pasteBtn) {
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && navigator.clipboard.readText) {
+            const text = await navigator.clipboard.readText();
+            // Insert at cursor position
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.value = editor.value.slice(0, start) + text + editor.value.slice(end);
+            // Move cursor to end of pasted text
+            editor.selectionStart = editor.selectionEnd = start + text.length;
+            editor.focus();
+            pasteBtn.classList.add('copied');
+            pasteBtn.innerHTML = '✅ הודבק';
+            setTimeout(() => {
+              pasteBtn.classList.remove('copied');
+              pasteBtn.innerHTML = '📥 הדבק';
+            }, 1500);
+          } else {
+            // Fallback: focus and tell user
+            editor.focus();
+            alert('להדבקה: לחץ ארוך על העורך ובחר "Paste"');
+          }
+        } catch(e) {
+          editor.focus();
+          alert('לא ניתן לגשת ללוח. השתמש ב-Ctrl+V או לחיצה ארוכה');
+        }
+      });
+    }
+    
+    if (cutBtn) {
+      cutBtn.addEventListener('click', () => {
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const selected = editor.value.slice(start, end) || editor.value;
+        const showCut = () => {
+          cutBtn.classList.add('copied');
+          cutBtn.innerHTML = '✅ נגזר';
+          setTimeout(() => {
+            cutBtn.classList.remove('copied');
+            cutBtn.innerHTML = '✂️ גזור';
+          }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(selected).then(() => {
+            if (start === end) {
+              // Cut everything
+              editor.value = '';
+            } else {
+              editor.value = editor.value.slice(0, start) + editor.value.slice(end);
+              editor.selectionStart = editor.selectionEnd = start;
+            }
+            showCut();
+          });
+        } else {
+          editor.select();
+          document.execCommand('cut');
+          showCut();
+        }
+      });
+    }
+    
+    if (selectBtn) {
+      selectBtn.addEventListener('click', () => {
+        editor.focus();
+        editor.select();
+      });
+    }
+    
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('לנקות את כל הקוד?')) {
+          editor.value = '';
+          editor.focus();
+        }
+      });
+    }
+  }
+
+
+  function render() {
+    updateHeader();
+    
+    if (filtered.length === 0) {
+      document.getElementById('content').innerHTML = 
+        '<div style="text-align:center;padding:30px;color:var(--text2);">לא נמצאו שאלות</div>';
+      return;
+    }
+    
+    if (currentIdx >= filtered.length) currentIdx = 0;
+    const q = filtered[currentIdx];
+    const score = getScore(q.num);
+    const basePoints = POINTS[q.difficulty];
+    const maxPoints = basePoints + BONUS[q.difficulty];
+    
+    const diffLabels = { easy: '🟢 קל', medium: '🟡 בינוני', hard: '🔴 קשה' };
+    const pointsBadge = score 
+      ? `<span class="badge badge-earned">✅ ${score.points} נק'</span>`
+      : `<span class="badge badge-points">🏆 עד ${maxPoints} נק'</span>`;
+    
+    document.getElementById('content').innerHTML = `
+      <div class="question-card">
+        <div class="q-header">
+          <div class="q-num">#${q.num}</div>
+          <div class="q-topic">${escapeHtml(q.topic)}</div>
+          <div class="q-badges">
+            <span class="badge badge-diff-${q.difficulty}">${diffLabels[q.difficulty]}</span>
+            ${pointsBadge}
+          </div>
+        </div>
+        
+        <div class="question-text">${q.q}</div>
+        
+        <div class="editor-label">💻 כתוב את הקוד שלך:</div>
+        <div class="editor-wrap">
+          <div class="editor-toolbar">
+            <button class="tb-btn" id="tb-copy" type="button">📋 העתק</button>
+            <button class="tb-btn" id="tb-paste" type="button">📥 הדבק</button>
+            <button class="tb-btn" id="tb-cut" type="button">✂️ גזור</button>
+            <button class="tb-btn" id="tb-select" type="button">🔘 בחר הכל</button>
+            <button class="tb-btn" id="tb-clear" type="button">🗑️ נקה</button>
+          </div>
+          <textarea class="code-editor" id="code-input" spellcheck="false" rows="9">${escapeHtml(q.starter || '')}</textarea>
+        </div>
+        
+        <div class="actions">
+          <button class="btn btn-run" id="run-btn">▶ הרץ ובדוק</button>
+          <button class="btn btn-solution" id="sol-btn">💡 הצג פתרון</button>
+          <button class="btn btn-reset" id="reset-btn">🔄 נקה</button>
+        </div>
+        
+        <div class="output-section" id="output-section">
+          <div class="editor-label" style="margin-top:14px;">📤 תוצאה:</div>
+          <div class="output-box" id="output-box"></div>
+        </div>
+        
+        <div class="verdict" id="verdict"></div>
+        
+        <div class="solution-section" id="solution-section">
+          ${!score ? '<div class="solution-warning">⚠️ צפייה בפתרון לפני פתרון תפחית את הניקוד בחצי</div>' : ''}
+          <div class="solution-header">
+            <h3>💡 פתרון רשמי</h3>
+            <button class="copy-btn" id="copy-btn">📋 העתק</button>
+          </div>
+          <div class="solution-code">
+            <pre>${escapeHtml(q.solution)}</pre>
+          </div>
+        </div>
+        
+        <div class="nav-row">
+          <button class="nav-btn" id="prev-btn" ${currentIdx === 0 ? 'disabled' : ''}>→ הקודמת</button>
+          <button class="nav-btn" id="next-btn" ${currentIdx === filtered.length - 1 ? 'disabled' : ''}>הבאה ←</button>
+        </div>
+      </div>
+    `;
+    
+    wireUp(q);
+  }
+  
+  function wireUp(q) {
+    document.getElementById('run-btn').addEventListener('click', () => runCode(q));
+    wireEditorToolbar();
+    document.getElementById('sol-btn').addEventListener('click', () => {
+      const sec = document.getElementById('solution-section');
+      const btn = document.getElementById('sol-btn');
+      if (sec.classList.contains('show')) {
+        sec.classList.remove('show');
+        btn.innerHTML = '💡 הצג פתרון';
+      } else {
+        sec.classList.add('show');
+        btn.innerHTML = '🙈 הסתר פתרון';
+        solutionViewed.add(q.num);
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      document.getElementById('code-input').value = q.starter || '';
+      document.getElementById('output-section').classList.remove('show');
+      document.getElementById('solution-section').classList.remove('show');
+      document.getElementById('verdict').classList.remove('show');
+      document.getElementById('sol-btn').innerHTML = '💡 הצג פתרון';
+    });
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(q.solution).then(() => {
+          const b = document.getElementById('copy-btn');
+          b.textContent = '✅ הועתק!';
+          setTimeout(() => { b.textContent = '📋 העתק'; }, 1800);
+        });
+      }
+    });
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      if (currentIdx > 0) { currentIdx--; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+    });
+    document.getElementById('next-btn').addEventListener('click', () => {
+      if (currentIdx < filtered.length - 1) { currentIdx++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+    });
+  }
+  
+  function runCode(q) {
+    if (typeof Sk === 'undefined') {
+      alert('Python עדיין נטען...');
+      return;
+    }
+    
+    const code = document.getElementById('code-input').value;
+    const outBox = document.getElementById('output-box');
+    const outSection = document.getElementById('output-section');
+    const verdict = document.getElementById('verdict');
+    const runBtn = document.getElementById('run-btn');
+    
+    outSection.classList.add('show');
+    outBox.textContent = '⏳ מריץ...';
+    outBox.classList.remove('error');
+    verdict.classList.remove('show');
+    runBtn.disabled = true;
+    
+    attempts[q.num] = (attempts[q.num] || 0) + 1;
+    
+    let buffer = '';
+    Sk.configure({
+      output: (text) => { buffer += text; },
+      read: (f) => {
+        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][f] === undefined) {
+          throw "File not found: '" + f + "'";
+        }
+        return Sk.builtinFiles["files"][f];
+      },
+      __future__: Sk.python3,
+      execLimit: 8000,
+    });
+    
+    const fullCode = (window.PYTHON_PRELUDE || '') + String.fromCharCode(10) + String.fromCharCode(10) + code;
+    
+    Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, fullCode, true))
+      .then(() => {
+        runBtn.disabled = false;
+        outBox.textContent = buffer || '(אין פלט)';
+        outBox.classList.remove('error');
+        
+        // Run check function
+        let passed = false;
+        try {
+          const checkFn = eval('(' + q.check + ')');
+          passed = checkFn(buffer, code);
+        } catch(e) {
+          console.warn('Check error:', e);
+          passed = false;
+        }
+        
+        if (passed) {
+          const basePoints = POINTS[q.difficulty];
+          const bonus = BONUS[q.difficulty];
+          const maxPoints = basePoints + bonus;
+          
+          let earned;
+          let msg;
+          
+          if (solutionViewed.has(q.num)) {
+            earned = Math.floor(basePoints / 2);
+            msg = ' (פתרון נצפה)';
+          } else if (attempts[q.num] === 1) {
+            earned = maxPoints;
+            msg = ' (פעם ראשונה! 🎯)';
+          } else {
+            earned = basePoints;
+            msg = '';
+          }
+          
+          const existing = getScore(q.num);
+          if (!existing || existing.points < earned) {
+            saveScore(q.num, earned);
+          }
+          
+          verdict.className = 'verdict show success';
+          verdict.innerHTML = `
+            ✅ <b>תשובה נכונה!</b>
+            <span class="points-earned">+${earned} נקודות${msg}</span>
+            ${existing && existing.points >= earned ? '<small>(הניקוד הקודם נשמר)</small>' : ''}
+          `;
+          
+          updateHeader();
+          if (earned >= 15) launchConfetti();
+          
+          // Update badge
+          setTimeout(() => {
+            const badges = document.querySelectorAll('.badge-points, .badge-earned');
+            badges.forEach(b => {
+              if (b.classList.contains('badge-points')) {
+                b.className = 'badge badge-earned';
+                b.textContent = `✅ ${earned} נק'`;
+              }
+            });
+          }, 600);
+        } else {
+          verdict.className = 'verdict show fail';
+          verdict.innerHTML = `
+            🤔 <b>התשובה לא נכונה</b><br>
+            <small>בדוק את הפלט ונסה שוב. צריך עזרה? "הצג פתרון" (אבל זה יפחית את הניקוד)</small>
+          `;
+        }
+      })
+      .catch((e) => {
+        runBtn.disabled = false;
+        outBox.textContent = String(e);
+        outBox.classList.add('error');
+        verdict.className = 'verdict show fail';
+        verdict.innerHTML = '⚠️ <b>שגיאה בקוד</b><br><small>בדוק את ההודעה למעלה</small>';
+      });
+  }
+  
+  function launchConfetti() {
+    const colors = ['#8b5cf6', '#00e5a0', '#ffd700', '#ec4899'];
+    for (let i = 0; i < 25; i++) {
+      const conf = document.createElement('div');
+      conf.className = 'confetti';
+      conf.style.left = Math.random() * 100 + '%';
+      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      conf.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      conf.style.transition = 'top 2s linear, opacity 2s linear';
+      document.body.appendChild(conf);
+      requestAnimationFrame(() => {
+        conf.style.top = '110vh';
+        conf.style.opacity = '0';
+      });
+      setTimeout(() => conf.remove(), 2200);
+    }
+  }
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.filterType;
+      const value = btn.dataset.filter;
+      const isActive = btn.classList.contains('active');
+      
+      document.querySelectorAll(`.filter-pill[data-filter-type="${type}"]`).forEach(b => b.classList.remove('active'));
+      
+      if (type === 'diff') {
+        currentDiff = value;
+        btn.classList.add('active');
+      } else if (type === 'status') {
+        if (isActive) {
+          currentStatus = null;
+        } else {
+          currentStatus = value;
+          btn.classList.add('active');
+        }
+      }
+      
+      applyFilters();
+    });
+  });
+  
+  let searchTimer;
+  document.getElementById('search').addEventListener('input', (e) => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = e.target.value.trim();
+      applyFilters();
+    }, 250);
+  });
+  
+  document.getElementById('reset-score-btn').addEventListener('click', () => {
+    if (confirm('לאפס את כל הניקוד?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+    }
+  });
+  
+  render();
+})();
+</script>
+
+</body>
+</html>

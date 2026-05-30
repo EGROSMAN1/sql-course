@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 שאלות אמריקאיות בPandas — חידון בעברית חינם | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;--bg2:#0c1518;--bg3:#111e21;
+  --border:rgba(0,212,200,.08);--border2:rgba(0,212,200,.18);
+  --text:#e8f4f5;--text2:#6b9098;--text3:#2a4048;
+  --aq:#00d4c8;--aq2:rgba(0,212,200,.12);
+  --green:#00e676;--red:#ff4757;--orange:#FFB020;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+
+/* TOPNAV */
+.topnav{background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--aq);text-decoration:none;font-size:12px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:13px;font-weight:700;color:var(--text2)}
+.topnav-right{display:flex;align-items:center;gap:.5rem;margin-right:auto}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);color:var(--aq);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;font-family:var(--mono)}
+.level-tabs{display:flex;gap:.35rem;margin-right:.5rem}
+.ltab{font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2);transition:all .12s;font-family:var(--mono)}
+.ltab:hover{color:var(--text);border-color:var(--border2)}
+.ltab.active{background:var(--aq2);border-color:var(--aq);color:var(--aq)}
+
+/* FIREBASE BAR */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;transition:all .3s;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* HERO */
+.hero{padding:2rem 1.5rem 1.5rem;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,200,.06),transparent 70%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,200,.1);border:1px solid var(--border2);color:var(--aq);font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--mono);letter-spacing:1px;margin-bottom:.75rem}
+.hero-title{font-size:2rem;font-weight:900;color:var(--text);margin-bottom:.3rem}
+.hero-title em{color:var(--aq);font-style:normal}
+.hero-desc{color:var(--text2);font-size:.9rem;margin-bottom:1.25rem}
+.hero-stats{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-n{font-size:1.6rem;font-weight:900;font-family:var(--mono);color:var(--aq)}
+.hs-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+
+/* PROGRESS */
+.prog-bar-wrap{padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:sticky;top:96px;z-index:80}
+.prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--aq);border-radius:2px;transition:width .3s}
+.prog-txt{font-size:11px;color:var(--text2);font-family:var(--mono);white-space:nowrap}
+.score-display{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--aq);white-space:nowrap}
+
+/* MAIN */
+.main{max-width:800px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* SECTION LABEL */
+.sec-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--aq);font-family:var(--mono);padding:.75rem 0 .5rem;margin-top:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:.75rem;transition:border-color .2s}
+.q-card.correct{border-color:rgba(0,230,118,.3)}
+.q-card.wrong{border-color:rgba(255,71,87,.3)}
+.q-header{margin-bottom:.85rem}
+.q-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.q-num{font-size:10px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px;font-weight:700}
+.q-section-tag{font-size:10px;color:var(--text3);font-weight:600}
+.q-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.55}
+.options{display:flex;flex-direction:column;gap:.4rem}
+.option{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .8rem;background:var(--bg3);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;user-select:none}
+.option:hover:not(.disabled){border-color:var(--border2);background:rgba(0,212,200,.05)}
+.option.disabled{cursor:default}
+.option.correct-ans{border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.07)}
+.option.wrong-ans{border-color:rgba(255,71,87,.4);background:rgba(255,71,87,.07)}
+.opt-letter{width:20px;height:20px;border-radius:4px;background:var(--bg);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;font-family:var(--mono)}
+.option.correct-ans .opt-letter{background:rgba(0,230,118,.2);border-color:rgba(0,230,118,.5);color:var(--green)}
+.option.wrong-ans .opt-letter{background:rgba(255,71,87,.2);border-color:rgba(255,71,87,.5);color:var(--red)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5}
+.option.correct-ans .opt-text{color:var(--text)}
+.explanation{background:var(--bg3);border-right:2px solid var(--aq);border-radius:0 6px 6px 0;padding:.6rem .85rem;margin-top:.6rem;display:none}
+.explanation.show{display:block}
+.exp-label{font-size:10px;font-weight:700;color:var(--aq);font-family:var(--mono);margin-bottom:.25rem}
+.exp-text{font-size:12.5px;color:var(--text2);line-height:1.6}
+
+/* FINISH */
+.finish-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
+.finish-score{font-size:2.5rem;font-weight:900;font-family:var(--mono);color:var(--aq);margin-bottom:.5rem}
+.finish-grade{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.finish-sub{font-size:.9rem;color:var(--text2);margin-bottom:1.5rem}
+.retry-btn{background:var(--aq);color:var(--bg);border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font);margin-left:.5rem}
+.level-link{display:inline-block;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:10px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;margin-top:.5rem;transition:all .15s}
+.level-link:hover{border-color:var(--aq);color:var(--aq)}
+
+/* MOBILE */
+/* ===== MOBILE — comprehensive responsive layout ===== */
+@media(max-width:900px){
+  .level-tabs{flex-wrap:wrap;gap:4px;justify-content:flex-end}
+  .level-tabs .ltab:not([title]){font-size:11px;padding:3px 7px}
+}
+@media(max-width:768px){
+  .topnav{padding:.45rem .7rem;gap:.4rem;flex-wrap:wrap}
+  .topnav-title{font-size:12px;flex:1;min-width:0;text-align:center}
+  .back-btn{font-size:11.5px;padding:4px 9px}
+  /* Hide the SQL-quiz tabs on mobile but KEEP language flags visible */
+  .level-tabs .ltab:not([title="עברית"]):not([title="English"]):not([title="中文"]){display:none}
+  .level-tabs{flex-wrap:nowrap;gap:3px}
+  .score-badge{font-size:11.5px;padding:3px 8px}
+  .hero{padding:1.2rem .8rem .9rem}
+  .hero-title{font-size:1.4rem;line-height:1.25}
+  .hero-subtitle{font-size:12.5px}
+  .hero-stats{gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem}
+  .hs{min-width:60px;padding:.4rem .55rem}
+  .hs-n{font-size:1.1rem}
+  .hs-l{font-size:10.5px}
+  .prog-bar-wrap{padding:.6rem .8rem;gap:.5rem;flex-wrap:wrap}
+  .prog-bar{height:8px}
+  .prog-txt,.score-display{font-size:12px}
+  .main{padding:.9rem .65rem 3rem}
+  .q-card{padding:.85rem;border-radius:10px;margin-bottom:.9rem}
+  .q-num{font-size:11px}
+  .q-section{font-size:11px;padding:2px 8px}
+  .q-text{font-size:13.5px;line-height:1.55}
+  .options{gap:.4rem}
+  .option{padding:.6rem .7rem;min-height:42px;font-size:13px}
+  .opt-letter{width:22px;height:22px;font-size:11.5px;flex-shrink:0}
+  .opt-text{font-size:12.5px;line-height:1.45}
+  .explanation{font-size:12.5px;padding:.7rem .8rem;line-height:1.55}
+  .explanation b{font-size:12.5px}
+  .finish-card{padding:1.4rem .9rem;margin:1.5rem .3rem}
+  .finish-title{font-size:1.3rem}
+  .finish-score{font-size:1.8rem}
+  .finish-msg{font-size:13px}
+  .finish-actions{flex-direction:column;gap:.5rem}
+  .finish-actions button,.finish-actions a{width:100%;padding:.7rem 1rem;font-size:13.5px;justify-content:center}
+  .fb-bar{padding:.4rem .7rem;font-size:11.5px;flex-wrap:wrap;gap:.4rem}
+  .fb-login-btn,.fb-logout-btn{font-size:11px;padding:4px 10px}
+}
+@media(max-width:480px){
+  .topnav{padding:.4rem .55rem}
+  .topnav-title{font-size:11px}
+  .back-btn{font-size:11px;padding:3px 7px}
+  .hero{padding:1rem .65rem .8rem}
+  .hero-title{font-size:1.2rem}
+  .hero-subtitle{font-size:11.5px}
+  .hero-stats{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.2rem}
+  .hero-stats::-webkit-scrollbar{display:none}
+  .hs{flex-shrink:0;min-width:55px}
+  .main{padding:.7rem .5rem 2.5rem}
+  .q-card{padding:.75rem}
+  .q-text{font-size:13px}
+  .option{padding:.55rem .6rem;min-height:40px}
+  .opt-text{font-size:12px}
+  .opt-letter{width:20px;height:20px;font-size:11px}
+  .prog-bar-wrap{padding:.5rem .65rem}
+}
+@media(max-width:380px){
+  .topnav{padding:.35rem .45rem}
+  .topnav-title{font-size:10.5px}
+  .hero-title{font-size:1.1rem}
+  .hs{min-width:48px;padding:.35rem .4rem}
+  .hs-n{font-size:1rem}
+  .hs-l{font-size:9.5px}
+  .q-card{padding:.65rem}
+  .q-text{font-size:12.5px}
+  .option{padding:.5rem .55rem}
+  .opt-text{font-size:11.5px}
+  .opt-letter{width:18px;height:18px;font-size:10px}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+</style>
+
+<meta name="description" content="חידון אמריקאי בן 100 שאלות בעברית על ספריית Pandas בפייתון — היכרות עם הטבלה, סינון, ערכים חסרים, פונקציות חלון, טבלאות ציר, תאריכים, ועוד 13 קטגוריות. עם הסבר לכל תשובה. חינם לחלוטין.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-pandas.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-pandas.html">
+<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
+<meta property="og:title" content="100 שאלות אמריקאיות בPandas — חידון בעברית | SQL.course">
+<meta property="og:description" content="100 שאלות אמריקאיות בעברית על Pandas — סינון, פונקציות חלון, טבלאות ציר, תאריכים ועוד. עם הסבר לכל תשובה.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="100 שאלות אמריקאיות בPandas — חידון בעברית | SQL.course">
+<meta name="twitter:description" content="100 שאלות אמריקאיות בעברית על Pandas — סינון, פונקציות חלון, טבלאות ציר, תאריכים ועוד. עם הסבר לכל תשובה.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "דף הבית",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "חידון Pandas — 100 שאלות",
+        "item": "https://egrosman1.github.io/sql-course/quiz-pandas.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "שאלות SQL רמה בינונית — חידון בעברית חינם | SQL.course",
+    "description": "חידון SQL ברמה בינונית בעברית: שאלות אמריקאיות עם הסברים על JOIN, GROUP BY, HAVING ותתי-שאילתות. תרגול מצוין להכנה לראיון עבודה לאנליסט.",
+    "url": "https://egrosman1.github.io/sql-course/quiz-pandas.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Quiz",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "אלירן גרוסמן",
+      "jobTitle": "מרצה SQL ומנהל אנליסטים, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "קורס SQL חינם בעברית",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body data-quiz-id="pandas">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="topnav-title">🐼 100 שאלות אמריקאיות בPandas</div>
+  <div class="topnav-right">
+    <div class="level-tabs">
+      <a href="quiz-beginner.html" class="ltab">🌱 SQL מתחילים</a>
+      <a href="quiz-medium.html" class="ltab">📗 SQL בינוני</a>
+      <a href="quiz.html" class="ltab">🧠 SQL מתקדם</a>
+      <a href="quiz-pandas.html" class="ltab active">🐼 Pandas</a><a href="quiz-pandas.html" class="ltab" title="עברית" aria-current="page"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="en/index.html" class="ltab" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="zh/index.html" class="ltab" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    </div>
+    <div class="score-badge" id="scoreText">✅ 0 / 0</div>
+  </div>
+</div>
+
+<!-- FIREBASE BAR -->
+<div class="fb-bar" id="fbBar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    התחבר עם Google
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 שמור התקדמות</button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 היסטוריה</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">יציאה</button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">📗 LEVEL 2 · INTERMEDIATE</div>
+  <h1 class="hero-title">שאלות אמריקאיות — <em>רמה בינונית</em></h1>
+  <p class="hero-desc">פונקציות מחרוזת · אגרגציה · JOINs מתקדמים — 80 שאלות</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">נענו</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">נכונות</div></div>
+    <div class="hs"><div class="hs-n">100</div><div class="hs-l">שאלות</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">ציון</div></div>
+  </div>
+</div>
+
+<div class="prog-bar-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">0 / 100</div>
+  <div class="score-display" id="scoreDisplay">0%</div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const questions = [
+  {n:1,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"איזו פקודה משמשת להצגת 5 השורות הראשונות בטבלה?",o:["df.first(5)","df.head()","df.top()","df.show(5)"],c:1,e:"head() מציגה כברירת מחדל את 5 השורות הראשונות לצורך הצצה ראשונית בנתונים."},
+  {n:2,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"כיצד ניתן לראות את מספר השורות והעמודות המדויק בטבלה?",o:["df.size()","df.info","df.shape","df.count()"],c:2,e:"shape הוא מאפיין (לא פונקציה) שמחזיר tuple של (שורות, עמודות) — לכן נכתב ללא סוגריים."},
+  {n:3,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"מה עושה הפקודה df.describe()?",o:["מציגה את שמות העמודות","מפיקה סטטיסטיקה תיאורית אוטומטית (ממוצע, מינ׳, מקס׳) לעמודות מספריות","מתארת את סוגי הנתונים","בודקת ערכים כפולים"],c:1,e:"describe מספקת מדדים סטטיסטיים מרכזיים — ממוצע, סטיית תקן, אחוזונים — במכה אחת."},
+  {n:4,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"מדוע חשוב להשתמש ב-df_new = df.copy() במקום ב-df_new = df?",o:["הטבלה תתפוס פחות זיכרון","למנוע מצב שבו שינויים בעותק ישפיעו בטעות גם על המקור","כדי לשרשר את הטבלה לעצמה","copy משמש רק לייצוא קבצים"],c:1,e:"הצבה רגילה יוצרת רק הפניה לאותו אובייקט. copy() מבטיחה עותק עצמאי לחלוטין."},
+  {n:5,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"איזו פקודה תהפוך את סדר השורות בטבלה (האחרונה הופכת לראשונה)?",o:["df.reverse()","df.iloc[::-1]","df.sort_values(ascending=False)","df.flip_rows()"],c:1,e:"[::-1] בתוך iloc הוא טריק slicing של פייתון — צעדים של מינוס 1 לאורך השורות."},
+  {n:6,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"כיצד נשלוף בדיוק 10% מהשורות באופן אקראי?",o:["df.sample(n=10)","df.sample(percent=10)","df.sample(frac=0.1)","df.sample(ratio=0.1)"],c:2,e:"frac (Fraction) מקבל ערך עשרוני 0-1 ומייצג את האחוז שיש לדגום."},
+  {n:7,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"איך נבדוק כמה זיכרון (בבתים) צורכת כל עמודה בטבלה?",o:["df.info()","df.memory_usage(deep=True)","df.size","df.bytes()"],c:1,e:"memory_usage(deep=True) מנתחת לעומק גם עמודות object (טקסט) ומחזירה צריכת זיכרון מדויקת."},
+  {n:8,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"באיזו פקודה נכפה על פנדס להציג תמיד את כל העמודות בלי קיצור?",o:["df.show_all_columns()","pd.set_option('display.max_columns', None)","pd.display_settings(columns='all')","df.columns.expand()"],c:1,e:"set_option שולטת בהגדרות התצוגה הגלובליות. None מבטל את ההגבלה."},
+  {n:9,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"כיצד נדע כמה שורות יש בטבלה בלי להשתמש ב-len()?",o:["df.size()","df.shape[0]","df.rows()","df.count_rows()"],c:1,e:"shape מחזיר (שורות, עמודות). המקום [0] הוא מספר השורות."},
+  {n:10,s:"חלק א׳ — היכרות בסיסית עם הטבלה",t:"מה מחזירה הפקודה df.columns?",o:["מספר עמודות","אובייקט עם רשימת שמות כל העמודות","מסדר עמודות בא״ב","מוחקת עמודות ריקות"],c:1,e:"מאפיין (לא פונקציה) שמחזיר את שמות העמודות — שימושי לתצוגה או לעדכון."},
+  {n:11,s:"חלק ב׳ — סינון, שליפה ומיון",t:"מהי הדרך הנכונה לסנן לפי שני תנאים: גיל > 30 וגם עיר = Tel Aviv?",o:["df[df['age']>30 and df['city']=='Tel Aviv']","df[(df['age']>30) & (df['city']=='Tel Aviv')]","df[df['age']>30 & df['city']=='Tel Aviv']","df.filter(age>30, city='Tel Aviv')"],c:1,e:"חובה & עבור 'וגם' (או | עבור 'או'), וחובה לעטוף כל תנאי בסוגריים."},
+  {n:12,s:"חלק ב׳ — סינון, שליפה ומיון",t:"כיצד נשלוף את 5 השורות עם הערכים הגבוהים ביותר בעמודה?",o:["df.sort_values(desc=True).head(5)","df.max(5,'column')","df.top(5,'column')","df.nlargest(5,'column')"],c:3,e:"nlargest יעיל יותר ממיון מלא — מקביל ל-ORDER BY DESC LIMIT 5."},
+  {n:13,s:"חלק ב׳ — סינון, שליפה ומיון",t:"באיזו פקודה נסנן בסגנון SQL במחרוזת טקסט?",o:["df.filter_text(\"age>30\")","df.query(\"age>30\")","df.search(\"age>30\")","df.sql(\"SELECT * WHERE age>30\")"],c:1,e:"query מקבלת תנאי כמחרוזת — לעיתים קריאה יותר מתנאי בוליאני בסוגריים."},
+  {n:14,s:"חלק ב׳ — סינון, שליפה ומיון",t:"מה ההבדל בין df.loc ל-df.iloc?",o:["loc שולפת עמודות, iloc שולפת שורות","loc למספרים, iloc לטקסט","loc לפי שמות (Labels), iloc לפי מיקום מספרי","אין הבדל"],c:2,e:"ה-i ב-iloc = Integer location. נשתמש בה כשנדע מיקום ולא שם."},
+  {n:15,s:"חלק ב׳ — סינון, שליפה ומיון",t:"איך נסנן לקוחות בערים 'Tel Aviv' או 'Haifa' בצורה היעילה?",o:["df[df['city']=='Tel Aviv' and df['city']=='Haifa']","df[(df['city']=='Tel Aviv') & (df['city']=='Haifa')]","df[df['city'].isin(['Tel Aviv','Haifa'])]","df.filter(city='Tel Aviv','Haifa')"],c:2,e:"isin חוסך תנאי OR ארוכים ומאפשר בדיקה מול רשימה בפקודה אחת."},
+  {n:16,s:"חלק ב׳ — סינון, שליפה ומיון",t:"איזה סימן מחליף את OR (או) בתנאי סינון בפנדס?",o:["||","or","|","&"],c:2,e:"| (Pipe) משמש כ-OR בוליאני בין תנאים, ועוטפים כל תנאי בסוגריים."},
+  {n:17,s:"חלק ב׳ — סינון, שליפה ומיון",t:"איך נמיין את הטבלה לפי 'price' מהיקר לזול?",o:["df.sort_values('price', ascending=False)","df.sort('price', desc=True)","df.order_by('price','DESC')","df.sort_values('price')"],c:0,e:"ascending=False ממיין בסדר יורד (מהגדול לקטן)."},
+  {n:18,s:"חלק ב׳ — סינון, שליפה ומיון",t:"איך ניצור עמודה חדשה 'total' = 'price' + 'tax'?",o:["df.add_column('total','price'+'tax')","df['total']=df['price']+df['tax']","df.new('total')=df['price']+df['tax']","pd.concat(df['price'],df['tax'],name='total')"],c:1,e:"הגדרת שם בסוגריים מרובעים והשמת ביטוי מחושב — הצורה הסטנדרטית בפנדס."},
+  {n:19,s:"חלק ב׳ — סינון, שליפה ומיון",t:"כיצד נציג את 3 הלקוחות עם ההכנסות הנמוכות מ-'revenue'?",o:["df.nsmallest(3,'revenue')","df.min(3,'revenue')","df.bottom(3,'revenue')","df.tail(3,'revenue')"],c:0,e:"nsmallest מקבילה ל-ORDER BY ASC LIMIT 3 — מהירה יותר ממיון מלא."},
+  {n:20,s:"חלק ב׳ — סינון, שליפה ומיון",t:"איך נשלוף לפי מיקום: שורה 0, עמודה 1?",o:["df.loc[0,1]","df.iloc[0,1]","df.get(0,1)","df.select(0,1)"],c:1,e:"iloc תמיד עובדת עם אינדקסים מספריים שלמים."},
+  {n:21,s:"חלק ב׳ — סינון, שליפה ומיון",t:"df['column'].rank(ascending=False) מקבילה ל:",o:["ROW_NUMBER","RANK / DENSE_RANK","NTILE","GROUP BY"],c:1,e:"rank מדרגת את הערכים — מקביל ל-RANK ב-SQL."},
+  {n:22,s:"חלק ב׳ — סינון, שליפה ומיון",t:"איך נבדוק אם גיל הלקוח בין 18 ל-25 (כולל)?",o:["df['age'].between(18,25)","df['age'].in_range(18,25)","df['age'].middle(18,25)","df['age']==range(18,25)"],c:0,e:"between מקבילה ל-BETWEEN ב-SQL ומחזירה True/False."},
+  {n:23,s:"חלק ג׳ — ערכים חסרים",t:"איזו פקודה סופרת בדיוק כמה ערכים ריקים יש בכל עמודה?",o:["df.count_nulls()","df.isnull()","df.isna().sum()","df.empty().count()"],c:2,e:"isna() מסמן True/False לכל תא, sum() סוכם את ה-True בכל עמודה."},
+  {n:24,s:"חלק ג׳ — ערכים חסרים",t:"באיזו פקודה נמחק כל שורה שיש בה לפחות תא ריק אחד?",o:["df.dropna()","df.remove_nulls()","df.fillna(0)","df.drop_empty()"],c:0,e:"dropna() ברירת מחדל מוחקת שורות עם NaN. השתמש בזהירות — עלול למחוק הרבה נתונים."},
+  {n:25,s:"חלק ג׳ — ערכים חסרים",t:"df.ffill() נועדה ל:",o:["מילוי בערך 0","מילוי ערכים חסרים על-ידי 'משיכת' הערך התקין מהשורה הקודמת","סינון לפי העמודה הראשונה","מציאת ערכים כפולים"],c:1,e:"Forward Fill — שימושי מאוד לערכי כותרת שצריכים לחול על שורות מתחתיהם."},
+  {n:26,s:"חלק ג׳ — ערכים חסרים",t:"מה ההבדל בין df.dropna() ל-df.dropna(thresh=3)?",o:["thresh=3 מוחק רק 3 שורות","thresh=3 משאיר שורות עם לפחות 3 ערכים תקינים","thresh מוחק רק עמודות","אין הבדל"],c:1,e:"thresh (Threshold) קובע סף מינימום של ערכים תקינים בשורה כדי שלא תימחק."},
+  {n:27,s:"חלק ג׳ — ערכים חסרים",t:"איזו פקודה הפוכה מ-isna() ומחזירה True רק לתאים מלאים?",o:["df.is_full()","df.has_data()","df.notna()","df.valid()"],c:2,e:"notna מסמן True רק לתאים שיש בהם ערך — שימושי לסינון."},
+  {n:28,s:"חלק ג׳ — ערכים חסרים",t:"איך נדע במהירות אם בכל עמודה יש לפחות תא ריק אחד?",o:["df.isna().any()","df.isna().all()","df.check_nulls()","df.has_empty()"],c:0,e:"any() אחרי isna() מחזיר True לעמודה אם יש לפחות חסר אחד — בדיקה ברמת עמודה."},
+  {n:29,s:"חלק ג׳ — ערכים חסרים",t:"איזו פקודה משלימה ערכים חסרים על-ידי חישוב הערך היחסי בין השכן הקודם לבא?",o:["df.fill_between()","df.ffill()","df.interpolate()","df.bfill()"],c:2,e:"interpolate 'מותחת קו' בין הערכים — חובה לסדרות זמן ורצפים פיננסיים."},
+  {n:30,s:"חלק ג׳ — ערכים חסרים",t:"איך נמלא ערכים חסרים ב-'age' בממוצע של אותה עמודה?",o:["df['age'].fillna(mean)","df['age'].fill_mean()","df['age'].fillna(df['age'].mean())","df['age'].replace_na('mean')"],c:2,e:"fillna מקבל ערך — כאן נעביר את הממוצע המחושב כארגומנט."},
+  {n:31,s:"חלק ג׳ — ערכים חסרים",t:"מה עושה df.bfill()?",o:["ממלא ריקים ב-0","מילוי לאחור (Backward Fill) — לוקח ערך מהשורה הבאה","מילוי קדימה (Forward Fill)","מבצע Undo"],c:1,e:"bfill לוקח נתון מהשורה הבאה ו'מעלה' אותו למעלה למילוי תאים ריקים."},
+  {n:32,s:"חלק ד׳ — ערכים ייחודיים וכפילויות",t:"איזו פקודה מחזירה רשימת ערכים ייחודיים בעמודה (ללא כפילויות)?",o:["df['column'].distinct()","df['column'].unique()","df['column'].nunique()","df['column'].drop_duplicates()"],c:1,e:"unique מחזירה את הערכים, ו-nunique סופרת כמה ערכים כאלה יש."},
+  {n:33,s:"חלק ד׳ — ערכים ייחודיים וכפילויות",t:"df['column'].value_counts() משמשת ל:",o:["ספירת תאים ריקים","חישוב סכום","ספירה כמה פעמים מופיע כל ערך ייחודי","מחיקת כפילויות"],c:2,e:"מצוין לבדיקת התפלגויות — למשל כמות לקוחות מכל סוג מנוי."},
+  {n:34,s:"חלק ד׳ — ערכים ייחודיים וכפילויות",t:"df['city'].nunique() תחזיר:",o:["שמות הערים ללא כפילויות","מספר שמייצג כמה ערים שונות וייחודיות יש","תמחק ערים כפולות","סופרת תאים ריקים"],c:1,e:"ה-n מסמלת Number — ספירה מספרית של הערכים הייחודיים."},
+  {n:35,s:"חלק ד׳ — ערכים ייחודיים וכפילויות",t:"איזו פקודה תסמן שורות כפולות מדויקות בטבלה?",o:["df.find_duplicates()","df.duplicates()","df.duplicated()","df.is_dup()"],c:2,e:"duplicated מחזירה Series בוליאני — True לשורה שהיא העתק של אחרת שכבר הופיעה."},
+  {n:36,s:"חלק ד׳ — ערכים ייחודיים וכפילויות",t:"מה חשוב לדעת על df.drop_duplicates() כברירת מחדל?",o:["מוחקת את כל הופעות הכפילויות","משאירה את ההופעה הראשונה ומוחקת את שאר ההעתקים","משאירה רק את האחרונה","שואלת את המשתמש איזו למחוק"],c:1,e:"ברירת המחדל היא keep='first' — שמירה על ההופעה הראשונה."},
+  {n:37,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"איזו פקודה מחברת שתי טבלאות לפי עמודה משותפת (כמו JOIN ב-SQL)?",o:["pd.concat([df1,df2])","pd.join(df1,df2)","pd.merge(df1,df2,on='id')","df1.append(df2)"],c:2,e:"merge היא המקבילה הקלאסית ל-JOIN לפי מפתח. concat לעומתה היא UNION."},
+  {n:38,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"איך נוסיף עמודה חדשה בדיוק בתחילת הטבלה?",o:["df.add_first('col',values)","df.insert(0,'col',values)","df.push('col',values,position=1)","df['col']=values"],c:1,e:"insert מאפשרת שליטה מלאה על המיקום. 0 = העמודה הראשונה."},
+  {n:39,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"איך נוסיף שורה חדשה ['v1','v2'] לתחתית הטבלה?",o:["df.add_row(['v1','v2'])","df.loc[len(df)]=['v1','v2']","df.append_bottom(['v1','v2'])","df.insert_row(['v1','v2'])"],c:1,e:"len(df) הוא מספר השורות. צירוף loc עם המספר הזה יוצר מזהה שורה חדש בתחתית."},
+  {n:40,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"pd.concat([df1,df2]) עם עמודות זהות תעשה:",o:["חיבור אופקי","חיבור אנכי אחת מתחת לשנייה (UNION)","מחיקת שורות משותפות","ממוצע בין הערכים"],c:1,e:"concat ברירת מחדל משרשרת לאורך axis=0 (שורות) — מקביל ל-UNION ALL."},
+  {n:41,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"pd.merge(df1, df2, on='id', how='left') מבצעת:",o:["איחוד אנכי","LEFT JOIN לפי 'id'","חיבור טקסטים","חישוב בין טבלאות"],c:1,e:"how='left' שומר את כל שורות df1 ומצמיד נתונים מ-df2 היכן שיש התאמה."},
+  {n:42,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"איך נוציא עמודה מהטבלה ונשמור אותה במשתנה תוך מחיקה מהמקור?",o:["df.extract('col')","df.cut('col')","df.pop('col')","df.pull('col')"],c:2,e:"pop פועלת כמו ברשימות/מילונים — חותכת ומחזירה את העמודה."},
+  {n:43,s:"חלק ה׳ — חיבור ומיזוג טבלאות",t:"איך נסיר עמודה לחלוטין מהטבלה?",o:["df.delete_column('col')","df.remove('col')","df.drop(columns=['col'])","df.clear('col')"],c:2,e:"drop מקבלת רשימת עמודות (או שורות) להסרה — אפשר גם רשימה של כמה."},
+  {n:44,s:"חלק ו׳ — פונקציות חלון (Window)",t:"איזו פקודה מחשבת סכום מצטבר (Running Total) לאורך השורות?",o:["df['column'].rolling_sum()","df['column'].sum()","df['column'].cumsum()","df['column'].agg('sum')"],c:2,e:"cumsum (Cumulative Sum) סוכמת שורה אחר שורה. שימושי למעקב הכנסות מצטברות."},
+  {n:45,s:"חלק ו׳ — פונקציות חלון (Window)",t:"df['column'].shift(1) משמשת בעיקר ל:",o:["הזזת העמודה למקום הראשון","מחיקת השורה הראשונה","'דחיפת' הנתונים שורה אחת למטה (כמו LAG)","הוספת 1 לכל תא"],c:2,e:"פונקציית חלון קלאסית — להשוואת ערך נוכחי מול ערך קודם (כמו מחיר מניה אתמול)."},
+  {n:46,s:"חלק ו׳ — פונקציות חלון (Window)",t:"איך נחשב ממוצע נע (Moving Average) על 7 ימים?",o:["df['column'].mean(7)","df['column'].rolling(7).mean()","df['column'].moving_average(7)","df['column'].window(7).avg()"],c:1,e:"rolling מגדירה חלון 'מתגלגל' שעליו אפשר להפעיל אגרגציות — קריטי לטרנדים."},
+  {n:47,s:"חלק ו׳ — פונקציות חלון (Window)",t:"איזו פקודה מחשבת אחוז שינוי בין שורה לקודמת?",o:["df['column'].diff_percent()","df['column'].pct_change()","df['column'].shift_pct()","df['column'].growth()"],c:1,e:"pct_change מחשבת ישירות את שיעור השינוי היחסי — קלאסי לאחוזי צמיחה."},
+  {n:48,s:"חלק ו׳ — פונקציות חלון (Window)",t:"df['column'].diff() מחשבת:",o:["הבדל בין עמודות","הפרש מהממוצע","הפרש מספרי בין השורה הנוכחית לקודמת","מספר שורות שונות"],c:2,e:"diff מעולה לחישוב שינוי יומי במחיר, צמיחה או ירידה."},
+  {n:49,s:"חלק ו׳ — פונקציות חלון (Window)",t:"מה ההבדל בין df['col'].sum() ל-df.cumsum(axis=1)?",o:["אין הבדל","הראשונה סכום של עמודה, השנייה סכום מצטבר אופקי בין עמודות","הראשונה למספרים שלמים","השנייה מוחקת עמודות"],c:1,e:"axis=1 מעביר את כיוון הפעולה לרוחב — בין העמודות, בכל שורה בנפרד."},
+  {n:50,s:"חלק ו׳ — פונקציות חלון (Window)",t:"df.cumsum() בלי axis יבצע סכום מצטבר:",o:["לרוחב העמודות","לאורך השורות (אנכית)","רק על העמודה הראשונה","יחזיר שגיאה"],c:1,e:"ברירת המחדל axis=0 = פעולה אנכית (לאורך השורות), כמו רוב פעולות הפנדס."},
+  {n:51,s:"חלק ז׳ — תאריכים וזמנים",t:"מה תעשה df['date_column'].dt.year?",o:["תשנה פורמט","תשלוף רק את השנה מעמודת התאריך","תוסיף שנה אחת","תסנן לשנה הנוכחית"],c:1,e:"מאפיין dt נותן גישה לרכיבי תאריך וזמן. year שולף את השנה."},
+  {n:52,s:"חלק ז׳ — תאריכים וזמנים",t:"איזו פקודה ממירה עמודת טקסט לפורמט תאריך חכם?",o:["df['date'].to_time()","df['date'].format_date()","pd.to_datetime(df['date'])","df['date'].astype(date)"],c:2,e:"to_datetime הופך מחרוזות לאובייקט Datetime ופותח את כל פעולות dt."},
+  {n:53,s:"חלק ז׳ — תאריכים וזמנים",t:"איזו פקודה מחזירה את שם היום בשבוע (Sunday/Monday) מתאריך?",o:["df['date'].dt.day()","df['date'].dt.weekday_text()","df['date'].dt.day_name()","df['date'].dt.name_of_day()"],c:2,e:"day_name מחזירה את השם המילולי של היום בשבוע."},
+  {n:54,s:"חלק ז׳ — תאריכים וזמנים",t:"איך לומר לפנדס להמיר עמודת תאריכים כבר בקריאת ה-CSV?",o:["pd.read_csv('f.csv', parse_dates=['date'])","pd.read_csv('f.csv', format_dates=True)","אי אפשר","pd.read_csv('f.csv', dates=True)"],c:0,e:"parse_dates ב-read_csv חוסך המרה נפרדת אחר כך — מיד אחרי הטעינה."},
+  {n:55,s:"חלק ז׳ — תאריכים וזמנים",t:"df['date'].dt.is_month_end מחזיר:",o:["תאריך סוף החודש","True/False לכל שורה — האם זהו היום האחרון בחודש","מספר ימים שנותרו","שגיאה בפברואר"],c:1,e:"מאפיין בוליאני (Boolean) שיודע לזהות את היום האחרון של החודש בכל חודש."},
+  {n:56,s:"חלק ז׳ — תאריכים וזמנים",t:"איך נשלוף רק את מספר החודש (1-12) מעמודת תאריך?",o:["df['date'].dt.month","df['date'].month()","df['date'].get_month()","pd.month(df['date'])"],c:0,e:"dt.month מחזיר את מספר החודש — נוח לקיבוץ חודשי."},
+  {n:57,s:"חלק ז׳ — תאריכים וזמנים",t:"df['date_column'].dt.is_month_end יחזיר עבור כל שורה:",o:["תאריך","True או False","מספר ימים","שגיאה"],c:1,e:"מאפיין לוגי — בדיקה בלבד אם התאריך הוא סוף חודש."},
+  {n:58,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"באיזו פונקציה ניצור טבלת ציר שמסכמת מכירות לפי ערים ושנים?",o:["pd.crosstab()","df.groupby()","pd.pivot_table()","df.melt()"],c:2,e:"pivot_table נועדה ליצירת טבלאות ציר עם שורות, עמודות וערכי אגרגציה — ממש כמו באקסל."},
+  {n:59,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"df.groupby('department').mean() מחשבת:",o:["ממוצע של הטבלה","מקבצת לפי מחלקה ומחשבת ממוצע נפרד לכל מחלקה","מוצאת את המחלקה הממוצעת","מוחקת מחלקות"],c:1,e:"הפעולה המקבילה ל-GROUP BY + AVG ב-SQL."},
+  {n:60,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"מה היתרון של df.groupby('col').agg({'col1':'sum','col2':'mean'})?",o:["מבצעת את אותה אגרגציה על הכל","מאפשרת אגרגציות שונות במקביל על עמודות שונות","מוחקת ערכים חסרים אוטומטית","משנה שמות עמודות"],c:1,e:"מילון בתוך agg קובע איזה חישוב לבצע על איזו עמודה — סכום לאחת, ממוצע לאחרת."},
+  {n:61,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"אם תא מכיל רשימה [ספר, מחברת, עט], איזו פקודה תייצר שורה לכל פריט?",o:["df.split_rows()","df.explode('column_name')","df.melt()","df.expand()"],c:1,e:"explode מפצצת רשימה — כל איבר מקבל שורה משלו, ושאר הנתונים משוכפלים."},
+  {n:62,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"מה עושה df.melt()?",o:["מאחדת שורות כפולות","הופכת טבלה רחבה לארוכה (Unpivot)","הופכת עמודות מספריות לטקסט","מוחקת ערכים שליליים"],c:1,e:"ההפך מ-Pivot — מצוין לסידור מחדש של נתונים שלא הגיעו במבנה נורמלי."},
+  {n:63,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"מה מבצעת df.set_index('customer_id')?",o:["מעבירה לסוף הטבלה","הופכת את 'customer_id' לאינדקס (מפתח ראשי)","מוחקת את העמודה","מאפסת מספרי שורות"],c:1,e:"מאיצה שליפות עם loc על בסיס המזהה ומשמשת בסיס לתפעול ייחודי לפי לקוח."},
+  {n:64,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"איזו פקודה תחזיר את האינדקס לעמודה רגילה ותאפס למספרים?",o:["df.clear_index()","df.revert_index()","df.reset_index()","df.drop_index()"],c:2,e:"reset_index הוא ההפך מ-set_index — מחזיר למבנה טבלאי שטוח."},
+  {n:65,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"pd.crosstab(df['col1'], df['col2']) משמשת ל:",o:["סידור עמודות הפוך","יצירת טבלת שכיחויות בין שתי עמודות קטגוריאליות","חישוב קורלציה","חיבור טבלאות"],c:1,e:"כלי מהיר לבדוק התפלגויות משותפות בין שני משתנים — למשל מגדר מול סוג מנוי."},
+  {n:66,s:"חלק ח׳ — טבלאות ציר וקיבוץ",t:"df.groupby('col').agg({'col1':'sum','col2':'mean'}) פועלת בעצם כמו ב-SQL:",o:["WHERE...","GROUP BY עם פונקציות שונות לעמודות","ORDER BY","DISTINCT"],c:1,e:"המילון בתוך agg ממפה לכל עמודה את פעולת האגרגציה שלה — בדומה לכתיבת כמה SUM/AVG אחרי GROUP BY."},
+  {n:67,s:"חלק ט׳ — טקסט ומחרוזות",t:"מה עושה df['column'].str.contains('test')?",o:["מחליפה test במילה אחרת","מחזירה True/False לפי האם הטקסט מכיל 'test'","מפצלת לפי המילה","מוחקת את המילה"],c:1,e:"מקבילה ל-LIKE ב-SQL — לסינון או מציאת טקסט חלקי בתוך מחרוזת."},
+  {n:68,s:"חלק ט׳ — טקסט ומחרוזות",t:"איזו פקודה מנקה רווחים מתחילת ומסוף הטקסט (כמו TRIM)?",o:["df['column'].str.clean()","df['column'].str.strip()","df['column'].str.clear()","df['column'].str.replace(' ','')"],c:1,e:"strip מסירה רווחים בקצוות — כלי חיוני לניקוי נתונים לפני השוואות."},
+  {n:69,s:"חלק ט׳ — טקסט ומחרוזות",t:"איך נפצל עמודת שם מלא (עם פסיק) לשתי עמודות?",o:["df['column'].str.split(',', expand=True)","df['column'].str.divide(',')","df.separate('column', by=',')","pd.concat('column', split=',')"],c:0,e:"expand=True פורס את התוצאות לעמודות חדשות במקום להשאיר רשימה בתא."},
+  {n:70,s:"חלק ט׳ — טקסט ומחרוזות",t:"איך נחליף את כל הרווחים בקווים תחתונים בשמות העמודות?",o:["df.rename(spaces='_')","df.columns = df.columns.str.replace(' ', '_')","df.replace_column_names(' ', '_')","pd.clean_columns(df)"],c:1,e:"ניגשים ישירות למערך df.columns ומפעילים str.replace — מעדכן כל הכותרות בבת אחת."},
+  {n:71,s:"חלק ט׳ — טקסט ומחרוזות",t:"איך נספור כמה תווים יש בכל תא בעמודת טקסט?",o:["df['column'].count_chars()","df['column'].length()","df['column'].str.len()","df['column'].size()"],c:2,e:"str.len מחשב את אורך המחרוזת בכל תא — שימושי לבדיקות תקינות."},
+  {n:72,s:"חלק ט׳ — טקסט ומחרוזות",t:"איך נהפוך את כל הטקסט בעמודת 'city' לאותיות קטנות?",o:["df['city'].lower()","df['city'].str.lower()","df['city'].lowercase()","str.lower(df['city'])"],c:1,e:"חובה לעבור דרך מחלקת .str כדי לגשת לפעולות טקסט ברמת העמודה בפנדס."},
+  {n:73,s:"חלק ט׳ — טקסט ומחרוזות",t:"df['column'].str.replace('A','B') מבצעת:",o:["מחליפה שם עמודה","מחליפה כל הופעה של 'A' ב-'B' בתוך טקסט","מחליפה שורות","מוחקת A"],c:1,e:"str.replace הוא הכלי הסטנדרטי לעריכת מחרוזות בתוך תאי DataFrame."},
+  {n:74,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"באיזו פקודה נמצא את מספר השורה שבה הערך המקסימלי?",o:["df['column'].max()","df['column'].argmax()","df['column'].idxmax()","df['column'].top_index()"],c:2,e:"max מחזיר את הערך, idxmax מחזיר את האינדקס (תווית השורה) שבו הערך יושב."},
+  {n:75,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"מה מחזירה df.corr()?",o:["שגיאות כתיב","מטריצת מתאם בין עמודות מספריות","מספר שורות נכונות","מוחקת עמודות עם קשר"],c:1,e:"ערכים בין 1- ל-1 — חשוב לזהות אילו משתנים נעים יחד או הפוך."},
+  {n:76,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"איך נמצא את הערך השכיח ביותר בעמודה?",o:["df['column'].mean()","df['column'].median()","df['column'].mode()","df['column'].frequent()"],c:2,e:"mean = ממוצע, median = חציון, mode = שכיח (הערך שמופיע הכי הרבה)."},
+  {n:77,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"איזו פונקציה מחזירה את מספר השורה (אינדקס) של הערך הקטן ביותר?",o:["df['column'].min()","df['column'].argmin()","df['column'].idxmin()","df['column'].lowest_index()"],c:2,e:"כמו idxmax אבל לערך המינימלי — מחזיר את ה-ID של אותו ערך."},
+  {n:78,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"מה מחשבת df['salary'].std()?",o:["שונות","סטיית תקן (Standard Deviation)","ממוצע","מספר תאים"],c:1,e:"std הוא Standard Deviation — מודד פיזור הנתונים סביב הממוצע."},
+  {n:79,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"ומה df['salary'].var()?",o:["שונות (Variance)","ערך ממוצע","חציון","סטיית תקן"],c:0,e:"var מייצגת Variance — סטיית התקן בריבוע. מדד נוסף לפיזור הנתונים."},
+  {n:80,s:"חלק י׳ — אינדקסים וסטטיסטיקה",t:"מה ההבדל בין df.where(cond, other=0) ל-df.mask(cond, 0)?",o:["where למספרים, mask לטקסט","where שומר את הערכים שמקיימים את התנאי, mask מחליף אותם","where רק ב-SQL","פעולות זהות"],c:1,e:"פעולות משלימות — שתיהן עובדות עם תנאי בוליאני, אבל בכיוונים הפוכים."},
+  {n:81,s:"חלק י\"א — לוגיקה והמרות חכמות",t:"איך נחתוך ערכים בעמודה כך שמתחת ל-0 יהיה 0 ומעל 100 יהיה 100?",o:["df['col'].limit(0,100)","df['col'].clip(lower=0, upper=100)","df['col'].cut(0,100)","df['col'].where(0,100)"],c:1,e:"clip קוטם ערכים קיצוניים (Outliers) לפי גבולות שהוגדרו."},
+  {n:82,s:"חלק י\"א — לוגיקה והמרות חכמות",t:"איך נחלק עמודת גיל לדליים: עד 18, 18-35, 35+?",o:["pd.cut(df['age'], bins=[0,18,35,100])","df['age'].split_groups(3)","pd.pivot_table(df['age'])","df['age'].astype('category')"],c:0,e:"pd.cut מחלקת לפי גבולות שהוגדרו ברשימה — הופכת מספרים לקטגוריות."},
+  {n:83,s:"חלק י\"א — לוגיקה והמרות חכמות",t:"מה היתרון של df.eval('profit = revenue - expenses')?",o:["מעגלת אוטומטית","מאפשרת חישובים ע״י מחרוזת ולרוב רצה מהר יותר על דאטה גדול","שולחת ל-SQL","מתעלמת מתאים ריקים"],c:1,e:"eval מנצלת ספריית NumExpr שמייעלת פעולות מתמטיות על מערכים גדולים."},
+  {n:84,s:"חלק י\"א — לוגיקה והמרות חכמות",t:"df.mask(df['age']<18, 0) מבצעת:",o:["מסתירה את הקטנים מ-18","מחליפה ל-0 רק היכן שהתנאי True","מוחקת את עמודת הגיל","שומרת רק את הקטנים מ-18"],c:1,e:"mask 'מתלבשת' על הערכים שמקיימים את התנאי ועוטה עליהם מסכה בצורת ערך חדש."},
+  {n:85,s:"חלק י\"א — לוגיקה והמרות חכמות",t:"df['column'].map({'Yes':1, 'No':0}) משמשת ל:",o:["תרגום שפות","המרת קטגוריות לערכים מספריים, לרוב כהכנה למודלים","מחיקת Yes/No","הוספת עמודות חדשות"],c:1,e:"map עובדת עם מילון — שימושי במיוחד להכנת נתונים ל-ML (כמו ניתוח churn)."},
+  {n:86,s:"חלק י\"א — לוגיקה והמרות חכמות",t:"מה מטרת df['column'].apply(function)?",o:["שמירת קובץ","הפעלת פונקציה מותאמת אישית על כל תא","אישור שינויים","הגדרת תצוגה"],c:1,e:"apply נותן גמישות מלאה — אפשר ליישם כל לוגיקה שאין לה פקודה מובנית."},
+  {n:87,s:"חלק י\"ב — סוגי נתונים",t:"להמרת עמודת טקסט עם מעט ערכים חוזרים (מגדר/סטטוס), איזה סוג חוסך הכי הרבה זיכרון?",o:["df['col'].astype(int)","df['col'].astype('category')","df['col'].astype(str)","df['col'].astype('object')"],c:1,e:"category מקודד טקסטים למספרים מאחורי הקלעים — חוסך זיכרון ומאיץ סינון/מיון."},
+  {n:88,s:"חלק י\"ב — סוגי נתונים",t:"איך נשלוף את כל העמודות ששמן מכיל 'date'?",o:["df.select_columns('date')","df.get(contains='date')","df.filter(like='date')","df.columns.find('date')"],c:2,e:"filter עם like שולפת עמודות לפי תת-מחרוזת בשם — חוסך עבודה ידנית."},
+  {n:89,s:"חלק י\"ב — סוגי נתונים",t:"איך נסיר את כל עמודות הטקסט ונשאיר רק מספרים/תאריכים?",o:["df.remove_text()","df.filter_types(keep='numbers')","df.select_dtypes(exclude=['object'])","df.drop_strings()"],c:2,e:"select_dtypes עם exclude מסיר עמודות לפי סוג. עמודות טקסט מקוטלגות כ-'object'."},
+  {n:90,s:"חלק י\"ב — סוגי נתונים",t:"מה מטרת df['column'].astype(float)?",o:["להמיר למספרים עשרוניים","להמיר למספרים שלמים","לעגל מספרים","למחוק עשרוניים"],c:0,e:"astype משנה Data Type, ו-float = מספר עשרוני."},
+  {n:91,s:"חלק י\"ב — סוגי נתונים",t:"איך נשנה סוגי נתונים של כמה עמודות במכה אחת?",o:["df.astype({'c1':'int','c2':'float'})","df.change_type(c1='int', c2='float')","df.convert_dtypes()","df.set_types({'c1':'int'})"],c:0,e:"astype גמישה — מקבלת מילון של עמודה → סוג נתונים."},
+  {n:92,s:"חלק י\"ב — סוגי נתונים",t:"איך נשלוף רק את עמודות הטקסט (object)?",o:["df.select_dtypes(include=['object'])","df.get_text_columns()","df.filter(type='object')","df.loc[:,'object']"],c:0,e:"select_dtypes(include=[...]) ייעודית לסינון עמודות לפי הסוג שלהן."},
+  {n:93,s:"חלק י\"ג — קריאה ושמירה",t:"לקובץ ענק שרוצים לחסוך בו זיכרון, מה הגישה הנכונה בטעינה?",o:["pd.read_csv(...).head(100)","pd.read_csv(..., usecols=['c1','c2'])","קריאת כל הקובץ ואז drop","טעינה בפורמט טקסט"],c:1,e:"usecols מבטיחה שעמודות מיותרות לא ייכנסו לזיכרון מלכתחילה."},
+  {n:94,s:"חלק י\"ג — קריאה ושמירה",t:"איך נשמור לאקסל עם שם גיליון 'Data'?",o:["df.save_excel('f.xlsx', sheet='Data')","df.to_excel('f.xlsx', sheet_name='Data')","df.export_excel('f.xlsx', tab='Data')","pd.write_excel(df,'f.xlsx','Data')"],c:1,e:"to_excel + sheet_name = שליטה על שם הגיליון בתוך הקובץ."},
+  {n:95,s:"חלק י\"ג — קריאה ושמירה",t:"לאיזו מערכת מתאים ייצוא ל-JSON ולמה?",o:["df.to_csv('data.csv')","df.to_sql('data.sql')","df.to_json('data.json')","df.to_html('data.html')"],c:2,e:"JSON מתאים אופטימלית ל-Web ול-JavaScript — to_json מתרגם את ה-DataFrame ישירות."},
+  {n:96,s:"חלק י\"ג — קריאה ושמירה",t:"איך נשנה שם של עמודה בודדת בפנדס?",o:["df.change_columns('old'='new')","df.columns['old']='new'","df.rename(columns={'old':'new'})","df.replace_name('old','new')"],c:2,e:"rename משתמשת במילון למיפוי מדויק בין השם הישן לחדש."},
+  {n:97,s:"חלק י\"ג — קריאה ושמירה",t:"איך נסיר עמודה אחת מהטבלה?",o:["df.delete_column('col')","df.remove('col')","df.drop(columns=['col'])","df.clear('col')"],c:2,e:"drop משמשת להשלכת שורות או עמודות. עמודות → דרך הפרמטר columns."},
+  {n:98,s:"חלק י\"ג — קריאה ושמירה",t:"איך נשמור CSV בלי שעמודת האינדקס תיכלל בקובץ?",o:["df.to_csv('f.csv', drop_index=True)","df.to_csv('f.csv', index=False)","df.to_csv('f.csv', no_index=True)","df.to_csv('f.csv', ignore_index=True)"],c:1,e:"index=False = ללא ייצוא של מספרי השורות. הקובץ נשאר נקי מתוספות מיותרות."},
+  {n:99,s:"חלק י\"ג — קריאה ושמירה",t:"pd.read_csv עם usecols=['c1','c2'] חוסך:",o:["מקום במחשב","טעינה מיותרת של עמודות לזיכרון RAM","זמן כתיבה","אבטחה"],c:1,e:"ההבדל הקריטי — נתונים שלא צוינו לא ייטענו לזיכרון כלל."},
+  {n:100,s:"חלק י\"ג — קריאה ושמירה",t:"מה קורה כשמשתמשים ב-df.rename(columns={'A':'B'}) בלי inplace=True?",o:["שם העמודה משתנה במקור","מוחזרת תצוגה עם השם החדש, אך הטבלה המקורית לא משתנה","שגיאה","קובץ ה-CSV משתנה"],c:1,e:"רוב פעולות הפנדס מחזירות עותק חדש כדי להגן על הנתונים, אלא אם מורים אחרת."},
+];
+
+const letters = ['א','ב','ג','ד'];
+let answers = {};
+let correct = 0;
+let currentSection = null;
+
+function updateScore(){
+  const total = Object.keys(answers).length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('scoreText').textContent = '✅ ' + correct + ' / ' + total;
+  document.getElementById('scoreFill').style.width = (Math.round(correct/questions.length*100)) + '%';
+  document.getElementById('progTxt').textContent = total + ' / ' + questions.length;
+  document.getElementById('scoreDisplay').textContent = pct + '%';
+  document.getElementById('heroAnswered').textContent = total;
+  document.getElementById('heroCorrect').textContent = correct;
+  document.getElementById('heroPct').textContent = pct + '%';
+  if(total === questions.length) showFinish();
+}
+
+function selectOption(qIdx, optIdx){
+  if(answers[qIdx] !== undefined) return;
+  const q = questions[qIdx];
+  const isCorrect = optIdx === q.c;
+  answers[qIdx] = optIdx;
+  if(isCorrect) correct++;
+  const card = document.getElementById('qcard-'+qIdx);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i === q.c) o.classList.add('correct-ans');
+    if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+  const exp = document.getElementById('exp-'+qIdx);
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ נכון! ' : '❌ טעית — התשובה הנכונה מסומנת בירוק. ') + q.e;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = '';
+  currentSection = null;
+  questions.forEach((q,i)=>{
+    if(q.s !== currentSection){
+      currentSection = q.s;
+      mc.innerHTML += `<div class="sec-label">${q.s}</div>`;
+    }
+    const opts = q.o.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    mc.innerHTML += `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">שאלה ${q.n}</div>
+          <div class="q-section-tag">${q.s.split('—')[1]?.trim()||q.s}</div>
+        </div>
+        <div class="q-text">${q.t}</div>
+      </div>
+      <div class="options">${opts}</div>
+      <div class="explanation" id="exp-${i}">
+        <div class="exp-label">💡 הסבר</div>
+        <div class="exp-text"></div>
+      </div>
+    </div>`;
+  });
+  mc.innerHTML += `
+  <div class="finish-card" id="finishCard">
+    <div class="finish-emoji">🎉</div>
+    <div class="finish-title">סיימת את הקוויז הבינוני!</div>
+    <div class="finish-score" id="finishScore">0/80</div>
+    <div class="finish-grade" id="finishGrade"></div>
+    <div class="finish-sub" id="finishSub"></div>
+    <br>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 נסה שוב</button>
+    <a href="quiz.html" class="level-link">🧠 מוכן לרמה המתקדמת? ←</a>
+  </div>`;
+}
+
+function showFinish(){
+  const card = document.getElementById('finishCard');
+  if(window.fbAutoSave && window.currentUser) window.fbAutoSave(correct, questions.length);
+  const pct = Math.round(correct/questions.length*100);
+  document.getElementById('finishScore').textContent = correct + ' / ' + questions.length;
+  let grade, sub;
+  if(pct>=90){grade='⭐ מצוין!';sub='שליטה מרשימה ברמה הבינונית!';}
+  else if(pct>=75){grade='👍 טוב מאוד';sub='עוד קצת תרגול ותגיע לשלמות!';}
+  else if(pct>=60){grade='📚 טוב';sub='כדאי לחזור על החומר החלש.';}
+  else{grade='💪 המשך להתאמן';sub='חזור על הפרקים ונסה שוב!';}
+  document.getElementById('finishGrade').textContent = grade;
+  document.getElementById('finishSub').textContent = sub;
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function resetQuiz(){
+  answers = {}; correct = 0;
+  document.getElementById('finishCard').classList.remove('show');
+  updateScore();
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuiz();
+updateScore();
+</script>
+
+<!-- Firebase SDK -->
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",
+  authDomain: "sql-course-507b5.firebaseapp.com",
+  projectId: "sql-course-507b5",
+  storageBucket: "sql-course-507b5.firebasestorage.app",
+  messagingSenderId: "999664091380",
+  appId: "1:999664091380:web:349959985ae11ce8c51ea1"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let currentUser = null;
+window.currentUser = null;
+const QUIZ_ID = 'pandas';
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user; window.currentUser = user;
+  const loginBtn = document.getElementById('fb-login-btn');
+  const logoutBtn = document.getElementById('fb-logout-btn');
+  const userInfo = document.getElementById('fb-user-info');
+  const histBtn = document.getElementById('fb-history-btn');
+  const saveBtn = document.getElementById('fb-save-btn');
+  if(user){
+    document.getElementById('fb-user-name').textContent = user.displayName;
+    document.getElementById('fb-user-photo').src = user.photoURL;
+    document.getElementById('fb-user-photo').style.display = 'block';
+    loginBtn.style.display='none'; logoutBtn.style.display='flex';
+    userInfo.style.display='flex'; histBtn.style.display='flex'; saveBtn.style.display='flex';
+    await loadProgress(); await loadHistory();
+  } else {
+    loginBtn.style.display='flex'; logoutBtn.style.display='none';
+    userInfo.style.display='none'; histBtn.style.display='none'; saveBtn.style.display='none';
+  }
+});
+
+window.fbLogin = async () => { try { await signInWithPopup(auth, provider); } catch(e){console.error(e);} };
+window.fbLogout = async () => { await signOut(auth); };
+window.fbToggleHistory = () => {
+  const w = document.getElementById('fb-history-wrap');
+  w.style.display = w.style.display==='none' ? 'block' : 'none';
+};
+window.triggerSave = async () => {
+  if(!currentUser){ window.fbLogin(); return; }
+  const scoreEl = document.getElementById('scoreText');
+  const txt = scoreEl ? scoreEl.textContent.replace('✅ ','') : '0 / 0';
+  const parts = txt.split('/');
+  const sc = parseInt(parts[0])||0; const tot = parseInt(parts[1])||0;
+  if(tot===0){ showToast('⚠️ ענה על לפחות שאלה אחת קודם!'); return; }
+  await saveProgress(sc, tot);
+};
+
+async function saveProgress(score, total){
+  if(!currentUser) return;
+  const pct = Math.round(score/total*100);
+  await setDoc(doc(db,'users',currentUser.uid,'quizzes',QUIZ_ID),{score,total,pct,lastUpdate:new Date().toISOString()},{merge:true});
+  await addDoc(collection(db,'users',currentUser.uid,'history'),{quizId:QUIZ_ID,score,total,pct,date:new Date().toISOString()});
+  showToast('✅ ההתקדמות נשמרה בענן!');
+  await loadHistory();
+}
+window.fbAutoSave = saveProgress;
+
+async function loadProgress(){
+  if(!currentUser) return;
+  const snap = await getDoc(doc(db,'users',currentUser.uid,'quizzes',QUIZ_ID));
+  if(snap.exists()){
+    const d = snap.data();
+    const el = document.getElementById('fb-saved-score');
+    el.textContent = `ניסיון אחרון: ${d.score}/${d.total} (${d.pct}%)`;
+    el.style.display = 'block';
+  }
+}
+
+async function loadHistory(){
+  if(!currentUser) return;
+  const q = query(collection(db,'users',currentUser.uid,'history'),orderBy('date','desc'),limit(10));
+  const snap = await getDocs(q);
+  const hist = [];
+  snap.forEach(d=>hist.push(d.data()));
+  renderChart(hist.filter(h=>h.quizId===QUIZ_ID));
+}
+
+function renderChart(history){
+  const panel = document.getElementById('fb-history-panel');
+  if(!history.length){ panel.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">עדיין אין היסטוריה — ענה על שאלות ושמור!</p>'; return; }
+  const rev = [...history].reverse();
+  const best = Math.max(...history.map(h=>h.pct));
+  const avg = Math.round(history.reduce((a,h)=>a+h.pct,0)/history.length);
+  const bars = rev.map(h=>{
+    const d = new Date(h.date);
+    const lbl = `${d.getDate()}/${d.getMonth()+1}`;
+    const color = h.pct>=80?'var(--aq)':h.pct>=50?'#FFB020':'#FF4060';
+    return `<div class="hbar-wrap"><div class="hbar-val">${h.pct}%</div><div class="hbar" style="height:${Math.max(h.pct*1.1,8)}px;background:${color}"></div><div class="hbar-lbl">${lbl}</div></div>`;
+  }).join('');
+  panel.innerHTML = `<div class="hstats-row"><div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">שיא אישי</div></div><div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">ממוצע</div></div><div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">ניסיונות</div></div></div><div class="hchart">${bars}</div>`;
+}
+
+function showToast(msg){
+  let t=document.getElementById('fb-toast');
+  if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>

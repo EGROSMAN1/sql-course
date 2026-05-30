@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>המסלול שלי | קורס דאטה - אלירן גרוסמן</title>
+<meta name="description" content="המסלול הלימודי המלא: Python → Pandas → SQL → Power BI. מעקב התקדמות אישית, רמות, ותעודה.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/career-path.html">
+<meta name="theme-color" content="#00d4c8">
+
+<style>
+  :root {
+    --bg: #0a0d1f;
+    --bg2: #121530;
+    --bg3: #1a1f3a;
+    --bg4: #252a52;
+    --border: #2a2f5c;
+    --border2: #353a6b;
+    --text: #f8fafc;
+    --text2: #aab;
+    --text3: #888fa6;
+    --cyan: #00d4c8;
+    --green: #00e5a0;
+    --gold: #ffd700;
+    --orange: #ff8800;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --red: #ef4444;
+  }
+
+  * { box-sizing: border-box; }
+  
+  body {
+    margin: 0;
+  -webkit-tap-highlight-color: rgba(0,212,200,0.2);
+  -webkit-text-size-adjust: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Heebo", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    direction: rtl;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* Top bar */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+  }
+  .home-btn {
+    background: linear-gradient(135deg, var(--cyan), var(--green));
+    color: #000;
+    padding: 7px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .lang-link {
+    margin-inline-start: auto;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    border: 1px solid var(--border2);
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all .15s;
+  }
+  .lang-link:hover { color: var(--cyan); border-color: var(--cyan); }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 28px 20px 20px;
+    background: linear-gradient(135deg, rgba(0,212,200,0.08) 0%, rgba(139,92,246,0.06) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--cyan);
+  }
+  .hero p {
+    margin: 0;
+    color: var(--text2);
+    font-size: 14px;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  /* Stats strip */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 600px;
+    margin: 16px auto 0;
+    padding: 0 16px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+  .stat-icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
+  .stat-val { font-size: 18px; font-weight: 800; color: var(--cyan); line-height: 1.1; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .3px; margin-top: 2px; }
+
+  /* Path container */
+  .path {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    position: relative;
+  }
+
+  /* Step card */
+  .step {
+    background: var(--bg3);
+    border: 1.5px solid var(--border2);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 18px;
+    position: relative;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .step.locked { opacity: 0.55; }
+  .step.completed { border-color: var(--green); background: linear-gradient(135deg, rgba(0,229,160,0.08) 0%, var(--bg3) 60%); }
+  .step.in-progress { border-color: var(--cyan); background: linear-gradient(135deg, rgba(0,212,200,0.08) 0%, var(--bg3) 60%); }
+  .step.available { border-color: var(--gold); }
+  .step:not(.locked):hover { transform: translateY(-2px); }
+  
+  .step-num {
+    position: absolute;
+    top: -10px;
+    inset-inline-start: 16px;
+    background: var(--bg3);
+    border: 1.5px solid var(--border2);
+    color: var(--text);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .step.completed .step-num { background: var(--green); color: #000; border-color: var(--green); }
+  .step.in-progress .step-num { background: var(--cyan); color: #000; border-color: var(--cyan); }
+  .step.available .step-num { background: var(--gold); color: #000; border-color: var(--gold); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+  .step-icon {
+    font-size: 32px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .step-titles { flex: 1; min-width: 0; }
+  .step-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .step-sub {
+    font-size: 12.5px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+  .step-status-badge {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    white-space: nowrap;
+  }
+  .step.locked .step-status-badge { background: var(--bg4); color: var(--text3); }
+  .step.available .step-status-badge { background: rgba(255,215,0,0.18); color: var(--gold); }
+  .step.in-progress .step-status-badge { background: rgba(0,212,200,0.18); color: var(--cyan); }
+  .step.completed .step-status-badge { background: rgba(0,229,160,0.18); color: var(--green); }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text2);
+    margin: 6px 0 10px;
+    line-height: 1.5;
+  }
+
+  /* Progress bar */
+  .step-progress-wrap {
+    margin: 10px 0;
+  }
+  .step-progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .step-progress-pct {
+    color: var(--cyan);
+    font-weight: 700;
+  }
+  .step.completed .step-progress-pct { color: var(--green); }
+  .step-progress-bar {
+    width: 100%;
+    height: 7px;
+    background: var(--bg);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .step-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--green));
+    border-radius: 6px;
+    transition: width .8s ease;
+  }
+  .step.completed .step-progress-fill { background: var(--green); }
+
+  /* Step action */
+  .step-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .step-btn {
+    background: linear-gradient(135deg, var(--cyan), var(--green));
+    color: #000;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: inherit;
+  }
+  .step-btn:hover, .step-btn:active { transform: scale(0.98); }
+  .step-btn.secondary {
+    background: var(--bg4);
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+  .step-btn.disabled {
+    background: var(--bg4);
+    color: var(--text3);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .step.completed .step-btn { background: linear-gradient(135deg, var(--green), #00c896); }
+
+  /* Connector line */
+  .step::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 30px;
+    bottom: -18px;
+    width: 2px;
+    height: 18px;
+    background: linear-gradient(180deg, var(--border2), transparent);
+  }
+  .step:last-of-type::before { display: none; }
+  .step.completed::before { background: var(--green); }
+
+  /* Final - Certificate card */
+  .cert-step {
+    background: linear-gradient(135deg, #2a1f4a 0%, #4a2d61 100%);
+    border: 2px solid var(--gold);
+    text-align: center;
+  }
+  .cert-step .step-icon { font-size: 48px; }
+  .cert-step .step-title { font-size: 18px; color: var(--gold); }
+  .cert-step .step-btn {
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: #1a1a2e;
+  }
+
+  /* Side info card */
+  .info-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 24px;
+    text-align: center;
+  }
+  .info-card h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    color: var(--gold);
+  }
+  .info-card p {
+    margin: 0;
+    color: var(--text2);
+    font-size: 13px;
+  }
+
+  /* Achievement badges row */
+  .badges-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .achievement-badge {
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .achievement-badge.earned {
+    background: rgba(255,215,0,0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .hero { padding: 22px 14px 16px; }
+    .hero h1 { font-size: 22px; }
+    .hero p { font-size: 13px; }
+    .stats-strip { gap: 5px; padding: 0 12px; }
+    .stat-card { padding: 8px 4px; }
+    .stat-val { font-size: 16px; }
+    .stat-label { font-size: 11px; }
+    .path { padding: 18px 12px 50px; }
+    .step { padding: 12px; margin-bottom: 16px; }
+    .step-num { width: 24px; height: 24px; font-size: 12px; inset-inline-start: 12px; }
+    .step-icon { font-size: 28px; }
+    .step-title { font-size: 14.5px; }
+    .step-sub { font-size: 11.5px; }
+    .step-status-badge { font-size: 11px; padding: 3px 8px; }
+    .step-desc { font-size: 12.5px; }
+    .step-btn { padding: 8px 14px; font-size: 12.5px; }
+    .cert-step .step-icon { font-size: 38px; }
+    .cert-step .step-title { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <a href="index.html" class="home-btn">🏠 דף הבית</a>
+  <a href="en/career-path.html" class="lang-link">English →</a>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>🗺️ המסלול שלי</h1>
+  <p>המסע הלימודי המלא שלך - ממתחיל ועד מומחה דאטה. עקוב אחר ההתקדמות, פתח שלבים חדשים, וזכה בתעודה.</p>
+  
+  <div class="stats-strip" id="stats-strip">
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-val" id="stat-xp">0</div>
+      <div class="stat-label">XP</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-val" id="stat-streak">0</div>
+      <div class="stat-label">רצף</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎖️</div>
+      <div class="stat-val" id="stat-level">1</div>
+      <div class="stat-label">רמה</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏅</div>
+      <div class="stat-val" id="stat-badges">0</div>
+      <div class="stat-label">מדליות</div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="info-card guided-projects-banner" style="background:linear-gradient(135deg,#2a1f4a,#4a2d61);border:2px solid #8b5cf6;margin-bottom:20px;">
+    <h3 style="color:#c4b5fd;">🚀 פרויקטים מודרכים (חדש!)</h3>
+    <p>5 פרויקטים ישראלים רב-שלביים: נטישת לקוחות, נדל"ן, קורונה, מכירות, פוטבול. בונים פורטפוליו אמיתי.</p>
+    <a href="projects.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#8b5cf6,#9333ea);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">צפה בפרויקטים ←</a>
+  </div>
+
+
+  <div class="info-card" style="background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(219,39,119,0.06));border:2px solid #ec4899;margin-bottom:20px;">
+    <h3 style="color:#ec4899;">🔍 חפש תרגיל לפי נושא (חדש!)</h3>
+    <p>סנן מתוך 80+ תרגילים לפי תגיות נושא, רמת קושי, וקורס. מנגנון חיפוש כמו ב-LeetCode.</p>
+    <a href="tags.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">חפש עכשיו ←</a>
+  </div>
+
+  <!-- Path -->
+<div class="path" id="path">
+  <!-- Steps will be rendered here by JS -->
+</div>
+
+<!-- Footer info -->
+<div class="path" style="padding-top:0;">
+  <div class="info-card">
+    <h3>💡 איך זה עובד?</h3>
+    <p>השלם תרגילים בכל שלב כדי לפתוח את השלב הבא. הצבירה שלך נשמרת בדפדפן ומסונכרנת בין השלבים. כל תרגיל = +10 XP. השלמת מסלול מלא = תעודה רשמית.</p>
+  </div>
+</div>
+  <div class="info-card" style="background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,136,0,0.06));border:2px solid #ffd700;margin-bottom:20px;">
+    <h3 style="color:#ffd700;">🗓️ אתגר יומי (חדש!)</h3>
+    <p>30 אתגרים בעברית, אחד ביום. שמור על הרצף וזכה במדליה!</p>
+    <a href="daily.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#ffd700,#ff8800);color:#1a1a2e;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">לאתגר היום ←</a>
+  </div>
+
+
+<script>
+(function() {
+  'use strict';
+
+  // ---- Path definition ----
+  const STEPS = [
+    {
+      id: 'python-basics',
+      icon: '🐍',
+      title: 'יסודות Python',
+      sub: 'משתנים, תנאים, לולאות',
+      desc: 'התחל מכאן! 170 תרגילים מודרכים שיביאו אותך מאפס ועד יכולת לכתוב סקריפטים.',
+      url: 'python-lesson.html',
+      courseId: 'python-lesson',
+      total: 170,
+      unlockAfter: 0,
+    },
+    {
+      id: 'python-course',
+      icon: '📚',
+      title: 'קורס Python מקיף',
+      sub: 'מודולים מתקדמים',
+      desc: 'מבט-על על כל הקורס: 10 מודולים מסודרים מבחירה. דפדף לפי הסדר או בחר מה שמעניין.',
+      url: 'python-course.html',
+      courseId: 'python-course',
+      total: 0,
+      unlockAfter: 10,
+    },
+    {
+      id: 'pandas',
+      icon: '🐼',
+      title: 'Pandas - ניתוח נתונים',
+      sub: '150 תרגילים + תרגול מתקדם',
+      desc: 'הספרייה הכי חשובה לדאטה. DataFrame, filter, groupby, merge, ובונוס: 20 תרגילי Pyodide עם matplotlib אמיתי.',
+      url: 'pandas-lesson.html',
+      courseId: 'pandas-lesson',
+      total: 150,
+      unlockAfter: 30,
+    },
+    {
+      id: 'quiz',
+      icon: '🎓',
+      title: 'אתגר 100 שאלות',
+      sub: 'בדוק את עצמך',
+      desc: 'חידון מקיף שמכסה את כל מה שלמדת בפייתון. אידיאלי להכנה לראיון.',
+      url: 'quiz-python-100.html',
+      courseId: 'quiz-python-100',
+      total: 100,
+      unlockAfter: 50,
+    },
+    {
+      id: 'playground',
+      icon: '🎮',
+      title: 'Playground - תרגול חופשי',
+      sub: 'כתוב קוד בלי הגבלה',
+      desc: 'סביבה דמוית Jupyter - בנה ועבד עם תאים, השתמש בדאטהסטים ישראליים, ייצא קבצים.',
+      url: 'python-playground.html',
+      courseId: 'python-playground',
+      total: 0,
+      unlockAfter: 30,
+      optional: true,
+    },
+    {
+      id: 'sql',
+      icon: '🗃️',
+      title: 'SQL - שאילתות מסד נתונים',
+      sub: 'מומלץ אחרי Python + Pandas',
+      desc: 'הקורס המקורי של אלירן - SQL מ-0 ועד JOIN-ים מורכבים, עם 4 סימולטורים על דאטה אמיתי.',
+      url: 'simulator.html',
+      courseId: 'sql',
+      total: 0,
+      unlockAfter: 100,
+    },
+    {
+      id: 'powerbi',
+      icon: '📊',
+      title: 'Power BI - דשבורדים',
+      sub: 'בקרוב',
+      desc: 'תרגומים אלירן מ-Power BI - חיבור לדאטה, יצירת מדדים, ויזואליזציה אינטראקטיבית.',
+      url: 'pbi-simulator.html',
+      courseId: 'powerbi',
+      total: 0,
+      unlockAfter: 150,
+      optional: true,
+    },
+    {
+      id: 'certificate',
+      icon: '🏆',
+      title: 'תעודת השלמה',
+      sub: 'הוכחה רשמית לכישוריך',
+      desc: 'הגעת! קבל תעודה PDF להורדה והדפסה + כפתור שיתוף ב-LinkedIn.',
+      url: 'pandas-lesson.html',  // open cert modal from here
+      courseId: 'certificate',
+      total: 0,
+      unlockAfter: 50,
+      isCertificate: true,
+    },
+  ];
+
+  // ---- Load progress from localStorage ----
+  function getPassedExercises() {
+    try { return JSON.parse(localStorage.getItem('gam_passedEx') || '{}'); }
+    catch (e) { return {}; }
+  }
+  function getXP() { return parseInt(localStorage.getItem('gam_xp') || '0', 10); }
+  function getStreak() { return parseInt(localStorage.getItem('gam_streak') || '0', 10); }
+  function getBadgesCount() {
+    try { return JSON.parse(localStorage.getItem('gam_badges') || '[]').length; }
+    catch (e) { return 0; }
+  }
+  function levelForXP(xp) {
+    const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, 10000];
+    for (let i = thresholds.length - 1; i >= 0; i--) {
+      if (xp >= thresholds[i]) return i + 1;
+    }
+    return 1;
+  }
+
+  // ---- Count completed per course ----
+  function countCompleted(courseId) {
+    const passed = getPassedExercises();
+    if (!passed[courseId]) return 0;
+    return Object.keys(passed[courseId]).length;
+  }
+  function totalCompleted() {
+    const passed = getPassedExercises();
+    let total = 0;
+    Object.values(passed).forEach(exs => { total += Object.keys(exs).length; });
+    return total;
+  }
+
+  // ---- Determine step status ----
+  function getStepStatus(step) {
+    const total = totalCompleted();
+    
+    // Check if locked (haven't unlocked yet)
+    if (total < step.unlockAfter && !step.optional) return 'locked';
+    if (total < step.unlockAfter && step.optional) return 'available'; // Optional steps - always available
+    
+    // Check certificate eligibility
+    if (step.isCertificate) {
+      return total >= 50 ? 'available' : 'locked';
+    }
+    
+    // Check completion based on count
+    if (step.total > 0) {
+      const done = countCompleted(step.courseId);
+      if (done >= step.total) return 'completed';
+      if (done > 0) return 'in-progress';
+    } else {
+      // No specific total - check if any progress made
+      const done = countCompleted(step.courseId);
+      if (done > 0) return 'in-progress';
+    }
+    
+    return 'available';
+  }
+
+  function getStatusBadge(status) {
+    const labels = {
+      'locked': '🔒 נעול',
+      'available': '✨ זמין',
+      'in-progress': '⏳ בתהליך',
+      'completed': '✅ הושלם'
+    };
+    return labels[status] || '';
+  }
+
+  // ---- Update stats strip ----
+  function updateStats() {
+    const xp = getXP();
+    document.getElementById('stat-xp').textContent = xp.toLocaleString();
+    document.getElementById('stat-streak').textContent = getStreak();
+    document.getElementById('stat-level').textContent = levelForXP(xp);
+    document.getElementById('stat-badges').textContent = getBadgesCount();
+  }
+
+  // ---- Render steps ----
+  function renderPath() {
+    const container = document.getElementById('path');
+    let html = '';
+    
+    STEPS.forEach((step, idx) => {
+      const status = getStepStatus(step);
+      const done = countCompleted(step.courseId);
+      const total = step.total;
+      const pct = total > 0 ? Math.min(100, Math.floor((done / total) * 100)) : (status === 'completed' ? 100 : 0);
+      
+      // For certificate, special calculation
+      let progressHTML = '';
+      if (step.isCertificate) {
+        const eligible = totalCompleted() >= 50;
+        const certPct = Math.min(100, Math.floor((totalCompleted() / 50) * 100));
+        progressHTML = `
+          <div class="step-progress-wrap">
+            <div class="step-progress-row">
+              <span>${eligible ? 'זכאי לתעודה!' : 'התקדמות לתעודה'}</span>
+              <span class="step-progress-pct">${totalCompleted()} / 50</span>
+            </div>
+            <div class="step-progress-bar"><div class="step-progress-fill" style="width:${certPct}%"></div></div>
+          </div>
+        `;
+      } else if (total > 0) {
+        progressHTML = `
+          <div class="step-progress-wrap">
+            <div class="step-progress-row">
+              <span>${done} מתוך ${total} תרגילים</span>
+              <span class="step-progress-pct">${pct}%</span>
+            </div>
+            <div class="step-progress-bar"><div class="step-progress-fill" style="width:${pct}%"></div></div>
+          </div>
+        `;
+      }
+      
+      // Button
+      let buttonHTML = '';
+      const btnText = status === 'completed' ? 'חזור לתרגול' : (done > 0 ? 'המשך' : 'התחל');
+      
+      if (status === 'locked') {
+        buttonHTML = `<button class="step-btn disabled">🔒 פתח אחרי ${step.unlockAfter} תרגילים</button>`;
+      } else if (step.isCertificate) {
+        if (status === 'available') {
+          buttonHTML = `<button class="step-btn" id="cert-open-btn">🏆 צפה בתעודה</button>`;
+        } else {
+          buttonHTML = `<button class="step-btn disabled">🔒 עוד ${50 - totalCompleted()} תרגילים</button>`;
+        }
+      } else {
+        buttonHTML = `<a href="${step.url}" class="step-btn">${btnText} ←</a>`;
+      }
+      
+      const stepClass = step.isCertificate ? 'step cert-step ' + status : 'step ' + status;
+      
+      html += `
+        <div class="${stepClass}" data-step-id="${step.id}">
+          <div class="step-num">${idx + 1}</div>
+          <div class="step-header">
+            <div class="step-icon">${step.icon}</div>
+            <div class="step-titles">
+              <div class="step-title">${step.title}${step.optional ? ' <span style="font-size:11px;opacity:0.7">(אופציונלי)</span>' : ''}</div>
+              <div class="step-sub">${step.sub}</div>
+            </div>
+            <div class="step-status-badge">${getStatusBadge(status)}</div>
+          </div>
+          <div class="step-desc">${step.desc}</div>
+          ${progressHTML}
+          <div class="step-actions">${buttonHTML}</div>
+        </div>
+      `;
+    });
+    
+    container.innerHTML = html;
+    
+    // Wire up certificate button
+    const certBtn = document.getElementById('cert-open-btn');
+    if (certBtn) {
+      certBtn.addEventListener('click', () => {
+        // Open pandas-lesson with cert query param
+        window.location.href = 'pandas-lesson.html?openCert=1';
+      });
+    }
+  }
+
+  // ---- Init ----
+  function init() {
+    updateStats();
+    renderPath();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>

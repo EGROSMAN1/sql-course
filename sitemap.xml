@@ -1,134 +1,778 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://egrosman1.github.io/sql-course/</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/course.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/course.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/course.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/course.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/course.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/course.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/course.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/course.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/course.html"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/lessons.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/lessons.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/lessons.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/lessons.html"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/practice.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/practice.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/practice.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/practice.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/practice.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/practice.html"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/study.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/study.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/study.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/study.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/study.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/study.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/study.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/study.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/study.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/study.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/study.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/study.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/study.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/study.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/study.html"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/reference.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/reference.html"/>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator-nw.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://egrosman1.github.io/sql-course/en/reference.html</loc>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/reference.html"/>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator-nba.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://egrosman1.github.io/sql-course/zh/reference.html</loc>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator-cl.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/interview-telecom.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/interview-insurance.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-beginner.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-medium.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-advanced2.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-expert.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/videos.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/videos2.html</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/reference.html"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/setup.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/setup.html"/>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-simulator.html</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://egrosman1.github.io/sql-course/en/setup.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/setup.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/setup.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/setup.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/videos.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/videos.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/videos.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/videos2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/videos2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/videos2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/quiz.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/quiz.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/quiz.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/quiz-beginner.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/quiz-beginner.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/quiz-beginner.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/quiz-medium.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/quiz-medium.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/quiz-medium.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/quiz-advanced2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/quiz-advanced2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/quiz-expert.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/quiz-expert.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/quiz-expert.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/simulator-nw.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/simulator-nw.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/simulator-nw.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/simulator-nba.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/simulator-nba.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/simulator-nba.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/simulator-cl.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/simulator-cl.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/simulator-cl.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/sql-simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/sql-simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/sql-simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/sql-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
   </url>
   <url>
     <loc>https://egrosman1.github.io/sql-course/tirgul-makif.html</loc>
-    <lastmod>2026-05-22</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
   </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/tirgul-makif.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/tirgul-makif.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/tirgul-makif.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/pbi-simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/pbi-simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/pbi-simulator.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/interview-telecom.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/interview-telecom.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/interview-telecom.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/interview-insurance.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/interview-insurance.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/interview-insurance.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/case_study_simulator_v2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/pandas-100.html</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pandas-100.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/quiz-pandas.html</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-pandas.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-pandas.html"/>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/python-course.html</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/python-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/python-course.html"/>
+  </url>
+  <url><loc>https://egrosman1.github.io/sql-course/pandas-course.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
 </urlset>

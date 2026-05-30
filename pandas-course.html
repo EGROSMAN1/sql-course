@@ -1,0 +1,4083 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>קורס פנדס בעברית - 10 מודולים, 150 תרגילים | אנליסט דאטה</title>
+<meta name="description" content="קורס פנדס מקיף בעברית. 10 מודולים, 30 נושאים, 150 תרגילים אינטראקטיביים. DataFrame, groupby, merge, ניקוי נתונים - הכל בסימולטור חי.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/pandas-course.html">
+
+<style>
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#5A6478;
+  --cyan:#00E5FF;--green:#00E5A0;--orange:#FFB020;--red:#FF4060;
+  --py-yellow:#FFDE57;--pd-purple:#9B5CFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Heebo",Roboto,system-ui,Arial,sans-serif;line-height:1.55;direction:rtl;min-height:100vh}
+a{color:var(--cyan);text-decoration:none}
+
+.topnav{display:flex;align-items:center;gap:.7rem;padding:.55rem 1rem;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50;flex-wrap:wrap}
+.back-btn{color:var(--text2);font-size:13px;font-weight:600;padding:5px 10px;border-radius:6px;background:var(--bg3);transition:all .12s}
+.back-btn:hover{color:var(--text);background:var(--bg4)}
+.crumb{flex:1;font-size:13.5px;color:var(--text);font-weight:700;min-width:0;text-align:center}
+.crumb em{color:var(--cyan);font-style:normal}
+
+.hero{padding:1.4rem 1rem 1rem;max-width:1000px;margin:0 auto;text-align:center}
+.hero h1{font-size:1.8rem;font-weight:800;margin-bottom:.4rem}
+.hero h1 .pd{background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--text2);font-size:14px;max-width:680px;margin:0 auto .9rem}
+.hero-stats{display:inline-flex;gap:1.2rem;padding:.5rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:9px;font-size:12.5px;color:var(--text2);font-weight:600}
+.hero-stats span{color:var(--cyan);font-weight:800;font-family:"SF Mono",monospace}
+
+.main{max-width:1000px;margin:0 auto;padding:1rem .8rem 4rem}
+
+/* Stats bar */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1rem}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:.7rem .8rem;text-align:center}
+.stat-value{font-size:1.5rem;font-weight:800;line-height:1;margin-bottom:.2rem;font-family:"SF Mono",monospace}
+.stat-value.done{color:var(--green)}
+.stat-value.xp{color:var(--cyan)}
+.stat-value.level{color:var(--py-yellow)}
+.stat-value.streak{color:var(--orange)}
+.stat-label{font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
+@media(max-width:480px){
+  .stats-bar{grid-template-columns:repeat(2,1fr);gap:.45rem}
+  .stat-card{padding:.55rem .6rem}
+  .stat-value{font-size:1.25rem}
+  .stat-label{font-size:9.5px}
+}
+
+/* CTA cards */
+.cta-cards{display:flex;gap:.7rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.cta-card{flex:1;min-width:160px;background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(0,229,255,.02));border:1px solid rgba(0,229,255,.3);border-radius:12px;padding:1rem 1.2rem;display:flex;align-items:center;gap:.9rem;color:var(--text);transition:all .15s}
+.cta-card:hover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 6px 18px rgba(0,229,255,.15)}
+.cta-card .em{font-size:2rem}
+.cta-card .body{flex:1}
+.cta-card .label{font-size:11px;font-weight:800;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.15rem}
+.cta-card .title{font-size:15px;font-weight:700;color:var(--text)}
+.cta-card .sub{font-size:12px;color:var(--text2);margin-top:.15rem}
+.cta-card .arrow{font-size:1.5rem;color:var(--text3);transition:color .15s}
+.cta-card:hover .arrow{color:var(--cyan)}
+.cta-card.continue{background:linear-gradient(135deg,rgba(255,222,87,.08),rgba(255,222,87,.02));border-color:rgba(255,222,87,.3)}
+.cta-card.continue:hover{border-color:var(--py-yellow);box-shadow:0 6px 18px rgba(255,222,87,.15)}
+.cta-card.continue .label{color:var(--py-yellow)}
+.cta-card.continue:hover .arrow{color:var(--py-yellow)}
+
+/* Module list */
+.section-title{font-size:1.05rem;font-weight:800;margin:1.5rem 0 .7rem;color:var(--text)}
+.section-title .count{color:var(--text3);font-weight:600;font-size:.85rem;font-family:"SF Mono",monospace}
+
+.mode-tabs{display:flex;gap:.4rem;margin-bottom:1rem}
+.mode-tab{flex:1;background:var(--bg2);border:1px solid var(--border);color:var(--text2);padding:.6rem;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center}
+.mode-tab.active{background:rgba(0,229,255,.08);border-color:var(--cyan);color:var(--text)}
+
+.module-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;margin-bottom:.55rem;display:flex;align-items:center;gap:.7rem;transition:all .15s}
+.module-card:hover{border-color:var(--border2);transform:translateX(-3px)}
+.module-card .num{background:var(--bg3);color:var(--text3);font-weight:800;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:"SF Mono",monospace;font-size:13px;flex-shrink:0}
+.module-card .em{font-size:1.6rem;flex-shrink:0}
+.module-card .body{flex:1;min-width:0}
+.module-card .name{font-size:14.5px;font-weight:700;margin-bottom:.15rem}
+.module-card .desc{font-size:12px;color:var(--text2);margin-bottom:.25rem}
+.module-card .meta{font-size:11px;color:var(--text3);font-weight:600}
+.module-card .prog{font-size:11.5px;font-weight:700;color:var(--green);font-family:"SF Mono",monospace}
+
+.module-topics{padding:.3rem 0 .8rem 0;display:none}
+.module-topics.expanded{display:block}
+.topic-link{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;border-radius:7px;color:var(--text2);font-size:12.5px;transition:all .12s;margin-bottom:.2rem}
+.topic-link:hover{background:var(--bg3);color:var(--text)}
+.topic-link.done{color:var(--green)}
+.topic-link .icon{flex-shrink:0;font-size:.95rem}
+.topic-link .name{flex:1}
+.topic-link .num-ex{font-size:10.5px;color:var(--text3);font-family:"SF Mono",monospace}
+.topic-link.done::before{content:"✓ ";color:var(--green);font-weight:800}
+
+/* Search */
+.search-bar{position:relative;margin-bottom:1rem}
+.search-bar input{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:.7rem .9rem .7rem 2.3rem;border-radius:9px;font-size:13.5px;font-family:inherit}
+.search-bar input:focus{outline:none;border-color:var(--cyan)}
+.search-bar input::placeholder{color:var(--text3)}
+.search-bar .icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:1rem}
+
+@media(max-width:768px){
+  .hero h1{font-size:1.4rem}
+  .hero p{font-size:13px}
+  .module-card .name{font-size:13.5px}
+}
+
+/* TOC for sequential mode */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.6rem}
+
+/* ============== UNIVERSAL MOBILE PACK ============== */
+/* Prevent iOS text auto-resize on rotation */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* iOS safe area insets for notched devices */
+body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+/* Prevent horizontal scroll on tiny phones */
+html,body{overflow-x:hidden;max-width:100vw}
+/* Better tap highlight */
+a,button,select,input{-webkit-tap-highlight-color:rgba(0,229,255,.15)}
+/* Smooth scrolling on iOS */
+.cell-output,.output-box,.theory pre,.df-table{-webkit-overflow-scrolling:touch}
+/* Prevent iOS input zoom (inputs need >=16px) */
+input,select,textarea{font-size:16px !important}
+/* Min touch target 44px (Apple HIG) */
+button:not(.cell-icon-btn):not(.jump-btn):not(.ex-nav-btn):not(.reset-btn):not(.tb-btn){min-height:38px}
+/* iOS Safari sticky header fix */
+@supports (-webkit-touch-callout:none){
+  .topnav{position:-webkit-sticky;position:sticky}
+}
+
+@media(max-width:400px){
+  .topnav{padding:.4rem .55rem;gap:.4rem}
+  .back-btn{font-size:11.5px;padding:4px 8px}
+  .crumb{font-size:11.5px}
+  .hero{padding:1rem .55rem .55rem}
+  .hero h1{font-size:1.35rem}
+  .hero p{font-size:12px}
+  .hero-stats{font-size:11px;gap:.7rem;padding:.4rem .7rem;flex-wrap:wrap;justify-content:center}
+  .main{padding:.75rem .55rem 4rem}
+  .stats-bar{grid-template-columns:repeat(2,1fr);gap:.4rem}
+  .stat-card{padding:.5rem .55rem}
+  .stat-value{font-size:1.15rem}
+  .stat-label{font-size:9px}
+  .cta-card{padding:.75rem .85rem;gap:.65rem;min-width:auto;flex:1 1 100%}
+  .cta-card .em{font-size:1.6rem}
+  .cta-card .title{font-size:13.5px}
+  .cta-card .sub{font-size:11px}
+  .section-title{font-size:1rem;margin:1.2rem 0 .55rem}
+  .module-card{padding:.7rem .8rem;gap:.55rem;border-radius:9px}
+  .module-card .num{width:24px;height:24px;font-size:11.5px}
+  .module-card .em{font-size:1.4rem}
+  .module-card .name{font-size:13px}
+  .module-card .desc{font-size:11px}
+  .module-card .meta{font-size:10.5px}
+  .module-card .prog{font-size:11px}
+  .topic-link{padding:.45rem .65rem;font-size:12px;min-height:38px}
+  .topic-link .num-ex{font-size:10px}
+  .mode-tab{padding:.55rem .4rem;font-size:12px;min-height:42px}
+  .search-bar input{padding:.55rem .75rem .55rem 2.1rem;font-size:13px}
+  .toc-grid{grid-template-columns:1fr}
+}
+@media(max-width:360px){
+  .hero h1{font-size:1.2rem}
+}
+
+
+/* === MOBILE OVERFLOW SAFETY === */
+@media(max-width:480px){
+  /* Force all content to wrap, never overflow */
+  *{max-width:100%}
+  pre, code, table{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CKNNVS2HVB');</script>
+
+<style>
+/* GAMIFICATION CSS */
+/* ============================================================
+   GAMIFICATION CSS — Mobile-first, RTL+LTR support
+   ============================================================ */
+
+/* ---- HUD (top fixed corner) ---- */
+#gam-hud {
+  position: fixed;
+  bottom: 12px;
+  z-index: 9998;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+[dir="ltr"] #gam-hud { right: 12px; }
+[dir="rtl"] #gam-hud { left: 12px; }
+
+#gam-hud-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+  border: 1.5px solid #4a5494;
+  border-radius: 22px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1;
+}
+#gam-hud-btn:hover, #gam-hud-btn:active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(74,84,148,0.5);
+}
+#gam-hud-btn .gam-streak,
+#gam-hud-btn .gam-xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+#gam-hud-btn .gam-streak { color: #ffb84a; }
+#gam-hud-btn .gam-xp     { color: #ffd700; }
+
+/* ---- XP gain toast ---- */
+.gam-toast {
+  position: fixed;
+  bottom: 90px;
+  z-index: 9999;
+  background: linear-gradient(135deg, #00c896 0%, #00a884 100%);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,200,150,0.4);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity .35s ease, transform .35s ease;
+  max-width: calc(100% - 30px);
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+[dir="ltr"] .gam-toast { right: 15px; }
+[dir="rtl"] .gam-toast { left: 15px; }
+.gam-toast.show { opacity: 1; transform: translateY(0); }
+.gam-toast-icon { font-size: 18px; margin-inline-end: 4px; }
+.gam-toast-xp { background: linear-gradient(135deg, #ffaa00 0%, #ff8800 100%); box-shadow: 0 8px 24px rgba(255,170,0,0.45); }
+.gam-toast small { opacity: 0.92; font-weight: 400; }
+
+/* ---- Celebration modal (level up / badge unlock) ---- */
+.gam-celebration {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  backdrop-filter: blur(4px);
+}
+.gam-celebration.show { opacity: 1; }
+.gam-celebration-inner {
+  background: linear-gradient(135deg, #1f2444 0%, #353a6b 100%);
+  border: 2px solid #ffd700;
+  border-radius: 22px;
+  padding: 28px 26px;
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+  color: #fff;
+  transform: scale(0.85);
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 20px 60px rgba(255,215,0,0.3);
+}
+.gam-celebration.show .gam-celebration-inner { transform: scale(1); }
+.gam-celebration-icon {
+  font-size: 64px;
+  margin-bottom: 10px;
+  animation: gam-bounce 0.6s ease infinite alternate;
+}
+@keyframes gam-bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-8px); }
+}
+.gam-celebration h2 {
+  margin: 6px 0 14px;
+  font-size: 22px;
+  color: #ffd700;
+}
+.gam-celebration h3 {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #ffaa00;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.gam-celebration p { font-size: 14px; opacity: 0.85; margin: 6px 0 14px; }
+.gam-level-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #1a1a2e;
+  padding: 10px 28px;
+  border-radius: 25px;
+  font-size: 19px;
+  font-weight: 800;
+  margin: 6px 0 18px;
+}
+.gam-badge-icon-big {
+  font-size: 72px;
+  margin-bottom: 6px;
+  animation: gam-spin 1.2s ease-in-out;
+}
+@keyframes gam-spin {
+  0%   { transform: rotate(-15deg) scale(0.7); opacity: 0; }
+  100% { transform: rotate(0) scale(1); opacity: 1; }
+}
+.gam-celebration-close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 9px 26px;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  font-family: inherit;
+}
+.gam-celebration-close:hover, .gam-celebration-close:active { background: rgba(255,255,255,0.22); }
+
+/* ---- Progress Panel ---- */
+#gam-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s ease;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  backdrop-filter: blur(4px);
+}
+#gam-panel.show { opacity: 1; }
+
+.gam-panel-inner {
+  background: #1a1f3a;
+  border-radius: 16px;
+  padding: 22px 18px 24px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow-y: auto;
+  color: #fff;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform .3s ease;
+  margin: 14px;
+  border: 1px solid #353a6b;
+}
+#gam-panel.show .gam-panel-inner { transform: translateY(0); }
+
+.gam-panel-close {
+  position: absolute;
+  top: 10px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 28px;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  line-height: 1;
+}
+[dir="ltr"] .gam-panel-close { right: 10px; }
+[dir="rtl"] .gam-panel-close { left: 10px; }
+.gam-panel-close:hover, .gam-panel-close:active { color: #fff; background: rgba(255,255,255,0.1); }
+
+.gam-panel-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: #ffd700;
+  text-align: center;
+}
+
+.gam-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.gam-stat {
+  background: linear-gradient(135deg, #252a52 0%, #2d3561 100%);
+  border-radius: 11px;
+  padding: 12px 6px;
+  text-align: center;
+  border: 1px solid #353a6b;
+}
+.gam-stat-icon { font-size: 22px; margin-bottom: 3px; }
+.gam-stat-val { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1; }
+.gam-stat-label { font-size: 10px; color: #aab; text-transform: uppercase; margin-top: 2px; letter-spacing: .3px; }
+
+.gam-progress-box {
+  background: #252a52;
+  border-radius: 11px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #353a6b;
+}
+.gam-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aab;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.gam-progress-bar {
+  width: 100%;
+  height: 9px;
+  background: #14172a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.gam-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700 0%, #ff8800 100%);
+  border-radius: 8px;
+  transition: width .5s ease;
+  box-shadow: 0 0 12px rgba(255,170,0,0.4);
+}
+.gam-progress-text {
+  text-align: center;
+  font-size: 11px;
+  color: #ccc;
+  margin-top: 6px;
+}
+
+.gam-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin: 16px 0 10px;
+  letter-spacing: .3px;
+}
+
+.gam-chart {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  height: 100px;
+  background: #252a52;
+  border-radius: 11px;
+  padding: 10px 8px 4px;
+  margin-bottom: 6px;
+  border: 1px solid #353a6b;
+}
+.gam-chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  height: 100%;
+}
+.gam-chart-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #00d4aa 0%, #00a884 100%);
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height .6s ease;
+}
+.gam-chart-label { font-size: 9px; color: #aab; margin-top: 3px; }
+.gam-chart-val { font-size: 9px; color: #ffd700; font-weight: 700; position: absolute; top: -14px; }
+
+.gam-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.gam-badge {
+  background: #252a52;
+  border-radius: 10px;
+  padding: 11px 4px 9px;
+  text-align: center;
+  border: 1.5px solid #353a6b;
+  transition: transform .15s ease;
+  cursor: help;
+}
+.gam-badge.earned {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #2a2e58 0%, #3d3a6b 100%);
+  box-shadow: 0 0 10px rgba(255,215,0,0.18);
+}
+.gam-badge.earned:hover { transform: scale(1.04); }
+.gam-badge.locked { opacity: 0.32; filter: grayscale(0.8); }
+.gam-badge-icon { font-size: 28px; margin-bottom: 3px; }
+.gam-badge-name { font-size: 10px; font-weight: 700; color: #fff; line-height: 1.18; }
+
+.gam-footer {
+  border-top: 1px solid #353a6b;
+  padding-top: 12px;
+  font-size: 12px;
+  color: #aab;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.gam-footer strong { color: #ffd700; }
+
+/* ---- Mobile tweaks ---- */
+@media (max-width: 480px) {
+  #gam-hud { bottom: 8px; }
+  [dir="ltr"] #gam-hud { right: 8px; }
+  [dir="rtl"] #gam-hud { left: 8px; }
+  #gam-hud-btn { padding: 6px 10px; font-size: 12px; }
+  
+  .gam-toast { font-size: 13px; padding: 10px 14px; bottom: 90px; }
+  [dir="ltr"] .gam-toast { right: 10px; left: 10px; max-width: none; }
+  [dir="rtl"] .gam-toast { left: 10px; right: 10px; max-width: none; }
+  
+  .gam-celebration-inner { padding: 22px 18px; max-width: 100%; }
+  .gam-celebration h2 { font-size: 20px; }
+  .gam-celebration-icon { font-size: 56px; }
+  .gam-badge-icon-big { font-size: 64px; }
+  .gam-level-badge { font-size: 17px; padding: 9px 24px; }
+  
+  .gam-panel-inner { padding: 18px 14px; margin: 0; border-radius: 16px 16px 0 0; max-height: 95vh; }
+  .gam-panel-title { font-size: 18px; }
+  .gam-stat-val { font-size: 19px; }
+  .gam-stat-icon { font-size: 20px; }
+  .gam-badges { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; }
+  .gam-badge-icon { font-size: 26px; }
+  .gam-badge-name { font-size: 9.5px; }
+  .gam-chart { height: 88px; }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .gam-stats { gap: 5px; }
+  .gam-stat { padding: 9px 4px; }
+  .gam-stat-val { font-size: 17px; }
+  .gam-stat-label { font-size: 9px; }
+  .gam-badges { grid-template-columns: repeat(3, 1fr); }
+  .gam-badge-name { font-size: 9px; }
+}
+
+</style>
+
+<style>
+/* AI HELPER CSS */
+/* ============================================================
+   AI HELPER CSS - Smart Error Explanation Box
+   ============================================================ */
+
+.gam-ai-helper {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #1a2447 0%, #2a3568 100%);
+  border: 1.5px solid #4a8eff;
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .3s ease, transform .3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 6px 20px rgba(74,142,255,0.18);
+  color: #fff;
+}
+.gam-ai-helper.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gam-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: rgba(74,142,255,0.12);
+  border-bottom: 1px solid rgba(74,142,255,0.25);
+}
+.gam-ai-icon {
+  font-size: 18px;
+  animation: gam-ai-pulse 2s ease-in-out infinite;
+}
+@keyframes gam-ai-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.13); }
+}
+.gam-ai-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4a8eff;
+  flex: 1;
+}
+.gam-ai-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gam-ai-close:hover, .gam-ai-close:active {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.gam-ai-body {
+  padding: 11px 14px 13px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.gam-ai-explain {
+  color: #ffcc66;
+  margin-bottom: 8px;
+}
+.gam-ai-explain b {
+  color: #ffaa00;
+}
+.gam-ai-explain code {
+  background: rgba(255,255,255,0.13);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: #ffd700;
+  font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+}
+
+.gam-ai-hints-title {
+  font-weight: 700;
+  margin: 8px 0 4px;
+  color: #00d4aa;
+  font-size: 13px;
+}
+
+.gam-ai-hints {
+  margin: 0;
+  padding-inline-start: 6px;
+  list-style: none;
+}
+.gam-ai-hints li {
+  margin-bottom: 5px;
+  padding-inline-start: 4px;
+  color: #d0d8ec;
+}
+.gam-ai-hints code {
+  background: rgba(0,212,170,0.12);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #00d4aa;
+  font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+  display: inline-block;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .gam-ai-helper { margin-top: 8px; border-radius: 10px; }
+  .gam-ai-header { padding: 8px 10px; }
+  .gam-ai-title { font-size: 12.5px; }
+  .gam-ai-body { padding: 10px 12px; font-size: 12.8px; }
+  .gam-ai-hints { padding-inline-start: 4px; }
+  .gam-ai-hints li { margin-bottom: 4px; }
+  .gam-ai-explain code, .gam-ai-hints code { font-size: 11.5px; padding: 1px 5px; }
+}
+
+/* Mute button positioning */
+.gam-mute-btn:hover, .gam-mute-btn:active {
+  transform: scale(1.1);
+  background: rgba(45,53,97,0.95) !important;
+}
+@media (max-width: 480px) {
+  .gam-mute-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <a href="index.html" class="back-btn">← דף הבית</a>
+  <div class="crumb">📊 קורס <em>Pandas</em> בעברית</div>
+  <a href="python-playground.html" class="back-btn">🧪 Playground</a>
+  <a href="quiz-python-100.html" class="back-btn">💯 תרגול</a>
+  <a href="python-course.html" class="back-btn">🐍 פייתון →</a>
+</header>
+
+<section class="hero">
+  <h1><span class="pd">📊 Pandas</span> · ניתוח נתונים בעברית</h1>
+  <p>קורס מקיף לאנליסטים: DataFrame, סינון, groupby, merge, ניקוי נתונים — הכל בסימולטור חי בדפדפן, ללא התקנות, עם דאטהסטים ישראליים.</p>
+  <div class="hero-stats">
+    <div><span>10</span> מודולים</div>
+    <div><span>30</span> נושאים</div>
+    <div><span>150</span> תרגילי קוד</div>
+  </div>
+</section>
+
+<main class="main">
+  
+  <!-- Stats bar (hidden until user has progress) -->
+  <div class="stats-bar" id="statsBar" style="display:none">
+    <div class="stat-card"><div class="stat-value done" id="statDone">0</div><div class="stat-label">תרגילים</div></div>
+    <div class="stat-card"><div class="stat-value xp" id="statXp">0</div><div class="stat-label">XP</div></div>
+    <div class="stat-card"><div class="stat-value level" id="statLevel">1</div><div class="stat-label">רמה</div></div>
+    <div class="stat-card"><div class="stat-value streak" id="statStreak">0</div><div class="stat-label">רצף ימים</div></div>
+  </div>
+  
+  <!-- CTA cards -->
+  <div class="cta-cards">
+    <a class="cta-card" href="#" id="startCard">
+      <span class="em">🚀</span>
+      <div class="body">
+        <div class="label">התחל מההתחלה</div>
+        <div class="title">מה זה DataFrame?</div>
+        <div class="sub">תרגיל ראשון - הכרת המבנה</div>
+      </div>
+      <span class="arrow">←</span>
+    </a>
+    <a class="cta-card continue" id="continueCard" href="#" style="display:none">
+      <span class="em">⏯️</span>
+      <div class="body">
+        <div class="label">המשך מאיפה שהפסקת</div>
+        <div class="title" id="continueTitle">…</div>
+        <div class="sub" id="continueSub">…</div>
+      </div>
+      <span class="arrow">←</span>
+    </a>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="modules" onclick="setMode('modules')">📚 לפי מודולים</button>
+    <button class="mode-tab" data-mode="topics" onclick="setMode('topics')">🔍 כל הנושאים</button>
+  </div>
+
+  <!-- Search (visible only in topics mode) -->
+  <div class="search-bar" id="searchBar" style="display:none">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="חפש נושא או מילת מפתח..." oninput="renderTopics()">
+  </div>
+
+  <!-- Modules listing -->
+  <div id="modulesView">
+    <h2 class="section-title">📚 כל המודולים <span class="count">10 מודולים · 150 תרגילים</span></h2>
+    <div id="moduleList"></div>
+  </div>
+
+  <!-- Topics listing -->
+  <div id="topicsView" style="display:none">
+    <h2 class="section-title">🔍 כל הנושאים <span class="count">30 נושאים</span></h2>
+    <div id="topicList" class="toc-grid"></div>
+  </div>
+
+</main>
+
+<script>
+// ===== INLINED pandas-data.js =====
+// ============================================================
+// PANDAS COURSE - mini-pandas based, 10 modules, 150 exercises
+// Hebrew RTL · works in Skulpt
+// ============================================================
+
+const PANDAS_COURSE = {
+  modules: [
+    {
+      num: 1,
+      id: "m1",
+      icon: "📦",
+      title: "הכרת DataFrame",
+      desc: "מה זה DataFrame, איך טוענים נתונים, וההצצה הראשונה",
+      topics: [
+        {
+          id: "pd-create-df",
+          icon: "🎯",
+          title: "יצירת DataFrame",
+          theory: "<h3>מה זה DataFrame?</h3><p><b>DataFrame</b> זה טבלה עם שורות ועמודות בעלות שמות. כמו טבלה ב-SQL או גיליון ב-Excel.</p><p><b>איך יוצרים?</b></p><pre>df = DataFrame({\"name\": [\"גל\",\"תומר\"], \"age\": [30, 25]})</pre><p>זה מילון: כל מפתח = שם עמודה, כל ערך = רשימת הנתונים. כל העמודות חייבות להיות באותו אורך.</p><p>בגרסת mini-pandas שלנו זה זהה ל-<code>pandas.DataFrame</code> אמיתי.</p>",
+          exercises: [
+            {
+              q: "צור <code>DataFrame</code> עם 2 עמודות: <code>name</code> עם \"גל\" ו-\"תומר\", ו-<code>age</code> עם 30 ו-25. הדפס.",
+              starter: "",
+              solution: "df = DataFrame({\"name\": [\"גל\", \"תומר\"], \"age\": [30, 25]})\nprint(df)",
+              check: (o,c) => /גל/.test(o) && /30/.test(o) && /DataFrame\(/.test(c)
+            },
+            {
+              q: "צור DataFrame של 3 ערים: עמודות <code>city</code> ו-<code>population</code>. ת\"א 460000, ירושלים 920000, חיפה 280000. הדפס.",
+              starter: "",
+              solution: "df = DataFrame({\"city\": [\"תל אביב\",\"ירושלים\",\"חיפה\"], \"population\": [460000, 920000, 280000]})\nprint(df)",
+              check: (o,c) => /ירושלים/.test(o) && /920000/.test(o)
+            },
+            {
+              q: "צור DataFrame עם 3 עמודות (a, b, c) של 4 ערכים כל אחת. הדפס את <code>shape</code>.",
+              starter: "",
+              solution: "df = DataFrame({\"a\":[1,2,3,4], \"b\":[5,6,7,8], \"c\":[9,10,11,12]})\nprint(df.shape)",
+              check: (o) => /\(4,\s*3\)/.test(o)
+            },
+            {
+              q: "צור DataFrame מ-<b>רשימת מילונים</b>: <code>[{\"x\":1,\"y\":2}, {\"x\":3,\"y\":4}]</code>. הדפס את <code>columns</code>.",
+              starter: "",
+              solution: "df = DataFrame([{\"x\":1,\"y\":2}, {\"x\":3,\"y\":4}])\nprint(df.columns)",
+              check: (o) => /\[.x.,\s*.y.\]/.test(o)
+            },
+            {
+              q: "צור DataFrame ריק לחלוטין (מילון ריק) והדפס את <code>shape</code>.",
+              starter: "",
+              solution: "df = DataFrame({})\nprint(df.shape)",
+              check: (o) => /\(0,\s*0\)/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-load-data",
+          icon: "📥",
+          title: "טעינת דאטהסטים",
+          theory: "<h3>טעינת נתונים מוכנים</h3><p>בסימולטור יש <b>9 דאטהסטים ישראליים מובנים</b>:</p><pre>data.list()  # רשימת כל הדאטהסטים\ndf = data.load(\"students\")  # טעינה</pre><p>בעולם האמיתי תשתמש ב-<code>pd.read_csv(\"file.csv\")</code> - הרעיון זהה.</p><p><b>הזמינים:</b> students, salaries, telecom-churn, real-estate, football, cities-weather, sales, covid-israel, eurovision</p>",
+          exercises: [
+            {
+              q: "טען את <code>students</code> והדפס את <code>shape</code>.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nprint(df.shape)",
+              check: (o) => /\(10,\s*4\)/.test(o)
+            },
+            {
+              q: "טען את <code>football</code> והדפס את שמות העמודות.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nprint(df.columns)",
+              check: (o) => /team/.test(o) && /points/.test(o)
+            },
+            {
+              q: "הדפס את הרשימה של כל הדאטהסטים הזמינים.",
+              starter: "",
+              solution: "data.list()",
+              check: (o) => /students/.test(o) && /football/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code> והדפס רק את מספר השורות (לא tuple).",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nprint(df.shape[0])",
+              check: (o) => o.trim() === '15'
+            },
+            {
+              q: "טען <code>cities-weather</code> והדפס אותו (יוצג כטבלה).",
+              starter: "",
+              solution: "df = data.load(\"cities-weather\")\nprint(df)",
+              check: (o) => /תל אביב|ירושלים/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-head-info",
+          icon: "👀",
+          title: "head, tail, info, describe",
+          theory: "<h3>הצצה ראשונה לנתונים</h3><p>4 פונקציות חיוניות לכל ניתוח:</p><ul><li><code>df.head(n)</code> - <b>n שורות ראשונות</b> (ברירת מחדל 5)</li><li><code>df.tail(n)</code> - <b>n שורות אחרונות</b></li><li><code>df.info()</code> - <b>סיכום</b>: עמודות, סוגים, ערכים לא-ריקים</li><li><code>df.describe()</code> - <b>סטטיסטיקה</b>: mean, min, max לעמודות מספריות</li></ul>",
+          exercises: [
+            {
+              q: "טען <code>students</code> והדפס את 3 השורות הראשונות.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nprint(df.head(3))",
+              check: (o,c) => /גל|תומר|יעל/.test(o) && /head\(3\)/.test(c)
+            },
+            {
+              q: "טען <code>sales</code> והדפס את 2 השורות האחרונות.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\nprint(df.tail(2))",
+              check: (o,c) => /נובמבר|דצמבר/.test(o) && /tail\(2\)/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code> והפעל <code>info()</code>.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\ndf.info()",
+              check: (o,c) => /department/.test(o) && /info\(\)/.test(c)
+            },
+            {
+              q: "טען <code>football</code> והדפס <code>describe()</code>.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nprint(df.describe())",
+              check: (o,c) => /mean/.test(o) && /describe\(\)/.test(c)
+            },
+            {
+              q: "טען <code>students</code>. ב-1 שורת קוד הדפס את 5 השורות הראשונות.",
+              starter: "",
+              solution: "print(data.load(\"students\").head(5))",
+              check: (o) => /גל/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 2,
+      id: "m2",
+      icon: "🔍",
+      title: "חיתוך וסינון",
+      desc: "גישה לעמודות, בחירת מספר עמודות, סינון לפי תנאי",
+      topics: [
+        {
+          id: "pd-select-cols",
+          icon: "📋",
+          title: "בחירת עמודות",
+          theory: "<h3>גישה לעמודות</h3><p><b>עמודה בודדת</b> (מחזיר Series):</p><pre>df[\"name\"]   # או df[\"age\"]</pre><p><b>מספר עמודות</b> (מחזיר DataFrame חדש):</p><pre>df[[\"name\", \"age\"]]   # שים לב לסוגריים כפולים!</pre><p>זה כמו <code>SELECT name, age FROM table</code> ב-SQL.</p>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. הדפס רק את עמודת <code>name</code>.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nprint(df[\"name\"])",
+              check: (o,c) => /גל/.test(o) && /df\[.name.\]/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. הדפס DataFrame מצומצם עם 2 עמודות: <code>name</code> ו-<code>salary</code>.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[[\"name\", \"salary\"]])",
+              check: (o,c) => /salary/.test(o) && /\[\[/.test(c)
+            },
+            {
+              q: "טען <code>football</code>. צור DataFrame חדש בשם <code>small</code> עם 3 עמודות: team, wins, losses. הדפס את shape.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nsmall = df[[\"team\", \"wins\", \"losses\"]]\nprint(small.shape)",
+              check: (o) => /\(5,\s*3\)/.test(o)
+            },
+            {
+              q: "טען <code>students</code>. הדפס את הציון של גל במתמטיקה (השורה הראשונה של עמודת math).",
+              starter: "",
+              solution: "df = data.load(\"students\")\nprint(df[\"math\"][0])",
+              check: (o) => o.trim() === '88'
+            },
+            {
+              q: "טען <code>cities-weather</code>. הדפס את עמודת <code>temp</code> בלבד.",
+              starter: "",
+              solution: "df = data.load(\"cities-weather\")\nprint(df[\"temp\"])",
+              check: (o) => /\[24/.test(o) && /17\]/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-filter-rows",
+          icon: "🎯",
+          title: "סינון שורות לפי תנאי",
+          theory: "<h3>סינון - מציאת שורות שעומדות בתנאי</h3><p>ב-pandas רגיל היינו כותבים <code>df[df[\"age\"] &gt; 25]</code>, אבל Skulpt לא תומך באופרטורים מותאמים. במקום, יש לנו <code>filter</code> נקי יותר:</p><pre>df.filter(\"age\", \"&gt;\", 25)\ndf.filter(\"city\", \"==\", \"Tel Aviv\")\ndf.filter(\"score\", \"&lt;=\", 100)</pre><p>אופרטורים: <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> <code>==</code> <code>!=</code> <code>in</code> (עבור רשימה).</p>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. סנן את הסטודנטים שקיבלו מעל 85 ב-<code>math</code>. הדפס את <code>shape</code>.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.filter(\"math\", \">\", 85)\nprint(result.shape)",
+              check: (o,c) => /\(5,\s*4\)/.test(o) && /filter/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. סנן רק עובדים ממחלקת <code>Sales</code>. הדפס את ה-DataFrame.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.filter(\"department\", \"==\", \"Sales\")\nprint(result)",
+              check: (o) => /Sales/.test(o) && /Sales/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. סנן רק לקוחות עם <code>monthly_bill</code> מעל 100. כמה שורות?",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.filter(\"monthly_bill\", \">\", 100)\nprint(result.shape[0])",
+              check: (o) => o.trim() === '5'
+            },
+            {
+              q: "טען <code>football</code>. סנן קבוצות עם <code>points >= 50</code>. הדפס את שמות הקבוצות (עמודת team).",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.filter(\"points\", \">=\", 50)\nprint(result[\"team\"])",
+              check: (o) => /מכבי תל אביב/.test(o) && /הפועל/.test(o)
+            },
+            {
+              q: "טען <code>cities-weather</code>. סנן ערים עם טמפ' שונה מ-24. הדפס את <code>shape</code>.",
+              starter: "",
+              solution: "df = data.load(\"cities-weather\")\nresult = df.filter(\"temp\", \"!=\", 24)\nprint(result.shape)",
+              check: (o) => /\(5,\s*4\)/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-where-lambda",
+          icon: "🧩",
+          title: "סינון מורכב עם where + lambda",
+          theory: "<h3>סינון מותאם אישית</h3><p>לתנאים מורכבים (AND, OR) השתמש ב-<code>where</code> עם פונקציית lambda:</p><pre>df.where(lambda row: row[\"age\"] &gt; 25 and row[\"dept\"] == \"Sales\")</pre><p>הפונקציה מקבלת מילון של כל השורה ומחזירה <code>True/False</code>. רק שורות שמחזירות True נשמרות.</p>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. סנן סטודנטים שקיבלו מעל 80 ב-math <b>וגם</b> מעל 80 ב-english. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.where(lambda r: r[\"math\"] > 80 and r[\"english\"] > 80)\nprint(result.shape)",
+              check: (o,c) => /\(\d/.test(o) && /where/.test(c) && /lambda/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. סנן עובדים במחלקת R&D שמשתכרים מעל 24000. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.where(lambda r: r[\"department\"] == \"R&D\" and r[\"salary\"] > 24000)\nprint(result)",
+              check: (o) => /R&D|הילה|חני/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. סנן קבוצות עם wins מעל 12 <b>או</b> ביש לפחות 50 נקודות. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.where(lambda r: r[\"wins\"] > 12 or r[\"points\"] >= 50)\nprint(result.shape)",
+              check: (o) => /\(\d,\s*7\)/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. מצא את הלקוחות שנטשו (churn==1) <b>וגם</b> היו לקוחות פחות מ-12 חודשים. כמה? הדפס shape[0].",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.where(lambda r: r[\"churn\"] == 1 and r[\"tenure_months\"] < 12)\nprint(result.shape[0])",
+              check: (o) => /\d/.test(o) && parseInt(o.trim()) >= 0
+            },
+            {
+              q: "טען <code>real-estate</code>. סנן דירות עם <b>שטח מעל 90</b> ו-<b>מחיר מתחת ל-5M</b>. הדפס את הרשימה של ה-neighborhood.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nresult = df.where(lambda r: r[\"sqm\"] > 90 and r[\"price_m\"] < 5)\nprint(result[\"neighborhood\"])",
+              check: (o) => /בבלי|רמת אביב/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 3,
+      id: "m3",
+      icon: "⚙️",
+      title: "פעולות על עמודות",
+      desc: "יצירת עמודות חדשות, חישובים, apply, map",
+      topics: [
+        {
+          id: "pd-new-cols",
+          icon: "➕",
+          title: "יצירת עמודות חדשות",
+          theory: "<h3>הוספת עמודות חדשות</h3><p>פשוט להקצות:</p><pre>df[\"total\"] = [100, 200, 300]      # רשימה באורך השורות\ndf[\"constant\"] = 0                  # ערך בודד = יחזור על עצמו</pre><p><b>חישובים בין עמודות:</b> צריך לעבור איבר-איבר (Skulpt לא תומך בפעולות וקטוריות על Series).</p><pre>df[\"diff\"] = [df[\"a\"][i] - df[\"b\"][i] for i in range(df.shape[0])]</pre>",
+          exercises: [
+            {
+              q: "טען <code>football</code>. הוסף עמודה חדשה <code>diff</code> שמחשבת goals_for פחות goals_against. הדפס את ה-DataFrame.",
+              starter: "",
+              solution: "df = data.load(\"football\")\ndf[\"diff\"] = [df[\"goals_for\"][i] - df[\"goals_against\"][i] for i in range(df.shape[0])]\nprint(df)",
+              check: (o,c) => /diff/.test(o) && /goals_for/.test(c) && /goals_against/.test(c)
+            },
+            {
+              q: "טען <code>students</code>. הוסף עמודה <code>average</code> שמחשבת ממוצע 3 הציונים. הדפס את העמודה.",
+              starter: "",
+              solution: "df = data.load(\"students\")\ndf[\"average\"] = [(df[\"math\"][i]+df[\"english\"][i]+df[\"history\"][i])/3 for i in range(df.shape[0])]\nprint(df[\"average\"])",
+              check: (o,c) => /\d/.test(o) && /average/.test(c) && /\/\s*3/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. הוסף עמודה <code>monthly</code> שזה <code>salary / 12</code> מעוגל. הדפס את העמודה הראשונה (אינדקס 0).",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\ndf[\"monthly\"] = [round(df[\"salary\"][i] / 12) for i in range(df.shape[0])]\nprint(df[\"monthly\"][0])",
+              check: (o) => o.trim() === '1250'
+            },
+            {
+              q: "טען <code>telecom-churn</code>. הוסף עמודה <code>total_paid</code> = monthly_bill * tenure_months. הדפס את ה-3 הראשונים.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\ndf[\"total_paid\"] = [df[\"monthly_bill\"][i] * df[\"tenure_months\"][i] for i in range(df.shape[0])]\nprint(df[\"total_paid\"][0])\nprint(df[\"total_paid\"][1])\nprint(df[\"total_paid\"][2])",
+              check: (o) => /546|7200|1927.2/.test(o)
+            },
+            {
+              q: "טען <code>sales</code>. הוסף עמודה <code>avg_price</code> = revenue / units. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ndf[\"avg_price\"] = [df[\"revenue\"][i] / df[\"units\"][i] for i in range(df.shape[0])]\nprint(df[\"avg_price\"])",
+              check: (o) => /37|3/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-apply",
+          icon: "🔧",
+          title: "apply ו-map",
+          theory: "<h3>שינוי ערכים בעמודה</h3><p><b>apply</b> - הפעלת פונקציה על כל ערך:</p><pre>df[\"doubled\"] = df[\"x\"].apply(lambda v: v * 2)</pre><p><b>map</b> - תרגום ערכים לפי מילון:</p><pre>df[\"label\"] = df[\"churn\"].map({0: \"Active\", 1: \"Churned\"})</pre><p>שימושי במיוחד להמרת קודים לטקסט (Yes/No → 1/0 וכו').</p>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. הוסף עמודה <code>math_doubled</code> = math * 2 בעזרת <code>apply</code>. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"students\")\ndf[\"math_doubled\"] = df[\"math\"].apply(lambda v: v * 2)\nprint(df[\"math_doubled\"])",
+              check: (o,c) => /176|184/.test(o) && /apply/.test(c)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. תרגם את עמודת <code>churn</code> ל-\"Active\"/\"Churned\" עם <code>map</code>. שמור ב-<code>status</code> והדפס.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\ndf[\"status\"] = df[\"churn\"].map({0: \"Active\", 1: \"Churned\"})\nprint(df[\"status\"])",
+              check: (o,c) => /Active/.test(o) && /Churned/.test(o) && /map/.test(c)
+            },
+            {
+              q: "טען <code>real-estate</code>. הוסף עמודה <code>price_label</code>: \"expensive\" אם price_m > 4, אחרת \"cheap\" (השתמש ב-apply עם lambda + if).",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\ndf[\"price_label\"] = df[\"price_m\"].apply(lambda v: \"expensive\" if v > 4 else \"cheap\")\nprint(df[\"price_label\"])",
+              check: (o,c) => /expensive/.test(o) && /cheap/.test(o)
+            },
+            {
+              q: "טען <code>cities-weather</code>. הוסף עמודה <code>celsius_to_kelvin</code> שמוסיפה 273 לכל טמפ'. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"cities-weather\")\ndf[\"celsius_to_kelvin\"] = df[\"temp\"].apply(lambda v: v + 273)\nprint(df[\"celsius_to_kelvin\"])",
+              check: (o) => /297|292|296/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. תרגם את <code>department</code> לקודים: Sales=1, R&D=2, Marketing=3. שמור ב-<code>dept_code</code> והדפס.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\ndf[\"dept_code\"] = df[\"department\"].map({\"Sales\": 1, \"R&D\": 2, \"Marketing\": 3})\nprint(df[\"dept_code\"])",
+              check: (o) => /1/.test(o) && /2/.test(o) && /3/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-series-ops",
+          icon: "🧮",
+          title: "פעולות על Series",
+          theory: "<h3>Series זה עמודה</h3><p>כל פעולה על עמודה מחזירה Series. ל-Series יש שיטות חשובות:</p><ul><li><code>.mean()</code> <code>.sum()</code> <code>.max()</code> <code>.min()</code> <code>.count()</code></li><li><code>.unique()</code> - ערכים ייחודיים</li><li><code>.nunique()</code> - <b>מספר</b> ערכים ייחודיים</li><li><code>.value_counts()</code> - מילון של כל ערך → כמה פעמים הופיע</li><li><code>.round(n)</code> - עיגול ל-n ספרות</li></ul>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. הדפס את הממוצע של עמודת math.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nprint(df[\"math\"].mean())",
+              check: (o) => /83/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. הדפס את <b>סכום</b> כל המשכורות.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[\"salary\"].sum())",
+              check: (o) => /222000/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. הדפס את <b>מספר</b> המחלקות הייחודיות (nunique).",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[\"department\"].nunique())",
+              check: (o) => o.trim() === '3'
+            },
+            {
+              q: "טען <code>salaries</code>. הדפס את <code>value_counts()</code> של עמודת <code>department</code>.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[\"department\"].value_counts())",
+              check: (o) => /Sales/.test(o) && /R&D/.test(o)
+            },
+            {
+              q: "טען <code>real-estate</code>. הדפס את המחיר המקסימלי בעמודת <code>price_m</code>.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nprint(df[\"price_m\"].max())",
+              check: (o) => o.trim() === '6.8'
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 4,
+      id: "m4",
+      icon: "🎯",
+      title: "GroupBy ואגרגציות",
+      desc: "קיבוץ נתונים וחישובים מצטברים",
+      topics: [
+        {
+          id: "pd-groupby-basic",
+          icon: "📊",
+          title: "GroupBy בסיסי",
+          theory: "<h3>קיבוץ - הליבה של pandas</h3><p>זה ה-<code>GROUP BY</code> של SQL:</p><pre>df.groupby(\"department\").mean()  # ממוצע כל עמודה לכל מחלקה\ndf.groupby(\"city\").sum()         # סכום\ndf.groupby(\"status\").count()     # ספירה</pre><p>הפעולות: <code>.mean() .sum() .count() .max() .min()</code></p><p><b>החזרה:</b> DataFrame חדש - שורה לכל קבוצה.</p>",
+          exercises: [
+            {
+              q: "טען <code>salaries</code>. קבץ לפי <code>department</code> וחשב <b>ממוצע</b> משכורת.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").mean()\nprint(result)",
+              check: (o,c) => /Sales|R&D|Marketing/.test(o) && /groupby/.test(c) && /mean\(\)/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. קבץ לפי <code>department</code> וחשב את <b>סכום</b> המשכורות.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").sum()\nprint(result)",
+              check: (o,c) => /sum\(\)/.test(c) && /Sales/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. קבץ לפי <code>plan</code> וחשב ממוצע <code>monthly_bill</code> לכל סוג חבילה. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.groupby(\"plan\").mean()\nprint(result)",
+              check: (o) => /basic|premium|standard/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. קבץ לפי <code>department</code> והחזר את <b>מספר העובדים</b> בכל מחלקה (count).",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").count()\nprint(result)",
+              check: (o,c) => /count\(\)/.test(c) && /\d/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. קבץ לפי <code>department</code> וחשב את ה-<b>maximum</b> בכל מחלקה. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").max()\nprint(result)",
+              check: (o,c) => /max\(\)/.test(c)
+            },
+          ]
+        },
+        {
+          id: "pd-groupby-deep",
+          icon: "🔬",
+          title: "GroupBy מתקדם",
+          theory: "<h3>שאלות עסקיות עם GroupBy</h3><p>אחרי groupby אפשר להוסיף מיון ופעולות נוספות:</p><pre>result = df.groupby(\"plan\").sum()\ntop = result.sort_values(\"revenue\", ascending=False)</pre><p><b>שאלות שתוכל לענות:</b></p><ul><li>איזה מחלקה הכניסה הכי הרבה השנה?</li><li>איזה אזור איבד הכי הרבה לקוחות?</li><li>איזה מוצר הכי פופולרי?</li></ul>",
+          exercises: [
+            {
+              q: "טען <code>telecom-churn</code>. <b>גלה</b> איזו תכנית (plan) הכי \"מנטשת\" - קבץ לפי <code>plan</code> וחשב סכום churn.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.groupby(\"plan\").sum()\nprint(result)",
+              check: (o) => /basic|premium|standard/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. קבץ לפי <code>department</code>, מצא ממוצע, ומיין מהממוצע הגבוה לנמוך (לפי <code>salary</code>).",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").mean().sort_values(\"salary\", ascending=False)\nprint(result)",
+              check: (o,c) => /groupby/.test(c) && /sort_values/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. מצא את <b>סך השנים</b> המצטבר לכל מחלקה (groupby department, sum על years).",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").sum()\nprint(result[\"years\"])",
+              check: (o) => /\d/.test(o)
+            },
+            {
+              q: "טען <code>students</code>. אין שם עמודה לקיבוץ. צור עמודה <code>passed</code> = True/False אם math > 80, ואז קבץ לפיה וספור.",
+              starter: "",
+              solution: "df = data.load(\"students\")\ndf[\"passed\"] = df[\"math\"].apply(lambda v: v > 80)\nresult = df.groupby(\"passed\").count()\nprint(result)",
+              check: (o) => /True|False/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. קבץ לפי <code>plan</code>, חשב <b>min</b> tenure_months לכל תכנית.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.groupby(\"plan\").min()\nprint(result[\"tenure_months\"])",
+              check: (o) => /\d/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-pivot-like",
+          icon: "🔀",
+          title: "pivot-like ניתוחים",
+          theory: "<h3>שאלות הצולבות שכבת ערכים</h3><p>בעולם האמיתי משתמשים ב-<code>pivot_table</code>, אבל ב-mini-pandas שלנו אפשר לעשות זאת על ידי שילוב <code>filter</code> + <code>groupby</code> + הוספת עמודות.</p><p>למשל - \"ממוצע שכר לפי מחלקה <b>ושנה</b>\":</p><pre>young = df.filter(\"years\", \"&lt;\", 5)\nresult = young.groupby(\"department\").mean()</pre>",
+          exercises: [
+            {
+              q: "טען <code>telecom-churn</code>. מצא ממוצע <code>monthly_bill</code> לכל <code>plan</code> <b>רק עבור לקוחות שלא נטשו</b> (churn==0).",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nactive = df.filter(\"churn\", \"==\", 0)\nresult = active.groupby(\"plan\").mean()\nprint(result)",
+              check: (o) => /basic|premium/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. מצא את ממוצע השכר לעובדים <b>עם פחות מ-5 שנות ותק</b>, מקובץ לפי מחלקה.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nyoung = df.filter(\"years\", \"<\", 5)\nresult = young.groupby(\"department\").mean()\nprint(result[\"salary\"])",
+              check: (o) => /\d/.test(o)
+            },
+            {
+              q: "טען <code>students</code>. הוסף עמודה <code>top_math</code> (math > 85). קבץ לפיה וספור.",
+              starter: "",
+              solution: "df = data.load(\"students\")\ndf[\"top_math\"] = df[\"math\"].apply(lambda v: v > 85)\nprint(df.groupby(\"top_math\").count())",
+              check: (o) => /True|False/.test(o)
+            },
+            {
+              q: "טען <code>real-estate</code>. הוסף עמודה <code>big</code> (sqm > 90), קבץ לפיה וחשב ממוצע <code>price_m</code>.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\ndf[\"big\"] = df[\"sqm\"].apply(lambda v: v > 90)\nresult = df.groupby(\"big\").mean()\nprint(result[\"price_m\"])",
+              check: (o) => /\d/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. הוסף עמודה <code>strong</code> (wins > 12), קבץ וחשב ממוצע goals_for.",
+              starter: "",
+              solution: "df = data.load(\"football\")\ndf[\"strong\"] = df[\"wins\"].apply(lambda v: v > 12)\nresult = df.groupby(\"strong\").mean()\nprint(result[\"goals_for\"])",
+              check: (o) => /\d/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 5,
+      id: "m5",
+      icon: "🔄",
+      title: "מיון וסדר",
+      desc: "sort_values, set_index, מיון לפי כמה עמודות",
+      topics: [
+        {
+          id: "pd-sort",
+          icon: "🔢",
+          title: "sort_values",
+          theory: "<h3>מיון שורות</h3><pre>df.sort_values(\"age\")              # מקטן לגדול\ndf.sort_values(\"age\", ascending=False)  # מגדול לקטן</pre><p>ה-DataFrame המקורי <b>לא משתנה</b> — חוזרת גרסה ממוינת.</p>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. מיין מהציון הכי <b>גבוה</b> למתמטיקה לנמוך. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.sort_values(\"math\", ascending=False)\nprint(result)",
+              check: (o,c) => /sort_values/.test(c) && /ascending\s*=\s*False/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. מיין מהמשכורת הנמוכה לגבוהה.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.sort_values(\"salary\")\nprint(result)",
+              check: (o,c) => /sort_values\(.salary.\)/.test(c)
+            },
+            {
+              q: "טען <code>football</code>. מצא את הקבוצה עם הכי הרבה <b>שערים שהוכנסו להם</b>. (מיין מהגבוה ושלוף את ה-team הראשון)",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.sort_values(\"goals_against\", ascending=False)\nprint(result[\"team\"][0])",
+              check: (o) => /ביתר/.test(o)
+            },
+            {
+              q: "טען <code>sales</code>. מצא את החודש הכי טוב (revenue הכי גבוה). הדפס את שם החודש בלבד.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\nresult = df.sort_values(\"revenue\", ascending=False)\nprint(result[\"month\"][0])",
+              check: (o) => /דצמבר/.test(o)
+            },
+            {
+              q: "טען <code>real-estate</code>. מיין לפי <code>price_m</code> ושלוף את 3 הזולות ביותר עם <code>head(3)</code>. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nresult = df.sort_values(\"price_m\").head(3)\nprint(result)",
+              check: (o,c) => /sort_values/.test(c) && /head\(3\)/.test(c)
+            },
+          ]
+        },
+        {
+          id: "pd-set-index",
+          icon: "🗝️",
+          title: "set_index, reset_index",
+          theory: "<h3>בחירת עמודת ה\"מזהה\" של הטבלה</h3><p><b>set_index</b> - להפוך עמודה לעמודה ראשונה (מזהה):</p><pre>df = df.set_index(\"customer_id\")</pre><p><b>reset_index</b> - להוסיף עמודת אינדקס מספרית (0, 1, 2...):</p><pre>df = df.reset_index()</pre><p>שימושי כשרוצים להבטיח סדר או כשמיתעצים על ה-id של הלקוח/השורה.</p>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. הפוך את <code>name</code> לעמודה הראשונה (set_index). הדפס את <code>columns</code>.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.set_index(\"name\")\nprint(result.columns)",
+              check: (o) => /name/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. הפוך את <code>customer_id</code> ל-index. הדפס את ה-DataFrame.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.set_index(\"customer_id\")\nprint(result)",
+              check: (o) => /customer_id/.test(o) && /101/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. הוסף לו עמודת אינדקס מספרית עם <code>reset_index()</code>. הדפס את העמודות.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.reset_index()\nprint(result.columns)",
+              check: (o) => /index/.test(o)
+            },
+            {
+              q: "טען <code>cities-weather</code>. הפוך את <code>city</code> לעמודה ראשונה, הדפס את ה-shape.",
+              starter: "",
+              solution: "df = data.load(\"cities-weather\")\nresult = df.set_index(\"city\")\nprint(result.shape)",
+              check: (o) => /\(6,\s*4\)/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. set_index לפי team והדפס את 3 השורות הראשונות.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.set_index(\"team\").head(3)\nprint(result)",
+              check: (o) => /מכבי/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-top-n",
+          icon: "🏆",
+          title: "Top-N (מיון + head)",
+          theory: "<h3>שאלת \"מי ה-Top 5?\"</h3><p>שילוב נפוץ של <code>sort_values</code> + <code>head(n)</code>:</p><pre># 5 הלקוחות הכי שילמו\ntop5 = df.sort_values(\"total\", ascending=False).head(5)</pre><p>זו אחת השאלות הכי נפוצות בעולם הדאטה.</p>",
+          exercises: [
+            {
+              q: "טען <code>salaries</code>. מצא את 3 העובדים <b>הכי משתכרים</b>. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\ntop3 = df.sort_values(\"salary\", ascending=False).head(3)\nprint(top3)",
+              check: (o,c) => /sort_values/.test(c) && /head\(3\)/.test(c)
+            },
+            {
+              q: "טען <code>real-estate</code>. מצא את 3 הדירות <b>הכי גדולות</b> (sqm). הדפס.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\ntop3 = df.sort_values(\"sqm\", ascending=False).head(3)\nprint(top3)",
+              check: (o,c) => /sort_values.*sqm/.test(c)
+            },
+            {
+              q: "טען <code>students</code>. מצא את 5 הסטודנטים המצטיינים ב-<b>אנגלית</b>. הדפס רק את עמודת ה-name.",
+              starter: "",
+              solution: "df = data.load(\"students\")\ntop5 = df.sort_values(\"english\", ascending=False).head(5)\nprint(top5[\"name\"])",
+              check: (o) => /שירה|נועה|יעל/.test(o)
+            },
+            {
+              q: "טען <code>sales</code>. מצא את 3 החודשים הכי גרועים (revenue הכי נמוך). הדפס.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\nbottom3 = df.sort_values(\"revenue\").head(3)\nprint(bottom3)",
+              check: (o) => /פברואר|ינואר|אפריל/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. מצא את הקבוצה עם <b>הכי הרבה תיקו</b> (draws). הדפס את שמה.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.sort_values(\"draws\", ascending=False)\nprint(result[\"team\"][0])",
+              check: (o) => /ביתר/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 6,
+      id: "m6",
+      icon: "📊",
+      title: "סטטיסטיקה תיאורית",
+      desc: "describe, value_counts, nunique, חישובים מצטברים",
+      topics: [
+        {
+          id: "pd-describe",
+          icon: "📐",
+          title: "describe ועוד",
+          theory: "<h3>סקירה סטטיסטית מהירה</h3><p><code>describe()</code> מחזירה מילון של מילונים עם: count, mean, min, max לכל עמודה מספרית.</p><pre>stats = df.describe()\nfor col, s in stats.items():\n    print(col, \":\", s)</pre>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. הדפס את <code>describe()</code>.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nprint(df.describe())",
+              check: (o,c) => /mean/.test(o) && /describe/.test(c)
+            },
+            {
+              q: "טען <code>salaries</code>. מצא את <b>טווח השכר</b> = max - min. הדפס מספר.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[\"salary\"].max() - df[\"salary\"].min())",
+              check: (o) => /16000/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. הדפס את ממוצע הנקודות לקבוצה ב-2 ספרות אחרי הנקודה.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nprint(round(df[\"points\"].mean(), 2))",
+              check: (o) => /47/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. כמה לקוחות סך הכל? כמה נטשו? הדפס שני מספרים.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nprint(df.shape[0])\nprint(df[\"churn\"].sum())",
+              check: (o) => /15/.test(o) && /7/.test(o)
+            },
+            {
+              q: "טען <code>real-estate</code>. מה ה-<b>מחיר הממוצע</b> למ\"ר (price_m * 1M / sqm) של כל הדירות? (חשב ידנית עם לולאה).",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append((df[\"price_m\"][i] * 1000000) / df[\"sqm\"][i])\nprint(round(sum(rates)/len(rates)))",
+              check: (o) => /\d{4,5}/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-value-counts",
+          icon: "📈",
+          title: "value_counts, unique, nunique",
+          theory: "<h3>ניתוח התפלגות</h3><ul><li><code>.unique()</code> - רשימת ערכים שונים</li><li><code>.nunique()</code> - <b>מספר</b> ערכים שונים</li><li><code>.value_counts()</code> - מילון: ערך → כמה פעמים</li></ul><pre>df[\"department\"].value_counts()\n# {\"Sales\": 5, \"R&D\": 4, \"Marketing\": 3}</pre>",
+          exercises: [
+            {
+              q: "טען <code>salaries</code>. כמה מחלקות שונות יש? (nunique על department)",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[\"department\"].nunique())",
+              check: (o) => o.trim() === '3'
+            },
+            {
+              q: "טען <code>salaries</code>. מי המחלקה עם הכי הרבה עובדים? הדפס value_counts.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nprint(df[\"department\"].value_counts())",
+              check: (o) => /Sales/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. הדפס את <code>plan.unique()</code>.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nprint(df[\"plan\"].unique())",
+              check: (o) => /basic|premium|standard/.test(o)
+            },
+            {
+              q: "טען <code>cities-weather</code>. כמה ערים שונות יש (nunique)?",
+              starter: "",
+              solution: "df = data.load(\"cities-weather\")\nprint(df[\"city\"].nunique())",
+              check: (o) => o.trim() === '6'
+            },
+            {
+              q: "טען <code>telecom-churn</code>. הדפס את <code>value_counts()</code> של עמודת <code>churn</code> - כמה נטשו וכמה לא?",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nprint(df[\"churn\"].value_counts())",
+              check: (o) => /0/.test(o) && /1/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-cumulative",
+          icon: "📈",
+          title: "cumsum, pct_change",
+          theory: "<h3>חישובים מצטברים</h3><p><b>cumsum</b> - סכום מצטבר (running total):</p><pre>df[\"running_total\"] = df[\"revenue\"].cumsum()</pre><p><b>pct_change</b> - אחוז שינוי מהשורה הקודמת:</p><pre>df[\"growth\"] = df[\"revenue\"].pct_change()  # 0.15 = גידול של 15%</pre><p>שימושיים מאוד לסדרות זמן (sales חודשי, מניות, צמיחה).</p>",
+          exercises: [
+            {
+              q: "טען <code>sales</code>. הוסף עמודה <code>running</code> שזה cumsum של revenue. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ndf[\"running\"] = df[\"revenue\"].cumsum()\nprint(df[\"running\"])",
+              check: (o,c) => /cumsum/.test(c) && /\d{5,}/.test(o)
+            },
+            {
+              q: "טען <code>sales</code>. הוסף עמודה <code>growth</code> = pct_change של revenue. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ndf[\"growth\"] = df[\"revenue\"].pct_change()\nprint(df[\"growth\"])",
+              check: (o,c) => /pct_change/.test(c)
+            },
+            {
+              q: "טען <code>covid-israel</code>. הוסף קסום מצטבר של מקרים חיוביים. הדפס את הערך האחרון.",
+              starter: "",
+              solution: "df = data.load(\"covid-israel\")\ncs = df[\"positive\"].cumsum()\nprint(list(cs)[-1])",
+              check: (o) => /41/.test(o)
+            },
+            {
+              q: "טען <code>sales</code>. חשב cumsum של <code>units</code>. הדפס את הערך באמצע (אינדקס 5).",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ncs = df[\"units\"].cumsum()\nprint(cs[5])",
+              check: (o) => /845/.test(o)
+            },
+            {
+              q: "טען <code>covid-israel</code>. חשב pct_change של hospitalized. הדפס את הערך השני (אינדקס 1).",
+              starter: "",
+              solution: "df = data.load(\"covid-israel\")\npc = df[\"hospitalized\"].pct_change()\nprint(round(pc[1], 4))",
+              check: (o) => /0\.27/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 7,
+      id: "m7",
+      icon: "🧹",
+      title: "ניקוי נתונים",
+      desc: "fillna, dropna, drop_duplicates, rename, astype",
+      topics: [
+        {
+          id: "pd-missing",
+          icon: "❓",
+          title: "ערכים חסרים (None / NaN)",
+          theory: "<h3>טיפול בערכים חסרים</h3><p>ב-Python אמיתי, ערכים חסרים הם <code>None</code> (או <code>NaN</code> בpandas).</p><ul><li><code>df.isna()</code> - מטריצת True/False של ערכים חסרים</li><li><code>df.fillna(0)</code> - להחליף כל None ב-0</li><li><code>df.dropna()</code> - להסיר שורות עם ערכים חסרים</li></ul>",
+          exercises: [
+            {
+              q: "צור DataFrame עם <code>x</code> = [1, None, 3, None, 5]. השתמש ב-<code>fillna(0)</code>. הדפס את העמודה x.",
+              starter: "",
+              solution: "df = DataFrame({\"x\": [1, None, 3, None, 5]})\nresult = df.fillna(0)\nprint(result[\"x\"])",
+              check: (o,c) => /\[1,\s*0,\s*3,\s*0,\s*5\]/.test(o) && /fillna/.test(c)
+            },
+            {
+              q: "צור DataFrame עם <code>a</code> = [1, None, 3], <code>b</code> = [10, 20, 30]. השתמש ב-<code>dropna()</code>. הדפס shape.",
+              starter: "",
+              solution: "df = DataFrame({\"a\": [1, None, 3], \"b\": [10, 20, 30]})\nresult = df.dropna()\nprint(result.shape)",
+              check: (o,c) => /\(2,\s*2\)/.test(o) && /dropna/.test(c)
+            },
+            {
+              q: "צור DataFrame: <code>{x: [10, None, 30, None]}</code>. החלף None בממוצע (חשב mean על העמודה ידנית). הדפס.",
+              starter: "",
+              solution: "df = DataFrame({\"x\": [10, None, 30, None]})\nmean_val = df[\"x\"].mean()\nresult = df.fillna(mean_val)\nprint(result[\"x\"])",
+              check: (o) => /20/.test(o)
+            },
+            {
+              q: "צור DataFrame עם <code>{age: [25, None, 30, None, 40]}</code>. חשב כמה ערכים חסרים יש (sum על isna).",
+              starter: "",
+              solution: "df = DataFrame({\"age\": [25, None, 30, None, 40]})\nna_mask = df[\"age\"].isna()\nprint(sum(na_mask))",
+              check: (o) => o.trim() === '2'
+            },
+            {
+              q: "צור DataFrame: <code>{a: [1,2,None], b: [10,None,30]}</code>. עשה fillna(-1) והדפס.",
+              starter: "",
+              solution: "df = DataFrame({\"a\": [1,2,None], \"b\": [10,None,30]})\nresult = df.fillna(-1)\nprint(result)",
+              check: (o) => /-1/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-rename-drop",
+          icon: "✏️",
+          title: "rename, drop, drop_duplicates",
+          theory: "<h3>סידור המבנה</h3><ul><li><code>df.rename({\"old\":\"new\"})</code> - שנה שמות עמודות</li><li><code>df.drop(columns=\"x\")</code> - הסר עמודה</li><li><code>df.drop(columns=[\"a\",\"b\"])</code> - הסר מספר</li><li><code>df.drop_duplicates()</code> - הסר שורות זהות</li></ul>",
+          exercises: [
+            {
+              q: "טען <code>salaries</code>. שנה את שם העמודה <code>salary</code> ל-<code>monthly_pay</code>. הדפס את שמות העמודות.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.rename({\"salary\": \"monthly_pay\"})\nprint(result.columns)",
+              check: (o,c) => /monthly_pay/.test(o) && /rename/.test(c)
+            },
+            {
+              q: "טען <code>football</code>. מחק את העמודות <code>draws</code> ו-<code>losses</code>. הדפס את ה-columns.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.drop(columns=[\"draws\", \"losses\"])\nprint(result.columns)",
+              check: (o,c) => !/draws/.test(o) && /drop/.test(c)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. הסר את עמודת <code>customer_id</code>. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.drop(columns=\"customer_id\")\nprint(result.shape)",
+              check: (o) => /\(15,\s*5\)/.test(o)
+            },
+            {
+              q: "צור DataFrame עם כפילויות: <code>{x: [1,1,2,2,3,3]}</code>. השתמש ב-drop_duplicates. הדפס shape.",
+              starter: "",
+              solution: "df = DataFrame({\"x\": [1,1,2,2,3,3]})\nresult = df.drop_duplicates()\nprint(result.shape)",
+              check: (o,c) => /\(3,\s*1\)/.test(o) && /drop_duplicates/.test(c)
+            },
+            {
+              q: "טען <code>students</code>. שנה את <code>math</code> ל-<code>matematika</code> ואת <code>english</code> ל-<code>anglit</code>. הדפס columns.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.rename({\"math\": \"matematika\", \"english\": \"anglit\"})\nprint(result.columns)",
+              check: (o) => /matematika/.test(o) && /anglit/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-astype-clip",
+          icon: "🔧",
+          title: "astype, clip",
+          theory: "<h3>המרות וקיצוץ</h3><p><b>astype</b> - להמיר סוג עמודה:</p><pre>df.astype(\"price\", float)\ndf.astype(\"count\", int)</pre><p><b>clip</b> - לקצוץ ערכים קיצוניים לטווח:</p><pre>df.clip(\"score\", lower=0, upper=100)</pre>",
+          exercises: [
+            {
+              q: "צור DataFrame עם <code>{price: [\"10\",\"20\",\"30\"]}</code> (מחרוזות). המר ל-int והדפס את העמודה.",
+              starter: "",
+              solution: "df = DataFrame({\"price\": [\"10\",\"20\",\"30\"]})\nresult = df.astype(\"price\", int)\nprint(result[\"price\"])",
+              check: (o,c) => /\[10/.test(o) && /astype/.test(c)
+            },
+            {
+              q: "טען <code>real-estate</code>. המר את <code>rooms</code> ל-float והדפס את העמודה.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nresult = df.astype(\"rooms\", float)\nprint(result[\"rooms\"])",
+              check: (o,c) => /3\.0|4\.0/.test(o) && /astype/.test(c)
+            },
+            {
+              q: "צור DataFrame: <code>{score: [-5, 50, 105, 150]}</code>. קצוץ ל-0..100. הדפס.",
+              starter: "",
+              solution: "df = DataFrame({\"score\": [-5, 50, 105, 150]})\nresult = df.clip(\"score\", lower=0, upper=100)\nprint(result[\"score\"])",
+              check: (o,c) => /\[0,\s*50,\s*100,\s*100\]/.test(o) && /clip/.test(c)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. קצוץ monthly_bill ל-max=120. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.clip(\"monthly_bill\", upper=120)\nprint(result[\"monthly_bill\"])",
+              check: (o,c) => /clip/.test(c)
+            },
+            {
+              q: "צור DataFrame עם <code>{x: [\"1.5\",\"2.5\",\"3.5\"]}</code>. המר ל-float. הדפס את הסכום של העמודה.",
+              starter: "",
+              solution: "df = DataFrame({\"x\": [\"1.5\",\"2.5\",\"3.5\"]})\nresult = df.astype(\"x\", float)\nprint(result[\"x\"].sum())",
+              check: (o) => /7\.5/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 8,
+      id: "m8",
+      icon: "🔗",
+      title: "איחוד טבלאות",
+      desc: "merge (JOIN) ו-concat (UNION)",
+      topics: [
+        {
+          id: "pd-merge-inner",
+          icon: "🔀",
+          title: "merge - אינר ג'וין",
+          theory: "<h3>חיבור טבלאות</h3><p>זה ה-<code>JOIN</code> של SQL:</p><pre>customers.merge(orders, on=\"customer_id\")\n# חיבור על customer_id - INNER JOIN כברירת מחדל</pre><p>רק שורות שיש להן <b>התאמה בשתי הטבלאות</b> נשמרות.</p>",
+          exercises: [
+            {
+              q: "צור 2 DataFrames: <code>a={id:[1,2,3], name:[\"A\",\"B\",\"C\"]}</code> ו-<code>b={id:[1,2], score:[100,200]}</code>. merge על id. הדפס shape.",
+              starter: "",
+              solution: "a = DataFrame({\"id\":[1,2,3], \"name\":[\"A\",\"B\",\"C\"]})\nb = DataFrame({\"id\":[1,2], \"score\":[100,200]})\nresult = a.merge(b, on=\"id\")\nprint(result.shape)",
+              check: (o,c) => /\(2,\s*3\)/.test(o) && /merge/.test(c)
+            },
+            {
+              q: "צור <code>users={uid:[1,2,3], name:[\"X\",\"Y\",\"Z\"]}</code> ו-<code>logins={uid:[2,3,4], date:[\"a\",\"b\",\"c\"]}</code>. merge על uid. הדפס.",
+              starter: "",
+              solution: "users = DataFrame({\"uid\":[1,2,3], \"name\":[\"X\",\"Y\",\"Z\"]})\nlogins = DataFrame({\"uid\":[2,3,4], \"date\":[\"a\",\"b\",\"c\"]})\nresult = users.merge(logins, on=\"uid\")\nprint(result)",
+              check: (o) => /Y/.test(o) && /Z/.test(o)
+            },
+            {
+              q: "צור <code>products={pid:[10,20,30], name:[\"Pen\",\"Book\",\"Pencil\"]}</code> ו-<code>sales={pid:[10,20,10], qty:[5,3,2]}</code>. merge על pid. הדפס shape.",
+              starter: "",
+              solution: "products = DataFrame({\"pid\":[10,20,30], \"name\":[\"Pen\",\"Book\",\"Pencil\"]})\nsales = DataFrame({\"pid\":[10,20,10], \"qty\":[5,3,2]})\nresult = products.merge(sales, on=\"pid\")\nprint(result.shape)",
+              check: (o) => /\(3,\s*3\)/.test(o)
+            },
+            {
+              q: "merge בין <code>{x:[1,2,3]}</code> ו-<code>{x:[4,5,6]}</code> על x. אין התאמות - הדפס shape.",
+              starter: "",
+              solution: "a = DataFrame({\"x\":[1,2,3]})\nb = DataFrame({\"x\":[4,5,6]})\nresult = a.merge(b, on=\"x\")\nprint(result.shape)",
+              check: (o) => /\(0/.test(o)
+            },
+            {
+              q: "merge בין <code>{k:[1,2], v:[\"A\",\"B\"]}</code> ו-<code>{k:[1,1,2], n:[10,20,30]}</code> על k. הדפס shape.",
+              starter: "",
+              solution: "a = DataFrame({\"k\":[1,2], \"v\":[\"A\",\"B\"]})\nb = DataFrame({\"k\":[1,1,2], \"n\":[10,20,30]})\nresult = a.merge(b, on=\"k\")\nprint(result.shape)",
+              check: (o) => /\(3,\s*3\)/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-merge-left",
+          icon: "⬅️",
+          title: "merge - LEFT JOIN",
+          theory: "<h3>LEFT JOIN - שומר על השמאלית</h3><pre>customers.merge(orders, on=\"id\", how=\"left\")</pre><p><b>כל שורה</b> בטבלת השמאל נשמרת. אם אין התאמה - הערכים מהטבלת ימין יהיו None.</p>",
+          exercises: [
+            {
+              q: "<code>a={id:[1,2,3], n:[\"A\",\"B\",\"C\"]}</code>, <code>b={id:[1,2], v:[10,20]}</code>. merge left על id. הדפס shape (כל הטבלה השמאלית נשמרת).",
+              starter: "",
+              solution: "a = DataFrame({\"id\":[1,2,3], \"n\":[\"A\",\"B\",\"C\"]})\nb = DataFrame({\"id\":[1,2], \"v\":[10,20]})\nresult = a.merge(b, on=\"id\", how=\"left\")\nprint(result.shape)",
+              check: (o,c) => /\(3,\s*3\)/.test(o) && /how/.test(c) && /left/.test(c)
+            },
+            {
+              q: "באותו תרגיל קודם - הדפס את עמודת ה-v. אמור להיות [10, 20, None].",
+              starter: "",
+              solution: "a = DataFrame({\"id\":[1,2,3], \"n\":[\"A\",\"B\",\"C\"]})\nb = DataFrame({\"id\":[1,2], \"v\":[10,20]})\nresult = a.merge(b, on=\"id\", how=\"left\")\nprint(result[\"v\"])",
+              check: (o) => /None/.test(o) && /10/.test(o)
+            },
+            {
+              q: "<code>employees={id:[1,2,3,4], name:[\"X\",\"Y\",\"Z\",\"W\"]}</code>, <code>departments={id:[1,3], dept:[\"A\",\"B\"]}</code>. left merge וההדפס.",
+              starter: "",
+              solution: "e = DataFrame({\"id\":[1,2,3,4], \"name\":[\"X\",\"Y\",\"Z\",\"W\"]})\nd = DataFrame({\"id\":[1,3], \"dept\":[\"A\",\"B\"]})\nresult = e.merge(d, on=\"id\", how=\"left\")\nprint(result)",
+              check: (o) => /X/.test(o) && /W/.test(o) && /None/.test(o)
+            },
+            {
+              q: "left merge עם 0 התאמות: <code>{id:[10,20], n:[\"a\",\"b\"]}</code> ו-<code>{id:[99], v:[5]}</code>. הדפס shape.",
+              starter: "",
+              solution: "a = DataFrame({\"id\":[10,20], \"n\":[\"a\",\"b\"]})\nb = DataFrame({\"id\":[99], \"v\":[5]})\nresult = a.merge(b, on=\"id\", how=\"left\")\nprint(result.shape)",
+              check: (o) => /\(2,\s*3\)/.test(o)
+            },
+            {
+              q: "מה ההבדל בין inner ל-left? בצע inner merge על <code>{id:[1,2]}</code> ו-<code>{id:[2,3], v:[10,20]}</code>. הדפס shape של התוצאה.",
+              starter: "",
+              solution: "a = DataFrame({\"id\":[1,2]})\nb = DataFrame({\"id\":[2,3], \"v\":[10,20]})\nresult = a.merge(b, on=\"id\")\nprint(result.shape)",
+              check: (o) => /\(1,\s*2\)/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-concat",
+          icon: "🧱",
+          title: "concat - UNION",
+          theory: "<h3>איחוד שורות מטבלאות זהות</h3><p>זה ה-<code>UNION ALL</code> של SQL:</p><pre>DataFrame.concat([df1, df2])</pre><p>הטבלאות צריכות להיות עם אותן עמודות. השורות מתחברות אחת מתחת לשנייה.</p>",
+          exercises: [
+            {
+              q: "צור 2 DataFrames: <code>{x:[1,2,3]}</code> ו-<code>{x:[4,5,6]}</code>. concat. הדפס shape.",
+              starter: "",
+              solution: "a = DataFrame({\"x\":[1,2,3]})\nb = DataFrame({\"x\":[4,5,6]})\nresult = DataFrame.concat([a,b])\nprint(result.shape)",
+              check: (o,c) => /\(6,\s*1\)/.test(o) && /concat/.test(c)
+            },
+            {
+              q: "צור 3 DataFrames כל אחד עם 2 שורות של עמודה <code>n</code>. concat לאחד והדפס.",
+              starter: "",
+              solution: "a = DataFrame({\"n\":[1,2]})\nb = DataFrame({\"n\":[3,4]})\nc = DataFrame({\"n\":[5,6]})\nresult = DataFrame.concat([a,b,c])\nprint(result[\"n\"])",
+              check: (o) => /\[1,\s*2,\s*3,\s*4,\s*5,\s*6\]/.test(o)
+            },
+            {
+              q: "צור <code>q1={month:[\"Jan\",\"Feb\"], sales:[100,200]}</code> ו-<code>q2={month:[\"Mar\",\"Apr\"], sales:[300,400]}</code>. concat. הדפס.",
+              starter: "",
+              solution: "q1 = DataFrame({\"month\":[\"Jan\",\"Feb\"], \"sales\":[100,200]})\nq2 = DataFrame({\"month\":[\"Mar\",\"Apr\"], \"sales\":[300,400]})\nresult = DataFrame.concat([q1, q2])\nprint(result)",
+              check: (o) => /Jan/.test(o) && /Apr/.test(o)
+            },
+            {
+              q: "concat של 2 טבלאות, אחת ריקה. הדפס shape.",
+              starter: "",
+              solution: "a = DataFrame({\"x\":[1,2,3]})\nb = DataFrame({\"x\":[]})\nresult = DataFrame.concat([a,b])\nprint(result.shape)",
+              check: (o) => /\(3,\s*1\)/.test(o)
+            },
+            {
+              q: "צור 2 טבלאות שכל אחת עם 5 שורות ועמודות a,b. concat ואז sort_values לפי a. הדפס head(3).",
+              starter: "",
+              solution: "a = DataFrame({\"a\":[3,1,4], \"b\":[10,20,30]})\nb = DataFrame({\"a\":[5,2,6], \"b\":[40,50,60]})\nresult = DataFrame.concat([a,b]).sort_values(\"a\")\nprint(result.head(3))",
+              check: (o) => /sort_values/.test(o) === false && /\d/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 9,
+      id: "m9",
+      icon: "🔢",
+      title: "פעולות מתקדמות",
+      desc: "where complex, multi-step pipelines, חיתוך מתוחכם",
+      topics: [
+        {
+          id: "pd-pipeline",
+          icon: "🚰",
+          title: "Pipelines רב-שלביים",
+          theory: "<h3>שרשור פעולות (chaining)</h3><p>פייתון מאפשרת לחבר פעולות אחת אחרי השנייה:</p><pre>result = (df.filter(\"col1\", \">\", 100)\n             .sort_values(\"col2\", ascending=False)\n             .head(10))</pre><p>זו דרך אלגנטית לעשות ניתוח שלם בקטע קוד קצר.</p>",
+          exercises: [
+            {
+              q: "טען <code>salaries</code>. סנן Sales > 15K → מיין מהגבוה → head(2). הדפס.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.filter(\"department\", \"==\", \"Sales\").filter(\"salary\", \">\", 15000).sort_values(\"salary\", ascending=False).head(2)\nprint(result)",
+              check: (o,c) => /filter/.test(c) && /sort_values/.test(c) && /head/.test(c)
+            },
+            {
+              q: "טען <code>students</code>. סנן math>80 → מיין לפי english → head(3).",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.filter(\"math\", \">\", 80).sort_values(\"english\", ascending=False).head(3)\nprint(result)",
+              check: (o,c) => /filter/.test(c) && /sort_values/.test(c) && /head/.test(c)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. סנן churn==1 → קבץ לפי plan → ספור. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.filter(\"churn\", \"==\", 1).groupby(\"plan\").count()\nprint(result)",
+              check: (o,c) => /filter/.test(c) && /groupby/.test(c)
+            },
+            {
+              q: "טען <code>real-estate</code>. סנן price_m<5 → מיין לפי sqm יורד → head(2).",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nresult = df.filter(\"price_m\", \"<\", 5).sort_values(\"sqm\", ascending=False).head(2)\nprint(result)",
+              check: (o) => /\d/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. סנן wins>=14 → מיין לפי points יורד → הדפס את ה-team הראשון.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.filter(\"wins\", \">=\", 14).sort_values(\"points\", ascending=False)\nprint(result[\"team\"][0])",
+              check: (o) => /מכבי תל אביב/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-multistep",
+          icon: "🎬",
+          title: "ניתוחים רב-שלבים",
+          theory: "<h3>פתרון בעיות עסקיות</h3><p>ניתוח אמיתי דורש שלבים: סינון → קיבוץ → אגרגציה → דירוג.</p><p>למשל - \"מי 3 הלקוחות הטובים ביותר בסגמנט ה-VIP?\":</p><pre>vip = df.filter(\"tier\", \"==\", \"VIP\")\ntop = vip.sort_values(\"revenue\", ascending=False).head(3)</pre>",
+          exercises: [
+            {
+              q: "טען <code>telecom-churn</code>. מצא את <b>הלקוח ששילם הכי הרבה</b> מבין הנוטשים. הדפס את ה-customer_id.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.filter(\"churn\", \"==\", 1).sort_values(\"monthly_bill\", ascending=False)\nprint(result[\"customer_id\"][0])",
+              check: (o) => /104/.test(o)
+            },
+            {
+              q: "טען <code>students</code>. מצא את הסטודנט עם <b>הציון הממוצע</b> הכי גבוה (חישוב + מיון).",
+              starter: "",
+              solution: "df = data.load(\"students\")\ndf[\"avg\"] = [(df[\"math\"][i]+df[\"english\"][i]+df[\"history\"][i])/3 for i in range(df.shape[0])]\nresult = df.sort_values(\"avg\", ascending=False)\nprint(result[\"name\"][0])",
+              check: (o) => /שירה|מאיה/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. עבור כל מחלקה, מה ההפרש בין השכר המקסימלי לממוצע? קבץ ושלוף max ו-mean. הדפס.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\ngmax = df.groupby(\"department\").max()\ngmean = df.groupby(\"department\").mean()\nprint(gmax)\nprint(gmean)",
+              check: (o) => /Sales/.test(o) || /R&D/.test(o)
+            },
+            {
+              q: "טען <code>real-estate</code>. צור <code>price_per_sqm</code>. מיין יורד. הדפס את 2 הראשונים.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\ndf[\"price_per_sqm\"] = [df[\"price_m\"][i]*1000000/df[\"sqm\"][i] for i in range(df.shape[0])]\nresult = df.sort_values(\"price_per_sqm\", ascending=False).head(2)\nprint(result[\"neighborhood\"])",
+              check: (o) => /רוטשילד|נווה צדק/.test(o)
+            },
+            {
+              q: "טען <code>sales</code>. כמה חודשים היו עם <b>גידול חיובי</b> ב-revenue? (pct_change > 0, סנן והדפס count).",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ndf[\"growth\"] = df[\"revenue\"].pct_change()\nresult = df.filter(\"growth\", \">\", 0)\nprint(result.shape[0])",
+              check: (o) => /\d/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-complex-conditions",
+          icon: "🧠",
+          title: "תנאים מורכבים",
+          theory: "<h3>שילוב של filter ו-where</h3><p>אפשר לחבר תנאים מורכבים על ידי <code>where(lambda...)</code> או על ידי שרשור <code>filter</code>:</p><pre># 2 דרכים לאותה תוצאה:\ndf.where(lambda r: r[\"a\"] &gt; 5 and r[\"b\"] &lt; 10)\ndf.filter(\"a\", \"&gt;\", 5).filter(\"b\", \"&lt;\", 10)</pre>",
+          exercises: [
+            {
+              q: "טען <code>students</code>. מצא את הסטודנטים עם math>80 וגם english>85. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"students\")\nresult = df.where(lambda r: r[\"math\"] > 80 and r[\"english\"] > 85)\nprint(result.shape)",
+              check: (o,c) => /where/.test(c) && /\(\d/.test(o)
+            },
+            {
+              q: "טען <code>telecom-churn</code>. מצא לקוחות צעירים (age<30) שגם שילמו >50. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.where(lambda r: r[\"age\"] < 30 and r[\"monthly_bill\"] > 50)\nprint(result.shape)",
+              check: (o) => /\(\d/.test(o)
+            },
+            {
+              q: "טען <code>football</code>. מצא קבוצות עם wins>=14 או losses<=4. הדפס את ה-team.",
+              starter: "",
+              solution: "df = data.load(\"football\")\nresult = df.where(lambda r: r[\"wins\"] >= 14 or r[\"losses\"] <= 4)\nprint(result[\"team\"])",
+              check: (o) => /מכבי/.test(o)
+            },
+            {
+              q: "טען <code>real-estate</code>. מצא דירות שאינן ביפו <b>וגם</b> sqm>80. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"real-estate\")\nresult = df.where(lambda r: r[\"neighborhood\"] != \"יפו\" and r[\"sqm\"] > 80)\nprint(result.shape)",
+              check: (o) => /\(\d/.test(o)
+            },
+            {
+              q: "טען <code>salaries</code>. מצא Sales עם > 5 שנים <b>או</b> R&D עם > 20K. הדפס shape.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.where(lambda r: (r[\"department\"]==\"Sales\" and r[\"years\"]>5) or (r[\"department\"]==\"R&D\" and r[\"salary\"]>20000))\nprint(result.shape)",
+              check: (o) => /\(\d/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+    {
+      num: 10,
+      id: "m10",
+      icon: "🏆",
+      title: "פרויקטים מסכמים",
+      desc: "Case studies מסכמים על דאטהסטים אמיתיים",
+      topics: [
+        {
+          id: "pd-project-churn",
+          icon: "📞",
+          title: "Case Study: ניתוח נטישה",
+          theory: "<h3>פרויקט: למה לקוחות עוזבים?</h3><p>אנחנו אנליסטים בחברת טלקום. יש לנו נתונים על 15 לקוחות (telecom-churn). המטרה: למצוא מי בסיכון לנטוש.</p><p>במהלך הפרויקט נחשב: שיעור נטישה כללי, נטישה לפי תכנית, פרופיל הלקוח הנוטש הממוצע.</p>",
+          exercises: [
+            {
+              q: "<b>שיעור נטישה:</b> טען telecom-churn. חשב את הממוצע של עמודת churn (כאחוז).",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nchurn_rate = df[\"churn\"].mean() * 100\nprint(round(churn_rate, 1), \"%\")",
+              check: (o) => /46/.test(o) && /%/.test(o)
+            },
+            {
+              q: "<b>נטישה לפי תכנית:</b> קבץ לפי plan וחשב את סכום ה-churn. איזו תכנית הכי גרועה?",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nresult = df.groupby(\"plan\").sum()\nprint(result[\"churn\"])",
+              check: (o) => /\[\d/.test(o)
+            },
+            {
+              q: "<b>גיל הנוטשים:</b> סנן רק נוטשים (churn==1) וחשב את הגיל הממוצע.",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nchurned = df.filter(\"churn\", \"==\", 1)\nprint(round(churned[\"age\"].mean(), 1))",
+              check: (o) => /4\d/.test(o)
+            },
+            {
+              q: "<b>חשבון ממוצע:</b> מה ההפרש בין monthly_bill של הנוטשים לבין הממוצע של כולם?",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nchurned_avg = df.filter(\"churn\", \"==\", 1)[\"monthly_bill\"].mean()\nall_avg = df[\"monthly_bill\"].mean()\nprint(round(churned_avg - all_avg, 2))",
+              check: (o) => /\d/.test(o)
+            },
+            {
+              q: "<b>סיכון:</b> סנן לקוחות שלא נטשו, עם tenure<24 ובחשבון>80. אלה ה\"בסיכון\". כמה הם? הדפס shape[0].",
+              starter: "",
+              solution: "df = data.load(\"telecom-churn\")\nat_risk = df.where(lambda r: r[\"churn\"]==0 and r[\"tenure_months\"]<24 and r[\"monthly_bill\"]>80)\nprint(at_risk.shape[0])",
+              check: (o) => /\d/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-project-salary",
+          icon: "💰",
+          title: "Case Study: פערי שכר",
+          theory: "<h3>פרויקט: ניתוח שכר במחלקות</h3><p>HR מבקש מאיתנו: מה הפערים בין המחלקות? יש מחלקה ש\"חיה בעולם משלה\"?</p>",
+          exercises: [
+            {
+              q: "<b>סקירה:</b> טען salaries. הדפס את ממוצע השכר לכל מחלקה.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").mean()\nprint(result[\"salary\"])",
+              check: (o) => /17000|24500|13000/.test(o)
+            },
+            {
+              q: "<b>פערים:</b> חשב את ההפרש בין הממוצע הגבוה לנמוך ביותר בין המחלקות.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nmeans = df.groupby(\"department\").mean()\nmax_avg = means[\"salary\"].max()\nmin_avg = means[\"salary\"].min()\nprint(round(max_avg - min_avg))",
+              check: (o) => /\d{3,}/.test(o)
+            },
+            {
+              q: "<b>ותק:</b> מצא את הקשר בין ותק לשכר. קבץ לפי מחלקה והדפס את ממוצע ה-years.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").mean()\nprint(result[\"years\"])",
+              check: (o) => /\d/.test(o)
+            },
+            {
+              q: "<b>טופ עובדים:</b> מצא את 3 העובדים הכי מבוגרים-בתפקיד (years הכי גבוהים). הדפס name+salary.",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\ntop3 = df.sort_values(\"years\", ascending=False).head(3)\nprint(top3[[\"name\", \"salary\"]])",
+              check: (o) => /חני|הילה|יוסי/.test(o)
+            },
+            {
+              q: "<b>אנומליה:</b> מי משתכר מעל הממוצע של המחלקה שלו? קבץ → ממוצע → חבר. (מרובה שלבים — לפחות הדפס את הממוצעים)",
+              starter: "",
+              solution: "df = data.load(\"salaries\")\nmeans = df.groupby(\"department\").mean()\nprint(means[\"salary\"])",
+              check: (o) => /\d/.test(o)
+            },
+          ]
+        },
+        {
+          id: "pd-project-sales",
+          icon: "📊",
+          title: "Case Study: ניתוח מכירות",
+          theory: "<h3>פרויקט: שנת המכירות</h3><p>נתחו את ביצועי המכירות החודשיים. מה היו הטרנדים? איזה חודש הכי טוב? מהי הצמיחה?</p>",
+          exercises: [
+            {
+              q: "<b>סך שנתי:</b> טען sales. הדפס את <b>סך ה-revenue</b> כל השנה.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\nprint(df[\"revenue\"].sum())",
+              check: (o) => /720000/.test(o)
+            },
+            {
+              q: "<b>חודש שיא:</b> מי החודש עם ה-revenue הכי גבוה? הדפס שם + סכום.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\nresult = df.sort_values(\"revenue\", ascending=False)\nprint(result[\"month\"][0], result[\"revenue\"][0])",
+              check: (o) => /דצמבר/.test(o) && /89000/.test(o)
+            },
+            {
+              q: "<b>מחיר ממוצע:</b> חשב revenue/units לכל חודש. מי החודש עם המחיר הממוצע הגבוה ביותר?",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ndf[\"avg_price\"] = [df[\"revenue\"][i]/df[\"units\"][i] for i in range(df.shape[0])]\nresult = df.sort_values(\"avg_price\", ascending=False)\nprint(result[\"month\"][0])",
+              check: (o) => /[א-ת]/.test(o)
+            },
+            {
+              q: "<b>גידול:</b> השתמש ב-pct_change על revenue. הדפס את העמודה.",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ngrowth = df[\"revenue\"].pct_change()\nprint(list(growth))",
+              check: (o,c) => /pct_change/.test(c) && /None/.test(o)
+            },
+            {
+              q: "<b>חודשי גידול:</b> כמה חודשים היו עם גידול חיובי?",
+              starter: "",
+              solution: "df = data.load(\"sales\")\ndf[\"growth\"] = df[\"revenue\"].pct_change()\nresult = df.filter(\"growth\", \">\", 0)\nprint(result.shape[0])",
+              check: (o) => /\d/.test(o)
+            },
+          ]
+        },
+      ]
+    },
+  ]
+};
+
+// Flatten topics for easy navigation
+const ALL_PD_TOPICS_FLAT = [];
+PANDAS_COURSE.modules.forEach(m => m.topics.forEach(t => ALL_PD_TOPICS_FLAT.push({...t, module: m.num, moduleIcon: m.icon, moduleTitle: m.title})));
+</script>
+
+<script>
+// ===== App logic =====
+const STORAGE_PREFIX = "pandas_progress_v1_";
+
+function getTopicProgress(tid) {
+  try { return JSON.parse(localStorage.getItem(STORAGE_PREFIX + tid) || '{}'); }
+  catch { return {}; }
+}
+
+function updateStreak() {
+  try {
+    const today = new Date().toDateString();
+    const last = localStorage.getItem('pandas_last_active');
+    let streak = parseInt(localStorage.getItem('pandas_streak') || '0') || 0;
+    if (last === today) return streak;
+    if (last) {
+      const lastD = new Date(last);
+      const yest = new Date(); yest.setDate(yest.getDate()-1);
+      streak = (lastD.toDateString() === yest.toDateString()) ? streak+1 : 1;
+    } else { streak = 1; }
+    localStorage.setItem('pandas_streak', String(streak));
+    localStorage.setItem('pandas_last_active', today);
+    return streak;
+  } catch { return 0; }
+}
+
+function computeStats() {
+  let done=0, total=0;
+  ALL_PD_TOPICS_FLAT.forEach(t => {
+    const prog = getTopicProgress(t.id);
+    if (prog.exercisesCompleted) done += prog.exercisesCompleted.length;
+    total += t.exercises ? t.exercises.length : 5;
+  });
+  return { done, total, xp: done*10, level: 1 + Math.floor(done*10/100) };
+}
+
+function renderStats() {
+  const stats = computeStats();
+  if (stats.done === 0) return;
+  document.getElementById('statsBar').style.display = 'grid';
+  document.getElementById('statDone').textContent = stats.done + '/' + stats.total;
+  document.getElementById('statXp').textContent = stats.xp;
+  document.getElementById('statLevel').textContent = stats.level;
+  document.getElementById('statStreak').textContent = updateStreak();
+}
+
+function getModuleProgress(mod) {
+  let done = 0, total = 0;
+  mod.topics.forEach(t => {
+    const prog = getTopicProgress(t.id);
+    if (prog.exercisesCompleted) done += prog.exercisesCompleted.length;
+    total += t.exercises.length;
+  });
+  return { done, total };
+}
+
+function isTopicDone(t) {
+  const prog = getTopicProgress(t.id);
+  return prog.exercisesCompleted && prog.exercisesCompleted.length >= t.exercises.length;
+}
+
+function renderModules() {
+  const list = document.getElementById('moduleList');
+  list.innerHTML = PANDAS_COURSE.modules.map(m => {
+    const p = getModuleProgress(m);
+    const topicsHtml = m.topics.map(t => {
+      const done = isTopicDone(t);
+      return `<a class="topic-link ${done?'done':''}" href="pandas-lesson.html?topic=${t.id}">
+        <span class="icon">${t.icon}</span>
+        <span class="name">${t.title}</span>
+        <span class="num-ex">${t.exercises.length} ת'</span>
+      </a>`;
+    }).join('');
+    return `
+      <div class="module-card" onclick="toggleModule('${m.id}')">
+        <div class="num">${m.num}</div>
+        <span class="em">${m.icon}</span>
+        <div class="body">
+          <div class="name">${m.title}</div>
+          <div class="desc">${m.desc}</div>
+          <div class="meta">${m.topics.length} נושאים · ${m.topics.reduce((s,t)=>s+t.exercises.length,0)} תרגילים</div>
+        </div>
+        <div class="prog">${p.done}/${p.total}</div>
+      </div>
+      <div class="module-topics" id="topics-${m.id}">${topicsHtml}</div>
+    `;
+  }).join('');
+}
+
+function toggleModule(mid) {
+  const el = document.getElementById('topics-' + mid);
+  if (el) el.classList.toggle('expanded');
+}
+
+function renderTopics() {
+  const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const list = document.getElementById('topicList');
+  const filtered = q ? ALL_PD_TOPICS_FLAT.filter(t => 
+    t.title.toLowerCase().includes(q) || (t.theory||'').toLowerCase().includes(q)
+  ) : ALL_PD_TOPICS_FLAT;
+  
+  list.innerHTML = filtered.map(t => {
+    const done = isTopicDone(t);
+    return `<a class="topic-link ${done?'done':''}" href="pandas-lesson.html?topic=${t.id}" style="background:var(--bg2);padding:.7rem .9rem;border-radius:9px;border:1px solid var(--border)">
+      <span class="icon">${t.icon}</span>
+      <span class="name"><b style="color:var(--text)">${t.title}</b><br><small style="color:var(--text3);font-weight:400">M${t.module} ${t.moduleIcon} ${t.moduleTitle}</small></span>
+      <span class="num-ex">${t.exercises.length}</span>
+    </a>`;
+  }).join('');
+}
+
+function setMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  document.getElementById('modulesView').style.display = mode === 'modules' ? '' : 'none';
+  document.getElementById('topicsView').style.display = mode === 'topics' ? '' : 'none';
+  document.getElementById('searchBar').style.display = mode === 'topics' ? '' : 'none';
+  if (mode === 'topics') renderTopics();
+}
+
+function initStartCards() {
+  const start = document.getElementById('startCard');
+  if (ALL_PD_TOPICS_FLAT.length > 0) {
+    start.href = 'pandas-lesson.html?topic=' + ALL_PD_TOPICS_FLAT[0].id;
+  }
+  
+  // Find last visited
+  const lastId = localStorage.getItem('pandas_last_topic');
+  if (lastId) {
+    const t = ALL_PD_TOPICS_FLAT.find(x => x.id === lastId);
+    if (t) {
+      const cc = document.getElementById('continueCard');
+      cc.style.display = '';
+      cc.href = 'pandas-lesson.html?topic=' + t.id;
+      document.getElementById('continueTitle').textContent = t.title;
+      document.getElementById('continueSub').textContent = 'M' + t.module + ' ' + t.moduleTitle;
+    }
+  }
+}
+
+function init() {
+  renderStats();
+  initStartCards();
+  renderModules();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+
+<script>
+/* GAMIFICATION ENGINE - pandas-course */
+/* ============================================================
+   GAMIFICATION ENGINE — XP + Streaks + Badges
+   Works in both Hebrew (RTL) and English (LTR) pages
+   Pure JS + localStorage, no backend needed
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  // ---- Detect language ----
+  const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
+  const T = IS_RTL ? {
+    xp: 'נקודות',
+    streak: 'רצף ימים',
+    streakDays: (n) => n === 1 ? 'יום' : 'ימים',
+    level: 'רמה',
+    newBadge: 'מדליה חדשה!',
+    levelUp: 'עלית רמה!',
+    today: 'היום',
+    yesterday: 'אתמול',
+    daysAgo: (n) => `לפני ${n} ימים`,
+    streakStart: 'התחלת רצף — חזור מחר!',
+    streakBroken: 'הרצף נשבר 💔',
+    streakAlive: (n) => `🔥 ${n} ימים ברצף!`,
+    streakFirst: '🎯 יום ראשון בקורס!',
+    achievements: 'הישגים',
+    progressTitle: 'ההתקדמות שלך',
+    close: 'סגור',
+    keepGoing: 'תמשיך ככה!',
+    perfectDay: 'יום מושלם!',
+    earned: 'הרווחת',
+    nextLevel: 'לרמה הבאה',
+    weeklyGoal: 'יעד שבועי',
+    daysLeft: (n) => `עוד ${n} ימים`,
+    streakInfo: 'פתח את האתר היום כדי לשמור על הרצף!',
+    xpToNext: (n) => `עוד ${n} XP לרמה הבאה`,
+  } : {
+    xp: 'XP',
+    streak: 'Day Streak',
+    streakDays: (n) => n === 1 ? 'day' : 'days',
+    level: 'Level',
+    newBadge: 'New Badge!',
+    levelUp: 'Level Up!',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    daysAgo: (n) => `${n} days ago`,
+    streakStart: 'Streak started — come back tomorrow!',
+    streakBroken: 'Streak broken 💔',
+    streakAlive: (n) => `🔥 ${n} day streak!`,
+    streakFirst: '🎯 First day of the course!',
+    achievements: 'Achievements',
+    progressTitle: 'Your Progress',
+    close: 'Close',
+    keepGoing: 'Keep going!',
+    perfectDay: 'Perfect day!',
+    earned: 'Earned',
+    nextLevel: 'to next level',
+    weeklyGoal: 'Weekly Goal',
+    daysLeft: (n) => `${n} days left`,
+    streakInfo: 'Open the site today to keep your streak alive!',
+    xpToNext: (n) => `${n} XP to next level`,
+  };
+  
+  // ---- XP rewards ----
+  const XP_REWARDS = {
+    EXERCISE_PASS: 10,
+    EXERCISE_PASS_NO_HINT: 15,    // bonus if didn't see solution
+    QUIZ_PASS: 20,
+    MODULE_COMPLETE: 50,
+    FIRST_RUN_OF_DAY: 5,           // bonus for opening site each day
+    STREAK_BONUS: (days) => Math.min(days * 2, 30),  // bonus per streak day, capped
+  };
+  
+  // ---- Storage keys ----
+  const STORAGE = {
+    XP: 'gam_xp',
+    STREAK: 'gam_streak',
+    LAST_DATE: 'gam_lastDate',
+    LONGEST_STREAK: 'gam_longest',
+    BADGES: 'gam_badges',
+    PASSED_EXERCISES: 'gam_passedEx',
+    USAGE_DAYS: 'gam_days',
+    DAILY_XP: 'gam_dailyXP',
+  };
+  
+  // ---- Storage helpers ----
+  function getXP() { return parseInt(localStorage.getItem(STORAGE.XP) || '0', 10); }
+  function setXP(n) { localStorage.setItem(STORAGE.XP, n); updateUI(); }
+  function addXP(amount, reason) {
+    const cur = getXP();
+    const newXP = cur + amount;
+    setXP(newXP);
+    
+    // Track daily XP
+    const today = todayStr();
+    const dailyData = JSON.parse(localStorage.getItem(STORAGE.DAILY_XP) || '{}');
+    dailyData[today] = (dailyData[today] || 0) + amount;
+    localStorage.setItem(STORAGE.DAILY_XP, JSON.stringify(dailyData));
+    
+    showXPGain(amount, reason);
+    checkLevelUp(cur, newXP);
+    checkBadges();
+  }
+  
+  function getStreak() { return parseInt(localStorage.getItem(STORAGE.STREAK) || '0', 10); }
+  function setStreak(n) {
+    localStorage.setItem(STORAGE.STREAK, n);
+    const longest = parseInt(localStorage.getItem(STORAGE.LONGEST_STREAK) || '0', 10);
+    if (n > longest) localStorage.setItem(STORAGE.LONGEST_STREAK, n);
+    updateUI();
+  }
+  
+  function getBadges() {
+    try { return JSON.parse(localStorage.getItem(STORAGE.BADGES) || '[]'); }
+    catch (e) { return []; }
+  }
+  function addBadge(id) {
+    const badges = getBadges();
+    if (!badges.includes(id)) {
+      badges.push(id);
+      localStorage.setItem(STORAGE.BADGES, JSON.stringify(badges));
+      const def = BADGE_DEFS.find(b => b.id === id);
+      if (def) showBadgeUnlock(def);
+      return true;
+    }
+    return false;
+  }
+  
+  function getPassedExercises() {
+    try { return JSON.parse(localStorage.getItem(STORAGE.PASSED_EXERCISES) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function markExercisePassed(courseId, exId, usedSolution) {
+    const passed = getPassedExercises();
+    if (!passed[courseId]) passed[courseId] = {};
+    if (!passed[courseId][exId]) {
+      passed[courseId][exId] = { date: todayStr(), used: !!usedSolution };
+      localStorage.setItem(STORAGE.PASSED_EXERCISES, JSON.stringify(passed));
+      
+      const xp = usedSolution ? XP_REWARDS.EXERCISE_PASS : XP_REWARDS.EXERCISE_PASS_NO_HINT;
+      addXP(xp, IS_RTL ? 'תרגיל הושלם!' : 'Exercise complete!');
+      return true;
+    }
+    return false;
+  }
+  
+  // ---- Date helpers ----
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function daysBetween(d1Str, d2Str) {
+    const d1 = new Date(d1Str);
+    const d2 = new Date(d2Str);
+    return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+  }
+  
+  // ---- Streak logic ----
+  function updateStreakOnLoad() {
+    const lastDate = localStorage.getItem(STORAGE.LAST_DATE);
+    const today = todayStr();
+    if (!lastDate) {
+      // First visit
+      localStorage.setItem(STORAGE.LAST_DATE, today);
+      setStreak(1);
+      addBadge('first_day');
+      showToast(T.streakFirst, '🎯');
+      return;
+    }
+    if (lastDate === today) return;  // Already counted today
+    
+    const diff = daysBetween(lastDate, today);
+    if (diff === 1) {
+      // Continued streak
+      const newStreak = getStreak() + 1;
+      setStreak(newStreak);
+      localStorage.setItem(STORAGE.LAST_DATE, today);
+      addXP(XP_REWARDS.FIRST_RUN_OF_DAY + XP_REWARDS.STREAK_BONUS(newStreak), T.streakAlive(newStreak));
+    } else if (diff > 1) {
+      // Streak broken
+      const oldStreak = getStreak();
+      if (oldStreak > 1) {
+        showToast(T.streakBroken, '💔');
+      }
+      setStreak(1);
+      localStorage.setItem(STORAGE.LAST_DATE, today);
+      addXP(XP_REWARDS.FIRST_RUN_OF_DAY, IS_RTL ? 'התחלת רצף חדש' : 'New streak started');
+    }
+    
+    // Track usage day
+    const days = JSON.parse(localStorage.getItem(STORAGE.USAGE_DAYS) || '[]');
+    if (!days.includes(today)) {
+      days.push(today);
+      localStorage.setItem(STORAGE.USAGE_DAYS, JSON.stringify(days));
+    }
+  }
+  
+  // ---- Level system ----
+  // XP needed for each level: 0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, ...
+  function levelForXP(xp) {
+    const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, 10000];
+    for (let i = thresholds.length - 1; i >= 0; i--) {
+      if (xp >= thresholds[i]) return i + 1;
+    }
+    return 1;
+  }
+  function xpForLevel(level) {
+    const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, 10000];
+    return thresholds[level - 1] || (10000 + (level - 14) * 2500);
+  }
+  function checkLevelUp(oldXP, newXP) {
+    const oldLvl = levelForXP(oldXP);
+    const newLvl = levelForXP(newXP);
+    if (newLvl > oldLvl) {
+      showLevelUp(newLvl);
+      // Badge for reaching levels
+      if (newLvl === 5) addBadge('level_5');
+      if (newLvl === 10) addBadge('level_10');
+    }
+  }
+  
+  // ---- Badge definitions ----
+  const BADGE_DEFS = [
+    { id: 'first_day',  icon: '🎯', name_he: 'יום ראשון',    name_en: 'First Day',    desc_he: 'התחלת ללמוד!',                   desc_en: 'Started learning!' },
+    { id: 'first_ex',   icon: '🐣', name_he: 'תרגיל ראשון',  name_en: 'First Exercise',desc_he: 'פתרת תרגיל ראשון',              desc_en: 'Solved your first exercise' },
+    { id: 'streak_3',   icon: '🔥', name_he: '3 ימים ברצף', name_en: '3-Day Streak', desc_he: 'התמדה!',                          desc_en: 'Consistency!' },
+    { id: 'streak_7',   icon: '⚡', name_he: 'שבוע ברצף',   name_en: '7-Day Streak', desc_he: 'אלוף של שבוע',                    desc_en: 'A week champion' },
+    { id: 'streak_30',  icon: '🏆', name_he: 'חודש ברצף',   name_en: '30-Day Streak',desc_he: 'אגדה',                            desc_en: 'Legend' },
+    { id: 'ex_10',      icon: '⭐', name_he: '10 תרגילים',   name_en: '10 Exercises', desc_he: '10 תרגילים נפתרו',                desc_en: '10 exercises solved' },
+    { id: 'ex_50',      icon: '🌟', name_he: '50 תרגילים',   name_en: '50 Exercises', desc_he: '50 תרגילים נפתרו',                desc_en: '50 exercises solved' },
+    { id: 'ex_100',     icon: '💯', name_he: '100 תרגילים',  name_en: '100 Exercises',desc_he: '100 תרגילים — מקצוען!',           desc_en: '100 exercises — pro!' },
+    { id: 'ex_200',     icon: '👑', name_he: '200 תרגילים',  name_en: '200 Exercises',desc_he: 'אלוף האלופים',                    desc_en: 'Champion of champions' },
+    { id: 'python_pro', icon: '🐍', name_he: 'Python Pro',  name_en: 'Python Pro',   desc_he: 'סיימת את קורס Python',           desc_en: 'Completed Python course' },
+    { id: 'pandas_pro', icon: '🐼', name_he: 'Pandas Pro',  name_en: 'Pandas Pro',   desc_he: 'סיימת את קורס Pandas',           desc_en: 'Completed Pandas course' },
+    { id: 'quiz_pro',   icon: '🎓', name_he: 'מומחה חידון',  name_en: 'Quiz Master',  desc_he: 'סיימת 100 שאלות חידון',           desc_en: 'Aced 100 quiz questions' },
+    { id: 'level_5',    icon: '🎖️', name_he: 'רמה 5',       name_en: 'Level 5',      desc_he: 'הגעת לרמה 5',                    desc_en: 'Reached Level 5' },
+    { id: 'level_10',   icon: '🏅', name_he: 'רמה 10',      name_en: 'Level 10',     desc_he: 'הגעת לרמה 10',                   desc_en: 'Reached Level 10' },
+    { id: 'no_hints',   icon: '🧠', name_he: '10 בלי רמזים', name_en: 'No Hints',    desc_he: '10 תרגילים בלי לראות פתרון',     desc_en: '10 exercises without solution' },
+  ];
+  
+  function checkBadges() {
+    const passed = getPassedExercises();
+    let totalPassed = 0;
+    let noHintCount = 0;
+    let pythonCount = 0, pandasCount = 0, quizCount = 0;
+    
+    Object.entries(passed).forEach(([course, exs]) => {
+      const count = Object.keys(exs).length;
+      totalPassed += count;
+      Object.values(exs).forEach(ex => { if (!ex.used) noHintCount++; });
+      if (course === 'python-lesson') pythonCount = count;
+      if (course === 'pandas-lesson') pandasCount = count;
+      if (course === 'quiz-python-100') quizCount = count;
+    });
+    
+    if (totalPassed >= 1)   addBadge('first_ex');
+    if (totalPassed >= 10)  addBadge('ex_10');
+    if (totalPassed >= 50)  addBadge('ex_50');
+    if (totalPassed >= 100) addBadge('ex_100');
+    if (totalPassed >= 200) addBadge('ex_200');
+    if (noHintCount >= 10)  addBadge('no_hints');
+    if (pythonCount >= 170) addBadge('python_pro');
+    if (pandasCount >= 150) addBadge('pandas_pro');
+    if (quizCount >= 100)   addBadge('quiz_pro');
+    
+    const streak = getStreak();
+    if (streak >= 3)  addBadge('streak_3');
+    if (streak >= 7)  addBadge('streak_7');
+    if (streak >= 30) addBadge('streak_30');
+  }
+  
+  // ---- UI: HUD (top corner) ----
+  function buildHUD() {
+    if (document.getElementById('gam-hud')) return;
+    
+    const hud = document.createElement('div');
+    hud.id = 'gam-hud';
+    hud.innerHTML = `
+      <button id="gam-hud-btn" aria-label="${T.progressTitle}">
+        <span class="gam-streak">🔥 <span id="gam-streak-num">0</span></span>
+        <span class="gam-xp">⭐ <span id="gam-xp-num">0</span></span>
+      </button>
+    `;
+    document.body.appendChild(hud);
+    document.getElementById('gam-hud-btn').addEventListener('click', openPanel);
+  }
+  
+  function updateUI() {
+    const xpEl = document.getElementById('gam-xp-num');
+    const stEl = document.getElementById('gam-streak-num');
+    if (xpEl) xpEl.textContent = getXP();
+    if (stEl) stEl.textContent = getStreak();
+  }
+  
+  // ---- UI: XP gain animation ----
+  function showXPGain(amount, reason) {
+    const div = document.createElement('div');
+    div.className = 'gam-toast gam-toast-xp';
+    div.innerHTML = `<span class="gam-toast-icon">⭐</span> <strong>+${amount} ${T.xp}</strong>${reason ? `<br><small>${reason}</small>` : ''}`;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    setTimeout(() => { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }, 2500);
+  }
+  
+  function showToast(message, icon) {
+    const div = document.createElement('div');
+    div.className = 'gam-toast';
+    div.innerHTML = `<span class="gam-toast-icon">${icon || '🎉'}</span> ${message}`;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    setTimeout(() => { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }, 3000);
+  }
+  
+  function showLevelUp(level) {
+    const div = document.createElement('div');
+    div.className = 'gam-celebration';
+    div.innerHTML = `
+      <div class="gam-celebration-inner">
+        <div class="gam-celebration-icon">🎉</div>
+        <h2>${T.levelUp}</h2>
+        <div class="gam-level-badge">${T.level} ${level}</div>
+        <button class="gam-celebration-close">${T.close}</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+      div.classList.remove('show');
+      setTimeout(() => div.remove(), 400);
+    });
+    div.addEventListener('click', e => {
+      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
+    });
+  }
+  
+  function showBadgeUnlock(badge) {
+    const name = IS_RTL ? badge.name_he : badge.name_en;
+    const desc = IS_RTL ? badge.desc_he : badge.desc_en;
+    const div = document.createElement('div');
+    div.className = 'gam-celebration gam-badge-unlock';
+    div.innerHTML = `
+      <div class="gam-celebration-inner">
+        <div class="gam-badge-icon-big">${badge.icon}</div>
+        <h3>${T.newBadge}</h3>
+        <h2>${name}</h2>
+        <p>${desc}</p>
+        <button class="gam-celebration-close">${T.close}</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+      div.classList.remove('show');
+      setTimeout(() => div.remove(), 400);
+    });
+    div.addEventListener('click', e => {
+      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
+    });
+  }
+  
+  // ---- UI: Progress Panel ----
+  function openPanel() {
+    if (document.getElementById('gam-panel')) return;
+    
+    const xp = getXP();
+    const streak = getStreak();
+    const longest = parseInt(localStorage.getItem(STORAGE.LONGEST_STREAK) || '0', 10);
+    const level = levelForXP(xp);
+    const nextLevelXP = xpForLevel(level + 1);
+    const currentLevelXP = xpForLevel(level);
+    const progressPct = Math.floor(((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100);
+    const xpToNext = nextLevelXP - xp;
+    
+    const earnedBadges = getBadges();
+    const passed = getPassedExercises();
+    let totalPassed = 0;
+    Object.values(passed).forEach(exs => { totalPassed += Object.keys(exs).length; });
+    
+    const badgesHTML = BADGE_DEFS.map(b => {
+      const earned = earnedBadges.includes(b.id);
+      const name = IS_RTL ? b.name_he : b.name_en;
+      const desc = IS_RTL ? b.desc_he : b.desc_en;
+      return `
+        <div class="gam-badge ${earned ? 'earned' : 'locked'}" title="${desc}">
+          <div class="gam-badge-icon">${b.icon}</div>
+          <div class="gam-badge-name">${name}</div>
+        </div>
+      `;
+    }).join('');
+    
+    // Last 7 days activity
+    const dailyData = JSON.parse(localStorage.getItem(STORAGE.DAILY_XP) || '{}');
+    const last7 = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      last7.push({ date: ds, xp: dailyData[ds] || 0, label: d.toLocaleDateString(IS_RTL ? 'he-IL' : 'en-US', { weekday: 'short' }) });
+    }
+    const maxXP = Math.max(...last7.map(d => d.xp), 1);
+    const chartHTML = last7.map(d => `
+      <div class="gam-chart-bar">
+        <div class="gam-chart-fill" style="height: ${(d.xp / maxXP) * 100}%"></div>
+        <div class="gam-chart-label">${d.label}</div>
+        <div class="gam-chart-val">${d.xp || ''}</div>
+      </div>
+    `).join('');
+    
+    const panel = document.createElement('div');
+    panel.id = 'gam-panel';
+    panel.innerHTML = `
+      <div class="gam-panel-inner" role="dialog">
+        <button class="gam-panel-close" aria-label="${T.close}">&times;</button>
+        <h2 class="gam-panel-title">${T.progressTitle}</h2>
+        
+        <div class="gam-stats">
+          <div class="gam-stat">
+            <div class="gam-stat-icon">⭐</div>
+            <div class="gam-stat-val">${xp.toLocaleString()}</div>
+            <div class="gam-stat-label">${T.xp}</div>
+          </div>
+          <div class="gam-stat">
+            <div class="gam-stat-icon">🔥</div>
+            <div class="gam-stat-val">${streak}</div>
+            <div class="gam-stat-label">${T.streak}</div>
+          </div>
+          <div class="gam-stat">
+            <div class="gam-stat-icon">🎖️</div>
+            <div class="gam-stat-val">${level}</div>
+            <div class="gam-stat-label">${T.level}</div>
+          </div>
+        </div>
+        
+        <div class="gam-progress-box">
+          <div class="gam-progress-header">
+            <span>${T.level} ${level}</span>
+            <span>${T.level} ${level + 1}</span>
+          </div>
+          <div class="gam-progress-bar">
+            <div class="gam-progress-fill" style="width: ${Math.max(0, Math.min(100, progressPct))}%"></div>
+          </div>
+          <div class="gam-progress-text">${T.xpToNext(xpToNext)}</div>
+        </div>
+        
+        <div class="gam-section-title">${IS_RTL ? '📈 פעילות שבועית' : '📈 Weekly Activity'}</div>
+        <div class="gam-chart">${chartHTML}</div>
+        
+        <div class="gam-section-title">${T.achievements} (${earnedBadges.length}/${BADGE_DEFS.length})</div>
+        <div class="gam-badges">${badgesHTML}</div>
+        
+        <div class="gam-footer">
+          <div>${IS_RTL ? 'תרגילים נפתרו' : 'Exercises solved'}: <strong>${totalPassed}</strong></div>
+          <div>${IS_RTL ? 'הרצף הכי ארוך שלך' : 'Longest streak'}: <strong>${longest}</strong> ${T.streakDays(longest)}</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(panel);
+    setTimeout(() => panel.classList.add('show'), 10);
+    
+    panel.querySelector('.gam-panel-close').addEventListener('click', closePanel);
+    panel.addEventListener('click', e => {
+      if (e.target === panel) closePanel();
+    });
+  }
+  function closePanel() {
+    const p = document.getElementById('gam-panel');
+    if (p) { p.classList.remove('show'); setTimeout(() => p.remove(), 300); }
+  }
+  
+  // ---- Public API ----
+  window.gam = {
+    addXP: addXP,
+    markExercisePassed: markExercisePassed,
+    completeModule: function(moduleName) {
+      addXP(XP_REWARDS.MODULE_COMPLETE, IS_RTL ? `מודול הושלם: ${moduleName}` : `Module complete: ${moduleName}`);
+    },
+    open: openPanel,
+    getXP: getXP,
+    getStreak: getStreak,
+    getBadges: getBadges,
+  };
+  
+  // ---- Init ----
+  function init() {
+    buildHUD();
+    updateUI();
+    updateStreakOnLoad();
+    checkBadges();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+
+<script>
+/* AI ERROR HELPER */
+/* ============================================================
+   AI ERROR HELPER — Smart error explanations
+   No external API needed - uses pattern matching + offline rules
+   Works in Hebrew (RTL) and English (LTR)
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
+  
+  // ---- Error patterns and explanations ----
+  // Each entry: { match: regex, he: explanation, en: explanation, hint: suggestion }
+  const ERROR_PATTERNS = [
+    {
+      match: /NameError.*name '(\w+)' is not defined/i,
+      he: (m) => `<b>NameError</b>: המשתנה <code>${m[1]}</code> לא הוגדר. 🤔`,
+      en: (m) => `<b>NameError</b>: The variable <code>${m[1]}</code> is not defined. 🤔`,
+      hint_he: (m) => [
+        `📝 בדוק שלא שכחת להגדיר את המשתנה לפני שאתה משתמש בו.`,
+        `🔤 ייתכן שיש typo (שגיאת כתיב) בשם המשתנה — שמות בפייתון רגישים לאותיות גדולות/קטנות.`,
+        `💡 דוגמה תקינה: <code>${m[1]} = 10</code> ואז <code>print(${m[1]})</code>`,
+      ],
+      hint_en: (m) => [
+        `📝 Check that you defined the variable before using it.`,
+        `🔤 There may be a typo in the name — Python names are case-sensitive.`,
+        `💡 Valid example: <code>${m[1]} = 10</code> then <code>print(${m[1]})</code>`,
+      ],
+    },
+    {
+      match: /SyntaxError.*expected/i,
+      he: () => `<b>SyntaxError</b>: יש שגיאה במבנה הקוד. ✏️`,
+      en: () => `<b>SyntaxError</b>: There's a problem in the code structure. ✏️`,
+      hint_he: () => [
+        `🔍 בדוק שיש סוגריים פתיחה וסגירה לכל הקריאות.`,
+        `🔍 בדוק שיש <code>:</code> בסוף שורות של <code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>.`,
+        `🔍 בדוק שאין גרשיים פתוחות בלי סגירה — לדוגמה <code>"hello</code> צריך להיות <code>"hello"</code>.`,
+      ],
+      hint_en: () => [
+        `🔍 Check that all parentheses are properly opened and closed.`,
+        `🔍 Check for the <code>:</code> at the end of <code>if</code>, <code>for</code>, <code>while</code>, <code>def</code> lines.`,
+        `🔍 Check for unclosed quotes — e.g. <code>"hello</code> should be <code>"hello"</code>.`,
+      ],
+    },
+    {
+      match: /SyntaxError.*EOL while scanning/i,
+      he: () => `<b>SyntaxError</b>: חסרה גרשיים סוגרים במחרוזת. 📝`,
+      en: () => `<b>SyntaxError</b>: A string is missing a closing quote. 📝`,
+      hint_he: () => [`💡 חפש מחרוזת שפותחת ב-<code>"</code> אבל לא נסגרת באותו תו.`],
+      hint_en: () => [`💡 Look for a string that opens with <code>"</code> but isn't closed.`],
+    },
+    {
+      match: /IndentationError|unexpected indent/i,
+      he: () => `<b>IndentationError</b>: בעיה בהזחת השורות (רווחים בתחילה). 📐`,
+      en: () => `<b>IndentationError</b>: Indentation problem (leading spaces). 📐`,
+      hint_he: () => [
+        `📏 בפייתון, השורות אחרי <code>if</code>, <code>for</code>, <code>def</code> צריכות להיות מוזחות (4 רווחים).`,
+        `📏 ודא שכל השורות באותו בלוק מוזחות באותה כמות.`,
+        `📏 אל תערבב רווחים וטאבים.`,
+      ],
+      hint_en: () => [
+        `📏 In Python, lines after <code>if</code>, <code>for</code>, <code>def</code> must be indented (4 spaces).`,
+        `📏 Make sure all lines in the same block have the same indentation.`,
+        `📏 Don't mix spaces and tabs.`,
+      ],
+    },
+    {
+      match: /TypeError.*unsupported operand.*'str'.*'int'|'int'.*'str'/i,
+      he: () => `<b>TypeError</b>: אי-אפשר לחבר/לבצע פעולה בין מספר למחרוזת. 🔢`,
+      en: () => `<b>TypeError</b>: Cannot operate between a number and a string. 🔢`,
+      hint_he: () => [
+        `🔄 השתמש ב-<code>str(x)</code> כדי להמיר מספר למחרוזת.`,
+        `🔄 השתמש ב-<code>int(x)</code> כדי להמיר מחרוזת למספר.`,
+        `💡 דוגמה: <code>"גיל: " + str(25)</code> או <code>int("5") + 3</code>`,
+      ],
+      hint_en: () => [
+        `🔄 Use <code>str(x)</code> to convert a number to a string.`,
+        `🔄 Use <code>int(x)</code> to convert a string to a number.`,
+        `💡 Example: <code>"Age: " + str(25)</code> or <code>int("5") + 3</code>`,
+      ],
+    },
+    {
+      match: /TypeError.*takes \d+.*argument.*but \d+/i,
+      he: () => `<b>TypeError</b>: שלחת מספר שגוי של ארגומנטים לפונקציה. 🎯`,
+      en: () => `<b>TypeError</b>: Wrong number of arguments passed to function. 🎯`,
+      hint_he: () => [
+        `🔍 בדוק שהפונקציה מקבלת בדיוק את מספר הארגומנטים הדרושים.`,
+        `💡 אם הפונקציה מוגדרת כ-<code>def f(a, b)</code> צריך לקרוא כ-<code>f(1, 2)</code>.`,
+      ],
+      hint_en: () => [
+        `🔍 Check that the function receives exactly the required arguments.`,
+        `💡 If defined as <code>def f(a, b)</code> call as <code>f(1, 2)</code>.`,
+      ],
+    },
+    {
+      match: /ZeroDivisionError/i,
+      he: () => `<b>ZeroDivisionError</b>: אי-אפשר לחלק ב-0. ➗`,
+      en: () => `<b>ZeroDivisionError</b>: Cannot divide by 0. ➗`,
+      hint_he: () => [
+        `🔍 בדוק שהמכנה (המספר שמחלקים בו) אינו 0.`,
+        `💡 הוסף תנאי לפני החלוקה: <code>if y != 0: print(x / y)</code>`,
+      ],
+      hint_en: () => [
+        `🔍 Check that the denominator isn't 0.`,
+        `💡 Add a condition: <code>if y != 0: print(x / y)</code>`,
+      ],
+    },
+    {
+      match: /IndexError.*out of range/i,
+      he: () => `<b>IndexError</b>: ניסית לגשת לאיבר שלא קיים ברשימה. 📋`,
+      en: () => `<b>IndexError</b>: Tried to access an item that doesn't exist in the list. 📋`,
+      hint_he: () => [
+        `🔢 רשימה באורך 5 — האינדקסים שלה הם 0, 1, 2, 3, 4 (לא 5!).`,
+        `📏 השתמש ב-<code>len(list)</code> כדי לבדוק את אורך הרשימה.`,
+        `💡 גישה לאיבר האחרון: <code>list[-1]</code>.`,
+      ],
+      hint_en: () => [
+        `🔢 A list of length 5 has indices 0, 1, 2, 3, 4 (not 5!).`,
+        `📏 Use <code>len(list)</code> to check list length.`,
+        `💡 Access the last item with <code>list[-1]</code>.`,
+      ],
+    },
+    {
+      match: /KeyError.*'?([^']+)'?/i,
+      he: (m) => `<b>KeyError</b>: המפתח <code>${m[1] || '?'}</code> לא קיים במילון. 🔑`,
+      en: (m) => `<b>KeyError</b>: The key <code>${m[1] || '?'}</code> doesn't exist in the dictionary. 🔑`,
+      hint_he: (m) => [
+        `🔍 בדוק את כתיב המפתח — שמות במילון רגישים לאותיות גדולות/קטנות.`,
+        `🛡 השתמש ב-<code>.get()</code> לגישה בטוחה: <code>dict.get("${m[1] || 'key'}", "default")</code>`,
+        `🔍 כדי לבדוק אם מפתח קיים: <code>if "${m[1] || 'key'}" in dict:</code>`,
+      ],
+      hint_en: (m) => [
+        `🔍 Check the key spelling — dictionary keys are case-sensitive.`,
+        `🛡 Use <code>.get()</code> for safe access: <code>dict.get("${m[1] || 'key'}", "default")</code>`,
+        `🔍 Check if key exists with <code>if "${m[1] || 'key'}" in dict:</code>`,
+      ],
+    },
+    {
+      match: /ValueError.*invalid literal for int/i,
+      he: () => `<b>ValueError</b>: ניסית להמיר מחרוזת שאינה מספר ל-int. 🔢`,
+      en: () => `<b>ValueError</b>: Tried converting a non-numeric string to int. 🔢`,
+      hint_he: () => [
+        `🔍 רק מחרוזות עם ספרות יכולות להפוך למספר: <code>int("123")</code> ✅`,
+        `❌ לא: <code>int("abc")</code> או <code>int("3.5")</code>`,
+        `💡 ל-float עם ספרות עשרוניות: <code>float("3.5")</code>`,
+      ],
+      hint_en: () => [
+        `🔍 Only digit strings can be converted: <code>int("123")</code> ✅`,
+        `❌ Not: <code>int("abc")</code> or <code>int("3.5")</code>`,
+        `💡 For decimals use: <code>float("3.5")</code>`,
+      ],
+    },
+    {
+      match: /AttributeError.*'(\w+)'.*object has no attribute '(\w+)'/i,
+      he: (m) => `<b>AttributeError</b>: לאובייקט מסוג <code>${m[1]}</code> אין המתודה/תכונה <code>${m[2]}</code>. ⚙️`,
+      en: (m) => `<b>AttributeError</b>: Object of type <code>${m[1]}</code> has no attribute <code>${m[2]}</code>. ⚙️`,
+      hint_he: (m) => [
+        `🔍 בדוק את כתיב שם המתודה — Python רגיש לאותיות גדולות/קטנות.`,
+        `📚 בדוק שהמתודה <code>${m[2]}</code> אכן קיימת ב-<code>${m[1]}</code>.`,
+        `💡 אם זה <code>list</code>, מתודות נפוצות: <code>.append()</code>, <code>.remove()</code>, <code>.sort()</code>.`,
+      ],
+      hint_en: (m) => [
+        `🔍 Check the method name spelling — Python is case-sensitive.`,
+        `📚 Verify that <code>${m[2]}</code> exists on <code>${m[1]}</code>.`,
+        `💡 If it's <code>list</code>, common methods: <code>.append()</code>, <code>.remove()</code>, <code>.sort()</code>.`,
+      ],
+    },
+    {
+      match: /FileNotFoundError/i,
+      he: () => `<b>FileNotFoundError</b>: הקובץ לא נמצא. 📁`,
+      en: () => `<b>FileNotFoundError</b>: File not found. 📁`,
+      hint_he: () => [
+        `🔍 בדוק את הנתיב לקובץ.`,
+        `💡 בסימולטור שלנו אין גישה לקבצים אמיתיים — השתמש ב-<code>data.load()</code> עבור דאטהסטים.`,
+      ],
+      hint_en: () => [
+        `🔍 Check the file path.`,
+        `💡 Our simulator doesn't access real files — use <code>data.load()</code> for datasets.`,
+      ],
+    },
+    {
+      match: /ImportError|ModuleNotFoundError/i,
+      he: (m) => `<b>ImportError</b>: לא ניתן לייבא את הספרייה. 📚`,
+      en: (m) => `<b>ImportError</b>: Cannot import the library. 📚`,
+      hint_he: () => [
+        `🔍 הסימולטור (Skulpt) תומך רק בספריות מובנות: math, random, re, datetime, itertools, string, collections.`,
+        `❌ אינו תומך: numpy, pandas, matplotlib (אך יש לנו DataFrame משלנו דרך <code>data.load()</code>).`,
+        `💡 לעבודה אמיתית עם pandas/numpy — הורד Python למחשב או השתמש ב-Google Colab.`,
+      ],
+      hint_en: () => [
+        `🔍 The simulator (Skulpt) only supports built-in libraries: math, random, re, datetime, itertools, string, collections.`,
+        `❌ Does not support: numpy, pandas, matplotlib (but we have our own DataFrame via <code>data.load()</code>).`,
+        `💡 For real pandas/numpy work — install Python locally or use Google Colab.`,
+      ],
+    },
+    {
+      match: /RecursionError|maximum recursion/i,
+      he: () => `<b>RecursionError</b>: יותר מדי קריאות רקורסיביות. 🌀`,
+      en: () => `<b>RecursionError</b>: Too many recursive calls. 🌀`,
+      hint_he: () => [
+        `🔍 ודא שיש תנאי עצירה (base case) בפונקציה הרקורסיבית.`,
+        `💡 דוגמה: <code>if n == 0: return 1</code>`,
+      ],
+      hint_en: () => [
+        `🔍 Make sure there's a base case in the recursive function.`,
+        `💡 Example: <code>if n == 0: return 1</code>`,
+      ],
+    },
+    // Generic fallback
+    {
+      match: /^([A-Z]\w*Error)/i,
+      he: (m) => `<b>${m[1]}</b>: יש שגיאה בקוד. בדוק את ההודעה למעלה. 🔍`,
+      en: (m) => `<b>${m[1]}</b>: There's an error in the code. Check the message above. 🔍`,
+      hint_he: () => [
+        `📖 קרא את הודעת השגיאה בקפידה — היא בדרך כלל מצביעה על מספר השורה והבעיה.`,
+        `💡 אם תקועים, לחץ "הצג פתרון" וראה איך זה אמור להיראות.`,
+      ],
+      hint_en: () => [
+        `📖 Read the error message carefully — it usually points to the line number and problem.`,
+        `💡 If stuck, click "Show Solution" to see how it should look.`,
+      ],
+    },
+  ];
+  
+  // ---- Main: explain an error ----
+  function explainError(errorText) {
+    if (!errorText || typeof errorText !== 'string') return null;
+    
+    for (const pat of ERROR_PATTERNS) {
+      const m = errorText.match(pat.match);
+      if (m) {
+        const explanation = IS_RTL ? pat.he(m) : pat.en(m);
+        const hintFn = IS_RTL ? pat.hint_he : pat.hint_en;
+        const hints = hintFn(m);
+        return { explanation, hints };
+      }
+    }
+    return null;
+  }
+  
+  // ---- UI: Show explanation box ----
+  function showExplanation(targetEl, errorText) {
+    const result = explainError(errorText);
+    if (!result) return;
+    
+    // Remove old explanation if exists
+    const old = targetEl.parentElement.querySelector('.gam-ai-helper');
+    if (old) old.remove();
+    
+    const box = document.createElement('div');
+    box.className = 'gam-ai-helper';
+    
+    const hintsHTML = result.hints.map(h => `<li>${h}</li>`).join('');
+    
+    box.innerHTML = `
+      <div class="gam-ai-header">
+        <span class="gam-ai-icon">🤖</span>
+        <span class="gam-ai-title">${IS_RTL ? 'עוזר חכם' : 'AI Helper'}</span>
+        <button class="gam-ai-close" aria-label="${IS_RTL ? 'סגור' : 'Close'}">&times;</button>
+      </div>
+      <div class="gam-ai-body">
+        <div class="gam-ai-explain">${result.explanation}</div>
+        <div class="gam-ai-hints-title">${IS_RTL ? '💡 איך לתקן:' : '💡 How to fix:'}</div>
+        <ul class="gam-ai-hints">${hintsHTML}</ul>
+      </div>
+    `;
+    
+    // Insert after the target
+    targetEl.parentElement.insertBefore(box, targetEl.nextSibling);
+    
+    // Animate in
+    setTimeout(() => box.classList.add('show'), 10);
+    
+    // Close button
+    box.querySelector('.gam-ai-close').addEventListener('click', () => {
+      box.classList.remove('show');
+      setTimeout(() => box.remove(), 300);
+    });
+  }
+  
+  // ---- Hook into output displays ----
+  function observeOutputs() {
+    // Find output boxes when they show errors
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(m => {
+        if (m.type === 'childList' || m.type === 'characterData') {
+          const target = m.target;
+          // Check if it's an output box with error content
+          let el = target.nodeType === 1 ? target : target.parentElement;
+          while (el && !el.classList) el = el.parentElement;
+          
+          if (el && el.classList && (
+              el.classList.contains('output-box') ||
+              el.classList.contains('out') ||
+              el.id?.startsWith('out-'))) {
+            const text = el.textContent || '';
+            // Check for error patterns
+            if (/Error:|Traceback/i.test(text)) {
+              // Avoid duplicates
+              if (!el.parentElement.querySelector('.gam-ai-helper')) {
+                showExplanation(el, text);
+              }
+            }
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  }
+  
+  // ---- Public API ----
+  window.gamAI = {
+    explain: explainError,
+    show: showExplanation,
+  };
+  
+  // ---- Init ----
+  function init() {
+    observeOutputs();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+/* SOUND EFFECTS */
+/* ============================================================
+   SOUND EFFECTS — Web Audio API (no external files)
+   Pure JS, works offline, mobile-friendly
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  // ---- Mute toggle (saved to localStorage) ----
+  function isMuted() { return localStorage.getItem('gam_muted') === '1'; }
+  function setMuted(b) { localStorage.setItem('gam_muted', b ? '1' : '0'); }
+  
+  // ---- AudioContext (lazy initialization, mobile-safe) ----
+  let audioCtx = null;
+  function getCtx() {
+    if (audioCtx) return audioCtx;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      audioCtx = new AC();
+      return audioCtx;
+    } catch(e) { return null; }
+  }
+  
+  // ---- Play a tone ----
+  function tone(freq, duration, type = 'sine', vol = 0.15, delay = 0) {
+    if (isMuted()) return;
+    const ctx = getCtx();
+    if (!ctx) return;
+    
+    // Resume context on first user interaction (mobile requirement)
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    
+    gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + delay + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + duration);
+  }
+  
+  // ---- Sound presets ----
+  const SOUNDS = {
+    // Exercise correct - bright ascending chime
+    correct: () => {
+      tone(523.25, 0.15, 'sine', 0.15, 0);     // C5
+      tone(659.25, 0.15, 'sine', 0.15, 0.1);   // E5
+      tone(783.99, 0.25, 'sine', 0.18, 0.2);   // G5
+    },
+    
+    // Exercise incorrect - soft descending hum
+    wrong: () => {
+      tone(330, 0.15, 'sine', 0.1, 0);
+      tone(247, 0.2, 'sine', 0.1, 0.12);
+    },
+    
+    // XP earned - quick double pop
+    xp: () => {
+      tone(800, 0.08, 'sine', 0.12, 0);
+      tone(1200, 0.12, 'sine', 0.12, 0.07);
+    },
+    
+    // Level up - triumphant fanfare
+    levelUp: () => {
+      tone(523.25, 0.12, 'square', 0.1, 0);      // C5
+      tone(659.25, 0.12, 'square', 0.1, 0.1);    // E5
+      tone(783.99, 0.12, 'square', 0.1, 0.2);    // G5
+      tone(1046.50, 0.3,  'square', 0.12, 0.3);  // C6
+    },
+    
+    // Badge unlock - magical sparkle
+    badge: () => {
+      tone(880, 0.1,  'sine', 0.1, 0);     // A5
+      tone(1108.73, 0.1, 'sine', 0.1, 0.08); // C#6
+      tone(1318.51, 0.1, 'sine', 0.12, 0.16); // E6
+      tone(1760, 0.25, 'sine', 0.13, 0.24); // A6
+    },
+    
+    // Streak continues - soft bell
+    streak: () => {
+      tone(659.25, 0.15, 'sine', 0.12, 0);
+      tone(987.77, 0.3, 'sine', 0.1, 0.1);
+    },
+    
+    // Click - subtle UI tick
+    click: () => {
+      tone(2000, 0.03, 'sine', 0.06, 0);
+    },
+    
+    // Module complete - full celebration
+    complete: () => {
+      tone(523.25, 0.1, 'sine', 0.12, 0);
+      tone(659.25, 0.1, 'sine', 0.12, 0.08);
+      tone(783.99, 0.1, 'sine', 0.12, 0.16);
+      tone(1046.50, 0.4, 'sine', 0.15, 0.24);
+    },
+  };
+  
+  // ---- Public API ----
+  window.gamSound = {
+    play: function(name) {
+      if (SOUNDS[name]) {
+        try { SOUNDS[name](); } catch(e) { /* swallow */ }
+      }
+    },
+    isMuted: isMuted,
+    setMuted: setMuted,
+    toggle: function() {
+      const newState = !isMuted();
+      setMuted(newState);
+      updateMuteUI();
+      if (!newState) SOUNDS.click();  // confirm sound when unmuting
+      return newState;
+    },
+  };
+  
+  // ---- Mute toggle button (added to HUD) ----
+  function updateMuteUI() {
+    const btn = document.getElementById('gam-mute-btn');
+    if (btn) btn.textContent = isMuted() ? '🔇' : '🔊';
+  }
+  
+  function addMuteButton() {
+    if (document.getElementById('gam-mute-btn')) return;
+    const hud = document.getElementById('gam-hud');
+    if (!hud) {
+      // Try again later
+      setTimeout(addMuteButton, 500);
+      return;
+    }
+    
+    const btn = document.createElement('button');
+    btn.id = 'gam-mute-btn';
+    btn.className = 'gam-mute-btn';
+    btn.textContent = isMuted() ? '🔇' : '🔊';
+    btn.setAttribute('aria-label', 'Toggle sound');
+    btn.style.cssText = `
+      pointer-events: auto;
+      background: rgba(30,35,70,0.85);
+      border: 1.5px solid #4a5494;
+      border-radius: 50%;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-inline-end: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s ease;
+    `;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.gamSound.toggle();
+    });
+    
+    hud.insertBefore(btn, hud.firstChild);
+  }
+  
+  // ---- Hook into gam events (XP, badges, levels) ----
+  function hookGamEvents() {
+    if (!window.gam) {
+      setTimeout(hookGamEvents, 200);
+      return;
+    }
+    
+    // Wrap original markExercisePassed
+    const origMark = window.gam.markExercisePassed;
+    window.gam.markExercisePassed = function(...args) {
+      const result = origMark.apply(this, args);
+      if (result) window.gamSound.play('correct');
+      return result;
+    };
+  }
+  
+  // ---- Init ----
+  function init() {
+    addMuteButton();
+    hookGamEvents();
+    
+    // Observe DOM for badge/level modals to play sounds
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType !== 1) return;
+          if (node.classList && node.classList.contains('gam-celebration')) {
+            if (node.classList.contains('gam-badge-unlock')) {
+              window.gamSound.play('badge');
+            } else {
+              window.gamSound.play('levelUp');
+            }
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true });
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+/* CERTIFICATE GENERATOR */
+/* ============================================================
+   CERTIFICATE GENERATOR
+   Pure HTML/CSS certificate, downloadable as PDF via browser print
+   Shareable on LinkedIn
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
+  
+  const T = IS_RTL ? {
+    certTitle: 'תעודת השלמה',
+    awarded: 'הוענקה ל-',
+    forCompleting: 'על השלמת',
+    pythonCourse: 'קורס Python מקיף',
+    pandasCourse: 'קורס Pandas מקיף',
+    quizCourse: 'אתגר 100 שאלות Python',
+    fullCourse: 'מסלול מלא בקוד דאטה',
+    issued: 'תאריך',
+    instructor: 'מדריך',
+    eliranName: 'אלירן גרוסמן',
+    eliranTitle: 'מרצה SQL ב-Partner Communications',
+    siteName: 'קוד דאטה',
+    siteUrl: 'egrosman1.github.io/sql-course',
+    yourName: 'שמך כאן',
+    enterName: 'הכנס שם לתעודה',
+    download: 'הורד / הדפס',
+    share: 'שתף ב-LinkedIn',
+    close: 'סגור',
+    statsTitle: 'הישגיך',
+    exercisesDone: 'תרגילים נפתרו',
+    daysActive: 'ימים פעילים',
+    xpEarned: 'XP נצברו',
+    badgesEarned: 'מדליות',
+    achievementsTitle: 'תעודת הצטיינות',
+    sealText: 'אישור רשמי',
+    serialPrefix: 'מס\' תעודה',
+    yourCertificate: 'התעודה שלך',
+    notEligibleTitle: '🎯 עוד לא זמין',
+    notEligibleDesc: 'אתה צריך לסיים לפחות 50 תרגילים כדי לקבל תעודה.',
+    progress: 'התקדמות',
+    eligibleMsg: '🎉 כל הכבוד! זכאי לתעודה',
+  } : {
+    certTitle: 'Certificate of Completion',
+    awarded: 'Awarded to',
+    forCompleting: 'for completing',
+    pythonCourse: 'Python Comprehensive Course',
+    pandasCourse: 'Pandas Comprehensive Course',
+    quizCourse: '100 Python Questions Challenge',
+    fullCourse: 'Full Data Code Track',
+    issued: 'Issued',
+    instructor: 'Instructor',
+    eliranName: 'Eliran Grossman',
+    eliranTitle: 'SQL Instructor at Partner Communications',
+    siteName: 'Data Code',
+    siteUrl: 'egrosman1.github.io/sql-course',
+    yourName: 'Your Name Here',
+    enterName: 'Enter name for certificate',
+    download: 'Download / Print',
+    share: 'Share on LinkedIn',
+    close: 'Close',
+    statsTitle: 'Your Achievements',
+    exercisesDone: 'Exercises Solved',
+    daysActive: 'Active Days',
+    xpEarned: 'XP Earned',
+    badgesEarned: 'Badges',
+    achievementsTitle: 'Certificate of Excellence',
+    sealText: 'Verified',
+    serialPrefix: 'Cert No.',
+    yourCertificate: 'Your Certificate',
+    notEligibleTitle: '🎯 Not yet available',
+    notEligibleDesc: 'You need to complete at least 50 exercises to earn a certificate.',
+    progress: 'Progress',
+    eligibleMsg: '🎉 Congrats! Eligible for certificate',
+  };
+  
+  // ---- Determine what certificate to award ----
+  function getCertificateType() {
+    let passed = {};
+    try { passed = JSON.parse(localStorage.getItem('gam_passedEx') || '{}'); } catch(e){}
+    
+    const pythonCount = passed['python-lesson'] ? Object.keys(passed['python-lesson']).length : 0;
+    const pandasCount = passed['pandas-lesson'] ? Object.keys(passed['pandas-lesson']).length : 0;
+    const quizCount   = passed['quiz-python-100'] ? Object.keys(passed['quiz-python-100']).length : 0;
+    
+    const total = pythonCount + pandasCount + quizCount;
+    
+    return {
+      total: total,
+      pythonCount, pandasCount, quizCount,
+      eligible: total >= 50,
+      perfect: pythonCount >= 170 && pandasCount >= 150 && quizCount >= 100,
+      pythonComplete: pythonCount >= 170,
+      pandasComplete: pandasCount >= 150,
+      quizComplete: quizCount >= 100,
+    };
+  }
+  
+  function getCertificateTitle(certType) {
+    if (certType.perfect) return T.fullCourse;
+    if (certType.pythonComplete && certType.pandasComplete) return T.fullCourse;
+    if (certType.pythonComplete) return T.pythonCourse;
+    if (certType.pandasComplete) return T.pandasCourse;
+    if (certType.quizComplete) return T.quizCourse;
+    return T.fullCourse;
+  }
+  
+  // ---- Serial number (deterministic, based on first achievement date) ----
+  function getSerialNumber() {
+    let serial = localStorage.getItem('gam_certSerial');
+    if (!serial) {
+      const ts = Date.now();
+      serial = 'DC-' + ts.toString(36).toUpperCase() + '-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      localStorage.setItem('gam_certSerial', serial);
+    }
+    return serial;
+  }
+  
+  // ---- Open certificate modal ----
+  function open() {
+    const certType = getCertificateType();
+    
+    if (document.getElementById('cert-modal')) return;
+    
+    const xp = (window.gam && window.gam.getXP) ? window.gam.getXP() : 0;
+    const badges = (window.gam && window.gam.getBadges) ? window.gam.getBadges().length : 0;
+    const days = JSON.parse(localStorage.getItem('gam_days') || '[]').length;
+    const total = certType.total;
+    
+    let name = localStorage.getItem('gam_userName') || '';
+    
+    const modal = document.createElement('div');
+    modal.id = 'cert-modal';
+    
+    if (!certType.eligible) {
+      // Show progress message
+      const pct = Math.floor((total / 50) * 100);
+      modal.innerHTML = `
+        <div class="cert-modal-inner">
+          <button class="cert-close" aria-label="${T.close}">&times;</button>
+          <div class="cert-locked">
+            <div class="cert-locked-icon">🏆</div>
+            <h2>${T.notEligibleTitle}</h2>
+            <p>${T.notEligibleDesc}</p>
+            <div class="cert-progress-wrap">
+              <div class="cert-progress-bar">
+                <div class="cert-progress-fill" style="width:${Math.min(100, pct)}%"></div>
+              </div>
+              <div class="cert-progress-text">${total} / 50 (${pct}%)</div>
+            </div>
+            <div class="cert-stats-mini">
+              <div>🐍 Python: <strong>${certType.pythonCount}</strong> / 170</div>
+              <div>🐼 Pandas: <strong>${certType.pandasCount}</strong> / 150</div>
+              <div>🎓 Quiz: <strong>${certType.quizCount}</strong> / 100</div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      setTimeout(() => modal.classList.add('show'), 10);
+      modal.querySelector('.cert-close').addEventListener('click', close);
+      modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      return;
+    }
+    
+    // Eligible - show certificate
+    const today = new Date();
+    const dateStr = IS_RTL 
+      ? `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`
+      : today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const serial = getSerialNumber();
+    const title = getCertificateTitle(certType);
+    
+    modal.innerHTML = `
+      <div class="cert-modal-inner">
+        <button class="cert-close" aria-label="${T.close}">&times;</button>
+        <h2 class="cert-modal-title">${T.yourCertificate}</h2>
+        
+        <div class="cert-eligible-banner">${T.eligibleMsg}</div>
+        
+        <div class="cert-name-input-wrap">
+          <label for="cert-name-input">${T.enterName}:</label>
+          <input type="text" id="cert-name-input" value="${name}" placeholder="${IS_RTL ? 'אלירן ישראלי' : 'John Doe'}" maxlength="60">
+        </div>
+        
+        <div class="cert-preview-wrap">
+          <div class="cert-preview" id="cert-preview">
+            ${buildCertificateHTML(name || T.yourName, title, dateStr, serial, certType, xp, badges, days)}
+          </div>
+        </div>
+        
+        <div class="cert-actions">
+          <button class="cert-btn cert-btn-primary" id="cert-download">📥 ${T.download}</button>
+          <button class="cert-btn cert-btn-share" id="cert-share">💼 ${T.share}</button>
+        </div>
+        
+        <div class="cert-stats-strip">
+          <div><strong>${total}</strong><br>${T.exercisesDone}</div>
+          <div><strong>${days}</strong><br>${T.daysActive}</div>
+          <div><strong>${xp.toLocaleString()}</strong><br>${T.xpEarned}</div>
+          <div><strong>${badges}</strong><br>${T.badgesEarned}</div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('show'), 10);
+    
+    // Wire up
+    modal.querySelector('.cert-close').addEventListener('click', close);
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    
+    const nameInput = modal.querySelector('#cert-name-input');
+    nameInput.addEventListener('input', e => {
+      const newName = e.target.value.trim();
+      localStorage.setItem('gam_userName', newName);
+      const preview = modal.querySelector('#cert-preview');
+      preview.innerHTML = buildCertificateHTML(newName || T.yourName, title, dateStr, serial, certType, xp, badges, days);
+    });
+    
+    modal.querySelector('#cert-download').addEventListener('click', () => downloadCertificate(name || T.yourName, title, dateStr, serial, certType, xp, badges, days));
+    modal.querySelector('#cert-share').addEventListener('click', () => shareLinkedIn(title));
+  }
+  
+  function close() {
+    const modal = document.getElementById('cert-modal');
+    if (modal) {
+      modal.classList.remove('show');
+      setTimeout(() => modal.remove(), 300);
+    }
+  }
+  
+  // ---- Build the certificate HTML (this is the actual certificate visual) ----
+  function buildCertificateHTML(name, title, dateStr, serial, certType, xp, badges, days) {
+    const escName = name.replace(/</g, '&lt;');
+    return `
+      <div class="cert-doc">
+        <div class="cert-doc-border">
+          <div class="cert-doc-inner">
+            <div class="cert-doc-header">
+              <div class="cert-logo">📊</div>
+              <div class="cert-site-name">${T.siteName}</div>
+              <div class="cert-site-url">${T.siteUrl}</div>
+            </div>
+            
+            <h1 class="cert-doc-title">${T.certTitle}</h1>
+            <div class="cert-doc-subtitle">${T.achievementsTitle}</div>
+            
+            <div class="cert-doc-awarded">${T.awarded}</div>
+            <div class="cert-doc-name">${escName}</div>
+            
+            <div class="cert-doc-for">${T.forCompleting}</div>
+            <div class="cert-doc-course">${title}</div>
+            
+            <div class="cert-doc-achievements">
+              <div class="cert-doc-stat"><span>${certType.total}</span>${T.exercisesDone}</div>
+              <div class="cert-doc-stat"><span>${days}</span>${T.daysActive}</div>
+              <div class="cert-doc-stat"><span>${xp.toLocaleString()}</span>${T.xpEarned}</div>
+              <div class="cert-doc-stat"><span>${badges}</span>${T.badgesEarned}</div>
+            </div>
+            
+            <div class="cert-doc-footer">
+              <div class="cert-doc-side">
+                <div class="cert-doc-line"></div>
+                <div class="cert-doc-label">${T.instructor}</div>
+                <div class="cert-doc-value">${T.eliranName}</div>
+                <div class="cert-doc-sublabel">${T.eliranTitle}</div>
+              </div>
+              <div class="cert-doc-seal">
+                <div class="cert-doc-seal-circle">
+                  <div class="cert-doc-seal-inner">
+                    <div class="cert-doc-seal-icon">✓</div>
+                    <div class="cert-doc-seal-text">${T.sealText}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="cert-doc-side">
+                <div class="cert-doc-line"></div>
+                <div class="cert-doc-label">${T.issued}</div>
+                <div class="cert-doc-value">${dateStr}</div>
+                <div class="cert-doc-sublabel">${T.serialPrefix}: ${serial}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // ---- Download/Print the certificate as PDF ----
+  function downloadCertificate(name, title, dateStr, serial, certType, xp, badges, days) {
+    // Open new window with just the certificate
+    const certHTML = buildCertificateHTML(name, title, dateStr, serial, certType, xp, badges, days);
+    const css = getCertificateCSS();
+    
+    const win = window.open('', '_blank', 'width=900,height=700');
+    if (!win) {
+      alert(IS_RTL ? 'אנא אפשר חלונות קופצים בדפדפן' : 'Please allow popups');
+      return;
+    }
+    
+    win.document.write(`
+      <!DOCTYPE html>
+      <html lang="${IS_RTL ? 'he' : 'en'}" dir="${IS_RTL ? 'rtl' : 'ltr'}">
+      <head>
+        <meta charset="UTF-8">
+        <title>${T.certTitle} - ${name}</title>
+        <style>
+          ${css}
+          @page { size: A4 landscape; margin: 0; }
+          body {
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .cert-doc { transform: none !important; margin: 20px; }
+          .cert-print-bar {
+            position: fixed;
+            top: 20px;
+            ${IS_RTL ? 'left' : 'right'}: 20px;
+            background: #1a1f3a;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            z-index: 9999;
+          }
+          .cert-print-bar button {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+          }
+          @media print {
+            .cert-print-bar { display: none; }
+            body { background: #fff; }
+            .cert-doc { margin: 0; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="cert-print-bar">
+          <button onclick="window.print()">🖨️ ${IS_RTL ? 'הדפס / שמור כ-PDF' : 'Print / Save as PDF'}</button>
+          <button onclick="window.close()" style="background:#444;color:#fff;">✕</button>
+        </div>
+        ${certHTML}
+      </body>
+      </html>
+    `);
+    win.document.close();
+    
+    // Auto-trigger print after load
+    setTimeout(() => {
+      try { win.print(); } catch(e) {}
+    }, 600);
+  }
+  
+  // ---- Share on LinkedIn ----
+  function shareLinkedIn(title) {
+    const url = 'https://egrosman1.github.io/sql-course/' + (IS_RTL ? '' : 'en/');
+    const text = IS_RTL 
+      ? `🎉 סיימתי את "${title}" בקוד דאטה! קורס פייתון ופאנדס חינמי בעברית.`
+      : `🎉 Just completed "${title}" at Data Code! Free Python and Pandas course.`;
+    
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`;
+    window.open(linkedinUrl, '_blank', 'width=600,height=600');
+  }
+  
+  // ---- CSS for the certificate document itself ----
+  function getCertificateCSS() {
+    return `
+.cert-doc {
+  width: 100%;
+  max-width: 850px;
+  aspect-ratio: 1.414 / 1;
+  background: linear-gradient(135deg, #fffef9 0%, #fff8e7 100%);
+  padding: 14px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  position: relative;
+}
+.cert-doc-border {
+  width: 100%;
+  height: 100%;
+  border: 3px solid #d4af37;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.cert-doc-inner {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid #d4af37;
+  padding: 26px 32px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: -apple-system, "Heebo", Georgia, serif;
+}
+.cert-doc-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.cert-logo { font-size: 32px; line-height: 1; }
+.cert-site-name { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-top: 2px; }
+.cert-site-url { font-size: 11px; color: #888; font-style: italic; margin-top: 1px; }
+
+.cert-doc-title {
+  font-size: 32px;
+  color: #1a1a2e;
+  margin: 8px 0 2px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.cert-doc-subtitle {
+  font-size: 13px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.cert-doc-awarded {
+  font-size: 13px;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.cert-doc-name {
+  font-size: 34px;
+  font-weight: 700;
+  color: #1a1a2e;
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 8px;
+  margin: 0 30px 12px;
+  font-family: "Heebo", Georgia, serif;
+}
+.cert-doc-for {
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.cert-doc-course {
+  font-size: 22px;
+  color: #d4af37;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.cert-doc-achievements {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 0 40px 14px;
+  padding: 8px 0;
+  border-top: 1px solid #e6d68a;
+  border-bottom: 1px solid #e6d68a;
+}
+.cert-doc-stat {
+  font-size: 9.5px;
+  color: #888;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.cert-doc-stat span {
+  display: block;
+  font-size: 18px;
+  color: #1a1a2e;
+  font-weight: 800;
+  margin-bottom: 1px;
+}
+
+.cert-doc-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+.cert-doc-side { text-align: center; }
+.cert-doc-line {
+  border-top: 1.5px solid #1a1a2e;
+  width: 80%;
+  margin: 0 auto 4px;
+}
+.cert-doc-label {
+  font-size: 9.5px;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+  letter-spacing: 0.5px;
+}
+.cert-doc-value {
+  font-size: 12.5px;
+  color: #1a1a2e;
+  font-weight: 700;
+}
+.cert-doc-sublabel {
+  font-size: 9.5px;
+  color: #888;
+  font-style: italic;
+  margin-top: 1px;
+}
+
+.cert-doc-seal-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(212,175,55,0.45);
+}
+.cert-doc-seal-circle::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1.5px dashed #d4af37;
+  border-radius: 50%;
+}
+.cert-doc-seal-inner {
+  width: 56px;
+  height: 56px;
+  background: #fff8e7;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cert-doc-seal-icon {
+  font-size: 22px;
+  color: #d4af37;
+  font-weight: 800;
+  line-height: 1;
+}
+.cert-doc-seal-text {
+  font-size: 8px;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  margin-top: 1px;
+}
+
+@media (max-width: 600px) {
+  .cert-doc { padding: 8px; }
+  .cert-doc-inner { padding: 16px 18px; }
+  .cert-doc-title { font-size: 22px; }
+  .cert-doc-name { font-size: 22px; margin: 0 8px 8px; }
+  .cert-doc-course { font-size: 16px; }
+  .cert-doc-achievements { grid-template-columns: repeat(2, 1fr); margin: 0 8px 10px; }
+  .cert-doc-stat span { font-size: 15px; }
+  .cert-doc-footer { gap: 8px; }
+  .cert-doc-seal-circle { width: 52px; height: 52px; }
+  .cert-doc-seal-inner { width: 42px; height: 42px; }
+  .cert-doc-seal-icon { font-size: 18px; }
+  .cert-doc-seal-text { font-size: 7px; }
+  .cert-doc-value { font-size: 11px; }
+  .cert-doc-label { font-size: 8.5px; }
+  .cert-doc-sublabel { font-size: 8.5px; }
+}
+    `;
+  }
+  
+  // ---- Public API ----
+  window.gamCert = {
+    open: open,
+    isEligible: () => getCertificateType().eligible,
+  };
+  
+  // ---- Inject base CSS for the cert modal ----
+  function injectCertCSS() {
+    if (document.getElementById('cert-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'cert-styles';
+    style.textContent = `
+/* Cert modal */
+#cert-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s;
+  padding: 14px;
+  backdrop-filter: blur(4px);
+}
+#cert-modal.show { opacity: 1; }
+
+.cert-modal-inner {
+  background: #1a1f3a;
+  border-radius: 14px;
+  padding: 18px 14px;
+  max-width: 720px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  color: #fff;
+  position: relative;
+  font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+}
+
+.cert-close {
+  position: absolute;
+  top: 8px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 26px;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  line-height: 1;
+}
+[dir="ltr"] .cert-close { right: 8px; }
+[dir="rtl"] .cert-close { left: 8px; }
+.cert-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+.cert-modal-title { font-size: 18px; text-align: center; margin: 0 0 12px; color: #ffd700; }
+
+.cert-eligible-banner {
+  background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+  color: #fff;
+  padding: 9px;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cert-name-input-wrap {
+  margin-bottom: 12px;
+}
+.cert-name-input-wrap label {
+  display: block;
+  font-size: 12.5px;
+  margin-bottom: 4px;
+  color: #aab;
+  font-weight: 600;
+}
+.cert-name-input-wrap input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #252a52;
+  border: 1.5px solid #353a6b;
+  color: #fff;
+  font-size: 15px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+.cert-name-input-wrap input:focus { outline: none; border-color: #ffd700; }
+
+.cert-preview-wrap {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 9px;
+  margin-bottom: 12px;
+  overflow: auto;
+}
+.cert-preview {
+  transform-origin: top center;
+}
+${getCertificateCSS()}
+/* Scale preview down */
+.cert-preview .cert-doc { transform: scale(0.85); transform-origin: top center; margin-bottom: -10%; }
+
+.cert-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cert-btn {
+  padding: 11px;
+  border-radius: 9px;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.cert-btn-primary {
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #1a1a2e;
+}
+.cert-btn-share {
+  background: #0077b5;
+  color: #fff;
+}
+.cert-btn:hover, .cert-btn:active { transform: scale(0.98); }
+
+.cert-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  text-align: center;
+  font-size: 10px;
+  color: #aab;
+  padding-top: 12px;
+  border-top: 1px solid #353a6b;
+}
+.cert-stats-strip strong {
+  display: block;
+  font-size: 16px;
+  color: #ffd700;
+  margin-bottom: 2px;
+}
+
+/* Locked state */
+.cert-locked { text-align: center; padding: 16px 8px; }
+.cert-locked-icon { font-size: 56px; margin-bottom: 8px; opacity: 0.6; }
+.cert-locked h2 { font-size: 19px; margin: 8px 0 6px; color: #ffd700; }
+.cert-locked p { color: #aab; font-size: 13.5px; margin-bottom: 14px; }
+.cert-progress-wrap { margin-bottom: 14px; }
+.cert-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #14172a;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.cert-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700 0%, #ff8800 100%);
+  border-radius: 8px;
+  transition: width .5s ease;
+}
+.cert-progress-text { font-size: 12.5px; color: #ffd700; font-weight: 700; }
+.cert-stats-mini {
+  background: #252a52;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: ${IS_RTL ? 'right' : 'left'};
+}
+.cert-stats-mini strong { color: #ffd700; }
+
+@media (max-width: 480px) {
+  .cert-modal-inner { padding: 14px 10px; }
+  .cert-modal-title { font-size: 16px; }
+  .cert-preview .cert-doc { transform: scale(0.55); transform-origin: top center; }
+  .cert-preview-wrap { padding: 6px; max-height: 220px; }
+  .cert-actions { grid-template-columns: 1fr; }
+  .cert-btn { padding: 10px; font-size: 13px; }
+  .cert-stats-strip strong { font-size: 14px; }
+  .cert-stats-strip { font-size: 9.5px; gap: 3px; }
+}
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // ---- Add certificate button to gam panel ----
+  function addCertButton() {
+    // Watch for gam panel to open
+    const obs = new MutationObserver(() => {
+      const panel = document.getElementById('gam-panel');
+      if (panel && !panel.querySelector('.cert-link-btn')) {
+        const footer = panel.querySelector('.gam-footer');
+        if (footer) {
+          const link = document.createElement('button');
+          link.className = 'cert-link-btn';
+          link.textContent = '🏆 ' + (IS_RTL ? 'תעודת השלמה' : 'Certificate');
+          link.style.cssText = `
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-family: inherit;
+          `;
+          link.addEventListener('click', () => {
+            // Close gam panel first
+            const closeBtn = panel.querySelector('.gam-panel-close');
+            if (closeBtn) closeBtn.click();
+            setTimeout(open, 350);
+          });
+          footer.appendChild(link);
+        }
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: false });
+  }
+  
+  function init() {
+    injectCertCSS();
+    addCertButton();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+</body>
+</html>

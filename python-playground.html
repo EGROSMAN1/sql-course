@@ -1,0 +1,4019 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>פייתון בסיס · סביבת עבודה (Playground) | קורס פייתון</title>
+<meta name="description" content="סביבת Notebook אינטראקטיבית בסגנון Google Colab — תאים מרובים, שיתוף state, שמירה ושיתוף קוד. ללא התקנות, בעברית.">
+<meta name="robots" content="noindex">
+
+<style>
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#5A6478;
+  --cyan:#00E5FF;--green:#00E5A0;--orange:#FFB020;--red:#FF4060;--purple:#9B5CFF;--pink:#FF5C8A;
+  --py-blue:#4584B6;--py-yellow:#FFDE57;
+  --code-bg:#0a0e15;--code-text:#FFD580;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Heebo",Roboto,system-ui,Arial,sans-serif;line-height:1.55;direction:rtl;min-height:100vh}
+a{color:var(--cyan);text-decoration:none}
+
+/* TOPBAR */
+.topnav{display:flex;align-items:center;gap:.7rem;padding:.55rem 1rem;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50;flex-wrap:wrap}
+.back-btn{color:var(--text2);font-size:13px;font-weight:600;padding:5px 10px;border-radius:6px;background:var(--bg3);transition:all .12s;white-space:nowrap}
+.back-btn:hover{color:var(--text);background:var(--bg4)}
+.crumb{flex:1;font-size:13.5px;color:var(--text);font-weight:700;min-width:0;text-align:center}
+.crumb em{color:var(--py-yellow);font-style:normal}
+.status-pill{font-size:11px;font-weight:700;padding:4px 9px;border-radius:8px;background:rgba(0,229,160,.1);color:var(--green);border:1px solid rgba(0,229,160,.3);white-space:nowrap}
+
+/* TOOLBAR */
+.toolbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem .8rem;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;overflow-x:auto}
+.tb-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:.4rem .75rem;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .12s;font-family:inherit;display:inline-flex;align-items:center;gap:.3rem;white-space:nowrap}
+.tb-btn:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}
+.tb-btn.primary{background:linear-gradient(135deg,var(--cyan),var(--green));color:#000;border-color:transparent;font-weight:800}
+.tb-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,229,255,.3)}
+.tb-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.tb-sep{width:1px;height:20px;background:var(--border)}
+.tb-spacer{flex:1;min-width:.5rem}
+
+/* MAIN LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:1rem .8rem 5rem;display:flex;flex-direction:column;gap:.75rem}
+
+/* CELL */
+.cell{background:var(--bg2);border:1px solid var(--border);border-radius:11px;overflow:hidden;transition:border-color .15s}
+.cell:hover{border-color:var(--border2)}
+.cell.running{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
+.cell.success{border-color:rgba(0,229,160,.4)}
+.cell.error{border-color:rgba(255,64,96,.4)}
+
+.cell-header{background:var(--bg3);padding:.4rem .7rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid var(--border);font-size:11.5px}
+.cell-num{background:var(--bg);color:var(--text3);font-weight:800;width:24px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:"SF Mono",monospace}
+.cell-type{font-weight:700;color:var(--text2);padding:2px 7px;border-radius:5px;background:var(--bg);font-size:10.5px;cursor:pointer;border:1px solid var(--border)}
+.cell-type.markdown{background:rgba(255,222,87,.08);color:var(--py-yellow);border-color:rgba(255,222,87,.25)}
+.cell-spacer{flex:1}
+.cell-actions{display:flex;gap:.3rem}
+.cell-icon-btn{background:transparent;border:none;color:var(--text2);cursor:pointer;font-size:13px;padding:3px 6px;border-radius:4px;transition:all .12s;font-family:inherit}
+.cell-icon-btn:hover{color:var(--text);background:var(--bg)}
+.cell-icon-btn.run-btn{color:var(--green);font-weight:800}
+.cell-icon-btn.delete-btn:hover{color:var(--red)}
+
+/* Editor */
+.cell-editor-wrap{position:relative;background:var(--code-bg)}
+.cell-editor-wrap textarea{display:none}
+.markdown-preview{background:var(--bg);padding:.85rem 1rem;color:var(--text);font-size:14px;line-height:1.65;min-height:50px;direction:rtl}
+.markdown-preview h1,.markdown-preview h2,.markdown-preview h3{margin:.4rem 0;font-weight:700}
+.markdown-preview h1{font-size:1.4rem;color:var(--cyan)}
+.markdown-preview h2{font-size:1.2rem;color:var(--py-yellow)}
+.markdown-preview h3{font-size:1.05rem}
+.markdown-preview p{margin:.4rem 0}
+.markdown-preview code{background:var(--code-bg);color:var(--code-text);padding:1px 6px;border-radius:4px;font-family:"SF Mono",monospace;font-size:12.5px;direction:ltr;display:inline-block}
+.markdown-preview pre{background:var(--code-bg);padding:.6rem .8rem;border-radius:6px;margin:.5rem 0;direction:ltr;overflow-x:auto;text-align:left}
+.markdown-preview ul,.markdown-preview ol{padding-right:1.5rem}
+.markdown-preview a{color:var(--cyan)}
+
+/* Output */
+.cell-output{background:var(--bg);border-top:1px solid var(--border);padding:.7rem .9rem;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;line-height:1.55;color:var(--text);max-height:400px;overflow-y:auto;display:none}
+.cell-output.show{display:block}
+.cell-output.err{color:#ffb0b8;background:rgba(255,64,96,.04)}
+.cell-output-meta{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);direction:rtl;text-align:right;border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:.5rem;font-family:-apple-system,sans-serif;font-weight:700}
+.cell-output-chart{margin-top:.5rem;background:#fff;border-radius:6px;padding:.5rem;direction:ltr}
+
+/* Add Cell button */
+.add-cell-row{display:flex;justify-content:center;gap:.5rem;margin:.4rem 0}
+.add-cell-btn{background:var(--bg2);border:1px dashed var(--border2);color:var(--text2);padding:.45rem 1rem;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;font-family:inherit;display:inline-flex;align-items:center;gap:.3rem}
+.add-cell-btn:hover{border-color:var(--cyan);color:var(--cyan);border-style:solid}
+
+/* VARIABLE INSPECTOR */
+.inspector{background:var(--bg2);border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-top:1rem}
+.inspector-head{background:var(--bg3);padding:.55rem .9rem;display:flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none}
+.inspector-head:hover{background:var(--bg4)}
+.inspector-head .ico{font-size:1rem}
+.inspector-head .title{flex:1;font-weight:700;font-size:13px}
+.inspector-head .chevron{transition:transform .2s;color:var(--text2)}
+.inspector.collapsed .chevron{transform:rotate(180deg)}
+.inspector.collapsed .inspector-body{display:none}
+.inspector-body{padding:.6rem .8rem;direction:ltr;text-align:left}
+.inspector-empty{color:var(--text3);font-size:12px;text-align:center;padding:.7rem;direction:rtl;font-family:-apple-system,sans-serif}
+.var-row{display:flex;gap:.6rem;padding:.35rem 0;border-bottom:1px solid var(--border);font-family:"SF Mono",monospace;font-size:12px;align-items:center}
+.var-row:last-child{border-bottom:none}
+.var-name{color:var(--cyan);font-weight:700;min-width:80px}
+.var-type{color:var(--text3);font-size:10.5px;background:var(--bg);padding:1px 6px;border-radius:4px;font-weight:600}
+.var-value{color:var(--code-text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px}
+
+/* INPUT MODAL */
+.input-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.input-modal.show{display:flex}
+.input-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:1.4rem;max-width:480px;width:100%;direction:rtl}
+.input-box .prompt-text{font-size:14px;color:var(--text2);margin-bottom:.6rem}
+.input-box .prompt-code{background:var(--code-bg);color:var(--code-text);padding:.5rem .7rem;border-radius:6px;font-family:"SF Mono",monospace;font-size:13px;margin-bottom:.7rem;direction:ltr;text-align:left}
+.input-box input{width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);padding:.65rem .8rem;border-radius:8px;font-size:14px;font-family:inherit;direction:ltr;text-align:left}
+.input-box input:focus{outline:none;border-color:var(--cyan)}
+.input-box .btns{display:flex;gap:.5rem;margin-top:.8rem;justify-content:flex-end}
+.input-box .btns button{padding:.55rem 1.1rem;border-radius:7px;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px;border:none}
+.input-box .btn-ok{background:linear-gradient(135deg,var(--cyan),var(--green));color:#000}
+.input-box .btn-cancel{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:.7rem 1.3rem;border-radius:9px;font-size:13.5px;font-weight:600;z-index:2000;opacity:0;transition:all .3s;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.toast.show{opacity:1;bottom:2rem}
+.toast.success{border-color:var(--green);background:linear-gradient(135deg,var(--bg2),rgba(0,229,160,.1))}
+.toast.error{border-color:var(--red);background:linear-gradient(135deg,var(--bg2),rgba(255,64,96,.1))}
+
+
+
+/* DataFrame HTML tables (replaces __DATAFRAME__ markers) */
+.df-table{border-collapse:collapse;margin:.5rem 0;font-size:12px;font-family:"SF Mono",monospace;direction:ltr;display:block;overflow-x:auto;max-width:100%;background:var(--bg2)}
+.df-table thead{background:var(--bg3)}
+.df-table th{padding:.45rem .7rem;font-weight:700;color:var(--cyan);border:1px solid var(--border);text-align:left;white-space:nowrap}
+.df-table td{padding:.35rem .7rem;border:1px solid var(--border);color:var(--text);white-space:nowrap}
+.df-table tbody tr:nth-child(odd){background:rgba(255,255,255,.02)}
+.df-table tbody tr:hover{background:rgba(0,229,255,.05)}
+@media(max-width:480px){
+  .df-table{font-size:11px}
+  .df-table th,.df-table td{padding:.3rem .5rem}
+}
+
+/* CodeMirror overrides */
+.CodeMirror{height:auto !important;min-height:80px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;direction:ltr;text-align:left}
+.cm-s-dracula.CodeMirror{background:#0a0e15 !important;color:#FFD580}
+.cm-s-dracula .CodeMirror-gutters{background:#0a0e15;border-right:1px solid var(--border)}
+.cm-s-dracula .CodeMirror-linenumber{color:var(--text3)}
+.CodeMirror-hints{background:var(--bg3) !important;border:1px solid var(--border2) !important;border-radius:6px;direction:ltr;font-family:"SF Mono",monospace;font-size:12.5px;z-index:9999}
+.CodeMirror-hint{color:var(--text);padding:5px 10px}
+li.CodeMirror-hint-active{background:var(--cyan) !important;color:#000 !important}
+
+/* MOBILE */
+@media(max-width:768px){
+  .topnav{padding:.45rem .65rem}
+  .crumb{font-size:12px}
+  .toolbar{padding:.4rem .55rem;gap:.3rem}
+  .tb-btn{padding:.35rem .6rem;font-size:11.5px}
+  .tb-sep{display:none}
+  .main{padding:.7rem .55rem 4rem;gap:.6rem}
+  .cell-header{padding:.35rem .55rem;font-size:11px}
+  .cell-output{font-size:12px;padding:.55rem .7rem;max-height:300px}
+  .add-cell-btn{padding:.4rem .8rem;font-size:11.5px}
+  .CodeMirror{font-size:12.5px;min-height:70px}
+  .var-row{font-size:11px}
+  .var-value{max-width:180px}
+}
+@media(max-width:480px){
+  .toolbar{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+  .toolbar::-webkit-scrollbar{display:none}
+  .tb-btn{flex-shrink:0}
+}
+
+/* ============== UNIVERSAL MOBILE PACK ============== */
+/* Prevent iOS text auto-resize on rotation */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* iOS safe area insets for notched devices */
+body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+/* Prevent horizontal scroll on tiny phones */
+html,body{overflow-x:hidden;max-width:100vw}
+/* Better tap highlight */
+a,button,select,input{-webkit-tap-highlight-color:rgba(0,229,255,.15)}
+/* Smooth scrolling on iOS */
+.cell-output,.output-box,.theory pre,.df-table{-webkit-overflow-scrolling:touch}
+/* Prevent iOS input zoom (inputs need >=16px) */
+input,select,textarea{font-size:16px !important}
+/* Min touch target 44px (Apple HIG) */
+button:not(.cell-icon-btn):not(.jump-btn):not(.ex-nav-btn):not(.reset-btn):not(.tb-btn){min-height:38px}
+/* iOS Safari sticky header fix */
+@supports (-webkit-touch-callout:none){
+  .topnav{position:-webkit-sticky;position:sticky}
+}
+
+@media(max-width:400px){
+  .topnav{padding:.4rem .5rem;gap:.4rem}
+  .back-btn{font-size:11.5px;padding:4px 8px}
+  .crumb{font-size:11.5px}
+  .status-pill{font-size:10px;padding:3px 7px}
+  .toolbar{padding:.35rem .45rem;gap:.25rem}
+  .tb-btn{padding:.3rem .55rem;font-size:11px;min-height:34px}
+  .main{padding:.6rem .45rem 4rem;gap:.5rem}
+  .cell{border-radius:9px}
+  .cell-header{padding:.3rem .5rem;font-size:10.5px}
+  .cell-num{width:22px;height:20px;font-size:10.5px}
+  .cell-type{font-size:10px;padding:2px 6px}
+  .cell-icon-btn{font-size:12px;padding:4px 7px;min-width:30px;min-height:30px}
+  .add-cell-btn{padding:.35rem .7rem;font-size:11px}
+  .CodeMirror{font-size:12px;min-height:65px}
+  .cell-output{font-size:11.5px;padding:.5rem .6rem;max-height:280px}
+  .markdown-preview{padding:.7rem .8rem;font-size:13px}
+  .inspector-head{padding:.5rem .75rem}
+  .inspector-head .title{font-size:12px}
+  .var-row{font-size:11px;padding:.3rem 0}
+  .var-name{min-width:60px}
+  .var-value{max-width:140px}
+  .input-box{padding:1.1rem}
+  .input-box .prompt-text{font-size:13px}
+  .input-box .prompt-code{font-size:12px}
+  .toast{font-size:12.5px;padding:.6rem 1.1rem}
+  .df-table{font-size:10.5px}
+  .df-table th,.df-table td{padding:.25rem .45rem}
+}
+@media(max-width:360px){
+  .tb-btn{font-size:10.5px;padding:.28rem .5rem}
+  .crumb{display:none}
+  .CodeMirror{font-size:11.5px}
+}
+
+
+/* ===== Templates Modal & Cheat Sheet Panel ===== */
+.pg-modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
+  z-index:9000;display:none;animation:fadeIn .2s ease-out;
+}
+.pg-modal-overlay.show{display:flex;align-items:center;justify-content:center;padding:1rem}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.pg-modal{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
+  max-width:900px;width:100%;max-height:92vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  animation:slideUp .25s ease-out;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.pg-modal-head{
+  background:var(--bg3);padding:.8rem 1.1rem;
+  display:flex;align-items:center;gap:.7rem;
+  border-bottom:1px solid var(--border);
+}
+.pg-modal-head h2{font-size:1.05rem;font-weight:800;flex:1;color:var(--text)}
+.pg-modal-close{
+  background:transparent;border:none;color:var(--text2);
+  font-size:1.4rem;cursor:pointer;padding:4px 10px;border-radius:6px;
+  transition:all .12s;min-height:auto;min-width:36px;
+}
+.pg-modal-close:hover{color:var(--red);background:var(--bg)}
+.pg-modal-body{
+  padding:1rem 1.1rem;overflow-y:auto;flex:1;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Templates grid */
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.7rem}
+.tpl-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:.85rem .95rem;cursor:pointer;transition:all .15s;
+  display:flex;flex-direction:column;gap:.4rem;
+}
+.tpl-card:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,229,255,.1)}
+.tpl-card .top{display:flex;align-items:center;gap:.55rem}
+.tpl-card .em{font-size:1.6rem;flex-shrink:0}
+.tpl-card .name{font-size:14px;font-weight:700;color:var(--text);flex:1;line-height:1.3}
+.tpl-card .sub{font-size:11.5px;color:var(--text2);line-height:1.45}
+.tpl-card .meta{font-size:10.5px;color:var(--text3);font-weight:600;margin-top:auto;padding-top:.3rem;border-top:1px solid var(--border)}
+
+/* Cheat sheet */
+.cs-search{
+  position:sticky;top:0;background:var(--bg2);padding:.7rem 0 .9rem;z-index:2;
+  border-bottom:1px solid var(--border);margin-bottom:.7rem;
+}
+.cs-search input{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);padding:.6rem .8rem .6rem 2.2rem;border-radius:8px;
+  font-size:14px;font-family:inherit;
+}
+.cs-search input:focus{outline:none;border-color:var(--cyan)}
+.cs-search-wrap{position:relative}
+.cs-search .icon{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:1rem;pointer-events:none}
+
+.cs-cat-tabs{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.7rem}
+.cs-cat-tab{
+  background:var(--bg3);border:1px solid var(--border);color:var(--text2);
+  padding:.35rem .7rem;border-radius:7px;font-size:11.5px;font-weight:700;
+  cursor:pointer;font-family:inherit;min-height:auto;transition:all .12s;
+}
+.cs-cat-tab.active{background:rgba(0,229,255,.08);border-color:var(--cyan);color:var(--text)}
+
+.cs-item{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:.65rem .8rem;margin-bottom:.45rem;
+}
+.cs-item .row1{display:flex;align-items:baseline;gap:.5rem;margin-bottom:.25rem;flex-wrap:wrap}
+.cs-item .name{font-family:"SF Mono",monospace;font-weight:700;color:var(--cyan);font-size:13px;direction:ltr}
+.cs-item .cat-badge{font-size:9.5px;background:var(--bg);padding:1px 6px;border-radius:4px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.cs-item .sig{font-family:"SF Mono",monospace;font-size:11.5px;color:var(--text3);direction:ltr;margin-right:auto}
+.cs-item .desc{font-size:12.5px;color:var(--text);line-height:1.5;margin-bottom:.4rem}
+.cs-item .actions{display:flex;gap:.3rem}
+.cs-item .cs-btn{
+  background:var(--bg);border:1px solid var(--border2);color:var(--text2);
+  padding:.32rem .65rem;border-radius:5px;font-size:11px;font-weight:700;
+  cursor:pointer;font-family:inherit;min-height:auto;transition:all .12s;
+}
+.cs-item .cs-btn:hover{color:var(--cyan);border-color:var(--cyan)}
+.cs-item .cs-btn.copied{color:var(--green);border-color:var(--green)}
+
+.cs-empty{text-align:center;color:var(--text3);padding:2rem;font-size:13px}
+
+@media(max-width:600px){
+  .pg-modal{border-radius:12px 12px 0 0;max-height:96vh;align-self:flex-end}
+  .pg-modal-overlay.show{align-items:flex-end;padding:0}
+  .tpl-grid{grid-template-columns:1fr;gap:.6rem}
+  .pg-modal-head{padding:.7rem .9rem}
+  .pg-modal-body{padding:.85rem}
+}
+@media(max-width:400px){
+  .pg-modal-head h2{font-size:.95rem}
+  .tpl-card{padding:.75rem .85rem}
+  .tpl-card .em{font-size:1.4rem}
+  .tpl-card .name{font-size:13px}
+  .tpl-card .sub{font-size:11px}
+  .cs-item .name{font-size:12px}
+  .cs-item .desc{font-size:11.5px}
+}
+
+/* Home button - return to homepage */
+.home-btn{
+  background:linear-gradient(135deg,var(--cyan),var(--green));
+  color:#000;font-size:14px;font-weight:800;
+  padding:5px 11px;border-radius:7px;
+  transition:all .15s;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:36px;min-height:32px;
+  white-space:nowrap;
+}
+.home-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,229,255,.3)}
+@media(max-width:400px){
+  .home-btn{font-size:13px;padding:4px 9px;min-width:32px;min-height:30px}
+}
+
+/* === MOBILE OVERFLOW SAFETY === */
+@media(max-width:480px){
+  /* Force all content to wrap, never overflow */
+  *{max-width:100%}
+  pre, code, table{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+</style>
+
+<!-- Skulpt — Python interpreter -->
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+<!-- CodeMirror -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+
+<!-- Chart.js for matplotlib-like charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CKNNVS2HVB');</script>
+
+<style>
+/* GAMIFICATION CSS */
+/* ============================================================
+   GAMIFICATION CSS — Mobile-first, RTL+LTR support
+   ============================================================ */
+
+/* ---- HUD (top fixed corner) ---- */
+#gam-hud {
+  position: fixed;
+  bottom: 12px;
+  z-index: 9998;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+[dir="ltr"] #gam-hud { right: 12px; }
+[dir="rtl"] #gam-hud { left: 12px; }
+
+#gam-hud-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+  border: 1.5px solid #4a5494;
+  border-radius: 22px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1;
+}
+#gam-hud-btn:hover, #gam-hud-btn:active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(74,84,148,0.5);
+}
+#gam-hud-btn .gam-streak,
+#gam-hud-btn .gam-xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+#gam-hud-btn .gam-streak { color: #ffb84a; }
+#gam-hud-btn .gam-xp     { color: #ffd700; }
+
+/* ---- XP gain toast ---- */
+.gam-toast {
+  position: fixed;
+  bottom: 90px;
+  z-index: 9999;
+  background: linear-gradient(135deg, #00c896 0%, #00a884 100%);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,200,150,0.4);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity .35s ease, transform .35s ease;
+  max-width: calc(100% - 30px);
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+[dir="ltr"] .gam-toast { right: 15px; }
+[dir="rtl"] .gam-toast { left: 15px; }
+.gam-toast.show { opacity: 1; transform: translateY(0); }
+.gam-toast-icon { font-size: 18px; margin-inline-end: 4px; }
+.gam-toast-xp { background: linear-gradient(135deg, #ffaa00 0%, #ff8800 100%); box-shadow: 0 8px 24px rgba(255,170,0,0.45); }
+.gam-toast small { opacity: 0.92; font-weight: 400; }
+
+/* ---- Celebration modal (level up / badge unlock) ---- */
+.gam-celebration {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  backdrop-filter: blur(4px);
+}
+.gam-celebration.show { opacity: 1; }
+.gam-celebration-inner {
+  background: linear-gradient(135deg, #1f2444 0%, #353a6b 100%);
+  border: 2px solid #ffd700;
+  border-radius: 22px;
+  padding: 28px 26px;
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+  color: #fff;
+  transform: scale(0.85);
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 20px 60px rgba(255,215,0,0.3);
+}
+.gam-celebration.show .gam-celebration-inner { transform: scale(1); }
+.gam-celebration-icon {
+  font-size: 64px;
+  margin-bottom: 10px;
+  animation: gam-bounce 0.6s ease infinite alternate;
+}
+@keyframes gam-bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-8px); }
+}
+.gam-celebration h2 {
+  margin: 6px 0 14px;
+  font-size: 22px;
+  color: #ffd700;
+}
+.gam-celebration h3 {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #ffaa00;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.gam-celebration p { font-size: 14px; opacity: 0.85; margin: 6px 0 14px; }
+.gam-level-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #1a1a2e;
+  padding: 10px 28px;
+  border-radius: 25px;
+  font-size: 19px;
+  font-weight: 800;
+  margin: 6px 0 18px;
+}
+.gam-badge-icon-big {
+  font-size: 72px;
+  margin-bottom: 6px;
+  animation: gam-spin 1.2s ease-in-out;
+}
+@keyframes gam-spin {
+  0%   { transform: rotate(-15deg) scale(0.7); opacity: 0; }
+  100% { transform: rotate(0) scale(1); opacity: 1; }
+}
+.gam-celebration-close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 9px 26px;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  font-family: inherit;
+}
+.gam-celebration-close:hover, .gam-celebration-close:active { background: rgba(255,255,255,0.22); }
+
+/* ---- Progress Panel ---- */
+#gam-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s ease;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  backdrop-filter: blur(4px);
+}
+#gam-panel.show { opacity: 1; }
+
+.gam-panel-inner {
+  background: #1a1f3a;
+  border-radius: 16px;
+  padding: 22px 18px 24px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow-y: auto;
+  color: #fff;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform .3s ease;
+  margin: 14px;
+  border: 1px solid #353a6b;
+}
+#gam-panel.show .gam-panel-inner { transform: translateY(0); }
+
+.gam-panel-close {
+  position: absolute;
+  top: 10px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 28px;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  line-height: 1;
+}
+[dir="ltr"] .gam-panel-close { right: 10px; }
+[dir="rtl"] .gam-panel-close { left: 10px; }
+.gam-panel-close:hover, .gam-panel-close:active { color: #fff; background: rgba(255,255,255,0.1); }
+
+.gam-panel-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: #ffd700;
+  text-align: center;
+}
+
+.gam-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.gam-stat {
+  background: linear-gradient(135deg, #252a52 0%, #2d3561 100%);
+  border-radius: 11px;
+  padding: 12px 6px;
+  text-align: center;
+  border: 1px solid #353a6b;
+}
+.gam-stat-icon { font-size: 22px; margin-bottom: 3px; }
+.gam-stat-val { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1; }
+.gam-stat-label { font-size: 10px; color: #aab; text-transform: uppercase; margin-top: 2px; letter-spacing: .3px; }
+
+.gam-progress-box {
+  background: #252a52;
+  border-radius: 11px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #353a6b;
+}
+.gam-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aab;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.gam-progress-bar {
+  width: 100%;
+  height: 9px;
+  background: #14172a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.gam-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700 0%, #ff8800 100%);
+  border-radius: 8px;
+  transition: width .5s ease;
+  box-shadow: 0 0 12px rgba(255,170,0,0.4);
+}
+.gam-progress-text {
+  text-align: center;
+  font-size: 11px;
+  color: #ccc;
+  margin-top: 6px;
+}
+
+.gam-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin: 16px 0 10px;
+  letter-spacing: .3px;
+}
+
+.gam-chart {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  height: 100px;
+  background: #252a52;
+  border-radius: 11px;
+  padding: 10px 8px 4px;
+  margin-bottom: 6px;
+  border: 1px solid #353a6b;
+}
+.gam-chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  height: 100%;
+}
+.gam-chart-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #00d4aa 0%, #00a884 100%);
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height .6s ease;
+}
+.gam-chart-label { font-size: 9px; color: #aab; margin-top: 3px; }
+.gam-chart-val { font-size: 9px; color: #ffd700; font-weight: 700; position: absolute; top: -14px; }
+
+.gam-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.gam-badge {
+  background: #252a52;
+  border-radius: 10px;
+  padding: 11px 4px 9px;
+  text-align: center;
+  border: 1.5px solid #353a6b;
+  transition: transform .15s ease;
+  cursor: help;
+}
+.gam-badge.earned {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #2a2e58 0%, #3d3a6b 100%);
+  box-shadow: 0 0 10px rgba(255,215,0,0.18);
+}
+.gam-badge.earned:hover { transform: scale(1.04); }
+.gam-badge.locked { opacity: 0.32; filter: grayscale(0.8); }
+.gam-badge-icon { font-size: 28px; margin-bottom: 3px; }
+.gam-badge-name { font-size: 10px; font-weight: 700; color: #fff; line-height: 1.18; }
+
+.gam-footer {
+  border-top: 1px solid #353a6b;
+  padding-top: 12px;
+  font-size: 12px;
+  color: #aab;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.gam-footer strong { color: #ffd700; }
+
+/* ---- Mobile tweaks ---- */
+@media (max-width: 480px) {
+  #gam-hud { bottom: 8px; }
+  [dir="ltr"] #gam-hud { right: 8px; }
+  [dir="rtl"] #gam-hud { left: 8px; }
+  #gam-hud-btn { padding: 6px 10px; font-size: 12px; }
+  
+  .gam-toast { font-size: 13px; padding: 10px 14px; bottom: 90px; }
+  [dir="ltr"] .gam-toast { right: 10px; left: 10px; max-width: none; }
+  [dir="rtl"] .gam-toast { left: 10px; right: 10px; max-width: none; }
+  
+  .gam-celebration-inner { padding: 22px 18px; max-width: 100%; }
+  .gam-celebration h2 { font-size: 20px; }
+  .gam-celebration-icon { font-size: 56px; }
+  .gam-badge-icon-big { font-size: 64px; }
+  .gam-level-badge { font-size: 17px; padding: 9px 24px; }
+  
+  .gam-panel-inner { padding: 18px 14px; margin: 0; border-radius: 16px 16px 0 0; max-height: 95vh; }
+  .gam-panel-title { font-size: 18px; }
+  .gam-stat-val { font-size: 19px; }
+  .gam-stat-icon { font-size: 20px; }
+  .gam-badges { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; }
+  .gam-badge-icon { font-size: 26px; }
+  .gam-badge-name { font-size: 9.5px; }
+  .gam-chart { height: 88px; }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .gam-stats { gap: 5px; }
+  .gam-stat { padding: 9px 4px; }
+  .gam-stat-val { font-size: 17px; }
+  .gam-stat-label { font-size: 9px; }
+  .gam-badges { grid-template-columns: repeat(3, 1fr); }
+  .gam-badge-name { font-size: 9px; }
+}
+
+</style>
+
+<style>
+/* AI HELPER CSS */
+/* ============================================================
+   AI HELPER CSS - Smart Error Explanation Box
+   ============================================================ */
+
+.gam-ai-helper {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #1a2447 0%, #2a3568 100%);
+  border: 1.5px solid #4a8eff;
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .3s ease, transform .3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 6px 20px rgba(74,142,255,0.18);
+  color: #fff;
+}
+.gam-ai-helper.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gam-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: rgba(74,142,255,0.12);
+  border-bottom: 1px solid rgba(74,142,255,0.25);
+}
+.gam-ai-icon {
+  font-size: 18px;
+  animation: gam-ai-pulse 2s ease-in-out infinite;
+}
+@keyframes gam-ai-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.13); }
+}
+.gam-ai-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4a8eff;
+  flex: 1;
+}
+.gam-ai-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gam-ai-close:hover, .gam-ai-close:active {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.gam-ai-body {
+  padding: 11px 14px 13px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.gam-ai-explain {
+  color: #ffcc66;
+  margin-bottom: 8px;
+}
+.gam-ai-explain b {
+  color: #ffaa00;
+}
+.gam-ai-explain code {
+  background: rgba(255,255,255,0.13);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: #ffd700;
+  font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+}
+
+.gam-ai-hints-title {
+  font-weight: 700;
+  margin: 8px 0 4px;
+  color: #00d4aa;
+  font-size: 13px;
+}
+
+.gam-ai-hints {
+  margin: 0;
+  padding-inline-start: 6px;
+  list-style: none;
+}
+.gam-ai-hints li {
+  margin-bottom: 5px;
+  padding-inline-start: 4px;
+  color: #d0d8ec;
+}
+.gam-ai-hints code {
+  background: rgba(0,212,170,0.12);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #00d4aa;
+  font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+  display: inline-block;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .gam-ai-helper { margin-top: 8px; border-radius: 10px; }
+  .gam-ai-header { padding: 8px 10px; }
+  .gam-ai-title { font-size: 12.5px; }
+  .gam-ai-body { padding: 10px 12px; font-size: 12.8px; }
+  .gam-ai-hints { padding-inline-start: 4px; }
+  .gam-ai-hints li { margin-bottom: 4px; }
+  .gam-ai-explain code, .gam-ai-hints code { font-size: 11.5px; padding: 1px 5px; }
+}
+
+/* Mute button positioning */
+.gam-mute-btn:hover, .gam-mute-btn:active {
+  transform: scale(1.1);
+  background: rgba(45,53,97,0.95) !important;
+}
+@media (max-width: 480px) {
+  .gam-mute-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <a href="index.html" class="home-btn" title="לדף הבית">🏠</a>
+  <a href="pandas-course.html" class="back-btn">📊 Pandas</a>
+  <a href="quiz-python-100.html" class="back-btn">💯 תרגול</a>
+  <a href="python-course.html" class="back-btn">← פייתון בסיס</a>
+  <div class="crumb"><em>Playground</em> · סביבת עבודה חופשית</div>
+  <div class="status-pill" id="statusPill">מוכן</div>
+</header>
+
+<div class="toolbar">
+  <button class="tb-btn primary" onclick="runAllCells()" title="Ctrl+Shift+Enter">▶ הרץ הכל</button>
+  <button class="tb-btn" onclick="addCell('code')">+ תא קוד</button>
+  <button class="tb-btn" onclick="addCell('markdown')">+ תא טקסט</button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" onclick="resetKernel()" title="מוחק את כל המשתנים">איפוס Kernel</button>
+  <button class="tb-btn danger" onclick="clearAllCells()" title="מוחק את כל התאים">נקה הכל</button>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" onclick="openTemplates()" title="תבניות מוכנות">📚 תבניות</button>
+  <button class="tb-btn" onclick="openCheatSheet()" title="מילון פונקציות">📖 ספריה</button>
+  <button class="tb-btn" onclick="loadExample()">דוגמה</button>
+  <select class="tb-btn" id="datasetSelect" onchange="loadDataset()" style="cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:inherit">
+    <option value="">📊 טען דאטהסט...</option>
+    <option value="cities-weather">מזג אוויר בערים</option>
+    <option value="real-estate">מחירי דירות תל אביב</option>
+    <option value="football">ליגת העל</option>
+    <option value="students">ציוני סטודנטים</option>
+    <option value="sales">מכירות חודשיות</option>
+    <option value="covid-israel">נתוני קורונה</option>
+    <option value="eurovision">אירוויזיון</option>
+  </select>
+  <button class="tb-btn" onclick="downloadPy()">הורד .py</button>
+  <button class="tb-btn" onclick="uploadPy()">העלה .py</button>
+  <button class="tb-btn" onclick="shareLink()">שתף</button>
+  <input type="file" id="uploadInput" accept=".py,.txt" style="display:none" onchange="handleUpload(event)">
+</div>
+
+<main class="main" id="cellsContainer">
+  <!-- Cells inserted here -->
+</main>
+
+<!-- Variable Inspector -->
+<div class="main" style="padding-top:0">
+  <div class="inspector" id="inspector">
+    <div class="inspector-head" onclick="toggleInspector()">
+      <span class="ico" style="color:var(--text3);font-size:.85rem">[ ]</span>
+      <span class="title">בודק משתנים (Variable Inspector) <span id="inspCount" style="color:var(--text3);font-weight:400">— ריק</span></span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="inspector-body" id="inspectorBody">
+      <div class="inspector-empty">המשתנים שלך יופיעו פה אחרי שתריץ קוד</div>
+    </div>
+  </div>
+</div>
+
+<!-- Input Modal -->
+<div class="input-modal" id="inputModal">
+  <div class="input-box">
+    <div class="prompt-text">התוכנית מבקשת קלט:</div>
+    <div class="prompt-code" id="inputPromptCode">input()</div>
+    <input id="inputField" type="text" placeholder="הקלד כאן..." autocomplete="off">
+    <div class="btns">
+      <button class="btn-cancel" onclick="cancelInput()">ביטול</button>
+      <button class="btn-ok" onclick="submitInput()">שלח</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== STATE ====================
+let cells = []; // [{id, type:'code'|'markdown', code, output, lastRun}]
+let nextCellId = 1;
+let cellEditors = {}; // cellId -> CodeMirror instance
+const STORAGE_KEY = 'python_playground_v2';
+let inputResolver = null;
+let chartCounter = 0;
+let preludeLoaded = false;
+
+// ==================== PYTHON PRELUDE (mini-pandas + datasets) ====================
+const PYTHON_PRELUDE = "# =============================================================\n# MINI-PANDAS \u2014 DataFrame-like API for Skulpt\n# Auto-injected into every Playground session\n# =============================================================\n\nclass DataFrame:\n    \"\"\"Minimal DataFrame implementation.\"\"\"\n    \n    def __init__(self, data):\n        if isinstance(data, list):\n            if len(data) == 0:\n                self._data = {}\n                self._columns = []\n            else:\n                self._columns = list(data[0].keys())\n                self._data = {}\n                for col in self._columns:\n                    self._data[col] = [row.get(col) for row in data]\n        else:\n            self._data = dict(data)\n            self._columns = list(self._data.keys())\n        if self._data:\n            first_col = self._columns[0]\n            self._nrows = len(self._data[first_col])\n        else:\n            self._nrows = 0\n    \n    @property\n    def shape(self):\n        return (self._nrows, len(self._columns))\n    \n    @property\n    def columns(self):\n        return list(self._columns)\n    \n    def head(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][:n]\n        return DataFrame(new_data)\n    \n    def tail(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][-n:]\n        return DataFrame(new_data)\n    \n    def __len__(self):\n        return self._nrows\n    \n    def __getitem__(self, key):\n        if isinstance(key, str):\n            return Series(self._data[key], name=key)\n        if isinstance(key, list):\n            if len(key) == self._nrows and len(key) > 0 and isinstance(key[0], bool):\n                new_data = {}\n                for c in self._columns:\n                    new_data[c] = []\n                    for i in range(self._nrows):\n                        if key[i]:\n                            new_data[c].append(self._data[c][i])\n                return DataFrame(new_data)\n            new_data = {}\n            for c in key:\n                if c in self._data:\n                    new_data[c] = self._data[c]\n            return DataFrame(new_data)\n        raise TypeError(\"Invalid key type\")\n    \n    def __setitem__(self, key, value):\n        if isinstance(value, Series):\n            value = value._data\n        if isinstance(value, list):\n            if len(value) != self._nrows:\n                raise ValueError(\"Length mismatch\")\n            self._data[key] = value\n        else:\n            self._data[key] = [value] * self._nrows\n        if key not in self._columns:\n            self._columns.append(key)\n    \n    def sort_values(self, by, ascending=True):\n        col_data = self._data[by]\n        indices = list(range(self._nrows))\n        indices.sort(key=lambda i: col_data[i], reverse=not ascending)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in indices]\n        return DataFrame(new_data)\n    \n    def filter(self, col, op, value):\n        \"\"\"Filter rows: df.filter(\"age\", \">\", 15). Operators: >, <, >=, <=, ==, !=\"\"\"\n        mask = []\n        col_data = self._data[col]\n        for v in col_data:\n            if op == \">\":\n                mask.append(v > value)\n            elif op == \"<\":\n                mask.append(v < value)\n            elif op == \">=\":\n                mask.append(v >= value)\n            elif op == \"<=\":\n                mask.append(v <= value)\n            elif op == \"==\":\n                mask.append(v == value)\n            elif op == \"!=\":\n                mask.append(v != value)\n            else:\n                raise ValueError(\"Unknown operator: \" + op)\n        # Apply mask\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = []\n            for i in range(self._nrows):\n                if mask[i]:\n                    new_data[c].append(self._data[c][i])\n        return DataFrame(new_data)\n    \n    def where(self, fn):\n        \"\"\"Filter rows by function: df.where(lambda row: row['age'] > 15)\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = []\n        for i in range(self._nrows):\n            row = {}\n            for c in self._columns:\n                row[c] = self._data[c][i]\n            if fn(row):\n                for c in self._columns:\n                    new_data[c].append(self._data[c][i])\n        return DataFrame(new_data)\n    \n    def mean(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals) / len(vals)\n        return result\n    \n    def sum(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals)\n        return result\n    \n    def describe(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = {\n                    \"count\": len(vals),\n                    \"mean\": round(sum(vals)/len(vals), 2),\n                    \"min\": min(vals),\n                    \"max\": max(vals)\n                }\n        return result\n    \n    def to_dict(self):\n        return dict(self._data)\n    \n    def __str__(self):\n        return self._render_text()\n    \n    def __repr__(self):\n        return self._render_text()\n    \n    def _render_text(self):\n        if not self._columns:\n            return \"Empty DataFrame\"\n        lines = []\n        # Magic markers so the JS renderer can convert to HTML\n        header = \"__DATAFRAME__|\" + \"|\".join([str(c) for c in self._columns])\n        lines.append(header)\n        for i in range(self._nrows):\n            row_vals = []\n            for c in self._columns:\n                row_vals.append(str(self._data[c][i]))\n            lines.append(\"__DATAROW__|\" + \"|\".join(row_vals))\n        lines.append(\"__DATAFRAME_END__\")\n        return \"\\n\".join(lines)\n\n\nclass Series:\n    \"\"\"A column from a DataFrame.\"\"\"\n    def __init__(self, data, name=None):\n        self._data = list(data)\n        self.name = name\n    \n    def __len__(self):\n        return len(self._data)\n    \n    def __getitem__(self, i):\n        return self._data[i]\n    \n    def __iter__(self):\n        return iter(self._data)\n    \n    def gt(self, other):\n        \"\"\"Greater than - returns list of bools.\"\"\"\n        return [v > other for v in self._data]\n    \n    def lt(self, other):\n        \"\"\"Less than - returns list of bools.\"\"\"\n        return [v < other for v in self._data]\n    \n    def ge(self, other):\n        \"\"\"Greater or equal - returns list of bools.\"\"\"\n        return [v >= other for v in self._data]\n    \n    def le(self, other):\n        \"\"\"Less or equal - returns list of bools.\"\"\"\n        return [v <= other for v in self._data]\n    \n    def eq(self, other):\n        \"\"\"Equal - returns list of bools.\"\"\"\n        return [v == other for v in self._data]\n    \n    def mean(self):\n        nums = [v for v in self._data if isinstance(v, (int, float))]\n        if nums:\n            return sum(nums) / len(nums)\n        return 0\n    \n    def sum(self):\n        nums = [v for v in self._data if isinstance(v, (int, float))]\n        return sum(nums)\n    \n    def max(self):\n        return max(self._data)\n    \n    def min(self):\n        return min(self._data)\n    \n    def unique(self):\n        seen = []\n        for v in self._data:\n            if v not in seen:\n                seen.append(v)\n        return seen\n    \n    def count(self):\n        return len(self._data)\n    \n    def value_counts(self):\n        counts = {}\n        for v in self._data:\n            if v in counts:\n                counts[v] = counts[v] + 1\n            else:\n                counts[v] = 1\n        return counts\n    \n    def __str__(self):\n        return str(self._data)\n    \n    def __repr__(self):\n        return \"Series(\" + str(self._data) + \")\"\n\n\n# =============================================================\n# DATASETS \u2014 Israeli-context datasets for learning\n# =============================================================\n\n_DATASETS = {\n    \"cities-weather\": {\n        \"name\": \"\u05de\u05d6\u05d2 \u05d0\u05d5\u05d5\u05d9\u05e8 \u05d1\u05e2\u05e8\u05d9\u05dd \u05d1\u05d9\u05e9\u05e8\u05d0\u05dc\",\n        \"desc\": \"\u05d8\u05de\u05e4\u05e8\u05d8\u05d5\u05e8\u05d5\u05ea \u05d5\u05dc\u05d7\u05d5\u05ea\",\n        \"data\": {\n            \"city\": [\"\u05ea\u05dc \u05d0\u05d1\u05d9\u05d1\", \"\u05d9\u05e8\u05d5\u05e9\u05dc\u05d9\u05dd\", \"\u05d7\u05d9\u05e4\u05d4\", \"\u05d1\u05d0\u05e8 \u05e9\u05d1\u05e2\", \"\u05d0\u05d9\u05dc\u05ea\", \"\u05e6\u05e4\u05ea\"],\n            \"temp\": [24, 19, 23, 27, 31, 17],\n            \"humidity\": [68, 50, 72, 40, 55, 45],\n            \"rain_mm\": [0, 2, 0, 0, 0, 5]\n        }\n    },\n    \"real-estate\": {\n        \"name\": \"\u05de\u05d7\u05d9\u05e8\u05d9 \u05d3\u05d9\u05e8\u05d5\u05ea \u05d1\u05ea\u05dc \u05d0\u05d1\u05d9\u05d1\",\n        \"desc\": \"8 \u05d3\u05d9\u05e8\u05d5\u05ea \u05e2\u05dd \u05e4\u05e8\u05d8\u05d9\u05dd\",\n        \"data\": {\n            \"neighborhood\": [\"\u05e4\u05dc\u05d5\u05e8\u05e0\u05d8\u05d9\u05df\", \"\u05e8\u05d5\u05d8\u05e9\u05d9\u05dc\u05d3\", \"\u05e0\u05d5\u05d5\u05d4 \u05e6\u05d3\u05e7\", \"\u05d9\u05e4\u05d5\", \"\u05e8\u05de\u05ea \u05d0\u05d1\u05d9\u05d1\", \"\u05d1\u05d1\u05dc\u05d9\", \"\u05e7\u05e8\u05d9\u05ea \u05e9\u05dc\u05d5\u05dd\", \"\u05d4\u05e6\u05e4\u05d5\u05df \u05d4\u05d9\u05e9\u05df\"],\n            \"rooms\": [3, 4, 4, 3, 5, 4, 3, 4],\n            \"sqm\": [75, 95, 110, 70, 130, 100, 65, 90],\n            \"price_m\": [3.2, 5.1, 6.8, 2.9, 4.5, 4.1, 1.9, 4.7]\n        }\n    },\n    \"football\": {\n        \"name\": \"\u05dc\u05d9\u05d2\u05ea \u05d4\u05e2\u05dc - 5 \u05e7\u05d1\u05d5\u05e6\u05d5\u05ea\",\n        \"desc\": \"\u05e0\u05e7\u05d5\u05d3\u05d5\u05ea \u05d5\u05e1\u05d8\u05d8\u05d9\u05e1\u05d8\u05d9\u05e7\u05d4\",\n        \"data\": {\n            \"team\": [\"\u05de\u05db\u05d1\u05d9 \u05ea\u05dc \u05d0\u05d1\u05d9\u05d1\", \"\u05d4\u05e4\u05d5\u05e2\u05dc \u05d1\\\"\u05e9\", \"\u05de\u05db\u05d1\u05d9 \u05d7\u05d9\u05e4\u05d4\", \"\u05d4\u05e4\u05d5\u05e2\u05dc \u05ea\\\"\u05d0\", \"\u05d1\u05d9\u05ea\\\"\u05e8\"],\n            \"points\": [55, 52, 48, 42, 38],\n            \"wins\": [17, 16, 14, 12, 10],\n            \"draws\": [4, 4, 6, 6, 8],\n            \"losses\": [3, 4, 4, 6, 6],\n            \"goals_for\": [54, 49, 41, 38, 32],\n            \"goals_against\": [21, 22, 25, 30, 33]\n        }\n    },\n    \"students\": {\n        \"name\": \"\u05e6\u05d9\u05d5\u05e0\u05d9 \u05e1\u05d8\u05d5\u05d3\u05e0\u05d8\u05d9\u05dd\",\n        \"desc\": \"\u05e6\u05d9\u05d5\u05e0\u05d9\u05dd \u05d1-3 \u05de\u05e7\u05e6\u05d5\u05e2\u05d5\u05ea\",\n        \"data\": {\n            \"name\": [\"\u05d2\u05dc\", \"\u05ea\u05d5\u05de\u05e8\", \"\u05d9\u05e2\u05dc\", \"\u05e0\u05d5\u05e2\u05d4\", \"\u05d0\u05d1\u05d9\u05d1\", \"\u05de\u05d0\u05d9\u05d4\", \"\u05d3\u05e0\u05d9\u05d0\u05dc\", \"\u05e9\u05d9\u05e8\u05d4\", \"\u05d0\u05d9\u05ea\u05d9\", \"\u05e8\u05d5\u05e0\u05d9\"],\n            \"math\": [88, 76, 92, 84, 70, 95, 81, 89, 73, 86],\n            \"english\": [78, 85, 88, 90, 72, 84, 79, 91, 68, 82],\n            \"history\": [85, 80, 90, 86, 76, 88, 84, 92, 70, 87]\n        }\n    },\n    \"sales\": {\n        \"name\": \"\u05de\u05db\u05d9\u05e8\u05d5\u05ea \u05d7\u05d5\u05d3\u05e9\u05d9\u05d5\u05ea\",\n        \"desc\": \"\u05de\u05d7\u05d6\u05d5\u05e8 \u05d1\u05d7\u05e0\u05d5\u05ea\",\n        \"data\": {\n            \"month\": [\"\u05d9\u05e0\u05d5\u05d0\u05e8\", \"\u05e4\u05d1\u05e8\u05d5\u05d0\u05e8\", \"\u05de\u05e8\u05e5\", \"\u05d0\u05e4\u05e8\u05d9\u05dc\", \"\u05de\u05d0\u05d9\", \"\u05d9\u05d5\u05e0\u05d9\", \"\u05d9\u05d5\u05dc\u05d9\", \"\u05d0\u05d5\u05d2\u05d5\u05e1\u05d8\", \"\u05e1\u05e4\u05d8\u05de\u05d1\u05e8\", \"\u05d0\u05d5\u05e7\u05d8\u05d5\u05d1\u05e8\", \"\u05e0\u05d5\u05d1\u05de\u05d1\u05e8\", \"\u05d3\u05e6\u05de\u05d1\u05e8\"],\n            \"revenue\": [45000, 38000, 52000, 49000, 61000, 72000, 68000, 71000, 58000, 53000, 64000, 89000],\n            \"units\": [120, 95, 140, 130, 165, 195, 180, 192, 155, 140, 170, 240]\n        }\n    },\n    \"covid-israel\": {\n        \"name\": \"\u05e0\u05ea\u05d5\u05e0\u05d9 \u05e7\u05d5\u05e8\u05d5\u05e0\u05d4 \u05d9\u05e9\u05e8\u05d0\u05dc\",\n        \"desc\": \"\u05de\u05e7\u05e8\u05d9\u05dd \u05d1\u05d7\u05d5\u05d3\u05e9 (\u05d3\u05d5\u05d2\u05de\u05d4)\",\n        \"data\": {\n            \"date\": [\"01/01\", \"08/01\", \"15/01\", \"22/01\", \"29/01\", \"05/02\", \"12/02\", \"19/02\"],\n            \"positive\": [3200, 4500, 6100, 8200, 7800, 5300, 3900, 2400],\n            \"tested\": [45000, 52000, 60000, 67000, 65000, 50000, 41000, 35000],\n            \"hospitalized\": [180, 230, 320, 410, 380, 290, 220, 160]\n        }\n    },\n    \"eurovision\": {\n        \"name\": \"\u05d0\u05d9\u05e8\u05d5\u05d5\u05d9\u05d6\u05d9\u05d5\u05df - \u05d9\u05e9\u05e8\u05d0\u05dc\",\n        \"desc\": \"\u05de\u05e7\u05d5\u05de\u05d5\u05ea \u05d5\u05e0\u05d9\u05e7\u05d5\u05d3\",\n        \"data\": {\n            \"year\": [2018, 2019, 2021, 2022, 2023, 2024],\n            \"place\": [1, 23, 17, 13, 3, 5],\n            \"points\": [529, 35, 93, 61, 362, 375],\n            \"song\": [\"Toy\", \"Home\", \"Set Me Free\", \"I.M\", \"Unicorn\", \"Hurricane\"]\n        }\n    }\n}\n\n\nclass _Datasets:\n    \"\"\"Pre-loaded datasets. Usage: df = data.load(\\\"cities-weather\\\")\"\"\"\n    \n    def list(self):\n        \"\"\"List all available datasets.\"\"\"\n        for key in _DATASETS:\n            info = _DATASETS[key]\n            print(\"  \" + key + \": \" + info[\"name\"] + \" - \" + info[\"desc\"])\n    \n    def load(self, name):\n        \"\"\"Load a dataset as a DataFrame.\"\"\"\n        if name not in _DATASETS:\n            keys = list(_DATASETS.keys())\n            raise ValueError(\"Dataset not found: \" + name + \". Available: \" + \", \".join(keys))\n        return DataFrame(_DATASETS[name][\"data\"])\n    \n    def info(self, name):\n        \"\"\"Show info about a dataset.\"\"\"\n        if name not in _DATASETS:\n            print(\"Dataset not found: \" + name)\n            return\n        info = _DATASETS[name]\n        print(\"DATASET: \" + info[\"name\"])\n        print(\"  \" + info[\"desc\"])\n        df = DataFrame(info[\"data\"])\n        print(\"  shape: \" + str(df.shape[0]) + \" rows x \" + str(df.shape[1]) + \" cols\")\n        print(\"  columns: \" + \", \".join(df.columns))\n\n\ndata = _Datasets()\n";
+
+
+// ==================== TOAST ====================
+function toast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.className = 'toast show ' + type;
+  t.textContent = msg;
+  setTimeout(()=>{ t.className = 'toast'; }, 2500);
+}
+
+// ==================== CELLS ====================
+function newCellId(){ return 'c' + (nextCellId++); }
+
+function addCell(type='code', code='', afterId=null){
+  const id = newCellId();
+  const cell = { id, type, code: code || (type==='code' ? '' : '## כותרת\n\nכתוב פה טקסט עם **Markdown**'), output:'', error:false, runTime:null };
+  if (afterId){
+    const idx = cells.findIndex(c => c.id === afterId);
+    cells.splice(idx+1, 0, cell);
+  } else {
+    cells.push(cell);
+  }
+  renderCells();
+  saveToStorage();
+  // focus the new cell
+  setTimeout(()=>{
+    if (type==='code' && cellEditors[id]) cellEditors[id].focus();
+  }, 50);
+}
+
+function deleteCell(id){
+  if (cells.length === 1){ toast('חייב לפחות תא אחד', 'error'); return; }
+  cells = cells.filter(c => c.id !== id);
+  delete cellEditors[id];
+  renderCells();
+  saveToStorage();
+}
+
+function toggleCellType(id){
+  const cell = cells.find(c => c.id === id);
+  if (!cell) return;
+  // save current code before switching
+  if (cellEditors[id]) cell.code = cellEditors[id].getValue();
+  cell.type = cell.type === 'code' ? 'markdown' : 'code';
+  cell.output = ''; cell.error = false;
+  delete cellEditors[id];
+  renderCells();
+  saveToStorage();
+}
+
+function moveCell(id, dir){
+  const idx = cells.findIndex(c => c.id === id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= cells.length) return;
+  // save editor content first
+  if (cellEditors[id]) cells[idx].code = cellEditors[id].getValue();
+  [cells[idx], cells[newIdx]] = [cells[newIdx], cells[idx]];
+  cellEditors = {}; // re-create editors
+  renderCells();
+  saveToStorage();
+}
+
+function clearAllCells(){
+  cells = [];
+  cellEditors = {};
+  addCell('code', '');
+}
+
+function renderMarkdown(md){
+  // simple markdown to HTML
+  let html = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+    .replace(/\*([^*]+)\*/g, '<i>$1</i>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>' + m + '</ul>');
+  html = html.split(/\n\n+/).map(p => p.trim().startsWith('<') ? p : '<p>' + p.replace(/\n/g,'<br>') + '</p>').join('');
+  return html;
+}
+
+function renderCells(){
+  const container = document.getElementById('cellsContainer');
+  if (cells.length === 0) addCell('code', '');
+  
+  let html = '';
+  cells.forEach((cell, idx) => {
+    html += `<div class="cell ${cell.error?'error':(cell.output?'success':'')}" id="cell-${cell.id}">
+      <div class="cell-header">
+        <div class="cell-num">[${idx+1}]</div>
+        <div class="cell-type ${cell.type==='markdown'?'markdown':''}" onclick="toggleCellType('${cell.id}')" title="לחץ להחליף סוג">${cell.type==='code'?'קוד':'טקסט'}</div>
+        <div class="cell-spacer"></div>
+        <div class="cell-actions">
+          ${cell.type==='code' ? `<button class="cell-icon-btn run-btn" onclick="runCell('${cell.id}')" title="הרץ (Ctrl+Enter)">▶</button>` : ''}
+          <button class="cell-icon-btn" onclick="moveCell('${cell.id}',-1)" title="הזז למעלה">↑</button>
+          <button class="cell-icon-btn" onclick="moveCell('${cell.id}',1)" title="הזז למטה">↓</button>
+          <button class="cell-icon-btn" onclick="addCell('code','','${cell.id}')" title="הוסף תא מתחת">+</button>
+          <button class="cell-icon-btn delete-btn" onclick="deleteCell('${cell.id}')" title="מחק תא">×</button>
+        </div>
+      </div>
+      <div class="cell-editor-wrap">
+        ${cell.type==='code' 
+          ? `<textarea id="ta-${cell.id}">${escapeHtml(cell.code)}</textarea>`
+          : `<div class="markdown-preview" onclick="editMarkdown('${cell.id}')">${cell.code ? renderMarkdown(cell.code) : '<em style="color:var(--text3)">(לחץ לעריכה)</em>'}</div>
+             <textarea id="ta-${cell.id}" style="display:none">${escapeHtml(cell.code)}</textarea>`
+        }
+      </div>
+      ${cell.output ? `<div class="cell-output ${cell.error?'err':''} show" id="out-${cell.id}">
+        <div class="cell-output-meta"><span>פלט</span><span>${cell.runTime ? cell.runTime + 'ms' : ''}</span></div>${renderOutput(cell.output)}${cell.chartData ? '<canvas class="cell-output-chart" id="chart-'+cell.id+'"></canvas>' : ''}</div>` : ''}
+    </div>`;
+  });
+  container.innerHTML = html;
+  
+  // Initialize CodeMirror on code cells
+  cells.forEach(cell => {
+    if (cell.type === 'code') {
+      const ta = document.getElementById('ta-'+cell.id);
+      if (ta && typeof CodeMirror !== 'undefined') {
+        const cm = CodeMirror.fromTextArea(ta, {
+          mode:'python', theme:'dracula', lineNumbers:true,
+          indentUnit:4, autoCloseBrackets:true, matchBrackets:true,
+          direction:'ltr',
+          extraKeys: {
+            'Tab': (c) => c.replaceSelection('    ', 'end'),
+            'Ctrl-Enter': () => runCell(cell.id),
+            'Cmd-Enter': () => runCell(cell.id),
+            'Ctrl-Shift-Enter': () => runAllCells(),
+            'Ctrl-Space': 'autocomplete'
+          }
+        });
+        cm.on('change', () => { cell.code = cm.getValue(); debouncedSave(); });
+        cellEditors[cell.id] = cm;
+      }
+    }
+  });
+  
+  // Render charts
+  cells.forEach(cell => {
+    if (cell.chartData) renderChart(cell.id, cell.chartData);
+  });
+}
+
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Renders output, converting __DATAFRAME__ markers to nice HTML tables
+function renderOutput(text){
+  if (!text) return '';
+  // Find DataFrame blocks
+  const dfRegex = /__DATAFRAME__\|([^\n]+)\n((?:__DATAROW__\|[^\n]*\n?)+)__DATAFRAME_END__/g;
+  let result = '';
+  let lastEnd = 0;
+  let match;
+  while ((match = dfRegex.exec(text)) !== null){
+    // Add text before the match
+    if (match.index > lastEnd){
+      result += escapeHtml(text.substring(lastEnd, match.index));
+    }
+    // Build table
+    const headers = match[1].split('|');
+    const rows = match[2].split('\n').filter(r => r.startsWith('__DATAROW__'));
+    let tableHtml = '<table class="df-table">';
+    tableHtml += '<thead><tr>' + headers.map(h => '<th>' + escapeHtml(h) + '</th>').join('') + '</tr></thead>';
+    tableHtml += '<tbody>';
+    rows.forEach(r => {
+      const cells = r.substring('__DATAROW__|'.length).split('|');
+      tableHtml += '<tr>' + cells.map(c => '<td>' + escapeHtml(c) + '</td>').join('') + '</tr>';
+    });
+    tableHtml += '</tbody></table>';
+    result += tableHtml;
+    lastEnd = match.index + match[0].length;
+  }
+  // Append remaining text
+  if (lastEnd < text.length){
+    result += escapeHtml(text.substring(lastEnd));
+  }
+  return result;
+}
+
+function editMarkdown(id){
+  const cell = cells.find(c => c.id === id);
+  if (!cell) return;
+  cell._editingMd = true;
+  const ta = document.getElementById('ta-'+id);
+  ta.style.display = 'block';
+  ta.style.width = '100%';
+  ta.style.minHeight = '100px';
+  ta.style.background = '#0a0e15';
+  ta.style.color = '#FFD580';
+  ta.style.border = 'none';
+  ta.style.padding = '.7rem';
+  ta.style.fontFamily = 'inherit';
+  ta.style.fontSize = '13.5px';
+  ta.style.direction = 'rtl';
+  ta.focus();
+  const preview = ta.previousElementSibling;
+  if (preview) preview.style.display = 'none';
+  ta.onblur = () => {
+    cell.code = ta.value;
+    saveToStorage();
+    renderCells();
+  };
+}
+
+// ==================== SKULPT KERNEL (persistent state) ====================
+const kernelState = { globals: {}, ready: typeof Sk !== 'undefined' };
+
+function configureKernel(outputBuffer) {
+  Sk.configure({
+    output: (text) => { outputBuffer.text += text; },
+    read: (filename) => {
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][filename] === undefined) {
+        throw "File not found: '" + filename + "'";
+      }
+      return Sk.builtinFiles["files"][filename];
+    },
+    __future__: Sk.python3,
+    execLimit: 10000, // 10 second timeout
+    inputfun: handleInput,
+    inputfunTakesPrompt: true,
+    retainglobals: true // Key: globals persist across runs!
+  });
+}
+
+// Handle Python's input() call — show modal
+function handleInput(prompt){
+  return new Promise((resolve, reject) => {
+    const modal = document.getElementById('inputModal');
+    const field = document.getElementById('inputField');
+    const promptEl = document.getElementById('inputPromptCode');
+    promptEl.textContent = prompt || 'input()';
+    field.value = '';
+    modal.classList.add('show');
+    setTimeout(()=>field.focus(), 50);
+    inputResolver = { resolve, reject };
+    field.onkeydown = (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); submitInput(); }
+      else if (e.key === 'Escape') { e.preventDefault(); cancelInput(); }
+    };
+  });
+}
+
+function submitInput(){
+  if (!inputResolver) return;
+  const value = document.getElementById('inputField').value;
+  document.getElementById('inputModal').classList.remove('show');
+  const r = inputResolver; inputResolver = null;
+  r.resolve(value);
+}
+
+function cancelInput(){
+  if (!inputResolver) return;
+  document.getElementById('inputModal').classList.remove('show');
+  const r = inputResolver; inputResolver = null;
+  r.reject('Input cancelled');
+}
+
+// Run a single cell
+async function runCell(cellId){
+  const cell = cells.find(c => c.id === cellId);
+  if (!cell || cell.type !== 'code') return;
+  // get current code
+  if (cellEditors[cellId]) cell.code = cellEditors[cellId].getValue();
+  if (!cell.code.trim()){ cell.output = '(תא ריק)'; cell.error = false; renderCells(); return; }
+  
+  const cellEl = document.getElementById('cell-'+cellId);
+  if (cellEl) cellEl.classList.add('running');
+  document.getElementById('statusPill').textContent = 'רץ...';
+  document.getElementById('statusPill').style.color = 'var(--orange)';
+  document.getElementById('statusPill').style.borderColor = 'var(--orange)';
+  
+  // detect matplotlib-like commands and intercept
+  const chartData = detectChartIntent(cell.code);
+  
+  const startTime = Date.now();
+  const buffer = { text: '' };
+  configureKernel(buffer);
+  
+  try {
+    // Load prelude on first run (mini-pandas + datasets)
+    if (!preludeLoaded) {
+      await Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, PYTHON_PRELUDE, true));
+      preludeLoaded = true;
+      buffer.text = ''; // discard prelude output
+    }
+    await Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, cell.code, true));
+    cell.output = buffer.text || '(אין פלט)';
+    cell.error = false;
+    cell.runTime = Date.now() - startTime;
+    cell.chartData = chartData;
+  } catch (e) {
+    let msg = e.toString();
+    msg = translateError(msg);
+    cell.output = (buffer.text ? buffer.text + '\n\n' : '') + '❌ ' + msg;
+    cell.error = true;
+    cell.runTime = Date.now() - startTime;
+  }
+  
+  // Update variable inspector
+  updateInspector();
+  
+  document.getElementById('statusPill').textContent = 'מוכן';
+  document.getElementById('statusPill').style.color = '';
+  document.getElementById('statusPill').style.borderColor = '';
+  
+  renderCells();
+  saveToStorage();
+}
+
+async function runAllCells(){
+  for (const cell of cells) {
+    if (cell.type === 'code') {
+      await runCell(cell.id);
+    }
+  }
+  toast('כל התאים רצו', 'success');
+}
+
+function resetKernel(){
+  // Clear Skulpt globals by re-loading
+  if (typeof Sk !== 'undefined' && Sk.globals) {
+    Sk.globals = {};
+  }
+  preludeLoaded = false; // will reload on next run
+  // Clear all outputs
+  cells.forEach(c => { c.output = ''; c.error = false; c.chartData = null; });
+  renderCells();
+  updateInspector();
+  toast('Kernel אופס — כל המשתנים נמחקו', 'success');
+}
+
+// ==================== VARIABLE INSPECTOR ====================
+function updateInspector(){
+  const body = document.getElementById('inspectorBody');
+  const countEl = document.getElementById('inspCount');
+  
+  if (typeof Sk === 'undefined' || !Sk.globals){
+    body.innerHTML = '<div class="inspector-empty">המשתנים שלך יופיעו פה אחרי שתריץ קוד</div>';
+    countEl.textContent = '— ריק';
+    return;
+  }
+  
+  const vars = [];
+  for (const k in Sk.globals) {
+    // skip built-in / hidden names
+    if (k.startsWith('__') || k === 'print' || k === 'input') continue;
+    const val = Sk.globals[k];
+    if (!val || typeof val !== 'object') continue;
+    
+    let typeName = 'unknown';
+    let valStr = '';
+    try {
+      typeName = val.tp$name || (val.constructor && val.constructor.name) || 'unknown';
+      // try to get python repr
+      if (Sk.builtin && Sk.builtin.repr) {
+        try {
+          valStr = Sk.ffi.remapToJs(Sk.builtin.repr(val));
+        } catch { valStr = String(val); }
+      } else {
+        valStr = String(val);
+      }
+    } catch { valStr = '(unable to display)'; }
+    
+    // Skip function objects, modules
+    if (['function','module','classobj','type'].includes(typeName)) continue;
+    if (valStr.startsWith('<function') || valStr.startsWith('<module') || valStr.startsWith('<class')) continue;
+    
+    vars.push({ name: k, type: typeName, value: valStr });
+  }
+  
+  if (vars.length === 0){
+    body.innerHTML = '<div class="inspector-empty">אין משתנים מוגדרים. הרץ קוד עם הגדרות משתנה.</div>';
+    countEl.textContent = '— ריק';
+  } else {
+    body.innerHTML = vars.map(v =>
+      `<div class="var-row"><span class="var-name">${escapeHtml(v.name)}</span><span class="var-type">${escapeHtml(v.type)}</span><span class="var-value">${escapeHtml(v.value).substring(0,200)}</span></div>`
+    ).join('');
+    countEl.textContent = `— ${vars.length} משתנים`;
+  }
+}
+
+function toggleInspector(){
+  document.getElementById('inspector').classList.toggle('collapsed');
+}
+
+// ==================== CHARTS (matplotlib detection) ====================
+function detectChartIntent(code){
+  // Simple regex detection for plt.plot, plt.bar, etc.
+  const plotMatch = code.match(/plt\.plot\(([^)]+)\)/);
+  const barMatch = code.match(/plt\.bar\(([^)]+)\)/);
+  
+  if (plotMatch) return { type: 'line', args: plotMatch[1] };
+  if (barMatch) return { type: 'bar', args: barMatch[1] };
+  return null;
+}
+
+function renderChart(cellId, chartData){
+  const canvas = document.getElementById('chart-'+cellId);
+  if (!canvas || typeof Chart === 'undefined') return;
+  
+  // Try to parse the args to extract x, y data
+  try {
+    // Simplistic: assume "x_array, y_array" format
+    const args = chartData.args.split(/,(?![^\[]*\])/);
+    let xData = [], yData = [];
+    
+    if (args.length >= 2){
+      xData = eval(args[0].trim()); // unsafe but it's local
+      yData = eval(args[1].trim());
+    } else if (args.length === 1){
+      yData = eval(args[0].trim());
+      xData = yData.map((_, i) => i);
+    }
+    
+    new Chart(canvas, {
+      type: chartData.type === 'bar' ? 'bar' : 'line',
+      data: {
+        labels: xData,
+        datasets: [{ label: 'data', data: yData, borderColor: '#00E5FF', backgroundColor: 'rgba(0,229,255,0.2)', tension: 0.3 }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+  } catch(e) {
+    canvas.style.display = 'none';
+  }
+}
+
+// ==================== ERROR TRANSLATION ====================
+function translateError(msg){
+  const translations = [
+    [/NameError:\s*name\s+'([^']+)'\s+is\s+not\s+defined/, (m,n) => `שגיאה: המשתנה '${n}' לא מוגדר. ייתכן ששכחת להגדיר אותו לפני השימוש.`],
+    [/SyntaxError:\s*invalid syntax/, () => `שגיאת תחביר: פייתון לא מבינה את הקוד. בדוק סוגריים, נקודתיים, וסימנים מיוחדים.`],
+    [/SyntaxError:\s*EOF in multi-line statement/, () => `שגיאת תחביר: חסר סוגר סוגריים או גרשיים סוגרים.`],
+    [/IndentationError/, () => `שגיאת הזחה: בדוק שהקוד מוזח נכון (4 רווחים או Tab בתוך פונקציה/תנאי/לולאה).`],
+    [/TypeError:\s*unsupported operand type/, () => `שגיאת סוג: ניסית לבצע פעולה בין סוגי נתונים שונים (למשל לחבר טקסט למספר). השתמש ב-str() או int() להמרה.`],
+    [/ZeroDivisionError/, () => `שגיאת חלוקה: אסור לחלק באפס בפייתון.`],
+    [/IndexError:\s*list/, () => `שגיאת אינדקס: ניסית לגשת לאיבר ברשימה שלא קיים. שים לב שהאינדקס מתחיל מ-0.`],
+    [/KeyError:\s*'?([^']+)'?/, (m,k) => `שגיאת מפתח: המפתח '${k}' לא קיים במילון. השתמש ב-.get() לגישה בטוחה.`],
+    [/ValueError:\s*invalid literal for int/, () => `שגיאת ערך: אי אפשר להמיר את המחרוזת הזו למספר שלם. ודא שהיא מכילה רק ספרות.`],
+    [/ImportError:\s*No module named '?(\w+)'?/, (m,n) => `שגיאת ייבוא: המודול '${n}' לא קיים בסימולטור. (Skulpt לא תומך בכל הספריות).`],
+    [/time/i, () => `הריצה נעצרה — הקוד רץ יותר מ-10 שניות (אולי לולאה אינסופית?).`],
+  ];
+  for (const [regex, transform] of translations){
+    const m = msg.match(regex);
+    if (m) return msg + '\n\n💡 ' + transform.apply(null, m);
+  }
+  return msg;
+}
+
+// ==================== STORAGE / SHARE ====================
+let saveTimer = null;
+function debouncedSave(){
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToStorage, 1500);
+}
+
+function saveToStorage(){
+  try {
+    // Get current code from editors
+    cells.forEach(c => { if (cellEditors[c.id]) c.code = cellEditors[c.id].getValue(); });
+    const data = cells.map(c => ({ type: c.type, code: c.code }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) { console.warn('Save failed', e); }
+}
+
+function loadFromStorage(){
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    if (data.length > 0){
+      cells = data.map(d => ({ id: newCellId(), type: d.type || 'code', code: d.code || '', output:'', error:false }));
+      return true;
+    }
+  } catch {}
+  return false;
+}
+
+function downloadPy(){
+  // collect all code cells
+  cells.forEach(c => { if (cellEditors[c.id]) c.code = cellEditors[c.id].getValue(); });
+  let content = '# Python Playground export\n# Created in פייתון בסיס\n\n';
+  cells.forEach((c, i) => {
+    if (c.type === 'markdown') {
+      content += c.code.split('\n').map(l => '# ' + l).join('\n') + '\n\n';
+    } else {
+      content += `# ===== Cell ${i+1} =====\n${c.code}\n\n`;
+    }
+  });
+  const blob = new Blob([content], { type: 'text/x-python' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'playground_' + new Date().toISOString().substring(0,10) + '.py';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('הקובץ ירד', 'success');
+}
+
+function uploadPy(){
+  document.getElementById('uploadInput').click();
+}
+
+function handleUpload(event){
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const content = e.target.result;
+    // Split by "# ===== Cell" markers, or just put all in one cell
+    const parts = content.split(/^# =====\s*Cell\s+\d+\s*=====$/m);
+    if (parts.length > 1){
+      cells = parts.filter(p => p.trim()).map(p => ({
+        id: newCellId(), type: 'code', code: p.trim(), output: '', error: false
+      }));
+    } else {
+      cells = [{ id: newCellId(), type: 'code', code: content, output: '', error: false }];
+    }
+    cellEditors = {};
+    renderCells();
+    saveToStorage();
+    toast('הקובץ נטען', 'success');
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function loadDataset(){
+  const sel = document.getElementById('datasetSelect');
+  const name = sel.value;
+  if (!name) return;
+  sel.value = '';
+  // Add a code cell with the load command
+  const code = '# טעון: ' + name + '\ndf = data.load("' + name + '")\nprint("צורה:", df.shape)\nprint(df.head())';
+  addCell('code', code);
+  toast('הוסף תא עם הדאטהסט', 'success');
+}
+
+function shareLink(){
+  cells.forEach(c => { if (cellEditors[c.id]) c.code = cellEditors[c.id].getValue(); });
+  const data = cells.map(c => ({ t: c.type === 'markdown' ? 'm' : 'c', c: c.code }));
+  try {
+    const json = JSON.stringify(data);
+    const compressed = btoa(unescape(encodeURIComponent(json)));
+    const url = window.location.origin + window.location.pathname + '?code=' + compressed;
+    if (navigator.share){
+      navigator.share({ title: 'פייתון בסיס Playground', url }).catch(()=>{});
+    } else if (navigator.clipboard){
+      navigator.clipboard.writeText(url).then(()=>toast('הקישור הועתק ללוח', 'success'));
+    } else {
+      // Show share URL in a copyable way that works in iframes
+      const textarea = document.createElement('textarea');
+      textarea.value = url;
+      textarea.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;height:60px;z-index:9999;padding:10px;background:#16202E;color:#fff;border:1px solid #00E5FF;border-radius:8px;font-size:13px;direction:ltr';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try { document.execCommand('copy'); toast('הקישור הועתק 📋', 'success'); } catch(e) {}
+      setTimeout(() => textarea.remove(), 3000);
+    }
+  } catch(e){ toast('לא ניתן לשתף קוד גדול מדי', 'error'); }
+}
+
+function loadFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  if (!code) return false;
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(code))));
+    cells = data.map(d => ({ id: newCellId(), type: d.t === 'm' ? 'markdown' : 'code', code: d.c || '', output: '', error: false }));
+    return true;
+  } catch { return false; }
+}
+
+// ==================== EXAMPLES ====================
+const EXAMPLES = [
+  {
+    title: 'דוגמה בסיסית',
+    cells: [
+      { type: 'markdown', code: '# דוגמה בסיסית\n\nMultiple cells, *shared state*. כמו Colab.' },
+      { type: 'code', code: '# משתנה שייתפס state בין תאים\nname = "אלירן"\nage = 32' },
+      { type: 'code', code: '# התא הזה משתמש במשתנים שהוגדרו למעלה\nprint(f"{name} בן {age}")' }
+    ]
+  },
+  {
+    title: 'מזג אוויר בערים',
+    cells: [
+      { type: 'markdown', code: '## ניתוח מזג אוויר\nניתוח טמפרטורות בערים בישראל. משתמש במאגר הנתונים המובנה.' },
+      { type: 'code', code: 'df = data.load("cities-weather")\nprint(df)' },
+      { type: 'code', code: '# סינון: ערים חמות (מעל 22 מעלות)\nhot = df.filter("temp", ">", 22)\nprint(hot)' },
+      { type: 'code', code: '# הטמפרטורה הממוצעת\nprint("ממוצע:", df["temp"].mean(), "מעלות")' }
+    ]
+  },
+  {
+    title: 'ליגת העל - ניתוח קבוצות',
+    cells: [
+      { type: 'markdown', code: '## ניתוח קבוצות בליגת העל' },
+      { type: 'code', code: 'df = data.load("football")\nprint(df)' },
+      { type: 'code', code: '# מיון לפי נקודות (מהגבוה לנמוך)\ntop = df.sort_values("points", ascending=False)\nprint(top)' },
+      { type: 'code', code: '# חישוב הפרש שערים לכל קבוצה\ndiff = []\nfor i in range(df.shape[0]):\n    diff.append(df["goals_for"][i] - df["goals_against"][i])\ndf["diff"] = diff\nprint(df)' }
+    ]
+  },
+  {
+    title: 'ציוני סטודנטים',
+    cells: [
+      { type: 'markdown', code: '## ניתוח ציונים\nמי הצטיין? מה הממוצע?' },
+      { type: 'code', code: 'df = data.load("students")\nprint(df)' },
+      { type: 'code', code: '# סטטיסטיקה כללית\nstats = df.describe()\nfor col in stats:\n    s = stats[col]\n    print(col, ": mean", s["mean"], "min", s["min"], "max", s["max"])' },
+      { type: 'code', code: '# סטודנטים שמעל 85 במתמטיקה\ntop_math = df.filter("math", ">", 85)\nprint("מצטיינים במתמטיקה:")\nprint(top_math)' }
+    ]
+  },
+  {
+    title: 'מחירי דירות בתל אביב',
+    cells: [
+      { type: 'markdown', code: '## ניתוח שוק הדיור' },
+      { type: 'code', code: 'df = data.load("real-estate")\nprint(df)' },
+      { type: 'code', code: '# דירות מעל 4M\nexpensive = df.filter("price_m", ">", 4)\nprint(expensive)' },
+      { type: 'code', code: '# מחיר ממוצע למ\"ר\nfor i in range(df.shape[0]):\n    price_per_sqm = (df["price_m"][i] * 1000000) / df["sqm"][i]\n    print(df["neighborhood"][i], "->", round(price_per_sqm), "NIS per sqm")' }
+    ]
+  },
+  {
+    title: 'סטטיסטיקה בסיסית',
+    cells: [
+      { type: 'markdown', code: '## חישוב סטטיסטי על רשימה' },
+      { type: 'code', code: 'scores = [85, 92, 78, 90, 88, 76, 95, 82]\nprint(f"מספר ציונים: {len(scores)}")' },
+      { type: 'code', code: 'avg = sum(scores) / len(scores)\nprint(f"ממוצע: {avg:.2f}")\nprint(f"מקסימום: {max(scores)}")\nprint(f"מינימום: {min(scores)}")' },
+      { type: 'code', code: '# סינון ציונים מעל 85\nhigh = [s for s in scores if s > 85]\nprint(f"ציונים מעל 85: {high}")' }
+    ]
+  },
+  {
+    title: 'input() אינטראקטיבי',
+    cells: [
+      { type: 'markdown', code: '## אינטראקציה עם המשתמש' },
+      { type: 'code', code: 'name = input("מה שמך? ")\nprint(f"שלום {name}!")' }
+    ]
+  }
+];
+
+let exampleIdx = 0;
+function loadExample(){
+  const ex = EXAMPLES[exampleIdx % EXAMPLES.length];
+  exampleIdx++;
+  cells = ex.cells.map(c => ({ id: newCellId(), type: c.type, code: c.code, output: '', error: false }));
+  cellEditors = {};
+  renderCells();
+  saveToStorage();
+  toast(`טענתי: ${ex.title}`, 'success');
+}
+
+// ==================== KEYBOARD SHORTCUTS ====================
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Enter') {
+    e.preventDefault();
+    runAllCells();
+  } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveToStorage();
+    toast('נשמר אוטומטית', 'success');
+  }
+});
+
+// ==================== INIT ====================
+function init(){
+  // Try URL share first
+  if (!loadFromUrl()){
+    if (!loadFromStorage()){
+      // First time — show welcome
+      cells = [
+        { id: newCellId(), type: 'markdown', code: '# ברוך הבא ל-Playground\n\nכאן אפשר לכתוב **כל קוד פייתון** שתרצה — בלי הגבלת תרגיל, בלי מבנה קבוע. סביבת עבודה חופשית בסגנון Google Colab.\n\n**טיפים:**\n- `Ctrl+Enter` — הרץ תא נוכחי\n- `Ctrl+Shift+Enter` — הרץ הכל\n- לחץ על "דוגמה" למעלה לטעון דוגמאות\n- משתנים **משותפים בין תאים** — בדיוק כמו ב-Colab\n- הקוד נשמר אוטומטית בדפדפן' },
+        { id: newCellId(), type: 'code', code: '' }
+      ];
+    }
+  }
+  renderCells();
+}
+
+// Wait for libraries to load
+if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
+  init();
+} else {
+  window.addEventListener('load', () => setTimeout(init, 100));
+}
+</script>
+
+<!-- Templates Modal -->
+<div class="pg-modal-overlay" id="tplOverlay" onclick="if(event.target===this)closeTemplates()">
+  <div class="pg-modal" role="dialog" aria-labelledby="tplTitle">
+    <div class="pg-modal-head">
+      <h2 id="tplTitle">📚 תבניות התחלה</h2>
+      <button class="pg-modal-close" onclick="closeTemplates()" aria-label="סגור">×</button>
+    </div>
+    <div class="pg-modal-body">
+      <p style="color:var(--text2);font-size:13px;margin-bottom:1rem">בחר תבנית — הקוד ייטען לתאים עם הסברים. כל תבנית מוכנה להרצה מיידית.</p>
+      <div class="tpl-grid" id="tplGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Cheat Sheet Modal -->
+<div class="pg-modal-overlay" id="csOverlay" onclick="if(event.target===this)closeCheatSheet()">
+  <div class="pg-modal" role="dialog" aria-labelledby="csTitle">
+    <div class="pg-modal-head">
+      <h2 id="csTitle">📖 ספריית פונקציות</h2>
+      <button class="pg-modal-close" onclick="closeCheatSheet()" aria-label="סגור">×</button>
+    </div>
+    <div class="pg-modal-body">
+      <div class="cs-search">
+        <div class="cs-search-wrap">
+          <span class="icon">🔍</span>
+          <input id="csSearchInput" type="text" placeholder="חפש: shape, groupby, mean..." oninput="renderCheatSheet()">
+        </div>
+        <div class="cs-cat-tabs" id="csCatTabs"></div>
+      </div>
+      <div id="csList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ============================================================
+// PLAYGROUND EXTRAS: Templates + Cheat Sheet
+// ============================================================
+// ============================================================
+// PLAYGROUND TEMPLATES — 10 starter notebooks
+// & API CHEAT SHEET — searchable Python/pandas reference
+// ============================================================
+
+const PLAYGROUND_TEMPLATES = [
+  {
+    id: 'eda',
+    icon: '📊',
+    title: 'EDA - ניתוח חקרני בסיסי',
+    desc: 'תבנית התחלה לכל ניתוח: טעינה, shape, info, describe, התפלגות',
+    color: '#00E5FF',
+    cells: [
+      { type: 'markdown', content: '# 📊 ניתוח חקרני (EDA)\n\nתבנית סטנדרטית לכל ניתוח דאטה.\nנעבור דרך 6 שלבים: **טעינה → גודל → סוגים → סטטיסטיקה → התפלגות → ויזואליזציה.**' },
+      { type: 'code', content: '# שלב 1: טעינה\ndf = data.load("students")\nprint("דאטה נטען בהצלחה!")' },
+      { type: 'code', content: '# שלב 2: גודל הטבלה\nprint("שורות:", df.shape[0])\nprint("עמודות:", df.shape[1])' },
+      { type: 'code', content: '# שלב 3: רשימת העמודות\nprint(df.columns)' },
+      { type: 'code', content: '# שלב 4: 5 שורות ראשונות\nprint(df.head())' },
+      { type: 'code', content: '# שלב 5: סוגי נתונים והשלמות\ndf.info()' },
+      { type: 'code', content: '# שלב 6: סטטיסטיקה תיאורית\nprint(df.describe())' },
+      { type: 'code', content: '# שלב 7: התפלגות עמודה קטגורית\n# החלף "math" בשם עמודה שאתה רוצה לחקור\nprint("ממוצע math:", df["math"].mean())\nprint("מקסימום:", df["math"].max())\nprint("מינימום:", df["math"].min())' },
+    ]
+  },
+  {
+    id: 'churn',
+    icon: '📞',
+    title: 'ניתוח נטישת לקוחות',
+    desc: 'Case study אמיתי: מי הלקוחות שעוזבים? איזו תכנית הכי מנטשת? מי בסיכון?',
+    color: '#FF4060',
+    cells: [
+      { type: 'markdown', content: '# 📞 ניתוח נטישת לקוחות\n\n**מטרה:** למצוא מה גורם ללקוחות לעזוב ומי בסיכון.\n\n**הצעדים:**\n1. שיעור נטישה כללי\n2. נטישה לפי תכנית\n3. פרופיל הנוטש\n4. זיהוי לקוחות בסיכון' },
+      { type: 'code', content: '# טעינה\ndf = data.load("telecom-churn")\nprint("סך לקוחות:", df.shape[0])' },
+      { type: 'code', content: '# 1. שיעור נטישה כללי\nchurn_rate = df["churn"].mean() * 100\nprint("שיעור נטישה:", round(churn_rate, 1), "%")' },
+      { type: 'code', content: '# 2. נטישה לפי תכנית\nby_plan = df.groupby("plan").sum()\nprint(by_plan["churn"])' },
+      { type: 'code', content: '# 3. פרופיל הנוטש - גיל ממוצע\nchurned = df.filter("churn", "==", 1)\nactive = df.filter("churn", "==", 0)\nprint("גיל ממוצע נוטשים:", round(churned["age"].mean(), 1))\nprint("גיל ממוצע פעילים:", round(active["age"].mean(), 1))' },
+      { type: 'code', content: '# 4. פרופיל הנוטש - חשבון חודשי\nprint("חשבון ממוצע נוטשים:", round(churned["monthly_bill"].mean(), 2))\nprint("חשבון ממוצע פעילים:", round(active["monthly_bill"].mean(), 2))' },
+      { type: 'code', content: '# 5. לקוחות בסיכון: ותק < 24 חודש + חשבון > 80 + עדיין לא נטשו\nat_risk = df.where(lambda r: r["churn"] == 0 and r["tenure_months"] < 24 and r["monthly_bill"] > 80)\nprint("לקוחות בסיכון:", at_risk.shape[0])\nprint(at_risk[["customer_id", "monthly_bill", "tenure_months"]])' },
+    ]
+  },
+  {
+    id: 'sales',
+    icon: '💰',
+    title: 'דוח מכירות שנתי',
+    desc: 'ניתוח 12 חודשי מכירות: סך, חודש שיא, צמיחה, מצטבר',
+    color: '#FFDE57',
+    cells: [
+      { type: 'markdown', content: '# 💰 דוח מכירות שנתי\n\nניתוח מלא של ביצועי מכירות חודשיים.' },
+      { type: 'code', content: 'df = data.load("sales")\nprint(df)' },
+      { type: 'code', content: '# סך הכנסות שנתי\ntotal = df["revenue"].sum()\nprint("סך הכל:", total, "ש\\"ח")' },
+      { type: 'code', content: '# חודש שיא וחודש שפל\nbest = df.sort_values("revenue", ascending=False).head(1)\nworst = df.sort_values("revenue").head(1)\nprint("חודש שיא:", best["month"][0], "-", best["revenue"][0])\nprint("חודש שפל:", worst["month"][0], "-", worst["revenue"][0])' },
+      { type: 'code', content: '# גידול חודשי (%)\ndf["growth_%"] = df["revenue"].pct_change()\nprint(df[["month", "revenue", "growth_%"]])' },
+      { type: 'code', content: '# סכום מצטבר\ndf["running_total"] = df["revenue"].cumsum()\nprint(df[["month", "revenue", "running_total"]])' },
+      { type: 'code', content: '# מחיר ממוצע ליחידה\ndf["avg_price"] = [df["revenue"][i] / df["units"][i] for i in range(df.shape[0])]\nprint(df[["month", "avg_price"]])' },
+    ]
+  },
+  {
+    id: 'cleaning',
+    icon: '🧹',
+    title: 'ניקוי נתונים',
+    desc: 'Pipeline מלא: ערכים חסרים, כפילויות, המרת סוגים, קיצוץ',
+    color: '#00E5A0',
+    cells: [
+      { type: 'markdown', content: '# 🧹 ניקוי נתונים\n\nכל ניתוח מתחיל בניקוי. הצעדים הסטנדרטיים:\n1. **ערכים חסרים** (None / NaN)\n2. **כפילויות**\n3. **המרת סוגים** (string→int)\n4. **קיצוץ ערכים קיצוניים**' },
+      { type: 'code', content: '# נתונים מלוכלכים לדוגמה\nmessy = DataFrame({\n    "id": [1, 2, 2, 3, 4, 4, 5],\n    "name": ["A", "B", "B", None, "D", "D", "E"],\n    "score": ["85", "92", "92", "78", None, "65", "150"]\n})\nprint("מקור:")\nprint(messy)' },
+      { type: 'code', content: '# 1. הסרת שורות עם ערכים חסרים\nstep1 = messy.dropna()\nprint("אחרי dropna:")\nprint(step1)' },
+      { type: 'code', content: '# 2. הסרת כפילויות\nstep2 = step1.drop_duplicates()\nprint("אחרי drop_duplicates:")\nprint(step2)' },
+      { type: 'code', content: '# 3. המרת score ממחרוזת ל-int\nstep3 = step2.astype("score", int)\nprint("score עכשיו int:", step3["score"][0])' },
+      { type: 'code', content: '# 4. קיצוץ score לטווח 0-100 (מסיר outliers)\nstep4 = step3.clip("score", lower=0, upper=100)\nprint("התוצאה הסופית:")\nprint(step4)' },
+    ]
+  },
+  {
+    id: 'groupby',
+    icon: '🎯',
+    title: 'GroupBy ו-Pivot',
+    desc: 'קיבוץ נתונים: GROUP BY בפייתון, אגרגציות מרובות',
+    color: '#9B5CFF',
+    cells: [
+      { type: 'markdown', content: '# 🎯 GroupBy - הלב של pandas\n\nזה ה-GROUP BY של SQL: קבץ → אגרג → דירוג.' },
+      { type: 'code', content: 'df = data.load("salaries")\nprint(df.head())' },
+      { type: 'code', content: '# ממוצע שכר לכל מחלקה\nmean_by_dept = df.groupby("department").mean()\nprint(mean_by_dept)' },
+      { type: 'code', content: '# מספר עובדים לכל מחלקה\ncount = df.groupby("department").count()\nprint(count)' },
+      { type: 'code', content: '# סכום שכר לכל מחלקה\ntotal = df.groupby("department").sum()\nprint(total["salary"])' },
+      { type: 'code', content: '# מי המחלקה עם הממוצע הגבוה?\nresult = df.groupby("department").mean().sort_values("salary", ascending=False)\nprint(result)' },
+      { type: 'code', content: '# טופ 3 עובדים בכל מחלקה (ידני - groupby+sort)\nfor dept in df["department"].unique():\n    print(f"\\n=== {dept} ===")\n    sub = df.filter("department", "==", dept).sort_values("salary", ascending=False).head(3)\n    print(sub[["name", "salary"]])' },
+    ]
+  },
+  {
+    id: 'join',
+    icon: '🔗',
+    title: 'JOIN בין טבלאות',
+    desc: 'חיבור טבלאות: merge (inner/left) ו-concat',
+    color: '#FFB020',
+    cells: [
+      { type: 'markdown', content: '# 🔗 JOIN בין טבלאות\n\nכמו ב-SQL: לחבר נתונים מ-2 מקורות לפי עמודה משותפת.' },
+      { type: 'code', content: '# 2 טבלאות לדוגמה\ncustomers = DataFrame({\n    "id": [1, 2, 3, 4],\n    "name": ["גל", "תומר", "נועה", "מיכל"],\n    "city": ["ת\\"א", "ירושלים", "חיפה", "באר שבע"]\n})\norders = DataFrame({\n    "id": [1, 1, 2, 3, 5],\n    "product": ["ספר", "עט", "מחשב", "כסא", "שולחן"],\n    "price": [50, 10, 5000, 800, 1500]\n})\nprint("customers:")\nprint(customers)\nprint("orders:")\nprint(orders)' },
+      { type: 'code', content: '# INNER JOIN - רק התאמות\ninner = customers.merge(orders, on="id")\nprint("INNER (התאמות בלבד):")\nprint(inner)' },
+      { type: 'code', content: '# LEFT JOIN - כל הלקוחות, גם בלי הזמנות\nleft = customers.merge(orders, on="id", how="left")\nprint("LEFT (כל הלקוחות):")\nprint(left)' },
+      { type: 'code', content: '# CONCAT - איחוד שורות (UNION ALL)\nq1 = DataFrame({"month": ["Jan", "Feb"], "revenue": [100, 150]})\nq2 = DataFrame({"month": ["Mar", "Apr"], "revenue": [200, 250]})\nyear = DataFrame.concat([q1, q2])\nprint(year)' },
+      { type: 'code', content: '# Chaining: JOIN + groupby + sort\ncombined = customers.merge(orders, on="id")\nby_city = combined.groupby("city").sum()\nprint("הכנסות לפי עיר:")\nprint(by_city["price"])' },
+    ]
+  },
+  {
+    id: 'stats',
+    icon: '📈',
+    title: 'סטטיסטיקה תיאורית',
+    desc: 'mean, median, std, percentiles - להבין את הדאטה',
+    color: '#00E5FF',
+    cells: [
+      { type: 'markdown', content: '# 📈 סטטיסטיקה תיאורית\n\n4 מדדים שצריך לדעת על כל עמודת מספרים.' },
+      { type: 'code', content: 'df = data.load("students")\nprint(df)' },
+      { type: 'code', content: '# 1. מרכז - ממוצע (mean)\nprint("ממוצע math:", round(df["math"].mean(), 2))\nprint("ממוצע english:", round(df["english"].mean(), 2))\nprint("ממוצע history:", round(df["history"].mean(), 2))' },
+      { type: 'code', content: '# 2. טווח - min ו-max\nfor col in ["math", "english", "history"]:\n    print(col, "- מינ:", df[col].min(), "מקס:", df[col].max())' },
+      { type: 'code', content: '# 3. סקירה כללית - describe\nprint(df.describe())' },
+      { type: 'code', content: '# 4. סטיית תקן (חישוב ידני, כי mini-pandas לא תומך)\ndef calc_std(values):\n    m = sum(values) / len(values)\n    var = sum((x - m) ** 2 for x in values) / len(values)\n    return var ** 0.5\n\nmath_values = list(df["math"])\nprint("סטיית תקן math:", round(calc_std(math_values), 2))' },
+      { type: 'code', content: '# 5. חציון (חישוב ידני)\ndef median(values):\n    s = sorted(values)\n    n = len(s)\n    return s[n // 2] if n % 2 else (s[n // 2 - 1] + s[n // 2]) / 2\n\nprint("חציון math:", median(list(df["math"])))' },
+    ]
+  },
+  {
+    id: 'timeseries',
+    icon: '⏰',
+    title: 'Time Series basics',
+    desc: 'סדרות זמן: cumsum, pct_change, ממוצע נע',
+    color: '#FF4060',
+    cells: [
+      { type: 'markdown', content: '# ⏰ Time Series - סדרות זמן\n\n3 חישובים בסיסיים לכל סדרה כרונולוגית.' },
+      { type: 'code', content: 'df = data.load("sales")\nprint(df)' },
+      { type: 'code', content: '# 1. סכום מצטבר (running total)\ndf["cumulative"] = df["revenue"].cumsum()\nprint(df[["month", "revenue", "cumulative"]])' },
+      { type: 'code', content: '# 2. אחוז שינוי מהחודש הקודם\ndf["growth"] = df["revenue"].pct_change()\nfor i in range(df.shape[0]):\n    g = df["growth"][i]\n    if g is not None:\n        print(df["month"][i], ":", round(g * 100, 1), "%")' },
+      { type: 'code', content: '# 3. ממוצע נע (3 חודשים) - חישוב ידני\nrevenues = list(df["revenue"])\nmoving_avg = []\nfor i in range(len(revenues)):\n    if i < 2:\n        moving_avg.append(None)\n    else:\n        moving_avg.append((revenues[i] + revenues[i-1] + revenues[i-2]) / 3)\n\nfor i in range(df.shape[0]):\n    print(df["month"][i], "-", moving_avg[i])' },
+      { type: 'code', content: '# 4. כמה חודשים היו עם גידול חיובי?\ndf["growth"] = df["revenue"].pct_change()\npos = df.filter("growth", ">", 0)\nprint("חודשים עם גידול:", pos.shape[0], "מתוך", df.shape[0] - 1)' },
+    ]
+  },
+  {
+    id: 'compare',
+    icon: '⚖️',
+    title: 'השוואה בין קבוצות',
+    desc: 'A/B test: השווה ממוצעים, התפלגות, סטטיסטיקה',
+    color: '#9B5CFF',
+    cells: [
+      { type: 'markdown', content: '# ⚖️ השוואה בין קבוצות\n\nשאלה קלאסית: האם 2 קבוצות שונות באמת?' },
+      { type: 'code', content: 'df = data.load("students")\nprint(df)' },
+      { type: 'code', content: '# פצל ל-2 קבוצות: ציון math גבוה / נמוך\nhigh = df.where(lambda r: r["math"] >= 85)\nlow = df.where(lambda r: r["math"] < 85)\nprint("קבוצה גבוהה:", high.shape[0], "סטודנטים")\nprint("קבוצה נמוכה:", low.shape[0], "סטודנטים")' },
+      { type: 'code', content: '# השווה ממוצעים באנגלית\nprint("ממוצע באנגלית - גבוהים:", round(high["english"].mean(), 2))\nprint("ממוצע באנגלית - נמוכים:", round(low["english"].mean(), 2))\nprint("הפרש:", round(high["english"].mean() - low["english"].mean(), 2))' },
+      { type: 'code', content: '# השווה גם בהיסטוריה\nprint("ממוצע בהיסטוריה - גבוהים:", round(high["history"].mean(), 2))\nprint("ממוצע בהיסטוריה - נמוכים:", round(low["history"].mean(), 2))' },
+      { type: 'code', content: '# סיכום: האם יש קשר בין ציון math לציון בשאר המקצועות?\ngap_eng = high["english"].mean() - low["english"].mean()\ngap_hist = high["history"].mean() - low["history"].mean()\nprint("פער באנגלית:", round(gap_eng, 2))\nprint("פער בהיסטוריה:", round(gap_hist, 2))\nif gap_eng > 5 and gap_hist > 5:\n    print("מסקנה: יש קשר חיובי בין הציונים")\nelse:\n    print("מסקנה: הקשר חלש")' },
+    ]
+  },
+  {
+    id: 'hr',
+    icon: '💼',
+    title: 'HR / Salary Analytics',
+    desc: 'ניתוח שכר במחלקות: פערים, ותק, top performers',
+    color: '#FFDE57',
+    cells: [
+      { type: 'markdown', content: '# 💼 HR Analytics\n\nניתוח שכר במחלקות הארגון.' },
+      { type: 'code', content: 'df = data.load("salaries")\nprint(df)' },
+      { type: 'code', content: '# סקירה - שכר ממוצע לפי מחלקה\nmeans = df.groupby("department").mean()\nprint(means)' },
+      { type: 'code', content: '# פערים בין מחלקות\nmax_avg = means["salary"].max()\nmin_avg = means["salary"].min()\nprint("ממוצע הכי גבוה:", max_avg)\nprint("ממוצע הכי נמוך:", min_avg)\nprint("פער:", max_avg - min_avg)' },
+      { type: 'code', content: '# האם ותק קשור לשכר?\ndf["ratio"] = [df["salary"][i] / df["years"][i] for i in range(df.shape[0])]\nresult = df.sort_values("ratio", ascending=False)\nprint("שכר ליחידת ותק:")\nprint(result[["name", "department", "salary", "years", "ratio"]])' },
+      { type: 'code', content: '# טופ 3 בכל מחלקה\nfor dept in df["department"].unique():\n    print("--- " + str(dept) + " ---")\n    sub = df.filter("department", "==", dept).sort_values("salary", ascending=False).head(3)\n    for i in range(sub.shape[0]):\n        print("  " + str(sub["name"][i]) + ": " + str(sub["salary"][i]) + " (" + str(sub["years"][i]) + " שנים)")' },
+      { type: 'code', content: '# מי משתכר מעל הממוצע של מחלקתו?\ndept_means = df.groupby("department").mean()\nabove = []\nfor i in range(df.shape[0]):\n    name = df["name"][i]\n    dept = df["department"][i]\n    salary = df["salary"][i]\n    # מצא את הממוצע של המחלקה\n    for j in range(dept_means.shape[0]):\n        if dept_means["department"][j] == dept:\n            avg = dept_means["salary"][j]\n            if salary > avg:\n                above.append(name)\n            break\nprint("מעל ממוצע מחלקתי:", above)' },
+    ]
+  },
+];
+
+
+// ============================================================
+// API CHEAT SHEET - DataFrame, Series, mini-pandas, Python builtins
+// ============================================================
+
+const API_CHEAT_SHEET = [
+  // === DataFrame Properties ===
+  { cat: 'DataFrame', name: 'shape', sig: 'df.shape', desc: 'גודל הטבלה: (שורות, עמודות)', example: 'df = data.load("students")\nprint(df.shape)' },
+  { cat: 'DataFrame', name: 'columns', sig: 'df.columns', desc: 'רשימת שמות העמודות', example: 'df = data.load("students")\nprint(df.columns)' },
+  { cat: 'DataFrame', name: 'values', sig: 'df.values', desc: 'נתוני הטבלה כרשימת שורות', example: 'df = DataFrame({"a":[1,2],"b":[3,4]})\nprint(df.values)' },
+
+  // === DataFrame Inspection ===
+  { cat: 'DataFrame', name: 'head', sig: 'df.head(n=5)', desc: 'n שורות ראשונות', example: 'df = data.load("students")\nprint(df.head(3))' },
+  { cat: 'DataFrame', name: 'tail', sig: 'df.tail(n=5)', desc: 'n שורות אחרונות', example: 'df = data.load("students")\nprint(df.tail(2))' },
+  { cat: 'DataFrame', name: 'info', sig: 'df.info()', desc: 'סיכום: עמודות, סוגים, ערכים לא-ריקים', example: 'df = data.load("students")\ndf.info()' },
+  { cat: 'DataFrame', name: 'describe', sig: 'df.describe()', desc: 'סטטיסטיקה תיאורית לעמודות מספריות', example: 'df = data.load("students")\nprint(df.describe())' },
+
+  // === DataFrame Filtering ===
+  { cat: 'DataFrame', name: 'filter', sig: 'df.filter(col, op, value)', desc: 'סינון לפי תנאי. אופרטורים: > < >= <= == != in', example: 'df = data.load("students")\nresult = df.filter("math", ">", 85)\nprint(result)' },
+  { cat: 'DataFrame', name: 'where', sig: 'df.where(lambda row: ...)', desc: 'סינון מורכב עם פונקציה', example: 'df = data.load("students")\nresult = df.where(lambda r: r["math"] > 80 and r["english"] > 80)\nprint(result)' },
+
+  // === DataFrame Operations ===
+  { cat: 'DataFrame', name: 'sort_values', sig: 'df.sort_values(by, ascending=True)', desc: 'מיון לפי עמודה', example: 'df = data.load("students")\nresult = df.sort_values("math", ascending=False)\nprint(result)' },
+  { cat: 'DataFrame', name: 'groupby', sig: 'df.groupby(col).mean()', desc: 'קיבוץ. methods: mean, sum, count, max, min, size', example: 'df = data.load("salaries")\nprint(df.groupby("department").mean())' },
+  { cat: 'DataFrame', name: 'merge', sig: 'a.merge(b, on, how="inner")', desc: 'JOIN בין 2 טבלאות. how: inner / left', example: 'a = DataFrame({"id":[1,2,3],"n":["A","B","C"]})\nb = DataFrame({"id":[1,2],"v":[10,20]})\nprint(a.merge(b, on="id"))' },
+  { cat: 'DataFrame', name: 'concat', sig: 'DataFrame.concat([df1, df2])', desc: 'איחוד שורות (UNION ALL)', example: 'a = DataFrame({"x":[1,2]})\nb = DataFrame({"x":[3,4]})\nprint(DataFrame.concat([a,b]))' },
+  { cat: 'DataFrame', name: 'apply', sig: 'df.apply(fn, axis=0)', desc: 'הפעלת פונקציה. axis=0=עמודות, axis=1=שורות', example: 'df = DataFrame({"x":[1,2,3]})\nprint(df.apply(sum))' },
+
+  // === DataFrame Cleaning ===
+  { cat: 'DataFrame', name: 'drop', sig: 'df.drop(columns=...)', desc: 'הסר עמודה או רשימת עמודות', example: 'df = data.load("students")\nresult = df.drop(columns="math")\nprint(result.columns)' },
+  { cat: 'DataFrame', name: 'drop_duplicates', sig: 'df.drop_duplicates()', desc: 'הסר שורות זהות', example: 'df = DataFrame({"x":[1,1,2,2,3]})\nprint(df.drop_duplicates())' },
+  { cat: 'DataFrame', name: 'fillna', sig: 'df.fillna(value)', desc: 'החלף None ב-value', example: 'df = DataFrame({"x":[1,None,3]})\nprint(df.fillna(0))' },
+  { cat: 'DataFrame', name: 'dropna', sig: 'df.dropna()', desc: 'הסר שורות עם None', example: 'df = DataFrame({"x":[1,None,3],"y":[1,2,3]})\nprint(df.dropna())' },
+  { cat: 'DataFrame', name: 'isna', sig: 'df.isna()', desc: 'מטריצת True/False של ערכים חסרים', example: 'df = DataFrame({"x":[1,None,3]})\nprint(df.isna())' },
+  { cat: 'DataFrame', name: 'rename', sig: 'df.rename({old: new})', desc: 'שינוי שמות עמודות', example: 'df = DataFrame({"a":[1,2]})\nprint(df.rename({"a": "b"}))' },
+  { cat: 'DataFrame', name: 'astype', sig: 'df.astype(col, type)', desc: 'המרת סוג עמודה. type: int / float / str', example: 'df = DataFrame({"x":["1","2","3"]})\nresult = df.astype("x", int)\nprint(result["x"].sum())' },
+  { cat: 'DataFrame', name: 'clip', sig: 'df.clip(col, lower, upper)', desc: 'קצוץ ערכים בעמודה לטווח', example: 'df = DataFrame({"x":[-5,50,150]})\nprint(df.clip("x", lower=0, upper=100))' },
+
+  // === DataFrame Indexing ===
+  { cat: 'DataFrame', name: 'set_index', sig: 'df.set_index(col)', desc: 'הפיכת עמודה לאינדקס (ראשונה)', example: 'df = DataFrame({"a":[1,2],"b":[3,4]})\nprint(df.set_index("b").columns)' },
+  { cat: 'DataFrame', name: 'reset_index', sig: 'df.reset_index()', desc: 'הוספת עמודת אינדקס מספרית', example: 'df = DataFrame({"x":[1,2,3]})\nprint(df.reset_index().columns)' },
+  { cat: 'DataFrame', name: 'nunique', sig: 'df.nunique()', desc: 'מספר ערכים ייחודיים בכל עמודה', example: 'df = DataFrame({"x":[1,1,2,3,3]})\nprint(df.nunique())' },
+
+  // === Series ===
+  { cat: 'Series', name: 'mean', sig: 'series.mean()', desc: 'ממוצע חשבוני', example: 'df = data.load("students")\nprint(df["math"].mean())' },
+  { cat: 'Series', name: 'sum', sig: 'series.sum()', desc: 'סכום הערכים', example: 'df = data.load("salaries")\nprint(df["salary"].sum())' },
+  { cat: 'Series', name: 'max', sig: 'series.max()', desc: 'הערך המקסימלי', example: 'df = data.load("students")\nprint(df["math"].max())' },
+  { cat: 'Series', name: 'min', sig: 'series.min()', desc: 'הערך המינימלי', example: 'df = data.load("students")\nprint(df["math"].min())' },
+  { cat: 'Series', name: 'count', sig: 'series.count()', desc: 'מספר ערכים לא-None', example: 'df = DataFrame({"x":[1,None,3]})\nprint(df["x"].count())' },
+  { cat: 'Series', name: 'unique', sig: 'series.unique()', desc: 'רשימת ערכים ייחודיים', example: 'df = data.load("salaries")\nprint(df["department"].unique())' },
+  { cat: 'Series', name: 'nunique', sig: 'series.nunique()', desc: 'מספר ערכים ייחודיים', example: 'df = data.load("salaries")\nprint(df["department"].nunique())' },
+  { cat: 'Series', name: 'value_counts', sig: 'series.value_counts()', desc: 'התפלגות - מילון ערך→ספירה', example: 'df = data.load("salaries")\nprint(df["department"].value_counts())' },
+  { cat: 'Series', name: 'apply', sig: 'series.apply(fn)', desc: 'הפעל פונקציה על כל ערך', example: 'df = data.load("students")\nresult = df["math"].apply(lambda v: v * 2)\nprint(list(result))' },
+  { cat: 'Series', name: 'map', sig: 'series.map(dict_or_fn)', desc: 'תרגום ערכים לפי מילון/פונקציה', example: 'df = data.load("telecom-churn")\nresult = df["churn"].map({0: "Active", 1: "Churned"})\nprint(list(result))' },
+  { cat: 'Series', name: 'isna', sig: 'series.isna()', desc: 'רשימת True/False של None', example: 'df = DataFrame({"x":[1,None,3]})\nprint(df["x"].isna())' },
+  { cat: 'Series', name: 'fillna', sig: 'series.fillna(value)', desc: 'החלף None ב-value', example: 'df = DataFrame({"x":[1,None,3]})\nprint(list(df["x"].fillna(0)))' },
+  { cat: 'Series', name: 'round', sig: 'series.round(n=0)', desc: 'עיגול ל-n ספרות אחרי הנקודה', example: 'df = DataFrame({"x":[1.234, 5.678]})\nprint(list(df["x"].round(1)))' },
+  { cat: 'Series', name: 'cumsum', sig: 'series.cumsum()', desc: 'סכום מצטבר (running total)', example: 'df = DataFrame({"x":[1,2,3,4]})\nprint(list(df["x"].cumsum()))' },
+  { cat: 'Series', name: 'pct_change', sig: 'series.pct_change()', desc: 'אחוז שינוי מהערך הקודם', example: 'df = DataFrame({"x":[100,150,180]})\nprint(list(df["x"].pct_change()))' },
+
+  // === Data Loader ===
+  { cat: 'נתונים', name: 'data.list', sig: 'data.list()', desc: 'הצג רשימת כל הדאטהסטים הזמינים', example: 'data.list()' },
+  { cat: 'נתונים', name: 'data.load', sig: 'data.load(name)', desc: 'טען דאטהסט. שמות: students, salaries, telecom-churn, real-estate, football, cities-weather, sales, covid-israel, eurovision', example: 'df = data.load("students")\nprint(df.shape)' },
+  { cat: 'נתונים', name: 'data.info', sig: 'data.info(name)', desc: 'הצג פרטים על דאטהסט', example: 'data.info("students")' },
+
+  // === Python Builtins ===
+  { cat: 'Python', name: 'print', sig: 'print(x, ...)', desc: 'הדפסה למסך. תומך בכמה ארגומנטים', example: 'print("Hello", "World", 123)' },
+  { cat: 'Python', name: 'len', sig: 'len(obj)', desc: 'מספר איברים', example: 'print(len([1,2,3]))\nprint(len("hello"))' },
+  { cat: 'Python', name: 'type', sig: 'type(obj)', desc: 'הסוג של אובייקט', example: 'print(type(5))\nprint(type("hi"))' },
+  { cat: 'Python', name: 'range', sig: 'range(start, stop, step)', desc: 'רצף מספרים', example: 'for i in range(0, 10, 2):\n    print(i)' },
+  { cat: 'Python', name: 'enumerate', sig: 'enumerate(iterable)', desc: 'אינדקס+ערך בלולאה', example: 'for i, v in enumerate(["a","b","c"]):\n    print(i, v)' },
+  { cat: 'Python', name: 'zip', sig: 'zip(a, b)', desc: 'איחוד 2 רשימות לזוגות', example: 'for n, s in zip(["A","B"], [85,90]):\n    print(n, "=", s)' },
+  { cat: 'Python', name: 'sorted', sig: 'sorted(iterable, key, reverse)', desc: 'מיון רשימה', example: 'print(sorted([3,1,2]))\nprint(sorted(["b","a","c"], reverse=True))' },
+  { cat: 'Python', name: 'sum', sig: 'sum(iterable)', desc: 'סכום ערכים', example: 'print(sum([1,2,3,4,5]))' },
+  { cat: 'Python', name: 'max', sig: 'max(iterable)', desc: 'הערך הגדול', example: 'print(max([3,1,7,2]))' },
+  { cat: 'Python', name: 'min', sig: 'min(iterable)', desc: 'הערך הקטן', example: 'print(min([3,1,7,2]))' },
+  { cat: 'Python', name: 'list', sig: 'list(iterable)', desc: 'המרה לרשימה', example: 'print(list(range(5)))' },
+  { cat: 'Python', name: 'dict', sig: 'dict()', desc: 'יצירת מילון', example: 'd = {"a": 1, "b": 2}\nprint(d["a"])' },
+  { cat: 'Python', name: 'set', sig: 'set(iterable)', desc: 'קבוצה (ערכים ייחודיים)', example: 'print(set([1,1,2,2,3]))' },
+  { cat: 'Python', name: 'isinstance', sig: 'isinstance(obj, type)', desc: 'בדיקת סוג', example: 'print(isinstance(5, int))\nprint(isinstance("hi", str))' },
+  { cat: 'Python', name: 'round', sig: 'round(x, n=0)', desc: 'עיגול ל-n ספרות', example: 'print(round(3.14159, 2))' },
+  { cat: 'Python', name: 'abs', sig: 'abs(x)', desc: 'ערך מוחלט', example: 'print(abs(-7))\nprint(abs(3.14))' },
+  { cat: 'Python', name: 'str', sig: 'str(x)', desc: 'המרה למחרוזת', example: 'print(str(123) + str(456))' },
+  { cat: 'Python', name: 'int', sig: 'int(x)', desc: 'המרה למספר שלם', example: 'print(int("42"))\nprint(int(3.7))' },
+  { cat: 'Python', name: 'float', sig: 'float(x)', desc: 'המרה למספר עשרוני', example: 'print(float("3.14"))\nprint(float(5))' },
+];
+
+
+// === Templates UI ===
+function openTemplates() {
+  const grid = document.getElementById('tplGrid');
+  grid.innerHTML = PLAYGROUND_TEMPLATES.map(t => {
+    const cellCount = t.cells.length;
+    return `<div class="tpl-card" onclick="loadTemplate('${t.id}')">
+      <div class="top">
+        <span class="em">${t.icon}</span>
+        <span class="name">${t.title}</span>
+      </div>
+      <div class="sub">${t.desc}</div>
+      <div class="meta">${cellCount} תאים · לחץ לטעינה</div>
+    </div>`;
+  }).join('');
+  document.getElementById('tplOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTemplates() {
+  document.getElementById('tplOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function loadTemplate(id) {
+  const tpl = PLAYGROUND_TEMPLATES.find(t => t.id === id);
+  if (!tpl) return;
+  if (typeof cells !== 'undefined' && cells.length > 0) {
+    if (typeof clearAllCellsForced === 'function') clearAllCellsForced();
+    else if (typeof cells !== 'undefined') {
+      cells.length = 0;
+      const c = document.getElementById('cellContainer');
+      if (c) c.innerHTML = '';
+      if (typeof editors !== 'undefined') Object.keys(editors).forEach(k => delete editors[k]);
+    }
+  }
+  tpl.cells.forEach(cell => {
+    if (typeof addCell === 'function') {
+      addCell(cell.type, cell.content);
+    }
+  });
+  closeTemplates();
+  if (typeof toast === 'function') toast('✓ תבנית "' + tpl.title + '" נטענה', 'success');
+}
+
+// === Cheat Sheet UI ===
+let csCurrentCat = 'all';
+
+function openCheatSheet() {
+  // Render category tabs
+  const cats = ['all', ...new Set(API_CHEAT_SHEET.map(i => i.cat))];
+  const labels = { 'all': 'הכל', 'DataFrame': 'DataFrame', 'Series': 'Series', 'נתונים': 'נתונים', 'Python': 'Python' };
+  const tabs = document.getElementById('csCatTabs');
+  tabs.innerHTML = cats.map(c => {
+    const count = c === 'all' ? API_CHEAT_SHEET.length : API_CHEAT_SHEET.filter(i => i.cat === c).length;
+    return `<button class="cs-cat-tab ${c === csCurrentCat ? 'active' : ''}" onclick="setCsCategory('${c}')">${labels[c] || c} <span style="opacity:.6">${count}</span></button>`;
+  }).join('');
+  
+  renderCheatSheet();
+  document.getElementById('csOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('csSearchInput').focus(), 200);
+}
+
+function closeCheatSheet() {
+  document.getElementById('csOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function setCsCategory(c) {
+  csCurrentCat = c;
+  document.querySelectorAll('.cs-cat-tab').forEach((tab, i) => {
+    const cats = ['all', ...new Set(API_CHEAT_SHEET.map(it => it.cat))];
+    tab.classList.toggle('active', cats[i] === c);
+  });
+  renderCheatSheet();
+}
+
+function renderCheatSheet() {
+  const q = (document.getElementById('csSearchInput').value || '').toLowerCase().trim();
+  let items = API_CHEAT_SHEET;
+  if (csCurrentCat !== 'all') items = items.filter(i => i.cat === csCurrentCat);
+  if (q) {
+    items = items.filter(i => 
+      i.name.toLowerCase().includes(q) ||
+      i.sig.toLowerCase().includes(q) ||
+      i.desc.toLowerCase().includes(q)
+    );
+  }
+  
+  const list = document.getElementById('csList');
+  if (items.length === 0) {
+    list.innerHTML = '<div class="cs-empty">🤷 אין תוצאות לחיפוש</div>';
+    return;
+  }
+  
+  list.innerHTML = items.map((it, idx) => `
+    <div class="cs-item">
+      <div class="row1">
+        <span class="name">${it.name}</span>
+        <span class="cat-badge">${it.cat}</span>
+        <span class="sig">${it.sig}</span>
+      </div>
+      <div class="desc">${it.desc}</div>
+      <div class="actions">
+        <button class="cs-btn" onclick="csInsertExample(${idx}, this)">+ הוסף לתא</button>
+        <button class="cs-btn" onclick="csCopyExample(${idx}, this)">📋 העתק</button>
+      </div>
+    </div>
+  `).join('');
+  
+  // Store the filtered items for action handlers
+  window._csFiltered = items;
+}
+
+function csInsertExample(idx, btn) {
+  const item = window._csFiltered[idx];
+  if (!item) return;
+  if (typeof addCell === 'function') {
+    addCell('code', item.example);
+    closeCheatSheet();
+    if (typeof toast === 'function') toast('✓ נוסף תא חדש', 'success');
+  }
+}
+
+function csCopyExample(idx, btn) {
+  const item = window._csFiltered[idx];
+  if (!item) return;
+  const text = item.example;
+  const doCopy = () => {
+    btn.textContent = '✓ הועתק';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 העתק';
+      btn.classList.remove('copied');
+    }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(doCopy, () => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;top:-100px;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); doCopy(); } catch(e) {}
+      document.body.removeChild(ta);
+    });
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;top:-100px;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); doCopy(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+}
+
+// ESC closes modals
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('tplOverlay').classList.contains('show')) closeTemplates();
+    if (document.getElementById('csOverlay').classList.contains('show')) closeCheatSheet();
+  }
+});
+
+</script>
+
+<script>
+/* GAMIFICATION ENGINE - python-playground */
+/* ============================================================
+   GAMIFICATION ENGINE — XP + Streaks + Badges
+   Works in both Hebrew (RTL) and English (LTR) pages
+   Pure JS + localStorage, no backend needed
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  // ---- Detect language ----
+  const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
+  const T = IS_RTL ? {
+    xp: 'נקודות',
+    streak: 'רצף ימים',
+    streakDays: (n) => n === 1 ? 'יום' : 'ימים',
+    level: 'רמה',
+    newBadge: 'מדליה חדשה!',
+    levelUp: 'עלית רמה!',
+    today: 'היום',
+    yesterday: 'אתמול',
+    daysAgo: (n) => `לפני ${n} ימים`,
+    streakStart: 'התחלת רצף — חזור מחר!',
+    streakBroken: 'הרצף נשבר 💔',
+    streakAlive: (n) => `🔥 ${n} ימים ברצף!`,
+    streakFirst: '🎯 יום ראשון בקורס!',
+    achievements: 'הישגים',
+    progressTitle: 'ההתקדמות שלך',
+    close: 'סגור',
+    keepGoing: 'תמשיך ככה!',
+    perfectDay: 'יום מושלם!',
+    earned: 'הרווחת',
+    nextLevel: 'לרמה הבאה',
+    weeklyGoal: 'יעד שבועי',
+    daysLeft: (n) => `עוד ${n} ימים`,
+    streakInfo: 'פתח את האתר היום כדי לשמור על הרצף!',
+    xpToNext: (n) => `עוד ${n} XP לרמה הבאה`,
+  } : {
+    xp: 'XP',
+    streak: 'Day Streak',
+    streakDays: (n) => n === 1 ? 'day' : 'days',
+    level: 'Level',
+    newBadge: 'New Badge!',
+    levelUp: 'Level Up!',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    daysAgo: (n) => `${n} days ago`,
+    streakStart: 'Streak started — come back tomorrow!',
+    streakBroken: 'Streak broken 💔',
+    streakAlive: (n) => `🔥 ${n} day streak!`,
+    streakFirst: '🎯 First day of the course!',
+    achievements: 'Achievements',
+    progressTitle: 'Your Progress',
+    close: 'Close',
+    keepGoing: 'Keep going!',
+    perfectDay: 'Perfect day!',
+    earned: 'Earned',
+    nextLevel: 'to next level',
+    weeklyGoal: 'Weekly Goal',
+    daysLeft: (n) => `${n} days left`,
+    streakInfo: 'Open the site today to keep your streak alive!',
+    xpToNext: (n) => `${n} XP to next level`,
+  };
+  
+  // ---- XP rewards ----
+  const XP_REWARDS = {
+    EXERCISE_PASS: 10,
+    EXERCISE_PASS_NO_HINT: 15,    // bonus if didn't see solution
+    QUIZ_PASS: 20,
+    MODULE_COMPLETE: 50,
+    FIRST_RUN_OF_DAY: 5,           // bonus for opening site each day
+    STREAK_BONUS: (days) => Math.min(days * 2, 30),  // bonus per streak day, capped
+  };
+  
+  // ---- Storage keys ----
+  const STORAGE = {
+    XP: 'gam_xp',
+    STREAK: 'gam_streak',
+    LAST_DATE: 'gam_lastDate',
+    LONGEST_STREAK: 'gam_longest',
+    BADGES: 'gam_badges',
+    PASSED_EXERCISES: 'gam_passedEx',
+    USAGE_DAYS: 'gam_days',
+    DAILY_XP: 'gam_dailyXP',
+  };
+  
+  // ---- Storage helpers ----
+  function getXP() { return parseInt(localStorage.getItem(STORAGE.XP) || '0', 10); }
+  function setXP(n) { localStorage.setItem(STORAGE.XP, n); updateUI(); }
+  function addXP(amount, reason) {
+    const cur = getXP();
+    const newXP = cur + amount;
+    setXP(newXP);
+    
+    // Track daily XP
+    const today = todayStr();
+    const dailyData = JSON.parse(localStorage.getItem(STORAGE.DAILY_XP) || '{}');
+    dailyData[today] = (dailyData[today] || 0) + amount;
+    localStorage.setItem(STORAGE.DAILY_XP, JSON.stringify(dailyData));
+    
+    showXPGain(amount, reason);
+    checkLevelUp(cur, newXP);
+    checkBadges();
+  }
+  
+  function getStreak() { return parseInt(localStorage.getItem(STORAGE.STREAK) || '0', 10); }
+  function setStreak(n) {
+    localStorage.setItem(STORAGE.STREAK, n);
+    const longest = parseInt(localStorage.getItem(STORAGE.LONGEST_STREAK) || '0', 10);
+    if (n > longest) localStorage.setItem(STORAGE.LONGEST_STREAK, n);
+    updateUI();
+  }
+  
+  function getBadges() {
+    try { return JSON.parse(localStorage.getItem(STORAGE.BADGES) || '[]'); }
+    catch (e) { return []; }
+  }
+  function addBadge(id) {
+    const badges = getBadges();
+    if (!badges.includes(id)) {
+      badges.push(id);
+      localStorage.setItem(STORAGE.BADGES, JSON.stringify(badges));
+      const def = BADGE_DEFS.find(b => b.id === id);
+      if (def) showBadgeUnlock(def);
+      return true;
+    }
+    return false;
+  }
+  
+  function getPassedExercises() {
+    try { return JSON.parse(localStorage.getItem(STORAGE.PASSED_EXERCISES) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function markExercisePassed(courseId, exId, usedSolution) {
+    const passed = getPassedExercises();
+    if (!passed[courseId]) passed[courseId] = {};
+    if (!passed[courseId][exId]) {
+      passed[courseId][exId] = { date: todayStr(), used: !!usedSolution };
+      localStorage.setItem(STORAGE.PASSED_EXERCISES, JSON.stringify(passed));
+      
+      const xp = usedSolution ? XP_REWARDS.EXERCISE_PASS : XP_REWARDS.EXERCISE_PASS_NO_HINT;
+      addXP(xp, IS_RTL ? 'תרגיל הושלם!' : 'Exercise complete!');
+      return true;
+    }
+    return false;
+  }
+  
+  // ---- Date helpers ----
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function daysBetween(d1Str, d2Str) {
+    const d1 = new Date(d1Str);
+    const d2 = new Date(d2Str);
+    return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+  }
+  
+  // ---- Streak logic ----
+  function updateStreakOnLoad() {
+    const lastDate = localStorage.getItem(STORAGE.LAST_DATE);
+    const today = todayStr();
+    if (!lastDate) {
+      // First visit
+      localStorage.setItem(STORAGE.LAST_DATE, today);
+      setStreak(1);
+      addBadge('first_day');
+      showToast(T.streakFirst, '🎯');
+      return;
+    }
+    if (lastDate === today) return;  // Already counted today
+    
+    const diff = daysBetween(lastDate, today);
+    if (diff === 1) {
+      // Continued streak
+      const newStreak = getStreak() + 1;
+      setStreak(newStreak);
+      localStorage.setItem(STORAGE.LAST_DATE, today);
+      addXP(XP_REWARDS.FIRST_RUN_OF_DAY + XP_REWARDS.STREAK_BONUS(newStreak), T.streakAlive(newStreak));
+    } else if (diff > 1) {
+      // Streak broken
+      const oldStreak = getStreak();
+      if (oldStreak > 1) {
+        showToast(T.streakBroken, '💔');
+      }
+      setStreak(1);
+      localStorage.setItem(STORAGE.LAST_DATE, today);
+      addXP(XP_REWARDS.FIRST_RUN_OF_DAY, IS_RTL ? 'התחלת רצף חדש' : 'New streak started');
+    }
+    
+    // Track usage day
+    const days = JSON.parse(localStorage.getItem(STORAGE.USAGE_DAYS) || '[]');
+    if (!days.includes(today)) {
+      days.push(today);
+      localStorage.setItem(STORAGE.USAGE_DAYS, JSON.stringify(days));
+    }
+  }
+  
+  // ---- Level system ----
+  // XP needed for each level: 0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, ...
+  function levelForXP(xp) {
+    const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, 10000];
+    for (let i = thresholds.length - 1; i >= 0; i--) {
+      if (xp >= thresholds[i]) return i + 1;
+    }
+    return 1;
+  }
+  function xpForLevel(level) {
+    const thresholds = [0, 50, 150, 300, 500, 800, 1200, 1700, 2300, 3000, 4000, 5500, 7500, 10000];
+    return thresholds[level - 1] || (10000 + (level - 14) * 2500);
+  }
+  function checkLevelUp(oldXP, newXP) {
+    const oldLvl = levelForXP(oldXP);
+    const newLvl = levelForXP(newXP);
+    if (newLvl > oldLvl) {
+      showLevelUp(newLvl);
+      // Badge for reaching levels
+      if (newLvl === 5) addBadge('level_5');
+      if (newLvl === 10) addBadge('level_10');
+    }
+  }
+  
+  // ---- Badge definitions ----
+  const BADGE_DEFS = [
+    { id: 'first_day',  icon: '🎯', name_he: 'יום ראשון',    name_en: 'First Day',    desc_he: 'התחלת ללמוד!',                   desc_en: 'Started learning!' },
+    { id: 'first_ex',   icon: '🐣', name_he: 'תרגיל ראשון',  name_en: 'First Exercise',desc_he: 'פתרת תרגיל ראשון',              desc_en: 'Solved your first exercise' },
+    { id: 'streak_3',   icon: '🔥', name_he: '3 ימים ברצף', name_en: '3-Day Streak', desc_he: 'התמדה!',                          desc_en: 'Consistency!' },
+    { id: 'streak_7',   icon: '⚡', name_he: 'שבוע ברצף',   name_en: '7-Day Streak', desc_he: 'אלוף של שבוע',                    desc_en: 'A week champion' },
+    { id: 'streak_30',  icon: '🏆', name_he: 'חודש ברצף',   name_en: '30-Day Streak',desc_he: 'אגדה',                            desc_en: 'Legend' },
+    { id: 'ex_10',      icon: '⭐', name_he: '10 תרגילים',   name_en: '10 Exercises', desc_he: '10 תרגילים נפתרו',                desc_en: '10 exercises solved' },
+    { id: 'ex_50',      icon: '🌟', name_he: '50 תרגילים',   name_en: '50 Exercises', desc_he: '50 תרגילים נפתרו',                desc_en: '50 exercises solved' },
+    { id: 'ex_100',     icon: '💯', name_he: '100 תרגילים',  name_en: '100 Exercises',desc_he: '100 תרגילים — מקצוען!',           desc_en: '100 exercises — pro!' },
+    { id: 'ex_200',     icon: '👑', name_he: '200 תרגילים',  name_en: '200 Exercises',desc_he: 'אלוף האלופים',                    desc_en: 'Champion of champions' },
+    { id: 'python_pro', icon: '🐍', name_he: 'Python Pro',  name_en: 'Python Pro',   desc_he: 'סיימת את קורס Python',           desc_en: 'Completed Python course' },
+    { id: 'pandas_pro', icon: '🐼', name_he: 'Pandas Pro',  name_en: 'Pandas Pro',   desc_he: 'סיימת את קורס Pandas',           desc_en: 'Completed Pandas course' },
+    { id: 'quiz_pro',   icon: '🎓', name_he: 'מומחה חידון',  name_en: 'Quiz Master',  desc_he: 'סיימת 100 שאלות חידון',           desc_en: 'Aced 100 quiz questions' },
+    { id: 'level_5',    icon: '🎖️', name_he: 'רמה 5',       name_en: 'Level 5',      desc_he: 'הגעת לרמה 5',                    desc_en: 'Reached Level 5' },
+    { id: 'level_10',   icon: '🏅', name_he: 'רמה 10',      name_en: 'Level 10',     desc_he: 'הגעת לרמה 10',                   desc_en: 'Reached Level 10' },
+    { id: 'no_hints',   icon: '🧠', name_he: '10 בלי רמזים', name_en: 'No Hints',    desc_he: '10 תרגילים בלי לראות פתרון',     desc_en: '10 exercises without solution' },
+  ];
+  
+  function checkBadges() {
+    const passed = getPassedExercises();
+    let totalPassed = 0;
+    let noHintCount = 0;
+    let pythonCount = 0, pandasCount = 0, quizCount = 0;
+    
+    Object.entries(passed).forEach(([course, exs]) => {
+      const count = Object.keys(exs).length;
+      totalPassed += count;
+      Object.values(exs).forEach(ex => { if (!ex.used) noHintCount++; });
+      if (course === 'python-lesson') pythonCount = count;
+      if (course === 'pandas-lesson') pandasCount = count;
+      if (course === 'quiz-python-100') quizCount = count;
+    });
+    
+    if (totalPassed >= 1)   addBadge('first_ex');
+    if (totalPassed >= 10)  addBadge('ex_10');
+    if (totalPassed >= 50)  addBadge('ex_50');
+    if (totalPassed >= 100) addBadge('ex_100');
+    if (totalPassed >= 200) addBadge('ex_200');
+    if (noHintCount >= 10)  addBadge('no_hints');
+    if (pythonCount >= 170) addBadge('python_pro');
+    if (pandasCount >= 150) addBadge('pandas_pro');
+    if (quizCount >= 100)   addBadge('quiz_pro');
+    
+    const streak = getStreak();
+    if (streak >= 3)  addBadge('streak_3');
+    if (streak >= 7)  addBadge('streak_7');
+    if (streak >= 30) addBadge('streak_30');
+  }
+  
+  // ---- UI: HUD (top corner) ----
+  function buildHUD() {
+    if (document.getElementById('gam-hud')) return;
+    
+    const hud = document.createElement('div');
+    hud.id = 'gam-hud';
+    hud.innerHTML = `
+      <button id="gam-hud-btn" aria-label="${T.progressTitle}">
+        <span class="gam-streak">🔥 <span id="gam-streak-num">0</span></span>
+        <span class="gam-xp">⭐ <span id="gam-xp-num">0</span></span>
+      </button>
+    `;
+    document.body.appendChild(hud);
+    document.getElementById('gam-hud-btn').addEventListener('click', openPanel);
+  }
+  
+  function updateUI() {
+    const xpEl = document.getElementById('gam-xp-num');
+    const stEl = document.getElementById('gam-streak-num');
+    if (xpEl) xpEl.textContent = getXP();
+    if (stEl) stEl.textContent = getStreak();
+  }
+  
+  // ---- UI: XP gain animation ----
+  function showXPGain(amount, reason) {
+    const div = document.createElement('div');
+    div.className = 'gam-toast gam-toast-xp';
+    div.innerHTML = `<span class="gam-toast-icon">⭐</span> <strong>+${amount} ${T.xp}</strong>${reason ? `<br><small>${reason}</small>` : ''}`;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    setTimeout(() => { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }, 2500);
+  }
+  
+  function showToast(message, icon) {
+    const div = document.createElement('div');
+    div.className = 'gam-toast';
+    div.innerHTML = `<span class="gam-toast-icon">${icon || '🎉'}</span> ${message}`;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    setTimeout(() => { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }, 3000);
+  }
+  
+  function showLevelUp(level) {
+    const div = document.createElement('div');
+    div.className = 'gam-celebration';
+    div.innerHTML = `
+      <div class="gam-celebration-inner">
+        <div class="gam-celebration-icon">🎉</div>
+        <h2>${T.levelUp}</h2>
+        <div class="gam-level-badge">${T.level} ${level}</div>
+        <button class="gam-celebration-close">${T.close}</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+      div.classList.remove('show');
+      setTimeout(() => div.remove(), 400);
+    });
+    div.addEventListener('click', e => {
+      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
+    });
+  }
+  
+  function showBadgeUnlock(badge) {
+    const name = IS_RTL ? badge.name_he : badge.name_en;
+    const desc = IS_RTL ? badge.desc_he : badge.desc_en;
+    const div = document.createElement('div');
+    div.className = 'gam-celebration gam-badge-unlock';
+    div.innerHTML = `
+      <div class="gam-celebration-inner">
+        <div class="gam-badge-icon-big">${badge.icon}</div>
+        <h3>${T.newBadge}</h3>
+        <h2>${name}</h2>
+        <p>${desc}</p>
+        <button class="gam-celebration-close">${T.close}</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 10);
+    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+      div.classList.remove('show');
+      setTimeout(() => div.remove(), 400);
+    });
+    div.addEventListener('click', e => {
+      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
+    });
+  }
+  
+  // ---- UI: Progress Panel ----
+  function openPanel() {
+    if (document.getElementById('gam-panel')) return;
+    
+    const xp = getXP();
+    const streak = getStreak();
+    const longest = parseInt(localStorage.getItem(STORAGE.LONGEST_STREAK) || '0', 10);
+    const level = levelForXP(xp);
+    const nextLevelXP = xpForLevel(level + 1);
+    const currentLevelXP = xpForLevel(level);
+    const progressPct = Math.floor(((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100);
+    const xpToNext = nextLevelXP - xp;
+    
+    const earnedBadges = getBadges();
+    const passed = getPassedExercises();
+    let totalPassed = 0;
+    Object.values(passed).forEach(exs => { totalPassed += Object.keys(exs).length; });
+    
+    const badgesHTML = BADGE_DEFS.map(b => {
+      const earned = earnedBadges.includes(b.id);
+      const name = IS_RTL ? b.name_he : b.name_en;
+      const desc = IS_RTL ? b.desc_he : b.desc_en;
+      return `
+        <div class="gam-badge ${earned ? 'earned' : 'locked'}" title="${desc}">
+          <div class="gam-badge-icon">${b.icon}</div>
+          <div class="gam-badge-name">${name}</div>
+        </div>
+      `;
+    }).join('');
+    
+    // Last 7 days activity
+    const dailyData = JSON.parse(localStorage.getItem(STORAGE.DAILY_XP) || '{}');
+    const last7 = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      last7.push({ date: ds, xp: dailyData[ds] || 0, label: d.toLocaleDateString(IS_RTL ? 'he-IL' : 'en-US', { weekday: 'short' }) });
+    }
+    const maxXP = Math.max(...last7.map(d => d.xp), 1);
+    const chartHTML = last7.map(d => `
+      <div class="gam-chart-bar">
+        <div class="gam-chart-fill" style="height: ${(d.xp / maxXP) * 100}%"></div>
+        <div class="gam-chart-label">${d.label}</div>
+        <div class="gam-chart-val">${d.xp || ''}</div>
+      </div>
+    `).join('');
+    
+    const panel = document.createElement('div');
+    panel.id = 'gam-panel';
+    panel.innerHTML = `
+      <div class="gam-panel-inner" role="dialog">
+        <button class="gam-panel-close" aria-label="${T.close}">&times;</button>
+        <h2 class="gam-panel-title">${T.progressTitle}</h2>
+        
+        <div class="gam-stats">
+          <div class="gam-stat">
+            <div class="gam-stat-icon">⭐</div>
+            <div class="gam-stat-val">${xp.toLocaleString()}</div>
+            <div class="gam-stat-label">${T.xp}</div>
+          </div>
+          <div class="gam-stat">
+            <div class="gam-stat-icon">🔥</div>
+            <div class="gam-stat-val">${streak}</div>
+            <div class="gam-stat-label">${T.streak}</div>
+          </div>
+          <div class="gam-stat">
+            <div class="gam-stat-icon">🎖️</div>
+            <div class="gam-stat-val">${level}</div>
+            <div class="gam-stat-label">${T.level}</div>
+          </div>
+        </div>
+        
+        <div class="gam-progress-box">
+          <div class="gam-progress-header">
+            <span>${T.level} ${level}</span>
+            <span>${T.level} ${level + 1}</span>
+          </div>
+          <div class="gam-progress-bar">
+            <div class="gam-progress-fill" style="width: ${Math.max(0, Math.min(100, progressPct))}%"></div>
+          </div>
+          <div class="gam-progress-text">${T.xpToNext(xpToNext)}</div>
+        </div>
+        
+        <div class="gam-section-title">${IS_RTL ? '📈 פעילות שבועית' : '📈 Weekly Activity'}</div>
+        <div class="gam-chart">${chartHTML}</div>
+        
+        <div class="gam-section-title">${T.achievements} (${earnedBadges.length}/${BADGE_DEFS.length})</div>
+        <div class="gam-badges">${badgesHTML}</div>
+        
+        <div class="gam-footer">
+          <div>${IS_RTL ? 'תרגילים נפתרו' : 'Exercises solved'}: <strong>${totalPassed}</strong></div>
+          <div>${IS_RTL ? 'הרצף הכי ארוך שלך' : 'Longest streak'}: <strong>${longest}</strong> ${T.streakDays(longest)}</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(panel);
+    setTimeout(() => panel.classList.add('show'), 10);
+    
+    panel.querySelector('.gam-panel-close').addEventListener('click', closePanel);
+    panel.addEventListener('click', e => {
+      if (e.target === panel) closePanel();
+    });
+  }
+  function closePanel() {
+    const p = document.getElementById('gam-panel');
+    if (p) { p.classList.remove('show'); setTimeout(() => p.remove(), 300); }
+  }
+  
+  // ---- Public API ----
+  window.gam = {
+    addXP: addXP,
+    markExercisePassed: markExercisePassed,
+    completeModule: function(moduleName) {
+      addXP(XP_REWARDS.MODULE_COMPLETE, IS_RTL ? `מודול הושלם: ${moduleName}` : `Module complete: ${moduleName}`);
+    },
+    open: openPanel,
+    getXP: getXP,
+    getStreak: getStreak,
+    getBadges: getBadges,
+  };
+  
+  // ---- Init ----
+  function init() {
+    buildHUD();
+    updateUI();
+    updateStreakOnLoad();
+    checkBadges();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+
+<script>
+/* AI ERROR HELPER */
+/* ============================================================
+   AI ERROR HELPER — Smart error explanations
+   No external API needed - uses pattern matching + offline rules
+   Works in Hebrew (RTL) and English (LTR)
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
+  
+  // ---- Error patterns and explanations ----
+  // Each entry: { match: regex, he: explanation, en: explanation, hint: suggestion }
+  const ERROR_PATTERNS = [
+    {
+      match: /NameError.*name '(\w+)' is not defined/i,
+      he: (m) => `<b>NameError</b>: המשתנה <code>${m[1]}</code> לא הוגדר. 🤔`,
+      en: (m) => `<b>NameError</b>: The variable <code>${m[1]}</code> is not defined. 🤔`,
+      hint_he: (m) => [
+        `📝 בדוק שלא שכחת להגדיר את המשתנה לפני שאתה משתמש בו.`,
+        `🔤 ייתכן שיש typo (שגיאת כתיב) בשם המשתנה — שמות בפייתון רגישים לאותיות גדולות/קטנות.`,
+        `💡 דוגמה תקינה: <code>${m[1]} = 10</code> ואז <code>print(${m[1]})</code>`,
+      ],
+      hint_en: (m) => [
+        `📝 Check that you defined the variable before using it.`,
+        `🔤 There may be a typo in the name — Python names are case-sensitive.`,
+        `💡 Valid example: <code>${m[1]} = 10</code> then <code>print(${m[1]})</code>`,
+      ],
+    },
+    {
+      match: /SyntaxError.*expected/i,
+      he: () => `<b>SyntaxError</b>: יש שגיאה במבנה הקוד. ✏️`,
+      en: () => `<b>SyntaxError</b>: There's a problem in the code structure. ✏️`,
+      hint_he: () => [
+        `🔍 בדוק שיש סוגריים פתיחה וסגירה לכל הקריאות.`,
+        `🔍 בדוק שיש <code>:</code> בסוף שורות של <code>if</code>, <code>for</code>, <code>while</code>, <code>def</code>.`,
+        `🔍 בדוק שאין גרשיים פתוחות בלי סגירה — לדוגמה <code>"hello</code> צריך להיות <code>"hello"</code>.`,
+      ],
+      hint_en: () => [
+        `🔍 Check that all parentheses are properly opened and closed.`,
+        `🔍 Check for the <code>:</code> at the end of <code>if</code>, <code>for</code>, <code>while</code>, <code>def</code> lines.`,
+        `🔍 Check for unclosed quotes — e.g. <code>"hello</code> should be <code>"hello"</code>.`,
+      ],
+    },
+    {
+      match: /SyntaxError.*EOL while scanning/i,
+      he: () => `<b>SyntaxError</b>: חסרה גרשיים סוגרים במחרוזת. 📝`,
+      en: () => `<b>SyntaxError</b>: A string is missing a closing quote. 📝`,
+      hint_he: () => [`💡 חפש מחרוזת שפותחת ב-<code>"</code> אבל לא נסגרת באותו תו.`],
+      hint_en: () => [`💡 Look for a string that opens with <code>"</code> but isn't closed.`],
+    },
+    {
+      match: /IndentationError|unexpected indent/i,
+      he: () => `<b>IndentationError</b>: בעיה בהזחת השורות (רווחים בתחילה). 📐`,
+      en: () => `<b>IndentationError</b>: Indentation problem (leading spaces). 📐`,
+      hint_he: () => [
+        `📏 בפייתון, השורות אחרי <code>if</code>, <code>for</code>, <code>def</code> צריכות להיות מוזחות (4 רווחים).`,
+        `📏 ודא שכל השורות באותו בלוק מוזחות באותה כמות.`,
+        `📏 אל תערבב רווחים וטאבים.`,
+      ],
+      hint_en: () => [
+        `📏 In Python, lines after <code>if</code>, <code>for</code>, <code>def</code> must be indented (4 spaces).`,
+        `📏 Make sure all lines in the same block have the same indentation.`,
+        `📏 Don't mix spaces and tabs.`,
+      ],
+    },
+    {
+      match: /TypeError.*unsupported operand.*'str'.*'int'|'int'.*'str'/i,
+      he: () => `<b>TypeError</b>: אי-אפשר לחבר/לבצע פעולה בין מספר למחרוזת. 🔢`,
+      en: () => `<b>TypeError</b>: Cannot operate between a number and a string. 🔢`,
+      hint_he: () => [
+        `🔄 השתמש ב-<code>str(x)</code> כדי להמיר מספר למחרוזת.`,
+        `🔄 השתמש ב-<code>int(x)</code> כדי להמיר מחרוזת למספר.`,
+        `💡 דוגמה: <code>"גיל: " + str(25)</code> או <code>int("5") + 3</code>`,
+      ],
+      hint_en: () => [
+        `🔄 Use <code>str(x)</code> to convert a number to a string.`,
+        `🔄 Use <code>int(x)</code> to convert a string to a number.`,
+        `💡 Example: <code>"Age: " + str(25)</code> or <code>int("5") + 3</code>`,
+      ],
+    },
+    {
+      match: /TypeError.*takes \d+.*argument.*but \d+/i,
+      he: () => `<b>TypeError</b>: שלחת מספר שגוי של ארגומנטים לפונקציה. 🎯`,
+      en: () => `<b>TypeError</b>: Wrong number of arguments passed to function. 🎯`,
+      hint_he: () => [
+        `🔍 בדוק שהפונקציה מקבלת בדיוק את מספר הארגומנטים הדרושים.`,
+        `💡 אם הפונקציה מוגדרת כ-<code>def f(a, b)</code> צריך לקרוא כ-<code>f(1, 2)</code>.`,
+      ],
+      hint_en: () => [
+        `🔍 Check that the function receives exactly the required arguments.`,
+        `💡 If defined as <code>def f(a, b)</code> call as <code>f(1, 2)</code>.`,
+      ],
+    },
+    {
+      match: /ZeroDivisionError/i,
+      he: () => `<b>ZeroDivisionError</b>: אי-אפשר לחלק ב-0. ➗`,
+      en: () => `<b>ZeroDivisionError</b>: Cannot divide by 0. ➗`,
+      hint_he: () => [
+        `🔍 בדוק שהמכנה (המספר שמחלקים בו) אינו 0.`,
+        `💡 הוסף תנאי לפני החלוקה: <code>if y != 0: print(x / y)</code>`,
+      ],
+      hint_en: () => [
+        `🔍 Check that the denominator isn't 0.`,
+        `💡 Add a condition: <code>if y != 0: print(x / y)</code>`,
+      ],
+    },
+    {
+      match: /IndexError.*out of range/i,
+      he: () => `<b>IndexError</b>: ניסית לגשת לאיבר שלא קיים ברשימה. 📋`,
+      en: () => `<b>IndexError</b>: Tried to access an item that doesn't exist in the list. 📋`,
+      hint_he: () => [
+        `🔢 רשימה באורך 5 — האינדקסים שלה הם 0, 1, 2, 3, 4 (לא 5!).`,
+        `📏 השתמש ב-<code>len(list)</code> כדי לבדוק את אורך הרשימה.`,
+        `💡 גישה לאיבר האחרון: <code>list[-1]</code>.`,
+      ],
+      hint_en: () => [
+        `🔢 A list of length 5 has indices 0, 1, 2, 3, 4 (not 5!).`,
+        `📏 Use <code>len(list)</code> to check list length.`,
+        `💡 Access the last item with <code>list[-1]</code>.`,
+      ],
+    },
+    {
+      match: /KeyError.*'?([^']+)'?/i,
+      he: (m) => `<b>KeyError</b>: המפתח <code>${m[1] || '?'}</code> לא קיים במילון. 🔑`,
+      en: (m) => `<b>KeyError</b>: The key <code>${m[1] || '?'}</code> doesn't exist in the dictionary. 🔑`,
+      hint_he: (m) => [
+        `🔍 בדוק את כתיב המפתח — שמות במילון רגישים לאותיות גדולות/קטנות.`,
+        `🛡 השתמש ב-<code>.get()</code> לגישה בטוחה: <code>dict.get("${m[1] || 'key'}", "default")</code>`,
+        `🔍 כדי לבדוק אם מפתח קיים: <code>if "${m[1] || 'key'}" in dict:</code>`,
+      ],
+      hint_en: (m) => [
+        `🔍 Check the key spelling — dictionary keys are case-sensitive.`,
+        `🛡 Use <code>.get()</code> for safe access: <code>dict.get("${m[1] || 'key'}", "default")</code>`,
+        `🔍 Check if key exists with <code>if "${m[1] || 'key'}" in dict:</code>`,
+      ],
+    },
+    {
+      match: /ValueError.*invalid literal for int/i,
+      he: () => `<b>ValueError</b>: ניסית להמיר מחרוזת שאינה מספר ל-int. 🔢`,
+      en: () => `<b>ValueError</b>: Tried converting a non-numeric string to int. 🔢`,
+      hint_he: () => [
+        `🔍 רק מחרוזות עם ספרות יכולות להפוך למספר: <code>int("123")</code> ✅`,
+        `❌ לא: <code>int("abc")</code> או <code>int("3.5")</code>`,
+        `💡 ל-float עם ספרות עשרוניות: <code>float("3.5")</code>`,
+      ],
+      hint_en: () => [
+        `🔍 Only digit strings can be converted: <code>int("123")</code> ✅`,
+        `❌ Not: <code>int("abc")</code> or <code>int("3.5")</code>`,
+        `💡 For decimals use: <code>float("3.5")</code>`,
+      ],
+    },
+    {
+      match: /AttributeError.*'(\w+)'.*object has no attribute '(\w+)'/i,
+      he: (m) => `<b>AttributeError</b>: לאובייקט מסוג <code>${m[1]}</code> אין המתודה/תכונה <code>${m[2]}</code>. ⚙️`,
+      en: (m) => `<b>AttributeError</b>: Object of type <code>${m[1]}</code> has no attribute <code>${m[2]}</code>. ⚙️`,
+      hint_he: (m) => [
+        `🔍 בדוק את כתיב שם המתודה — Python רגיש לאותיות גדולות/קטנות.`,
+        `📚 בדוק שהמתודה <code>${m[2]}</code> אכן קיימת ב-<code>${m[1]}</code>.`,
+        `💡 אם זה <code>list</code>, מתודות נפוצות: <code>.append()</code>, <code>.remove()</code>, <code>.sort()</code>.`,
+      ],
+      hint_en: (m) => [
+        `🔍 Check the method name spelling — Python is case-sensitive.`,
+        `📚 Verify that <code>${m[2]}</code> exists on <code>${m[1]}</code>.`,
+        `💡 If it's <code>list</code>, common methods: <code>.append()</code>, <code>.remove()</code>, <code>.sort()</code>.`,
+      ],
+    },
+    {
+      match: /FileNotFoundError/i,
+      he: () => `<b>FileNotFoundError</b>: הקובץ לא נמצא. 📁`,
+      en: () => `<b>FileNotFoundError</b>: File not found. 📁`,
+      hint_he: () => [
+        `🔍 בדוק את הנתיב לקובץ.`,
+        `💡 בסימולטור שלנו אין גישה לקבצים אמיתיים — השתמש ב-<code>data.load()</code> עבור דאטהסטים.`,
+      ],
+      hint_en: () => [
+        `🔍 Check the file path.`,
+        `💡 Our simulator doesn't access real files — use <code>data.load()</code> for datasets.`,
+      ],
+    },
+    {
+      match: /ImportError|ModuleNotFoundError/i,
+      he: (m) => `<b>ImportError</b>: לא ניתן לייבא את הספרייה. 📚`,
+      en: (m) => `<b>ImportError</b>: Cannot import the library. 📚`,
+      hint_he: () => [
+        `🔍 הסימולטור (Skulpt) תומך רק בספריות מובנות: math, random, re, datetime, itertools, string, collections.`,
+        `❌ אינו תומך: numpy, pandas, matplotlib (אך יש לנו DataFrame משלנו דרך <code>data.load()</code>).`,
+        `💡 לעבודה אמיתית עם pandas/numpy — הורד Python למחשב או השתמש ב-Google Colab.`,
+      ],
+      hint_en: () => [
+        `🔍 The simulator (Skulpt) only supports built-in libraries: math, random, re, datetime, itertools, string, collections.`,
+        `❌ Does not support: numpy, pandas, matplotlib (but we have our own DataFrame via <code>data.load()</code>).`,
+        `💡 For real pandas/numpy work — install Python locally or use Google Colab.`,
+      ],
+    },
+    {
+      match: /RecursionError|maximum recursion/i,
+      he: () => `<b>RecursionError</b>: יותר מדי קריאות רקורסיביות. 🌀`,
+      en: () => `<b>RecursionError</b>: Too many recursive calls. 🌀`,
+      hint_he: () => [
+        `🔍 ודא שיש תנאי עצירה (base case) בפונקציה הרקורסיבית.`,
+        `💡 דוגמה: <code>if n == 0: return 1</code>`,
+      ],
+      hint_en: () => [
+        `🔍 Make sure there's a base case in the recursive function.`,
+        `💡 Example: <code>if n == 0: return 1</code>`,
+      ],
+    },
+    // Generic fallback
+    {
+      match: /^([A-Z]\w*Error)/i,
+      he: (m) => `<b>${m[1]}</b>: יש שגיאה בקוד. בדוק את ההודעה למעלה. 🔍`,
+      en: (m) => `<b>${m[1]}</b>: There's an error in the code. Check the message above. 🔍`,
+      hint_he: () => [
+        `📖 קרא את הודעת השגיאה בקפידה — היא בדרך כלל מצביעה על מספר השורה והבעיה.`,
+        `💡 אם תקועים, לחץ "הצג פתרון" וראה איך זה אמור להיראות.`,
+      ],
+      hint_en: () => [
+        `📖 Read the error message carefully — it usually points to the line number and problem.`,
+        `💡 If stuck, click "Show Solution" to see how it should look.`,
+      ],
+    },
+  ];
+  
+  // ---- Main: explain an error ----
+  function explainError(errorText) {
+    if (!errorText || typeof errorText !== 'string') return null;
+    
+    for (const pat of ERROR_PATTERNS) {
+      const m = errorText.match(pat.match);
+      if (m) {
+        const explanation = IS_RTL ? pat.he(m) : pat.en(m);
+        const hintFn = IS_RTL ? pat.hint_he : pat.hint_en;
+        const hints = hintFn(m);
+        return { explanation, hints };
+      }
+    }
+    return null;
+  }
+  
+  // ---- UI: Show explanation box ----
+  function showExplanation(targetEl, errorText) {
+    const result = explainError(errorText);
+    if (!result) return;
+    
+    // Remove old explanation if exists
+    const old = targetEl.parentElement.querySelector('.gam-ai-helper');
+    if (old) old.remove();
+    
+    const box = document.createElement('div');
+    box.className = 'gam-ai-helper';
+    
+    const hintsHTML = result.hints.map(h => `<li>${h}</li>`).join('');
+    
+    box.innerHTML = `
+      <div class="gam-ai-header">
+        <span class="gam-ai-icon">🤖</span>
+        <span class="gam-ai-title">${IS_RTL ? 'עוזר חכם' : 'AI Helper'}</span>
+        <button class="gam-ai-close" aria-label="${IS_RTL ? 'סגור' : 'Close'}">&times;</button>
+      </div>
+      <div class="gam-ai-body">
+        <div class="gam-ai-explain">${result.explanation}</div>
+        <div class="gam-ai-hints-title">${IS_RTL ? '💡 איך לתקן:' : '💡 How to fix:'}</div>
+        <ul class="gam-ai-hints">${hintsHTML}</ul>
+      </div>
+    `;
+    
+    // Insert after the target
+    targetEl.parentElement.insertBefore(box, targetEl.nextSibling);
+    
+    // Animate in
+    setTimeout(() => box.classList.add('show'), 10);
+    
+    // Close button
+    box.querySelector('.gam-ai-close').addEventListener('click', () => {
+      box.classList.remove('show');
+      setTimeout(() => box.remove(), 300);
+    });
+  }
+  
+  // ---- Hook into output displays ----
+  function observeOutputs() {
+    // Find output boxes when they show errors
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(m => {
+        if (m.type === 'childList' || m.type === 'characterData') {
+          const target = m.target;
+          // Check if it's an output box with error content
+          let el = target.nodeType === 1 ? target : target.parentElement;
+          while (el && !el.classList) el = el.parentElement;
+          
+          if (el && el.classList && (
+              el.classList.contains('output-box') ||
+              el.classList.contains('out') ||
+              el.id?.startsWith('out-'))) {
+            const text = el.textContent || '';
+            // Check for error patterns
+            if (/Error:|Traceback/i.test(text)) {
+              // Avoid duplicates
+              if (!el.parentElement.querySelector('.gam-ai-helper')) {
+                showExplanation(el, text);
+              }
+            }
+          }
+        }
+      });
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  }
+  
+  // ---- Public API ----
+  window.gamAI = {
+    explain: explainError,
+    show: showExplanation,
+  };
+  
+  // ---- Init ----
+  function init() {
+    observeOutputs();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+/* SOUND EFFECTS */
+/* ============================================================
+   SOUND EFFECTS — Web Audio API (no external files)
+   Pure JS, works offline, mobile-friendly
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  // ---- Mute toggle (saved to localStorage) ----
+  function isMuted() { return localStorage.getItem('gam_muted') === '1'; }
+  function setMuted(b) { localStorage.setItem('gam_muted', b ? '1' : '0'); }
+  
+  // ---- AudioContext (lazy initialization, mobile-safe) ----
+  let audioCtx = null;
+  function getCtx() {
+    if (audioCtx) return audioCtx;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      audioCtx = new AC();
+      return audioCtx;
+    } catch(e) { return null; }
+  }
+  
+  // ---- Play a tone ----
+  function tone(freq, duration, type = 'sine', vol = 0.15, delay = 0) {
+    if (isMuted()) return;
+    const ctx = getCtx();
+    if (!ctx) return;
+    
+    // Resume context on first user interaction (mobile requirement)
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    
+    gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + delay + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + duration);
+  }
+  
+  // ---- Sound presets ----
+  const SOUNDS = {
+    // Exercise correct - bright ascending chime
+    correct: () => {
+      tone(523.25, 0.15, 'sine', 0.15, 0);     // C5
+      tone(659.25, 0.15, 'sine', 0.15, 0.1);   // E5
+      tone(783.99, 0.25, 'sine', 0.18, 0.2);   // G5
+    },
+    
+    // Exercise incorrect - soft descending hum
+    wrong: () => {
+      tone(330, 0.15, 'sine', 0.1, 0);
+      tone(247, 0.2, 'sine', 0.1, 0.12);
+    },
+    
+    // XP earned - quick double pop
+    xp: () => {
+      tone(800, 0.08, 'sine', 0.12, 0);
+      tone(1200, 0.12, 'sine', 0.12, 0.07);
+    },
+    
+    // Level up - triumphant fanfare
+    levelUp: () => {
+      tone(523.25, 0.12, 'square', 0.1, 0);      // C5
+      tone(659.25, 0.12, 'square', 0.1, 0.1);    // E5
+      tone(783.99, 0.12, 'square', 0.1, 0.2);    // G5
+      tone(1046.50, 0.3,  'square', 0.12, 0.3);  // C6
+    },
+    
+    // Badge unlock - magical sparkle
+    badge: () => {
+      tone(880, 0.1,  'sine', 0.1, 0);     // A5
+      tone(1108.73, 0.1, 'sine', 0.1, 0.08); // C#6
+      tone(1318.51, 0.1, 'sine', 0.12, 0.16); // E6
+      tone(1760, 0.25, 'sine', 0.13, 0.24); // A6
+    },
+    
+    // Streak continues - soft bell
+    streak: () => {
+      tone(659.25, 0.15, 'sine', 0.12, 0);
+      tone(987.77, 0.3, 'sine', 0.1, 0.1);
+    },
+    
+    // Click - subtle UI tick
+    click: () => {
+      tone(2000, 0.03, 'sine', 0.06, 0);
+    },
+    
+    // Module complete - full celebration
+    complete: () => {
+      tone(523.25, 0.1, 'sine', 0.12, 0);
+      tone(659.25, 0.1, 'sine', 0.12, 0.08);
+      tone(783.99, 0.1, 'sine', 0.12, 0.16);
+      tone(1046.50, 0.4, 'sine', 0.15, 0.24);
+    },
+  };
+  
+  // ---- Public API ----
+  window.gamSound = {
+    play: function(name) {
+      if (SOUNDS[name]) {
+        try { SOUNDS[name](); } catch(e) { /* swallow */ }
+      }
+    },
+    isMuted: isMuted,
+    setMuted: setMuted,
+    toggle: function() {
+      const newState = !isMuted();
+      setMuted(newState);
+      updateMuteUI();
+      if (!newState) SOUNDS.click();  // confirm sound when unmuting
+      return newState;
+    },
+  };
+  
+  // ---- Mute toggle button (added to HUD) ----
+  function updateMuteUI() {
+    const btn = document.getElementById('gam-mute-btn');
+    if (btn) btn.textContent = isMuted() ? '🔇' : '🔊';
+  }
+  
+  function addMuteButton() {
+    if (document.getElementById('gam-mute-btn')) return;
+    const hud = document.getElementById('gam-hud');
+    if (!hud) {
+      // Try again later
+      setTimeout(addMuteButton, 500);
+      return;
+    }
+    
+    const btn = document.createElement('button');
+    btn.id = 'gam-mute-btn';
+    btn.className = 'gam-mute-btn';
+    btn.textContent = isMuted() ? '🔇' : '🔊';
+    btn.setAttribute('aria-label', 'Toggle sound');
+    btn.style.cssText = `
+      pointer-events: auto;
+      background: rgba(30,35,70,0.85);
+      border: 1.5px solid #4a5494;
+      border-radius: 50%;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-inline-end: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s ease;
+    `;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.gamSound.toggle();
+    });
+    
+    hud.insertBefore(btn, hud.firstChild);
+  }
+  
+  // ---- Hook into gam events (XP, badges, levels) ----
+  function hookGamEvents() {
+    if (!window.gam) {
+      setTimeout(hookGamEvents, 200);
+      return;
+    }
+    
+    // Wrap original markExercisePassed
+    const origMark = window.gam.markExercisePassed;
+    window.gam.markExercisePassed = function(...args) {
+      const result = origMark.apply(this, args);
+      if (result) window.gamSound.play('correct');
+      return result;
+    };
+  }
+  
+  // ---- Init ----
+  function init() {
+    addMuteButton();
+    hookGamEvents();
+    
+    // Observe DOM for badge/level modals to play sounds
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType !== 1) return;
+          if (node.classList && node.classList.contains('gam-celebration')) {
+            if (node.classList.contains('gam-badge-unlock')) {
+              window.gamSound.play('badge');
+            } else {
+              window.gamSound.play('levelUp');
+            }
+          }
+        });
+      });
+    });
+    observer.observe(document.body, { childList: true });
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+/* CERTIFICATE GENERATOR */
+/* ============================================================
+   CERTIFICATE GENERATOR
+   Pure HTML/CSS certificate, downloadable as PDF via browser print
+   Shareable on LinkedIn
+   ============================================================ */
+
+(function() {
+  'use strict';
+  
+  const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
+  
+  const T = IS_RTL ? {
+    certTitle: 'תעודת השלמה',
+    awarded: 'הוענקה ל-',
+    forCompleting: 'על השלמת',
+    pythonCourse: 'קורס Python מקיף',
+    pandasCourse: 'קורס Pandas מקיף',
+    quizCourse: 'אתגר 100 שאלות Python',
+    fullCourse: 'מסלול מלא בקוד דאטה',
+    issued: 'תאריך',
+    instructor: 'מדריך',
+    eliranName: 'אלירן גרוסמן',
+    eliranTitle: 'מרצה SQL ב-Partner Communications',
+    siteName: 'קוד דאטה',
+    siteUrl: 'egrosman1.github.io/sql-course',
+    yourName: 'שמך כאן',
+    enterName: 'הכנס שם לתעודה',
+    download: 'הורד / הדפס',
+    share: 'שתף ב-LinkedIn',
+    close: 'סגור',
+    statsTitle: 'הישגיך',
+    exercisesDone: 'תרגילים נפתרו',
+    daysActive: 'ימים פעילים',
+    xpEarned: 'XP נצברו',
+    badgesEarned: 'מדליות',
+    achievementsTitle: 'תעודת הצטיינות',
+    sealText: 'אישור רשמי',
+    serialPrefix: 'מס\' תעודה',
+    yourCertificate: 'התעודה שלך',
+    notEligibleTitle: '🎯 עוד לא זמין',
+    notEligibleDesc: 'אתה צריך לסיים לפחות 50 תרגילים כדי לקבל תעודה.',
+    progress: 'התקדמות',
+    eligibleMsg: '🎉 כל הכבוד! זכאי לתעודה',
+  } : {
+    certTitle: 'Certificate of Completion',
+    awarded: 'Awarded to',
+    forCompleting: 'for completing',
+    pythonCourse: 'Python Comprehensive Course',
+    pandasCourse: 'Pandas Comprehensive Course',
+    quizCourse: '100 Python Questions Challenge',
+    fullCourse: 'Full Data Code Track',
+    issued: 'Issued',
+    instructor: 'Instructor',
+    eliranName: 'Eliran Grossman',
+    eliranTitle: 'SQL Instructor at Partner Communications',
+    siteName: 'Data Code',
+    siteUrl: 'egrosman1.github.io/sql-course',
+    yourName: 'Your Name Here',
+    enterName: 'Enter name for certificate',
+    download: 'Download / Print',
+    share: 'Share on LinkedIn',
+    close: 'Close',
+    statsTitle: 'Your Achievements',
+    exercisesDone: 'Exercises Solved',
+    daysActive: 'Active Days',
+    xpEarned: 'XP Earned',
+    badgesEarned: 'Badges',
+    achievementsTitle: 'Certificate of Excellence',
+    sealText: 'Verified',
+    serialPrefix: 'Cert No.',
+    yourCertificate: 'Your Certificate',
+    notEligibleTitle: '🎯 Not yet available',
+    notEligibleDesc: 'You need to complete at least 50 exercises to earn a certificate.',
+    progress: 'Progress',
+    eligibleMsg: '🎉 Congrats! Eligible for certificate',
+  };
+  
+  // ---- Determine what certificate to award ----
+  function getCertificateType() {
+    let passed = {};
+    try { passed = JSON.parse(localStorage.getItem('gam_passedEx') || '{}'); } catch(e){}
+    
+    const pythonCount = passed['python-lesson'] ? Object.keys(passed['python-lesson']).length : 0;
+    const pandasCount = passed['pandas-lesson'] ? Object.keys(passed['pandas-lesson']).length : 0;
+    const quizCount   = passed['quiz-python-100'] ? Object.keys(passed['quiz-python-100']).length : 0;
+    
+    const total = pythonCount + pandasCount + quizCount;
+    
+    return {
+      total: total,
+      pythonCount, pandasCount, quizCount,
+      eligible: total >= 50,
+      perfect: pythonCount >= 170 && pandasCount >= 150 && quizCount >= 100,
+      pythonComplete: pythonCount >= 170,
+      pandasComplete: pandasCount >= 150,
+      quizComplete: quizCount >= 100,
+    };
+  }
+  
+  function getCertificateTitle(certType) {
+    if (certType.perfect) return T.fullCourse;
+    if (certType.pythonComplete && certType.pandasComplete) return T.fullCourse;
+    if (certType.pythonComplete) return T.pythonCourse;
+    if (certType.pandasComplete) return T.pandasCourse;
+    if (certType.quizComplete) return T.quizCourse;
+    return T.fullCourse;
+  }
+  
+  // ---- Serial number (deterministic, based on first achievement date) ----
+  function getSerialNumber() {
+    let serial = localStorage.getItem('gam_certSerial');
+    if (!serial) {
+      const ts = Date.now();
+      serial = 'DC-' + ts.toString(36).toUpperCase() + '-' + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      localStorage.setItem('gam_certSerial', serial);
+    }
+    return serial;
+  }
+  
+  // ---- Open certificate modal ----
+  function open() {
+    const certType = getCertificateType();
+    
+    if (document.getElementById('cert-modal')) return;
+    
+    const xp = (window.gam && window.gam.getXP) ? window.gam.getXP() : 0;
+    const badges = (window.gam && window.gam.getBadges) ? window.gam.getBadges().length : 0;
+    const days = JSON.parse(localStorage.getItem('gam_days') || '[]').length;
+    const total = certType.total;
+    
+    let name = localStorage.getItem('gam_userName') || '';
+    
+    const modal = document.createElement('div');
+    modal.id = 'cert-modal';
+    
+    if (!certType.eligible) {
+      // Show progress message
+      const pct = Math.floor((total / 50) * 100);
+      modal.innerHTML = `
+        <div class="cert-modal-inner">
+          <button class="cert-close" aria-label="${T.close}">&times;</button>
+          <div class="cert-locked">
+            <div class="cert-locked-icon">🏆</div>
+            <h2>${T.notEligibleTitle}</h2>
+            <p>${T.notEligibleDesc}</p>
+            <div class="cert-progress-wrap">
+              <div class="cert-progress-bar">
+                <div class="cert-progress-fill" style="width:${Math.min(100, pct)}%"></div>
+              </div>
+              <div class="cert-progress-text">${total} / 50 (${pct}%)</div>
+            </div>
+            <div class="cert-stats-mini">
+              <div>🐍 Python: <strong>${certType.pythonCount}</strong> / 170</div>
+              <div>🐼 Pandas: <strong>${certType.pandasCount}</strong> / 150</div>
+              <div>🎓 Quiz: <strong>${certType.quizCount}</strong> / 100</div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      setTimeout(() => modal.classList.add('show'), 10);
+      modal.querySelector('.cert-close').addEventListener('click', close);
+      modal.addEventListener('click', e => { if (e.target === modal) close(); });
+      return;
+    }
+    
+    // Eligible - show certificate
+    const today = new Date();
+    const dateStr = IS_RTL 
+      ? `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`
+      : today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const serial = getSerialNumber();
+    const title = getCertificateTitle(certType);
+    
+    modal.innerHTML = `
+      <div class="cert-modal-inner">
+        <button class="cert-close" aria-label="${T.close}">&times;</button>
+        <h2 class="cert-modal-title">${T.yourCertificate}</h2>
+        
+        <div class="cert-eligible-banner">${T.eligibleMsg}</div>
+        
+        <div class="cert-name-input-wrap">
+          <label for="cert-name-input">${T.enterName}:</label>
+          <input type="text" id="cert-name-input" value="${name}" placeholder="${IS_RTL ? 'אלירן ישראלי' : 'John Doe'}" maxlength="60">
+        </div>
+        
+        <div class="cert-preview-wrap">
+          <div class="cert-preview" id="cert-preview">
+            ${buildCertificateHTML(name || T.yourName, title, dateStr, serial, certType, xp, badges, days)}
+          </div>
+        </div>
+        
+        <div class="cert-actions">
+          <button class="cert-btn cert-btn-primary" id="cert-download">📥 ${T.download}</button>
+          <button class="cert-btn cert-btn-share" id="cert-share">💼 ${T.share}</button>
+        </div>
+        
+        <div class="cert-stats-strip">
+          <div><strong>${total}</strong><br>${T.exercisesDone}</div>
+          <div><strong>${days}</strong><br>${T.daysActive}</div>
+          <div><strong>${xp.toLocaleString()}</strong><br>${T.xpEarned}</div>
+          <div><strong>${badges}</strong><br>${T.badgesEarned}</div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('show'), 10);
+    
+    // Wire up
+    modal.querySelector('.cert-close').addEventListener('click', close);
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    
+    const nameInput = modal.querySelector('#cert-name-input');
+    nameInput.addEventListener('input', e => {
+      const newName = e.target.value.trim();
+      localStorage.setItem('gam_userName', newName);
+      const preview = modal.querySelector('#cert-preview');
+      preview.innerHTML = buildCertificateHTML(newName || T.yourName, title, dateStr, serial, certType, xp, badges, days);
+    });
+    
+    modal.querySelector('#cert-download').addEventListener('click', () => downloadCertificate(name || T.yourName, title, dateStr, serial, certType, xp, badges, days));
+    modal.querySelector('#cert-share').addEventListener('click', () => shareLinkedIn(title));
+  }
+  
+  function close() {
+    const modal = document.getElementById('cert-modal');
+    if (modal) {
+      modal.classList.remove('show');
+      setTimeout(() => modal.remove(), 300);
+    }
+  }
+  
+  // ---- Build the certificate HTML (this is the actual certificate visual) ----
+  function buildCertificateHTML(name, title, dateStr, serial, certType, xp, badges, days) {
+    const escName = name.replace(/</g, '&lt;');
+    return `
+      <div class="cert-doc">
+        <div class="cert-doc-border">
+          <div class="cert-doc-inner">
+            <div class="cert-doc-header">
+              <div class="cert-logo">📊</div>
+              <div class="cert-site-name">${T.siteName}</div>
+              <div class="cert-site-url">${T.siteUrl}</div>
+            </div>
+            
+            <h1 class="cert-doc-title">${T.certTitle}</h1>
+            <div class="cert-doc-subtitle">${T.achievementsTitle}</div>
+            
+            <div class="cert-doc-awarded">${T.awarded}</div>
+            <div class="cert-doc-name">${escName}</div>
+            
+            <div class="cert-doc-for">${T.forCompleting}</div>
+            <div class="cert-doc-course">${title}</div>
+            
+            <div class="cert-doc-achievements">
+              <div class="cert-doc-stat"><span>${certType.total}</span>${T.exercisesDone}</div>
+              <div class="cert-doc-stat"><span>${days}</span>${T.daysActive}</div>
+              <div class="cert-doc-stat"><span>${xp.toLocaleString()}</span>${T.xpEarned}</div>
+              <div class="cert-doc-stat"><span>${badges}</span>${T.badgesEarned}</div>
+            </div>
+            
+            <div class="cert-doc-footer">
+              <div class="cert-doc-side">
+                <div class="cert-doc-line"></div>
+                <div class="cert-doc-label">${T.instructor}</div>
+                <div class="cert-doc-value">${T.eliranName}</div>
+                <div class="cert-doc-sublabel">${T.eliranTitle}</div>
+              </div>
+              <div class="cert-doc-seal">
+                <div class="cert-doc-seal-circle">
+                  <div class="cert-doc-seal-inner">
+                    <div class="cert-doc-seal-icon">✓</div>
+                    <div class="cert-doc-seal-text">${T.sealText}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="cert-doc-side">
+                <div class="cert-doc-line"></div>
+                <div class="cert-doc-label">${T.issued}</div>
+                <div class="cert-doc-value">${dateStr}</div>
+                <div class="cert-doc-sublabel">${T.serialPrefix}: ${serial}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // ---- Download/Print the certificate as PDF ----
+  function downloadCertificate(name, title, dateStr, serial, certType, xp, badges, days) {
+    // Open new window with just the certificate
+    const certHTML = buildCertificateHTML(name, title, dateStr, serial, certType, xp, badges, days);
+    const css = getCertificateCSS();
+    
+    const win = window.open('', '_blank', 'width=900,height=700');
+    if (!win) {
+      alert(IS_RTL ? 'אנא אפשר חלונות קופצים בדפדפן' : 'Please allow popups');
+      return;
+    }
+    
+    win.document.write(`
+      <!DOCTYPE html>
+      <html lang="${IS_RTL ? 'he' : 'en'}" dir="${IS_RTL ? 'rtl' : 'ltr'}">
+      <head>
+        <meta charset="UTF-8">
+        <title>${T.certTitle} - ${name}</title>
+        <style>
+          ${css}
+          @page { size: A4 landscape; margin: 0; }
+          body {
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .cert-doc { transform: none !important; margin: 20px; }
+          .cert-print-bar {
+            position: fixed;
+            top: 20px;
+            ${IS_RTL ? 'left' : 'right'}: 20px;
+            background: #1a1f3a;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            z-index: 9999;
+          }
+          .cert-print-bar button {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+          }
+          @media print {
+            .cert-print-bar { display: none; }
+            body { background: #fff; }
+            .cert-doc { margin: 0; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="cert-print-bar">
+          <button onclick="window.print()">🖨️ ${IS_RTL ? 'הדפס / שמור כ-PDF' : 'Print / Save as PDF'}</button>
+          <button onclick="window.close()" style="background:#444;color:#fff;">✕</button>
+        </div>
+        ${certHTML}
+      </body>
+      </html>
+    `);
+    win.document.close();
+    
+    // Auto-trigger print after load
+    setTimeout(() => {
+      try { win.print(); } catch(e) {}
+    }, 600);
+  }
+  
+  // ---- Share on LinkedIn ----
+  function shareLinkedIn(title) {
+    const url = 'https://egrosman1.github.io/sql-course/' + (IS_RTL ? '' : 'en/');
+    const text = IS_RTL 
+      ? `🎉 סיימתי את "${title}" בקוד דאטה! קורס פייתון ופאנדס חינמי בעברית.`
+      : `🎉 Just completed "${title}" at Data Code! Free Python and Pandas course.`;
+    
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${encodeURIComponent(text)}`;
+    window.open(linkedinUrl, '_blank', 'width=600,height=600');
+  }
+  
+  // ---- CSS for the certificate document itself ----
+  function getCertificateCSS() {
+    return `
+.cert-doc {
+  width: 100%;
+  max-width: 850px;
+  aspect-ratio: 1.414 / 1;
+  background: linear-gradient(135deg, #fffef9 0%, #fff8e7 100%);
+  padding: 14px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  position: relative;
+}
+.cert-doc-border {
+  width: 100%;
+  height: 100%;
+  border: 3px solid #d4af37;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.cert-doc-inner {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid #d4af37;
+  padding: 26px 32px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: -apple-system, "Heebo", Georgia, serif;
+}
+.cert-doc-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.cert-logo { font-size: 32px; line-height: 1; }
+.cert-site-name { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-top: 2px; }
+.cert-site-url { font-size: 11px; color: #888; font-style: italic; margin-top: 1px; }
+
+.cert-doc-title {
+  font-size: 32px;
+  color: #1a1a2e;
+  margin: 8px 0 2px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.cert-doc-subtitle {
+  font-size: 13px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.cert-doc-awarded {
+  font-size: 13px;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.cert-doc-name {
+  font-size: 34px;
+  font-weight: 700;
+  color: #1a1a2e;
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 8px;
+  margin: 0 30px 12px;
+  font-family: "Heebo", Georgia, serif;
+}
+.cert-doc-for {
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.cert-doc-course {
+  font-size: 22px;
+  color: #d4af37;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.cert-doc-achievements {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 0 40px 14px;
+  padding: 8px 0;
+  border-top: 1px solid #e6d68a;
+  border-bottom: 1px solid #e6d68a;
+}
+.cert-doc-stat {
+  font-size: 9.5px;
+  color: #888;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.cert-doc-stat span {
+  display: block;
+  font-size: 18px;
+  color: #1a1a2e;
+  font-weight: 800;
+  margin-bottom: 1px;
+}
+
+.cert-doc-footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+.cert-doc-side { text-align: center; }
+.cert-doc-line {
+  border-top: 1.5px solid #1a1a2e;
+  width: 80%;
+  margin: 0 auto 4px;
+}
+.cert-doc-label {
+  font-size: 9.5px;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 1px;
+  letter-spacing: 0.5px;
+}
+.cert-doc-value {
+  font-size: 12.5px;
+  color: #1a1a2e;
+  font-weight: 700;
+}
+.cert-doc-sublabel {
+  font-size: 9.5px;
+  color: #888;
+  font-style: italic;
+  margin-top: 1px;
+}
+
+.cert-doc-seal-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(212,175,55,0.45);
+}
+.cert-doc-seal-circle::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1.5px dashed #d4af37;
+  border-radius: 50%;
+}
+.cert-doc-seal-inner {
+  width: 56px;
+  height: 56px;
+  background: #fff8e7;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cert-doc-seal-icon {
+  font-size: 22px;
+  color: #d4af37;
+  font-weight: 800;
+  line-height: 1;
+}
+.cert-doc-seal-text {
+  font-size: 8px;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  margin-top: 1px;
+}
+
+@media (max-width: 600px) {
+  .cert-doc { padding: 8px; }
+  .cert-doc-inner { padding: 16px 18px; }
+  .cert-doc-title { font-size: 22px; }
+  .cert-doc-name { font-size: 22px; margin: 0 8px 8px; }
+  .cert-doc-course { font-size: 16px; }
+  .cert-doc-achievements { grid-template-columns: repeat(2, 1fr); margin: 0 8px 10px; }
+  .cert-doc-stat span { font-size: 15px; }
+  .cert-doc-footer { gap: 8px; }
+  .cert-doc-seal-circle { width: 52px; height: 52px; }
+  .cert-doc-seal-inner { width: 42px; height: 42px; }
+  .cert-doc-seal-icon { font-size: 18px; }
+  .cert-doc-seal-text { font-size: 7px; }
+  .cert-doc-value { font-size: 11px; }
+  .cert-doc-label { font-size: 8.5px; }
+  .cert-doc-sublabel { font-size: 8.5px; }
+}
+    `;
+  }
+  
+  // ---- Public API ----
+  window.gamCert = {
+    open: open,
+    isEligible: () => getCertificateType().eligible,
+  };
+  
+  // ---- Inject base CSS for the cert modal ----
+  function injectCertCSS() {
+    if (document.getElementById('cert-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'cert-styles';
+    style.textContent = `
+/* Cert modal */
+#cert-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s;
+  padding: 14px;
+  backdrop-filter: blur(4px);
+}
+#cert-modal.show { opacity: 1; }
+
+.cert-modal-inner {
+  background: #1a1f3a;
+  border-radius: 14px;
+  padding: 18px 14px;
+  max-width: 720px;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  color: #fff;
+  position: relative;
+  font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+}
+
+.cert-close {
+  position: absolute;
+  top: 8px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 26px;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  line-height: 1;
+}
+[dir="ltr"] .cert-close { right: 8px; }
+[dir="rtl"] .cert-close { left: 8px; }
+.cert-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+.cert-modal-title { font-size: 18px; text-align: center; margin: 0 0 12px; color: #ffd700; }
+
+.cert-eligible-banner {
+  background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+  color: #fff;
+  padding: 9px;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cert-name-input-wrap {
+  margin-bottom: 12px;
+}
+.cert-name-input-wrap label {
+  display: block;
+  font-size: 12.5px;
+  margin-bottom: 4px;
+  color: #aab;
+  font-weight: 600;
+}
+.cert-name-input-wrap input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #252a52;
+  border: 1.5px solid #353a6b;
+  color: #fff;
+  font-size: 15px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+.cert-name-input-wrap input:focus { outline: none; border-color: #ffd700; }
+
+.cert-preview-wrap {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 9px;
+  margin-bottom: 12px;
+  overflow: auto;
+}
+.cert-preview {
+  transform-origin: top center;
+}
+${getCertificateCSS()}
+/* Scale preview down */
+.cert-preview .cert-doc { transform: scale(0.85); transform-origin: top center; margin-bottom: -10%; }
+
+.cert-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cert-btn {
+  padding: 11px;
+  border-radius: 9px;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+.cert-btn-primary {
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #1a1a2e;
+}
+.cert-btn-share {
+  background: #0077b5;
+  color: #fff;
+}
+.cert-btn:hover, .cert-btn:active { transform: scale(0.98); }
+
+.cert-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  text-align: center;
+  font-size: 10px;
+  color: #aab;
+  padding-top: 12px;
+  border-top: 1px solid #353a6b;
+}
+.cert-stats-strip strong {
+  display: block;
+  font-size: 16px;
+  color: #ffd700;
+  margin-bottom: 2px;
+}
+
+/* Locked state */
+.cert-locked { text-align: center; padding: 16px 8px; }
+.cert-locked-icon { font-size: 56px; margin-bottom: 8px; opacity: 0.6; }
+.cert-locked h2 { font-size: 19px; margin: 8px 0 6px; color: #ffd700; }
+.cert-locked p { color: #aab; font-size: 13.5px; margin-bottom: 14px; }
+.cert-progress-wrap { margin-bottom: 14px; }
+.cert-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #14172a;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.cert-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700 0%, #ff8800 100%);
+  border-radius: 8px;
+  transition: width .5s ease;
+}
+.cert-progress-text { font-size: 12.5px; color: #ffd700; font-weight: 700; }
+.cert-stats-mini {
+  background: #252a52;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: ${IS_RTL ? 'right' : 'left'};
+}
+.cert-stats-mini strong { color: #ffd700; }
+
+@media (max-width: 480px) {
+  .cert-modal-inner { padding: 14px 10px; }
+  .cert-modal-title { font-size: 16px; }
+  .cert-preview .cert-doc { transform: scale(0.55); transform-origin: top center; }
+  .cert-preview-wrap { padding: 6px; max-height: 220px; }
+  .cert-actions { grid-template-columns: 1fr; }
+  .cert-btn { padding: 10px; font-size: 13px; }
+  .cert-stats-strip strong { font-size: 14px; }
+  .cert-stats-strip { font-size: 9.5px; gap: 3px; }
+}
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // ---- Add certificate button to gam panel ----
+  function addCertButton() {
+    // Watch for gam panel to open
+    const obs = new MutationObserver(() => {
+      const panel = document.getElementById('gam-panel');
+      if (panel && !panel.querySelector('.cert-link-btn')) {
+        const footer = panel.querySelector('.gam-footer');
+        if (footer) {
+          const link = document.createElement('button');
+          link.className = 'cert-link-btn';
+          link.textContent = '🏆 ' + (IS_RTL ? 'תעודת השלמה' : 'Certificate');
+          link.style.cssText = `
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-family: inherit;
+          `;
+          link.addEventListener('click', () => {
+            // Close gam panel first
+            const closeBtn = panel.querySelector('.gam-panel-close');
+            if (closeBtn) closeBtn.click();
+            setTimeout(open, 350);
+          });
+          footer.appendChild(link);
+        }
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: false });
+  }
+  
+  function init() {
+    injectCertCSS();
+    addCertButton();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+</body>
+</html>

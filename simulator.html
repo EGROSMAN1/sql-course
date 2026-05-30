@@ -1,267 +1,1726 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CKNNVS2HVB');
-</script>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>סימולטורי SQL אונליין בעברית — תרגול חי בדפדפן | SQL.course</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית | קורס SQL</title>
+<meta name="description" content="תרגול מקיף ב-SQL חינמי בעברית — 135 שאלות אינטראקטיביות (SELECT, JOIN, GROUP BY, פונקציות חלון), עורך SQL שרץ בדפדפן ללא התקנה, פתרונות מלאים והכנה לראיון אנליסט נתונים.">
+<meta name="keywords" content="תרגול SQL, SQL בעברית, סימולטור SQL, שאילתות SQL, לימוד SQL, SELECT, JOIN, GROUP BY, ראיון אנליסט נתונים, MySQL, SQLite, אנליסט נתונים, Data Analyst">
+<meta name="author" content="אלירן גרוסמן">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="theme-color" content="#0b0f17">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/sql-simulator.html">
+<!-- ====== Open Graph ====== -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="קורס SQL בעברית — אלירן גרוסמן">
+<meta property="og:locale" content="he_IL">
+<meta property="og:title" content="תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית">
+<meta property="og:description" content="135 שאלות SQL אינטראקטיביות בעברית, עורך שרץ בדפדפן ללא התקנה, פתרונות מלאים והכנה לראיון אנליסט נתונים.">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/sql-simulator.html">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="תרגול מקיף ב-SQL בעברית">
+<!-- ====== Twitter ====== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית">
+<meta name="twitter:description" content="135 שאלות SQL אינטראקטיביות בעברית, עורך שרץ בדפדפן, פתרונות מלאים והכנה לראיון אנליסט נתונים.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+<!-- ====== Favicon (inline SVG) ====== -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f17'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='700' fill='%232dd4bf' text-anchor='middle'%3ESQL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#060a0f;--bg2:#0d1420;--bg3:#111927;--bg4:#1a2535;
-  --border:#1e2d42;--border2:#2a3f5a;
-  --text:#e8f0fe;--text2:#8ba3c7;--text3:#4a6080;
-  --aq:#00d4c8;
-  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+  --bg:#0b0f17; --bg2:#111824; --panel:#141c2a; --panel2:#1a2434;
+  --line:#243248; --line2:#30425c;
+  --txt:#eef3f9; --muted:#a7b6cc; --dim:#8094ac;
+  --teal:#2dd4bf; --teal-d:#14b8a6; --cyan:#38bdf8;
+  --green:#4ade80; --red:#fb7185; --amber:#fcd34d;
+  --glow:rgba(45,212,191,.13);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Heebo',system-ui,sans-serif;
 }
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;line-height:1.5}
+*{margin:0;padding:0;box-sizing:border-box}
+button{color:inherit}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:var(--bg); color:var(--txt); font-family:var(--sans);
+  line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1100px 600px at 80% -10%, var(--glow), transparent 70%);
+  background-attachment:fixed; min-height:100vh; padding-bottom:env(safe-area-inset-bottom);
+  overflow-x:clip;
+}
+.wrap{max-width:840px;margin:0 auto;padding:0 20px}
+*:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
-/* Topbar */
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.7rem 1.2rem;display:flex;align-items:center;gap:1rem;height:54px;position:sticky;top:0;z-index:50}
-.logo{display:flex;align-items:center;gap:.4rem;font-weight:900;font-size:1.05rem}
-.logo-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--aq),#4a9eff);box-shadow:0 0 12px var(--aq)}
-.back{margin-right:auto;color:var(--text2);text-decoration:none;font-size:12.5px;font-weight:600;padding:.4rem .8rem;border-radius:6px;border:1px solid var(--border);transition:all .15s}
-.back:hover{color:var(--aq);border-color:var(--aq)}
+/* ============ SCREEN: SELECT ============ */
+#screen-select{padding:48px 0 60px}
+.intro{text-align:center;margin-bottom:38px}
+.intro .tag{display:inline-block;font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;border:1px solid var(--line2);border-radius:999px;padding:6px 15px;margin-bottom:16px}
+.intro h1{font-size:clamp(1.55rem,5vw,2.7rem);font-weight:800;letter-spacing:-.01em;margin-bottom:10px;line-height:1.18;text-wrap:balance}
+.intro p{color:var(--muted);font-size:1.02rem;max-width:520px;margin:0 auto}
 
-/* Hero */
-.hero{text-align:center;padding:3.5rem 1.5rem 2rem;max-width:760px;margin:0 auto}
-.badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(0,212,200,.1);border:1px solid rgba(0,212,200,.3);color:var(--aq);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.4rem 1rem;border-radius:99px;margin-bottom:1.2rem;font-family:var(--mono)}
-.hero h1{font-size:2.6rem;font-weight:900;margin-bottom:.85rem;letter-spacing:-.7px;line-height:1.15}
-.hero h1 span{background:linear-gradient(135deg,var(--aq),#4a9eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--text2);font-size:1.05rem;line-height:1.65;max-width:560px;margin:0 auto}
+.mode-row{display:flex;gap:10px;justify-content:center;margin:26px 0 30px;flex-wrap:wrap}
+.mode-card{flex:1;min-width:220px;max-width:300px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;text-align:right;transition:all .16s;color:inherit;font-family:inherit}
+.mode-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.mode-card h3{font-size:1.05rem;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.mode-card .ic{width:30px;height:30px;border-radius:9px;background:var(--bg2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;color:var(--teal);font-family:var(--mono);font-size:.95rem}
+.mode-card p{color:var(--muted);font-size:.86rem;line-height:1.5}
 
-/* Cards grid */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.4rem;max-width:1200px;margin:1rem auto 4rem;padding:0 1.5rem}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.5rem;display:flex;flex-direction:column;gap:.85rem;text-decoration:none;color:inherit;transition:all .25s;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--cc,var(--aq))}
-.card:hover{transform:translateY(-7px);border-color:var(--cc,var(--aq));box-shadow:0 24px 48px rgba(0,0,0,.5)}
+.sec-label{font-size:.82rem;color:var(--dim);font-weight:600;letter-spacing:.04em;margin:0 4px 14px;text-transform:uppercase}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px}
+.topic{position:relative;text-align:right;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;transition:all .15s;font-family:inherit;color:inherit;width:100%}
+.topic:hover{border-color:var(--teal-d);transform:translateY(-2px);background:var(--panel2)}
+.topic h3{font-size:.98rem;font-weight:700;margin-bottom:3px}
+.topic .td{font-size:.8rem;color:var(--muted);line-height:1.45;margin-bottom:9px;min-height:34px}
+.topic .meta{display:flex;gap:7px;font-family:var(--mono);font-size:.7rem}
+.topic .pill{border-radius:6px;padding:2px 8px;border:1px solid var(--line)}
+.topic .pill.q{color:var(--cyan)} .topic .pill.m{color:var(--amber)}
+.topic .go{position:absolute;top:15px;left:16px;color:var(--dim);font-size:1.1rem;transition:transform .15s}
+.topic:hover .go{transform:translateX(-4px);color:var(--teal)}
 
-.card-icon{font-size:3rem;line-height:1}
-.card-name{font-size:1.4rem;font-weight:900;color:var(--text)}
-.card-desc{font-size:.88rem;color:var(--text2);line-height:1.6;flex:1}
+/* ============ SCREEN: PRACTICE ============ */
+#screen-practice{display:none;min-height:100vh;flex-direction:column}
+.pbar{position:sticky;top:0;z-index:40;background:rgba(11,15,23,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.pbar-inner{max-width:840px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:14px}
+.back-btn{background:var(--panel);border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:8px 13px;font-family:inherit;font-size:.86rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;flex-shrink:0}
+.back-btn:hover{border-color:var(--teal);color:var(--txt)}
+.hnav-group{display:flex;gap:7px;flex-shrink:0}
+.hnav{background:var(--panel);border:1px solid var(--line2);color:var(--muted);border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.hnav:hover:not(:disabled){border-color:var(--teal);color:var(--txt)}
+.hnav.primary{background:var(--teal);color:#04231f;border-color:var(--teal)}
+.hnav.primary:hover:not(:disabled){background:var(--cyan)}
+.hnav:disabled{opacity:.38;cursor:default}
+.pbar .ptitle{font-weight:700;font-size:.98rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbar .ptopic{color:var(--dim);font-size:.82rem}
+.progress-wrap{flex:1;min-width:60px}
+.progress-track{height:7px;background:var(--bg2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--cyan));width:0;transition:width .3s;border-radius:999px}
+.pcount{font-family:var(--mono);font-size:.82rem;color:var(--muted);flex-shrink:0;min-width:62px;text-align:center}
 
-.stats{display:flex;gap:.75rem;flex-wrap:wrap}
-.stat{background:var(--bg3);border-radius:8px;padding:.4rem .85rem;text-align:center;min-width:70px}
-.stat-n{font-size:1.2rem;font-weight:900;font-family:var(--mono);color:var(--cc,var(--aq))}
-.stat-l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.pstage{flex:1;padding:26px 0 30px}
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px 24px 22px;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qcard.solved{border-color:var(--teal-d)}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.qbadge{font-family:var(--mono);font-size:.68rem;font-weight:700;border-radius:7px;padding:4px 9px}
+.qbadge.query{color:var(--cyan);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3)}
+.qbadge.mcq{color:var(--amber);background:rgba(252,211,77,.12);border:1px solid rgba(252,211,77,.3)}
+.qhead .qsolvedmark{margin-inline-start:auto;color:var(--green);font-size:.84rem;font-weight:600;display:none}
+.qdiff{display:inline-flex;align-items:center;gap:6px;margin-inline-start:8px}
+.qdiff .dot{width:7px;height:7px;border-radius:50%;background:var(--line2)}
+.qdiff-lbl{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:.02em}
+.qdiff.l1 .dot.on,.qdiff.l2 .dot.on{background:var(--green)}
+.qdiff.l1 .qdiff-lbl,.qdiff.l2 .qdiff-lbl{color:var(--green)}
+.qdiff.l3 .dot.on{background:var(--amber)} .qdiff.l3 .qdiff-lbl{color:var(--amber)}
+.qdiff.l4 .dot.on,.qdiff.l5 .dot.on{background:var(--red)}
+.qdiff.l4 .qdiff-lbl,.qdiff.l5 .qdiff-lbl{color:var(--red)}
+.qcard.solved .qsolvedmark{display:inline}
+.qtext{font-size:1.18rem;font-weight:600;line-height:1.55;white-space:pre-line;margin-bottom:20px}
 
-.tags{display:flex;flex-wrap:wrap;gap:.3rem}
-.tag{font-size:10.5px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:3px 8px;border-radius:4px;border:1px solid var(--border)}
+/* editor */
+.editor-shell{border:1px solid var(--line2);border-radius:12px;overflow:hidden;direction:ltr}
+.CodeMirror{height:auto;min-height:120px;font-family:var(--mono)!important;font-size:.92rem;background:#0c1119!important}
+.CodeMirror-gutters{background:#0a0f17!important;border-right:1px solid var(--line)!important}
+.CodeMirror-scroll{overflow-x:hidden!important}            /* lineWrapping is on → no horizontal scroll needed */
+.CodeMirror-hscrollbar{display:none!important;height:0!important}
+.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{background:#0c1119!important}
+.editor-shell ::-webkit-scrollbar{width:10px;height:0}
+.editor-shell ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+.editor-shell ::-webkit-scrollbar-track,.editor-shell ::-webkit-scrollbar-corner{background:#0c1119}
+.actions{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;align-items:center}
+.btn{border:none;border-radius:10px;padding:11px 18px;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-run{background:var(--teal);color:#04231f}
+.btn-run:hover{background:var(--cyan)}
+.btn-ghost{background:var(--bg2);color:var(--muted);border:1px solid var(--line2)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--txt)}
+.kbd-hint{margin-inline-start:auto;font-size:.76rem;color:var(--dim)}
+.kbd-hint kbd{font-family:var(--mono);background:var(--bg2);border:1px solid var(--line2);border-radius:5px;padding:1px 6px;font-size:.72rem}
+.hintline{font-size:.86rem;color:#e8c45a;margin-top:13px;background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.22);border-radius:10px;padding:11px 14px;display:none}
+.hintline.show{display:block}
 
-.btn{background:var(--cc,var(--aq));color:#070d0f;border:none;padding:.65rem 1.5rem;border-radius:8px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:var(--font);text-align:center;margin-top:.25rem;transition:opacity .15s;display:block}
-.card:hover .btn{opacity:.88}
+.result{margin-top:14px;display:none}
+.result.show{display:block}
+.status{font-size:.95rem;font-weight:600;margin-bottom:10px}
+.status.ok{color:var(--green)} .status.err{color:var(--red)} .status.neutral{color:var(--muted)}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:11px;direction:ltr}
+table.res{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.84rem}
+table.res th{background:var(--bg2);color:var(--teal);text-align:left;padding:9px 13px;border-bottom:1px solid var(--line2);white-space:nowrap;position:sticky;top:0}
+table.res td{padding:8px 13px;border-bottom:1px solid var(--line);color:#d4deec;white-space:nowrap}
+table.res tr:last-child td{border-bottom:none}
+.errmsg{font-family:var(--mono);font-size:.85rem;color:var(--red);background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.28);border-radius:11px;padding:12px 15px;direction:ltr;text-align:left;white-space:pre-wrap}
+.errhint{font-size:.9rem;color:#e8c45a;background:rgba(252,211,77,.08);border:1px solid rgba(252,211,77,.22);border-radius:10px;padding:11px 14px;margin:10px 0;line-height:1.55}
 
-/* Card colors */
-.nw{--cc:#00d4c8}
-.nba{--cc:#e85d04}
-.cl{--cc:#ffb81c}
-.pbi{--cc:#f2c811}
+/* data preview */
+.datapanel{margin:14px 0 4px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.datapanel>summary{cursor:pointer;list-style:none;padding:11px 15px;font-size:.88rem;font-weight:600;color:var(--teal);user-select:none}
+.datapanel>summary::-webkit-details-marker{display:none}
+.datapanel>summary::before{content:'▸ ';display:inline-block;transition:transform .15s;color:var(--dim)}
+.datapanel[open]>summary::before{content:'▾ '}
+.datapanel[open]>summary{border-bottom:1px solid var(--line)}
+.dp-body{padding:12px 13px;display:flex;flex-direction:column;gap:14px;max-height:340px;overflow-y:auto}
+.dp-name{font-family:var(--mono);font-size:.8rem;color:var(--cyan);margin-bottom:6px;font-weight:600}
+.dp-table .tbl-scroll{max-height:none}
+.dp-table table.res{font-size:.78rem}
+.dp-table table.res th{padding:6px 10px}
+.dp-table table.res td{padding:5px 10px}
+.tbl-note{font-size:.76rem;color:var(--dim);padding:7px 4px 2px;text-align:right}
 
-@media(max-width:820px){
-  .hero{padding:2.2rem 1rem 1.5rem}
-  .hero h1{font-size:2rem}
-  .hero p{font-size:.95rem}
-  .cards{grid-template-columns:1fr;gap:1rem;padding:0 1rem;margin:.5rem auto 2.5rem}
-  .card{padding:1.3rem 1.2rem}
-  .card-icon{font-size:2.5rem}
-  .card-name{font-size:1.2rem}
+/* mcq */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{text-align:right;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:14px 17px;font-family:inherit;font-size:1rem;color:var(--txt);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:12px;width:100%}
+.opt:hover:not(.locked){border-color:var(--teal);background:var(--panel2)}
+.opt .mark{flex-shrink:0;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line2);font-family:var(--mono);font-size:.82rem;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+.opt.correct{border-color:var(--green);background:rgba(74,222,128,.12)}
+.opt.correct .mark{background:var(--green);border-color:var(--green);color:#04231f}
+.opt.wrong{border-color:var(--red);background:rgba(251,113,133,.12)}
+.opt.wrong .mark{background:var(--red);border-color:var(--red);color:#2a0a0a}
+.opt.locked{cursor:default}
+.explain{margin-top:15px;background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.24);border-radius:12px;padding:14px 17px;font-size:.94rem;display:none}
+.explain.show{display:block}
+.explain b{color:var(--teal)}
+
+.sol-reveal{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.sol-toggle{background:none;border:none;color:var(--dim);font-family:inherit;font-size:.86rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.sol-toggle:hover{color:var(--teal)}
+.sol-code{display:none;margin-top:11px;background:#0c1119;border:1px solid var(--line);border-radius:11px;padding:14px 16px;direction:ltr;text-align:left}
+.sol-code.show{display:block}
+.sol-code code{font-family:var(--mono);font-size:.87rem;color:#d4deec;white-space:pre-wrap;line-height:1.7}
+
+/* nav */
+.pnav{display:flex;gap:11px;margin-top:22px;align-items:center}
+.nav-btn{flex:1;background:var(--panel);border:1px solid var(--line2);color:var(--txt);border-radius:12px;padding:13px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .15s}
+.nav-btn:hover:not(:disabled){border-color:var(--teal);background:var(--panel2)}
+.nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.nav-btn.primary{background:var(--teal);color:#04231f;border-color:var(--teal);flex:1.4}
+.nav-btn.primary:hover{background:var(--cyan)}
+
+.done-card{text-align:center;padding:40px 24px;background:var(--panel);border:1px solid var(--teal-d);border-radius:18px}
+.done-card .big{font-size:2.4rem;margin-bottom:8px}
+.done-card h2{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.done-card p{color:var(--muted);margin-bottom:20px}
+.done-card .score{font-family:var(--mono);font-size:1.1rem;color:var(--teal);margin-bottom:20px}
+.score-ring{width:128px;height:128px;border-radius:50%;margin:6px auto 14px;display:flex;align-items:center;justify-content:center;transition:background .4s}
+.score-inner{width:98px;height:98px;border-radius:50%;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-pct{font-family:var(--mono);font-size:1.9rem;font-weight:800;line-height:1}
+.score-sub{font-size:.74rem;color:var(--dim);margin-top:3px}
+.grade-label{font-size:1.15rem;font-weight:800;margin-bottom:6px}
+.score-detail{color:var(--muted);font-family:var(--mono);font-size:.92rem;margin-bottom:22px}
+.pscore{font-family:var(--mono);font-size:.8rem;color:var(--teal);flex-shrink:0;font-weight:700}
+
+/* schema chip */
+.schema-link{background:none;border:none;color:var(--dim);font-family:inherit;font-size:.82rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.schema-link:hover{color:var(--teal)}
+.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:80;display:none;backdrop-filter:blur(3px)}
+.drawer-bg.show{display:block}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(430px,92vw);background:var(--bg2);border-right:1px solid var(--line2);z-index:81;transform:translateX(-100%);transition:transform .25s;overflow-y:auto;padding:24px}
+.drawer.show{transform:translateX(0)}
+.drawer h3{font-size:1.15rem;margin-bottom:6px}
+.drawer>p{color:var(--muted);font-size:.87rem;margin-bottom:18px}
+.drawer .tbl{margin-bottom:18px}
+.drawer .tbl h4{font-family:var(--mono);color:var(--teal);font-size:.9rem;margin-bottom:5px}
+.drawer .tbl .cols{font-family:var(--mono);font-size:.77rem;color:#9fb0c6;direction:ltr;text-align:left;background:#0c1119;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.drawer-close{position:absolute;top:15px;left:15px;background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1}
+
+#loading-ov{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--muted)}
+.spinner{width:36px;height:36px;border:3px solid var(--line2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ ERD ============ */
+.erd-fab{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;background:var(--teal);color:#04231f;border:none;border-radius:999px;padding:11px 17px;font-family:var(--sans);font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:all .15s}
+.erd-fab:hover{background:var(--cyan);transform:translateY(-2px)}
+.erd-overlay{position:fixed;inset:0;z-index:90;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.erd-overlay.show{display:flex}
+.erd-bar{display:flex;align-items:center;gap:7px;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--bg2);flex-shrink:0}
+.erd-title{font-weight:700;font-size:.92rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.erd-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--line2);color:var(--muted);border-radius:9px;font-size:1.2rem;line-height:1;cursor:pointer;font-family:inherit}
+.erd-icon:hover{border-color:var(--teal);color:var(--txt)}
+.erd-hint{flex-shrink:0;padding:7px 14px;font-size:.76rem;color:var(--muted);background:var(--bg2);border-bottom:1px solid var(--line);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.erd-canvas{flex:1;position:relative;overflow:auto;background:
+  radial-gradient(circle, rgba(48,66,92,.5) 1px, transparent 1px) 0 0/26px 26px,
+  var(--bg);min-height:0}
+.erd-viewport{position:relative}
+.erd-stage{position:relative;transform-origin:0 0;width:1180px;height:1180px}
+.erd-svg{position:absolute;top:0;left:0;pointer-events:none;overflow:visible}
+.erd-box{position:absolute;width:184px;background:var(--panel);border:1px solid var(--line2);border-radius:11px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.35);touch-action:none;cursor:grab;user-select:none;z-index:2}
+.erd-box:active{cursor:grabbing}
+.erd-box-h{background:var(--panel2);color:var(--teal);font-family:var(--mono);font-weight:700;font-size:.84rem;padding:9px 12px;border-bottom:1px solid var(--line2)}
+.erd-col{font-family:var(--mono);font-size:.76rem;color:#c4d2e4;padding:5px 12px;direction:ltr;text-align:left;border-bottom:1px solid rgba(36,50,72,.5);display:flex;align-items:center;gap:5px}
+.erd-col:last-child{border-bottom:none}
+.erd-col.fk{color:var(--cyan)}
+.erd-pk{font-size:.72rem}
+.erd-fklink{margin-inline-start:auto;opacity:.7;font-size:.7rem}
+
+/* ---- autocomplete dropdown ---- */
+.ac-box{position:fixed;z-index:300;max-height:230px;overflow-y:auto;background:var(--panel2);border:1px solid var(--teal-d);border-radius:9px;box-shadow:0 10px 28px rgba(0,0,0,.55);font-family:var(--mono);font-size:.9rem;min-width:150px;display:none}
+.ac-item{padding:9px 13px;color:#c4d2e4;cursor:pointer;direction:ltr;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(36,50,72,.4)}
+.ac-item:last-child{border-bottom:none}
+.ac-item.sel{background:var(--teal);color:#04231f;font-weight:700}
+
+/* ---- SEO content / FAQ / footer (landing only) ---- */
+.seo{max-width:760px;margin:46px auto 0;padding:26px 22px;background:var(--panel);border:1px solid var(--line);border-radius:16px;color:var(--muted);line-height:1.7}
+.seo h2{color:var(--txt);font-size:1.12rem;font-weight:800;margin:22px 0 8px}
+.seo h2:first-child{margin-top:0}
+.seo strong{color:#c4d2e4;font-weight:700}
+.seo p{margin-bottom:6px}
+.seo-list{list-style:none;margin:6px 0 4px;padding:0}
+.seo-list li{padding:7px 2px;border-bottom:1px solid var(--line2)}
+.seo-list li:last-child{border-bottom:none}
+.faq{margin-top:6px}
+.faq details{border:1px solid var(--line2);border-radius:10px;margin-bottom:9px;background:var(--bg2);overflow:hidden}
+.faq summary{cursor:pointer;padding:13px 16px;font-weight:600;color:var(--txt);list-style:none;display:flex;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:'+';color:var(--teal);font-weight:800;margin-inline-end:10px;font-family:var(--mono)}
+.faq details[open] summary::before{content:'\2212'}
+.faq details p{padding:0 16px 14px;color:var(--muted);line-height:1.65;margin:0}
+.site-footer{max-width:760px;margin:26px auto 0;text-align:center;color:var(--dim);font-size:.86rem;line-height:1.7}
+.site-footer a{color:var(--teal);text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
+.muted-fine{font-size:.76rem;color:#5b6b82;margin-top:4px}
+
+@media (max-width:600px){
+  body{font-size:15px}
+  .wrap{padding:0 12px}
+  #screen-select{padding:30px 0 48px}
+  .intro{margin-bottom:26px}
+  .intro .tag{font-size:.68rem;padding:5px 12px;margin-bottom:12px}
+  .mode-row{flex-direction:column;gap:9px;margin:20px 0 24px}
+  .mode-card{max-width:none;min-width:0;padding:15px 16px}
+  .topics{grid-template-columns:1fr}
+  .topic .td{min-height:0}
+
+  .pbar-inner{flex-wrap:wrap;padding:8px 12px;gap:7px 9px}
+  .pbar .ptitle{flex:1;font-size:.88rem;min-width:40px}
+  .progress-wrap{order:5;flex-basis:100%;min-width:0}
+  .hnav-group{order:6;flex-basis:100%;gap:9px}
+  .hnav{flex:1;padding:10px;font-size:.88rem}
+  .back-btn{padding:7px 10px;font-size:.8rem}
+  .pcount{min-width:46px;font-size:.74rem}
+  .pscore{font-size:.74rem}
+
+  .pstage{padding:16px 0 26px}
+  .qcard{padding:16px 13px;border-radius:14px}
+  .qhead{flex-wrap:wrap;gap:7px}
+  .qdiff{margin-inline-start:4px}
+  .qtext{font-size:1.04rem;margin-bottom:14px}
+
+  /* editor: 16px font prevents iOS auto-zoom on focus */
+  .CodeMirror{font-size:16px!important;min-height:104px}
+  .actions{gap:8px}
+  .actions .btn{flex:1 1 auto;padding:12px 14px;font-size:.9rem}
+  .btn-run{flex-basis:100%}
+  .kbd-hint{display:none}
+
+  /* data preview compact + horizontally scrollable */
+  .dp-body{max-height:200px;padding:9px;gap:11px}
+  .dp-table table.res{font-size:.74rem}
+  .datapanel>summary{padding:11px 13px;font-size:.86rem}
+  .tbl-note{font-size:.72rem}
+
+  table.res th,table.res td{padding:7px 10px;font-size:.8rem}
+
+  .opt{padding:13px 14px;font-size:.95rem;gap:10px}
+  .opt .mark{width:24px;height:24px}
+  .explain{font-size:.9rem;padding:13px 14px}
+
+  .pnav{flex-wrap:wrap;gap:9px}
+  .nav-btn{padding:13px;font-size:.92rem}
+  .nav-btn.primary{flex:1.2}
+
+  .drawer{width:100vw;padding:20px 16px}
+  .done-card{padding:30px 18px}
+
+  /* landing SEO content / FAQ / footer */
+  .intro p{font-size:.92rem;line-height:1.55;max-width:none;padding:0 4px}
+  .seo{margin-top:28px;padding:18px 15px;border-radius:14px;font-size:.92rem;line-height:1.65}
+  .seo h2{font-size:1.02rem;margin:17px 0 7px}
+  .seo-list li{padding:8px 2px;font-size:.9rem}
+  .faq summary{padding:12px 13px;font-size:.91rem}
+  .faq details p{padding:0 13px 12px;font-size:.88rem}
+  .site-footer{margin-top:18px;font-size:.82rem;padding:0 6px}
+  .muted-fine{font-size:.72rem}
+}
+@media (max-width:380px){
+  .actions .btn{font-size:.85rem;padding:11px 10px}
+  .qtext{font-size:1rem}
+  .nav-btn{font-size:.88rem;padding:12px}
+  .qdiff-lbl{display:none}
+  .pbar .ptitle{font-size:.85rem}
+}
+/* larger tap targets on touch devices */
+@media (hover:none){
+  .sol-toggle,.schema-link{padding:6px 0;display:inline-block}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
-
-<meta name="description" content="סימולטורי SQL חיים בעברית שרצים בדפדפן ללא התקנה: תרגלו שאילתות אמיתיות על נתוני NBA, ליגת האלופות ו-Northwind. חינם לחלוטין.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/simulator.html">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/simulator.html">
-<meta property="og:site_name" content="קורס SQL בעברית - אלירן גרוסמן">
-<meta property="og:title" content="בחר סימולטור SQL">
-<meta property="og:description" content="סימולטורי SQL חיים בעברית שרצים בדפדפן ללא התקנה: תרגלו שאילתות אמיתיות על נתוני NBA, ליגת האלופות ו-Northwind. חינם לחלוטין.">
-<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="בחר סימולטור SQL">
-<meta name="twitter:description" content="סימולטורי SQL חיים בעברית שרצים בדפדפן ללא התקנה: תרגלו שאילתות אמיתיות על נתוני NBA, ליגת האלופות ו-Northwind. חינם לחלוטין.">
-<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
-<script type="application/ld+json">
-[
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "דף הבית",
-        "item": "https://egrosman1.github.io/sql-course/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "סימולטורי SQL",
-        "item": "https://egrosman1.github.io/sql-course/simulator.html"
-      }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "LearningResource",
-    "name": "סימולטורי SQL אונליין בעברית — תרגול חי בדפדפן | SQL.course",
-    "description": "סימולטורי SQL חיים בעברית שרצים בדפדפן ללא התקנה: תרגלו שאילתות אמיתיות על נתוני NBA, ליגת האלופות ו-Northwind. חינם לחלוטין.",
-    "url": "https://egrosman1.github.io/sql-course/simulator.html",
-    "inLanguage": "he",
-    "isAccessibleForFree": true,
-    "learningResourceType": "Simulation",
-    "teaches": "SQL",
-    "educationalLevel": "beginner to advanced",
-    "provider": {
-      "@type": "Organization",
-      "name": "SQL.course",
-      "url": "https://egrosman1.github.io/sql-course/"
-    },
-    "author": {
-      "@type": "Person",
-      "name": "אלירן גרוסמן",
-      "jobTitle": "מרצה SQL ומנהל אנליסטים, Partner"
-    },
-    "isPartOf": {
-      "@type": "Course",
-      "name": "קורס SQL חינם בעברית",
-      "url": "https://egrosman1.github.io/sql-course/"
-    }
-  }
-]
-</script>
 <script type="application/ld+json">
 {
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
-  {
-   "@type": "Question",
-   "name": "האם צריך להתקין משהו כדי להריץ SQL בסימולטור?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "לא. הסימולטורים רצים ישירות בדפדפן באמצעות מנוע SQL מקומי — כותבים שאילתה, לוחצים הרצה ורואים תוצאות אמיתיות, ללא התקנה וללא שרת."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "על אילו נתונים אפשר לתרגל בסימולטורים?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "יש שלושה סימולטורי SQL חיים: נתוני NBA אמיתיים, 33 עונות של ליגת האלופות, ומסד הנתונים הקלאסי Northwind. בנוסף קיים סימולטור Power BI ללימוד DAX ודשבורדים."
-   }
-  }
- ]
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://egrosman1.github.io/sql-course/sql-simulator.html#app",
+      "name": "תרגול מקיף — תרגול SQL אינטראקטיבי בעברית",
+      "url": "https://egrosman1.github.io/sql-course/sql-simulator.html",
+      "description": "תרגול מקיף וחינמי ב-SQL בעברית עם 135 שאלות אינטראקטיביות, עורך SQL שרץ בדפדפן ללא התקנה, ופתרונות מלאים.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web (כל דפדפן)",
+      "inLanguage": "he",
+      "isAccessibleForFree": true,
+      "educationalUse": "תרגול, הכנה לראיון עבודה",
+      "teaches": ["SQL", "SELECT", "WHERE", "JOIN", "GROUP BY", "תת-שאילתות", "פונקציות חלון"],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "ILS" },
+      "author": {
+        "@type": "Person",
+        "name": "אלירן גרוסמן",
+        "jobTitle": "אנליסט נתונים ומדריך SQL"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "האם התרגול בחינם?",
+          "acceptedAnswer": { "@type": "Answer", "text": "כן. השימוש חופשי לחלוטין, ללא הרשמה וללא תשלום." } },
+        { "@type": "Question", "name": "האם צריך להתקין תוכנה או מסד נתונים?",
+          "acceptedAnswer": { "@type": "Answer", "text": "לא. מנוע SQLite רץ ישירות בדפדפן (sql.js), כך שאפשר לכתוב ולהריץ שאילתות אמיתיות בלי שום התקנה." } },
+        { "@type": "Question", "name": "אילו נושאי SQL נכללים בתרגול?",
+          "acceptedAnswer": { "@type": "Answer", "text": "SELECT, סינון בעזרת WHERE, מיון ומגבלה, GROUP BY ואגרגציות, סוגי JOIN, תת-שאילתות, פונקציות חלון כמו ROW_NUMBER ו-RANK, ופונקציות טקסט ותאריך." } },
+        { "@type": "Question", "name": "האם התרגול מתאים להכנה לראיון עבודה לאנליסט נתונים?",
+          "acceptedAnswer": { "@type": "Answer", "text": "כן. יש קטגוריות ייעודיות של שאלות ראיון SQL נפוצות, מסודרות לפי רמת קושי." } },
+        { "@type": "Question", "name": "כמה שאלות יש בתרגול?",
+          "acceptedAnswer": { "@type": "Answer", "text": "135 שאלות, מתוכן 76 שאילתות שמריצים בעורך ה-SQL, מסודרות מהקל לקשה." } },
+        { "@type": "Question", "name": "על איזה מסד נתונים מתרגלים?",
+          "acceptedAnswer": { "@type": "Answer", "text": "מסד נתונים עם 14 טבלאות מקושרות (עובדים, מחלקות, הזמנות, מוצרים, לקוחות ועוד) ובו עד 30,000 רשומות." } }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "קורס SQL בעברית", "item": "https://egrosman1.github.io/sql-course/" },
+        { "@type": "ListItem", "position": 2, "name": "תרגול מקיף", "item": "https://egrosman1.github.io/sql-course/sql-simulator.html" }
+      ]
+    }
+  ]
 }
 </script>
 </head>
 <body>
+<noscript><style>#loading-ov{display:none!important}</style></noscript>
 
-<div class="topbar">
-  <div class="logo"><div class="logo-dot"></div>SQL Simulator</div>
-  <a href="index.html" class="back">← דף הבית</a><a href="simulator.html" class="back" style="margin-inline-start:auto" title="עברית" aria-current="page"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="en/simulator.html" class="back" style="margin-inline-start:auto" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a>
+<div id="loading-ov"><div class="spinner"></div><div>טוען מנוע SQL ובונה את מסד הנתונים…</div></div>
+
+<!-- ============ SCREEN 1: SELECT ============ -->
+<main id="screen-select" class="wrap" role="main">
+  <header class="intro">
+    <span class="tag">// תרגול מקיף</span><a href="sql-simulator.html"  style="text-decoration:none;font-size:1.15rem"title="עברית" aria-current="page"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="en/sql-simulator.html"  style="text-decoration:none;font-size:1.15rem"title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="zh/sql-simulator.html" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <h1>תרגול מקיף ב-SQL — 135 שאלות אינטראקטיביות בעברית</h1>
+    <p>בחרו נושא והתחילו לתרגל: שאלה אחת בכל פעם — כותבים שאילתה ומריצים אותה באמת על מסד נתונים אמיתי בדפדפן, או עונים על שאלון אמריקאי עם הסבר מלא. 135 שאלות מהקל לקשה, חינם וללא התקנה.</p>
+  </header>
+
+  <div class="sec-label">מצב מהיר</div>
+  <div class="mode-row">
+    <button class="mode-card" id="mode-all">
+      <h3><span class="ic">↗</span> מסלול מדורג</h3>
+      <p>כל <span id="cntAll">—</span> השאלות בסדר עולה — מהקל לקשה. הדרך המומלצת ללמוד.</p>
+    </button>
+    <button class="mode-card" id="mode-queries">
+      <h3><span class="ic">▶</span> שאילתות בלבד</h3>
+      <p><span id="cntQ">—</span> שאלות שמריצים בעורך ה-SQL, גם הן מהקל לקשה.</p>
+    </button>
+  </div>
+
+  <div class="sec-label">או בחרו נושא ספציפי</div>
+  <div class="topics" id="topics"></div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="schema-link" id="schemaBtn1">הצג את מבנה הטבלאות</button>
+  </div>
+
+  <section class="seo" aria-label="מידע על התרגול המקיף">
+    <h2>מה תמצאו בתרגול המקיף</h2>
+    <p>התרגול המקיף מאפשר לתרגל <strong>שאילתות SQL</strong> בעברית ישירות בדפדפן — בלי להתקין מסד נתונים. כל שאילתה רצה על מנוע <strong>SQLite</strong> אמיתי, מקבלת ציון, ומלווה בפתרון לדוגמה ובהסבר.</p>
+    <ul class="seo-list">
+      <li><strong>SELECT וסינון:</strong> שליפת עמודות, WHERE, DISTINCT, LIKE, IN, BETWEEN.</li>
+      <li><strong>מיון ומגבלה:</strong> ORDER BY, LIMIT, OFFSET.</li>
+      <li><strong>קיבוץ ואגרגציה:</strong> GROUP BY, HAVING, COUNT, SUM, AVG, MIN, MAX.</li>
+      <li><strong>JOIN:</strong> INNER ו-LEFT JOIN, anti-join וצירופים מתעתעים.</li>
+      <li><strong>מתקדם:</strong> תת-שאילתות, CASE, פונקציות חלון (ROW_NUMBER, RANK, DENSE_RANK).</li>
+      <li><strong>טקסט ותאריך:</strong> UPPER/LOWER, TRIM, REPLACE, strftime ועוד.</li>
+      <li><strong>הכנה לראיון:</strong> שאלות SQL נפוצות בראיונות לאנליסט נתונים, לפי רמת קושי.</li>
+    </ul>
+
+    <h2>למי התרגול מתאים</h2>
+    <p>לכל מי שלומד <strong>SQL מאפס</strong>, לסטודנטים, ולמחפשי עבודה שמתכוננים ל<strong>ראיון אנליסט נתונים (Data Analyst)</strong>. השאלות מסודרות מהקל לקשה, כך שאפשר להתקדם בהדרגה.</p>
+
+    <h2>מסד הנתונים לתרגול</h2>
+    <p>התרגול מתבצע על מסד נתונים עם <strong>14 טבלאות מקושרות</strong> — עובדים, מחלקות, נוכחות, הזמנות, פריטי הזמנה, מוצרים, ספקים, קטגוריות, לקוחות ותשלומים — ובו עד <strong>30,000 רשומות</strong>. אפשר לצפות במבנה המלא ובתרשים הקשרים (ERD) מתוך התרגול.</p>
+
+    <h2>שאלות נפוצות</h2>
+    <div class="faq">
+      <details><summary>האם התרגול בחינם?</summary><p>כן. השימוש חופשי לחלוטין, ללא הרשמה וללא תשלום.</p></details>
+      <details><summary>האם צריך להתקין תוכנה או מסד נתונים?</summary><p>לא. מנוע SQLite רץ ישירות בדפדפן (sql.js), כך שאפשר לכתוב ולהריץ שאילתות אמיתיות בלי שום התקנה.</p></details>
+      <details><summary>אילו נושאי SQL נכללים בתרגול?</summary><p>SELECT, סינון בעזרת WHERE, מיון ומגבלה, GROUP BY ואגרגציות, סוגי JOIN, תת-שאילתות, פונקציות חלון כמו ROW_NUMBER ו-RANK, ופונקציות טקסט ותאריך.</p></details>
+      <details><summary>האם התרגול מתאים להכנה לראיון עבודה לאנליסט נתונים?</summary><p>כן. יש קטגוריות ייעודיות של שאלות ראיון SQL נפוצות, מסודרות לפי רמת קושי.</p></details>
+      <details><summary>כמה שאלות יש בתרגול?</summary><p>135 שאלות, מתוכן 76 שאילתות שמריצים בעורך ה-SQL, מסודרות מהקל לקשה.</p></details>
+      <details><summary>על איזה מסד נתונים מתרגלים?</summary><p>מסד נתונים עם 14 טבלאות מקושרות (עובדים, מחלקות, הזמנות, מוצרים, לקוחות ועוד) ובו עד 30,000 רשומות.</p></details>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>נבנה על ידי <strong>אלירן גרוסמן</strong> · חלק מ<a href="https://egrosman1.github.io/sql-course/" rel="noopener">קורס ה-SQL בעברית</a></p>
+    <p class="muted-fine">תרגול SQL חינמי · SELECT · JOIN · GROUP BY · פונקציות חלון · הכנה לראיון אנליסט נתונים</p>
+  </footer>
+</main>
+
+<!-- ============ SCREEN 2: PRACTICE ============ -->
+<section id="screen-practice" aria-live="polite">
+  <div class="pbar">
+    <div class="pbar-inner">
+      <button class="back-btn" id="backBtn" aria-label="חזרה לבחירת נושא">→ נושאים</button>
+      <div class="hnav-group">
+        <button class="hnav" id="hPrev" aria-label="שאלה קודמת">הקודם</button>
+        <button class="hnav primary" id="hNext" aria-label="שאלה הבאה">הבא ←</button>
+      </div>
+      <div class="ptitle" id="pTitle">נושא</div>
+      <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="pFill"></div></div></div>
+      <div class="pcount" id="pCount">0 / 0</div>
+      <div class="pscore" id="pScore" title="ציון נוכחי">✓ 0</div>
+    </div>
+  </div>
+  <div class="pstage wrap"><div id="qhost"></div></div>
+</section>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" aria-label="מבנה הטבלאות">
+  <button class="drawer-close" id="drawerClose" aria-label="סגור">×</button>
+  <h3>מבנה מסד הנתונים</h3>
+  <p>הטבלאות הזמינות לתרגול. הנתונים נטענים מחדש לפני כל הרצה.</p>
+  <div id="schemaContent"></div>
+</aside>
+
+<!-- ============ FLOATING ERD BUTTON (visible everywhere) ============ -->
+<button class="erd-fab" id="erdFab" aria-label="פתח מפת קשרים">🗺️ ERD</button>
+
+<!-- ============ ERD OVERLAY ============ -->
+<div class="erd-overlay" id="erdOverlay" aria-label="מפת קשרים בין הטבלאות">
+  <div class="erd-bar">
+    <div class="erd-title">🗺️ מפת קשרים (ERD)</div>
+    <button class="erd-icon" id="erdZoomOut" title="הקטן" aria-label="הקטן">−</button>
+    <button class="erd-icon" id="erdZoomIn" title="הגדל" aria-label="הגדל">+</button>
+    <button class="erd-icon" id="erdFitBtn" title="התאם למסך" aria-label="התאם למסך">⤢</button>
+    <button class="erd-icon" id="erdReset" title="סדר מחדש" aria-label="סדר מחדש">⟲</button>
+    <button class="erd-icon" id="erdClose" title="סגור" aria-label="סגור">×</button>
+  </div>
+  <div class="erd-hint" id="erdHint">גררו טבלאות · כפתורי +/− לזום · 🔑 מפתח ראשי · 🔗 מפתח זר</div>
+  <div class="erd-canvas" id="erdCanvas">
+    <div class="erd-viewport" id="erdViewport"><div class="erd-stage" id="erdStage"></div></div>
+  </div>
 </div>
 
-<div class="hero">
-  <div class="badge">🗄 בחר מסד נתונים</div>
-  <h1>בחר <span>סימולטור SQL</span></h1>
-  <p>3 סימולטורים אינטראקטיביים — תרגל SQL על מסדי נתונים אמיתיים, מהבסיס ועד Window Functions ו-CTEs</p>
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
+<script>
+// 800+ SQL — נתוני סימולטור
+// type "query": שאלת תרגול שמריצים בפועל (SQLite). solution = פתרון לדוגמה.
+// type "mcq":   שאלון אמריקאי. options[], correct (index), explain.
+// ניב הרצה: SQLite (sql.js). הפתרונות הומרו מ-MS SQL Server ל-SQLite.
 
-<div class="cards">
+const CATEGORIES = [
+  {
+    id: "basic", title: "שאילתות בסיסיות",
+    desc: "SELECT, WHERE, LIKE, פונקציות מחרוזת בסיסיות",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"החזירו את כל פרטי העובדים מטבלת EmployeeDetail.", hint:"כוכבית מחזירה את כל העמודות.", solution:"SELECT * FROM EmployeeDetail" },
+      { type:"query", q:"החזירו רק את עמודת FirstName מטבלת EmployeeDetail.", hint:"ציינו את שם העמודה במקום כוכבית.", solution:"SELECT FirstName FROM EmployeeDetail" },
+      { type:"query", q:"החזירו את FirstName באותיות גדולות תחת הכינוי \"First Name\".", hint:"UPPER() להמרה לאותיות גדולות, AS לכינוי.", solution:"SELECT UPPER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
+      { type:"query", q:"החזירו את FirstName באותיות קטנות תחת הכינוי \"First Name\".", hint:"LOWER() להמרה לאותיות קטנות.", solution:"SELECT LOWER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
+      { type:"query", q:"שלבו FirstName ו-LastName והציגו תחת \"Name\" (עם רווח ביניהם).", hint:"ב-SQLite משרשרים מחרוזות עם ||", solution:"SELECT FirstName || ' ' || LastName AS \"Name\" FROM EmployeeDetail" },
+      { type:"query", q:"החזירו את פרטי העובד ששמו \"Vikas\".", hint:"WHERE עם השוואת שוויון.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName = 'Vikas'" },
+      { type:"query", q:"החזירו עובדים ש-FirstName שלהם מתחיל באות 'a' (ללא תלות ברישיות).", hint:"LIKE עם % בסוף. ב-SQLite LIKE לא רגיש לרישיות כברירת מחדל.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE 'a%'" },
+      { type:"query", q:"החזירו עובדים ש-FirstName שלהם מכיל את האות 'k'.", hint:"% משני הצדדים.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%k%'" },
+      { type:"query", q:"החזירו עובדים ש-FirstName שלהם מסתיים באות 'h'.", hint:"% לפני התו.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%h'" },
+      { type:"query", q:"החזירו עובדים ש-FirstName מתחיל בתו בודד בטווח אותיות קטנות 'a-p'.", hint:"ב-SQLite משתמשים ב-GLOB עם סוגריים: '[a-p]*' (GLOB רגיש לרישיות).", solution:"SELECT * FROM EmployeeDetail WHERE FirstName GLOB '[a-p]*'" },
+      { type:"query", q:"החזירו עובדים ש-Gender מסתיים ב-'le' ובאורך 4 תווים.", hint:"ב-LIKE התו _ מייצג תו בודד. שני קווים + le.", solution:"SELECT * FROM EmployeeDetail WHERE Gender LIKE '__le'" },
+      { type:"query", q:"החזירו את רשימת המחלקות הייחודיות.", hint:"DISTINCT מסיר כפילויות.", solution:"SELECT DISTINCT Department FROM EmployeeDetail" },
+      { type:"query", q:"החזירו את המשכורת הגבוהה ביותר.", hint:"פונקציית הצבירה MAX.", solution:"SELECT MAX(Salary) FROM EmployeeDetail" },
+      { type:"query", q:"החזירו את המשכורת הנמוכה ביותר.", hint:"פונקציית הצבירה MIN.", solution:"SELECT MIN(Salary) FROM EmployeeDetail" },
+      { type:"mcq", q:"איזה תו ב-LIKE מייצג רצף תווים כלשהו (אפס או יותר)?",
+        options:["_ (קו תחתון)","% (אחוז)","* (כוכבית)","? (סימן שאלה)"], correct:1,
+        explain:"ב-LIKE התו % מייצג רצף של אפס תווים או יותר, והתו _ מייצג תו בודד אחד. הכוכבית * משמשת ב-GLOB, לא ב-LIKE." }
+    ]
+  },
+  {
+    id: "datetime", title: "תאריך וזמן",
+    desc: "strftime, julianday — עבודה עם תאריכים ב-SQLite",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"הציגו את JoiningDate בפורמט \"yyyy/mm/dd\".", hint:"strftime עם תבנית פורמט.", solution:"SELECT strftime('%Y/%m/%d', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"הציגו רק את חלק השעה (HH:MM:SS) מתוך JoiningDate.", hint:"strftime עם %H:%M:%S", solution:"SELECT strftime('%H:%M:%S', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"החזירו רק את חלק השנה מתוך JoiningDate.", hint:"strftime('%Y', ...)", solution:"SELECT strftime('%Y', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"החזירו רק את חלק החודש מתוך JoiningDate.", hint:"strftime('%m', ...)", solution:"SELECT strftime('%m', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"החזירו את התאריך הנוכחי.", hint:"date('now') ב-SQLite.", solution:"SELECT date('now')" },
+      { type:"query", q:"החזירו עובדים ששנת ההצטרפות שלהם היא 2013.", hint:"מסננים לפי strftime('%Y', ...).", solution:"SELECT * FROM EmployeeDetail WHERE strftime('%Y', JoiningDate) = '2013'" },
+      { type:"query", q:"החזירו עובדים שחודש ההצטרפות שלהם הוא ינואר (01).", hint:"strftime('%m', ...) = '01'", solution:"SELECT * FROM EmployeeDetail WHERE strftime('%m', JoiningDate) = '01'" },
+      { type:"query", q:"החזירו עובדים שתאריך הצטרפותם בין 2013-01-01 ל-2013-12-01.", hint:"BETWEEN לטווח תאריכים.", solution:"SELECT * FROM EmployeeDetail WHERE JoiningDate BETWEEN '2013-01-01' AND '2013-12-01'" },
+      { type:"query", q:"כמה עובדים הצטרפו בשנת 2014?", hint:"סננו לפי strftime('%Y', JoiningDate) = '2014' וספרו עם COUNT(*).", solution:"SELECT COUNT(*) FROM EmployeeDetail WHERE strftime('%Y', JoiningDate) = '2014'" },
+      { type:"mcq", q:"איזו פונקציה ב-SQLite מחזירה את התאריך והשעה הנוכחיים?",
+        options:["GETDATE()","NOW()","datetime('now')","SYSDATE"], correct:2,
+        explain:"ב-SQLite: datetime('now') (או date('now') / time('now')). GETDATE() שייך ל-SQL Server, NOW() ל-MySQL, ו-SYSDATE ל-Oracle." }
+    ]
+  },
+  {
+    id: "salary", title: "סינון, מיון והגבלה",
+    desc: "IN / NOT IN, BETWEEN, CASE, LIMIT/OFFSET — והערך השני בגובהו",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"החזירו רק שורה אחת (הראשונה).", hint:"ב-SQLite משתמשים ב-LIMIT, לא ב-TOP.", solution:"SELECT * FROM EmployeeDetail LIMIT 1" },
+      { type:"query", q:"החזירו עובדים ששמם \"Vikas\", \"Ashish\" או \"Nikhil\".", hint:"IN עם רשימת ערכים.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName IN ('Vikas','Ashish','Nikhil')" },
+      { type:"query", q:"החזירו עובדים ששמם *אינו* \"Vikas\", \"Ashish\" או \"Nikhil\".", hint:"NOT IN.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName NOT IN ('Vikas','Ashish','Nikhil')" },
+      { type:"query", q:"החזירו את FirstName לאחר הסרת רווחים מימין.", hint:"RTRIM() מסיר רווחים מימין.", solution:"SELECT RTRIM(FirstName) AS FirstName FROM EmployeeDetail" },
+      { type:"query", q:"הציגו שם ומגדר כ-M/F (זכר=M, נקבה=F).", hint:"CASE WHEN ... THEN ... END.", solution:"SELECT FirstName, CASE WHEN Gender='Male' THEN 'M' WHEN Gender='Female' THEN 'F' END AS Gender FROM EmployeeDetail" },
+      { type:"query", q:"הציגו את FirstName עם הקידומת \"Hello \".", hint:"שרשור עם ||", solution:"SELECT 'Hello ' || FirstName FROM EmployeeDetail" },
+      { type:"query", q:"החזירו עובדים שמשכורתם גבוהה מ-600000.", hint:"אופרטור >", solution:"SELECT * FROM EmployeeDetail WHERE Salary > 600000" },
+      { type:"query", q:"החזירו עובדים שמשכורתם בין 500000 ל-600000.", hint:"BETWEEN.", solution:"SELECT * FROM EmployeeDetail WHERE Salary BETWEEN 500000 AND 600000" },
+      { type:"query", q:"החזירו את המשכורת השנייה בגובהה.", hint:"ב-SQLite: LIMIT 1 OFFSET 1 על רשימה ממוינת יורד.", solution:"SELECT Salary FROM EmployeeDetail ORDER BY Salary DESC LIMIT 1 OFFSET 1" },
+      { type:"mcq", q:"כיצד מגבילים את מספר השורות המוחזרות ב-SQLite (במקום TOP של SQL Server)?",
+        options:["TOP n","LIMIT n","ROWNUM <= n","FETCH FIRST n"], correct:1,
+        explain:"ב-SQLite (ו-MySQL) משתמשים ב-LIMIT n. TOP שייך ל-SQL Server, ROWNUM ל-Oracle, ו-FETCH FIRST הוא תקן ANSI." }
+    ]
+  },
+  {
+    id: "groupby", title: "קיבוץ (GROUP BY)",
+    desc: "פונקציות צבירה: MIN/MAX/SUM/AVG/COUNT, GROUP BY ו-HAVING",
+    tables: ["EmployeeDetail","ProjectDetail"],
+    questions: [
+      { type:"query", q:"החזירו מחלקה וסך המשכורות בכל מחלקה.", hint:"GROUP BY + SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"החזירו מחלקה וסך משכורות, ממוין עולה לפי הסכום.", hint:"ORDER BY על SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY SUM(Salary) ASC" },
+      { type:"query", q:"החזירו מחלקה, מספר העובדים בה, וסך המשכורות.", hint:"COUNT(*) ו-SUM באותו GROUP BY.", solution:"SELECT Department, COUNT(*) AS \"Dept Counts\", SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"החזירו ממוצע משכורת לכל מחלקה, ממוין עולה.", hint:"AVG.", solution:"SELECT Department, AVG(Salary) AS \"Average Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY AVG(Salary) ASC" },
+      { type:"query", q:"החזירו את המשכורת המקסימלית לכל מחלקה.", hint:"MAX בכל קבוצה.", solution:"SELECT Department, MAX(Salary) AS \"Max Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"החזירו שמות פרויקטים שמשויכים ליותר מעובד אחד.", hint:"GROUP BY + HAVING COUNT(*) > 1.", solution:"SELECT ProjectName, COUNT(*) AS NoofEmp FROM ProjectDetail GROUP BY ProjectName HAVING COUNT(*) > 1" },
+      { type:"mcq", q:"מה ההבדל המרכזי בין WHERE ל-HAVING?",
+        options:["אין הבדל, הם מתחלפים","WHERE מסנן שורות לפני הקיבוץ, HAVING מסנן קבוצות אחרי הקיבוץ","HAVING מהיר יותר תמיד","WHERE עובד רק על מספרים"], correct:1,
+        explain:"WHERE מסנן שורות בודדות לפני GROUP BY ולא יכול להשתמש בפונקציות צבירה. HAVING מסנן את הקבוצות אחרי הקיבוץ ויכול להשתמש ב-SUM, COUNT וכו'." }
+    ]
+  },
+  {
+    id: "joins", title: "JOINs",
+    desc: "INNER / LEFT JOIN, IFNULL, תת-שאילתות",
+    tables: ["EmployeeDetail","ProjectDetail"],
+    questions: [
+      { type:"query", q:"החזירו שם עובד ושם פרויקט רק לעובדים שמשויכים לפרויקט, ממוין לפי שם.", hint:"INNER JOIN על EmployeeID = EmployeeDetailID.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A INNER JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"החזירו שם עובד ושם פרויקט לכל העובדים, גם ללא פרויקט.", hint:"LEFT JOIN שומר את כל הטבלה השמאלית.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"כמו קודם, אך אם אין פרויקט הציגו '-No Project Assigned'.", hint:"ב-SQLite משתמשים ב-IFNULL (לא ISNULL).", solution:"SELECT FirstName, IFNULL(ProjectName,'-No Project Assigned') FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"מצאו עובדים שלא משויכים לאף פרויקט.", hint:"LEFT JOIN + WHERE ProjectName IS NULL.", solution:"SELECT FirstName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID WHERE ProjectName IS NULL" },
+      { type:"query", q:"החזירו עובדים שמשויכים ליותר מפרויקט אחד.", hint:"תת-שאילתה עם GROUP BY ... HAVING COUNT(*) > 1.", solution:"SELECT EmployeeID, FirstName, ProjectName FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID WHERE EmployeeID IN (SELECT EmployeeDetailID FROM ProjectDetail GROUP BY EmployeeDetailID HAVING COUNT(*) > 1)" },
+      { type:"mcq", q:"איזה JOIN מחזיר את כל השורות מהטבלה השמאלית, גם אם אין התאמה בטבלה הימנית?",
+        options:["INNER JOIN","LEFT JOIN","CROSS JOIN","Self JOIN"], correct:1,
+        explain:"LEFT JOIN שומר את כל שורות הטבלה השמאלית; היכן שאין התאמה, עמודות הטבלה הימנית מקבלות NULL." }
+    ]
+  },
+  {
+    id: "tricky-joins", title: "JOINs מתעתעים",
+    desc: "Members2023 מול Members2024 — מי חידש, מי עזב, התנהגות תנאים ו-NULL",
+    tables: ["Members2023","Members2024"],
+    questions: [
+      { type:"query", q:"מצאו את החברים שהופיעו גם ב-Members2023 וגם ב-Members2024 (חידשו חברות) לפי ID. הציגו 4 עמודות (INNER JOIN).", hint:"INNER JOIN ON A.ID = B.ID.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID" },
+      { type:"query", q:"מצאו את החברים שהיו ב-Members2023 אך לא חידשו ב-Members2024 (עזבו) — לפי ID.", hint:"LEFT JOIN + WHERE B.ID IS NULL.", solution:"SELECT A.ID, A.Name FROM Members2023 A LEFT JOIN Members2024 B ON A.ID = B.ID WHERE B.ID IS NULL" },
+      { type:"query", q:"INNER JOIN עם תנאי כפול: התאמה גם ב-ID וגם ב-Name (אותו אדם בדיוק בשתי השנים).", hint:"ON A.ID = B.ID AND A.Name = B.Name.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID AND A.Name = B.Name" },
+      { type:"mcq", q:"בהינתן INNER JOIN עם התנאי ON A.ID = B.ID OR A.Name = B.Name — כיצד התוצאה משתנה לעומת AND?",
+        options:["התוצאה מצטמצמת","התוצאה גדלה — מספיק שאחד התנאים מתקיים","אין שינוי","זורק שגיאה"], correct:1,
+        explain:"OR מרחיב את ההתאמות: שורה נכללת אם מתקיים לפחות אחד התנאים. AND מצמצם כי שני התנאים חייבים להתקיים יחד." },
+      { type:"mcq", q:"מהי התבנית הנכונה למציאת שורות שקיימות ב-Members2023 אך לא ב-Members2024 (anti-join)?",
+        options:["INNER JOIN בלבד","LEFT JOIN + WHERE B.ID IS NULL","CROSS JOIN","RIGHT JOIN בלבד"], correct:1,
+        explain:"LEFT JOIN שומר את כל שורות A; היכן שאין התאמה ב-B העמודות מקבלות NULL, ולכן WHERE B.ID IS NULL מבודד בדיוק את השורות הללו." }
+    ]
+  },
+  {
+    id: "ddl", title: "DDL — הגדרת מבנה",
+    desc: "CREATE TABLE, PRIMARY KEY, FOREIGN KEY, AUTOINCREMENT",
+    tables: [],
+    questions: [
+      { type:"query", q:"צרו טבלה בשם NewEmp עם עמודת מזהה אוטומטי id (מפתח ראשי) ועמודת name טקסט. (הריצו — אם אין שגיאה, הצלחתם)", hint:"ב-SQLite: INTEGER PRIMARY KEY AUTOINCREMENT.", solution:"CREATE TABLE NewEmp (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)", noResult:true },
+      { type:"mcq", q:"כיצד מגדירים עמודת מזהה אוטומטי (auto-increment) ב-SQLite?",
+        options:["INT IDENTITY(1,1)","AUTO_INCREMENT","INTEGER PRIMARY KEY AUTOINCREMENT","SEQUENCE"], correct:2,
+        explain:"ב-SQLite: INTEGER PRIMARY KEY AUTOINCREMENT. IDENTITY(1,1) שייך ל-SQL Server, AUTO_INCREMENT ל-MySQL, ו-SEQUENCE ל-Oracle/PostgreSQL." },
+      { type:"mcq", q:"מהי מטרת אילוץ FOREIGN KEY?",
+        options:["להאיץ שאילתות","להפנות לעמודת מפתח בטבלה אחרת ולאכוף שלמות התייחסותית","למנוע ערכי NULL","להצפין נתונים"], correct:1,
+        explain:"FOREIGN KEY מצביע ל-PRIMARY KEY בטבלה אחרת ומונע פעולות שיהרסו את הקשרים — אכיפת referential integrity." }
+    ]
+  },
+  {
+    id: "tricky", title: "שאלות קצרות ומתעתעות",
+    desc: "התנהגות SELECT, NULL, צבירה — מבחן הבנה",
+    tables: [],
+    questions: [
+      { type:"query", q:"הריצו: SELECT 15", hint:"SELECT ללא FROM מחזיר ביטוי כקבוע.", solution:"SELECT 15" },
+      { type:"query", q:"הריצו שאילתה שמחזירה 'VIKAS1' על ידי שרשור 'VIKAS' ו-'1'.", hint:"שרשור עם ||", solution:"SELECT 'VIKAS' || '1'" },
+      { type:"query", q:"הריצו: SELECT COUNT(*) ללא FROM. כמה יוחזר?", hint:"נספרת ה'שורה הריקה' היחידה.", solution:"SELECT COUNT(*)" },
+      { type:"mcq", q:"מה הפלט של: SELECT NULL + 5",
+        options:["5","0","NULL","שגיאה"], correct:2,
+        explain:"כל פעולה אריתמטית עם NULL מחזירה NULL. NULL מייצג 'לא ידוע', ולכן 'לא ידוע' + 5 = 'לא ידוע'." },
+      { type:"mcq", q:"מה הפלט של: SELECT 1 WHERE NULL = NULL",
+        options:["1","NULL","0 שורות (כלום)","שגיאה"], correct:2,
+        explain:"NULL = NULL אינו TRUE אלא UNKNOWN — NULL לא שווה אפילו לעצמו. כדי לבדוק NULL משתמשים ב-IS NULL." },
+      { type:"mcq", q:"מה הפלט של: SELECT SUM(NULL)",
+        options:["0","NULL","שגיאה","1"], correct:1,
+        explain:"כשאין ערכים שאינם NULL לצבור, SUM מחזיר NULL. אם יש לפחות ערך תקין אחד, SUM מתעלם מה-NULL וצובר את השאר." },
+      { type:"mcq", q:"מה הפלט של חלוקת השלמים: SELECT 0/9 (ב-SQLite)",
+        options:["0","NULL","שגיאת חלוקה באפס","0.0"], correct:0,
+        explain:"0 חלקי 9 בחלוקת שלמים הוא 0. לעומת זאת 9/0 ב-SQLite מחזיר NULL (בניגוד ל-SQL Server שזורק שגיאה)." }
+    ]
+  },
+  {
+    id: "advanced", title: "שאילתות מתקדמות",
+    desc: "group_concat, ניתוח רצפים, CTE ופונקציות חלון (ROW_NUMBER/DENSE_RANK)",
+    tables: ["EmployeeDetail","ProjectDetail","FuelDetail"],
+    questions: [
+      { type:"query", q:"הציגו את כל שמות העובדים בתא אחד, מופרדים בפסיק.", hint:"ב-SQLite משתמשים ב-group_concat (במקום STUFF/FOR XML).", solution:"SELECT group_concat(FirstName, ', ') AS \"All Emp Name\" FROM EmployeeDetail" },
+      { type:"query", q:"לכל פרויקט, הציגו את שמות העובדים העובדים עליו מופרדים בפסיק.", hint:"JOIN + GROUP BY ProjectName + group_concat.", solution:"SELECT P.ProjectName, group_concat(E.FirstName, ', ') AS \"Employee Name\" FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID GROUP BY P.ProjectName" },
+      { type:"query", q:"בטבלת FuelDetail מצאו את הרגעים שבהם כמות הדלק עלתה לעומת המדידה הקודמת (מילוי דלק). הציגו ID, Fuel, Date.", hint:"Self JOIN לפי ID סמוך. סננו היכן ש-Fuel גדל.", solution:"SELECT FD.ID, FD.Fuel, FD.Date FROM FuelDetail FD INNER JOIN FuelDetail FD1 ON FD1.ID = FD.ID - 1 WHERE FD.Fuel > FD1.Fuel" },
+      { type:"query", q:"באמצעות CTE רקורסיבי, הפיקו את המספרים 1 עד 10.", hint:"WITH RECURSIVE cte(n) AS (SELECT 1 ... UNION ALL ... WHERE n<10).", solution:"WITH RECURSIVE cte(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM cte WHERE n < 10) SELECT n FROM cte" },
+      { type:"mcq", q:"איזו פונקציה ב-SQLite משרשרת ערכים מכמה שורות למחרוזת אחת (כמו STUFF/FOR XML ב-SQL Server)?",
+        options:["CONCAT_WS","group_concat","STRING_AGG","STUFF"], correct:1,
+        explain:"ב-SQLite: group_concat(col, sep). ב-SQL Server המודרני קיים STRING_AGG. CONCAT_WS משרשר עמודות באותה שורה, לא שורות." }
+    ]
+  },
+  {
+    id: "tcs", title: "שאלות מתעתעות (TCS)",
+    desc: "swap ערכים, ספירת תווים, CAST, מכפלה קרטזית",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"בחרו רשומה אקראית מטבלת EmployeeDetail.", hint:"ORDER BY RANDOM() LIMIT 1 (ב-SQLite RANDOM(), לא NEWID()).", solution:"SELECT * FROM EmployeeDetail ORDER BY RANDOM() LIMIT 1" },
+      { type:"query", q:"ספרו כמה פעמים מופיעה האות 'A' (גדולה) במחרוזת 'VIKASAAA'.", hint:"טריק: אורך מקורי פחות אורך אחרי הסרת התו.", solution:"SELECT LENGTH('VIKASAAA') - LENGTH(REPLACE('VIKASAAA','A',''))" },
+      { type:"query", q:"עבור 5/2 קבלו תוצאה 2.5 (ולא חלוקת שלמים).", hint:"ממירים ל-REAL לפני החלוקה.", solution:"SELECT CAST(5 AS REAL) / 2" },
+      { type:"mcq", q:"כיצד בוחרים שורה אקראית ב-SQLite (במקום ORDER BY NEWID() של SQL Server)?",
+        options:["ORDER BY RAND() LIMIT 1","ORDER BY RANDOM() LIMIT 1","SELECT TOP 1 ... ORDER BY NEWID()","SAMPLE 1"], correct:1,
+        explain:"ב-SQLite: ORDER BY RANDOM() LIMIT 1. ב-MySQL זה RAND(), וב-SQL Server זה NEWID() עם TOP 1." },
+      { type:"mcq", q:"כמה שורות תחזיר מכפלה קרטזית של טבלה עם 100 שורות וטבלה עם 0 שורות?",
+        options:["100","0","שגיאה","אינסוף"], correct:1,
+        explain:"מכפלה קרטזית = 100 × 0 = 0 שורות. כל JOIN מול טבלה ריקה מחזיר תוצאה ריקה." }
+    ]
+  },
+  {
+    id: "datatypes", title: "טיפוסי נתונים",
+    desc: "char/varchar, Unicode, datetime, timestamp, אחסון",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"מהם שני סוגי הנתונים התוויים העיקריים ש-SQL Server תומך בהם?",
+        options:["Short ו-Long","רגיל (Regular) ו-Unicode","Fixed ו-Float","ASCII ו-Binary"], correct:1,
+        explain:"רגיל (CHAR, VARCHAR) ו-Unicode (NCHAR, NVARCHAR). טיפוסי Unicode מקדימים את הליטרל ב-N, למשל N'text', ותופסים 2 בתים לתו." },
+      { type:"mcq", q:"מה ההבדל בין DATETIME ל-TIMESTAMP ב-SQL Server?",
+        options:["הם זהים","DATETIME הוא טיפוס תאריך-זמן רגיל; TIMESTAMP (ROWVERSION) הוא מספר בינארי שמתעדכן בכל שינוי בשורה","TIMESTAMP מדויק יותר","DATETIME לא שומר שעה"], correct:1,
+        explain:"DATETIME מאחסן תאריך וזמן. TIMESTAMP (ששמו שונה ל-ROWVERSION) הוא מספר ייחודי שמתעדכן אוטומטית בכל שינוי בשורה — לבקרת גרסאות, לא לזמן. גודלו 8 בתים." },
+      { type:"mcq", q:"מהו הגודל המקסימלי של varchar(max) ב-SQL Server?",
+        options:["8000 בתים","2GB (כ-2 מיליארד תווים)","4000 תווים","ללא הגבלה"], correct:1,
+        explain:"varchar(max) מאחסן עד 2GB (2^31-1 תווים). עד 8000 בתים הנתון בשורה; מעבר לכך נשמר כ-LOB עם מצביע." },
+      { type:"mcq", q:"כשעובדים רק עם זמן בטיפוס DATETIME (ללא תאריך), מה SQL Server משלים כתאריך?",
+        options:["התאריך הנוכחי","1 בינואר 1900","1 בינואר 1970","NULL"], correct:1,
+        explain:"SQL Server משלים את חלק התאריך כ-1 בינואר 1900 כשמספקים רק זמן." },
+      { type:"mcq", q:"כיצד מבטאים מחרוזת ליטרל בעמודת Unicode (NVARCHAR) ב-SQL Server?",
+        options:["עם גרשיים בודדים בלבד","עם הקידומת N לפני המחרוזת: N'text'","עם U'text'","עם גרשיים כפולים"], correct:1,
+        explain:"מקדימים את המחרוזת ב-N, למשל N'שלום'. בעמודה רגילה מספיק 'text' עם גרשיים בודדים." }
+    ]
+  },
+  {
+    id: "views", title: "Views (מבטים)",
+    desc: "הגדרה, מטרות, SCHEMABINDING, encryption",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"צרו View בשם vIT שמציג שם ומשכורת רק לעובדי מחלקת IT, ואז בחרו ממנו.", hint:"CREATE VIEW ... AS SELECT ...; SELECT * FROM vIT", solution:"CREATE VIEW vIT AS SELECT FirstName, Salary FROM EmployeeDetail WHERE Department='IT'; SELECT * FROM vIT" },
+      { type:"mcq", q:"מהו View ב-SQL?",
+        options:["טבלה פיזית נוספת","טבלה וירטואלית שתוכנה מוגדר על ידי שאילתת SELECT שמורה","עותק גיבוי של טבלה","אינדקס מיוחד"], correct:1,
+        explain:"View הוא טבלה וירטואלית — למעשה משפט SELECT שמור שמתנהג כטבלה. בדרך כלל אין לו אחסון פיזי משלו." },
+      { type:"mcq", q:"מהן המטרות העיקריות של יצירת View?",
+        options:["רק להאצה","אבטחה, פישוט שאילתות מורכבות ותגובה מהירה","רק לגיבוי","להחליף פרוצדורות"], correct:1,
+        explain:"View משמש לאבטחה (הגבלת גישה), פתרון שאילתות מורכבות בפשטות, ותגובה מהירה. View לא מקבל פרמטרים — בניגוד לפרוצדורה." },
+      { type:"mcq", q:"כיצד מצפינים View ב-SQL Server כך שלא ניתן לראות את הקוד שלו?",
+        options:["WITH PASSWORD","WITH ENCRYPTION","SET HIDDEN","ENCRYPT VIEW"], correct:1,
+        explain:"משתמשים ב-WITH ENCRYPTION בעת יצירת ה-View. תחת SCHEMABINDING, אגב, אסור להשתמש ב-SELECT* — חובה לציין שמות עמודות." }
+    ]
+  },
+  {
+    id: "indexes", title: "אינדקסים (Indexes)",
+    desc: "Clustered מול Non-Clustered, B-Tree, Fill Factor",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"צרו אינדקס בשם idx_dept על עמודת Department בטבלת EmployeeDetail.", hint:"CREATE INDEX name ON table(column).", solution:"CREATE INDEX idx_dept ON EmployeeDetail(Department)", noResult:true },
+      { type:"query", q:"צרו אינדקס ייחודי בשם idx_uid על עמודת EmployeeID.", hint:"CREATE UNIQUE INDEX.", solution:"CREATE UNIQUE INDEX idx_uid ON EmployeeDetail(EmployeeID)", noResult:true },
+      { type:"mcq", q:"כמה אינדקסים מקובצים (clustered) יכולים להיות בטבלה אחת?",
+        options:["אחד בלבד","עד 249","ללא הגבלה","שניים"], correct:0,
+        explain:"רק אחד. ה-clustered index קובע את הסדר הפיזי של השורות בדיסק, ולכן לא ייתכן יותר מאחד. אינדקסים לא-מקובצים יכולים להיות רבים (עד 999)." },
+      { type:"mcq", q:"מה ההבדל המרכזי בין Clustered ל-Non-Clustered Index?",
+        options:["אין הבדל","Clustered קובע את הסדר הפיזי של השורות; Non-Clustered מגדיר סדר לוגי עם מצביעים לנתונים","Non-Clustered מהיר תמיד","Clustered תופס פחות מקום"], correct:1,
+        explain:"Clustered ממיין ומאחסן את השורות פיזית לפי המפתח (ולכן רק אחד). Non-Clustered מכיל ערך מפתח + מצביע לנתונים, ומגדיר סדר לוגי שלא תואם בהכרח את הסדר הפיזי." },
+      { type:"mcq", q:"מהו Fill Factor של אינדקס?",
+        options:["מספר העמודות באינדקס","אחוז המקום בכל עמוד עלה שימולא בנתונים","גודל האינדקס ב-MB","מספר השורות בעמוד"], correct:1,
+        explain:"Fill Factor קובע את אחוז המילוי של כל leaf page. ברירת המחדל 100 ממלאת מקסימום שורות. ערך נמוך משאיר מקום לעדכונים ומפחית page splits." }
+    ]
+  },
+  {
+    id: "sp", title: "פרוצדורות מאוחסנות (SP)",
+    desc: "הגדרה, יתרונות, רקורסיה, TRY-CATCH, SP מול View",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"מהי פרוצדורה מאוחסנת (Stored Procedure)?",
+        options:["טבלה וירטואלית","קבוצת משפטי SQL בעלת שם, שנשמרה מראש בשרת ומקבלת פרמטרים","אינדקס","סוג של View"], correct:1,
+        explain:"SP היא קבוצה בעלת שם של משפטי SQL השמורה בשרת. מקבלת פרמטרים, מצמצמת תעבורת רשת ומשפרת ביצועים (שימוש חוזר בתוכניות ביצוע)." },
+      { type:"mcq", q:"מהו יתרון משמעותי של פרוצדורה מאוחסנת בהיבט אבטחה?",
+        options:["היא מצפינה את כל הנתונים","היא יכולה למנוע התקפות SQL Injection","היא מסתירה את מסד הנתונים","אין לה יתרון אבטחה"], correct:1,
+        explain:"שימוש בפרוצדורות עם פרמטרים מונע SQL Injection, כי הקלט מטופל כפרמטר ולא כקוד. בנוסף ה-DBA שולט מי מורשה להריץ." },
+      { type:"mcq", q:"עד כמה רמות ניתן לקנן פרוצדורות מאוחסנות (כולל רקורסיה)?",
+        options:["8","16","32","ללא הגבלה"], correct:2,
+        explain:"עד 32 רמות. T-SQL תומך ברקורסיה, כך שפרוצדורה יכולה לקרוא לעצמה." },
+      { type:"mcq", q:"היכן ניתן להשתמש ב-TRY-CATCH?",
+        options:["בפרוצדורה ובפונקציה (UDF)","רק בפרוצדורה מאוחסנת, לא בפונקציה","רק בפונקציה","באף אחד מהם"], correct:1,
+        explain:"TRY-CATCH נתמך בפרוצדורות אך לא בפונקציות מוגדרות-משתמש (UDF) — אחת המגבלות של פונקציות." },
+      { type:"mcq", q:"מה ההבדל המרכזי בין Stored Procedure ל-View?",
+        options:["אין הבדל","SP מקבלת פרמטרים ויכולה להכיל לוגיקה ושינויים; View לא מקבל פרמטרים והוא SELECT בלבד","View מהיר תמיד","SP לא יכולה להחזיר נתונים"], correct:1,
+        explain:"View הוא SELECT שמור ללא פרמטרים. SP מקבלת פרמטרים, מכילה לוגיקה (IF/לולאות) ויכולה לשנות טבלאות. אפשר View בתוך SP, אך לא להפך." }
+    ]
+  },
+  {
+    id: "temp", title: "טבלאות זמניות (Temp Tables)",
+    desc: "Local מול Global, Table Variables, tempdb",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"מהם שני סוגי הטבלאות הזמניות ב-SQL Server?",
+        options:["Fast ו-Slow","Local (#) ו-Global (##)","Public ו-Private","Memory ו-Disk"], correct:1,
+        explain:"מקומית מסומנת ב-# אחד ונראית רק לסשן שיצר אותה. גלובלית מסומנת ב-## ונראית לכל החיבורים. שתיהן נמחקות כשהסשן נסגר." },
+      { type:"mcq", q:"באיזה מסד נתונים נוצרות הטבלאות הזמניות?",
+        options:["master","tempdb","model","msdb"], correct:1,
+        explain:"כל הטבלאות הזמניות נוצרות במסד הנתונים tempdb." },
+      { type:"mcq", q:"מהי תכונה ייחודית של Table Variable לעומת Temp Table?",
+        options:["היא תמיד בזיכרון בלבד","ROLLBACK לא משפיע עליה והיא לא משתתפת בטרנזקציות/נעילות","היא מהירה תמיד","יש לה סטטיסטיקות מפורטות"], correct:1,
+        explain:"Table Variable לא מושפעת מ-ROLLBACK, לא משתתפת בטרנזקציות/נעילות, פעולות DML עליה לא נרשמות בלוג, ואין עליה סטטיסטיקות." },
+      { type:"mcq", q:"האם ניתן ליצור FOREIGN KEY על טבלה זמנית?",
+        options:["כן, תמיד","לא","רק על Global","רק על Local"], correct:1,
+        explain:"לא ניתן ליצור אילוצי FOREIGN KEY על טבלאות זמניות." }
+    ]
+  },
+  {
+    id: "constraints", title: "אילוצים (Constraints)",
+    desc: "PRIMARY/FOREIGN KEY, UNIQUE, CHECK, DEFAULT",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"כמה מפתחות ראשיים (Primary Keys) יכולים להתקיים בטבלה?",
+        options:["אחד בלבד","עד שניים","ללא הגבלה","תלוי בטבלה"], correct:0,
+        explain:"מפתח ראשי אחד בלבד (אך הוא יכול להיות מורכב ממספר עמודות). לעומת זאת ניתן מספר אילוצי UNIQUE." },
+      { type:"mcq", q:"מה ההבדל בין Primary Key ל-Unique Key?",
+        options:["אין הבדל","Unique מתיר ערך NULL אחד ואפשר כמה בטבלה; Primary Key לא מתיר NULL ויש רק אחד","Primary Key מתיר NULL","Unique מתיר כפילויות"], correct:1,
+        explain:"Unique מתיר ערך NULL אחד, וניתן מספר אילוצי Unique. Primary Key = NOT NULL + UNIQUE, ויש רק אחד לכל טבלה." },
+      { type:"mcq", q:"כשיוצרים Primary Key, איזה אינדקס נוצר אוטומטית כברירת מחדל (ב-SQL Server)?",
+        options:["Non-Clustered","Clustered","אף אינדקס","Unique בלבד"], correct:1,
+        explain:"Primary Key יוצר Clustered index כברירת מחדל. Unique Key יוצר Non-Clustered index כברירת מחדל." },
+      { type:"mcq", q:"מהם שלושת סוגי שלמות הנתונים?",
+        options:["High/Medium/Low","Domain, Entity, Referential","Read/Write/Execute","Primary/Secondary/Tertiary"], correct:1,
+        explain:"Domain Integrity (טיפוס, CHECK), Entity Integrity (Primary Key, Unique), ו-Referential Integrity (Foreign Key)." }
+    ]
+  },
+  {
+    id: "storage", title: "אחסון וגדלים",
+    desc: "Page 8K, מגבלות, LENGTH מול אורך בבתים",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"query", q:"החזירו את אורך המחרוזת 'A value' (מספר התווים).", hint:"ב-SQLite LENGTH() מחזיר מספר תווים.", solution:"SELECT LENGTH('A value')" },
+      { type:"mcq", q:"מהי יחידת האחסון הבסיסית בקבצי נתונים של SQL Server וגודלה?",
+        options:["Block בגודל 4K","Page בגודל 8K","Sector בגודל 512B","Extent בגודל 64K"], correct:1,
+        explain:"היחידה הבסיסית היא Page (עמוד) בגודל 8K. שמונה עמודים רצופים מרכיבים Extent (64K)." },
+      { type:"mcq", q:"מה ההבדל בין LEN() ל-DATALENGTH() ב-SQL Server?",
+        options:["הם זהים","LEN מחזיר תווים ללא רווחים בסוף; DATALENGTH מחזיר בתים כולל רווחים בסוף","DATALENGTH מהיר יותר","LEN עובד רק על מספרים"], correct:1,
+        explain:"LEN מחזיר אורך בתווים ללא רווחים בסוף. DATALENGTH מחזיר אורך בבתים כולל רווחים בסוף. עבור Unicode כל תו = 2 בתים." },
+      { type:"mcq", q:"כמה מקום תופס ערך NULL בשדה ברוחב משתנה (variable width)?",
+        options:["כמו ערך מלא","לא תופס מקום","תמיד 1 בית","תמיד 8 בתים"], correct:1,
+        explain:"בשדה ברוחב משתנה NULL לא תופס מקום. בשדה ברוחב קבוע NULL תופס את אותו מקום כמו כל ערך אחר." }
+    ]
+  },
+  {
+    id: "concepts", title: "מושגי יסוד",
+    desc: "נעילות, גיבויים, DELETE/TRUNCATE, UNION, נורמליזציה",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"מה ההבדל בין DELETE ל-TRUNCATE?",
+        options:["הם זהים","DELETE מאפשר WHERE ונרשם בלוג שורה-שורה; TRUNCATE מסיר את הכל ללא תנאי ומהיר יותר","TRUNCATE מאפשר WHERE","DELETE מהיר יותר"], correct:1,
+        explain:"DELETE מסיר שורות סלקטיבית (עם WHERE) ונרשם בלוג שורה-שורה. TRUNCATE מסיר הכל ללא תנאי, מהיר יותר ונרשם מינימלית. TRUNCATE הוא DDL ו-DELETE הוא DML." },
+      { type:"mcq", q:"מה ההבדל בין UNION ל-UNION ALL?",
+        options:["הם זהים","UNION מסיר כפילויות (איטי יותר); UNION ALL לא מסיר (מהיר יותר)","UNION ALL מסיר כפילויות","UNION עובד רק על שתי טבלאות"], correct:1,
+        explain:"UNION מסיר שורות כפולות (דורש מיון, איטי יותר). UNION ALL מחזיר הכל כולל כפילויות, ולכן מהיר יותר." },
+      { type:"mcq", q:"מה ההבדל בין DDL Trigger ל-DML Trigger?",
+        options:["אין הבדל","DDL מופעל בשינוי מבנה (CREATE/ALTER/DROP); DML בשינוי נתונים (INSERT/UPDATE/DELETE)","DML מופעל ידנית","DDL עובד רק על Views"], correct:1,
+        explain:"DDL Trigger מגיב לשינויי מבנה. DML Trigger מגיב לשינויי נתונים." },
+      { type:"mcq", q:"מהן ארבע רמות הבידוד של טרנזקציות?",
+        options:["Low/Medium/High/Max","Read Committed, Read Uncommitted, Repeatable Read, Serializable","Fast/Slow/Safe/Risky","A/C/I/D"], correct:1,
+        explain:"Read Uncommitted, Read Committed, Repeatable Read, ו-Serializable — מהבידוד החלש לחזק." },
+      { type:"mcq", q:"מהן המטרות העיקריות של נורמליזציה?",
+        options:["להאיץ קריאות","לצמצם יתירות נתונים ולמנוע אנומליות INSERT/UPDATE/DELETE","להוסיף יתירות","להצפין נתונים"], correct:1,
+        explain:"נורמליזציה מצמצמת יתירות, מונעת אנומליות בעת שינוי, ומפצלת טבלאות גדולות לתת-קבוצות יציבות. דה-נורמליזציה היא ההפך." }
+    ]
+  },
+  {
+    id: "modern", title: "SQL Server 2016/2017",
+    desc: "JSON, Temporal, RLS, Adaptive Query, TRANSLATE",
+    tables: [],
+    questions: [
+      { type:"mcq", q:"מהו הטיפוס/תמיכה החדשה שהוצגה ב-SQL Server 2016 כחלופה ל-XML?",
+        options:["YAML","JSON","CSV","Protobuf"], correct:1,
+        explain:"JSON. הוא קל-משקל יותר מ-XML ולא דורש parser ייעודי — ניתן לפענוח בפונקציית JavaScript סטנדרטית, ולכן מהיר ופשוט יותר." },
+      { type:"mcq", q:"מהי Row-Level Security (RLS) שהוצגה ב-SQL Server 2016?",
+        options:["הצפנת שורות","שליטה בגישה לשורות לפי הקשר ההרצה (למשל זהות המשתמש)","גיבוי שורות","מחיקת שורות מהירה"], correct:1,
+        explain:"RLS מאפשרת להגביל גישה לשורות לפי הקשר ההרצה — למשל להציג למשתמש רק שורות השייכות למחלקה שלו, גם אם כולם מריצים SELECT * מאותה טבלה." },
+      { type:"mcq", q:"מהי הפונקציה TRANSLATE שהוצגה ב-SQL Server 2017?",
+        options:["תרגום שפה","החלפת מספר תווים במספר תווים בהתאמה (חוסכת REPLACE מקונן)","המרת טיפוסים","תרגום קוד"], correct:1,
+        explain:"TRANSLATE מחליפה כל תו ברשימת המקור בתו המקביל ביעד. למשל TRANSLATE('[3+4]','[]','()') ⇒ '(3+4)'. מחזירה שגיאה אם הרשימות באורכים שונים." },
+      { type:"mcq", q:"מהי תכונת Temporal Tables ב-SQL Server 2016?",
+        options:["טבלאות זמניות","תמיכה מובנית במידע על נתונים בכל נקודת זמן בעבר","טבלאות מהירות","טבלאות מוצפנות"], correct:1,
+        explain:"Temporal Tables שומרות היסטוריית שינויים ומאפשרות לשאול את מצב הנתונים בכל נקודת זמן בעבר. הוצגו ב-ANSI SQL 2011." }
+    ]
+  },
+  {
+    id: "interview", title: "תיאוריה לראיונות",
+    desc: "RDBMS, ACID, דירוג (RANK/DENSE_RANK), ISNULL/COALESCE, CTE — תיאוריה",
+    tables: ["EmployeeDetail"],
+    questions: [
+      { type:"mcq", q:"מהו RDBMS?",
+        options:["שפת תכנות","מערכת לניהול מסדי נתונים יחסיים — נתונים בטבלאות הקשורות במפתחות","סוג של אינדקס","פרוטוקול רשת"], correct:1,
+        explain:"Relational Database Management System — מערכת שבה הנתונים מאוחסנים בטבלאות (יחסים) הקשורות במפתחות. דוגמאות: SQL Server, MySQL, Oracle, SQLite." },
+      { type:"mcq", q:"מה מבטיחה תכונת ACID?",
+        options:["מהירות","אמינות טרנזקציות: Atomicity, Consistency, Isolation, Durability","אבטחה","דחיסה"], correct:1,
+        explain:"ACID: Atomicity (הכול או כלום), Consistency (עקביות), Isolation (בידוד), ו-Durability (קביעות לאחר commit)." },
+      { type:"query", q:"מצאו את המשכורת השנייה בגובהה באמצעות DENSE_RANK.", hint:"DENSE_RANK() OVER (ORDER BY Salary DESC) בתת-שאילתה, ואז סינון לדירוג 2.", solution:"SELECT Salary FROM (SELECT Salary, DENSE_RANK() OVER (ORDER BY Salary DESC) AS rnk FROM EmployeeDetail) WHERE rnk = 2" },
+      { type:"query", q:"הוסיפו לכל עובד מספר שורה רץ (ROW_NUMBER) לפי משכורת יורד. הציגו FirstName, Salary והמספר.", hint:"ROW_NUMBER() OVER (ORDER BY Salary DESC).", solution:"SELECT FirstName, Salary, ROW_NUMBER() OVER (ORDER BY Salary DESC) AS rn FROM EmployeeDetail" },
+      { type:"mcq", q:"מה ההבדל בין ROW_NUMBER, RANK ו-DENSE_RANK בעת שוויון?",
+        options:["הם זהים","ROW_NUMBER ייחודי תמיד; RANK מדלג אחרי שוויון (1,2,2,4); DENSE_RANK לא מדלג (1,2,2,3)","RANK תמיד ייחודי","DENSE_RANK מדלג"], correct:1,
+        explain:"ROW_NUMBER נותן מספר רץ ייחודי. RANK נותן דירוג עם דילוגים בשוויון (1,2,2,4). DENSE_RANK נותן דירוג רציף ללא דילוגים (1,2,2,3)." },
+      { type:"mcq", q:"מה ההבדל בין ISNULL ל-COALESCE?",
+        options:["הם זהים לחלוטין","ISNULL מקבל 2 ארגומנטים; COALESCE (תקן ANSI) מקבל מספר ארגומנטים ומחזיר את הראשון שאינו NULL","COALESCE מקבל רק 2","ISNULL גמיש יותר"], correct:1,
+        explain:"ISNULL(a,b) מחזיר a אם אינו NULL אחרת b. COALESCE(a,b,c,...) הוא תקן ANSI שמקבל מספר ארגומנטים ומחזיר את הראשון שאינו NULL — גמיש ונייד יותר." },
+      { type:"mcq", q:"מהו CTE (Common Table Expression) ומהו יתרון מרכזי שלו?",
+        options:["טבלה פיזית","תוצאת ביניים זמנית בעלת שם (WITH) שמשפרת קריאוּת ותומכת ברקורסיה","אינדקס","סוג JOIN"], correct:1,
+        explain:"CTE היא תוצאת ביניים זמנית המוגדרת ב-WITH ומשמשת בשאילתה שאחריה. יתרונות: קריאוּת, שימוש חוזר, ותמיכה ברקורסיה (מבני עץ/היררכיה)." }
+    ]
+  },
+  {
+    id: "sales", title: "מכירות — JOINs ואגרגציה",
+    desc: "Customers, Orders, OrderItems, Products — צירופים, קיבוץ וטופ-N",
+    tables: ["Customers","Orders","OrderItems","Products"],
+    questions: [
+      { type:"query", q:"החזירו את כל הלקוחות מטבלת Customers.", hint:"SELECT * מהטבלה.", solution:"SELECT * FROM Customers" },
+      { type:"query", q:"החזירו את הלקוחות מישראל (Country = 'Israel').", hint:"WHERE על עמודת Country, מחרוזת בגרשיים בודדים.", solution:"SELECT * FROM Customers WHERE Country = 'Israel'" },
+      { type:"query", q:"החזירו שם ומלאי של מוצרים שהמלאי שלהם קטן מ-20.", hint:"WHERE Stock < 20.", solution:"SELECT ProductName, Stock FROM Products WHERE Stock < 20" },
+      { type:"query", q:"כמה הזמנות יש בכל סטטוס? הציגו סטטוס וספירה.", hint:"GROUP BY Status עם COUNT(*).", solution:"SELECT Status, COUNT(*) AS cnt FROM Orders GROUP BY Status" },
+      { type:"query", q:"לכל לקוח, הציגו את שמו ואת מספר ההזמנות שלו (INNER JOIN).", hint:"Customers מצורף ל-Orders על CustomerID, ואז GROUP BY.", solution:"SELECT C.CustomerName, COUNT(*) AS Orders FROM Customers C INNER JOIN Orders O ON C.CustomerID = O.CustomerID GROUP BY C.CustomerID" },
+      { type:"query", q:"חשבו את ההכנסה לכל הזמנה (סכום של כמות × מחיר יחידה) מטבלת OrderItems.", hint:"SUM(Quantity * UnitPrice) עם GROUP BY OrderID.", solution:"SELECT OrderID, SUM(Quantity * UnitPrice) AS Revenue FROM OrderItems GROUP BY OrderID" },
+      { type:"query", q:"מהם 5 המוצרים שנמכרו בכמות הגדולה ביותר? הציגו שם וכמות כוללת.", hint:"JOIN ל-OrderItems, SUM(Quantity), GROUP BY, ORDER BY יורד, LIMIT 5.", solution:"SELECT P.ProductName, SUM(OI.Quantity) AS Qty FROM Products P INNER JOIN OrderItems OI ON P.ProductID = OI.ProductID GROUP BY P.ProductID ORDER BY Qty DESC LIMIT 5" },
+      { type:"mcq", q:"כדי לחשב את ההכנסה לכל הזמנה מטבלת OrderItems, מה נכון?",
+        options:["SUM(Quantity) בלבד","SUM(Quantity * UnitPrice) עם GROUP BY OrderID","COUNT(*) עם GROUP BY OrderID","AVG(UnitPrice)"], correct:1,
+        explain:"ההכנסה לפריט = כמות × מחיר יחידה. מסכמים את המכפלה עם SUM ומקבצים לפי OrderID כדי לקבל הכנסה לכל הזמנה." }
+    ]
+  },
+  {
+    id: "analytics", title: "ניתוח עסקי",
+    desc: "תת-שאילתות, HAVING, חתך לפי זמן, הכנסה לפי קטגוריה",
+    tables: ["Orders","OrderItems","Products","Categories"],
+    questions: [
+      { type:"query", q:"כמה הזמנות יש בסך הכול בטבלת Orders?", hint:"COUNT(*).", solution:"SELECT COUNT(*) FROM Orders" },
+      { type:"query", q:"מצאו לקוחות (CustomerID) עם יותר מ-10 הזמנות. הציגו מזהה וספירה.", hint:"GROUP BY CustomerID עם HAVING COUNT(*) > 10.", solution:"SELECT CustomerID, COUNT(*) AS c FROM Orders GROUP BY CustomerID HAVING COUNT(*) > 10" },
+      { type:"query", q:"מהי ההכנסה הממוצעת להזמנה? (חשבו הכנסה לכל הזמנה ואז ממוצע).", hint:"תת-שאילתה: סכמו לכל הזמנה, ואז AVG על התוצאה.", solution:"SELECT AVG(rev) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS rev FROM OrderItems GROUP BY OrderID)" },
+      { type:"query", q:"כמה הזמנות בוצעו בכל חודש בשנת 2023? הציגו חודש וספירה, ממוין לפי חודש.", hint:"סננו לשנה עם strftime('%Y',...) = '2023', וקבצו לפי strftime('%m',...).", solution:"SELECT strftime('%m', OrderDate) AS Month, COUNT(*) AS Orders FROM Orders WHERE strftime('%Y', OrderDate) = '2023' GROUP BY Month ORDER BY Month" },
+      { type:"query", q:"איזה עובד טיפל בהכי הרבה הזמנות? הציגו שם ומספר הזמנות (העובד המוביל).", hint:"JOIN בין EmployeeDetail ל-Orders על EmployeeID, GROUP BY, ORDER BY יורד, LIMIT 1.", solution:"SELECT E.FirstName, COUNT(*) AS Handled FROM EmployeeDetail E INNER JOIN Orders O ON E.EmployeeID = O.EmployeeID GROUP BY O.EmployeeID ORDER BY Handled DESC LIMIT 1" },
+      { type:"query", q:"חשבו את ההכנסה הכוללת לכל קטגוריית מוצר, ממוין מהגבוה לנמוך.", hint:"שלושה צירופים: Categories עם Products עם OrderItems, ואז SUM(Quantity*UnitPrice) לפי קטגוריה.", solution:"SELECT Cat.CategoryName, SUM(OI.Quantity * OI.UnitPrice) AS Revenue FROM Categories Cat INNER JOIN Products P ON P.CategoryID = Cat.CategoryID INNER JOIN OrderItems OI ON OI.ProductID = P.ProductID GROUP BY Cat.CategoryID ORDER BY Revenue DESC" },
+      { type:"mcq", q:"רוצים רק לקוחות עם יותר מ-10 הזמנות. היכן ממקמים את התנאי COUNT(*) > 10?",
+        options:["ב-WHERE","ב-HAVING אחרי GROUP BY","ב-SELECT","ב-ORDER BY"], correct:1,
+        explain:"תנאי על תוצאת פונקציית צבירה (כמו COUNT) חייב לבוא ב-HAVING, אחרי GROUP BY. WHERE פועל על שורות בודדות לפני הקיבוץ ולא יכול להשתמש ב-COUNT." }
+    ]
+  }
+];
 
-  <!-- Northwind -->
-  <a href="simulator-nw.html" class="card nw">
-    <div class="card-icon">🛒</div>
-    <div class="card-name">Northwind</div>
-    <div class="card-desc">מסד נתונים קלאסי של חברת מכירות — לקוחות, הזמנות, מוצרים, ספקים ועובדים. המועדף ללימוד SQL מהבסיס ועד Window Functions.</div>
-    <div class="stats">
-      <div class="stat"><div class="stat-n">16</div><div class="stat-l">טבלאות</div></div>
-      <div class="stat"><div class="stat-n">24K</div><div class="stat-l">שורות</div></div>
-      <div class="stat"><div class="stat-n">110</div><div class="stat-l">תרגילים</div></div>
-    </div>
-    <div class="tags">
-      <span class="tag">customers</span>
-      <span class="tag">orders</span>
-      <span class="tag">products</span>
-      <span class="tag">employees</span>
-      <span class="tag">suppliers</span>
-    </div>
-    <div class="btn">פתח סימולטור ←</div>
-  </a>
+// ===== רמות קושי (1=הכי קל, 5=הכי קשה) — ממופה לפי הסדר המקורי של כל קטגוריה =====
+// מאפשר מיון "מהקל לקשה" בתוך כל נושא ובמסלול המדורג, בלי לשנות את השאלות עצמן.
+const DIFF = {
+  basic:[1,1,3,3,3,2,3,3,3,4,4,2,2,2,3],
+  datetime:[3,2,2,2,1,3,3,3,1,2],
+  salary:[2,2,3,2,4,2,2,3,4,2],
+  groupby:[3,3,3,3,3,4,3],
+  joins:[3,3,4,4,5,3],
+  'tricky-joins':[3,4,3,4,4],
+  ddl:[3,3,4],
+  tricky:[1,2,3,3,4,4,3],
+  advanced:[4,5,5,5,4],
+  tcs:[3,4,3,3,4],
+  datatypes:[3,4,4,4,3],
+  views:[3,2,3,4],
+  indexes:[3,3,4,4,5],
+  sp:[3,4,4,5,4],
+  temp:[3,3,5,4],
+  constraints:[3,4,4,5],
+  storage:[2,4,4,5],
+  concepts:[3,3,4,5,4],
+  modern:[3,5,4,5],
+  interview:[2,3,5,4,4,4,3],
+  sales:[1,2,2,3,3,4,4,3],
+  analytics:[2,4,4,4,4,5,3]
+};
+CATEGORIES.forEach(c=>{const d=DIFF[c.id]||[];c.questions.forEach((q,i)=>{q.diff=d[i]||q.diff||3;});});
 
-  <!-- NBA -->
-  <a href="simulator-nba.html" class="card nba">
-    <div class="card-icon">🏀</div>
-    <div class="card-name">NBA Boxscore</div>
-    <div class="card-desc">נתונים אמיתיים מה-NBA — 12,000 משחקים ו-305,000 שורות סטטיסטיקות שחקנים מ-2013 ועד היום. מושלם לניתוח ספורט ו-aggregations מורכבים.</div>
-    <div class="stats">
-      <div class="stat"><div class="stat-n">3</div><div class="stat-l">טבלאות</div></div>
-      <div class="stat"><div class="stat-n">305K</div><div class="stat-l">שורות</div></div>
-      <div class="stat"><div class="stat-n">110</div><div class="stat-l">תרגילים</div></div>
-    </div>
-    <div class="tags">
-      <span class="tag">game_info</span>
-      <span class="tag">player_stats</span>
-      <span class="tag">team_stats</span>
-    </div>
-    <div class="btn">פתח סימולטור ←</div>
-  </a>
+// ===== תיקון שיוך נושאים: העברת שאלות לבית הנכון לפי הקונסטרוקט שהן מלמדות =====
+// (מתבצע אחרי שיוך רמות הקושי, כך שכל שאלה נושאת איתה את הרמה שלה)
+const TOPIC_REMAP = {
+  'basic#12':'groupby',     // MAX(Salary)        → צבירה
+  'basic#13':'groupby',     // MIN(Salary)        → צבירה
+  'salary#3':'basic',       // RTRIM(...)         → פונקציית מחרוזת בסיסית
+  'salary#5':"basic",       // 'Hello ' || ...    → פונקציית מחרוזת בסיסית
+  'interview#2':'advanced', // DENSE_RANK (query) → שאילתות מתקדמות
+  'interview#3':'advanced'  // ROW_NUMBER (query) → שאילתות מתקדמות
+};
+(function applyTopicRemap(){
+  const byId={}; CATEGORIES.forEach(c=>byId[c.id]=c);
+  const moves=[];
+  Object.keys(TOPIC_REMAP).forEach(k=>{
+    const p=k.split('#'), c=byId[p[0]]; if(!c)return;
+    const q=c.questions[+p[1]], to=byId[TOPIC_REMAP[k]];
+    if(q&&to) moves.push({q,from:c,to});
+  });
+  // resolve all source questions first (by identity), then remove, then append — index-shift safe
+  moves.forEach(m=>{ m.from.questions=m.from.questions.filter(x=>x!==m.q); });
+  moves.forEach(m=>{ m.to.questions.push(m.q); });
+})();
 
-  <!-- Champions League -->
-  <a href="simulator-cl.html" class="card cl">
-    <div class="card-icon">⚽</div>
-    <div class="card-name">UEFA Champions League</div>
-    <div class="card-desc">33 עונות של ליגת האלופות (1991–2024) — קבוצות, שחקנים, סגלים, שלבי בתים ונוקאאוט. מושלם ל-JOINs מורכבים, Window Functions ו-CTEs.</div>
-    <div class="stats">
-      <div class="stat"><div class="stat-n">7</div><div class="stat-l">טבלאות</div></div>
-      <div class="stat"><div class="stat-n">30K</div><div class="stat-l">שורות</div></div>
-      <div class="stat"><div class="stat-n">112</div><div class="stat-l">תרגילים</div></div>
-    </div>
-    <div class="tags">
-      <span class="tag">seasons</span>
-      <span class="tag">teams</span>
-      <span class="tag">players_list</span>
-      <span class="tag">squads</span>
-      <span class="tag">knock_out_stage</span>
-    </div>
-    <div class="btn">פתח סימולטור ←</div>
-  </a>
+</script>
+<script id="schema-sql" type="text/plain">-- ===== EmployeeDetail =====
+CREATE TABLE EmployeeDetail (
+  EmployeeID INTEGER PRIMARY KEY,
+  FirstName  TEXT,
+  LastName   TEXT,
+  Salary     REAL,
+  JoiningDate TEXT,
+  Department TEXT,
+  Gender     TEXT
+);
+INSERT INTO EmployeeDetail VALUES
+ (1,'Vikas','Ahlawat',600000.00,'2013-02-15 11:16:28','IT','Male'),
+ (2,'nikita','Jain',530000.00,'2014-01-09 17:31:07','HR','Female'),
+ (3,'Ashish','Kumar',1000000.00,'2014-01-09 10:05:07','IT','Male'),
+ (4,'Nikhil','Sharma',480000.00,'2014-01-09 09:00:07','HR','Male'),
+ (5,'anish','kadian',500000.00,'2014-01-09 09:31:07','Payroll','Male');
 
-  <!-- Power BI -->
-  <a href="pbi-simulator.html" class="card" style="border-color:rgba(242,200,17,.4)">
-    <div class="card-icon">📊</div>
-    <div class="card-name">Power BI — NBA Analytics</div>
-    <div class="card-desc">לא SQL — סימולטור Power BI ויזואלי בעברית. לימוד DAX מאפס, בניית דשבורדים בגרירת שדות, ותרגול מעשי על נתוני NBA. חלק מסדנת הדאטה המלאה.</div>
-    <div class="stats">
-      <div class="stat"><div class="stat-n">DAX</div><div class="stat-l">נוסחאות</div></div>
-      <div class="stat"><div class="stat-n">📊</div><div class="stat-l">דשבורדים</div></div>
-      <div class="stat"><div class="stat-n">NBA</div><div class="stat-l">נתונים</div></div>
-    </div>
-    <div class="tags">
-      <span class="tag">DAX</span>
-      <span class="tag">Measures</span>
-      <span class="tag">Dashboard</span>
-      <span class="tag">Visuals</span>
-    </div>
-    <div class="btn">פתח סימולטור ←</div>
-  </a>
+-- ===== ProjectDetail =====
+CREATE TABLE ProjectDetail (
+  ProjectDetailID  INTEGER PRIMARY KEY,
+  EmployeeDetailID INTEGER,
+  ProjectName      TEXT
+);
+INSERT INTO ProjectDetail VALUES
+ (1,1,'Task Track'),
+ (2,1,'CLP'),
+ (3,1,'Survey Managment'),
+ (4,2,'HR Managment'),
+ (5,3,'Task Track'),
+ (6,3,'GRS'),
+ (7,3,'DDS'),
+ (8,4,'HR Managment'),
+ (9,6,'GL Managment');
 
-</div>
+-- ===== Members2023 / Members2024 (JOIN demos) =====
+CREATE TABLE Members2023 (ID INTEGER, Name TEXT);
+INSERT INTO Members2023 VALUES (1,'Vikas Ahlawat'),(2,'Sachin Aggarwal'),(3,'Manoj Kumar');
+CREATE TABLE Members2024 (ID INTEGER, Name TEXT);
+INSERT INTO Members2024 VALUES (1,'Vikas Ahlawat'),(4,'Sanjay Kumar'),(5,'Sachin Aggarwal'),(3,'Sandeep Kumar');
 
+-- ===== FuelDetail =====
+CREATE TABLE FuelDetail (ID INTEGER PRIMARY KEY, Fuel INTEGER, Date TEXT);
+INSERT INTO FuelDetail VALUES
+ (1,10,'2014-04-25 10:00:00'),(2,9,'2014-04-25 11:00:00'),(3,8,'2014-04-25 12:00:00'),
+ (4,6,'2014-04-25 13:00:00'),(5,12,'2014-04-25 14:00:00'),(6,11,'2014-04-25 15:00:00'),
+ (7,10,'2014-04-25 16:00:00'),(8,9,'2014-04-25 17:00:00'),(9,8,'2014-04-25 18:00:00'),
+ (10,10,'2014-04-25 19:00:00'),(11,9,'2014-04-25 20:00:00'),(12,8,'2014-04-25 21:00:00'),
+ (13,7,'2014-04-25 22:00:00'),(14,15,'2014-04-25 23:00:00');
+
+-- ===== 9 טבלאות חדשות (סכימת מכירות + HR) — הנתונים מיוצרים בזמן ריצה =====
+CREATE TABLE Departments (DeptID INTEGER PRIMARY KEY, DeptName TEXT, Location TEXT, Budget INTEGER);
+CREATE TABLE Categories  (CategoryID INTEGER PRIMARY KEY, CategoryName TEXT);
+CREATE TABLE Suppliers   (SupplierID INTEGER PRIMARY KEY, SupplierName TEXT, Country TEXT);
+CREATE TABLE Customers   (CustomerID INTEGER PRIMARY KEY, CustomerName TEXT, City TEXT, Country TEXT, SignupDate TEXT);
+CREATE TABLE Products    (ProductID INTEGER PRIMARY KEY, ProductName TEXT, CategoryID INTEGER, SupplierID INTEGER, Price REAL, Stock INTEGER);
+CREATE TABLE Orders      (OrderID INTEGER PRIMARY KEY, CustomerID INTEGER, EmployeeID INTEGER, OrderDate TEXT, Status TEXT);
+CREATE TABLE OrderItems  (OrderItemID INTEGER PRIMARY KEY, OrderID INTEGER, ProductID INTEGER, Quantity INTEGER, UnitPrice REAL);
+CREATE TABLE Payments    (PaymentID INTEGER PRIMARY KEY, OrderID INTEGER, PaidDate TEXT, Method TEXT, Amount REAL);
+CREATE TABLE Attendance  (AttID INTEGER PRIMARY KEY, EmployeeID INTEGER, WorkDate TEXT, HoursWorked REAL);
+</script>
+<script>
+const SCHEMA_SQL=document.getElementById('schema-sql').textContent;
+let SCHEMA_HINT={EmployeeDetail:["EmployeeID","FirstName","LastName","Salary","JoiningDate","Department","Gender"],ProjectDetail:["ProjectDetailID","EmployeeDetailID","ProjectName"],Members2023:["ID","Name"],Members2024:["ID","Name"],FuelDetail:["ID","Fuel","Date"]};
+const SQL_KEYWORDS=['SELECT','FROM','WHERE','GROUP BY','ORDER BY','HAVING','LIMIT','OFFSET','DISTINCT','AS','AND','OR','NOT','NULL','IS NULL','IS NOT NULL','IN','LIKE','GLOB','BETWEEN','JOIN','INNER JOIN','LEFT JOIN','ON','UNION','UNION ALL','INSERT INTO','VALUES','UPDATE','SET','DELETE FROM','CREATE TABLE','CREATE VIEW','CREATE INDEX','CASE','WHEN','THEN','ELSE','END','CAST','ASC','DESC','COUNT','SUM','AVG','MIN','MAX','ROUND','ABS','UPPER','LOWER','LENGTH','REPLACE','TRIM','RTRIM','LTRIM','IFNULL','COALESCE','strftime','date','datetime','group_concat','ROW_NUMBER','RANK','DENSE_RANK','OVER','PARTITION BY','WITH','RECURSIVE','RANDOM','INTEGER','TEXT','REAL','PRIMARY KEY'];
+let SQL=null;
+let DB_BYTES=null;      // snapshot of the fully-seeded 30k-row database
+let viewerDb=null;      // shared read-only connection for previews / counts
+const BIG_ROWS=30000;   // EmployeeDetail size
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+// session state
+let session={items:[],idx:0,solved:new Set(),answers:{},code:{},editor:null};
+
+function loadSqlJs(){
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.min.js";
+    s.onload=()=>initSqlJs({locateFile:f=>"https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/"+f}).then(res).catch(rej);
+    s.onerror=rej; document.head.appendChild(s);
+  });
+}
+
+// deterministic PRNG so the generated data is identical every run
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const FN=['Vikas','Ashish','Nikhil','Nikita','Anish','Rahul','Priya','Amit','Sneha','Karan','Pooja','Rohit','Neha','Arjun','Divya','Manoj','Sachin','Sanjay','Sandeep','Ankit','Meera','Kiran','Deepak','Riya','Varun','Tara','Yash','Isha','Gaurav','Bhavna'];
+const LN=['Ahlawat','Jain','Kumar','Sharma','Kadian','Verma','Gupta','Singh','Patel','Mehta','Reddy','Nair','Bose','Iyer','Chopra','Malhotra','Das','Rao'];
+const DEPTS=['IT','HR','Payroll','Finance','Sales','Marketing','Support','Operations'];
+
+function buildBigDb(){
+  const db=new SQL.Database();
+  db.run(SCHEMA_SQL);                 // creates tables + small seed rows (incl. IDs 1..5)
+  const rnd=mulberry32(20240522);
+  const pick=a=>a[Math.floor(rnd()*a.length)];
+  db.run('BEGIN');
+  const stmt=db.prepare('INSERT INTO EmployeeDetail VALUES (?,?,?,?,?,?,?)');
+  for(let id=6;id<=BIG_ROWS;id++){
+    const sal=Math.round((300000+rnd()*900000)/1000)*1000;        // 300k–1.2M, round thousands
+    const y=2013+Math.floor(rnd()*4);                              // 2013..2016
+    const mo=String(1+Math.floor(rnd()*12)).padStart(2,'0');
+    const da=String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    const hh=String(Math.floor(rnd()*24)).padStart(2,'0');
+    const mi=String(Math.floor(rnd()*60)).padStart(2,'0');
+    const date=y+'-'+mo+'-'+da+' '+hh+':'+mi+':00';
+    stmt.run([id,pick(FN),pick(LN),sal,date,pick(DEPTS),rnd()<0.5?'Male':'Female']);
+  }
+  stmt.free();
+  db.run('COMMIT');
+
+  // ===== 9 הטבלאות החדשות =====
+  const CATS=['Electronics','Books','Clothing','Home & Kitchen','Toys','Sports','Beauty','Food'];
+  const COUNTRIES=['USA','UK','Germany','India','Israel','France','Japan','Canada','Brazil','Spain'];
+  const CITIES=['New York','London','Berlin','Mumbai','Tel Aviv','Paris','Tokyo','Toronto','Sao Paulo','Madrid'];
+  const SUPN=['Acme Corp','Globex','Initech','Umbrella','Stark Inc','Wayne Ent','Wonka Co','Soylent','Hooli','Vandelay','Massive Dynamic','Cyberdyne'];
+  const PADJ=['Pro','Max','Mini','Ultra','Classic','Eco','Smart','Lite','Prime','Deluxe'];
+  const PNOUN=['Widget','Gadget','Device','Kit','Set','Tool','Pack','Unit','Gear','Box'];
+  const STAT=['Pending','Shipped','Delivered','Delivered','Cancelled'];
+  const PAYM=['Credit Card','PayPal','Wire','Cash'];
+  const DLOC=['Tel Aviv','Haifa','Jerusalem','Beer Sheva','Tel Aviv','Haifa','Jerusalem','Tel Aviv'];
+  const NSUP=12,NC=600,NP=150,NO=4000,NA=6000;
+
+  db.run('BEGIN');
+  let s;
+  s=db.prepare('INSERT INTO Departments VALUES (?,?,?,?)');
+  DEPTS.forEach((n,i)=>s.run([i+1,n,DLOC[i],Math.round((500000+rnd()*4000000)/10000)*10000])); s.free();
+  s=db.prepare('INSERT INTO Categories VALUES (?,?)');
+  CATS.forEach((n,i)=>s.run([i+1,n])); s.free();
+  s=db.prepare('INSERT INTO Suppliers VALUES (?,?,?)');
+  for(let i=1;i<=NSUP;i++)s.run([i,SUPN[i-1],pick(COUNTRIES)]); s.free();
+  s=db.prepare('INSERT INTO Customers VALUES (?,?,?,?,?)');
+  for(let i=1;i<=NC;i++){const ci=Math.floor(rnd()*CITIES.length);
+    const sd=(2018+Math.floor(rnd()*6))+'-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([i,pick(FN)+' '+pick(LN),CITIES[ci],COUNTRIES[ci],sd]);} s.free();
+  const PRICE=[];
+  s=db.prepare('INSERT INTO Products VALUES (?,?,?,?,?,?)');
+  for(let i=1;i<=NP;i++){const pr=Math.round((5+rnd()*495)*100)/100;PRICE[i]=pr;
+    s.run([i,pick(PADJ)+' '+pick(PNOUN),1+Math.floor(rnd()*CATS.length),1+Math.floor(rnd()*NSUP),pr,Math.floor(rnd()*500)]);} s.free();
+  const OSTAT=[];
+  s=db.prepare('INSERT INTO Orders VALUES (?,?,?,?,?)');
+  for(let i=1;i<=NO;i++){const st=pick(STAT);OSTAT[i]=st;
+    const od=(2022+Math.floor(rnd()*3))+'-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([i,1+Math.floor(rnd()*NC),1+Math.floor(rnd()*400),od,st]);} s.free();
+  const OTOT=[]; let oiId=1;
+  s=db.prepare('INSERT INTO OrderItems VALUES (?,?,?,?,?)');
+  for(let o=1;o<=NO;o++){const n=1+Math.floor(rnd()*4);let tot=0;
+    for(let k=0;k<n;k++){const pid=1+Math.floor(rnd()*NP),qty=1+Math.floor(rnd()*10),up=PRICE[pid];tot+=qty*up;
+      s.run([oiId++,o,pid,qty,up]);}
+    OTOT[o]=Math.round(tot*100)/100;} s.free();
+  s=db.prepare('INSERT INTO Payments VALUES (?,?,?,?,?)'); let payId=1;
+  for(let o=1;o<=NO;o++){if(OSTAT[o]==='Cancelled'||rnd()<0.05)continue;
+    const pd=(2022+Math.floor(rnd()*3))+'-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([payId++,o,pd,pick(PAYM),OTOT[o]]);} s.free();
+  s=db.prepare('INSERT INTO Attendance VALUES (?,?,?,?)');
+  for(let i=1;i<=NA;i++){const wd='2024-'+String(1+Math.floor(rnd()*12)).padStart(2,'0')+'-'+String(1+Math.floor(rnd()*28)).padStart(2,'0');
+    s.run([i,1+Math.floor(rnd()*500),wd,Math.round((4+rnd()*6)*10)/10]);} s.free();
+  db.run('COMMIT');
+
+  const bytes=db.export();
+  db.close();
+  return bytes;
+}
+
+// fresh, independent, writable clone of the seeded DB (for running user / solution queries)
+function freshDb(){return new SQL.Database(DB_BYTES);}
+
+/* ---- topics screen ---- */
+function renderTopics(){
+  document.getElementById('topics').innerHTML=CATEGORIES.map(c=>{
+    const nq=c.questions.filter(q=>q.type==='query').length;
+    const nm=c.questions.filter(q=>q.type==='mcq').length;
+    return '<button class="topic" data-cat="'+c.id+'">'+
+      '<span class="go" aria-hidden="true">‹</span>'+
+      '<h3>'+esc(c.title)+'</h3><div class="td">'+esc(c.desc)+'</div>'+
+      '<div class="meta">'+(nq?'<span class="pill q">'+nq+' שאילתות</span>':'')+(nm?'<span class="pill m">'+nm+' אמריקאי</span>':'')+'</div>'+
+      '</button>';
+  }).join('');
+  document.querySelectorAll('.topic').forEach(t=>t.addEventListener('click',()=>startCategory(t.dataset.cat)));
+}
+
+/* ---- build sessions ---- */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function byDiff(items){return items.slice().sort((a,b)=>(a.q.diff||3)-(b.q.diff||3));} // stable: ties keep authored order
+function flat(filterFn){
+  let out=[];
+  CATEGORIES.forEach(c=>c.questions.forEach(q=>{ if(filterFn(q,c)) out.push({q,cat:c}); }));
+  return out;
+}
+function startCategory(cid){
+  const c=CATEGORIES.find(x=>x.id===cid);
+  session={items:byDiff(c.questions.map(q=>({q,cat:c}))),idx:0,solved:new Set(),answers:{},code:{},editor:null,label:c.title};
+  enterPractice();
+}
+function startMode(kind){
+  let items;
+  if(kind==='all'){ items=byDiff(flat(()=>true)); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'מסלול מדורג — מהקל לקשה'}; }
+  else { items=byDiff(flat(q=>q.type==='query')); session={items,idx:0,solved:new Set(),answers:{},code:{},editor:null,label:'שאילתות — מהקל לקשה'}; }
+  enterPractice();
+}
+function enterPractice(){
+  document.getElementById('screen-select').style.display='none';
+  document.getElementById('screen-practice').style.display='flex';
+  document.getElementById('pTitle').textContent=session.label;
+  window.scrollTo(0,0);
+  renderCurrent();
+}
+function exitPractice(){
+  if(session.editor){try{session.editor.toTextArea();}catch(e){}}
+  session.editor=null;
+  document.getElementById('screen-practice').style.display='none';
+  document.getElementById('screen-select').style.display='block';
+  window.scrollTo(0,0);
+}
+
+/* ---- render one question ---- */
+function updateProgress(){
+  const n=session.items.length, i=session.idx+1, s=session.solved.size;
+  document.getElementById('pCount').textContent=i+' / '+n;
+  document.getElementById('pFill').style.width=(s/n*100)+'%';
+  const ps=document.getElementById('pScore');
+  if(ps) ps.textContent='✓ '+s+' ('+(n?Math.round(s/n*100):0)+'%)';
+  const hp=document.getElementById('hPrev'), hn=document.getElementById('hNext');
+  if(hp) hp.disabled = session.idx===0;
+  if(hn) hn.textContent = (session.idx>=n-1) ? 'סיום' : 'הבא ←';
+}
+function saveCode(){
+  const it=session.items[session.idx];
+  if(session.editor && it && it.q.type==='query'){ try{session.code[itemKey()]=session.editor.getValue();}catch(e){} }
+}
+function goPrev(){ saveCode(); if(session.idx>0){ session.idx--; renderCurrent(); window.scrollTo({top:0,behavior:'smooth'}); } }
+function goNext(){ saveCode(); session.idx++; renderCurrent(); window.scrollTo({top:0,behavior:'smooth'}); }
+function renderCurrent(){
+  if(session.editor){try{session.editor.toTextArea();}catch(e){}session.editor=null;}
+  const host=document.getElementById('qhost');
+  if(session.idx>=session.items.length){ renderDone(); return; }
+  const {q,cat}=session.items[session.idx];
+  updateProgress();
+  host.innerHTML = (q.type==='query'?queryCard(q,cat):mcqCard(q,cat));
+  if(q.type==='query') mountEditor(q);
+  else mountMcq(q);
+  // focus management
+  const card=host.querySelector('.qcard'); if(card) card.setAttribute('tabindex','-1'),card.focus({preventScroll:true});
+}
+function navButtons(){
+  const last=session.idx>=session.items.length-1;
+  return '<div class="pnav">'+
+    '<button class="nav-btn" id="prevBtn"'+(session.idx===0?' disabled':'')+'>הקודם</button>'+
+    '<button class="nav-btn primary" id="nextBtn">'+(last?'סיום':'הבא ←')+'</button>'+
+    '</div>';
+}
+function itemKey(){ const {q,cat}=session.items[session.idx]; return cat.id+'::'+cat.questions.indexOf(q); }
+function diffBadge(q){
+  const d=q.diff||3, lbl=['','קל מאוד','קל','בינוני','קשה','קשה מאוד'][d];
+  let dots=''; for(let i=1;i<=5;i++)dots+='<span class="dot'+(i<=d?' on':'')+'"></span>';
+  return '<span class="qdiff l'+d+'" title="רמת קושי: '+lbl+' ('+d+'/5)" aria-label="רמת קושי '+d+' מתוך 5">'+dots+'<span class="qdiff-lbl">'+lbl+'</span></span>';
+}
+
+function queryCard(q,cat){
+  const solvedCls=session.solved.has(itemKey())?' solved':'';
+  return '<div class="qcard'+solvedCls+'" id="qcard">'+
+    '<div class="qhead"><span class="qbadge query">SQL</span><span style="color:var(--dim);font-size:.8rem;font-family:var(--mono)">'+esc(cat.title)+'</span>'+diffBadge(q)+'<span class="qsolvedmark">✓ נפתר</span></div>'+
+    '<div class="qtext">'+esc(q.q)+'</div>'+
+    dataPreview(cat)+
+    '<div class="editor-shell"><textarea id="cmEditor"></textarea></div>'+
+    '<div class="actions">'+
+      '<button class="btn btn-run" id="runBtn">הרץ שאילתה ▶</button>'+
+      '<button class="btn btn-ghost" id="acBtn">💡 השלמה</button>'+
+      '<button class="btn btn-ghost" id="hintBtn">רמז</button>'+
+      '<button class="btn btn-ghost" id="clearBtn">נקה</button>'+
+      '<span class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> הרצה · <kbd>Ctrl</kbd>+<kbd>Space</kbd> השלמה</span>'+
+    '</div>'+
+    '<div class="hintline" id="hintLine">'+esc(q.hint||'')+'</div>'+
+    '<div class="result" id="result"></div>'+
+    '<div class="sol-reveal"><button class="sol-toggle" id="solToggle">הצג פתרון לדוגמה</button>'+
+      '<div class="sol-code" id="solCode"><code>'+esc(q.solution)+'</code></div></div>'+
+    navButtons()+
+    '<div style="text-align:center;margin-top:14px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">מבנה הטבלאות</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+}
+function mcqCard(q,cat){
+  const solvedCls=session.solved.has(itemKey())?' solved':'';
+  const opts=q.options.map((o,i)=>'<button class="opt" data-i="'+i+'"><span class="mark">'+String.fromCharCode(65+i)+'</span><span>'+esc(o)+'</span></button>').join('');
+  return '<div class="qcard'+solvedCls+'" id="qcard">'+
+    '<div class="qhead"><span class="qbadge mcq">אמריקאי</span><span style="color:var(--dim);font-size:.8rem;font-family:var(--mono)">'+esc(cat.title)+'</span>'+diffBadge(q)+'<span class="qsolvedmark">✓ נפתר</span></div>'+
+    '<div class="qtext">'+esc(q.q)+'</div>'+
+    '<div class="opts" id="opts">'+opts+'</div>'+
+    '<div class="explain" id="explain"><b>הסבר:</b> '+esc(q.explain)+'</div>'+
+    navButtons()+
+    '<div style="text-align:center;margin-top:14px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">מבנה הטבלאות</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+}
+function gradeBand(pct){
+  if(pct>=90)return {t:'מצוין! 🏆',c:'var(--green)'};
+  if(pct>=75)return {t:'טוב מאוד 👏',c:'var(--green)'};
+  if(pct>=60)return {t:'טוב 👍',c:'var(--amber)'};
+  if(pct>=40)return {t:'יש בסיס — כדאי לחזור 📚',c:'var(--amber)'};
+  return {t:'דורש תרגול נוסף 💪',c:'var(--red)'};
+}
+function renderDone(){
+  if(session.editor){try{session.editor.toTextArea();}catch(e){}session.editor=null;}
+  const n=session.items.length, s=session.solved.size;
+  const pct=n?Math.round(s/n*100):0, g=gradeBand(pct);
+  const deg=Math.round(pct*3.6);
+  document.getElementById('pCount').textContent=n+' / '+n;
+  document.getElementById('pFill').style.width='100%';
+  document.getElementById('qhost').innerHTML=
+    '<div class="done-card">'+
+      '<div class="big">🎉</div><h2>סיימת את הסט!</h2>'+
+      '<p>'+esc(session.label)+'</p>'+
+      '<div class="score-ring" style="background:conic-gradient('+g.c+' '+deg+'deg, var(--line) '+deg+'deg)">'+
+        '<div class="score-inner"><div class="score-pct" style="color:'+g.c+'">'+pct+'%</div><div class="score-sub">ציון</div></div>'+
+      '</div>'+
+      '<div class="grade-label" style="color:'+g.c+'">'+g.t+'</div>'+
+      '<div class="score-detail">פתרת נכון '+s+' מתוך '+n+' שאלות</div>'+
+      '<div class="pnav" style="max-width:380px;margin:0 auto">'+
+        '<button class="nav-btn" id="restartBtn">התחל מחדש</button>'+
+        '<button class="nav-btn primary" id="toTopicsBtn">נושא אחר</button>'+
+      '</div>'+
+    '</div>';
+  document.getElementById('restartBtn').onclick=()=>{session.idx=0;session.solved=new Set();session.answers={};session.code={};renderCurrent();};
+  document.getElementById('toTopicsBtn').onclick=exitPractice;
+}
+
+/* ---- query logic ---- */
+/* ---- self-contained SQL autocomplete (no external addon dependency) ---- */
+let acItems=[],acIdx=-1,acFrom=null,acTo=null,acCm=null;
+function acOpen(){ const b=document.getElementById('acBox'); return !!(b && b.style.display==='block' && acItems.length); }
+function acClose(){ const b=document.getElementById('acBox'); if(b)b.style.display='none'; acItems=[]; acIdx=-1; acCm=null; }
+function acPool(cm){
+  const cur=cm.getCursor(), line=cm.getLine(cur.line);
+  let start=cur.ch;
+  while(start>0 && /\w/.test(line.charAt(start-1))) start--;
+  const word=line.slice(start,cur.ch);
+  const dot=line.slice(0,start).match(/([A-Za-z_]\w*)\.\s*$/);  // "Table." → that table's columns
+  let pool;
+  if(dot && SCHEMA_HINT[dot[1]]) pool=SCHEMA_HINT[dot[1]].slice();
+  else { pool=SQL_KEYWORDS.slice(); Object.keys(SCHEMA_HINT).forEach(t=>{pool.push(t);SCHEMA_HINT[t].forEach(c=>pool.push(c));}); pool=[...new Set(pool)]; }
+  const lw=word.toLowerCase();
+  let list = word ? pool.filter(x=>x.toLowerCase().startsWith(lw)) : pool;
+  if(word && !list.length) list = pool.filter(x=>x.toLowerCase().includes(lw)); // contains fallback
+  return {list:list.slice(0,50), start, end:cur.ch, line:cur.line, word};
+}
+function acEnsureBox(){
+  let b=document.getElementById('acBox');
+  if(!b){
+    b=document.createElement('div'); b.id='acBox'; b.className='ac-box';
+    document.body.appendChild(b);
+    b.addEventListener('pointerdown',e=>{ const it=e.target.closest('.ac-item'); if(it){ e.preventDefault(); e.stopPropagation(); acPick(+it.dataset.i); } });
+  }
+  return b;
+}
+function acShow(cm){
+  const r=acPool(cm);
+  if(!r.list.length){ acClose(); return; }
+  acCm=cm; acItems=r.list; acIdx=0;
+  acFrom=CodeMirror.Pos(r.line,r.start); acTo=CodeMirror.Pos(r.line,r.end);
+  const box=acEnsureBox();
+  box.innerHTML=acItems.map((x,i)=>'<div class="ac-item'+(i===0?' sel':'')+'" data-i="'+i+'">'+esc(x)+'</div>').join('');
+  box.style.display='block'; box.scrollTop=0;
+  const co=cm.cursorCoords(true,'window');
+  let left=co.left, top=co.bottom+3;
+  const bw=box.offsetWidth, bh=box.offsetHeight, vw=window.innerWidth, vh=window.innerHeight;
+  if(left+bw>vw-8) left=Math.max(8,vw-bw-8);
+  if(top+bh>vh-8) top=Math.max(8,co.top-bh-3);   // flip above if no room below (keyboard)
+  box.style.left=left+'px'; box.style.top=top+'px';
+}
+function acPick(i){
+  if(!acCm||i<0||i>=acItems.length){ acClose(); return; }
+  const cm=acCm, word=acItems[i];
+  cm.replaceRange(word, acFrom, acTo, '+complete');
+  acClose(); cm.focus();
+}
+function acMove(d){
+  if(!acItems.length)return;
+  acIdx=(acIdx+d+acItems.length)%acItems.length;
+  const box=document.getElementById('acBox'); if(!box)return;
+  [...box.children].forEach((c,i)=>c.classList.toggle('sel',i===acIdx));
+  const sel=box.children[acIdx]; if(sel&&sel.scrollIntoView)sel.scrollIntoView({block:'nearest'});
+}
+function mountEditor(q){
+  const ta=document.getElementById('cmEditor');
+  const cm=CodeMirror.fromTextArea(ta,{mode:'text/x-sql',theme:'material-darker',lineNumbers:true,lineWrapping:true,direction:'ltr',
+    extraKeys:{
+      "Ctrl-Space":c=>acShow(c), "Cmd-Space":c=>acShow(c),
+      "Ctrl-Enter":runQuery, "Cmd-Enter":runQuery,
+      "Down":c=>{ if(acOpen()){acMove(1);return;} return CodeMirror.Pass; },
+      "Up":c=>{ if(acOpen()){acMove(-1);return;} return CodeMirror.Pass; },
+      "Enter":c=>{ if(acOpen()){acPick(acIdx);return;} return CodeMirror.Pass; },
+      "Tab":c=>{ if(acOpen()){acPick(acIdx);return;} return CodeMirror.Pass; },
+      "Esc":c=>{ if(acOpen()){acClose();return;} return CodeMirror.Pass; },
+      "Backspace":c=>{ if(!acOpen()) return CodeMirror.Pass; c.execCommand('delCharBefore'); acShow(c); }
+    }});
+  // auto-popup from the first letter typed (or after a dot)
+  cm.on("inputRead",(c,ch)=>{
+    const t=ch.text&&ch.text[0];
+    if(t && /[A-Za-z_.]/.test(t)) acShow(c); else acClose();
+  });
+  // PRIMARY trigger: native DOM input event on the editor's field — fires for
+  // every input method (mobile/predictive/IME keyboards) where inputRead is unreliable.
+  const fld=cm.getInputField&&cm.getInputField();
+  if(fld) fld.addEventListener('input',()=>setTimeout(()=>{
+    if(!cm.hasFocus())return;
+    const cur=cm.getCursor(), ch=cm.getLine(cur.line).charAt(cur.ch-1);
+    if(ch && /[A-Za-z_.]/.test(ch)) acShow(cm); else acClose();
+  },0));
+  cm.on("blur",()=>setTimeout(()=>{ if(!cm.hasFocus()) acClose(); },200));
+  cm.on("scroll",acClose);
+  session.editor=cm;
+  // restore the user's previously typed query for this question (don't lose work on navigation)
+  const saved=session.code&&session.code[itemKey()];
+  if(saved){ cm.setValue(saved); }
+  setTimeout(()=>{cm.refresh();if(window.innerWidth>760)cm.focus();},30);
+}
+function mountMcq(q){
+  const prev=session.answers[itemKey()];
+  if(prev!==undefined){ revealMcq(q,prev); return; }
+  document.querySelectorAll('#opts .opt').forEach(b=>b.addEventListener('click',()=>answerMcq(+b.dataset.i)));
+}
+function revealMcq(q,chosen){
+  document.querySelectorAll('#opts .opt').forEach((b,i)=>{b.classList.add('locked');if(i===q.correct)b.classList.add('correct');if(i===chosen&&chosen!==q.correct)b.classList.add('wrong');});
+  document.getElementById('explain').classList.add('show');
+}
+function normCell(v){
+  if(v===null||v===undefined)return '\u0000';
+  if(typeof v==='number'&&!Number.isInteger(v))return String(Math.round(v*1e6)/1e6);
+  const n=Number(v);
+  if(typeof v==='string'&&v.trim()!==''&&!isNaN(n)&&!Number.isInteger(n))return String(Math.round(n*1e6)/1e6);
+  return String(v).trim();
+}
+function rowKey(r){return r.map(normCell).join('\u0001');}
+function tablesEqual(a,b,ordered){
+  if(!a&&!b)return true; if(!a||!b)return false; if(a.length!==b.length)return false;
+  if(ordered){ for(let i=0;i<a.length;i++)if(rowKey(a[i])!==rowKey(b[i]))return false; return true; }
+  const ka=a.map(rowKey).sort(), kb=b.map(rowKey).sort();
+  for(let i=0;i<ka.length;i++)if(ka[i]!==kb[i])return false; return true;
+}
+function execAll(db,sql){const r=db.exec(sql);return (r&&r.length)?r[r.length-1]:null;}
+function resultTable(res,cap){
+  const rows=res.values, lim=cap||rows.length, show=rows.slice(0,lim);
+  let h='<div class="tbl-scroll"><table class="res"><thead><tr>';
+  res.columns.forEach(c=>h+='<th>'+esc(c)+'</th>'); h+='</tr></thead><tbody>';
+  show.forEach(r=>{h+='<tr>';r.forEach(v=>h+='<td>'+esc(v)+'</td>');h+='</tr>';}); h+='</tbody></table></div>';
+  if(rows.length>lim)h+='<div class="tbl-note">מציג '+lim+' מתוך '+rows.length.toLocaleString('en-US')+' שורות שהוחזרו</div>';
+  return h;
+}
+function tablePreview(tableName,limit){
+  if(!viewerDb)return '';
+  const lim=limit||8; let total=0,res=null;
+  try{
+    const c=viewerDb.exec('SELECT COUNT(*) FROM "'+tableName+'"'); total=c[0].values[0][0];
+    const r=viewerDb.exec('SELECT * FROM "'+tableName+'" LIMIT '+lim); res=r[0];
+  }catch(e){return '';}
+  if(!res)return '';
+  let h='<div class="dp-table"><div class="dp-name">'+esc(tableName)+' · '+Number(total).toLocaleString('en-US')+' שורות</div>'+resultTable(res);
+  if(total>res.values.length)h+='<div class="tbl-note">מציג '+res.values.length+' שורות ראשונות — לתצוגה רחבה לחצו על "מבנה הטבלאות"</div>';
+  return h+'</div>';
+}
+function dataPreview(cat){
+  if(!viewerDb||!cat.tables||!cat.tables.length)return '';
+  const mobile=window.innerWidth<=600;
+  const inner=cat.tables.map(t=>tablePreview(t,mobile?5:8)).join('');
+  if(!inner)return '';
+  return '<details class="datapanel"><summary>📋 לחץ כאן לצפייה בטבלאות</summary><div class="dp-body">'+inner+'</div></details>';
+}
+function friendlyErr(msg){
+  const m=String(msg);
+  if(/no such table/i.test(m))return 'אין טבלה בשם הזה. בדקו את האיות המדויק — לחצו על "מבנה הטבלאות" כדי לראות את השמות (למשל EmployeeDetail, ProjectDetail).';
+  if(/no such column/i.test(m))return 'אין עמודה בשם הזה. בדקו את שמות העמודות ב"מבנה הטבלאות". זכרו ש-SQLite מבדיל בין שם עמודה לבין מחרוזת (מחרוזת עוטפים בגרשיים בודדים).';
+  if(/no such function/i.test(m))return 'הפונקציה הזו לא קיימת ב-SQLite. שימו לב להבדלים מ-SQL Server (למשל IFNULL במקום ISNULL, RANDOM במקום NEWID).';
+  if(/syntax error/i.test(m))return 'שגיאת תחביר. בדקו פסיקים, גרשיים וסדר מילות המפתח: SELECT … FROM … WHERE …';
+  if(/ambiguous/i.test(m))return 'שם עמודה מופיע בשתי טבלאות — הקדימו אותו בשם/כינוי הטבלה (למשל A.ID).';
+  return null;
+}
+function runQuery(){
+  const {q}=session.items[session.idx];
+  const userSql=session.editor.getValue().trim();
+  const resEl=document.getElementById('result'); resEl.classList.add('show');
+  if(!userSql){resEl.innerHTML='<div class="status neutral">כתבו שאילתה תחילה.</div>';return;}
+  let userRes=null,err=null,db=freshDb();
+  try{userRes=execAll(db,userSql);}catch(e){err=e.message;} db.close();
+  if(err){
+    const fr=friendlyErr(err);
+    resEl.innerHTML='<div class="status err">✗ השאילתה נכשלה</div>'+
+      (fr?'<div class="errhint">💡 '+esc(fr)+'</div>':'')+
+      '<div class="errmsg">'+esc(err)+'</div>';
+    return;
+  }
+  let expRes=null;
+  if(!q.noResult){let e=freshDb();try{expRes=execAll(e,q.solution);}catch(_){}e.close();}
+  let html='';
+  const uvHasRows=!!(userRes&&userRes.values&&userRes.values.length);
+  if(userRes&&userRes.values&&userRes.values.length)html+=resultTable(userRes,window.innerWidth<=600?50:200);
+  else if(q.noResult){resEl.innerHTML='<div class="status ok">✓ הפקודה רצה בהצלחה.</div>';markSolved();return;}
+  else html+='<div class="status neutral">השאילתה רצה אך לא החזירה שורות.</div>';
+  if(!q.noResult&&expRes){
+    const nondet=/random\s*\(\)/i.test(q.solution);
+    if(nondet){
+      if(uvHasRows){html='<div class="status ok">✓ רץ והחזיר שורה. (תוצאה אקראית — לא ניתנת להשוואה מדויקת)</div>'+html;markSolved();}
+      resEl.innerHTML=html;return;
+    }
+    const ordered=/\border\s+by\b/i.test(q.solution);
+    const uv=userRes&&userRes.values;
+    if(tablesEqual(uv,expRes.values,ordered)){html='<div class="status ok">✓ נכון! התוצאה תואמת לפתרון.</div>'+html;markSolved();}
+    else if(ordered && tablesEqual(uv,expRes.values,false)){
+      html='<div class="status neutral">↻ הערכים נכונים — אבל הסדר שונה. בשאלה הזו הסדר חשוב, בדקו את ה-ORDER BY.</div>'+html;
+    }
+    else html='<div class="status neutral">↻ השאילתה רצה, אך התוצאה שונה מהפתרון. השוו לטבלה למטה או הציגו פתרון.</div>'+html;
+  }
+  resEl.innerHTML=html;
+}
+function answerMcq(chosen){
+  const {q}=session.items[session.idx];
+  if(session.answers[itemKey()]!==undefined)return;
+  session.answers[itemKey()]=chosen;
+  revealMcq(q,chosen);
+  if(chosen===q.correct)markSolved();
+}
+function markSolved(){session.solved.add(itemKey());const c=document.getElementById('qcard');if(c)c.classList.add('solved');updateProgress();}
+
+/* ---- delegated events in practice ---- */
+document.getElementById('qhost').addEventListener('click',e=>{
+  if(e.target.closest('#runBtn'))return runQuery();
+  if(e.target.closest('#acBtn')){ if(session.editor){session.editor.focus();acShow(session.editor);} return; }
+  if(e.target.closest('#hintBtn'))return document.getElementById('hintLine').classList.toggle('show');
+  if(e.target.closest('#clearBtn')){session.editor.setValue('');session.editor.focus();const r=document.getElementById('result');r.classList.remove('show');r.innerHTML='';return;}
+  const st=e.target.closest('#solToggle');
+  if(st){const el=document.getElementById('solCode');el.classList.toggle('show');st.textContent=el.classList.contains('show')?'הסתר פתרון':'הצג פתרון לדוגמה';return;}
+  if(e.target.closest('#prevBtn')){ goPrev(); return; }
+  if(e.target.closest('#nextBtn')){ goNext(); return; }
+  if(e.target.closest('#schemaBtn2'))return openDrawer();
+  if(e.target.closest('#erdBtnCard'))return openErd();
+});
+
+/* ---- mode + back ---- */
+document.getElementById('mode-all').onclick=()=>startMode('all');
+document.getElementById('mode-queries').onclick=()=>startMode('queries');
+document.getElementById('backBtn').onclick=exitPractice;
+document.getElementById('hPrev').onclick=goPrev;
+document.getElementById('hNext').onclick=goNext;
+
+/* ---- drawer ---- */
+function buildSchema(){
+  if(!viewerDb){
+    const t=[['EmployeeDetail','עובדים'],['ProjectDetail','פרויקטים'],['Members2023 / Members2024','דמו ל-JOIN'],['FuelDetail','דלק']];
+    document.getElementById('schemaContent').innerHTML=t.map(x=>'<div class="tbl"><h4>'+x[0]+'</h4><p style="margin:0;color:var(--dim);font-size:.81rem">'+x[1]+'</p></div>').join('');
+    return;
+  }
+  const tables=ALL_TABLES;
+  const lim=window.innerWidth<=600?20:50;
+  document.getElementById('schemaContent').innerHTML=tables.map(name=>{
+    let total=0,res=null;
+    try{total=viewerDb.exec('SELECT COUNT(*) FROM "'+name+'"')[0].values[0][0];res=viewerDb.exec('SELECT * FROM "'+name+'" LIMIT '+lim)[0];}catch(e){return '';}
+    if(!res)return '';
+    return '<div class="tbl"><h4>'+esc(name)+' · '+Number(total).toLocaleString('en-US')+' שורות</h4>'+
+      '<div class="cols">'+res.columns.map(esc).join(', ')+'</div>'+resultTable(res,lim)+'</div>';
+  }).join('');
+}
+const drawer=document.getElementById('drawer'),drawerBg=document.getElementById('drawerBg');
+function openDrawer(){buildSchema();drawer.classList.add('show');drawerBg.classList.add('show');}
+function closeDrawer(){drawer.classList.remove('show');drawerBg.classList.remove('show');}
+document.getElementById('schemaBtn1').onclick=openDrawer;
+document.getElementById('drawerClose').onclick=closeDrawer;
+drawerBg.onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();closeErd();}});
+
+/* ---- ERD (entity-relationship diagram) ---- */
+// קשרים לוגיים (מפתחות זרים). הדגל 'soft' = קשר רעיוני (לא FK אמיתי).
+const ERD_RELS=[
+  ['ProjectDetail','EmployeeDetailID','EmployeeDetail','EmployeeID'],
+  ['Orders','CustomerID','Customers','CustomerID'],
+  ['Orders','EmployeeID','EmployeeDetail','EmployeeID'],
+  ['OrderItems','OrderID','Orders','OrderID'],
+  ['OrderItems','ProductID','Products','ProductID'],
+  ['Products','CategoryID','Categories','CategoryID'],
+  ['Products','SupplierID','Suppliers','SupplierID'],
+  ['Payments','OrderID','Orders','OrderID'],
+  ['Attendance','EmployeeID','EmployeeDetail','EmployeeID'],
+  ['Departments','DeptName','EmployeeDetail','Department','soft'],
+  ['Members2024','ID','Members2023','ID','soft']
+];
+const ERD_POS={
+  EmployeeDetail:[30,30], ProjectDetail:[30,360], Attendance:[30,620], Departments:[30,880], FuelDetail:[30,1120],
+  Orders:[320,30], OrderItems:[320,330], Payments:[320,640], Customers:[320,900],
+  Products:[610,30], Categories:[610,320], Suppliers:[610,520], Members2023:[610,720], Members2024:[610,940]
+};
+let erdBuilt=false;
+let erdZoom=1, erdW=1180, erdH=1180;
+function erdBuild(){
+  const stage=document.getElementById('erdStage');
+  if(!viewerDb){stage.innerHTML='<div style="padding:24px;color:var(--muted)">המנוע עדיין נטען… פתחו שוב בעוד רגע.</div>';return;}
+  const fkset={}; ERD_RELS.forEach(r=>fkset[r[0]+'.'+r[1]]=true);
+  let html='<svg id="erdSvg" class="erd-svg"></svg>';
+  ALL_TABLES.forEach(t=>{
+    let ti; try{ti=viewerDb.exec('PRAGMA table_info("'+t+'")')[0];}catch(e){return;}
+    if(!ti)return;
+    const pos=ERD_POS[t]||[40,40];
+    html+='<div class="erd-box" data-t="'+t+'" style="left:'+pos[0]+'px;top:'+pos[1]+'px">';
+    html+='<div class="erd-box-h">'+esc(t)+'</div>';
+    ti.values.forEach(c=>{ const name=c[1], pk=c[5]>0, fk=fkset[t+'.'+name];
+      html+='<div class="erd-col'+(fk?' fk':'')+'">'+(pk?'<span class="erd-pk">🔑</span>':'')+'<span>'+esc(name)+'</span>'+(fk?'<span class="erd-fklink">🔗</span>':'')+'</div>';
+    });
+    html+='</div>';
+  });
+  stage.innerHTML=html;
+  erdBuilt=true;
+}
+function erdMeasure(){
+  const stage=document.getElementById('erdStage');
+  stage.style.zoom=1;                 // measure in unscaled coordinates
+  let maxR=300,maxB=300;
+  stage.querySelectorAll('.erd-box').forEach(b=>{
+    maxR=Math.max(maxR,b.offsetLeft+b.offsetWidth);
+    maxB=Math.max(maxB,b.offsetTop+b.offsetHeight);
+  });
+  erdW=maxR+40; erdH=maxB+40;
+  stage.style.width=erdW+'px'; stage.style.height=erdH+'px';
+  const svg=document.getElementById('erdSvg');
+  if(svg){svg.setAttribute('width',erdW);svg.setAttribute('height',erdH);}
+}
+function erdApplyZoom(){
+  // CSS `zoom` scales layout natively — avoids the transform-inside-scroll
+  // rendering bug seen in mobile WebViews (which produced a blank canvas).
+  document.getElementById('erdStage').style.zoom=erdZoom;
+}
+function erdSetZoom(z){ erdZoom=Math.min(2,Math.max(0.2,z)); erdApplyZoom(); }
+function erdFit(){
+  const cv=document.getElementById('erdCanvas');
+  if(!cv.clientWidth||!erdW)return;
+  const z=Math.min((cv.clientWidth-12)/erdW,(cv.clientHeight-12)/erdH);
+  erdSetZoom(Math.max(0.2,Math.min(1,z)));
+  cv.scrollTo(0,0);
+}
+function erdDraw(){
+  const svg=document.getElementById('erdSvg'); if(!svg)return;
+  const stage=document.getElementById('erdStage');
+  let lines='';
+  ERD_RELS.forEach(r=>{
+    const a=stage.querySelector('.erd-box[data-t="'+r[0]+'"]'), b=stage.querySelector('.erd-box[data-t="'+r[2]+'"]');
+    if(!a||!b)return;
+    const ax=a.offsetLeft+a.offsetWidth/2, ay=a.offsetTop+a.offsetHeight/2;
+    const bx=b.offsetLeft+b.offsetWidth/2, by=b.offsetTop+b.offsetHeight/2;
+    const soft=r[4]==='soft';
+    lines+='<line x1="'+ax+'" y1="'+ay+'" x2="'+bx+'" y2="'+by+'" stroke="'+(soft?'#5b6b82':'#2dd4bf')+'" stroke-width="2" stroke-opacity="'+(soft?.7:.85)+'"'+(soft?' stroke-dasharray="6 5"':'')+' />';
+  });
+  svg.innerHTML=lines;
+}
+// drag — coordinates converted to stage space using current zoom
+let erdDragEl=null, erdOff=[0,0];
+function erdStageXY(e){
+  const cv=document.getElementById('erdCanvas'), cr=cv.getBoundingClientRect();
+  return [ (e.clientX-cr.left+cv.scrollLeft)/erdZoom, (e.clientY-cr.top+cv.scrollTop)/erdZoom ];
+}
+function erdDown(e){
+  const box=e.target.closest('.erd-box'); if(!box)return;
+  erdDragEl=box; const p=erdStageXY(e);
+  erdOff=[p[0]-box.offsetLeft, p[1]-box.offsetTop]; box.style.zIndex=20;
+  if(box.setPointerCapture&&e.pointerId!=null){try{box.setPointerCapture(e.pointerId);}catch(_){}}
+  e.preventDefault();
+}
+function erdMove(e){
+  if(!erdDragEl)return;
+  const p=erdStageXY(e);
+  erdDragEl.style.left=Math.max(0,p[0]-erdOff[0])+'px';
+  erdDragEl.style.top=Math.max(0,p[1]-erdOff[1])+'px';
+  erdDraw();
+}
+function erdUp(){ if(erdDragEl){erdDragEl.style.zIndex='';erdDragEl=null;} }
+function erdRefresh(){ erdMeasure(); erdDraw(); erdFit(); }
+function openErd(){
+  const ov=document.getElementById('erdOverlay');
+  ov.classList.add('show');
+  // build & size only once the overlay is actually laid out (avoids empty/black canvas)
+  setTimeout(()=>{ if(!erdBuilt)erdBuild(); erdRefresh(); requestAnimationFrame(erdRefresh); },30);
+}
+function closeErd(){ document.getElementById('erdOverlay').classList.remove('show'); }
+document.getElementById('erdFab').onclick=openErd;
+document.getElementById('erdClose').onclick=closeErd;
+document.getElementById('erdReset').onclick=()=>{erdBuilt=false;erdBuild();erdRefresh();};
+document.getElementById('erdZoomIn').onclick=()=>erdSetZoom(erdZoom*1.25);
+document.getElementById('erdZoomOut').onclick=()=>erdSetZoom(erdZoom*0.8);
+document.getElementById('erdFitBtn').onclick=erdFit;
+(function(){
+  const cv=document.getElementById('erdCanvas');
+  cv.addEventListener('pointerdown',erdDown);
+  document.addEventListener('pointermove',erdMove);
+  document.addEventListener('pointerup',erdUp);
+  cv.addEventListener('pointercancel',erdUp);
+  cv.addEventListener('wheel',e=>{ if(e.ctrlKey){e.preventDefault();erdSetZoom(erdZoom*(e.deltaY<0?1.1:0.9));} },{passive:false});
+})();
+
+/* ---- init ---- */
+let ALL_TABLES=['EmployeeDetail','ProjectDetail','Members2023','Members2024','FuelDetail'];
+(function setCounts(){
+  const all=flat(()=>true).length, qs=flat(q=>q.type==='query').length;
+  document.getElementById('cntAll').textContent=all;
+  document.getElementById('cntQ').textContent=qs;
+})();
+renderTopics();buildSchema();
+function loadSchemaMeta(){
+  try{
+    const r=viewerDb.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+    ALL_TABLES=r.length?r[0].values.map(v=>v[0]):ALL_TABLES;
+    const hint={};
+    ALL_TABLES.forEach(t=>{
+      const ti=viewerDb.exec('PRAGMA table_info("'+t+'")');
+      hint[t]=ti.length?ti[0].values.map(v=>v[1]):[];
+    });
+    SCHEMA_HINT=hint;
+  }catch(e){}
+}
+loadSqlJs().then(s=>{
+  SQL=s;
+  DB_BYTES=buildBigDb();
+  viewerDb=new SQL.Database(DB_BYTES);
+  loadSchemaMeta();
+  document.getElementById('loading-ov').style.display='none';
+})
+.catch(()=>{document.getElementById('loading-ov').innerHTML='<div style="color:var(--red);text-align:center;padding:20px">שגיאה בטעינת מנוע ה-SQL.<br>בדקו חיבור אינטרנט ונסו לרענן.</div>';});
+</script>
 </body>
 </html>
