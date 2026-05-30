@@ -1,0 +1,136 @@
+/* ============================================================
+   AI HELPER CSS - Smart Error Explanation Box
+   ============================================================ */
+
+.gam-ai-helper {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #1a2447 0%, #2a3568 100%);
+  border: 1.5px solid #4a8eff;
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .3s ease, transform .3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 6px 20px rgba(74,142,255,0.18);
+  color: #fff;
+}
+.gam-ai-helper.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gam-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: rgba(74,142,255,0.12);
+  border-bottom: 1px solid rgba(74,142,255,0.25);
+}
+.gam-ai-icon {
+  font-size: 18px;
+  animation: gam-ai-pulse 2s ease-in-out infinite;
+}
+@keyframes gam-ai-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.13); }
+}
+.gam-ai-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4a8eff;
+  flex: 1;
+}
+.gam-ai-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gam-ai-close:hover, .gam-ai-close:active {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.gam-ai-body {
+  padding: 11px 14px 13px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.gam-ai-explain {
+  color: #ffcc66;
+  margin-bottom: 8px;
+}
+.gam-ai-explain b {
+  color: #ffaa00;
+}
+.gam-ai-explain code {
+  background: rgba(255,255,255,0.13);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: #ffd700;
+  font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+}
+
+.gam-ai-hints-title {
+  font-weight: 700;
+  margin: 8px 0 4px;
+  color: #00d4aa;
+  font-size: 13px;
+}
+
+.gam-ai-hints {
+  margin: 0;
+  padding-inline-start: 6px;
+  list-style: none;
+}
+.gam-ai-hints li {
+  margin-bottom: 5px;
+  padding-inline-start: 4px;
+  color: #d0d8ec;
+}
+.gam-ai-hints code {
+  background: rgba(0,212,170,0.12);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #00d4aa;
+  font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+  display: inline-block;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .gam-ai-helper { margin-top: 8px; border-radius: 10px; }
+  .gam-ai-header { padding: 8px 10px; }
+  .gam-ai-title { font-size: 12.5px; }
+  .gam-ai-body { padding: 10px 12px; font-size: 12.8px; }
+  .gam-ai-hints { padding-inline-start: 4px; }
+  .gam-ai-hints li { margin-bottom: 4px; }
+  .gam-ai-explain code, .gam-ai-hints code { font-size: 11.5px; padding: 1px 5px; }
+}
+
+/* Mute button positioning */
+.gam-mute-btn:hover, .gam-mute-btn:active {
+  transform: scale(1.1);
+  background: rgba(45,53,97,0.95) !important;
+}
+@media (max-width: 480px) {
+  .gam-mute-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+}

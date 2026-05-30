@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL 学习材料 —— 从基础到面试的完整课程 | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* TOP NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;gap:6px;transition:opacity .2s}
+.back-btn:hover{opacity:.7}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-right{margin-right:auto;display:flex;gap:.75rem}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;transition:color .2s;font-weight:600}
+.topnav-link:hover{color:var(--cyan)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 49px)}
+
+/* SIDEBAR */
+.sidebar{width:260px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto;padding:1rem 0;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.sidebar-section{padding:.5rem 1rem;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:1rem}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:.5rem 1rem;cursor:pointer;transition:all .15s;font-size:13px;color:var(--text2);border-right:2px solid transparent}
+.sidebar-item:hover{background:var(--bg3);color:var(--text)}
+.sidebar-item.active{background:rgba(74,158,255,.08);color:var(--blue);border-right-color:var(--blue)}
+.sidebar-num{font-family:var(--mono);font-size:10px;background:var(--bg4);color:var(--text3);width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.sidebar-item.active .sidebar-num{background:var(--blue3);color:var(--blue)}
+
+/* MAIN */
+.main-content{flex:1;padding:2rem;overflow-x:hidden;max-width:860px}
+
+/* CHAPTER HEADER */
+.ch-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.ch-meta{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem}
+.ch-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.ch-desc{color:var(--text2);font-size:14px;line-height:1.8;max-width:660px}
+
+/* SYNTAX BOX */
+.syntax-box{background:var(--bg3);border:1px solid var(--border2);border-right:3px solid var(--cyan);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;font-family:var(--mono);font-size:12.5px;color:var(--yellow);line-height:1.8}
+
+/* CONCEPT CARDS */
+.concepts{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:2rem}
+.concept{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.concept-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-text{color:var(--text2);font-size:13px;line-height:1.7}
+.concept-text strong{color:var(--text);font-weight:600}
+
+/* SECTION DIVIDER */
+.sec-div{border:none;border-top:1px solid var(--border);margin:2rem 0}
+.sec-label{font-size:.85rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:3px;height:14px;background:var(--yellow);border-radius:2px;display:block}
+
+/* EXAMPLE CARD */
+.example-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:1.25rem;overflow:hidden}
+.ex-head{padding:.85rem 1rem;display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;user-select:none;transition:background .15s}
+.ex-head:hover{background:var(--bg3)}
+.ex-num{background:var(--blue3);color:var(--blue);font-size:11px;font-weight:700;width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:var(--mono)}
+.ex-q{font-size:13.5px;color:var(--text);line-height:1.5;flex:1}
+.ex-toggle{color:var(--text3);font-size:16px;transition:transform .2s;flex-shrink:0;margin-top:4px}
+.example-card.open .ex-toggle{transform:rotate(180deg)}
+.ex-body{display:none;border-top:1px solid var(--border)}
+.example-card.open .ex-body{display:block}
+.ex-explain{background:rgba(74,158,255,.04);border-right:3px solid var(--blue2);padding:.75rem 1rem;margin:.75rem 1rem 0}
+.ex-explain p{color:var(--text2);font-size:13px;line-height:1.6}
+.ex-explain p strong{color:var(--text);font-weight:600}
+
+/* CODE BLOCK */
+.code-block{margin:.75rem 1rem 1rem;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.code-hdr{background:var(--bg4);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600;letter-spacing:.5px}
+.copy-btn{background:transparent;border:none;color:var(--text2);cursor:pointer;font-size:11px;font-family:var(--font);padding:2px 8px;border-radius:4px;transition:all .15s}
+.copy-btn:hover{background:var(--border);color:var(--text)}
+.copy-btn.ok{color:var(--green)}
+pre{background:var(--bg);padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+/* SYNTAX HIGHLIGHT */
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.num{color:#79c0ff}
+.cmt{color:#4a6080;font-style:italic}.tbl{color:#7ee787}.col{color:#e6edf3}.op{color:#ffa657}
+
+/* TAGS */
+.tag{display:inline-flex;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:6px;letter-spacing:.3px}
+.tag-b{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.tag-m{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.25)}
+.tag-a{background:rgba(210,168,255,.1);color:var(--purple);border:1px solid rgba(210,168,255,.25)}
+
+.chapter{display:none}
+.chapter.active{display:block}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px;transition:all .2s}
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.topnav-title{font-size:12px}
+.main{padding:1rem .75rem 4rem}
+pre{font-size:11px;line-height:1.5}
+.layout{flex-direction:column}
+.sidebar{display:none}
+.video-grid{grid-template-columns:1fr}
+.filter-row{flex-wrap:wrap;gap:.4rem}
+.lesson-tabs{padding:0}
+.lesson-tab{font-size:11px;padding:.6rem .4rem}
+.progress-section{flex-direction:column;gap:1rem}
+.step-body p{font-size:13px}
+.file-grid{grid-template-columns:1fr}
+.section-divider{padding:.6rem .75rem}
+.q-text{font-size:13px}
+.code-block{margin:.5rem}
+}
+
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<meta name="description" content="免费的 SQL 学习材料：从基础到窗口函数的每一条 SQL 命令，配有清晰的讲解、实用的示例，以及面向分析师的互动练习。">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/course.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/course.html">
+<meta property="og:site_name" content="免费 SQL 课程 - Eliran Grossman">
+<meta property="og:title" content="SQL 学习材料">
+<meta property="og:description" content="免费的 SQL 学习材料：从基础到窗口函数的每一条 SQL 命令，配有清晰的讲解、实用的示例，以及面向分析师的互动练习。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SQL 学习材料">
+<meta name="twitter:description" content="免费的 SQL 学习材料：从基础到窗口函数的每一条 SQL 命令，配有清晰的讲解、实用的示例，以及面向分析师的互动练习。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL 学习材料",
+        "item": "https://egrosman1.github.io/sql-course/course.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "SQL 学习材料 —— 从基础到面试的完整课程 | SQL.course",
+    "description": "免费的 SQL 学习材料：从基础到窗口函数的每一条 SQL 命令，配有清晰的讲解、实用的示例，以及面向分析师的互动练习。",
+    "url": "https://egrosman1.github.io/sql-course/course.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Course",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL 讲师兼分析负责人，Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "免费 SQL 课程",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body>
+<h1 class="sr-only">SQL Learning Material</h1>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← 首页</a>
+  <div class="topnav-title">📚 SQL 学习材料</div>
+  <div class="topnav-right">
+    <a href="practice.html" class="topnav-link">✏️ 练习</a>
+    <a href="../course.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/course.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="course.html" class="topnav-link on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="tirgul-makif.html" class="topnav-link">🎯 综合练习</a>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="main-content" id="mainContent">
+    <!-- chapters injected by JS -->
+  </div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section">章节</div>
+  </div>
+</div>
+
+<script>
+const chapters = [
+{num:1,icon:"📗",title:"第 1 课 —— SELECT、字符串、计算、ORDER BY",desc:"完整的第一课：检索数据、DISTINCT、文本函数、数学计算以及结果排序。",
+syntax:"SELECT col1, col2 FROM table;\nSELECT DISTINCT col FROM table;\nSELECT LEFT(col,3), ROUND(price*1.17,2) FROM table;\nORDER BY col DESC LIMIT 5 OFFSET 10;",
+concepts:[
+{label:"第 1 部分 —— SELECT 与 FROM",text:"<strong>SELECT *</strong> = 所有列。<strong>SELECT col1, col2</strong> = 指定列。<strong>AS</strong> = 列的显示名称（别名）。"},
+{label:"第 2 部分 —— DISTINCT 与字符串",text:"<strong>DISTINCT</strong> = 去除重复。<strong>LEFT/RIGHT(col,N)</strong> = N 个字符。<strong>SUBSTRING(col,start,len)</strong> = 提取。<strong>TRIM/REPLACE/UPPER/LOWER</strong> 用于清理和格式化。"},
+{label:"第 3 部分 —— 数学计算",text:"对列进行 <strong>+ - * /</strong>。<strong>ROUND(val,2)</strong> = 四舍五入。<strong>MOD(val,12)</strong> = 余数。<strong>ABS(val)</strong> = 绝对值。"},
+{label:"第 4 部分 —— ORDER BY、LIMIT、OFFSET",text:"<strong>ORDER BY col DESC</strong> = 降序。<strong>LIMIT 5</strong> = 5 行。<strong>OFFSET 10</strong> = 跳过 10 行。可以按 <strong>CHAR_LENGTH()</strong> 等函数排序。"},
+],
+sections:[
+{label:"📌 第 1 部分：SELECT 与 FROM",examples:[
+{title:"示例 1 —— 从 products 表中检索所有列",tag:"b",
+explain:"星号（*）检索所有列。适合初步查看——在生产环境中，最好指定具体列名。",
+code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 2 —— 检索单个列：客户公司名称",tag:"b",
+explain:"只选择 company 列。服务器负载更小，也更易读。",
+code:`<span class="kw">SELECT</span> <span class="col">company</span> <span class="kw">FROM</span> <span class="tbl">customers</span>;`},
+{title:"示例 3 —— 多个列：员工的名、姓和职位",tag:"b",
+explain:"用逗号分隔多个列。书写顺序 = 结果中显示的顺序。",
+code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>, <span class="col">job_title</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>;`},
+{title:"示例 4 —— AS（别名）：列的替代名称",tag:"b",
+explain:"AS 提供显示名称。它不会改变表本身！带空格的名称 → 用单引号括起来。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span> <span class="kw">AS</span> <span class="str">'Product Name'</span>, <span class="col">list_price</span> <span class="kw">AS</span> <span class="str">'Price'</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 5 —— 从 orders 中检索选定字段",tag:"b",
+explain:"从 orders 表中：订单 ID、日期和发货城市——正是你需要的。",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>, <span class="col">ship_city</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+]},
+{label:"📌 第 2 部分：DISTINCT 与文本函数",examples:[
+{title:"示例 1 —— DISTINCT：唯一的国家",tag:"b",
+explain:"DISTINCT 去除重复。即使有 100 个来自美国的客户——USA 也只出现一次。",
+code:`<span class="kw">SELECT DISTINCT</span> <span class="col">country_region</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>;`},
+{title:"示例 2 —— LEFT 和 RIGHT：电话前缀和后缀",tag:"b",
+explain:"LEFT(col,3) = 前 3 个字符。RIGHT(col,4) = 后 4 个字符。适合处理短代码。",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">LEFT</span>(<span class="col">company</span>, <span class="num">3</span>) <span class="kw">AS</span> <span class="str">comp_prefix</span>,\n       <span class="col">business_phone</span>, <span class="fn">RIGHT</span>(<span class="col">business_phone</span>, <span class="num">4</span>) <span class="kw">AS</span> <span class="str">phone_suffix</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">business_phone</span> <span class="kw">IS NOT NULL</span>;`},
+{title:"示例 3 —— SUBSTRING：从指定位置提取",tag:"b",
+explain:"SUBSTRING(col, 2, 5) = 从第 2 个字符开始的 5 个字符。位置从 1 开始计数。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">SUBSTRING</span>(<span class="col">product_name</span>, <span class="num">2</span>, <span class="num">5</span>) <span class="kw">AS</span> <span class="str">middle_text</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 4 —— TRIM、LTRIM、RTRIM：清理空白字符",tag:"b",
+explain:"LTRIM = 去除开头空格。RTRIM = 去除结尾空格。TRIM = 两侧都去除。对于清理手工录入的数据至关重要。",
+code:`<span class="kw">SELECT</span>\n  <span class="fn">LTRIM</span>(<span class="str">'   LeftSpace'</span>) <span class="kw">AS</span> <span class="str">l_trimmed</span>,\n  <span class="fn">RTRIM</span>(<span class="str">'RightSpace   '</span>) <span class="kw">AS</span> <span class="str">r_trimmed</span>,\n  <span class="fn">TRIM</span>(<span class="str">'   BothSides   '</span>) <span class="kw">AS</span> <span class="str">full_trimmed</span>;`},
+{title:"示例 5 —— REPLACE 和 UPPER：替换与规范化",tag:"m",
+explain:"REPLACE(col,'UK','United Kingdom') 替换文本。UPPER() 转换为大写。",
+code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">company_caps</span>,\n       <span class="fn">REPLACE</span>(<span class="col">country_region</span>, <span class="str">'UK'</span>, <span class="str">'United Kingdom'</span>) <span class="kw">AS</span> <span class="str">country</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'UK'</span>;`},
+]},
+{label:"📌 第 3 部分：数学计算",examples:[
+{title:"示例 1 —— 单位利润：价格减成本",tag:"b",
+explain:"SQL 即时计算——表本身不变。list_price - standard_cost = 毛利润。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>, <span class="col">standard_cost</span>,\n       (<span class="col">list_price</span> <span class="op">-</span> <span class="col">standard_cost</span>) <span class="kw">AS</span> <span class="str">unit_profit</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 2 —— 库存总值：价格 × 目标数量",tag:"b",
+explain:"两列相乘可计算每个产品的库存总值。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       (<span class="col">list_price</span> <span class="op">*</span> <span class="col">target_level</span>) <span class="kw">AS</span> <span class="str">total_stock_value</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 3 —— ROUND：含 17% 税的价格，保留 2 位小数",tag:"b",
+explain:"list_price * 1.17 增加 17%。ROUND(..., 2) 保留两位小数。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">1.17</span>, <span class="num">2</span>) <span class="kw">AS</span> <span class="str">price_with_tax</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 4 —— MOD：分装成包时的余数",tag:"m",
+explain:"MOD(target_level, 12) = 在凑满一包 12 个之外还剩多少个产品。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">target_level</span>,\n       <span class="fn">MOD</span>(<span class="col">target_level</span>, <span class="num">12</span>) <span class="kw">AS</span> <span class="str">loose_items</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 5 —— ABS：库存与目标之间的绝对差",tag:"m",
+explain:"ABS 始终保证结果为正。无论哪个更大——差值总是正数。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ABS</span>(<span class="col">target_level</span> <span class="op">-</span> <span class="col">reorder_level</span>) <span class="kw">AS</span> <span class="str">stock_gap</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+]},
+{label:"📌 第 4 部分：ORDER BY、LIMIT、OFFSET",examples:[
+{title:"示例 1 —— ORDER BY DESC：产品按价格从高到低",tag:"b",
+explain:"DESC = 降序。list_price DESC = 从最高价到最低价。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>;`},
+{title:"示例 2 —— 双重排序：先国家，后城市",tag:"b",
+explain:"ORDER BY 中有两列：先按 country，相同则按 city。ASC 是默认值。",
+code:`<span class="kw">SELECT</span> <span class="col">country_region</span>, <span class="col">city</span>, <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">country_region</span>, <span class="col">city</span>;`},
+{title:"示例 3 —— LIMIT：最贵的 5 个产品",tag:"b",
+explain:"ORDER BY DESC 从最贵开始排序。LIMIT 5 只取前 5 条。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
+{title:"示例 4 —— 按姓氏长度排序（CHAR_LENGTH）",tag:"m",
+explain:"CHAR_LENGTH 返回字符数。你可以按任意表达式排序——不仅仅是列。",
+code:`<span class="kw">SELECT</span> <span class="col">last_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="fn">CHAR_LENGTH</span>(<span class="col">last_name</span>) <span class="kw">DESC</span>;`},
+{title:"示例 5 —— OFFSET：跳过 10 条，显示接下来的 5 条",tag:"m",
+explain:"LIMIT 5 OFFSET 10 = 结果的第二页。OFFSET 设置从哪里开始计数。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">id</span>\n<span class="kw">LIMIT</span> <span class="num">5</span> <span class="kw">OFFSET</span> <span class="num">10</span>;`},
+]},
+],
+examples:[]},
+
+{num:5,icon:"📅",title:"日期",desc:"提取部分、格式化以及计算差值——全面处理日期。",
+syntax:"YEAR(date) / MONTH(date) / DAY(date)\nDATE_FORMAT(date, '%d/%m/%Y')\nDATEDIFF(date2, date1) -- number of days\nDATE_ADD(date, INTERVAL 30 DAY)",
+concepts:[
+{label:"提取部分",text:"<strong>YEAR() MONTH() DAY()</strong> —— 提取日期的某一部分。在 WHERE 中用于筛选时间段。"},
+{label:"DATE_FORMAT",text:"<strong>%d</strong>=日 <strong>%m</strong>=月 <strong>%Y</strong>=4 位年份 <strong>%M</strong>=月份名称 <strong>%H:%i</strong>=时:分"},
+{label:"DATEDIFF",text:"<strong>DATEDIFF(later, earlier)</strong> = 天数。顺序很重要！颠倒 → 得到负数。"},
+{label:"DATE_ADD / DATE_SUB",text:"<strong>DATE_ADD(date, INTERVAL 30 DAY)</strong> 加 30 天。DATE_SUB 则相减。"},
+],
+examples:[
+{title:"示例 1 —— YEAR：每个订单的下单年份",tag:"b",
+explain:"YEAR() 从日期中提取年份。可在 WHERE 中组合使用以筛选特定年份。",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_year</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"示例 2 —— MONTH：下单月份",tag:"b",
+explain:"MONTH() 返回 1-12 的数字。可以跨任意年份按月份筛选。",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_month</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"示例 3 —— DATE_FORMAT：日/月/年格式",tag:"b",
+explain:"'%d/%m/%Y' = 日/月/年。你可以构建任何喜欢的显示格式。",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">il_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"示例 4 —— DATEDIFF：发货天数",tag:"m",
+explain:"DATEDIFF(shipped, ordered) = 从下单到发货的天数。重要：顺序很关键！",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">shipping_days</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"示例 5 —— DATE_ADD：账期 + 30 天",tag:"m",
+explain:"DATE_ADD 添加一个 INTERVAL。可以指定 DAY、MONTH、YEAR、HOUR 等。",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+]},
+
+{num:6,icon:"🔎",title:"WHERE —— 筛选",desc:"按条件筛选行。日常工作中最有用的工具。",
+syntax:"WHERE column = 'value' AND/OR ...\nIN ('a','b','c')\nBETWEEN x AND y\nLIKE '%pattern%'\nIS NULL / IS NOT NULL",
+concepts:[
+{label:"AND / OR / NOT",text:"<strong>AND</strong> = 两者都满足。<strong>OR</strong> = 至少一个。使用括号控制优先级：<strong>WHERE (a OR b) AND c</strong>"},
+{label:"IN",text:"<strong>IN ('London','Paris')</strong> = 多个 OR 的简写。更高效、更易读。"},
+{label:"BETWEEN",text:"<strong>BETWEEN 20 AND 50</strong> = 同时包含 20 和 50！等价于：>= 20 AND <= 50"},
+{label:"LIKE",text:"<strong>%</strong> = 任意数量的字符。<strong>_</strong> = 单个字符。'j%' 以 j 开头。'%@gmail%' 包含 gmail。"},
+],
+examples:[
+{title:"示例 1 —— 基本 WHERE：价格超过 50",tag:"b",
+explain:"一个简单的比较条件。可以使用：> < >= <= = !=（不等于）。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
+{title:"示例 2 —— AND：国家 + 城市",tag:"b",
+explain:"AND = 两个条件都必须满足。该客户必须同时来自美国和 NY。",
+code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>\n  <span class="kw">AND</span> <span class="col">city</span> = <span class="str">'New York'</span>;`},
+{title:"示例 3 —— IN：多个城市",tag:"b",
+explain:"IN = OR 的简写。更易读、更易维护。",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">suppliers</span>\n<span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'Tokyo'</span>, <span class="str">'London'</span>, <span class="str">'New York'</span>);`},
+{title:"示例 4 —— LIKE：模式搜索",tag:"m",
+explain:"% = 任意数量的字符。这里：以特定域名结尾的电子邮件。",
+code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders.com'</span>;`},
+{title:"示例 5 —— IS NULL：未发货的订单",tag:"m",
+explain:"NULL = 缺失的值。必须使用 IS NULL，而不是 = NULL！这是初学者的经典错误。",
+code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;`},
+]},
+
+{num:7,icon:"📦",title:"GROUP BY 与聚合",desc:"对数据分组并计算统计值。包含 HAVING、ROLLUP 和 UNION。",
+syntax:"SELECT column, COUNT(*) / SUM() / AVG()\nFROM table\nGROUP BY column\nHAVING COUNT(*) > 5;",
+concepts:[
+{label:"聚合函数",text:"<strong>COUNT(*)</strong> 计数 | <strong>SUM()</strong> 求和 | <strong>AVG()</strong> 平均 | <strong>MIN/MAX()</strong> 极值"},
+{label:"GROUP BY 规则",text:"SELECT 中每个非聚合列<strong>必须</strong>出现在 GROUP BY 中。否则——报错。"},
+{label:"WHERE 与 HAVING",text:"<strong>WHERE</strong> = 分组之前（作用于行）。<strong>HAVING</strong> = 分组之后（作用于组）。WHERE 中不允许使用聚合函数。"},
+{label:"ROLLUP",text:"<strong>GROUP BY col WITH ROLLUP</strong> —— 添加一行总计（分组列中为 NULL）。"},
+],
+examples:[
+{title:"示例 1 —— COUNT：每个类别中的产品数",tag:"b",
+explain:"GROUP BY 进行分组；COUNT(*) 统计组内的每一行。",
+code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
+{title:"示例 2 —— SUM：按公司统计运费",tag:"b",
+explain:"SUM 分别对每个 shipper_id 的 shipping_fee 求和。",
+code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
+{title:"示例 3 —— GROUP BY 之前的 WHERE",tag:"m",
+explain:"WHERE 先筛选（在分组之前）。这里：只取价格超过 20 的产品，然后计算每个供应商的平均值。",
+code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
+{title:"示例 4 —— HAVING：分组后筛选",tag:"m",
+explain:"HAVING 作用于分组后的结果。这里：只取客户超过 2 个的城市。",
+code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">2</span>;`},
+{title:"示例 5 —— ROLLUP：带总计",tag:"a",
+explain:"WITH ROLLUP 添加一行包含 NULL 和总计。COALESCE 用文本替换 NULL。",
+code:`<span class="kw">SELECT</span>\n  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- TOTAL ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,\n  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;`},
+]},
+
+{num:8,icon:"🔗",title:"JOIN",desc:"合并多张表——在真实数据库工作中 SQL 最重要的工具。",
+syntax:"FROM table1 a\nINNER JOIN table2 b ON a.id = b.fk\nLEFT JOIN table3 c ON b.id = c.fk",
+concepts:[
+{label:"INNER JOIN",text:"仅返回<strong>两个表中都有匹配</strong>的行。没有匹配——该行消失。"},
+{label:"LEFT JOIN",text:"返回<strong>左表中的所有行</strong> + 匹配项。没有匹配 → NULL。"},
+{label:"ON —— 连接条件",text:"<strong>ON a.id = b.customer_id</strong> —— 将主键（PK）与外键（FK）关联。必需！"},
+{label:"表别名",text:"<strong>FROM orders o JOIN customers c</strong> —— 用 o.id 代替 orders.id。更简短、更清晰。"},
+],
+examples:[
+{title:"示例 1 —— INNER JOIN：订单及客户名称",tag:"m",
+explain:"orders 包含 customer_id。JOIN 从 customers 中引入名称。",
+code:`<span class="kw">SELECT</span> <span class="col">o.id</span>, <span class="col">o.order_date</span>, <span class="col">c.company</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span> <span class="col">o</span>\n<span class="kw">INNER JOIN</span> <span class="tbl">customers</span> <span class="col">c</span> <span class="kw">ON</span> <span class="col">o.customer_id</span> = <span class="col">c.id</span>;`},
+{title:"示例 2 —— JOIN：订单明细及产品名称",tag:"m",
+explain:"order_details 包含 product_id。JOIN 到 products 引入名称。",
+code:`<span class="kw">SELECT</span> <span class="col">od.order_id</span>, <span class="col">p.product_name</span>, <span class="col">od.quantity</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span> <span class="col">od</span>\n<span class="kw">INNER JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>;`},
+{title:"示例 3 —— LEFT JOIN：即使没有订单的客户",tag:"m",
+explain:"LEFT JOIN 保留所有客户。没有订单的客户在订单列中显示 NULL。",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="col">o.id</span> <span class="kw">AS</span> <span class="str">order_id</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>;`},
+{title:"示例 4 —— 4 张表：完整的销售报表",tag:"a",
+explain:"每一次 JOIN 都增加一层信息。customers → orders → order_details → products。",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="col">o.order_date</span>, <span class="col">p.product_name</span>, <span class="col">od.quantity</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>;`},
+{title:"示例 5 —— JOIN + GROUP BY：每位客户的总销售额",tag:"a",
+explain:"结合 JOIN 和 GROUP BY：先连接，再按客户分组并求和。",
+code:`<span class="kw">SELECT</span> <span class="col">c.company</span>,\n       <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">total_revenue</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">GROUP BY</span> <span class="col">c.company</span>\n<span class="kw">ORDER BY</span> <span class="str">total_revenue</span> <span class="kw">DESC</span>;`},
+]},
+
+{num:9,icon:"🧠",title:"子查询、CASE、CTE",desc:"高级查询——以易读的方式表达复杂逻辑。",
+syntax:"WHERE col > (SELECT AVG(col) FROM ...)\nCASE WHEN ... THEN ... ELSE ... END\nWITH cte AS (SELECT ...) SELECT ...",
+concepts:[
+{label:"子查询",text:"查询中的查询。可用于 WHERE、FROM（临时表）或 SELECT（计算列）中。"},
+{label:"EXISTS",text:"<strong>EXISTS (SELECT 1 FROM ... WHERE ...)</strong> = 布尔检查。对大表比 IN 更快。"},
+{label:"CASE WHEN",text:"<strong>CASE WHEN condition THEN value ... ELSE default END</strong> —— 类似 if-else。可在查询的任何位置使用。"},
+{label:"CTE (WITH)",text:"<strong>WITH name AS (query)</strong> —— 命名的临时表。让冗长的查询更易读。"},
+],
+examples:[
+{title:"示例 1 —— 子查询：高于平均价的产品",tag:"m",
+explain:"内层括号计算平均值；外层 WHERE 与之比较。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">FROM</span> <span class="tbl">products</span>);`},
+{title:"示例 2 —— EXISTS：有订单的客户",tag:"m",
+explain:"EXISTS 检查是否至少存在一行。SELECT 1 = 高效的简写（无需真实的值）。",
+code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">WHERE</span> <span class="kw">EXISTS</span> (\n  <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> <span class="tbl">orders</span> <span class="col">o</span>\n  <span class="kw">WHERE</span> <span class="col">o.customer_id</span> = <span class="col">c.id</span>\n);`},
+{title:"示例 3 —— CASE WHEN：价格分类",tag:"m",
+explain:"CASE 按顺序检查条件。它在第一个成立的条件处停止。ELSE = 默认值。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> > <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'Expensive'</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'Mid-range'</span>\n    <span class="kw">ELSE</span> <span class="str">'Cheap'</span>\n  <span class="kw">END</span> <span class="kw">AS</span> <span class="str">price_cat</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 4 —— CTE：大类别",tag:"a",
+explain:"WITH 定义一个名为 CategoryStats 的“表”。主查询把它当作真实的表来使用。",
+code:`<span class="kw">WITH</span> <span class="tbl">CategoryStats</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n  <span class="kw">FROM</span> <span class="tbl">products</span> <span class="kw">GROUP BY</span> <span class="col">category</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">CategoryStats</span>\n<span class="kw">WHERE</span> <span class="col">cnt</span> > <span class="num">5</span>;`},
+]},
+
+{num:10,icon:"🪟",title:"窗口函数",desc:"保留所有行的复杂计算——排名、累计总和、LAG/LEAD。",
+syntax:"RANK() OVER (PARTITION BY col ORDER BY col)\nLAG(col) OVER (PARTITION BY ... ORDER BY ...)\nSUM(col) OVER (ORDER BY col ROWS BETWEEN ...)",
+concepts:[
+{label:"OVER()",text:"把每个窗口函数都包在 <strong>OVER(...)</strong> 中。有了 OVER，它就不会合并行！"},
+{label:"PARTITION BY",text:"拆分成独立的窗口。<strong>PARTITION BY category</strong> = 为每个类别单独排名。"},
+{label:"ROW_NUMBER 与 RANK",text:"<strong>ROW_NUMBER</strong> = 始终连续 | <strong>RANK</strong> = 并列 + 跳号 | <strong>DENSE_RANK</strong> = 并列但不跳号"},
+{label:"LAG / LEAD",text:"<strong>LAG(col)</strong> = 上一行的值。<strong>LEAD(col)</strong> = 下一行的值。用于计算不同时段之间的变化。"},
+],
+examples:[
+{title:"示例 1 —— ROW_NUMBER：为行编号",tag:"m",
+explain:"ROW_NUMBER() 分配连续编号。始终唯一，即使出现并列。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">row_num</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 2 —— RANK：类别内排名",tag:"a",
+explain:"PARTITION BY category = 每个类别一个独立窗口。RANK 在其中进行排名。",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>, <span class="col">list_price</span>,\n       <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">category</span> <span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">rank_pos</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+{title:"示例 3 —— LAG：客户的上一个订单",tag:"a",
+explain:"PARTITION BY customer_id = 每位客户一个独立窗口。LAG 返回上一个订单日期。",
+code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="col">order_date</span>,\n       <span class="fn">LAG</span>(<span class="col">order_date</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n         <span class="kw">ORDER BY</span> <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">prev_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+{title:"示例 4 —— SUM：累计总和",tag:"a",
+explain:"SUM() OVER(ORDER BY) = 累计总和。每一行都把自身加到之前的总和上。",
+code:`<span class="kw">SELECT</span> <span class="col">order_date</span>, <span class="col">shipping_fee</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">running_total</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
+]},
+
+{num:11,icon:"⚙️",title:"DML、DDL、事务",desc:"修改数据和结构。INSERT、UPDATE、DELETE、TRANSACTION、CREATE、ALTER。",
+syntax:"INSERT INTO table (cols) VALUES (...);\nUPDATE table SET col=val WHERE ...;\nSTART TRANSACTION; ... COMMIT;",
+concepts:[
+{label:"DML —— 修改数据",text:"<strong>INSERT</strong> 添加 | <strong>UPDATE</strong> 更新 | <strong>DELETE</strong> 删除。使用 UPDATE/DELETE 时务必带 WHERE！"},
+{label:"⚠️ 警告！",text:"<strong>不带 WHERE 的 UPDATE/DELETE</strong> = 修改/删除整张表！务必先用相同的 WHERE 执行一次 SELECT。"},
+{label:"TRANSACTION",text:"<strong>START TRANSACTION</strong> 开始 | <strong>COMMIT</strong> 提交 | <strong>ROLLBACK</strong> 全部撤销。所有操作一起生效。"},
+{label:"DDL —— 修改结构",text:"<strong>CREATE TABLE</strong> | <strong>ALTER TABLE ADD/DROP</strong> | <strong>DROP TABLE</strong>。DDL 无法回滚！"},
+],
+examples:[
+{title:"示例 1 —— INSERT：添加客户",tag:"b",
+explain:"先写列名，再按相同顺序写值。可以省略带有默认值的列。",
+code:`<span class="kw">INSERT INTO</span> <span class="tbl">customers</span> (<span class="col">company</span>, <span class="col">last_name</span>, <span class="col">first_name</span>, <span class="col">city</span>)\n<span class="kw">VALUES</span> (<span class="str">'Tech Ltd'</span>, <span class="str">'Cohen'</span>, <span class="str">'Yossi'</span>, <span class="str">'Tel Aviv'</span>);`},
+{title:"示例 2 —— 带 WHERE 的 UPDATE",tag:"b",
+explain:"WHERE 至关重要！没有 WHERE——每个价格都会被更新。务必先 SELECT 检查。",
+code:`<span class="kw">UPDATE</span> <span class="tbl">products</span>\n<span class="kw">SET</span> <span class="col">list_price</span> = <span class="num">20</span>\n<span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">1</span>;`},
+{title:"示例 3 —— TRANSACTION：安全更新",tag:"m",
+explain:"一切都在 TRANSACTION 内进行。如果出错——ROLLBACK 撤销一切；COMMIT 则保存。",
+code:`<span class="kw">START TRANSACTION</span>;\n<span class="kw">UPDATE</span> <span class="tbl">products</span> <span class="kw">SET</span> <span class="col">list_price</span> = <span class="col">list_price</span> <span class="op">*</span> <span class="num">1.1</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">5</span>;\n<span class="kw">INSERT INTO</span> <span class="tbl">orders</span> (<span class="col">id</span>, <span class="col">customer_id</span>) <span class="kw">VALUES</span> (<span class="num">9000</span>, <span class="num">4</span>);\n<span class="kw">COMMIT</span>; <span class="cmt">-- or ROLLBACK to undo</span>`},
+]},
+
+// ==================== Lesson 5: WINDOW FUNCTIONS on Sakila ====================
+{num:5,icon:"🪟",title:"第 5 课 —— 窗口函数（Sakila）",desc:"在 Sakila 数据库（一个影片租赁商店数据库）上使用窗口函数。涵盖 6 个主题：热身、排名、聚合、偏移、取值和 CTE。",
+syntax:"function() OVER (\n  PARTITION BY column  -- split into groups\n  ORDER BY column      -- order within each window\n  ROWS BETWEEN ...    -- define the range\n)",
+concepts:[
+{label:"🗄️ Sakila 数据库 —— 主要表",text:"<strong>film</strong> —— 影片 | <strong>customer</strong> —— 客户 | <strong>payment</strong> —— 付款 | <strong>rental</strong> —— 租借 | <strong>actor</strong> —— 演员 | <strong>staff</strong> —— 员工"},
+{label:"什么是窗口函数？",text:"一个作用于相对当前行的<strong>“窗口”</strong>的函数——不会合并（不会每组只返回一行）。每一行都会保留，并带有一个计算值。"},
+{label:"PARTITION BY",text:"拆分成独立的窗口，很像 GROUP BY——但保留所有行。不带 PARTITION = 整张表是一个窗口。"},
+{label:"OVER 内的 ORDER BY",text:"定义<strong>窗口内的顺序</strong>。对 ROW_NUMBER、LAG、LEAD 和累计总和等函数至关重要。"},
+],
+sections:[
+{label:"⏩ 第 0 部分：热身 —— GROUP BY 与窗口",examples:[
+{title:"示例 0.1 —— GROUP BY：每位客户的总付款",tag:"b",
+explain:"经典的 GROUP BY——每位客户返回一行。我们看不到单笔付款的明细。",
+code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>,\n       <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">AS</span> <span class="str">total_amount</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>\n<span class="kw">GROUP BY</span> <span class="col">customer_id</span>;`},
+{title:"示例 0.2 —— GROUP BY：按评级统计的平均影片时长",tag:"b",
+explain:"分别计算每个 rating 的平均时长（AVG）。这是旧方法——窗口函数能让我们在每部影片旁看到平均值。",
+code:`<span class="kw">SELECT</span> <span class="col">rating</span>,\n       <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">AS</span> <span class="str">avg_length</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>\n<span class="kw">GROUP BY</span> <span class="col">rating</span>;`},
+]},
+{label:"🏆 第 1 部分：排名函数",examples:[
+{title:"1.1 —— ROW_NUMBER：按名称全局编号",tag:"b",
+explain:"ROW_NUMBER() 为每一行连续编号。始终唯一，即使出现并列。ORDER BY first_name = 按字母顺序。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">first_name</span>, <span class="col">last_name</span>,\n  <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">first_name</span>) <span class="kw">AS</span> <span class="str">global_row_num</span>\n<span class="kw">FROM</span> <span class="tbl">customer</span>;`},
+{title:"1.2 —— ROW_NUMBER：为每位客户分别编号租借记录",tag:"m",
+explain:"PARTITION BY customer_id = 每位客户一个独立窗口。ORDER BY rental_date DESC = 从最新到最旧。这会为每位客户分别为租借记录编号。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span> <span class="kw">DESC</span>\n  ) <span class="kw">AS</span> <span class="str">customer_rental_order</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
+{title:"1.3 —— RANK：按影片时长全局排名",tag:"b",
+explain:"RANK() 对并列给出相同排名——然后跳号。两部时长相同的影片都得到第 1 名，下一部得到第 3 名。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">length</span>,\n  <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">length</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">global_rank</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"1.4 —— RANK：每个评级内按时长排名",tag:"m",
+explain:"PARTITION BY rating = 每个 rating 有自己的排名。最长的 PG 影片在 PG 中获得第 1 名。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">length</span>,\n  <span class="fn">RANK</span>() <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">length</span> <span class="kw">DESC</span>\n  ) <span class="kw">AS</span> <span class="str">rank_in_rating</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"1.5 —— DENSE_RANK：无间隔的密集排名",tag:"b",
+explain:"DENSE_RANK() 类似 RANK，但不跳号——两个第 1 名之后是第 2 名（而不是第 3 名）。适合干净的排名。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">replacement_cost</span>,\n  <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">replacement_cost</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">cost_rank</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"1.6 —— DENSE_RANK：按评级的费用排名",tag:"m",
+explain:"结合 PARTITION + DENSE_RANK。每个 rating 组都有自己的密集费用排名。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">replacement_cost</span>,\n  <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">replacement_cost</span> <span class="kw">DESC</span>\n  ) <span class="kw">AS</span> <span class="str">cost_rank_in_rating</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"1.7 —— NTILE(4)：按时长分成四分位",tag:"m",
+explain:"NTILE(N) 把所有行平均分成 N 组。NTILE(4) = 四分位（Q1-Q4）。适合百分位分析。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">length</span>,\n  <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">length</span>) <span class="kw">AS</span> <span class="str">quartile</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"1.8 —— NTILE(3)：按评级分成三分位",tag:"m",
+explain:"在每个 rating 内分别分成 3 组（三分位）。PARTITION BY rating + NTILE(3)。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">length</span>,\n  <span class="fn">NTILE</span>(<span class="num">3</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">length</span>\n  ) <span class="kw">AS</span> <span class="str">tertile_in_rating</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+]},
+{label:"📊 第 2 部分：聚合函数",examples:[
+{title:"2.1 —— SUM：付款的全局累计总和",tag:"b",
+explain:"SUM() OVER(ORDER BY date) = 累计总和。每一行都把自身加到之前的总和上。对财务报表非常有用。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">payment_date</span>) <span class="kw">AS</span> <span class="str">running_total</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"2.2 —— SUM：为每位客户分别计算累计余额",tag:"m",
+explain:"PARTITION BY customer_id = 每位客户一个独立的累计总和。就像银行账户——客户截至每个时间点已支付了多少。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">customer_running_total</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"2.3 —— AVG：将每部影片与总体平均值比较",tag:"b",
+explain:"不带 ORDER BY 或 PARTITION 的 AVG() OVER() = 整张表的平均值。显示在每一行旁边。diff_from_avg = 差值。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">length</span>,\n  <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">OVER</span>() <span class="kw">AS</span> <span class="str">global_avg</span>,\n  <span class="col">length</span> <span class="op">-</span> <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">OVER</span>() <span class="kw">AS</span> <span class="str">diff_from_avg</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"2.4 —— AVG：每部影片与其评级平均值的对比",tag:"m",
+explain:"PARTITION BY rating = 每个 rating 的平均值不同。每部影片与其所在组的平均值比较——而不是总体平均值。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">length</span>,\n  <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">rating</span>) <span class="kw">AS</span> <span class="str">rating_avg</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+{title:"2.5 —— COUNT：交易的累计计数",tag:"b",
+explain:"COUNT() OVER(ORDER BY date) = 到目前为止发生了多少笔交易。随每一行增长。适合跟踪活动节奏。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">payment_id</span>, <span class="col">payment_date</span>,\n  <span class="fn">COUNT</span>(<span class="col">payment_id</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">payment_date</span>) <span class="kw">AS</span> <span class="str">total_so_far</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"2.6 —— COUNT：按时间统计每位员工的租借数",tag:"m",
+explain:"PARTITION BY staff_id = 按员工分别跟踪。该员工截至每个时间点处理了多少笔租借。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">staff_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">COUNT</span>(<span class="col">rental_id</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">staff_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span>\n  ) <span class="kw">AS</span> <span class="str">staff_rentals_so_far</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
+{title:"2.7 —— MAX：店内最高付款（全局）",tag:"b",
+explain:"不带 PARTITION 的 MAX() OVER() = 整张表的最大值。出现在每一行旁边——适合比较。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">payment_id</span>, <span class="col">amount</span>,\n  <span class="fn">MAX</span>(<span class="col">amount</span>) <span class="kw">OVER</span>() <span class="kw">AS</span> <span class="str">max_global</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"2.8 —— MAX：每位客户的最高付款",tag:"m",
+explain:"PARTITION BY customer_id = 每位客户的最大值不同。在每笔付款旁边——该客户曾支付的最高金额。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">amount</span>,\n  <span class="fn">MAX</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">customer_id</span>) <span class="kw">AS</span> <span class="str">max_per_customer</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+]},
+{label:"⬅️ 第 3 部分：偏移函数（LAG / LEAD）",examples:[
+{title:"3.1 —— LAG：客户的上一笔付款是多少？",tag:"m",
+explain:"LAG(col) 返回上一行的值。PARTITION BY customer_id = 同一客户内的上一行。第一行 → NULL。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">LAG</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">prev_amount</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"3.2 —— LAG：计算与上一笔付款的差额",tag:"m",
+explain:"amount - LAG(amount) = 付款上涨/下降了多少。正数 = 上涨，负数 = 下降。适合趋势分析。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="col">amount</span> <span class="op">-</span> <span class="fn">LAG</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">diff_from_last</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"3.3 —— LEAD：下一笔付款会是多少？",tag:"m",
+explain:"LEAD(col) = 下一行的值。与 LAG 相反。最后一行 → NULL。适合预测和分析。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">LEAD</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">next_amount</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
+{title:"3.4 —— LEAD：下一个租借日期（带默认值）",tag:"a",
+explain:"LEAD(col, 1, default) —— 第三个参数是没有“下一行”时的默认值。这里用 '2099-01-01' 代替 NULL。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">LEAD</span>(<span class="col">rental_date</span>, <span class="num">1</span>, <span class="str">'2099-01-01'</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span>\n  ) <span class="kw">AS</span> <span class="str">next_rental_date</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
+]},
+{label:"🔝 第 4 部分：值函数（FIRST_VALUE）",examples:[
+{title:"4.1 —— FIRST_VALUE：客户的首次租借日期",tag:"m",
+explain:"FIRST_VALUE(col) 返回窗口中的第一个值。配合 PARTITION BY customer_id = 每位客户的首次日期，显示在每条租借记录旁边。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">FIRST_VALUE</span>(<span class="col">rental_date</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span> <span class="kw">ASC</span>\n  ) <span class="kw">AS</span> <span class="str">first_rental_date</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
+{title:"4.2 —— FIRST_VALUE：在每部影片旁显示该类别中最便宜的影片",tag:"m",
+explain:"ORDER BY rental_rate ASC = 最便宜的在前。FIRST_VALUE 取它。这样就能把每部影片与其类别中最便宜的进行比较。",
+code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">rental_rate</span>,\n  <span class="fn">FIRST_VALUE</span>(<span class="col">rental_rate</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_rate</span> <span class="kw">ASC</span>\n  ) <span class="kw">AS</span> <span class="str">cheapest_in_category</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
+]},
+{label:"🧮 第 5 部分：CTE —— 公用表表达式",examples:[
+{title:"5.1 —— 基本 CTE：演员及姓氏",tag:"b",
+explain:"WITH name AS (query) —— 定义一个命名的“临时表”。然后从中 SELECT。非常易读，并能理清复杂的查询。",
+code:`<span class="kw">WITH</span> <span class="tbl">ActorNames</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>\n  <span class="kw">FROM</span> <span class="tbl">actor</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">ActorNames</span>;`},
+{title:"5.2 —— CTE：提前筛选英语影片",tag:"b",
+explain:"CTE 先筛选（language_id=1），然后主 SELECT 对筛选后的数据进行操作。简化冗长的查询。",
+code:`<span class="kw">WITH</span> <span class="tbl">EnglishFilms</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">title</span>, <span class="col">language_id</span>\n  <span class="kw">FROM</span> <span class="tbl">film</span>\n  <span class="kw">WHERE</span> <span class="col">language_id</span> = <span class="num">1</span>\n)\n<span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">FROM</span> <span class="tbl">EnglishFilms</span>;`},
+{title:"5.3 —— 带聚合的 CTE：消费超过 $150 的客户",tag:"m",
+explain:"CTE 计算每位客户的总付款。主查询筛选出超过 150 的客户。比在子查询上用 HAVING 更易读。",
+code:`<span class="kw">WITH</span> <span class="tbl">CustomerTotals</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">customer_id</span>,\n         <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">AS</span> <span class="str">total_spent</span>\n  <span class="kw">FROM</span> <span class="tbl">payment</span>\n  <span class="kw">GROUP BY</span> <span class="col">customer_id</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">CustomerTotals</span>\n<span class="kw">WHERE</span> <span class="col">total_spent</span> > <span class="num">150</span>;`},
+{title:"5.4 —— CTE + 窗口：每位客户的最新租借",tag:"a",
+explain:"一个经典技巧：你无法在 WHERE 中直接对窗口函数进行筛选。解决办法：在 CTE 中用 ROW_NUMBER，然后在外层用 WHERE rn=1。",
+code:`<span class="kw">WITH</span> <span class="tbl">RankedRentals</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n    <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (\n      <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n      <span class="kw">ORDER BY</span> <span class="col">rental_date</span> <span class="kw">DESC</span>\n    ) <span class="kw">AS</span> <span class="str">rn</span>\n  <span class="kw">FROM</span> <span class="tbl">rental</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">RankedRentals</span>\n<span class="kw">WHERE</span> <span class="col">rn</span> = <span class="num">1</span>;`},
+]},
+],
+examples:[]},
+];
+
+function buildSidebar(){
+const sb=document.getElementById('sidebar');
+chapters.forEach((ch,i)=>{
+const count=ch.sections ? ch.sections.reduce((s,sec)=>s+sec.examples.length,0) : ch.examples.length;
+sb.innerHTML+=`<div class="sidebar-item${i===0?' active':''}" onclick="showCh(${i})" id="si-${i}">
+<span class="sidebar-num">${ch.num}</span>${ch.icon} ${ch.title}</div>`;
+});
+}
+
+function showCh(idx){
+document.querySelectorAll('.chapter').forEach(c=>c.classList.remove('active'));
+document.querySelectorAll('.sidebar-item').forEach(s=>s.classList.remove('active'));
+document.getElementById('ch-'+idx).classList.add('active');
+document.getElementById('si-'+idx).classList.add('active');
+document.querySelector('.main-content').scrollTop=0;
+window.scrollTo(0,0);
+}
+
+function tagHTML(t){
+if(t==='b')return`<span class="tag tag-b">Basic</span>`;
+if(t==='m')return`<span class="tag tag-m">Intermediate</span>`;
+return`<span class="tag tag-a">Advanced</span>`;
+}
+
+function buildChapters(){
+const mc=document.getElementById('mainContent');
+chapters.forEach((ch,ci)=>{
+let h=`<div class="chapter${ci===0?' active':''}" id="ch-${ci}">`;
+h+=`<div class="ch-header"><div class="ch-meta">Chapter ${ch.num}</div>
+<h1 class="ch-title">${ch.icon} ${ch.title}</h1>
+<p class="ch-desc">${ch.desc}</p></div>`;
+h+=`<div class="syntax-box">${ch.syntax.replace(/\n/g,'<br>')}</div>`;
+h+=`<div class="sec-label">Key Concepts</div><div class="concepts">`;
+ch.concepts.forEach(c=>{
+h+=`<div class="concept"><div class="concept-label">${c.label}</div><div class="concept-text">${c.text}</div></div>`;
+});
+h+='</div><hr class="sec-div">';
+// Support sections (multi-part chapters like lesson 1) OR flat examples
+if(ch.sections && ch.sections.length){
+let globalIdx=0;
+ch.sections.forEach((sec,si)=>{
+h+=`<div class="sec-label" style="margin-top:${si>0?'2rem':'0'}">${sec.label} <span style="color:var(--text3);font-size:11px;font-weight:400">(${sec.examples.length} examples)</span></div>`;
+sec.examples.forEach((ex,ei)=>{
+const id=`${ci}-${globalIdx}`;
+h+=`<div class="example-card" id="ex-${id}">
+<div class="ex-head" onclick="toggleEx('${id}')">
+<span class="ex-num">${globalIdx+1}</span>
+<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>
+<span class="ex-toggle">▾</span></div>
+<div class="ex-body">
+<div class="ex-explain"><p>${ex.explain}</p></div>
+<div class="code-block"><div class="code-hdr">
+<span class="code-lang">SQL</span>
+<button class="copy-btn" onclick="copyCode('${id}',this)">📋 Copy</button></div>
+<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
+globalIdx++;
+});
+});
+} else {
+const total=ch.examples.length;
+h+=`<div class="sec-label">Code Examples (${total})</div>`;
+ch.examples.forEach((ex,ei)=>{
+const id=`${ci}-${ei}`;
+h+=`<div class="example-card" id="ex-${id}">
+<div class="ex-head" onclick="toggleEx('${id}')">
+<span class="ex-num">${ei+1}</span>
+<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>
+<span class="ex-toggle">▾</span></div>
+<div class="ex-body">
+<div class="ex-explain"><p>${ex.explain}</p></div>
+<div class="code-block"><div class="code-hdr">
+<span class="code-lang">SQL</span>
+<button class="copy-btn" onclick="copyCode('${id}',this)">📋 Copy</button></div>
+<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
+});
+}
+h+='</div>';
+mc.innerHTML+=h;
+});
+}
+
+function toggleEx(id){
+document.getElementById(`ex-${id}`).classList.toggle('open');
+}
+function copyCode(id,btn){
+const text=document.getElementById(`code-${id}`).innerText;
+navigator.clipboard.writeText(text).then(()=>{
+btn.textContent='✅ Copied';btn.classList.add('ok');
+setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('ok')},2000);
+});
+}
+
+buildSidebar();
+buildChapters();
+</script>
+<script>
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>面向初学者的 SQL 题目 —— 免费多选测验 | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --teal:#00d4aa;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(0,212,170,.05) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.25);color:var(--teal);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:1.8rem;font-weight:900;color:var(--teal);font-family:var(--mono)}
+.hero-stat-label{font-size:12px;color:var(--text3)}
+
+/* SCORE BAR */
+.score-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;position:sticky;top:49px;z-index:90}
+.score-info{font-size:13px;color:var(--text2)}
+.score-info strong{color:var(--text);font-size:15px}
+.score-track{flex:1;min-width:150px;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:4px;transition:width .4s}
+.score-pct{font-family:var(--mono);font-size:13px;color:var(--teal);font-weight:700;white-space:nowrap}
+.reset-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:var(--font);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* SECTION LABEL */
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px;color:var(--teal)}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow:hidden;transition:border-color .2s}
+.q-card.correct{border-color:var(--green2)}
+.q-card.wrong{border-color:var(--red)}
+.q-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.q-meta{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap}
+.q-num{background:var(--bg4);color:var(--text3);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.q-section{font-size:10px;color:var(--teal);font-family:var(--mono);background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.2);padding:2px 8px;border-radius:10px}
+.q-text{font-size:14px;font-weight:600;color:var(--text);line-height:1.6}
+.q-body{padding:1rem 1.25rem}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:.6rem}
+.option{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.75rem;text-align:right}
+.option:hover:not(.disabled){background:var(--bg4);border-color:var(--border2)}
+.option.disabled{cursor:default;pointer-events:none}
+.option.correct-ans{border-color:var(--green2)!important;background:rgba(0,168,84,.08)!important}
+.option.wrong-ans{border-color:var(--red)!important;background:rgba(255,71,87,.08)!important}
+.opt-letter{width:26px;height:26px;border-radius:6px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.option.correct-ans .opt-letter{background:var(--green2);color:#fff;border-color:var(--green2)}
+.option.wrong-ans .opt-letter{background:var(--red);color:#fff;border-color:var(--red)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1;font-family:var(--mono)}
+.option.correct-ans .opt-text,.option.wrong-ans .opt-text{color:var(--text)}
+
+/* EXPLANATION */
+.explanation{display:none;margin-top:.75rem;border-radius:8px;padding:.85rem 1rem;background:rgba(0,212,170,.04);border:1px solid rgba(0,212,170,.15);border-right:3px solid var(--teal)}
+.explanation.show{display:block}
+.exp-label{font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.5px;margin-bottom:.3rem;font-family:var(--mono)}
+.exp-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.exp-text strong{color:var(--text)}
+
+/* FINISH */
+.finish-card{background:linear-gradient(135deg,rgba(0,212,170,.08),rgba(0,230,118,.05));border:1px solid rgba(0,212,170,.2);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.6rem;font-weight:900;color:var(--teal);margin-bottom:.5rem}
+.finish-score{font-size:3rem;font-weight:900;font-family:var(--mono);margin:.75rem 0}
+.finish-grade{display:inline-block;font-size:1rem;font-weight:700;padding:.4rem 1.2rem;border-radius:20px;margin:.75rem 0}
+.grade-a{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.grade-b{background:rgba(74,158,255,.15);color:var(--blue);border:1px solid rgba(74,158,255,.3)}
+.grade-c{background:rgba(255,140,66,.15);color:var(--orange);border:1px solid rgba(255,140,66,.3)}
+.grade-d{background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3)}
+.finish-sub{color:var(--text2);font-size:14px;line-height:1.7}
+.retry-btn{background:var(--teal);color:#000;border:none;padding:12px 28px;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;transition:all .2s}
+.retry-btn:hover{opacity:.85;transform:translateY(-1px)}
+.adv-link{display:inline-flex;align-items:center;gap:6px;margin-top:.75rem;margin-right:1rem;color:var(--blue);text-decoration:none;font-size:13px;font-weight:700}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hero{padding:2rem .75rem 1.5rem}
+.hero-title{font-size:1.5rem}
+.hero-sub{font-size:13px}
+.hero-stats{gap:.75rem;flex-wrap:wrap}
+.hero-stat-num{font-size:1.5rem}
+.quiz-container{padding:.75rem}
+.question-card{padding:1rem}
+.q-text{font-size:14px}
+.options{gap:.5rem}
+.option-btn{font-size:13px;padding:.7rem .85rem;text-align:right}
+.explain-box{font-size:13px;padding:.65rem .85rem}
+.nav-links,.nav-cta{display:none}
+.finish-card{padding:2rem 1rem}
+.finish-score{font-size:2.5rem}
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.opt-text{font-size:11px}
+.score-track{min-width:80px}
+}
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+
+/* ─── FIREBASE AUTH BAR ─── */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;transition:opacity .15s;font-family:var(--font)}
+.fb-login-btn:hover{opacity:.88}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn:hover{color:var(--text)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;transition:all .3s;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<meta name="description" content="一个初学者 SQL 测验：150 道带讲解的多选题，涵盖 SELECT、WHERE、ORDER BY 和数据库基础。非常适合入门和面试准备。">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-beginner.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-beginner.html">
+<meta property="og:site_name" content="免费 SQL 课程 - Eliran Grossman">
+<meta property="og:title" content="初学者测验 —— SQL">
+<meta property="og:description" content="一个初学者 SQL 测验：150 道带讲解的多选题，涵盖 SELECT、WHERE、ORDER BY 和数据库基础。非常适合入门和面试准备。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="初学者测验 —— SQL">
+<meta name="twitter:description" content="一个初学者 SQL 测验：150 道带讲解的多选题，涵盖 SELECT、WHERE、ORDER BY 和数据库基础。非常适合入门和面试准备。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL 初学者测验",
+        "item": "https://egrosman1.github.io/sql-course/quiz-beginner.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "面向初学者的 SQL 题目 —— 免费多选测验 | SQL.course",
+    "description": "一个初学者 SQL 测验：150 道带讲解的多选题，涵盖 SELECT、WHERE、ORDER BY 和数据库基础。非常适合入门和面试准备。",
+    "url": "https://egrosman1.github.io/sql-course/quiz-beginner.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Quiz",
+    "teaches": "SQL",
+    "educationalLevel": "初级到高级",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL 讲师兼分析负责人，Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "免费 SQL 课程",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body data-quiz-id="beginner">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← 首页</a>
+  <div class="topnav-title">🌱 初学者题目</div>
+  <a href="../quiz-beginner.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/quiz-beginner.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="quiz-beginner.html" class="topnav-link on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+  <div style="margin-right:auto;display:flex;gap:.35rem"><a href="quiz-beginner.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--aq);color:var(--aq);background:rgba(0,212,200,.1)">🌱 初学者</a><a href="quiz-medium.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2)">📗 中级</a><a href="quiz.html" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2)">🧠 高级</a></div>
+
+<!-- FIREBASE AUTH BAR -->
+<div class="fb-bar" id="fbBar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    使用 Google 登录
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">
+    💾 保存进度
+  </button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">
+    📊 历史记录
+  </button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">
+    退出登录
+  </button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+  <div class="topnav-links">
+    <a href="quiz.html" class="topnav-link">🧠 高级测验</a>
+    <a href="course.html" class="topnav-link">📚 学习</a>
+    <a href="practice.html" class="topnav-link">✏️ 练习</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 首页</a>
+  <a href="tirgul-makif.html">🎯 综合练习</a>
+  <a href="quiz.html">🧠 高级测验</a>
+  <a href="course.html">📚 学习材料</a>
+  <a href="practice.html">✏️ 练习</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🌱 初学者 · 基础 SELECT</div>
+  <h1 class="hero-title">初学者测验 —— SQL</h1>
+  <p class="hero-sub">150 道关于 SELECT、WHERE、GROUP BY、JOIN 和子查询的题目——每个答案都配有详细讲解</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">150</div><div class="hero-stat-label">道题</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-label">个主题</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="heroAnswered">0</div><div class="hero-stat-label">已回答</div></div>
+  </div>
+</div>
+
+<div class="score-bar">
+  <div class="score-info">得分： <strong id="scoreText">0 / 0</strong></div>
+  <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="score-pct" id="scorePct">0%</div>
+  <button class="reset-btn" onclick="resetQuiz()">🔄 重新开始</button>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const questions = [
+  // Part A: SELECT Basics
+  {num:1, section:"A 部分 —— SELECT 基础", text:"SELECT 命令的主要作用是什么？",
+   options:["从表中删除数据。","更新现有数据。","从数据库中检索并显示数据。","创建一张新表。"],
+   correct:2, explain:"SELECT 是我们用来<strong>查看表中现有数据</strong>的“读取”命令。它不会更改或删除——只会显示。"},
+
+  {num:2, section:"A 部分 —— SELECT 基础", text:"我们用哪个符号来检索一张给定表中的所有列？",
+   options:["#","&","*（星号）","%"],
+   correct:2, explain:"星号是“全部”的简写。<code>SELECT *</code> 会检索每一列，而无需逐个列出。"},
+
+  {num:3, section:"A 部分 —— SELECT 基础", text:"哪个关键字指定我们要从中检索数据的表的名称？",
+   options:["WHERE","FROM","TABLE","IN"],
+   correct:1, explain:"基本结构是：<code>SELECT</code>（取什么）然后 <code>FROM</code>（从哪里取）。FROM = 来自哪里。"},
+
+  {num:4, section:"A 部分 —— SELECT 基础", text:"在单个查询中，我们如何分隔多个列的名称？",
+   options:["句号（.）","逗号（,）","连字符（-）","只用一个空格。"],
+   correct:1, explain:"要检索多个特定的列，用<strong>逗号</strong>把它们隔开：<code>SELECT name, city, phone</code>"},
+
+  {num:5, section:"A 部分 —— SELECT 基础", text:"在 SELECT 查询中，单词 AS 是什么意思？",
+   options:["筛选数据。","在结果中给列起一个别名。","按升序对数据排序。","连接两张表。"],
+   correct:1, explain:"<strong>AS</strong> 让你改变最终报表中列顶部显示的名称，而不改变表中真实的名称。例如：<code>SELECT price AS Price</code>"},
+
+  // Part B: Keywords & Syntax
+  {num:6, section:"B 部分 —— 关键字与语法", text:"我们如何从一个给定的列中只检索唯一值（不含重复）？",
+   options:["SELECT UNIQUE","SELECT DIFFERENT","SELECT DISTINCT","SELECT ONLY"],
+   correct:2, explain:"<strong>DISTINCT</strong> 会过滤掉重复行，每个值只显示一次。<code>SELECT DISTINCT city FROM customers</code>"},
+
+  {num:7, section:"B 部分 —— 关键字与语法", text:"分号（;）通常放在查询的什么位置？",
+   options:["在查询的开头。","在 SELECT 和 FROM 之间。","在整个查询的最末尾。","在每个列名之后。"],
+   correct:2, explain:"分号<strong>标志着语句的结束</strong>，并告诉 SQL 引擎它可以运行了。"},
+
+  {num:8, section:"B 部分 —— 关键字与语法", text:"单词 SELECT 和 FROM 必须大写吗？",
+   options:["是的，否则查询无法运行。","不，SQL 的关键字不区分大小写。","只有单词 SELECT 必须大写。","这只取决于 MySQL 的版本。"],
+   correct:1, explain:"SQL 的关键字<strong>不区分大小写</strong>。<code>select * from customers</code> 的效果与 <code>SELECT * FROM customers</code> 完全相同。大写是为了便于阅读的约定。"},
+
+  {num:9, section:"B 部分 —— 关键字与语法", text:"如果我们写 SELECT 5 + 5 会发生什么？",
+   options:["报错，因为没有 FROM 子句。","系统返回结果 10。","系统打印文本 '5 + 5'。","系统删除表。"],
+   correct:1, explain:"<strong>SELECT 可以当计算器用！</strong> 如果你不查询表，它会对表达式求值并返回结果——在这个例子中是 10。"},
+
+  {num:10, section:"B 部分 —— 关键字与语法", text:"在 SQL 中我们如何写单行注释？",
+   options:["//","#","-- （两个连字符）","B 和 C 都对（取决于数据库）。"],
+   correct:3, explain:"在大多数系统中，<code>-- 注释</code> 总是有效。在 MySQL 中你也可以用 <code># 注释</code>。引擎会忽略标记之后的文本。"},
+
+  // Part C: Columns & Calculations
+  {num:11, section:"C 部分 —— 列与计算", text:"查询 SELECT 'Hello World'; 会显示什么？",
+   options:["报错，缺少表名。","世界上所有客户的列表。","一行，内容是文本 Hello World。","数据库中的所有表。"],
+   correct:2, explain:"在 <strong>SELECT 中使用引号</strong>会显示一个常量文本字符串——一行，值就是我们所写的内容。"},
+
+  {num:12, section:"C 部分 —— 列与计算", text:"我们如何计算一个价格列乘以 2？",
+   options:["SELECT price * 2 FROM products","SELECT price X 2 FROM products","SELECT MULTIPLY(price, 2) FROM products","SELECT price ^ 2 FROM products"],
+   correct:0, explain:"SQL 使用普通的数学运算符：<code>*</code> 表示乘法，<code>/</code> 表示除法，<code>+</code> 表示加法，<code>-</code> 表示减法。"},
+
+  {num:13, section:"C 部分 —— 列与计算", text:"如果我们想给一个列起一个包含空格的别名（例如：My Price），应该怎么写？",
+   options:["AS My Price","AS 'My Price'（带引号）","AS My_Price","B 和 C 都对。"],
+   correct:3, explain:"如果<strong>名称中有空格</strong>，就必须用引号：<code>AS 'My Price'</code>。如果你用下划线，则不需要：<code>AS My_Price</code>。两者都有效。"},
+
+  {num:14, section:"C 部分 —— 列与计算", text:"SELECT * 和选择特定列之间有什么区别？",
+   options:["没有性能差异。","SELECT * 总是更快。","选择特定的列能节省资源，并只显示你需要的内容。","SELECT * 只在 MySQL 中有效。"],
+   correct:2, explain:"始终<strong>最好只检索你需要的列</strong>。SELECT * 会把所有内容加载到内存——包括你不会用到的列——这会拖慢查询。"},
+
+  {num:15, section:"C 部分 —— 列与计算", text:"哪个查询能返回 Employees 表中的所有数据？",
+   options:["GET * FROM Employees","SELECT ALL FROM Employees","SELECT * FROM Employees","SHOW Employees"],
+   correct:2, explain:"<code>SELECT * FROM Employees</code> 是检索一张表全部数据的<strong>标准、最简单</strong>的方式。"},
+
+  // Part D: Logic & Structure
+  {num:16, section:"D 部分 —— 逻辑与结构", text:"SELECT 可以不带 FROM 使用吗？",
+   options:["绝不可以。","可以，用于计算或显示常量文本。","只有在表为空时才可以。","只在 SQL Server 中可以。"],
+   correct:1, explain:"<strong>可以！</strong> <code>SELECT 5 + 5</code> 或 <code>SELECT 'Hello'</code> 不带 FROM 也能运行。当你不查询表时，就不需要 FROM。"},
+
+  {num:17, section:"D 部分 —— 逻辑与结构", text:"SELECT NULL + 10 的结果是什么？",
+   options:["10","0","NULL","报错。"],
+   correct:2, explain:"在 SQL 中，<strong>任何与 NULL 的数学运算都始终返回 NULL</strong>。NULL = 未知值。如果其中一个操作数是未知的，结果也是未知的。"},
+
+  {num:18, section:"D 部分 —— 逻辑与结构", text:"我们如何从 Customers 表中检索 Name 和 City 两列？",
+   options:["SELECT Name City FROM Customers","SELECT Name, City FROM Customers","SELECT Name & City FROM Customers","SELECT Name; City FROM Customers"],
+   correct:1, explain:"<strong>逗号</strong>是 SELECT 中各列之间的标准分隔符。每个逗号 = 又一列。"},
+
+  {num:19, section:"D 部分 —— 逻辑与结构", text:"LIMIT（MySQL 中）或 TOP（SQL Server 中）的作用是什么？",
+   options:["从末尾删除行。","限制结果中显示的行数。","对行进行排序。","查找最大值。"],
+   correct:1, explain:"<code>LIMIT 5</code> 只显示<strong>前 5 行</strong>。当有数百万行时，用于快速检查非常有用。"},
+
+  {num:20, section:"D 部分 —— 逻辑与结构", text:"哪个查询能显示产品名称及其加上 17% 增值税后的价格？",
+   options:["SELECT name, price + 17 FROM products","SELECT name, price * 1.17 FROM products","SELECT name, price % 17 FROM products","SELECT name + price * 1.17 FROM products"],
+   correct:1, explain:"乘以 <strong>1.17</strong> 会在现有值上加 17%。1.17 = 100% + 17%。<code>price + 17</code> 加的是 17 谢克尔，而不是 17%！"},
+
+  // Part E: Light Advanced Practice
+  {num:21, section:"E 部分 —— 轻度进阶练习", text:"一张表有 10 行，城市都是 'Tel Aviv'。SELECT DISTINCT city 返回多少行？",
+   options:["10","0","1","报错。"],
+   correct:2, explain:"<strong>DISTINCT 会合并重复项。</strong> 即使有 10 行 Tel Aviv——它们全都相同，所以只返回一个结果。"},
+
+  {num:22, section:"E 部分 —— 轻度进阶练习", text:"查询 SELECT 1, 2, 3; 是什么意思？",
+   options:["它显示一张有 3 列的表，每列保存对应的数字。","它数到 3。","报错，因为缺少 FROM。","它把所有数字显示在一列中。"],
+   correct:0, explain:"<strong>SELECT 中的每个逗号都会创建一个新列</strong>。<code>SELECT 1, 2, 3</code> 返回一行，有 3 列。"},
+
+  {num:23, section:"E 部分 —— 轻度进阶练习", text:"给 Name 列起别名使其显示为 Customer_Name 的正确写法是什么？",
+   options:["SELECT Name RENAME Customer_Name","SELECT Name AS Customer_Name","SELECT Name = Customer_Name","SELECT Name TO Customer_Name"],
+   correct:1, explain:"<strong>AS</strong> 是定义别名的标准方式。<code>SELECT Name AS Customer_Name</code>——列标题将显示 'Customer_Name'。"},
+
+  {num:24, section:"E 部分 —— 轻度进阶练习", text:"如果在一个引用了表中真实列的查询里忘记写 FROM，会发生什么？",
+   options:["系统会猜测表名。","查询会返回所有的表。","系统会抛出语法错误。","查询会运行但什么都不显示。"],
+   correct:2, explain:"引擎<strong>必须知道要从哪个源读取</strong>。没有 FROM，它根本不知道去哪里找，于是抛出语法错误。"},
+
+  {num:25, section:"E 部分 —— 轻度进阶练习", text:"查询 SELECT * FROM Employees LIMIT 0; 会返回什么？",
+   options:["所有员工。","报错。","没有行（只有列名）。","第一行。"],
+   correct:2, explain:"<strong>LIMIT 0</strong> = 零行。结构（列名）会出现，但没有数据。有时对查看表结构很有用。"},
+
+  // Part F: Review Questions
+  {num:26, section:"F 部分 —— 复习题", text:"SELECT 中列的顺序决定它们在结果中出现的顺序吗？",
+   options:["不，系统自己决定。","是的，列按查询中所写的顺序出现。","它们总是按字母顺序出现。","它们总是按在表中存储的顺序出现。"],
+   correct:1, explain:"<strong>SELECT 控制数据如何显示。</strong> SELECT 中所写的顺序就是结果中显示的顺序——与表中的顺序无关。"},
+
+  {num:27, section:"F 部分 —— 复习题", text:"我们如何写一个查询，为 products 表中的每一行显示一个值为 100 的常量列？",
+   options:["SELECT 100 FROM products","SELECT * + 100 FROM products","SELECT price = 100 FROM products","SELECT ALL 100 FROM products"],
+   correct:0, explain:"在 <strong>SELECT 中写一个常量值</strong>会让它出现在每一行旁边。<code>SELECT 100 FROM products</code> 为每个产品显示一次数字 100。"},
+
+  {num:28, section:"F 部分 —— 复习题", text:"在查询 SELECT price * 0.9 AS discounted_price FROM items; 中，别名是什么？",
+   options:["price","items","discounted_price","0.9"],
+   correct:2, explain:"别名是<strong>紧跟在单词 AS 之后出现的名称</strong>。在这个查询中，discounted_price 是显示在列顶部的别名。"},
+
+  {num:29, section:"F 部分 —— 复习题", text:"SQL 中哪个词被视为保留字？",
+   options:["SELECT","FROM","WHERE","所有答案都对。"],
+   correct:3, explain:"<strong>所有 SQL 关键字都是保留字</strong>——SELECT、FROM、WHERE 以及许多其他词。最好不要把它们用作表名或列名。"},
+
+  {num:30, section:"F 部分 —— 复习题", text:"简而言之，SELECT 的作用是什么？",
+   options:["更新数据库中的数据。","提出一个问题并从数据中得到答案。","从表中永久删除重复项。","在表之间建立关系。"],
+   correct:1, explain:"SQL = <strong>Structured Query Language（结构化查询语言）</strong>。而 SELECT 是向数据提问的工具。它只读取——不更改或删除。"},
+
+  // ===== Part 3: WHERE =====
+  {num:31, section:"G 部分 —— WHERE：基本运算符", text:"在 SQL 中用哪个关键字来筛选行？",
+   options:["IF","HAVING","WHERE","FILTER"],
+   correct:2, explain:"<strong>WHERE</strong> 是按条件筛选行的标准命令。它位于 FROM 之后。"},
+
+  {num:32, section:"G 部分 —— WHERE：基本运算符", text:"我们如何检索价格正好等于 100 的所有产品？",
+   options:["WHERE price is 100","WHERE price = 100","WHERE price == 100","WHERE price 100"],
+   correct:1, explain:"SQL 用<strong>单个 =</strong> 进行比较（不同于 Python 等使用 == 的语言）。"},
+
+  {num:33, section:"G 部分 —— WHERE：基本运算符", text:"我们如何写一个检查“不等于”的条件？",
+   options:["!=","<>","NOT =","A 和 B 都对。"],
+   correct:3, explain:"大多数系统都支持 <code><></code>（传统符号）和 <code>!=</code>。两者都对。"},
+
+  {num:34, section:"G 部分 —— WHERE：基本运算符", text:"查询 WHERE age > 18 返回什么？",
+   options:["只有 18 岁的人。","18 岁及以上的人。","19 岁及以上的人（大于 18）。","所有人。"],
+   correct:2, explain:"<code>></code> 运算符<strong>不包含</strong>值本身。要包含 18，请使用 <code>>=</code>。"},
+
+  {num:35, section:"G 部分 —— WHERE：基本运算符", text:"我们如何筛选居住在城市 'Tel Aviv' 的客户？",
+   options:["WHERE city = Tel Aviv","WHERE city = \"Tel Aviv\"","WHERE city = 'Tel Aviv'","B 和 C 通常都对。"],
+   correct:3, explain:"在 SQL 中，文本必须用引号包起来。<strong>单引号</strong>是标准；大多数系统也支持双引号。"},
+
+  {num:36, section:"H 部分 —— WHERE：BETWEEN 与 IN", text:"BETWEEN 运算符的作用是什么？",
+   options:["检查一个值是否在列表中。","筛选给定范围内的值（包含边界）。","连接两张表。","选择一个随机值。"],
+   correct:1, explain:"<code>WHERE price BETWEEN 10 AND 20</code> 返回 10 到 20 之间的一切，<strong>包括 10 和 20 本身</strong>。"},
+
+  {num:37, section:"H 部分 —— WHERE：BETWEEN 与 IN", text:"哪个查询可以替代：WHERE city = 'London' OR city = 'Paris' OR city = 'Berlin'？",
+   options:["WHERE city IN ('London', 'Paris', 'Berlin')","WHERE city CONTAINS ('London', 'Paris', 'Berlin')","WHERE city = ALL ('London', 'Paris', 'Berlin')","WHERE city BETWEEN 'Berlin' AND 'Paris'"],
+   correct:0, explain:"<strong>IN</strong> 让你检查一个值是否在列表中——是多个 OR 的便捷、简洁的简写。"},
+
+  {num:38, section:"H 部分 —— WHERE：BETWEEN 与 IN", text:"查询 WHERE score BETWEEN 50 AND 100 包含数字 50 吗？",
+   options:["是。","否。","取决于数据库。","只有在你加上 INCLUDE 时。"],
+   correct:0, explain:"SQL 中的 BETWEEN 始终<strong>包含边界</strong>——它包括两个边界（50 和 100 都包含在内）。"},
+
+  {num:39, section:"H 部分 —— WHERE：BETWEEN 与 IN", text:"我们如何检索不在部门 1、2 或 3 工作的员工？",
+   options:["WHERE dept_id NOT IN (1, 2, 3)","WHERE dept_id != (1, 2, 3)","WHERE dept_id NOT (1, 2, 3)","WHERE dept_id <> 1, 2, 3"],
+   correct:0, explain:"<strong>NOT IN</strong> 会从结果中排除列表中出现的一切。正确写法：<code>NOT IN (1, 2, 3)</code>。"},
+
+  {num:40, section:"H 部分 —— WHERE：BETWEEN 与 IN", text:"如果我们写 WHERE price BETWEEN 100 AND 10 会发生什么？（较大的数在前）",
+   options:["系统会自己交换它们。","它返回 10 到 100 之间的所有值。","它不返回任何行（在大多数系统中）。","语法错误。"],
+   correct:2, explain:"在标准 SQL 中，<strong>BETWEEN 中的第一个值必须是较小的</strong>。顺序颠倒会返回空结果。"},
+
+  {num:41, section:"I 部分 —— WHERE：NULL", text:"我们如何检查一个列是否为空（NULL）？",
+   options:["WHERE column = NULL","WHERE column IS NULL","WHERE column == NULL","WHERE column IS EMPTY"],
+   correct:1, explain:"NULL 不是一个值，而是一个“数据缺失”的标记，所以<strong>你不能用 =</strong>。你必须用 <code>IS NULL</code>。"},
+
+  {num:42, section:"I 部分 —— WHERE：NULL", text:"条件 WHERE phone IS NOT NULL 返回什么？",
+   options:["没有电话号码的客户。","有某个电话号码的客户。","电话为 0 的客户。","整张表。"],
+   correct:1, explain:"<strong>IS NOT NULL</strong> 会过滤掉所有空行——只留下该列有值的行。"},
+
+  {num:43, section:"I 部分 —— WHERE：NULL", text:"条件 WHERE salary = 0 会返回 salary 为 NULL 的行吗？",
+   options:["会，因为 NULL 算作 0。","不会，NULL 和 0 是完全不同的东西。","只有在我们于服务器设置中配置时。","取决于该列是否为数字类型。"],
+   correct:1, explain:"<strong>0 是一个已知的数字。NULL 是“未知”。</strong> 它们永远不相等——WHERE salary = 0 不会返回 NULL。"},
+
+  {num:44, section:"J 部分 —— WHERE：LIKE", text:"LIKE 运算符的作用是什么？",
+   options:["检查用户是否“点赞”了某个产品。","搜索文本模式（模式匹配）。","查找数值上相近的值。","对数据排序。"],
+   correct:1, explain:"<strong>LIKE</strong> 让你用通配符在文本中搜索单词的一部分。"},
+
+  {num:45, section:"J 部分 —— WHERE：LIKE", text:"在 LIKE 查询中 % 符号是什么意思？",
+   options:["任意单个字符。","任意数量的字符（0 个或多个）。","数值的一个百分比。","只匹配大写字母。"],
+   correct:1, explain:"<code>%</code> = 任意数量的字符（甚至零个）。<code>a%</code> = 以 a 开头。<code>%a</code> = 以 a 结尾。<code>%a%</code> = 包含 a。"},
+
+  {num:46, section:"J 部分 —— WHERE：LIKE", text:"查询 WHERE name LIKE '_a%' 会找到什么？",
+   options:["以 a 开头的名字。","第二个字母是 a 的名字。","任意位置包含 a 的名字。","正好 2 个字母的名字。"],
+   correct:1, explain:"下划线 <code>_</code> = 正好一个单个字符。<code>_a%</code> = 任意一个字符，然后是字母 a，然后是任何其他内容。"},
+
+  {num:47, section:"J 部分 —— WHERE：LIKE", text:"我们如何搜索姓氏以 'son' 结尾的客户？",
+   options:["LIKE 'son%'","LIKE '%son'","LIKE '%son%'","LIKE '_son'"],
+   correct:1, explain:"<code>'%son'</code>——开头的 % = 前面是什么都无所谓，而 'son' 必须<strong>在末尾</strong>。"},
+
+  {num:48, section:"第 11 部分 —— WHERE：AND、OR、NOT", text:"我们什么时候使用 AND？",
+   options:["当我们希望其中一个条件成立时。","当我们希望所有条件同时成立时。","连接两张表。","向结果中添加一列。"],
+   correct:1, explain:"<strong>AND</strong> = 所有条件都必须成立。<code>WHERE city='TLV' AND age > 20</code>——只有既住在 TLV 又年龄超过 20 的人。"},
+
+  {num:49, section:"第 11 部分 —— WHERE：AND、OR、NOT", text:"在查询 WHERE city = 'London' OR age > 30 中会发生什么？",
+   options:["我们只得到来自 London 且年龄超过 30 的人。","我们得到所有住在 London 的人，以及所有年龄超过 30 的人（来自任何城市）。","报错，OR 中不能混用文本和数字。","我们一个人都得不到。"],
+   correct:1, explain:"<strong>OR = 只要有一个条件为真就足够。</strong> 任何在 London 的人都包含在内（不论年龄），任何超过 30 岁的人也包含在内（来自任何城市）。"},
+
+  {num:50, section:"第 11 部分 —— WHERE：AND、OR、NOT", text:"AND 和 OR 之间的优先级是什么？",
+   options:["OR 总是先算。","它们是相等的。","AND 总是在 OR 之前求值。","取决于书写顺序。"],
+   correct:2, explain:"就像数学里一样——<strong>AND 先于 OR</strong>（就像乘法先于加法）。要改变它：使用括号。"},
+
+  {num:51, section:"第 11 部分 —— WHERE：AND、OR、NOT", text:"NOT 在条件中的作用是什么？",
+   options:["删除条件。","对条件取反（True 变成 False）。","标记数据缺失。","一个拼写错误。"],
+   correct:1, explain:"<strong>NOT 会对条件取反。</strong> <code>WHERE NOT city = 'Paris'</code> 会带出除 Paris 以外的每个城市。"},
+
+  {num:52, section:"第 12 部分 —— WHERE：综合题", text:"我们如何筛选价格在 50 到 100 之间、且属于类别 5 的产品？",
+   options:["WHERE price BETWEEN 50 AND 100 OR category = 5","WHERE price BETWEEN 50 AND 100 AND category = 5","WHERE price IN (50, 100) AND category = 5","WHERE price > 50 AND price < 100 AND category = 5"],
+   correct:1, explain:"BETWEEN（范围）+ AND（额外条件）的组合。答案 D 几乎正确，但不包含 50 和 100 本身。"},
+
+  {num:53, section:"第 12 部分 —— WHERE：综合题", text:"LIKE 和 '=' 之间有什么区别？",
+   options:["没有区别。","= 查找精确匹配，LIKE 允许通配符。","LIKE 比 = 快。","LIKE 只对数字有效。"],
+   correct:1, explain:"<code>city = 'Tel%'</code> 会查找名字正好是 'Tel%' 的城市。<strong>只有用 LIKE，% 才会变成动态的</strong>。"},
+
+  {num:54, section:"第 12 部分 —— WHERE：综合题", text:"我们如何检索名字以 A 或 B 开头的客户？",
+   options:["WHERE name LIKE 'A%' OR name LIKE 'B%'","WHERE name IN ('A%', 'B%')","WHERE name LIKE 'AB%'","WHERE name = 'A' OR 'B'"],
+   correct:0, explain:"<strong>你不能在 IN 内部使用 %。</strong> 你需要用 OR 配合两个独立的 LIKE 子句。"},
+
+  {num:55, section:"第 12 部分 —— WHERE：综合题", text:"查询 WHERE 1 = 1 返回什么？",
+   options:["报错。","没有行。","表中的所有行。","只有第一行。"],
+   correct:2, explain:"条件 1=1 对每一行<strong>始终为真</strong>——所以所有行都会被返回。"},
+
+  {num:56, section:"第 12 部分 —— WHERE：综合题", text:"我们如何筛选日期？例如，所有在 2000 年之后出生的人？",
+   options:["WHERE birth_date > 2000","WHERE birth_date > '2000-01-01'","WHERE birth_date > (2000)","WHERE birth_date AFTER 2000"],
+   correct:1, explain:"SQL 中的日期写成 <strong>'YYYY-MM-DD'</strong> 格式的文本字符串。<code>> '2000-01-01'</code> = 在 2000 年 1 月 1 日之后。"},
+
+  {num:57, section:"第 12 部分 —— WHERE：综合题", text:"查询 WHERE name NOT LIKE '%a%' 做什么？",
+   options:["它找出以 a 开头的名字。","它找出完全不包含字母 a 的名字。","它找出只包含字母 a 的名字。","报错。"],
+   correct:1, explain:"<code>LIKE '%a%'</code> 找出包含 a 的名字。<strong>NOT</strong> 会取反——也就是说，<strong>完全不</strong>包含字母 a 的名字。"},
+
+  {num:58, section:"第 12 部分 —— WHERE：综合题", text:"哪个查询返回价格为 10、20 或 30 的产品？",
+   options:["WHERE price = 10 AND price = 20 AND price = 30","WHERE price IN (10, 20, 30)","WHERE price BETWEEN 10 AND 30","WHERE price = (10, 20, 30)"],
+   correct:1, explain:"答案 A 是错的——一个价格不可能同时是 3 个不同的值。<strong>IN</strong> 是处理一组精确值的正确方式。"},
+
+  {num:59, section:"第 12 部分 —— WHERE：综合题", text:"我们可以在 WHERE 内部使用 SELECT 中定义的别名吗？",
+   options:["可以，总是可以。","不可以，WHERE 在 SELECT 之前运行，因此不知道这个别名。","只在 MySQL 中可以。","只有当别名加引号时才可以。"],
+   correct:1, explain:"SQL 执行顺序：FROM → WHERE → SELECT。<strong>WHERE 在 SELECT 之前运行</strong>，所以那时别名还不存在。你必须使用原始名称。"},
+
+  {num:60, section:"第 12 部分 —— WHERE：综合题", text:"搜索包含撇号的文本（例如名字 O'neil）的正确方式是什么？",
+   options:["WHERE name = 'O'neil'","WHERE name = 'O''neil'（撇号写两次）","WHERE name = \"O'neil\"","B 和 C 都对（取决于系统）。"],
+   correct:3, explain:"要在字符串内部“转义”一个撇号——<strong>把它写两次</strong>：<code>'O''neil'</code>。在 MySQL 中你也可以用双引号。"},
+
+  // ===== Part 4: GROUP BY =====
+  {num:61, section:"第 13 部分 —— 聚合函数", text:"COUNT(*) 函数做什么？",
+   options:["它对表中的数值求和。","它统计表中的所有行（包括重复和 NULL）。","它返回最大的数字。","它检查表是否为空。"],
+   correct:1, explain:"星号告诉 SQL <strong>统计行数</strong>——无论其内容如何，包括含 NULL 的行。"},
+
+  {num:62, section:"第 13 部分 —— 聚合函数", text:"哪个命令返回 products 表中所有价格的总和？",
+   options:["SELECT AVG(price) FROM products","SELECT COUNT(price) FROM products","SELECT SUM(price) FROM products","SELECT TOTAL(price) FROM products"],
+   correct:2, explain:"<strong>SUM</strong> 是把数值加总的函数。标准 SQL 中不存在 TOTAL。"},
+
+  {num:63, section:"第 13 部分 —— 聚合函数", text:"对一个包含 10、20 和 NULL 的列做 AVG，结果是什么？",
+   options:["15（10 和 20 的平均，忽略 NULL）。","10（NULL 算作 0，平均值除以 3）。","NULL（数据缺失就无法计算平均值）。","报错。"],
+   correct:0, explain:"聚合函数（COUNT* 除外）<strong>会忽略 NULL</strong>。10 和 20 的 AVG = 15。"},
+
+  {num:64, section:"第 13 部分 —— 聚合函数", text:"我们如何找出最便宜产品的价格？",
+   options:["SELECT MIN(price) FROM products","SELECT MAX(price) FROM products","SELECT LOW(price) FROM products","SELECT TOP 1 price FROM products"],
+   correct:0, explain:"<strong>MIN</strong> 返回最小值。MAX 返回最大值。SQL 中不存在 LOW。"},
+
+  {num:65, section:"第 13 部分 —— 聚合函数", text:"如果我们对一个名字（文本）列运行 MAX 会发生什么？",
+   options:["报错，MAX 只对数字有效。","它返回最长的名字。","它返回按字母顺序排在最后的名字。","它返回按字母顺序排在第一的名字。"],
+   correct:2, explain:"MIN 和 MAX 也对文本有效——<strong>按字母顺序</strong>。MAX = 按字母排在最后的，MIN = 第一个。"},
+
+  {num:66, section:"第 14 部分 —— GROUP BY 基础", text:"什么时候必须使用 GROUP BY？",
+   options:["每次使用 SELECT 时。","当 SELECT 中聚合函数和普通列同时出现时。","只有当行数超过一百万时。","当我们想对结果排序时。"],
+   correct:1, explain:"如果你想<strong>按城市</strong>统计总销售额——城市就必须出现在 GROUP BY 中。否则：报错。"},
+
+  {num:67, section:"第 14 部分 —— GROUP BY 基础", text:"GROUP BY 在查询中位于什么位置？",
+   options:["在 FROM 之前。","在 WHERE 之前。","在 WHERE（若有）之后、ORDER BY 之前。","总是在查询的末尾。"],
+   correct:2, explain:"顺序是：<strong>SELECT → FROM → WHERE → GROUP BY → ORDER BY</strong>。GROUP BY 总是在 WHERE 之后。"},
+
+  {num:68, section:"第 14 部分 —— GROUP BY 基础", text:"查询 SELECT city, COUNT(*) FROM users（不带 GROUP BY）会发生什么？",
+   options:["它返回第一个城市和用户总数。","它返回一个错误（在大多数系统中）。","它显示所有城市以及每个城市的计数。","它删除 city 列。"],
+   correct:1, explain:"<strong>不带 GROUP BY</strong> 你不能把一个普通列（city）和一个计数一起显示。在大多数系统中这会报错。"},
+
+  {num:69, section:"第 14 部分 —— GROUP BY 基础", text:"查询 SELECT category, SUM(price) FROM products GROUP BY category 做什么？",
+   options:["它分别显示每个类别的价格总和。","它显示每个类别中的最高价格。","它只显示有价格的类别。","它把所有产品加总一次。"],
+   correct:0, explain:"GROUP BY <strong>按类别拆分成组</strong>，并对每个组分别应用 SUM。结果：每个类别一行。"},
+
+  {num:70, section:"第 14 部分 —— GROUP BY 基础", text:"可以按多个列分组吗？",
+   options:["不，只能按一个列分组。","可以，在 GROUP BY 内部用逗号把它们隔开。","可以，但只在 SQL Server 中。","只有在使用 UNION 时。"],
+   correct:1, explain:"<strong>你可以按多个列分组</strong>：<code>GROUP BY city, gender</code> 会为每个 城市+性别 组合创建一个组。"},
+
+  {num:71, section:"第 15 部分 —— HAVING", text:"WHERE 和 HAVING 之间的主要区别是什么？",
+   options:["没有区别。","WHERE 筛选单独的行，HAVING 在分组之后筛选组。","HAVING 只对文本有效。","WHERE 总是在 GROUP BY 之后。"],
+   correct:1, explain:"<strong>WHERE</strong> = 在分组之前筛选行。<strong>HAVING</strong> = 在分组之后筛选组。你不能在 WHERE 中写 SUM()。"},
+
+  {num:72, section:"第 15 部分 —— HAVING", text:"哪个查询显示总销售额大于 5000 的类别？",
+   options:["... WHERE SUM(sales) > 5000 GROUP BY category","... GROUP BY category HAVING SUM(sales) > 5000","... HAVING sales > 5000 GROUP BY category","... WHERE sales > 5000"],
+   correct:1, explain:"筛选聚合结果（SUM）<strong>必须放在 HAVING 中</strong>，在分组之后——而不是在 WHERE 中。"},
+
+  {num:73, section:"第 15 部分 —— HAVING", text:"WHERE 和 HAVING 可以在同一个查询中使用吗？",
+   options:["不，那会让引擎困惑。","可以。WHERE 先筛选行，HAVING 再筛选组。","只有用子查询时。","只在 MySQL 中。"],
+   correct:1, explain:"<strong>可以！</strong> WHERE 在计算之前清理原始数据，HAVING 在之后筛选结果。两者结合——一个强大的查询。"},
+
+  {num:74, section:"第 15 部分 —— HAVING", text:"查询 SELECT city FROM users GROUP BY city（不带 COUNT）做什么？",
+   options:["它显示所有城市的列表，包括重复。","它显示唯一城市的列表（类似 DISTINCT）。","报错，因为缺少聚合函数。","它统计每个城市有多少用户。"],
+   correct:1, explain:"不带聚合函数的分组<strong>会返回唯一值</strong>——它的效果类似 DISTINCT，但通过 GROUP BY 实现。"},
+
+  {num:75, section:"第 15 部分 —— HAVING", text:"哪个 HAVING 条件返回记录数超过 10 的组？",
+   options:["HAVING COUNT() > 10","HAVING ROWS > 10","HAVING SUM(1) > 10","A 和 C 都对。"],
+   correct:3, explain:"<code>COUNT(*)</code> 是标准方式。从技术上讲，<code>SUM(1)</code> 也会为每行加 1，得到相同结果。"},
+
+  {num:76, section:"第 16 部分 —— GROUP BY 细节", text:"查询 SELECT COUNT(phone) FROM users 会发生什么？",
+   options:["它统计表中的所有行。","它只统计 phone 不为 NULL 的行。","如果有 NULL 它会报错。","它只统计唯一的电话号码。"],
+   correct:1, explain:"当你在 COUNT 中指定一个列名时，<strong>NULL 不会被计入</strong>。只有存在的值才会被算进去。"},
+
+  {num:77, section:"第 16 部分 —— GROUP BY 细节", text:"我们如何统计 customers 表中有多少个不同的（唯一的）城市？",
+   options:["SELECT COUNT(city) FROM customers","SELECT COUNT(DISTINCT city) FROM customers","SELECT DISTINCT COUNT(city) FROM customers","SELECT SUM(city) FROM customers"],
+   correct:1, explain:"<code>COUNT(DISTINCT city)</code>——把 DISTINCT 放在 COUNT 括号<strong>内部</strong>，只统计不同的值。"},
+
+  {num:78, section:"第 16 部分 —— GROUP BY 细节", text:"允许在 HAVING 内部使用别名吗？",
+   options:["在大多数系统中不允许——你必须再写一次函数。","可以，总是可以。","只有当别名是希伯来文时。","只在 WHERE 中。"],
+   correct:0, explain:"和 WHERE 一样，<strong>在 HAVING 中引擎通常不识别来自 SELECT 的别名</strong>。你必须写：<code>HAVING SUM(price) > 0</code>，而不是 <code>HAVING total > 0</code>。"},
+
+  {num:79, section:"第 16 部分 —— GROUP BY 细节", text:"这个查询显示什么：SELECT category, AVG(price) FROM products WHERE price > 100 GROUP BY category？",
+   options:["先算所有产品的平均，然后才去掉低于 100 的。","它先筛选出超过 100 的产品，再对它们按类别计算平均。","报错，WHERE 不能在 GROUP BY 之前。","最高的平均价格。"],
+   correct:1, explain:"<strong>WHERE 先发生</strong>——它在求平均之前缩小数据。只有超过 100 的产品才进入计算。"},
+
+  {num:80, section:"第 16 部分 —— GROUP BY 细节", text:"对一张空表，哪个函数返回一个行数数字？",
+   options:["NULL","报错。","0","1"],
+   correct:2, explain:"<strong>COUNT 始终返回一个数字。</strong> 如果没有数据——结果是 0，而不是 NULL，也不是错误。"},
+
+  {num:81, section:"第 17 部分 —— GROUP BY 练习", text:"一张表有 5 行值为 10，5 行为 NULL。COUNT(*) 返回什么？",
+   options:["5","10","0","NULL"],
+   correct:1, explain:"<strong>COUNT(*) 统计一切</strong>——包括含 NULL 的行。5 行 + 5 行 = 10。"},
+
+  {num:82, section:"第 17 部分 —— GROUP BY 练习", text:"在同一张表中，COUNT(column_name) 返回什么（对那个有值的列）？",
+   options:["5","10","NULL","0"],
+   correct:0, explain:"COUNT(column) <strong>会跳过 NULL</strong>。只有值为 10 的那 5 行被统计。"},
+
+  {num:83, section:"第 17 部分 —— GROUP BY 练习", text:"我们如何把 GROUP BY 结果按总销售额从高到低排序？",
+   options:["... GROUP BY category SORT SUM(sales)","... GROUP BY category ORDER BY SUM(sales) DESC","... GROUP BY category HAVING MAX(sales)","... ORDER BY category"],
+   correct:1, explain:"<strong>ORDER BY</strong> 总是放在最后。你可以在 ORDER BY 中直接使用聚合函数：<code>ORDER BY SUM(sales) DESC</code>"},
+
+  {num:84, section:"第 17 部分 —— GROUP BY 练习", text:"查询 SELECT MAX(price) - MIN(price) FROM products 做什么？",
+   options:["报错，函数之间不能相减。","它显示最贵和最便宜产品之间的差（价格区间）。","它显示两个独立的列。","它把所有价格彼此相减。"],
+   correct:1, explain:"<strong>你可以对聚合函数的结果进行算术运算</strong>。MAX - MIN = 价格区间。"},
+
+  {num:85, section:"第 17 部分 —— GROUP BY 练习", text:"可以在 SELECT 中不带聚合函数使用 GROUP BY 吗？",
+   options:["可以，它只是返回唯一值。","不，那没有意义。","只有在有 WHERE 时。","只在 SQL Server 中。"],
+   correct:0, explain:"<strong>技术上可行</strong>——它返回唯一值。不过为此我们通常用 DISTINCT。"},
+
+  {num:86, section:"第 18 部分 —— GROUP BY 复习", text:"如果我们写：SELECT category, city, SUM(price) FROM products GROUP BY category 会发生什么？",
+   options:["它按类别分组并随机挑选一个城市。","报错，因为 city 没有出现在 GROUP BY 中。","它自动也按 city 分组。","它在每个城市旁显示总计。"],
+   correct:1, explain:"<strong>一条重要规则：</strong> SELECT 中每个不在聚合函数里的列<strong>都必须出现在 GROUP BY 中</strong>。city 缺失——报错。"},
+
+  {num:87, section:"第 18 部分 —— GROUP BY 复习", text:"聚合函数在 HAVING 内部的作用是什么？",
+   options:["按组的计算结果筛选组。","更改组内部的值。","对组排序。","创建新的组。"],
+   correct:0, explain:"HAVING + 聚合函数 = <strong>组的守门员</strong>。只有满足条件（例如 SUM > 1000）的组才能进入结果。"},
+
+  {num:88, section:"第 18 部分 —— GROUP BY 复习", text:"哪个查询能找出每位客户的平均订单数？",
+   options:["SELECT AVG(COUNT(order_id)) FROM orders","SELECT COUNT(order_id) / COUNT(DISTINCT customer_id) FROM orders","SELECT AVG(order_id) FROM orders","报错，不能对计数求平均。"],
+   correct:1, explain:"订单总数除以唯一客户数。<code>COUNT/COUNT(DISTINCT)</code>。答案 A——在普通 SQL 中，函数套函数通常是不允许的。"},
+
+  {num:89, section:"第 18 部分 —— GROUP BY 复习", text:"COUNT(DISTINCT name) 和 DISTINCT COUNT(name) 之间有什么区别？",
+   options:["没有区别。","前者统计唯一的名字，后者试图对一个计数结果做 DISTINCT（始终是单个数字）。","在 MySQL 中后者是正确的写法。","前者只对数字有效。"],
+   correct:1, explain:"始终把 <strong>DISTINCT 放在括号内部</strong>：<code>COUNT(DISTINCT name)</code>。把 DISTINCT 放在 COUNT 之前没有意义——计数本来就只返回一个数字。"},
+
+  {num:90, section:"第 18 部分 —— GROUP BY 复习", text:"在一个包含所有子句的 SQL 查询处理过程中，最后一个阶段是什么？",
+   options:["FROM","WHERE","SELECT","ORDER BY"],
+   correct:3, explain:"SQL 执行顺序：FROM → WHERE → GROUP BY → HAVING → SELECT → <strong>ORDER BY</strong>。排序总是最后。"},
+
+  // ===== Part 5: JOIN =====
+  {num:91, section:"第 19 部分 —— JOIN：核心概念", text:"SQL 中 JOIN 命令的主要用途是什么？",
+   options:["一次从两张表中删除数据。","基于共享的列把来自不同表的行合并起来。","对两张不同表中的数据排序。","在一张表内部创建另一张表的副本。"],
+   correct:1, explain:"JOIN 在表 A 的行和表 B 的行之间存在逻辑关联时，把它们<strong>粘合</strong>起来——例如，把客户与其订单关联。"},
+
+  {num:92, section:"第 19 部分 —— JOIN：核心概念", text:"什么是 INNER JOIN？",
+   options:["即使没有匹配也返回表 A 中所有行的连接。","只返回在两张表中都有匹配的行的连接。","删除重复行的连接。","创建一张临时内部表的命令。"],
+   correct:1, explain:"INNER JOIN = <strong>只取匹配项</strong>。如果某个客户没有订单——他不会出现在结果中。"},
+
+  {num:93, section:"第 19 部分 —— JOIN：核心概念", text:"在 JOIN 查询中单词 ON 的作用是什么？",
+   options:["在服务器上运行查询。","定义连接条件（要比较哪些列）。","像 WHERE 一样筛选最终结果。","指定第二张表的名称。"],
+   correct:1, explain:"<code>ON</code> 定义<strong>表 A 中的哪一列等于表 B 中的哪一列</strong>。例如：<code>ON orders.user_id = users.id</code>"},
+
+  {num:94, section:"第 19 部分 —— JOIN：核心概念", text:"在 JOIN 的语境中，“外键”是什么？",
+   options:["存储密码的列。","只在外部表中创建的键。","一张表中引用另一张表主键的列。","不能在 JOIN 中使用的列。"],
+   correct:2, explain:"外键是<strong>桥梁</strong>——它保存着让我们能在另一张表中找到相关信息的 ID。"},
+
+  {num:95, section:"第 19 部分 —— JOIN：核心概念", text:"可以在一张表和它自己之间执行 JOIN（自连接）吗？",
+   options:["不，那会导致无限循环。","可以，例如当“员工”表中有一个“经理”列时很有用。","只有在你物理复制这张表时。","只在 SQL Server 中。"],
+   correct:1, explain:"<strong>自连接是可能的！</strong> 你给同一张表两个不同的别名——例如 <code>employees e JOIN employees m ON e.manager_id = m.id</code>"},
+
+  {num:96, section:"第 20 部分 —— LEFT、RIGHT、FULL JOIN", text:"LEFT JOIN 返回什么？",
+   options:["只返回表的左侧。","返回左表的所有行 + 右表的匹配项（没有匹配时为 NULL）。","只返回没有匹配的行。","返回两张表的所有行。"],
+   correct:1, explain:"左表是<strong>主表</strong>。你会得到它的全部内容，以及来自右表的相关信息——没有匹配的地方为 NULL。"},
+
+  {num:97, section:"第 20 部分 —— LEFT、RIGHT、FULL JOIN", text:"我们什么时候用 LEFT JOIN 而不是 INNER JOIN？",
+   options:["当我们也想看到从未下过订单的客户时。","当我们想让结果更快时。","当我们只有一张表时。","当我们想删除缺失数据时。"],
+   correct:0, explain:"INNER JOIN 会<strong>隐藏</strong>没有订单的客户。LEFT JOIN 会<strong>保留</strong>他们，并在订单列中填 NULL。"},
+
+  {num:98, section:"第 20 部分 —— LEFT、RIGHT、FULL JOIN", text:"LEFT JOIN 和 RIGHT JOIN 之间有什么区别？",
+   options:["没有逻辑上的区别——取决于你先写哪张表。","LEFT JOIN 更快。","MySQL 不支持 RIGHT JOIN。","LEFT 返回文本，RIGHT 返回数字。"],
+   correct:0, explain:"逻辑上 <strong>A LEFT JOIN B = B RIGHT JOIN A</strong>。数据从业者总是更喜欢 LEFT JOIN，因为阅读顺序更舒服。"},
+
+  {num:99, section:"第 20 部分 —— LEFT、RIGHT、FULL JOIN", text:"在 LEFT JOIN 中，如果没有匹配，右表的列里会出现什么？",
+   options:["0","一个空格。","NULL","报错。"],
+   correct:2, explain:"<strong>NULL</strong> = “没有数据”。在外连接中没有匹配行时，系统会填入 NULL。"},
+
+  {num:100, section:"第 20 部分 —— LEFT、RIGHT、FULL JOIN", text:"FULL OUTER JOIN 做什么？",
+   options:["它返回两张表的所有行（缺少匹配处为 NULL）。","它只返回 100% 完全匹配的行。","它删除这些表并创建一张新表。","它把所有列合并成一个长列。"],
+   correct:0, explain:"<strong>FULL JOIN = LEFT + RIGHT。</strong> 它不会漏掉任何一行。注意：MySQL 没有直接的 FULL JOIN——你要用 UNION 来实现。"},
+
+  {num:101, section:"第 21 部分 —— JOIN：语法与别名", text:"为什么在 JOIN 中给表使用别名是值得的？",
+   options:["这样代码更短、更易读（例如用 o 代替 orders）。","因为你必须给 JOIN 中的每张表都起别名。","为了永久改变表名。","为了隐藏真实的表名。"],
+   correct:0, explain:"别名能<strong>缩短并理清</strong>代码。<code>o.id = c.id</code> 比 <code>orders.id = customers.id</code> 易读得多。"},
+
+  {num:102, section:"第 21 部分 —— JOIN：语法与别名", text:"“Ambiguous column name”（列名有歧义）错误是什么？",
+   options:["列名太长了。","该列不存在。","该列在连接的多张表中都存在——系统不知道你指的是哪一个。","你忘了写 JOIN。"],
+   correct:2, explain:"如果两张表都包含一个名为 <code>id</code> 的列——你必须指明：<code>orders.id</code> 或 <code>users.id</code> 以消除歧义。"},
+
+  {num:103, section:"第 21 部分 —— JOIN：语法与别名", text:"可以在单个查询中连接超过两张表吗？",
+   options:["不，最多 2 张。","可以，你可以一个接一个地串联 JOIN。","可以，但只能用 INNER JOIN。","只在 SQL Server 中。"],
+   correct:1, explain:"<strong>你可以在一个查询中连接 3 张、4 张，甚至 20 张表</strong>——每次只要再加一个 JOIN。"},
+
+  {num:104, section:"第 21 部分 —— JOIN：语法与别名", text:"如果你做 JOIN 却忘了写 ON 条件会发生什么？",
+   options:["系统会随机挑选一个列。","语法错误。","“笛卡尔积”——A 的每一行都与 B 的每一行连接。","它只返回第一行。"],
+   correct:2, explain:"<strong>CROSS JOIN（笛卡尔积）</strong>：10 行 × 10 行 = 100 行。通常是一个代价非常高的错误！"},
+
+  {num:105, section:"第 21 部分 —— JOIN：语法与别名", text:"使用 ON 和使用 USING 之间有什么区别？",
+   options:["没有区别。","USING 只在两张表的列名完全相同时使用。","ON 更快。","USING 只在 INNER JOIN 中有效。"],
+   correct:1, explain:"<code>USING(user_id)</code> = <code>ON a.user_id = b.user_id</code> 的简写。<strong>它只在两张表的名称完全相同时才有效。</strong>"},
+
+  {num:106, section:"第 22 部分 —— 带筛选的 JOIN", text:"WHERE 放在 JOIN 查询的什么位置？",
+   options:["在 JOIN 之前。","在 ON 内部。","在所有 JOIN 都写完之后。","在查询的开头。"],
+   correct:2, explain:"你先<strong>连接</strong>所有表（JOIN），然后才<strong>筛选</strong>合并后的结果（WHERE）。"},
+
+  {num:107, section:"第 22 部分 —— 带筛选的 JOIN", text:"在 LEFT JOIN 中，在 ON 里筛选和在 WHERE 里筛选有什么区别？",
+   options:["没有区别。","在 ON 里筛选决定哪些行被连接。在 WHERE 里筛选会从最终结果中移除行。","WHERE 更快。","不能在 ON 内部筛选。"],
+   correct:1, explain:"<strong>一个细微但重要的区别：</strong> 在 LEFT JOIN 的右表上于 WHERE 中筛选，可能会意外地把它变成 INNER JOIN——因为它会把 NULL 过滤掉。"},
+
+  {num:108, section:"第 22 部分 —— 带筛选的 JOIN", text:"我们如何统计每位客户有多少个订单？",
+   options:["在表之间做 JOIN，并用 COUNT(order_id) 配合按客户名称的 GROUP BY。","使用 SUM(orders)。","不能在 JOIN 内部计数。","使用 DISTINCT customers。"],
+   correct:0, explain:"<strong>JOIN + GROUP BY + COUNT</strong>——一个经典组合！把 customers 连接到 orders，按客户分组，然后统计订单数。"},
+
+  {num:109, section:"第 22 部分 —— 带筛选的 JOIN", text:"什么是 CROSS JOIN？",
+   options:["只交叉具有相似值的行的连接。","在两张表之间产生所有可能组合的连接。","两个数据库的表之间的连接。","取消 JOIN 的命令。"],
+   correct:1, explain:"CROSS JOIN = <strong>所有可能的组合</strong>。适合诸如一个产品的 每种颜色 × 尺码 组合。5×5 = 25 行。"},
+
+  {num:110, section:"第 22 部分 —— 带筛选的 JOIN", text:"可以在多个列上做 JOIN 吗？",
+   options:["不，ON 条件只能包含一个列。","可以，你在 ON 内部使用 AND。","可以，但只在 NATURAL JOIN 中。","只有在你事先创建一个组合列时。"],
+   correct:1, explain:"<strong>你可以！</strong> <code>ON a.first = b.first AND a.last = b.last</code>——你用 AND 在多个列上连接。"},
+
+  {num:111, section:"第 23 部分 —— JOIN 场景", text:"在 Sakila 中，我们如何把一部影片连接到它的类型（category）？",
+   options:["在两张表之间直接连接。","通过一张名为 film_category 的关联表来连接。","类型存储在 films 表内部。","无法连接它们。"],
+   correct:1, explain:"这是一种<strong>多对多（N:N）</strong>关系——所以有一张中间表 film_category，保存着两者的键。"},
+
+  {num:112, section:"第 23 部分 —— JOIN 场景", text:"在 WWI 中，哪张表把订单（Orders）连接到产品（StockItems）？",
+   options:["Customers","OrderLines","Suppliers","Invoices"],
+   correct:1, explain:"<strong>OrderLines</strong> = 一张中间表。Orders 保存订单的总体信息，OrderLines 保存所购买的每一件产品。"},
+
+  {num:113, section:"第 23 部分 —— JOIN 场景", text:"我们如何找出从未下过订单的客户？",
+   options:["在 customers 和 orders 之间做 INNER JOIN。","在 customers 和 orders 之间做 LEFT JOIN，并筛选 WHERE order_id IS NULL。","在 customers 和 orders 之间做 RIGHT JOIN。","只搜索 orders 表。"],
+   correct:1, explain:"<strong>一个经典技巧！</strong> LEFT JOIN 会把没有订单的客户保留为 NULL，然后 <code>WHERE order_id IS NULL</code> 只筛选出他们。"},
+
+  {num:114, section:"第 23 部分 —— JOIN 场景", text:"什么是 NATURAL JOIN？",
+   options:["一种通过相同的列名自己猜测关系的连接。","只使用自然数的连接。","不带 SELECT 也能工作的连接。","数据库启动时自动发生的连接。"],
+   correct:0, explain:"NATURAL JOIN 通过相同的名称<strong>猜测</strong>连接列。<strong>不推荐</strong>——在专业代码中既冒险又难读。"},
+
+  {num:115, section:"第 23 部分 —— JOIN 场景", text:"如果表 A 有 5 行、表 B 有 0 行，INNER JOIN 返回多少行？",
+   options:["5","0","NULL","报错。"],
+   correct:1, explain:"INNER JOIN 需要匹配。<strong>如果一边为空——就没有匹配，结果是 0 行。</strong>"},
+
+  {num:116, section:"第 24 部分 —— JOIN 复习", text:"如果我们把一个文本列连接到一个数字列会发生什么？",
+   options:["系统执行自动转换。","“Data type mismatch”（数据类型不匹配）错误。","查询运行但不返回数据。","系统删除这两列。"],
+   correct:1, explain:"<strong>你必须比较兼容的数据类型</strong>。数字不等于文本——系统会抛出 Data type mismatch 错误。"},
+
+  {num:117, section:"第 24 部分 —— JOIN 复习", text:"JOIN 和 UNION 之间有什么区别？",
+   options:["JOIN 合并列（横向），UNION 合并行（纵向）。","UNION 更快。","JOIN 需要相同的列名，UNION 不需要。","没有区别。"],
+   correct:0, explain:"<strong>JOIN = 横向</strong>（增加列）。<strong>UNION = 纵向</strong>（把行堆叠在其他行下面）。"},
+
+  {num:118, section:"第 24 部分 —— JOIN 复习", text:"可以连接位于不同数据库中的表吗？",
+   options:["不，每个查询都局限于一个数据库。","可以，通过指定完整名称（DB1.Table1 JOIN DB2.Table2）。","只有当它们在同一台物理服务器上时。","只在 Oracle 中。"],
+   correct:1, explain:"<strong>可以！</strong> 只要你对两者都有权限：<code>DB1.customers JOIN DB2.orders ON ...</code>"},
+
+  {num:119, section:"第 24 部分 —— JOIN 复习", text:"连接巨型表最高效的方式是什么？",
+   options:["总是使用 SELECT *。","确保 JOIN 的列上有索引。","用 RIGHT JOIN 代替 LEFT JOIN。","在 WHERE 而不是 ON 里做连接。"],
+   correct:1, explain:"<strong>索引</strong>让引擎能快速查找值。没有索引——每次 JOIN 都要做全表扫描。"},
+
+  {num:120, section:"第 24 部分 —— JOIN 复习", text:"在选择 JOIN 类型之前要问的合乎逻辑的问题是什么？",
+   options:["“表里有多少列？”","“我想丢掉在另一边没有匹配的数据吗？”","“哪张表更大？”","“我有管理员权限吗？”"],
+   correct:1, explain:"<strong>关键问题：</strong> “是的，只要匹配项” → INNER JOIN。“不，我必须看到一切” → LEFT JOIN。"},
+
+  // ===== Part 6: Subqueries =====
+  {num:121, section:"第 25 部分 —— 子查询：基础", text:"子查询最简单的定义是什么？",
+   options:["只在夜间运行的查询。","位于另一个查询内部、括号里的查询。","连接两张表的查询。","统计行数的函数。"],
+   correct:1, explain:"子查询是一个位于括号内部的<strong>内层 SELECT 语句</strong>，它为外层查询提供数据。"},
+
+  {num:122, section:"第 25 部分 —— 子查询：基础", text:"子查询通常放在主查询内部的什么位置？",
+   options:["在 SELECT、FROM 或 WHERE 内部。","只在 ORDER BY 内部。","总是在 GROUP BY 之后。","在主 SELECT 语句之前。"],
+   correct:0, explain:"<strong>3 个常见位置：</strong> SELECT 内部（每行一个值）、FROM（一张临时表）、WHERE（一个计算出的条件）。"},
+
+  {num:123, section:"第 25 部分 —— 子查询：基础", text:"写子查询时你必须做什么？",
+   options:["只用小写书写。","在它末尾加一个分号。","把它用圆括号 () 包起来。","至少使用两个 JOIN。"],
+   correct:2, explain:"<strong>必须有括号！</strong> 它们告诉 SQL 引擎这是一个独立的单元——一个内层查询。"},
+
+  {num:124, section:"第 25 部分 —— 子查询：基础", text:"什么是“标量子查询”（scalar subquery）？",
+   options:["返回整张表的子查询。","只返回一列的子查询。","返回单个值（一行一列）的子查询。","没有 FROM 的子查询。"],
+   correct:2, explain:"<strong>一个单一的值</strong>——比如一个平均值或某个特定的 ID。这就是为什么你可以直接把它和 = 一起使用。"},
+
+  {num:125, section:"第 25 部分 —— 子查询：基础", text:"我们用哪个查询来找出价格高于平均值的产品？",
+   options:["WHERE price > AVG(price)","WHERE price > (SELECT AVG(price) FROM products)","SELECT AVG(price) WHERE price > AVG","WHERE price > (SELECT * FROM products)"],
+   correct:1, explain:"<strong>你不能在 WHERE 中直接使用 AVG。</strong> 你必须在子查询中计算它：<code>WHERE price > (SELECT AVG(price) FROM products)</code>"},
+
+  {num:126, section:"第 26 部分 —— 子查询：IN 与 EXISTS", text:"我们什么时候在子查询中使用 IN 运算符？",
+   options:["当子查询返回一个值列表时（一列、多行）。","当我们想计算一个总和时。","只有在只有一张表时。","当子查询只返回单个值时。"],
+   correct:0, explain:"<strong>IN</strong> 检查值是否在一个“集合”中。子查询返回一整列值来进行比对。"},
+
+  {num:127, section:"第 26 部分 —— 子查询：IN 与 EXISTS", text:"EXISTS 运算符做什么？",
+   options:["检查一个值是否等于 1。","检查子查询是否返回了任何行（至少一行）。","返回所有存在的值。","删除不存在的行。"],
+   correct:1, explain:"<strong>EXISTS</strong> 不关心返回了什么值——只关心<strong>“有结果”还是“没有结果”</strong>。"},
+
+  {num:128, section:"第 26 部分 —— 子查询：IN 与 EXISTS", text:"IN 和 EXISTS 之间有什么区别？",
+   options:["IN 检查具体的值，EXISTS 检查行是否存在。","IN 总是更快。","EXISTS 只对数字有效。","没有区别。"],
+   correct:0, explain:"<strong>IN</strong> = 把一个值与一个列表比对。<strong>EXISTS</strong> = 检查是否存在匹配的行（对复杂关系很有用）。"},
+
+  {num:129, section:"第 26 部分 —— 子查询：IN 与 EXISTS", text:"WHERE id NOT IN (SELECT id FROM blocked_users) 做什么？",
+   options:["它只显示被屏蔽的用户。","它显示除屏蔽名单上之外的所有用户。","它删除被屏蔽的用户。","报错。"],
+   correct:1, explain:"<strong>NOT IN</strong> 会从结果中排除子查询返回的所有值——与 IN 相反。"},
+
+  {num:130, section:"第 26 部分 —— 子查询：IN 与 EXISTS", text:"如果 IN 中的子查询返回了一个 NULL 值会发生什么？",
+   options:["NULL 被忽略。","查询可能不返回任何行（尤其是用 NOT IN 时）。","系统用 0 替换它。","语法错误。"],
+   correct:1, explain:"<strong>NULL 陷阱！</strong> 与 NULL 的比较是“未知”，这可能完全破坏 NOT IN 的结果。"},
+
+  {num:131, section:"第 27 部分 —— 子查询：SELECT 与 FROM", text:"什么是“派生表”（derived table）？",
+   options:["FROM 内部的、行为像普通表一样的子查询。","已从数据库中删除的表。","由另外两列计算得出的列。","不同服务器之间的连接。"],
+   correct:0, explain:"<strong>派生表</strong> = FROM 内部的一个 SELECT。你把另一个 SELECT 的结果当作一张真实的表来对它做 SELECT。"},
+
+  {num:132, section:"第 27 部分 —— 子查询：SELECT 与 FROM", text:"在 FROM 内部的子查询必须加什么？",
+   options:["一个别名。","一个 WHERE 子句。","一个排序顺序（ORDER BY）。","单词 TABLE。"],
+   correct:0, explain:"<strong>必须有别名！</strong> 系统必须知道该如何称呼这张“临时表”，才能引用它的列。"},
+
+  {num:133, section:"第 27 部分 —— 子查询：SELECT 与 FROM", text:"我们什么时候在 SELECT 内部使用子查询？",
+   options:["当我们想在每一行旁边显示一个聚合值时（例如：在产品价格旁显示总体平均值）。","从结果中删除行。","重命名列。","只在 GROUP BY 中。"],
+   correct:0, explain:"SELECT 中的子查询<strong>会为每一行运行</strong>，并从当前上下文之外引入一个值——比如在每个产品旁边显示总体平均值。"},
+
+  {num:134, section:"第 27 部分 —— 子查询：SELECT 与 FROM", text:"SELECT 内部的子查询最多能返回多少列？",
+   options:["想要多少就多少。","只能一列。","两列。","不返回任何列。"],
+   correct:1, explain:"<strong>只能一列！</strong> 它必须能放进最终表中的一个“单元格”，所以它必须返回单个值。"},
+
+  {num:135, section:"第 27 部分 —— 子查询：SELECT 与 FROM", text:"可以在子查询内部使用 JOIN 吗？",
+   options:["不，子查询必须简单。","可以，子查询可以像任何普通查询一样复杂。","只有当主查询是 JOIN 时。","只在 MySQL 8.0+ 中。"],
+   correct:1, explain:"<strong>子查询自成一体！</strong> 你可以在其中做任何事：筛选、连接、分组——就像任何普通查询一样。"},
+
+  {num:136, section:"第 28 部分 —— 相关子查询", text:"什么是相关子查询？",
+   options:["在两个数据库上运行的查询。","使用外层查询中某个值的内层查询。","没有 WHERE 的查询。","只返回正数的查询。"],
+   correct:1, explain:"<strong>相关</strong> = 内层查询“知道”外面当前的那一行，并执行针对它量身定制的计算。"},
+
+  {num:137, section:"第 28 部分 —— 相关子查询", text:"相关子查询的主要缺点是什么？",
+   options:["它不太安全。","它可能非常慢（它对每一行都重新运行）。","它只对文本有效。","它不能在 SQL Server 中使用。"],
+   correct:1, explain:"<strong>性能！</strong> 引擎会为每一条记录重新运行它——如果有一百万行，它就运行一百万次。"},
+
+  {num:138, section:"第 28 部分 —— 相关子查询", text:"我们如何在代码中识别一个相关子查询？",
+   options:["通过括号。","通过外层查询的某个表的别名出现在内层 WHERE 中这一点。","通过单词 CORRELATED。","通过它有一个 GROUP BY 这一点。"],
+   correct:1, explain:"<strong>识别标志：</strong> 外层查询的一个别名出现在内部。例如：<code>WHERE p.category = o.category</code>，其中 o 来自外面。"},
+
+  {num:139, section:"第 28 部分 —— 相关子查询", text:"带 EXISTS 的相关查询的目的是什么？",
+   options:["求平均值。","为每一行检查另一张表中是否存在匹配的记录。","删除重复项。","对内层表排序。"],
+   correct:1, explain:"一个经典用法：<strong>“显示至少有一个订单的客户”</strong>——EXISTS 为每位客户分别检查是否存在。"},
+
+  {num:140, section:"第 28 部分 —— 相关子查询", text:"每个子查询都能用 JOIN 替代吗？",
+   options:["是的，总是可以。","不，有些复杂的聚合计算用子查询更容易实现。","JOIN 总是更慢。","FROM 中的子查询本质上就是一个 JOIN。"],
+   correct:1, explain:"JOIN 在性能上更好，但<strong>子查询能实现一些逻辑</strong>，这些逻辑用简单的连接很难表达。"},
+
+  {num:141, section:"第 29 部分 —— ALL、ANY、SOME", text:"ALL 运算符在子查询中做什么？",
+   options:["它返回所有的行。","它检查条件是否对子查询返回的所有值都成立。","它检查是否至少有一个值成立。","它计算总和。"],
+   correct:1, explain:"<code>WHERE price > ALL (...)</code> = 比<strong>它们全部</strong>都贵。条件必须对列表中的每一项都成立。"},
+
+  {num:142, section:"第 29 部分 —— ALL、ANY、SOME", text:"ANY 运算符做什么？",
+   options:["它检查条件是否对子查询返回的至少一个值成立。","它返回一个随机值。","它检查是否完全没有值。","它等价于 NOT EXISTS。"],
+   correct:0, explain:"<strong>ANY</strong> = 只要有一个条件成立就够了。类似 IN，但它允许 <code>></code>、<code><</code> 等运算符。"},
+
+  {num:143, section:"第 29 部分 —— ALL、ANY、SOME", text:"ANY 和 SOME 之间有区别吗？",
+   options:["有，SOME 只对数字有效。","没有，它们是同义词，工作方式完全相同。","ANY 更快。","SOME 只在 PostgreSQL 中有效。"],
+   correct:1, explain:"<strong>ANY 和 SOME 完全相同</strong>——它们的存在是为了让 SQL 读起来更像自然语言。"},
+
+  {num:144, section:"第 29 部分 —— ALL、ANY、SOME", text:"WHERE salary > ALL (SELECT 1000, 2000) 返回什么？",
+   options:["高于 1000 的工资。","高于 2000 的工资（它们必须大于所有值）。","1000 到 2000 之间的工资。","报错。"],
+   correct:1, explain:"<strong>ALL = 必须超过它们全部。</strong> 2000 是列表中最高的，所以只有高于 2000 的工资才通过。"},
+
+  {num:145, section:"第 29 部分 —— ALL、ANY、SOME", text:"子查询在 WHERE 中什么时候会报错？",
+   options:["当它返回多于一个值，但我们使用了单值运算符（=）时。","当它返回 0 行时。","当它有多于一个 JOIN 时。","当它有一个别名时。"],
+   correct:0, explain:"<strong>一个经典错误！</strong> <code>WHERE id = (SELECT id FROM users)</code>——如果返回了两个用户，引擎不知道该和哪一个比较。"},
+
+  {num:146, section:"第 30 部分 —— 子查询：复习", text:"对于一个 WHERE 中带子查询的查询，SQL 按什么顺序处理？",
+   options:["先外层，再内层。","先内层（子查询），然后外层使用其结果。","两者同时。","从上到下。"],
+   correct:1, explain:"<strong>先内层！</strong> 引擎先解析括号 → 得到一个结果 → 把它当作常量用在外层查询中。"},
+
+  {num:147, section:"第 30 部分 —— 子查询：复习", text:"为什么 FROM 中的子查询有时比简单的 JOIN 更可取？",
+   options:["因为它更短。","为了提前做 GROUP BY，在连接之前缩小数据。","因为它总是更快。","因为在 FROM 中你不需要别名。"],
+   correct:1, explain:"<strong>一个性能技巧！</strong> 你把大表汇总成小的组——然后再连接它们。高效得多。"},
+
+  {num:148, section:"第 30 部分 —— 子查询：复习", text:"一个子查询内部可以再包含另一个子查询吗？",
+   options:["不，有一层的限制。","可以，你可以把查询嵌套好几层（嵌套子查询）。","最多 3 层。","只在 SQL Server Enterprise 中。"],
+   correct:1, explain:"<strong>没有技术上的限制</strong>——但层数太多，代码会变得非常难读。那时用 CTE 更好。"},
+
+  {num:149, section:"第 30 部分 —— 子查询：复习", text:"检查一个子查询是否有效的最好方法是什么？",
+   options:["运行完整的查询，然后祈祷一切顺利。","复制括号里的代码，作为一个普通查询单独运行。","只检查外层 SELECT。","把内层 SELECT 改成 COUNT。"],
+   correct:1, explain:"<strong>一个专业技巧！</strong> 子查询是一个独立的查询——把它复制到单独的窗口里单独运行，看看它返回什么。"},
+
+  {num:150, section:"第 30 部分 —— 子查询：复习", text:"使用子查询时最重要的规则是什么？",
+   options:["它们总是返回所有列（*）。","确保它们返回的数据形态正好是外层查询所期望的。","只对数字使用它们。","完全不要使用它们。"],
+   correct:1, explain:"<strong>最常见的错误</strong>：括号返回的内容与外面等待的运算符之间不匹配（= 对 IN）。"},
+];
+
+let answers = {};
+let correct = 0;
+let currentSection = null;
+
+function updateScore(){
+  const total = Object.keys(answers).length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('scoreText').textContent = correct+' / '+total;
+  document.getElementById('scoreFill').style.width = pct+'%';
+  document.getElementById('scorePct').textContent = pct+'%';
+  document.getElementById('heroAnswered').textContent = total;
+  if(total === questions.length) showFinish();
+}
+
+function selectOption(qIdx, optIdx){
+  if(answers[qIdx] !== undefined) return;
+  const q = questions[qIdx];
+  const isCorrect = optIdx === q.correct;
+  answers[qIdx] = optIdx;
+  if(isCorrect) correct++;
+  const card = document.getElementById('qcard-'+qIdx);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i === q.correct) o.classList.add('correct-ans');
+    if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+  const exp = document.getElementById('exp-'+qIdx);
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ 正确！ ' : '❌ 错误——正确答案以绿色标出。 ') + q.explain;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  questions.forEach((q,i)=>{
+    if(q.section !== currentSection){
+      currentSection = q.section;
+      mc.innerHTML += `<div class="sec-label">${q.section}</div>`;
+    }
+    const opts = q.options.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    mc.innerHTML += `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">第 ${q.num} 题</div>
+          <div class="q-section">${q.section.split('—')[1]?.trim() || q.section}</div>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-body">
+        <div class="options">${opts}</div>
+        <div class="explanation" id="exp-${i}">
+          <div class="exp-label">💡 Explanation</div>
+          <div class="exp-text"></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  mc.innerHTML += `
+  <div class="finish-card" id="finishCard">
+    <div class="finish-emoji">🎉</div>
+    <div class="finish-title">你完成了测验！</div>
+    <div class="finish-score" id="finishScore">0/150</div>
+    <div id="finishGrade"></div>
+    <div class="finish-sub" id="finishSub"></div>
+    <br>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 重新尝试</button>
+    <a href="quiz.html" class="adv-link">🧠 Ready for the advanced quiz? ←</a>
+  </div>`;
+}
+
+function showFinish(){
+  if(window.fbAutoSave && window.currentUser) window.fbAutoSave(correct, questions.length);
+  const card = document.getElementById('finishCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('finishScore').textContent = correct+'/150';
+  const pct = Math.round(correct/150*100);
+  let grade, sub;
+  if(pct>=90){grade='<span class="finish-grade grade-a">⭐ 优秀！A</span>';sub='做得好！你已经牢固掌握了 SELECT 基础。你已经准备好进入下一批主题了！';}
+  else if(pct>=75){grade='<span class="finish-grade grade-b">👍 很好！B</span>';sub='不错！值得复习一下你答错的题目，然后再继续。';}
+  else if(pct>=60){grade='<span class="finish-grade grade-c">📚 及格！C</span>';sub='基础不错，但在继续之前值得复习一下 SELECT 的材料。';}
+  else{grade='<span class="finish-grade grade-d">💪 继续练习！D</span>';sub='不要放弃——回到 SELECT 学习材料再试一次！';}
+  document.getElementById('finishGrade').innerHTML = grade;
+  document.getElementById('finishSub').textContent = sub;
+}
+
+function resetQuiz(){
+  answers = {}; correct = 0; currentSection = null;
+  buildQuiz();
+  updateScore();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+buildQuiz();
+updateScore();
+</script>
+
+<!-- Firebase SDK -->
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",
+  authDomain: "sql-course-507b5.firebaseapp.com",
+  projectId: "sql-course-507b5",
+  storageBucket: "sql-course-507b5.firebasestorage.app",
+  messagingSenderId: "999664091380",
+  appId: "1:999664091380:web:349959985ae11ce8c51ea1"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let currentUser = null;
+window.currentUser = null;
+const QUIZ_ID = document.body.dataset.quizId || 'quiz';
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user; window.currentUser = user;
+  const loginBtn = document.getElementById('fb-login-btn');
+  const logoutBtn = document.getElementById('fb-logout-btn');
+  const userInfo = document.getElementById('fb-user-info');
+  const histBtn = document.getElementById('fb-history-btn');
+  const saveBtn = document.getElementById('fb-save-btn');
+  if (user) {
+    document.getElementById('fb-user-name').textContent = user.displayName;
+    document.getElementById('fb-user-photo').src = user.photoURL;
+    document.getElementById('fb-user-photo').style.display = 'block';
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'flex';
+    userInfo.style.display = 'flex';
+    histBtn.style.display = 'flex';
+    saveBtn.style.display = 'flex';
+    await loadProgress();
+    await loadHistory();
+  } else {
+    loginBtn.style.display = 'flex';
+    logoutBtn.style.display = 'none';
+    userInfo.style.display = 'none';
+    histBtn.style.display = 'none';
+    saveBtn.style.display = 'none';
+  }
+});
+
+window.fbLogin = async () => {
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { console.error(e); }
+};
+
+window.fbLogout = async () => { await signOut(auth); };
+
+window.fbToggleHistory = () => {
+  const wrap = document.getElementById('fb-history-wrap');
+  wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+};
+
+window.triggerSave = async () => {
+  if (!currentUser) { fbLogin(); return; }
+  // Get current score from page
+  const scoreEl = document.getElementById('scoreText') || document.getElementById('score-display');
+  const txt = scoreEl ? scoreEl.textContent : '0 / 0';
+  const parts = txt.split('/');
+  const score = parseInt(parts[0]) || 0;
+  const total = parseInt(parts[1]) || 0;
+  if (total === 0) { showToast('⚠️ 请先至少回答一道题！'); return; }
+  await saveProgress(score, total);
+};
+
+async function saveProgress(score, total) {
+  if (!currentUser) return;
+  const pct = Math.round(score/total*100);
+  const ref = doc(db, 'users', currentUser.uid, 'quizzes', QUIZ_ID);
+  await setDoc(ref, { score, total, pct, lastUpdate: new Date().toISOString() }, { merge: true });
+  await addDoc(collection(db, 'users', currentUser.uid, 'history'), {
+    quizId: QUIZ_ID, score, total, pct, date: new Date().toISOString()
+  });
+  showToast('✅ 进度已保存到云端！');
+  await loadHistory();
+}
+
+window.fbAutoSave = saveProgress;
+
+async function loadProgress() {
+  if (!currentUser) return;
+  const snap = await getDoc(doc(db, 'users', currentUser.uid, 'quizzes', QUIZ_ID));
+  if (snap.exists()) {
+    const d = snap.data();
+    const el = document.getElementById('fb-saved-score');
+    el.textContent = `Last attempt: ${d.score}/${d.total} (${d.pct}%)`;
+    el.style.display = 'block';
+  }
+}
+
+async function loadHistory() {
+  if (!currentUser) return;
+  const q = query(collection(db, 'users', currentUser.uid, 'history'), orderBy('date','desc'), limit(10));
+  const snap = await getDocs(q);
+  const hist = [];
+  snap.forEach(d => hist.push(d.data()));
+  renderChart(hist.filter(h => h.quizId === QUIZ_ID));
+}
+
+function renderChart(history) {
+  const panel = document.getElementById('fb-history-panel');
+  if (!history.length) {
+    panel.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">No history yet — answer questions and save!</p>';
+    return;
+  }
+  const rev = [...history].reverse();
+  const best = Math.max(...history.map(h=>h.pct));
+  const avg = Math.round(history.reduce((a,h)=>a+h.pct,0)/history.length);
+  const bars = rev.map(h => {
+    const d = new Date(h.date);
+    const lbl = `${d.getDate()}/${d.getMonth()+1}`;
+    const color = h.pct>=80?'var(--aq)':h.pct>=50?'#FFB020':'#FF4060';
+    const ht = Math.max(h.pct*1.1, 8);
+    return `<div class="hbar-wrap">
+      <div class="hbar-val">${h.pct}%</div>
+      <div class="hbar" style="height:${ht}px;background:${color}"></div>
+      <div class="hbar-lbl">${lbl}</div>
+    </div>`;
+  }).join('');
+  panel.innerHTML = `
+    <div class="hstats-row">
+      <div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">Personal best</div></div>
+      <div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">Average</div></div>
+      <div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">Attempts</div></div>
+    </div>
+    <div class="hchart">${bars}</div>`;
+}
+
+function showToast(msg) {
+  let t = document.getElementById('fb-toast');
+  if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+
+</body>
+</html>

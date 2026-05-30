@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- =============================================== -->
+<!-- SEO META TAGS - Primary                         -->
+<!-- =============================================== -->
+<title>免费 SQL 课程 | 310+ 练习、在线模拟器和求职面试准备 | Eliran Grossman</title>
+<meta name="title" content="Free SQL Course | 310+ Exercises, Live Simulators & Interview Prep">
+<meta name="description" content="完全免费的 SQL 课程，包含 310+ 个互动练习、4 个在线 SQL 模拟器（NBA、欧洲冠军联赛、Northwind）、完整的函数参考，以及面向数据分析师的案例式面试模拟。">
+<meta name="keywords" content="SQL, SQL course, learn SQL, free SQL course, SQL exercises, SQL simulator, Window Functions, Northwind, JOIN, GROUP BY, data analyst, SQL interview, MySQL, SQL Server, data, BI">
+<meta name="author" content="Eliran Grossman">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow">
+<meta name="language" content="English">
+<meta name="geo.region" content="US">
+<meta name="geo.placename" content="Global">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/">
+
+<!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/">
+<meta property="og:site_name" content="免费 SQL 课程 - Eliran Grossman">
+<meta property="og:title" content="免费 SQL 课程 | 310+ 练习和在线模拟器">
+<meta property="og:description" content="完全免费的 SQL 课程。310+ 个练习、4 个模拟器、函数参考，以及面向数据分析师的真实面试准备。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+<meta property="og:image:alt" content="Eliran Grossman - SQL Instructor">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="免费 SQL 课程 | 310+ 练习">
+<meta name="twitter:description" content="完全免费的 SQL 课程，包含练习、模拟器和面试准备。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<!-- Theme color -->
+<meta name="theme-color" content="#00d4c8">
+
+<!-- =============================================== -->
+<!-- JSON-LD Structured Data - Course Schema         -->
+<!-- =============================================== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Course",
+      "@id": "https://egrosman1.github.io/sql-course/#course",
+      "name": "免费 SQL 课程",
+      "description": "全面、完全免费的 SQL 课程。包含 11 个课程、310+ 个实操练习、4 个在线 SQL 模拟器、函数参考、四个难度等级的测验，以及案例式面试模拟。",
+      "url": "https://egrosman1.github.io/sql-course/en/",
+      "image": "https://egrosman1.github.io/sql-course/eliran.png",
+      "inLanguage": "en",
+      "isAccessibleForFree": true,
+      "educationalLevel": "Beginner to Expert",
+      "teaches": [
+        "SQL",
+        "SELECT statements",
+        "JOIN operations",
+        "GROUP BY and aggregation",
+        "Window Functions",
+        "Subqueries",
+        "Data Analysis",
+        "SQL Interview Preparation"
+      ],
+      "audience": {
+        "@type": "EducationalAudience",
+        "educationalRole": "student"
+      },
+      "provider": {
+        "@type": "Person",
+        "@id": "https://egrosman1.github.io/sql-course/#instructor"
+      },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "PT40H",
+        "inLanguage": "en"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "category": "free"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://egrosman1.github.io/sql-course/#instructor",
+      "name": "Eliran Grossman",
+      "alternateName": "Eliran Grossman",
+      "jobTitle": "数据分析师兼 SQL 讲师",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Partner Communications"
+      },
+      "image": "https://egrosman1.github.io/sql-course/eliran.png",
+      "sameAs": [
+        "https://www.linkedin.com/in/eliran-grossman-17a84b245/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://egrosman1.github.io/sql-course/#website",
+      "url": "https://egrosman1.github.io/sql-course/en/",
+      "name": "免费 SQL 课程",
+      "description": "免费的 SQL 课程，包含练习、模拟器和面试准备",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://egrosman1.github.io/sql-course/#instructor"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首页",
+          "item": "https://egrosman1.github.io/sql-course/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- FAQ Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "课程真的免费吗？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "是的，本课程完全免费——包括所有练习、模拟器、测验和面试模拟。无需注册或付费。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "这门课程适合谁？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本课程适合数据领域的零基础初学者、想要提升 SQL 的分析师，以及正在准备数据岗位面试的求职者。教材分为四个难度等级——从初级到专家。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "这门课程的独特之处是什么？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "本课程提供 4 个基于真实数据集（NBA、欧洲冠军联赛、Northwind）的互动 SQL 模拟器，以及面向保险和电信行业的案例式面试模拟——这些都是在其他课程中找不到的独特内容。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "完成这门课程需要多长时间？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "每周投入 3–5 小时，你可以在 6–10 周内学完全部材料，并达到初级到中级数据分析师的水平。"
+      }
+    }
+  ]
+}
+</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;
+  --bg2:#0c1518;
+  --bg3:#111e21;
+  --border:rgba(0,212,200,.08);
+  --border2:rgba(0,212,200,.18);
+  --text:#e8f4f5;
+  --text2:#6b9098;
+  --text3:#2a4048;
+  --aq:#00d4c8;
+  --aq2:rgba(0,212,200,.12);
+  --font:'Heebo',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --sb:260px;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.top{position:fixed;top:0;right:0;left:0;height:48px;z-index:300;background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
+.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
+.lang-flags{display:flex;gap:5px;align-items:center}
+.lang-flags a{font-size:13px;font-weight:600;color:#fff;line-height:1;display:inline-flex;align-items:center;gap:5px;text-decoration:none;padding:4px 9px;border-radius:6px;opacity:.6;border:1px solid transparent;transition:all .12s}
+.lang-flags a:hover{opacity:1;background:var(--bg2)}
+.lang-flags a.on{opacity:1;border-color:var(--aq);background:var(--aq2)}
+.logo em{color:var(--aq);font-style:normal}
+.top-nav{display:flex;gap:.1rem;list-style:none;flex:1;overflow-x:auto;scrollbar-width:none}
+.top-nav::-webkit-scrollbar{display:none}
+.top-nav a{color:var(--text2);text-decoration:none;font-size:12px;font-weight:600;padding:4px 9px;border-radius:4px;white-space:nowrap;display:block;transition:color .12s}
+.top-nav a:hover{color:var(--aq)}
+.hbg{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:6px}
+.hbg span{width:18px;height:2px;background:var(--text2);border-radius:2px;display:block}
+
+/* SIDEBAR */
+.sb{position:fixed;top:48px;left:0;width:var(--sb);bottom:0;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;z-index:200}
+.sb-hdr{padding:1.2rem 1.3rem .9rem;border-bottom:1px solid var(--border)}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.4rem}
+.sb-title{font-size:14px;font-weight:700;color:var(--text)}
+.sb-body{padding:.6rem 0 3rem}
+.sb-group{padding:.6rem 1.3rem .2rem;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono)}
+.sb-link{display:flex;align-items:center;gap:.6rem;padding:.45rem 1.3rem;text-decoration:none;transition:all .12s}
+.sb-link:hover,.sb-link.on{background:var(--aq2)}
+.sb-link:hover .sl-dot,.sb-link.on .sl-dot{background:var(--aq);border-color:var(--aq)}
+.sb-link:hover .sl-txt,.sb-link.on .sl-txt{color:var(--text)}
+.sl-dot{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0}
+.sl-txt{font-size:12.5px;color:var(--text2)}
+
+/* MAIN */
+.main{margin-top:48px;margin-left:var(--sb);padding:2.5rem 2.5rem 4rem;min-height:calc(100vh - 48px)}
+
+/* HERO */
+.hero{background:var(--bg2);border:1px solid var(--border);border-top:2px solid var(--aq);border-radius:12px;padding:2rem 2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
+.hero-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--aq);font-family:var(--mono);margin-bottom:.6rem}
+.hero h1{font-size:2.2rem;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:.5rem}
+.hero h1 em{color:var(--aq);font-style:normal}
+.hero-desc{font-size:.9rem;color:var(--text2);line-height:1.7;max-width:460px}
+.hero-desc strong{color:var(--text)}
+.hero-about{font-size:.85rem;color:var(--text2);line-height:1.75;max-width:480px;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)}
+.hero-about strong{color:var(--aq)}
+.hero-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--aq);flex-shrink:0}
+.hero-photo-ph{width:80px;height:80px;border-radius:50%;background:var(--bg3);border:2px solid var(--aq);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
+
+/* INSTRUCTOR ROW */
+.inst{display:flex;align-items:center;gap:.7rem;margin-top:1.1rem;flex-wrap:wrap}
+.inst-name{font-size:13px;font-weight:700;color:var(--text)}
+.inst-role{font-size:11.5px;color:var(--text2)}
+.inst-sep{color:var(--text3)}
+.ilink{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;text-decoration:none}
+.ilink.li{background:#0a66c2;color:#fff}
+.ilink.wa{background:#25d366;color:#fff}
+
+/* STATS ROW */
+.stats{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1.1rem;display:flex;align-items:center;gap:.65rem;flex:1;min-width:110px}
+.stat-val{font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--aq);line-height:1}
+.stat-lbl{font-size:11px;color:var(--text2);font-weight:600}
+
+/* NAV CARDS */
+.cards-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.75rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.5rem}
+.card{display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);transition:all .15s}
+.card:hover{border-color:var(--border2);background:var(--bg3)}
+.card.feat{border-color:var(--border2);border-left:2px solid var(--aq)}
+.card-ico{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
+.card-title{font-size:13px;font-weight:700;color:var(--text)}
+.card.feat .card-title{color:var(--aq)}
+.card-arr{font-size:12px;color:var(--text3);margin-left:auto;transition:transform .12s}
+.card:hover .card-arr{transform:translateX(3px);color:var(--text2)}
+
+/* MOBILE */
+.mob-nav{display:none;position:fixed;top:48px;right:0;left:0;bottom:0;background:var(--bg);z-index:250;padding:1rem;flex-direction:column;gap:.15rem;overflow-y:auto;border-top:1px solid var(--border)}
+.mob-nav.open{display:flex}
+.mob-nav a{color:var(--text2);text-decoration:none;font-size:14px;padding:10px 14px;border-radius:7px;display:block}
+.mob-nav a:hover{background:var(--bg2);color:var(--text)}
+
+@media(max-width:860px){
+  :root{--sb:0px}
+  .sb{display:none}
+  .hbg{display:flex}
+  .top-nav{display:none}
+  .main{padding:1.5rem 1rem 3rem}
+  .hero{grid-template-columns:1fr;gap:1rem}
+  .hero-photo,.hero-photo-ph{display:none}
+  .hero h1{font-size:1.7rem}
+  .cards{grid-template-columns:1fr}
+}
+
+/* LEVEL SELECTOR */
+.level-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:.5rem}
+.lcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;transition:all .2s;position:relative;overflow:hidden}
+.lcard:hover{transform:translateY(-3px)}
+.lcard::after{content:'';position:absolute;bottom:0;right:0;left:0;height:3px;background:var(--lc,var(--aq))}
+.lcard-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:.2rem}
+.lc-icon{font-size:1.6rem}
+.lc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);background:var(--bg3);padding:2px 8px;border-radius:4px}
+.lc-title{font-size:17px;font-weight:800;color:var(--text)}
+.lc-num{font-size:2.4rem;font-weight:900;font-family:var(--mono);color:var(--lc,var(--aq));line-height:1.1}
+.lc-sub{font-size:12px;color:var(--text2);font-weight:600;margin-top:-.2rem}
+.lc-topics{font-size:11.5px;color:var(--text2);line-height:1.5;margin-top:.3rem}
+.lc1{--lc:#00e5a0}.lc1:hover{border-color:rgba(0,229,160,.35)}
+.lc2{--lc:#4a9eff}.lc2:hover{border-color:rgba(74,158,255,.35)}
+.lc3{--lc:#9B5CFF}.lc3:hover{border-color:rgba(155,92,255,.35)}
+.lc4{--lc:#FFB020}.lc4:hover{border-color:rgba(255,176,32,.5)}
+.lcard.feat{border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04)}
+.lc-hot{position:absolute;top:36px;left:8px;background:rgba(255,176,32,.15);color:#FFB020;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(255,176,32,.3)}
+/* MOBILE */
+@media(max-width:768px){
+  .level-selector{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .lc-topics{font-size:11px}
+  .lc-num{font-size:2rem}
+  .lc-title{font-size:15px}
+  .lcard{padding:1rem .85rem}
+}
+@media(max-width:400px){
+  .level-selector{grid-template-columns:1fr 1fr;gap:.5rem}
+  .lc-topics{display:none}
+  .lc-badge{display:none}
+  .lc-num{font-size:1.75rem}
+}
+
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="top">
+  <a href="index.html" class="logo">SQL<em>.course</em></a>
+  <ul class="top-nav">
+    <li><a href="course.html">学习</a></li>
+    <li><a href="practice.html">练习</a></li>
+    <li><a href="simulator.html">⚡ 模拟器</a></li>
+    <li><a href="tirgul-makif.html">🎯 综合练习</a></li>
+    <li><a href="pbi-simulator.html">📊 Power BI</a></li>
+    <li><a href="reference.html">函数</a></li>
+    <li><a href="quiz-beginner.html">初级测验</a></li>
+    <li><a href="quiz.html">高级测验</a></li>
+    <li><a href="videos.html">MySQL</a></li>
+    <li><a href="videos2.html">SQL Server</a></li>
+    <li><a href="setup.html">安装设置</a></li>
+  </ul>
+  <div class="lang-flags"><a href="../index.html" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/index.html" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="index.html" class="on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a></div>
+  <button class="hbg" onclick="toggleMob()" aria-label="菜单"><span></span><span></span><span></span></button>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mob-nav" id="mobNav">
+  <a href="course.html">📚 学习材料</a>
+  <a href="practice.html">✏️ 练习</a>
+  <a href="simulator.html">⚡ SQL 模拟器</a>
+  <a href="tirgul-makif.html">🎯 综合练习</a>
+  <a href="pbi-simulator.html">📊 Power BI 模拟器</a>
+  <a href="reference.html">📘 函数参考</a>
+  <a href="quiz-beginner.html">🌱 初级题目</a>
+  <a href="quiz.html">🧠 高级题目</a>
+  <a href="videos.html">🎬 MySQL 教程</a>
+  <a href="videos2.html">🖥️ SQL Server 教程</a>
+  <a href="setup.html">🛠️ 安装指南</a>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-hdr">
+    <div class="sb-label">工具</div>
+    <div class="sb-title">SQL.course</div>
+  </div>
+  <div class="sb-body">
+    <a href="simulator.html" class="sb-link on"><div class="sl-dot"></div><div class="sl-txt">⚡ SQL 模拟器</div></a>
+    <a href="tirgul-makif.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🎯 综合练习</div></a>
+    <a href="pbi-simulator.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📊 Power BI 模拟器</div></a>
+    <a href="reference.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📘 函数参考</div></a>
+    <a href="practice.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">✏️ 练习</div></a>
+    <a href="quiz-beginner.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🌱 初级题目</div></a>
+    <a href="quiz-medium.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📗 中级题目</div></a>
+    <a href="quiz-advanced2.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 高级题目</div></a>
+    <a href="quiz-expert.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🏆 专家题目</div></a>
+    <a href="quiz.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 高级题目</div></a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-tag">● 免费 SQL 课程 · 310+ 练习 · 由数据分析师打造</div>
+      <h1>免费 <em>SQL</em> 课程</h1>
+      <p class="hero-desc">从基础一直到 <strong>求职面试水平</strong>—— 一门实用、免费的 SQL 课程，包含 4 个互动模拟器、310+ 个练习，以及面向分析师的案例模拟。</p>
+      <p class="hero-about">SQL 讲师兼分析团队负责人，任职于 <strong>Partner</strong>，拥有多年的数据实战经验。<br>
+      我的目标是 —— <strong>免费、简单、人人都能轻松学习数据</strong>—— 并把真实的实战经验带给每一位想在这个领域成长、并在求职面试中脱颖而出的人。</p>
+      <div class="inst">
+        <img src="../eliran.png" alt="Eliran Grossman" width="32" height="32"
+             style="border-radius:50%;border:1.5px solid var(--aq);object-fit:cover;flex-shrink:0"
+             onerror="this.style.display='none'">
+        <span class="inst-name">Eliran Grossman</span>
+        <span class="inst-sep">·</span>
+        <span class="inst-role">SQL 讲师 · Partner</span>
+        <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" class="ilink li">LinkedIn</a>
+        <a href="https://wa.me/972507514807" target="_blank" class="ilink wa">WhatsApp</a>
+      </div>
+    </div>
+    <img src="../eliran.png" alt="Eliran Grossman" class="hero-photo"
+         onerror="this.outerHTML='<div class=hero-photo-ph>👨‍💻</div>'">
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">课程</div></div>
+    <div class="stat"><div class="stat-val">110+</div><div class="stat-lbl">练习</div></div>
+    <div class="stat"><div class="stat-val">24K</div><div class="stat-lbl">模拟器中的数据行</div></div>
+    <div class="stat"><div class="stat-val">🆓</div><div class="stat-lbl">完全免费</div></div>
+  </div>
+
+  <!-- NAV CARDS -->
+  <div class="cards-label">选择题 —— 选择难度等级</div>
+  <div class="level-selector">
+    <a href="quiz-beginner.html" class="lcard lc1">
+      <div class="lcard-top">
+        <div class="lc-icon">🌱</div>
+        <div class="lc-badge">等级 1</div>
+      </div>
+      <div class="lc-title">初级</div>
+      <div class="lc-num">150</div>
+      <div class="lc-sub">道题</div>
+      <div class="lc-topics">SELECT · WHERE · GROUP BY · JOINs</div>
+    </a>
+    <a href="quiz-medium.html" class="lcard lc2">
+      <div class="lcard-top">
+        <div class="lc-icon">📗</div>
+        <div class="lc-badge">等级 2</div>
+      </div>
+      <div class="lc-title">中级</div>
+      <div class="lc-num">80</div>
+      <div class="lc-sub">道题</div>
+      <div class="lc-topics">字符串 · 聚合 · 高级 JOIN</div>
+    </a>
+    <a href="quiz-advanced2.html" class="lcard lc3">
+      <div class="lcard-top">
+        <div class="lc-icon">🧠</div>
+        <div class="lc-badge">等级 3</div>
+      </div>
+      <div class="lc-title">高级</div>
+      <div class="lc-num">60</div>
+      <div class="lc-sub">道题</div>
+      <div class="lc-topics">子查询 · 窗口函数</div>
+    </a>
+    <a href="quiz-expert.html" class="lcard lc4 feat">
+      <div class="lc-hot">🔥 最难</div>
+      <div class="lcard-top">
+        <div class="lc-icon">🏆</div>
+        <div class="lc-badge">等级 4</div>
+      </div>
+      <div class="lc-title">专家</div>
+      <div class="lc-num">20</div>
+      <div class="lc-sub">道题</div>
+      <div class="lc-topics">选择正确的查询</div>
+    </a>
+  </div>
+
+  <div class="cards-label" style="margin-top:1.5rem">更多工具</div>
+  <div class="cards">
+    <a href="tirgul-makif.html" class="card feat">
+      <span class="card-ico">🎯</span>
+      <span class="card-title">综合练习 —— 135 道互动 SQL 题目</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="simulator.html" class="card feat">
+      <span class="card-ico">⚡</span>
+      <span class="card-title">SQL 模拟器</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="pbi-simulator.html" class="card feat">
+      <span class="card-ico">📊</span>
+      <span class="card-title">Power BI 模拟器 —— DAX 和仪表板</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="interview-telecom.html" class="card">
+      <span class="card-ico">🎯</span>
+      <span class="card-title">面试练习 —— 客户流失（电信）</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="interview-insurance.html" class="card">
+      <span class="card-ico">🏛️</span>
+      <span class="card-title">面试练习 —— 管理费（保险）</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="course.html" class="card">
+      <span class="card-ico">📚</span>
+      <span class="card-title">学习材料</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="practice.html" class="card">
+      <span class="card-ico">✏️</span>
+      <span class="card-title">练习题</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="quiz-beginner.html" class="card">
+      <span class="card-ico">🌱</span>
+      <span class="card-title">选择题 —— 初级</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="quiz.html" class="card">
+      <span class="card-ico">🧠</span>
+      <span class="card-title">选择题 —— 高级</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="reference.html" class="card">
+      <span class="card-ico">📘</span>
+      <span class="card-title">函数参考</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="videos.html" class="card">
+      <span class="card-ico">🎬</span>
+      <span class="card-title">视频教程 —— MySQL</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="videos2.html" class="card">
+      <span class="card-ico">🖥️</span>
+      <span class="card-title">视频教程 —— SQL Server</span>
+      <span class="card-arr">→</span>
+    </a>
+    <a href="setup.html" class="card">
+      <span class="card-ico">🛠️</span>
+      <span class="card-title">安装指南</span>
+      <span class="card-arr">→</span>
+    </a>
+  </div>
+
+</main>
+
+<script>
+function toggleMob(){document.getElementById('mobNav').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const m=document.getElementById('mobNav');
+  if(m.classList.contains('open')&&!e.target.closest('#mobNav')&&!e.target.closest('.hbg'))
+    m.classList.remove('open');
+});
+</script>
+</body>
+</html>

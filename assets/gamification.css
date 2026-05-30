@@ -1,0 +1,381 @@
+/* ============================================================
+   GAMIFICATION CSS — Mobile-first, RTL+LTR support
+   ============================================================ */
+
+/* ---- HUD (top fixed corner) ---- */
+#gam-hud {
+  position: fixed;
+  top: 12px;
+  z-index: 9998;
+  pointer-events: none;
+}
+[dir="ltr"] #gam-hud { right: 12px; }
+[dir="rtl"] #gam-hud { left: 12px; }
+
+#gam-hud-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+  border: 1.5px solid #4a5494;
+  border-radius: 22px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1;
+}
+#gam-hud-btn:hover, #gam-hud-btn:active {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(74,84,148,0.5);
+}
+#gam-hud-btn .gam-streak,
+#gam-hud-btn .gam-xp {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+#gam-hud-btn .gam-streak { color: #ffb84a; }
+#gam-hud-btn .gam-xp     { color: #ffd700; }
+
+/* ---- XP gain toast ---- */
+.gam-toast {
+  position: fixed;
+  top: 60px;
+  z-index: 9999;
+  background: linear-gradient(135deg, #00c896 0%, #00a884 100%);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,200,150,0.4);
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: opacity .35s ease, transform .35s ease;
+  max-width: calc(100% - 30px);
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+[dir="ltr"] .gam-toast { right: 15px; }
+[dir="rtl"] .gam-toast { left: 15px; }
+.gam-toast.show { opacity: 1; transform: translateY(0); }
+.gam-toast-icon { font-size: 18px; margin-inline-end: 4px; }
+.gam-toast-xp { background: linear-gradient(135deg, #ffaa00 0%, #ff8800 100%); box-shadow: 0 8px 24px rgba(255,170,0,0.45); }
+.gam-toast small { opacity: 0.92; font-weight: 400; }
+
+/* ---- Celebration modal (level up / badge unlock) ---- */
+.gam-celebration {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  backdrop-filter: blur(4px);
+}
+.gam-celebration.show { opacity: 1; }
+.gam-celebration-inner {
+  background: linear-gradient(135deg, #1f2444 0%, #353a6b 100%);
+  border: 2px solid #ffd700;
+  border-radius: 22px;
+  padding: 28px 26px;
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+  color: #fff;
+  transform: scale(0.85);
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 20px 60px rgba(255,215,0,0.3);
+}
+.gam-celebration.show .gam-celebration-inner { transform: scale(1); }
+.gam-celebration-icon {
+  font-size: 64px;
+  margin-bottom: 10px;
+  animation: gam-bounce 0.6s ease infinite alternate;
+}
+@keyframes gam-bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-8px); }
+}
+.gam-celebration h2 {
+  margin: 6px 0 14px;
+  font-size: 22px;
+  color: #ffd700;
+}
+.gam-celebration h3 {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #ffaa00;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.gam-celebration p { font-size: 14px; opacity: 0.85; margin: 6px 0 14px; }
+.gam-level-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700 0%, #ff8800 100%);
+  color: #1a1a2e;
+  padding: 10px 28px;
+  border-radius: 25px;
+  font-size: 19px;
+  font-weight: 800;
+  margin: 6px 0 18px;
+}
+.gam-badge-icon-big {
+  font-size: 72px;
+  margin-bottom: 6px;
+  animation: gam-spin 1.2s ease-in-out;
+}
+@keyframes gam-spin {
+  0%   { transform: rotate(-15deg) scale(0.7); opacity: 0; }
+  100% { transform: rotate(0) scale(1); opacity: 1; }
+}
+.gam-celebration-close {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 9px 26px;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+  font-family: inherit;
+}
+.gam-celebration-close:hover, .gam-celebration-close:active { background: rgba(255,255,255,0.22); }
+
+/* ---- Progress Panel ---- */
+#gam-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .3s ease;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  backdrop-filter: blur(4px);
+}
+#gam-panel.show { opacity: 1; }
+
+.gam-panel-inner {
+  background: #1a1f3a;
+  border-radius: 16px;
+  padding: 22px 18px 24px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow-y: auto;
+  color: #fff;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform .3s ease;
+  margin: 14px;
+  border: 1px solid #353a6b;
+}
+#gam-panel.show .gam-panel-inner { transform: translateY(0); }
+
+.gam-panel-close {
+  position: absolute;
+  top: 10px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 28px;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  line-height: 1;
+}
+[dir="ltr"] .gam-panel-close { right: 10px; }
+[dir="rtl"] .gam-panel-close { left: 10px; }
+.gam-panel-close:hover, .gam-panel-close:active { color: #fff; background: rgba(255,255,255,0.1); }
+
+.gam-panel-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: #ffd700;
+  text-align: center;
+}
+
+.gam-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.gam-stat {
+  background: linear-gradient(135deg, #252a52 0%, #2d3561 100%);
+  border-radius: 11px;
+  padding: 12px 6px;
+  text-align: center;
+  border: 1px solid #353a6b;
+}
+.gam-stat-icon { font-size: 22px; margin-bottom: 3px; }
+.gam-stat-val { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.1; }
+.gam-stat-label { font-size: 10px; color: #aab; text-transform: uppercase; margin-top: 2px; letter-spacing: .3px; }
+
+.gam-progress-box {
+  background: #252a52;
+  border-radius: 11px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #353a6b;
+}
+.gam-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aab;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.gam-progress-bar {
+  width: 100%;
+  height: 9px;
+  background: #14172a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.gam-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700 0%, #ff8800 100%);
+  border-radius: 8px;
+  transition: width .5s ease;
+  box-shadow: 0 0 12px rgba(255,170,0,0.4);
+}
+.gam-progress-text {
+  text-align: center;
+  font-size: 11px;
+  color: #ccc;
+  margin-top: 6px;
+}
+
+.gam-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin: 16px 0 10px;
+  letter-spacing: .3px;
+}
+
+.gam-chart {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  height: 100px;
+  background: #252a52;
+  border-radius: 11px;
+  padding: 10px 8px 4px;
+  margin-bottom: 6px;
+  border: 1px solid #353a6b;
+}
+.gam-chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  height: 100%;
+}
+.gam-chart-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #00d4aa 0%, #00a884 100%);
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height .6s ease;
+}
+.gam-chart-label { font-size: 9px; color: #aab; margin-top: 3px; }
+.gam-chart-val { font-size: 9px; color: #ffd700; font-weight: 700; position: absolute; top: -14px; }
+
+.gam-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.gam-badge {
+  background: #252a52;
+  border-radius: 10px;
+  padding: 11px 4px 9px;
+  text-align: center;
+  border: 1.5px solid #353a6b;
+  transition: transform .15s ease;
+  cursor: help;
+}
+.gam-badge.earned {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #2a2e58 0%, #3d3a6b 100%);
+  box-shadow: 0 0 10px rgba(255,215,0,0.18);
+}
+.gam-badge.earned:hover { transform: scale(1.04); }
+.gam-badge.locked { opacity: 0.32; filter: grayscale(0.8); }
+.gam-badge-icon { font-size: 28px; margin-bottom: 3px; }
+.gam-badge-name { font-size: 10px; font-weight: 700; color: #fff; line-height: 1.18; }
+
+.gam-footer {
+  border-top: 1px solid #353a6b;
+  padding-top: 12px;
+  font-size: 12px;
+  color: #aab;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.gam-footer strong { color: #ffd700; }
+
+/* ---- Mobile tweaks ---- */
+@media (max-width: 480px) {
+  #gam-hud { top: 8px; }
+  [dir="ltr"] #gam-hud { right: 8px; }
+  [dir="rtl"] #gam-hud { left: 8px; }
+  #gam-hud-btn { padding: 6px 10px; font-size: 12px; }
+  
+  .gam-toast { font-size: 13px; padding: 10px 14px; top: 56px; }
+  [dir="ltr"] .gam-toast { right: 10px; left: 10px; max-width: none; }
+  [dir="rtl"] .gam-toast { left: 10px; right: 10px; max-width: none; }
+  
+  .gam-celebration-inner { padding: 22px 18px; max-width: 100%; }
+  .gam-celebration h2 { font-size: 20px; }
+  .gam-celebration-icon { font-size: 56px; }
+  .gam-badge-icon-big { font-size: 64px; }
+  .gam-level-badge { font-size: 17px; padding: 9px 24px; }
+  
+  .gam-panel-inner { padding: 18px 14px; margin: 0; border-radius: 16px 16px 0 0; max-height: 95vh; }
+  .gam-panel-title { font-size: 18px; }
+  .gam-stat-val { font-size: 19px; }
+  .gam-stat-icon { font-size: 20px; }
+  .gam-badges { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; }
+  .gam-badge-icon { font-size: 26px; }
+  .gam-badge-name { font-size: 9.5px; }
+  .gam-chart { height: 88px; }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .gam-stats { gap: 5px; }
+  .gam-stat { padding: 9px 4px; }
+  .gam-stat-val { font-size: 17px; }
+  .gam-stat-label { font-size: 9px; }
+  .gam-badges { grid-template-columns: repeat(3, 1fr); }
+  .gam-badge-name { font-size: 9px; }
+}

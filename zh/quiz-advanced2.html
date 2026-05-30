@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高级 SQL 题目 —— 免费测验 | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;--bg2:#0c1518;--bg3:#111e21;
+  --border:rgba(0,212,200,.08);--border2:rgba(0,212,200,.18);
+  --text:#e8f4f5;--text2:#6b9098;--text3:#2a4048;
+  --aq:#00d4c8;--aq2:rgba(0,212,200,.12);
+  --green:#00e676;--red:#ff4757;--orange:#FFB020;--purple:#9B5CFF;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+.topnav{background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--aq);text-decoration:none;font-size:12px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:13px;font-weight:700;color:var(--text2)}
+.topnav-right{display:flex;align-items:center;gap:.5rem;margin-right:auto;flex-wrap:wrap}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);color:var(--aq);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;font-family:var(--mono)}
+.ltabs{display:flex;gap:.3rem;flex-wrap:wrap}
+.ltab{font-size:11px;font-weight:700;padding:4px 9px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2);transition:all .12s}
+.ltab:hover{color:var(--text)}
+.ltab.active{background:rgba(155,92,255,.15);border-color:var(--purple);color:var(--purple)}
+/* Firebase */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Hero */
+.hero{padding:2rem 1.5rem 1.5rem;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(155,92,255,.07),transparent 70%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(155,92,255,.12);border:1px solid rgba(155,92,255,.3);color:var(--purple);font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--mono);letter-spacing:1px;margin-bottom:.75rem}
+.hero-title{font-size:2rem;font-weight:900;color:var(--text);margin-bottom:.3rem}
+.hero-title em{color:var(--purple);font-style:normal}
+.hero-desc{color:var(--text2);font-size:.9rem;margin-bottom:1.25rem}
+.hero-stats{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-n{font-size:1.6rem;font-weight:900;font-family:var(--mono);color:var(--purple)}
+.hs-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+/* Progress */
+.prog-bar-wrap{padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:sticky;top:96px;z-index:80}
+.prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--purple);border-radius:2px;transition:width .3s}
+.prog-txt{font-size:11px;color:var(--text2);font-family:var(--mono);white-space:nowrap}
+.score-display{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--purple);white-space:nowrap}
+/* Main */
+.main{max-width:800px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);font-family:var(--mono);padding:.75rem 0 .5rem;margin-top:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+/* Cards */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:.75rem;transition:border-color .2s}
+.q-card.correct{border-color:rgba(0,230,118,.3)}
+.q-card.wrong{border-color:rgba(255,71,87,.3)}
+.q-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.q-num{font-size:10px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px;font-weight:700}
+.q-sec-tag{font-size:10px;color:var(--text3);font-weight:600}
+.q-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.55;margin-bottom:.85rem}
+.options{display:flex;flex-direction:column;gap:.4rem}
+.option{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .8rem;background:var(--bg3);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;user-select:none}
+.option:hover:not(.disabled){border-color:var(--border2);background:rgba(155,92,255,.05)}
+.option.disabled{cursor:default}
+.option.correct-ans{border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.07)}
+.option.wrong-ans{border-color:rgba(255,71,87,.4);background:rgba(255,71,87,.07)}
+.opt-letter{width:20px;height:20px;border-radius:4px;background:var(--bg);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;font-family:var(--mono)}
+.option.correct-ans .opt-letter{background:rgba(0,230,118,.2);border-color:rgba(0,230,118,.5);color:var(--green)}
+.option.wrong-ans .opt-letter{background:rgba(255,71,87,.2);border-color:rgba(255,71,87,.5);color:var(--red)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5}
+.option.correct-ans .opt-text{color:var(--text)}
+.explanation{background:var(--bg3);border-right:2px solid var(--purple);border-radius:0 6px 6px 0;padding:.6rem .85rem;margin-top:.6rem;display:none}
+.explanation.show{display:block}
+.exp-label{font-size:10px;font-weight:700;color:var(--purple);font-family:var(--mono);margin-bottom:.25rem}
+.exp-text{font-size:12.5px;color:var(--text2);line-height:1.6}
+/* Finish */
+.finish-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
+.finish-score{font-size:2.5rem;font-weight:900;font-family:var(--mono);color:var(--purple);margin-bottom:.5rem}
+.finish-grade{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.finish-sub{font-size:.9rem;color:var(--text2);margin-bottom:1.5rem}
+.retry-btn{background:var(--purple);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font)}
+.level-link{display:inline-block;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:10px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;margin-top:.5rem;transition:all .15s;margin-right:.5rem}
+.level-link:hover{border-color:var(--purple);color:var(--purple)}
+@media(max-width:768px){
+  .ltabs{display:none}
+  .hero{padding:1.25rem .75rem 1rem}
+  .hero-title{font-size:1.5rem}
+  .main{padding:1rem .5rem 3rem}
+  .q-text{font-size:13px}
+  .opt-text{font-size:12.5px}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<meta name="description" content="一个高级 SQL 测验：关于窗口函数、CTE、相关子查询和复杂聚合的多选题并配有讲解。用于数据分析师面试准备。">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-advanced2.html">
+<meta property="og:site_name" content="免费 SQL 课程 - Eliran Grossman">
+<meta property="og:title" content="多选题 —— 高级 | SQL">
+<meta property="og:description" content="一个高级 SQL 测验：关于窗口函数、CTE、相关子查询和复杂聚合的多选题并配有讲解。用于数据分析师面试准备。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="多选题 —— 高级 | SQL">
+<meta name="twitter:description" content="一个高级 SQL 测验：关于窗口函数、CTE、相关子查询和复杂聚合的多选题并配有讲解。用于数据分析师面试准备。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL 高级测验",
+        "item": "https://egrosman1.github.io/sql-course/quiz-advanced2.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "高级 SQL 题目 —— 免费测验 | SQL.course",
+    "description": "一个高级 SQL 测验：关于窗口函数、CTE、相关子查询和复杂聚合的多选题并配有讲解。用于数据分析师面试准备。",
+    "url": "https://egrosman1.github.io/sql-course/quiz-advanced2.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Quiz",
+    "teaches": "SQL",
+    "educationalLevel": "初级到高级",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL 讲师兼分析负责人，Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "免费 SQL 课程",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body data-quiz-id="advanced2">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← 首页</a>
+  <div class="topnav-title">🧠 题目 —— 高级</div>
+  <div class="topnav-right">
+    <div class="ltabs">
+      <a href="quiz-beginner.html" class="ltab">🌱 初学者</a>
+      <a href="quiz-medium.html" class="ltab">📗 中级</a>
+      <a href="quiz-advanced2.html" class="ltab active">🧠 高级</a>
+      <a href="../quiz-advanced2.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/quiz-advanced2.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="quiz-advanced2.html" class="topnav-link on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    </div>
+    <div class="score-badge" id="scoreText">✅ 0 / 0</div>
+  </div>
+</div>
+
+<!-- FIREBASE BAR -->
+<div class="fb-bar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    使用 Google 登录
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 保存进度</button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 历史记录</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">退出登录</button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🧠 第 3 级 · 高级</div>
+  <h1 class="hero-title">多选题 —— <em>高级</em></h1>
+  <p class="hero-desc">子查询 · 窗口函数 · 日期函数 —— 60 道题</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">已回答</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">正确</div></div>
+    <div class="hs"><div class="hs-n">60</div><div class="hs-l">道题</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">得分</div></div>
+  </div>
+</div>
+
+<div class="prog-bar-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">0 / 60</div>
+  <div class="score-display" id="scoreDisplay">0%</div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const Q=[
+  // ── Subqueries ──
+  {n:1,s:"A 部分 —— 子查询",t:"什么是子查询？",o:["在主查询之后运行的查询。","放在另一个查询内部的查询（SELECT、INSERT、UPDATE 或 DELETE）。","用于连接表的函数。","用于创建临时表的命令。"],c:1,e:"子查询是一个把结果传递给外层查询的内层查询。"},
+  {n:2,s:"A 部分 —— 子查询",t:"子查询可以放在哪里？",o:["只能在 WHERE 中。","只能在 FROM 中。","在 SELECT、FROM、WHERE 和 HAVING 中。","只能在 ORDER BY 中。"],c:2,e:"子查询用途广泛，几乎可以用在查询的任何部分。"},
+  {n:3,s:"A 部分 —— 子查询",t:"什么是相关子查询？",o:["只运行一次的子查询。","返回多于一列的子查询。","为每一行依赖外层查询的值的子查询。","执行 JOIN 的子查询。"],c:2,e:"在相关子查询中，内层查询会为外层查询处理的每一行重新运行。"},
+  {n:4,s:"A 部分 —— 子查询",t:"当 WHERE 中的子查询返回多个值时，我们用哪些运算符？",o:["= , < , >","IN, ANY, ALL","LIKE, BETWEEN","GROUP BY"],c:1,e:"像 IN 这样的运算符让你把一个值与子查询返回的列表进行比较。"},
+  {n:5,s:"A 部分 —— 子查询",t:"EXISTS 运算符返回什么？",o:["找到的第一个值。","行数的计数。","一个布尔值（真/假），取决于子查询是否返回了任何行。","如果查询为空则报错。"],c:2,e:"EXISTS 检查记录是否存在，而不返回数据本身。"},
+  {n:6,s:"A 部分 —— 子查询",t:"我们什么时候在 FROM 内部使用子查询？",o:["筛选行。","把查询结果当作一张临时表（一个内联视图）。","计算单行的平均。","对数据排序。"],c:1,e:"FROM 中的子查询让你先处理数据，然后再对它进行查询。"},
+  {n:7,s:"A 部分 —— 子查询",t:"标量子查询的限制是什么？",o:["它必须至少返回 10 行。","它必须正好返回一个值（一行一列）。","它只能用于数字。","它不能出现在 SELECT 中。"],c:1,e:"标量查询在表达式中充当一个单一的值。"},
+  {n:8,s:"A 部分 —— 子查询",t:"如果 IN 中的子查询返回 NULL 会发生什么？",o:["查询失败。","NULL 值被当作能匹配任何东西。","在 IN 中与 NULL 比较可能导致意外结果（通常不返回任何行）。","SQL 会自动忽略 NULL。"],c:2,e:"在 SQL 中，与 NULL 的比较始终是 UNKNOWN。"},
+  {n:9,s:"A 部分 —— 子查询",t:"ANY 和 ALL 之间有什么区别？",o:["没有区别。","ANY 检查所有值，ALL 检查至少一个。","如果条件对至少一个值成立，ANY 返回真；ALL 要求对所有值都成立。","ANY 只用于数字。"],c:2,e:"ANY = 至少一个。ALL = 无一例外地全部。"},
+  {n:10,s:"A 部分 —— 子查询",t:"你如何写查询“显示收入高于平均值的员工”？",o:["WHERE salary > AVG(salary)","WHERE salary > (SELECT AVG(salary) FROM employees)","GROUP BY salary HAVING salary > AVG","JOIN (SELECT AVG...)"],c:1,e:"不用子查询，你不能在 WHERE 中直接使用聚合函数。"},
+  {n:11,s:"A 部分 —— 子查询",t:"CTE（WITH 子句）相对于 FROM 中子查询的优势是什么？",o:["它更快。","它让代码更易读，并让你在同一个查询中重复使用同一张“临时表”。","它不需要权限。","它只在 MySQL 中有效。"],c:1,e:"CTE 是一种定义子查询的现代、干净的方式。"},
+  {n:12,s:"A 部分 —— 子查询",t:"子查询可以包含 ORDER BY 吗？",o:["总是可以。","通常不可以（除非你使用 TOP 或 LIMIT），因为内层数据集不需要排序。","只有在有 JOIN 时。","只在 WHERE 中。"],c:1,e:"子查询中的 ORDER BY 除非和 TOP/LIMIT 结合，否则没有意义。"},
+  {n:13,s:"A 部分 —— 子查询",t:"如果一个标量子查询意外返回了两行会发生什么？",o:["系统取第一行。","系统把它们合并。","查询以运行时错误失败。","显示 NULL。"],c:2,e:"返回多于一行的标量子查询会导致错误。"},
+  {n:14,s:"A 部分 —— 子查询",t:"什么时候用 JOIN 比用子查询更好？",o:["总是。","当你需要在最终结果中显示两张表的列时。","当表非常小时。","当你想按单个值筛选时。"],c:1,e:"当你需要两张表的列时，JOIN 更好。子查询更适合存在性检查和筛选。"},
+  {n:15,s:"A 部分 —— 子查询",t:"NOT EXISTS 运算符做什么？",o:["检查一个列是否不存在。","只有当子查询不返回任何行时才返回真。","删除不存在的行。","检查 NULL 值。"],c:1,e:"NOT EXISTS = Anti-Join——它找出在另一张表中没有匹配的行。"},
+  {n:16,s:"A 部分 —— 子查询",t:'What is a "Nested Subquery"?',o:["A query inside a JOIN.","A subquery located inside another subquery.","A query that returns a list.","A parallel query."],c:1,e:"A nested subquery enables complex logic but can hurt performance."},
+  {n:17,s:"A 部分 —— 子查询",t:"在查询的哪个部分，我们用子查询基于另一张表来更新一张表中的数据？",o:["SELECT","UPDATE ... SET column = (SELECT ...)","FROM","GROUP BY"],c:1,e:"在 SET 中带子查询的 UPDATE 让你从另一张表取值。"},
+  {n:18,s:"A 部分 —— 子查询",t:"HAVING 中的子查询是什么？",o:["在分组之前筛选行。","基于在子查询中执行的计算来筛选组。","对组排序的一种方式。","一个无效的命令。"],c:1,e:"HAVING + 子查询 = 用来自另一张表的复杂计算来筛选组。"},
+  {n:19,s:"A 部分 —— 子查询",t:"可以对返回两列的子查询使用 IN 吗？",o:["可以，总是可以。","只有当外层查询与一对列比较时（在 PostgreSQL/Oracle 等数据库中）。","不，IN 只接受一列。","只有当列是文本类型时。"],c:1,e:"行子查询（多列）在 PostgreSQL 和 Oracle 中受支持。"},
+  {n:20,s:"A 部分 —— 子查询",t:"IN 和 EXISTS 之间的性能区别是什么？",o:["IN 总是更快。","EXISTS 总是更慢。","在现代系统中，优化器通常把它们转成相同的操作，但对于大型列表，EXISTS 被认为更高效。","完全没有区别。"],c:2,e:"对于大型列表，EXISTS 更好，因为它在第一个匹配处就停止。"},
+  // ── Window Functions ──
+  {n:21,s:"B 部分 —— 窗口函数",t:"窗口函数的主要特征是什么？",o:["它减少行数（聚合）。","它在一组行上执行计算，而不丢失各行的明细。","它只对时间窗口有效。","它替代 GROUP BY。"],c:1,e:"SUM() OVER() 保留所有行，并在它们旁边显示总和——这与 GROUP BY 不同。"},
+  {n:22,s:"B 部分 —— 窗口函数",t:"用哪个关键字来定义窗口函数？",o:["GROUP BY","OVER","WINDOW","PARTITION"],c:1,e:"OVER 是定义函数所作用的“窗口”的那个词。"},
+  {n:23,s:"B 部分 —— 窗口函数",t:"PARTITION BY 做什么？",o:["对结果排序。","把行拆分成组（例如按部门），用于窗口内的计算。","删除磁盘分区。","连接表。"],c:1,e:"PARTITION BY 就像 GROUP BY——但在窗口内部，不会把行折叠起来。"},
+  {n:24,s:"B 部分 —— 窗口函数",t:"ROW_NUMBER() 和 RANK() 之间有什么区别？",o:["没有区别。","ROW_NUMBER 给出唯一的连续编号，RANK 给相等的值相同的编号（并在下一个编号上留下空缺）。","RANK 不跳过编号。","ROW_NUMBER 只对日期有效。"],c:1,e:"RANK 中的并列：两者都得 1，下一个得 3（而不是 2）。"},
+  {n:25,s:"B 部分 —— 窗口函数",t:"DENSE_RANK() 在并列的情况下如何排名？",o:["它跳过编号。","它给出随机编号。","它给相等的值相同的编号，但在下一个编号上不留空缺。","它总是从 0 开始。"],c:2,e:"DENSE_RANK 中的并列：两者都得 1，下一个得 2（而不是 3）。"},
+  {n:26,s:"B 部分 —— 窗口函数",t:"LAG() 函数做什么？",o:["计算下一行的平均。","访问前一行的值（例如，计算与上个月相比的增长）。","延迟查询。","返回表中的最后一行。"],c:1,e:"LAG = 向后看。LEAD = 向前看。"},
+  {n:27,s:"B 部分 —— 窗口函数",t:"LEAD() 函数做什么？",o:["返回最大值。","访问窗口中下一行的值。","找出组的领导者。","按升序对数据排序。"],c:1,e:"LEAD 让你把当前行与未来的某一行进行比较。"},
+  {n:28,s:"B 部分 —— 窗口函数",t:"OVER 内部的 ORDER BY 有什么用？",o:["对查询的最终结果排序。","设定函数处理行的顺序（对累计总和至关重要）。","定义列名。","它是无效的。"],c:1,e:"OVER 内部的 ORDER BY 设定函数的扫描顺序。"},
+  {n:29,s:"B 部分 —— 窗口函数",t:"你如何计算累计总和？",o:["SUM(price) GROUP BY date","SUM(price) OVER (ORDER BY date)","SUM(price) OVER (PARTITION BY date)","ADD(price)"],c:1,e:"SUM() OVER(ORDER BY date) 计算随时间的累计总和。"},
+  {n:30,s:"B 部分 —— 窗口函数",t:"FIRST_VALUE() 函数做什么？",o:["返回表中的第一行。","返回所定义的数据窗口中的第一个值。","返回值 1。","找出最小值。"],c:1,e:"FIRST_VALUE 让你在每一行旁边显示第一个值。"},
+  {n:31,s:"B 部分 —— 窗口函数",t:"不带 OVER 的 SUM 和带 OVER 的 SUM 之间有什么区别？",o:["没有区别。","不带 OVER 会报错。","不带 OVER 它为每个组返回一行，带 OVER 它为每一行都返回总和。","OVER 更快。"],c:2,e:"GROUP BY 会折叠行——OVER 会保留它们。"},
+  {n:32,s:"B 部分 —— 窗口函数",t:"什么是窗口帧（window frame，例如 ROWS BETWEEN...）？",o:["表的另一个名称。","对当前行周围哪些行被纳入计算的精确定义（例如移动平均）。","调整屏幕大小的命令。","一种 JOIN。"],c:1,e:"窗口帧定义用于计算的行范围——对移动平均至关重要。"},
+  {n:33,s:"B 部分 —— 窗口函数",t:"UNBOUNDED PRECEDING 是什么意思？",o:["直到下一行。","从窗口的开头（当前行之前的所有行）。","完全没有边界。","只有前一行。"],c:1,e:"UNBOUNDED PRECEDING = 从窗口中的第一行直到当前行。"},
+  {n:34,s:"B 部分 —— 窗口函数",t:"哪个函数把行拆分成 4 个相等的组（四分位）？",o:["QUARTER()","DIVIDE(4)","NTILE(4)","PART(4)"],c:2,e:"NTILE(4) 把所有行拆分成 4 个大小相等的组。"},
+  {n:35,s:"B 部分 —— 窗口函数",t:"LAST_VALUE() 函数做什么？",o:["返回 NULL。","返回窗口中的最后一个值（需要正确的帧定义）。","删除最后一行。","找出最大值。"],c:1,e:"LAST_VALUE 需要 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING 才能得到正确的结果。"},
+  {n:36,s:"B 部分 —— 窗口函数",t:"可以在 WHERE 中使用窗口函数吗？",o:["可以。","不可以，它们在 WHERE 之后才计算（你需要一个子查询或 CTE）。","只有在有 GROUP BY 时。","只在 SQL Server 中。"],c:1,e:"窗口函数在 WHERE 之后计算——把它们包进一个 CTE，然后再筛选。"},
+  {n:37,s:"B 部分 —— 窗口函数",t:"在窗口定义中 CURRENT ROW 是什么意思？",o:["表中的第一行。","最后被读取的行。","此刻正在对其执行计算的那一行。","系统错误。"],c:2,e:"CURRENT ROW = 计算中的当前行。"},
+  {n:38,s:"B 部分 —— 窗口函数",t:"哪个函数以百分比（0 到 1）返回一行的相对位置？",o:["PERCENT()","PERCENT_RANK()","RANK_PCT()","RATIO()"],c:1,e:"PERCENT_RANK =（rank-1）/（rows-1）。第一行返回 0，最后一行返回 1。"},
+  {n:39,s:"B 部分 —— 窗口函数",t:"LAG/LEAD 相对于 SELF JOIN 的优势是什么？",o:["它们看起来更好看。","它们在性能上高效得多、也快得多。","它们不需要主键。","它们只对数字有效。"],c:1,e:"LAG/LEAD 用一行就能写出，而且非常高效——SELF JOIN 会给优化器带来负担。"},
+  {n:40,s:"B 部分 —— 窗口函数",t:"SELECT ROW_NUMBER() OVER(ORDER BY id) 返回什么？",o:["行的 ID。","按 ID 顺序的连续序号（1、2、3……）。","行的总数。","重复的行。"],c:1,e:"ROW_NUMBER() OVER(ORDER BY id) 按排序顺序为行依次编号。"},
+  // ── Dates ──
+  {n:41,s:"C 部分 —— 日期函数",t:"哪个函数返回当前的日期和时间？",o:["NOW()（在 MySQL/Postgres 中）","GETDATE()（在 SQL Server 中）","CURRENT_TIMESTAMP","所有答案都对（取决于数据库）。"],c:3,e:"每个引擎都支持自己的形式——NOW、GETDATE、CURRENT_TIMESTAMP。"},
+  {n:42,s:"C 部分 —— 日期函数",t:"你如何只从日期中提取年份？",o:["YEAR(date) / EXTRACT(YEAR FROM date)","DATE_YEAR()","GET_YEAR()","SUBSTRING(date, 1, 4)"],c:0,e:"YEAR() 很常见，EXTRACT 是标准的 ANSI 形式。"},
+  {n:43,s:"C 部分 —— 日期函数",t:"DATEDIFF() 函数做什么？",o:["把两个日期相加。","计算两个日期之间的差（以天、月等为单位）。","检查一个日期是否有效。","更改日期格式。"],c:1,e:"DATEDIFF(day, start, end) = 两个日期之间的天数。"},
+  {n:44,s:"C 部分 —— 日期函数",t:"你如何给一个给定日期加上 10 天？",o:["date + 10","DATEADD(day, 10, date) / date + INTERVAL '10 days'","ADD_DAYS(date, 10)","INSERT_TIME(10)"],c:1,e:"SQL Server 中用 DATEADD，MySQL/PostgreSQL 中用 INTERVAL。"},
+  {n:45,s:"C 部分 —— 日期函数",t:"哪个函数返回星期几？",o:["DAY()","WEEK()","DAYNAME() / TO_CHAR(date, 'Day')","DATE_PART()"],c:2,e:"MySQL 中用 DAYNAME，Oracle/PostgreSQL 中用 TO_CHAR。"},
+  {n:46,s:"C 部分 —— 日期函数",t:"MONTH() 函数做什么？",o:["返回该月的天数。","返回月份编号（1-12）。","返回月份名称。","检查一个月是否已过去。"],c:1,e:"MONTH() 返回月份编号——1 表示一月，12 表示十二月。"},
+  {n:47,s:"C 部分 —— 日期函数",t:"SQL 中标准的日期格式是什么？",o:["DD-MM-YYYY","MM-DD-YYYY","YYYY-MM-DD","YYYY-DD-MM"],c:2,e:"ISO 8601 = YYYY-MM-DD。这是国际标准。"},
+  {n:48,s:"C 部分 —— 日期函数",t:"你如何找出当前月份的最后一天？",o:["LAST_DAY()","EOMONTH() (SQL Server) / LAST_DAY() (MySQL)","END_MONTH()","MONTH_LIMIT()"],c:1,e:"SQL Server 中用 EOMONTH，MySQL 中用 LAST_DAY。"},
+  {n:49,s:"C 部分 —— 日期函数",t:"DATEPART(weekday, date) 做什么？",o:["返回日期名称。","返回星期几的数字表示。","返回一年中的周数。","拆分日期。"],c:1,e:"DATEPART(weekday) 返回 1-7，DATEPART(week) 返回一年中的周数。"},
+  {n:50,s:"C 部分 —— 日期函数",t:"DATE 和 DATETIME 之间有什么区别？",o:["没有区别。","DATE 只保存日/月/年，DATETIME 还保存时/分/秒。","DATETIME 只用于未来。","DATE 占用更多内存。"],c:1,e:"DATE = 3 字节。DATETIME = 8 字节（包括时间）。"},
+  {n:51,s:"C 部分 —— 日期函数",t:"我们如何把字符串 '2023-01-01' 转换成一个日期对象？",o:["CAST('2023-01-01' AS DATE) / TO_DATE()","CONVERT_TO_TIME()","MAKE_DATE()","它总是自动发生。"],c:0,e:"CAST 是 ANSI 标准，TO_DATE() 在 Oracle/PostgreSQL 中很常见。"},
+  {n:52,s:"C 部分 —— 日期函数",t:"EXTRACT(QUARTER FROM date) 返回什么？",o:["季度内的第几天。","一年中的季度编号（1-4）。","该季度的销售额。","日期的 25%。"],c:1,e:"EXTRACT(QUARTER) = 1 表示一月至三月，2 表示四月至六月，3 表示七月至九月，4 表示十月至十二月。"},
+  {n:53,s:"C 部分 —— 日期函数",t:"ISDATE() 做什么？",o:["检查日期是否是今天。","检查一个给定字符串是否为有效日期（返回 1 或 0）。","把日期转换成文本。","返回数据类型。"],c:1,e:"ISDATE() 对数据清理很有用——在 CAST 成日期之前。"},
+  {n:54,s:"C 部分 —— 日期函数",t:"你如何在 SQL 中计算一个人的年龄？",o:["YEAR(NOW()) - YEAR(birthdate)","DATEDIFF(year, birthdate, GETDATE())","上述方法很常见，但你必须通过考虑日和月来做到精确。","AGE(birthdate)"],c:2,e:"计算精确的年龄需要比较月和日——而不仅仅是年份。"},
+  {n:55,s:"C 部分 —— 日期函数",t:"TIMESTAMPDIFF 做什么？",o:["只以秒为单位计算时间差。","以选定的单位（小时、分钟等）计算两个时间值之间的差。","创建一个新的时间戳。","更改时区。"],c:1,e:"TIMESTAMPDIFF(HOUR, start, end) = 两个时间之间的小时数。"},
+  {n:56,s:"C 部分 —— 日期函数",t:"什么是 Unix 时间戳？",o:["文本格式的日期。","自 1970 年 1 月 1 日以来经过的秒数。","一种 Apple 日期格式。","一个内部的 SQL 时钟。"],c:1,e:"Unix 时间戳 = epoch 时间。在 API 和分布式系统中广泛使用。"},
+  {n:57,s:"C 部分 —— 日期函数",t:"你如何以 'DD/MM/YYYY' 格式显示一个日期？",o:["FORMAT(date, 'dd/MM/yyyy')","TO_CHAR(date, 'DD/MM/YYYY')","CONVERT(VARCHAR, date, 103)","所有答案都对（取决于数据库）。"],c:3,e:"SQL Server 中用 FORMAT，Oracle/PostgreSQL 中用 TO_CHAR，SQL Server 中用代码 103 的 CONVERT。"},
+  {n:58,s:"C 部分 —— 日期函数",t:"SYSDATE 在 Oracle 中做什么？",o:["删除系统日期。","返回服务器当前的日期和时间。","更新时钟。","只返回年份。"],c:1,e:"Oracle 中的 SYSDATE = SQL Server 中的 GETDATE() = MySQL 中的 NOW()。"},
+  {n:59,s:"C 部分 —— 日期函数",t:"DATE_TRUNC 函数是什么？",o:["从表中删除日期。","把一个日期“舍入”到给定的时间单位（例如月初或当天的开始）。","裁剪一个日期字符串。","延长日期。"],c:1,e:"DATE_TRUNC('month', date) = 该月的第一个日期。对月度报表很有用。"},
+  {n:60,s:"C 部分 —— 日期函数",t:"如果你给 12 月 31 日加上一天会发生什么？",o:["报错。","日期保持不变。","日期变成下一年的 1 月 1 日。","系统返回 NULL。"],c:2,e:"在日期计算中，SQL 会自动处理月/年的进位。"}
+];
+
+const L=['A','B','C','D'];
+let answers={}, correct=0, curSec=null;
+
+function updateScore(){
+  const tot=Object.keys(answers).length;
+  const pct=tot>0?Math.round(correct/tot*100):0;
+  document.getElementById('scoreText').textContent='✅ '+correct+' / '+tot;
+  document.getElementById('scoreFill').style.width=(Math.round(correct/Q.length*100))+'%';
+  document.getElementById('progTxt').textContent=tot+' / '+Q.length;
+  document.getElementById('scoreDisplay').textContent=pct+'%';
+  document.getElementById('heroAnswered').textContent=tot;
+  document.getElementById('heroCorrect').textContent=correct;
+  document.getElementById('heroPct').textContent=pct+'%';
+  if(tot===Q.length) showFinish();
+}
+
+function selectOption(qi,oi){
+  if(answers[qi]!==undefined)return;
+  const q=Q[qi]; const ok=oi===q.c;
+  answers[qi]=oi; if(ok)correct++;
+  const card=document.getElementById('qcard-'+qi);
+  card.classList.add(ok?'correct':'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i===q.c)o.classList.add('correct-ans');
+    if(i===oi&&!ok)o.classList.add('wrong-ans');
+  });
+  const exp=document.getElementById('exp-'+qi);
+  exp.querySelector('.exp-text').innerHTML=(ok?'✅ 正确！ ':'❌ 错误——正确答案以绿色标出。 ')+q.e;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc=document.getElementById('mainContent');
+  mc.innerHTML=''; curSec=null;
+  Q.forEach((q,i)=>{
+    if(q.s!==curSec){curSec=q.s;mc.innerHTML+=`<div class="sec-label">${q.s}</div>`;}
+    const opts=q.o.map((o,oi)=>`<div class="option" onclick="selectOption(${i},${oi})"><div class="opt-letter">${L[oi]}</div><div class="opt-text">${o}</div></div>`).join('');
+    mc.innerHTML+=`<div class="q-card" id="qcard-${i}"><div class="q-meta"><div class="q-num">第 ${q.n} 题</div><div class="q-sec-tag">${q.s.split('—')[1]?.trim()||q.s}</div></div><div class="q-text">${q.t}</div><div class="options">${opts}</div><div class="explanation" id="exp-${i}"><div class="exp-label">💡 Explanation</div><div class="exp-text"></div></div></div>`;
+  });
+  mc.innerHTML+=`<div class="finish-card" id="finishCard"><div class="finish-emoji">🏆</div><div class="finish-title">You finished the advanced level!</div><div class="finish-score" id="finishScore">0/60</div><div class="finish-grade" id="finishGrade"></div><div class="finish-sub" id="finishSub"></div><br><button class="retry-btn" onclick="resetQuiz()">🔄 重新尝试</button><a href="quiz-medium.html" class="level-link">📗 Back to the intermediate level</a></div>`;
+}
+
+function showFinish(){
+  if(window.fbAutoSave&&window.currentUser)window.fbAutoSave(correct,Q.length);
+  const pct=Math.round(correct/Q.length*100);
+  document.getElementById('finishScore').textContent=correct+' / '+Q.length;
+  const grades=[[90,'🏆 优秀！','令人印象深刻地掌握了高级水平！'],[75,'⭐ 很好','再多练一点你就能完全掌握了！'],[60,'👍 良好','值得复习一下较薄弱的材料。'],[0,'💪 继续练习','复习一下各章节再试一次！']];
+  const [,grade,sub]=grades.find(([t])=>pct>=t);
+  document.getElementById('finishGrade').textContent=grade;
+  document.getElementById('finishSub').textContent=sub;
+  const card=document.getElementById('finishCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function resetQuiz(){
+  answers={};correct=0;
+  document.getElementById('finishCard').classList.remove('show');
+  updateScore();buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuiz();updateScore();
+</script>
+
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const app=initializeApp({apiKey:"AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",authDomain:"sql-course-507b5.firebaseapp.com",projectId:"sql-course-507b5",storageBucket:"sql-course-507b5.firebasestorage.app",messagingSenderId:"999664091380",appId:"1:999664091380:web:349959985ae11ce8c51ea1"});
+const auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
+let currentUser=null;window.currentUser=null;const QID='advanced2';
+onAuthStateChanged(auth,async(user)=>{
+  currentUser=user;window.currentUser=user;
+  const li=document.getElementById('fb-login-btn'),lo=document.getElementById('fb-logout-btn'),ui=document.getElementById('fb-user-info'),hb=document.getElementById('fb-history-btn'),sb=document.getElementById('fb-save-btn');
+  if(user){
+    document.getElementById('fb-user-name').textContent=user.displayName;
+    document.getElementById('fb-user-photo').src=user.photoURL;
+    document.getElementById('fb-user-photo').style.display='block';
+    li.style.display='none';lo.style.display='flex';ui.style.display='flex';hb.style.display='flex';sb.style.display='flex';
+    await loadProg();await loadHist();
+  }else{li.style.display='flex';lo.style.display='none';ui.style.display='none';hb.style.display='none';sb.style.display='none';}
+});
+window._fbLogin=window.fbLogin=async()=>{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}};
+window._fbLogout=window.fbLogout=async()=>{await signOut(auth);};
+window._fbToggleHistory=window.fbToggleHistory=()=>{const w=document.getElementById('fb-history-wrap');w.style.display=w.style.display==='none'?'block':'none';};
+window._triggerSave=window.triggerSave=async()=>{
+  if(!currentUser){window.fbLogin();return;}
+  const txt=(document.getElementById('scoreText')?.textContent||'0 / 0').replace('✅ ','');
+  const p=txt.split('/');const sc=parseInt(p[0])||0,tot=parseInt(p[1])||0;
+  if(tot===0){showToast('⚠️ 请先至少回答一道题！');return;}
+  await saveProg(sc,tot);
+};
+async function saveProg(score,total){
+  if(!currentUser)return;
+  const pct=Math.round(score/total*100);
+  await setDoc(doc(db,'users',currentUser.uid,'quizzes',QID),{score,total,pct,lastUpdate:new Date().toISOString()},{merge:true});
+  await addDoc(collection(db,'users',currentUser.uid,'history'),{quizId:QID,score,total,pct,date:new Date().toISOString()});
+  showToast('✅ 进度已保存到云端！');await loadHist();
+}
+window.fbAutoSave=saveProg;
+async function loadProg(){
+  if(!currentUser)return;
+  const s=await getDoc(doc(db,'users',currentUser.uid,'quizzes',QID));
+  if(s.exists()){const d=s.data();const el=document.getElementById('fb-saved-score');el.textContent=`Last attempt: ${d.score}/${d.total} (${d.pct}%)`;el.style.display='block';}
+}
+async function loadHist(){
+  if(!currentUser)return;
+  const q=query(collection(db,'users',currentUser.uid,'history'),orderBy('date','desc'),limit(10));
+  const s=await getDocs(q);const hist=[];
+  s.forEach(d=>hist.push(d.data()));
+  renderChart(hist.filter(h=>h.quizId===QID));
+}
+function renderChart(h){
+  const p=document.getElementById('fb-history-panel');
+  if(!h.length){p.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">No history yet — answer questions and save!</p>';return;}
+  const rev=[...h].reverse();
+  const best=Math.max(...h.map(x=>x.pct)),avg=Math.round(h.reduce((a,x)=>a+x.pct,0)/h.length);
+  const bars=rev.map(x=>{const d=new Date(x.date);const lbl=`${d.getDate()}/${d.getMonth()+1}`;const col=x.pct>=80?'var(--aq)':x.pct>=50?'#FFB020':'#FF4060';return`<div class="hbar-wrap"><div class="hbar-val">${x.pct}%</div><div class="hbar" style="height:${Math.max(x.pct*1.1,8)}px;background:${col}"></div><div class="hbar-lbl">${lbl}</div></div>`;}).join('');
+  p.innerHTML=`<div class="hstats-row"><div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">Personal best</div></div><div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">Average</div></div><div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${h.length}</div><div class="hstat-l">Attempts</div></div></div><div class="hchart">${bars}</div>`;
+}
+function showToast(msg){let t=document.getElementById('fb-toast');if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+</script>
+</body>
+</html>

@@ -7,9 +7,9 @@
 <!-- =============================================== -->
 <!-- SEO META TAGS - Primary                         -->
 <!-- =============================================== -->
-<title>Free SQL Course | 310+ Exercises, Live Simulators & Job-Interview Prep | Eliran Grossman</title>
+<title>Free Data Course | SQL · Python · Pandas · 580+ Exercises | Eliran Grossman</title>
 <meta name="title" content="Free SQL Course | 310+ Exercises, Live Simulators & Interview Prep">
-<meta name="description" content="A completely free SQL course with 310+ interactive exercises, 4 live SQL simulators (NBA, Champions League, Northwind), a full function reference, and case-study interview simulations for data analysts.">
+<meta name="description" content="A completely free data course - SQL · Python · Pandas. 580+ interactive exercises, code simulators with auto-grading, daily challenges, and case-study interview simulations.">
 <meta name="keywords" content="SQL, SQL course, learn SQL, free SQL course, SQL exercises, SQL simulator, Window Functions, Northwind, JOIN, GROUP BY, data analyst, SQL interview, MySQL, SQL Server, data, BI">
 <meta name="author" content="Eliran Grossman">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -25,7 +25,7 @@
 <meta property="og:url" content="https://egrosman1.github.io/sql-course/en/">
 <meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
 <meta property="og:title" content="Free SQL Course | 310+ Exercises & Live Simulators">
-<meta property="og:description" content="A completely free SQL course. 310+ exercises, 4 simulators, a function reference, and real interview prep for data analysts.">
+<meta property="og:description" content="A completely free data course - SQL · Python · Pandas. 580+ interactive exercises, code simulators with auto-grading, daily challenges, and case-study interview simulations.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -158,7 +158,7 @@
       "name": "What makes this course unique?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The course offers 4 interactive SQL simulators on real datasets (NBA, Champions League, Northwind) plus case-study interview simulations for the insurance and telecom industries \u2014 unique content you won\u2019t find in other courses."
+        "text": "The course offers 5 interactive simulators (SQL + Python + Pandas) on real datasets (NBA, Champions League, Northwind) plus case-study interview simulations for the insurance and telecom industries \u2014 unique content you won\u2019t find in other courses."
       }
     },
     {
@@ -317,6 +317,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   .lc-num{font-size:1.75rem}
 }
 
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
 </style>
 
 <!-- Google Analytics 4 -->
@@ -335,10 +346,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   <a href="index.html" class="logo">SQL<em>.course</em></a>
   <ul class="top-nav">
     <li><a href="course.html">Learn</a></li>
+    <li><a href="python-lesson.html">🐍 Python Course</a></li>
+    <li><a href="pandas-lesson.html">🐼 Pandas Course</a></li>
+    <li><a href="quiz-python-100.html">💯 Python Quiz</a></li>
+    <li><a href="python-playground.html">🎮 Playground</a></li>
     <li><a href="practice.html">Practice</a></li>
     <li><a href="simulator.html">⚡ Simulator</a></li>
     <li><a href="tirgul-makif.html">🎯 Full Practice</a></li>
-    <li><a href="../pbi-simulator.html">📊 Power BI</a></li>
+    <li><a href="pbi-simulator.html">📊 Power BI</a></li>
     <li><a href="reference.html">Functions</a></li>
     <li><a href="quiz-beginner.html">Beginner Quiz</a></li>
     <li><a href="quiz.html">Advanced Quiz</a></li>
@@ -346,7 +361,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
     <li><a href="videos2.html">SQL Server</a></li>
     <li><a href="setup.html">Setup</a></li>
   </ul>
-  <div class="lang-flags"><a href="../index.html" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="index.html" class="on" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a></div>
+  <div class="lang-flags"><a href="../index.html" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="index.html" class="on" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/index.html" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a></div>
   <button class="hbg" onclick="toggleMob()" aria-label="Menu"><span></span><span></span><span></span></button>
 </header>
 
@@ -356,7 +371,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   <a href="practice.html">✏️ Practice</a>
   <a href="simulator.html">⚡ SQL Simulator</a>
   <a href="tirgul-makif.html">🎯 Full Practice</a>
-  <a href="../pbi-simulator.html">📊 Power BI Simulator</a>
+  <a href="pbi-simulator.html">📊 Power BI Simulator</a>
   <a href="reference.html">📘 Function Reference</a>
   <a href="quiz-beginner.html">🌱 Beginner Questions</a>
   <a href="quiz.html">🧠 Advanced Questions</a>
@@ -374,7 +389,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   <div class="sb-body">
     <a href="simulator.html" class="sb-link on"><div class="sl-dot"></div><div class="sl-txt">⚡ SQL Simulator</div></a>
     <a href="tirgul-makif.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🎯 Full Practice</div></a>
-    <a href="../pbi-simulator.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📊 Power BI Simulator</div></a>
+    <a href="pbi-simulator.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📊 Power BI Simulator</div></a>
     <a href="reference.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📘 Function Reference</div></a>
     <a href="practice.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">✏️ Practice</div></a>
     <a href="quiz-beginner.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🌱 Beginner Questions</div></a>
@@ -391,9 +406,29 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   <!-- HERO -->
   <div class="hero">
     <div>
-      <div class="hero-tag">● Free SQL Course · 310+ Exercises · Built by an Analyst</div>
-      <h1>Free <em>SQL</em> Course</h1>
-      <p class="hero-desc">From the basics all the way to <strong>job-interview level</strong> — a practical, free SQL course with 4 interactive simulators, 310+ exercises, and case-study simulations for analysts.</p>
+      <div class="hero-tag">● Free Data Course · SQL · Python · Pandas · 580+ Exercises</div>
+      <h1>Free <em>Data</em> Course</h1>
+      <p class="hero-desc">From the basics all the way to <strong>job-interview level</strong> — a practical, free data course covering <b>SQL</b>, <b>Python</b>, and <b>Pandas</b>. 580+ interactive exercises, 5 simulators, and case-study simulations for analysts.</p>
+      <div style="margin: 16px 0 18px;">
+        <a href="career-path.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#00d4c8,#00e5a0);color:#000;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(0,212,200,0.35);transition:transform .15s;">
+          🗺️ View Your Learning Path
+        </a>
+        <a href="python-lesson.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#3776ab,#2c5d8c);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(55,118,171,0.4);margin-inline-start:8px;">
+          🐍 Python Course (170 exercises)
+        </a>
+        <a href="pandas-lesson.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#8b5cf6,#6b21a8);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(139,92,246,0.4);margin-inline-start:8px;">
+          🐼 Pandas Course (150 exercises)
+        </a>
+        <a href="quiz-python-100.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(245,158,11,0.4);margin-inline-start:8px;">
+          💯 Python Quiz 100
+        </a>
+        <a href="python-playground.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(16,185,129,0.4);margin-inline-start:8px;">
+          🎮 Python Playground
+        </a>
+        <a href="projects.html" class="projects-cta-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#8b5cf6,#9333ea);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(139,92,246,0.4);margin-inline-start:8px;">
+          🚀 Guided Projects
+        </a>
+      </div>
       <p class="hero-about">SQL instructor and analytics team lead at <strong>Partner</strong>, with years of hands-on experience in data.<br>
       My goal — <strong>to teach data for free, simply and accessibly to everyone</strong> — and to bring real-world experience to anyone who wants to grow in the field and succeed in job interviews.</p>
       <div class="inst">
@@ -413,8 +448,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 
   <!-- STATS -->
   <div class="stats">
-    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">Lessons</div></div>
-    <div class="stat"><div class="stat-val">110+</div><div class="stat-lbl">Exercises</div></div>
+    <div class="stat"><div class="stat-val">27</div><div class="stat-lbl">Lessons</div></div>
+    <div class="stat"><div class="stat-val">580+</div><div class="stat-lbl">Exercises</div></div>
     <div class="stat"><div class="stat-val">24K</div><div class="stat-lbl">Rows in simulator</div></div>
     <div class="stat"><div class="stat-val">🆓</div><div class="stat-lbl">Completely free</div></div>
   </div>
@@ -477,7 +512,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
       <span class="card-title">SQL Simulator</span>
       <span class="card-arr">→</span>
     </a>
-    <a href="../pbi-simulator.html" class="card feat">
+    <a href="pbi-simulator.html" class="card feat">
       <span class="card-ico">📊</span>
       <span class="card-title">Power BI Simulator — DAX & dashboards</span>
       <span class="card-arr">→</span>

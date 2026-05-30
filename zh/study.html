@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL 学习资料 —— 总结与示例 | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(74,158,255,.06) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.25);color:var(--blue);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px}
+
+/* TABS */
+.tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;position:sticky;top:49px;z-index:90}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.85rem 1.2rem;font-size:13px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-right:none;border-left:none;font-family:var(--font)}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* SECTION HEADER */
+.sec-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.sec-header::before{content:'';position:absolute;top:0;right:0;width:180px;height:180px;background:radial-gradient(circle,rgba(0,212,255,.05) 0%,transparent 70%)}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.sec-title{font-size:1.6rem;font-weight:900;margin-bottom:.5rem}
+.sec-desc{color:var(--text2);font-size:14px;line-height:1.8}
+
+/* CONTENT SECTION */
+.content-sec{margin-bottom:2.5rem}
+.content-sec-title{font-size:.95rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.content-sec-title::before{content:'';display:block;width:3px;height:16px;background:var(--yellow);border-radius:2px;flex-shrink:0}
+
+/* CONCEPT BOX */
+.concept{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.concept-lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-body{color:var(--text2);font-size:14px;line-height:1.85}
+.concept-body strong{color:var(--text);font-weight:600}
+.concept-body code{background:var(--bg3);border:1px solid var(--border);color:var(--cyan);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
+
+/* HIGHLIGHT */
+.hl{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;display:flex;gap:.75rem;align-items:flex-start}
+.hl.info{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-right:3px solid var(--blue)}
+.hl.tip{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-right:3px solid var(--green2)}
+.hl.warn{background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow)}
+.hl-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.hl-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.hl-text strong{color:var(--text)}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
+.data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.65rem 1rem;text-align:right;border:1px solid var(--border)}
+.data-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.6}
+.data-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.data-table .pk{color:var(--yellow);font-family:var(--mono);font-size:11px;font-weight:700}
+.data-table .fk{color:var(--orange);font-family:var(--mono);font-size:11px;font-weight:700}
+.data-table .good{color:var(--green)}
+.data-table .bad{color:var(--red)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:.6rem;margin:.75rem 0}
+.step{display:flex;gap:.75rem;align-items:flex-start}
+.step-n{width:28px;height:28px;border-radius:8px;background:var(--blue3);color:var(--blue);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-t{font-size:13.5px;color:var(--text2);line-height:1.6;flex:1}
+.step-t strong{color:var(--text)}
+
+/* NORTHWIND DIAGRAM */
+.diagram-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:.75rem 0}
+.diagram-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.75rem 1rem;font-size:13px;font-weight:700;color:var(--text2)}
+.diagram-body{padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
+.db-table{background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.db-table-header{padding:.5rem .75rem;font-size:12px;font-weight:700;font-family:var(--mono);text-align:center}
+.db-table-header.blue{background:rgba(74,158,255,.2);color:var(--blue)}
+.db-table-header.green{background:rgba(0,230,118,.15);color:var(--green)}
+.db-table-header.orange{background:rgba(255,140,66,.15);color:var(--orange)}
+.db-table-header.purple{background:rgba(210,168,255,.15);color:var(--purple)}
+.db-table-header.cyan{background:rgba(0,212,255,.15);color:var(--cyan)}
+.db-table-header.red{background:rgba(255,71,87,.15);color:var(--red)}
+.db-table-header.yellow{background:rgba(255,209,102,.15);color:var(--yellow)}
+.db-table-header.teal{background:rgba(0,168,150,.15);color:#00d4aa}
+.db-col{padding:.3rem .75rem;font-size:11.5px;color:var(--text3);font-family:var(--mono);border-top:1px solid var(--border)}
+.db-col.pk-col{color:var(--yellow)}
+.db-col.fk-col{color:var(--orange)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.diagram-body{grid-template-columns:repeat(2,1fr)}
+.tab-btn{font-size:11px;padding:.65rem .75rem}
+.data-table{font-size:11px}
+}
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<meta name="description" content="结构化的 SQL 学习资料：每个主题的总结、代码示例和练习——从 SELECT 和 JOIN 到窗口函数。为分析师面试做全面准备。">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/study.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/study.html">
+<meta property="og:site_name" content="免费 SQL 课程 - Eliran Grossman">
+<meta property="og:title" content="学习资料 —— SQL 课程">
+<meta property="og:description" content="结构化的 SQL 学习资料：每个主题的总结、代码示例和练习——从 SELECT 和 JOIN 到窗口函数。为分析师面试做全面准备。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="学习资料 —— SQL 课程">
+<meta name="twitter:description" content="结构化的 SQL 学习资料：每个主题的总结、代码示例和练习——从 SELECT 和 JOIN 到窗口函数。为分析师面试做全面准备。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "学习资料",
+        "item": "https://egrosman1.github.io/sql-course/study.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "SQL 学习资料 —— 总结与示例 | SQL.course",
+    "description": "结构化的 SQL 学习资料：每个主题的总结、代码示例和练习——从 SELECT 和 JOIN 到窗口函数。为分析师面试做全面准备。",
+    "url": "https://egrosman1.github.io/sql-course/study.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Course",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL 讲师兼分析负责人，Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "免费 SQL 课程",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← 首页</a>
+  <div class="topnav-title">📖 学习资料</div>
+  <div class="topnav-links">
+    <a href="course.html" class="topnav-link">📚 学习</a>
+    <a href="../study.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/study.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="study.html" class="topnav-link on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="practice.html" class="topnav-link">✏️ 练习</a>
+    <a href="quiz.html" class="topnav-link">🧠 测验</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 首页</a>
+  <a href="tirgul-makif.html">🎯 综合练习</a>
+  <a href="course.html">📚 学习材料</a>
+  <a href="practice.html">✏️ 练习</a>
+  <a href="quiz.html">🧠 测验</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">📖 有条理的学习资料</div>
+  <h1 class="hero-title">学习资料 —— SQL 课程</h1>
+  <p class="hero-sub">深入讲解数据库、Northwind 结构和 SQL 基础</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab(0)">🗄️ 什么是数据库？</button>
+  <button class="tab-btn" onclick="showTab(1)">🏗️ Northwind 结构</button>
+  <button class="tab-btn" onclick="showTab(2)">🔑 键与关系</button>
+  <button class="tab-btn" onclick="showTab(3)">📊 SQL 与 Excel</button>
+</div>
+
+<div class="main">
+
+<!-- ===================== TAB 1: What is a DB ===================== -->
+<div class="tab-pane active" id="tab-0">
+  <div class="sec-header">
+    <div class="sec-num">第 1 部分</div>
+    <div class="sec-title">🗄️ 什么是数据库？</div>
+    <div class="sec-desc">理解数据库最简单的方法，就是把它想象成一个 <strong>庞大而精密的数字图书馆</strong>。如果说一个 Excel 文件就像一张纸，那么数据库就是那个容纳成千上万本“笔记本”、把它们组织好、并让你在瞬间找到信息的结构。</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🏛️ 数据库是什么，它有什么用？</div>
+    <div class="concept">
+      <div class="concept-lbl">定义</div>
+      <div class="concept-body">
+        数据库是一个 <strong>以电子方式存储的、有组织的信息集合</strong>。管理这些数据的系统称为 <strong>DBMS（数据库管理系统）</strong> —— 例如 MySQL、SQL Server 或 Oracle。
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-lbl">5 大主要作用</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>存储海量数据</strong> —— 与在一百万行就开始“卡死”的 Excel 不同，数据库能轻松处理 <strong>数十亿行</strong> 数据。</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>快速检索</strong> —— 用 SQL 你可以在数百万条记录中找到某个特定值， <strong>只需几毫秒</strong>.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>安全与权限</strong> —— 精确定义谁可以查看、编辑和删除数据。</div></div>
+          <div class="step"><div class="step-n">4</div><div class="step-t"><strong>数据完整性</strong> —— 防止重复和矛盾（例如，两个客户拥有相同的 ID 编号）。</div></div>
+          <div class="step"><div class="step-n">5</div><div class="step-t"><strong>并发访问</strong> —— 数百名用户同时读写，而不会出现“文件被锁定”的情况。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🏗️ 数据库的层级结构</div>
+    <div class="concept">
+      <div class="concept-lbl">从最高层到最底层</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">☁️</div><div class="step-t"><strong>服务器 / 实例</strong> —— 运行软件的计算机或云。</div></div>
+          <div class="step"><div class="step-n">🗄️</div><div class="step-t"><strong>数据库</strong> —— 主“仓库”。例如：“一个销售系统”。</div></div>
+          <div class="step"><div class="step-n">📁</div><div class="step-t"><strong>模式（Schema）</strong> —— 仓库内部的逻辑划分（就像超市里的部门：客户、财务……）。</div></div>
+          <div class="step"><div class="step-n">📋</div><div class="step-t"><strong>表</strong> —— 实际存储数据的基本单元。</div></div>
+          <div class="step"><div class="step-n">🔍</div><div class="step-t"><strong>其他对象</strong> —— 视图（保存的查询）、存储过程（工作流）。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📋 表结构 —— 数据库的核心</div>
+    <div class="concept">
+      <div class="concept-lbl">说明</div>
+      <div class="concept-body">
+        表以网格形式构建——但与 Excel 不同，它是 <strong>严格的</strong>：每一列都有预先定义的角色和数据类型。
+      </div>
+    </div>
+    <table class="data-table">
+      <tr><th>组成部分</th><th>描述</th><th>示例</th></tr>
+      <tr>
+        <td><strong>列 / 字段</strong></td>
+        <td>定义数据类型。每一列都有名称和类型（数字、文本、日期）</td>
+        <td>一个“客户名称”或“产品价格”列</td>
+      </tr>
+      <tr>
+        <td><strong>行 / 记录</strong></td>
+        <td>表示一个实体的单个实例。每一行都是一个完整的“对象”</td>
+        <td>某个具体客户的所有详细信息</td>
+      </tr>
+      <tr>
+        <td><span class="pk">🔑 主键</span></td>
+        <td>每一行都必须唯一的列——记录的“身份证”</td>
+        <td>CustomerID</td>
+      </tr>
+      <tr>
+        <td><span class="fk">🔗 外键</span></td>
+        <td>链接到另一个表中主键的列——在表之间建立关系</td>
+        <td>Orders 表中的 CustomerID</td>
+      </tr>
+    </table>
+
+    <div class="concept">
+      <div class="concept-lbl">一个直观的示例 —— Products 表</div>
+      <div class="concept-body">
+        <table class="data-table">
+          <tr>
+            <th><span class="pk">🔑 ProductID (PK)</span></th>
+            <th>ProductName</th>
+            <th><span class="fk">🔗 CategoryID (FK)</span></th>
+            <th>ListPrice</th>
+          </tr>
+          <tr><td>101</td><td>笔记本电脑</td><td>1</td><td>3,500</td></tr>
+          <tr><td>102</td><td>鼠标</td><td>2</td><td>150</td></tr>
+          <tr><td>103</td><td>键盘</td><td>2</td><td>250</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text">
+        <strong>关于这个示例：</strong><br>
+        • <strong>主键</strong>：ProductID 确保没有两个产品共用同一个编号<br>
+        • <strong>外键</strong>：CategoryID 链接到 Categories 表——其中类别 1 = “Computers”，2 = “Peripherals”<br>
+        • <strong>类型</strong>：ListPrice 始终是数字，ProductName 始终是文本
+      </div>
+    </div>
+  </div>
+
+  <div class="hl info">
+    <div class="hl-icon">🎯</div>
+    <div class="hl-text"><strong>总之：</strong> 数据库是你所知道的每一个应用和网站背后的引擎。它把信息存储在相互关联的表中，并让你快速提取复杂的业务洞察。</div>
+  </div>
+</div>
+
+<!-- ===================== TAB 2: Northwind ===================== -->
+<div class="tab-pane" id="tab-1">
+  <div class="sec-header">
+    <div class="sec-num">第 2 部分</div>
+    <div class="sec-title">🏪 Northwind 数据库结构</div>
+    <div class="sec-desc">Northwind 是一个经典的数据库，模拟一家 <strong>贸易公司</strong>。它包含 8 张相互关联的核心表。这是我们整个课程都会使用的数据库。</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🗂️ Northwind 的 8 张表</div>
+    <div class="diagram-wrap">
+      <div class="diagram-header">📊 表结构 —— Northwind</div>
+      <div class="diagram-body">
+
+        <div class="db-table">
+          <div class="db-table-header blue">🏢 Customers</div>
+          <div class="db-col pk-col">🔑 CustomerID</div>
+          <div class="db-col">CompanyName</div>
+          <div class="db-col">ContactTitle</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+          <div class="db-col">Region</div>
+          <div class="db-col">PostalCode</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header green">📦 Orders</div>
+          <div class="db-col pk-col">🔑 OrderID</div>
+          <div class="db-col fk-col">🔗 CustomerID</div>
+          <div class="db-col fk-col">🔗 EmployeeID</div>
+          <div class="db-col">OrderDate</div>
+          <div class="db-col">RequiredDate</div>
+          <div class="db-col">ShippedDate</div>
+          <div class="db-col fk-col">🔗 ShipVia</div>
+          <div class="db-col">Freight</div>
+          <div class="db-col">ShipCity</div>
+          <div class="db-col">ShipCountry</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header red">📋 Order Details</div>
+          <div class="db-col pk-col">🔑 OrderID</div>
+          <div class="db-col fk-col">🔗 ProductID</div>
+          <div class="db-col">UnitPrice</div>
+          <div class="db-col">Quantity</div>
+          <div class="db-col">Discount</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header orange">🛒 Products</div>
+          <div class="db-col pk-col">🔑 ProductID</div>
+          <div class="db-col">ProductName</div>
+          <div class="db-col fk-col">🔗 SupplierID</div>
+          <div class="db-col fk-col">🔗 CategoryID</div>
+          <div class="db-col">UnitPrice</div>
+          <div class="db-col">UnitsInStock</div>
+          <div class="db-col">Discontinued</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header purple">👤 Employees</div>
+          <div class="db-col pk-col">🔑 EmployeeID</div>
+          <div class="db-col">LastName</div>
+          <div class="db-col">FirstName</div>
+          <div class="db-col">Title</div>
+          <div class="db-col">BirthDate</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header cyan">🏭 Suppliers</div>
+          <div class="db-col pk-col">🔑 SupplierID</div>
+          <div class="db-col">CompanyName</div>
+          <div class="db-col">ContactTitle</div>
+          <div class="db-col">Address</div>
+          <div class="db-col">City</div>
+          <div class="db-col">PostalCode</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header yellow">🏷️ Categories</div>
+          <div class="db-col pk-col">🔑 CategoryID</div>
+          <div class="db-col">CategoryName</div>
+          <div class="db-col">描述</div>
+          <div class="db-col">Picture</div>
+        </div>
+
+        <div class="db-table">
+          <div class="db-table-header teal">🚚 Shippers</div>
+          <div class="db-col pk-col">🔑 ShipperID</div>
+          <div class="db-col fk-col">🔗 CompanyName</div>
+          <div class="db-col">Phone</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔗 表之间的关系</div>
+    <table class="data-table">
+      <tr><th>源表</th><th>通过…链接</th><th>目标表</th><th>含义</th></tr>
+      <tr><td>Orders</td><td>CustomerID</td><td>Customers</td><td>每个订单都属于一位客户</td></tr>
+      <tr><td>Orders</td><td>EmployeeID</td><td>Employees</td><td>每个订单都由一名员工处理</td></tr>
+      <tr><td>Orders</td><td>ShipVia</td><td>Shippers</td><td>每个订单都由一家物流公司发货</td></tr>
+      <tr><td>Order Details</td><td>OrderID</td><td>Orders</td><td>每个订单的行项目</td></tr>
+      <tr><td>Order Details</td><td>ProductID</td><td>Products</td><td>订购了哪个产品</td></tr>
+      <tr><td>Products</td><td>SupplierID</td><td>Suppliers</td><td>谁供应该产品</td></tr>
+      <tr><td>Products</td><td>CategoryID</td><td>Categories</td><td>该产品属于哪个类别</td></tr>
+    </table>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text"><strong>提示：</strong> the <strong>Orders</strong> 表是 Northwind 的核心——它链接到其他 4 张表。我们编写的大多数 JOIN 查询都会经过它。</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🎯 你在 Northwind 上的第一个查询</div>
+    <div class="concept">
+      <div class="concept-lbl">基本 SELECT</div>
+      <div class="concept-body">
+        连接到 Northwind 后，你就可以检索数据：<br><br>
+        <code>USE Northwind;</code><br>
+        <code>SELECT * FROM customers LIMIT 5;</code><br><br>
+        如果你看到 5 行客户数据——说明数据库运行得很完美！🎉
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 3: Keys ===================== -->
+<div class="tab-pane" id="tab-2">
+  <div class="sec-header">
+    <div class="sec-num">第 3 部分</div>
+    <div class="sec-title">🔑 键与关系</div>
+    <div class="sec-desc">键是表之间关系的基础——正是它们把一堆孤立的表变成一个真正的数据库。</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔑 主键</div>
+    <div class="concept">
+      <div class="concept-lbl">定义与规则</div>
+      <div class="concept-body">
+        标识每一行的列（或多列的组合） <strong>完全唯一地</strong>.<br><br>
+        <strong>3 条规则：</strong><br>
+        1. 任何两个值都不能相同<br>
+        2. 它不能为 NULL<br>
+        3. 它不随时间改变<br><br>
+        <strong>示例：</strong> <code>CustomerID</code> （在 customers 表中）—— 每个客户都有自己唯一的编号。
+      </div>
+    </div>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text">主键是表中每一行的 <strong>“身份证”</strong> —— 就像没有两张身份证能共用同一个号码一样。</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔗 外键</div>
+    <div class="concept">
+      <div class="concept-lbl">定义</div>
+      <div class="concept-body">
+        一个表中指向主键的列 <strong>（在另一个表中）</strong>。它在表之间建立关系。<br><br>
+        <strong>示例：</strong> <code>CustomerID</code> （在 orders 表中）指向 <code>CustomerID</code> （在 customers 表中）。<br><br>
+        含义：“每个订单都有一个明确的客户，可以在 customers 表中找到。”
+      </div>
+    </div>
+    <div class="hl warn">
+      <div class="hl-icon">⚠️</div>
+      <div class="hl-text"><strong>引用完整性：</strong> 你不能创建一个 CustomerID 在 customers 表中不存在的订单。数据库会保持关系有效。</div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📊 关系的类型</div>
+    <table class="data-table">
+      <tr><th>关系类型</th><th>说明</th><th>Northwind 中的示例</th></tr>
+      <tr>
+        <td><strong>1:N（一对多）</strong></td>
+        <td>表 A 中的一行链接到表 B 中的多行</td>
+        <td>一位客户 → 多个订单</td>
+      </tr>
+      <tr>
+        <td><strong>N:N（多对多）</strong></td>
+        <td>需要一张连接表——多对多</td>
+        <td>Orders ↔ Products（通过 Order Details）</td>
+      </tr>
+      <tr>
+        <td><strong>1:1（一对一）</strong></td>
+        <td>表 A 中的一行 = 表 B 中的一行</td>
+        <td>较少见——例如，单独的联系方式</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🔄 这与 JOIN 有什么关系？</div>
+    <div class="concept">
+      <div class="concept-lbl">直接的联系</div>
+      <div class="concept-body">
+        JOIN 命令正是利用这些主键/外键关系来合并表：<br><br>
+        <code>JOIN orders ON customers.CustomerID = orders.CustomerID</code><br><br>
+        我们编写的每一个 JOIN 都通过定义表间关系的列来合并表。
+      </div>
+    </div>
+    <div class="hl info">
+      <div class="hl-icon">🎯</div>
+      <div class="hl-text"><strong>规则：</strong> 在每个 JOIN 之前，问自己—— <strong>这些表是通过哪一列链接的？</strong> 答案通常是主键/外键。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 4: SQL vs Excel ===================== -->
+<div class="tab-pane" id="tab-3">
+  <div class="sec-header">
+    <div class="sec-num">第 4 部分</div>
+    <div class="sec-title">📊 SQL 与 Excel</div>
+    <div class="sec-desc">两个都是出色的工具——但用途不同。理解它们的区别有助于你知道何时使用哪一个。</div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">⚡ 完整对比</div>
+    <table class="data-table">
+      <tr><th>对比项</th><th>Excel</th><th>SQL</th></tr>
+      <tr>
+        <td><strong>数据量</strong></td>
+        <td class="bad">最多约 100 万行</td>
+        <td class="good">数十亿行</td>
+      </tr>
+      <tr>
+        <td><strong>速度</strong></td>
+        <td class="bad">处理大文件时慢</td>
+        <td class="good">任何规模都非常快</td>
+      </tr>
+      <tr>
+        <td><strong>共享与可访问性</strong></td>
+        <td class="bad">文件到处传递，版本冲突</td>
+        <td class="good">一个供所有人使用的中央数据库</td>
+      </tr>
+      <tr>
+        <td><strong>数据安全</strong></td>
+        <td class="bad">任何人都能编辑</td>
+        <td class="good">为每个用户设置精确权限</td>
+      </tr>
+      <tr>
+        <td><strong>人为错误</strong></td>
+        <td class="bad">容易输入错误的值</td>
+        <td class="good">严格的结构防止错误</td>
+      </tr>
+      <tr>
+        <td><strong>并发工作</strong></td>
+        <td class="bad">文件被锁定——一次只能一个人</td>
+        <td class="good">数百名用户同时使用</td>
+      </tr>
+      <tr>
+        <td><strong>可视化灵活性</strong></td>
+        <td class="good">轻松制作图表和配色</td>
+        <td class="bad">需要单独的 BI 工具</td>
+      </tr>
+      <tr>
+        <td><strong>对普通用户的易用性</strong></td>
+        <td class="good">直观的图形界面</td>
+        <td class="bad">需要学习一门语言</td>
+      </tr>
+      <tr>
+        <td><strong>精准检索</strong></td>
+        <td class="bad">把整个文件加载到内存</td>
+        <td class="good">只检索所需的内容</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">🎯 何时使用哪一个？</div>
+    <div class="concept">
+      <div class="concept-lbl">在以下情况使用 Excel</div>
+      <div class="concept-body">
+        ✅ 对小文件的一次性分析（最多几十万行）<br>
+        ✅ 快速可视化——图表、数据透视表<br>
+        ✅ 处理已从数据库导出的数据<br>
+        ✅ 方便与不懂 SQL 的管理者共享
+      </div>
+    </div>
+    <div class="concept">
+      <div class="concept-lbl">在以下情况使用 SQL</div>
+      <div class="concept-body">
+        ✅ 处理数百万行及以上的数据<br>
+        ✅ 连接多张表的复杂查询<br>
+        ✅ 自动刷新的报表<br>
+        ✅ 维护“单一可信数据源”——正确、集中的数据<br>
+        ✅ 自动化并运行重复的流程
+      </div>
+    </div>
+    <div class="hl tip">
+      <div class="hl-icon">💡</div>
+      <div class="hl-text"><strong>实际上：</strong> 分析师用 SQL 从数据库中提取数据——然后把它导入 Excel、Power BI 或 Python 进行分析和可视化。 <strong>两者相辅相成！</strong></div>
+    </div>
+  </div>
+
+  <div class="content-sec">
+    <div class="content-sec-title">📈 结论 —— 为什么要学 SQL？</div>
+    <div class="concept">
+      <div class="concept-lbl">3 个关键原因</div>
+      <div class="concept-body">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>一门通用的语言</strong> —— SQL 适用于 MySQL、SQL Server、Oracle、PostgreSQL 等等。学一次——到处都能用。</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>市场需求</strong> —— SQL 是任何 Data、BI、Analytics 或 Product 岗位中最抢手的技能之一。</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>分析的独立性</strong> —— 不必等 IT 准备报表，你可以在需要的时候精确地提取所需的数据。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showTab(idx){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>

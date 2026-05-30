@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL 面试题 —— 在线测验 | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;min-height:100vh}
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(188,140,255,.05) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(188,140,255,.1);border:1px solid rgba(188,140,255,.25);color:var(--purple);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.5px}
+.hero-title{font-size:2rem;font-weight:900;margin-bottom:.5rem}
+.hero-sub{color:var(--text2);font-size:14px;margin-bottom:1.5rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:1.8rem;font-weight:900;color:var(--purple);font-family:var(--mono)}
+.hero-stat-label{font-size:12px;color:var(--text3)}
+
+/* SCORE BAR */
+.score-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;position:sticky;top:49px;z-index:90}
+.score-info{font-size:13px;color:var(--text2)}
+.score-info strong{color:var(--text);font-size:15px}
+.score-track{flex:1;min-width:150px;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:4px;transition:width .4s}
+.score-pct{font-family:var(--mono);font-size:13px;color:var(--purple);font-weight:700;white-space:nowrap}
+.reset-btn{background:transparent;border:1px solid var(--border2);color:var(--text3);font-family:var(--font);font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:2rem 0 1rem;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-label.easy{color:var(--green)}
+.section-label.medium{color:var(--orange)}
+.section-label.hard{color:var(--red)}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow:hidden;transition:border-color .2s}
+.q-card.correct{border-color:var(--green2)}
+.q-card.wrong{border-color:var(--red)}
+.q-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.q-meta{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.q-num{background:var(--bg4);color:var(--text3);font-family:var(--mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.q-diff{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.diff-easy{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.25)}
+.diff-medium{background:rgba(255,140,66,.1);color:var(--orange);border:1px solid rgba(255,140,66,.25)}
+.diff-hard{background:rgba(255,71,87,.1);color:var(--red);border:1px solid rgba(255,71,87,.25)}
+.q-topic{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.q-text{font-size:14px;font-weight:600;color:var(--text);line-height:1.6}
+.q-body{padding:1rem 1.25rem}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:.6rem}
+.option{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.75rem;text-align:right}
+.option:hover:not(.disabled){background:var(--bg4);border-color:var(--border2)}
+.option.selected{border-color:var(--blue);background:rgba(74,158,255,.06)}
+.option.correct-ans{border-color:var(--green2)!important;background:rgba(0,168,84,.08)!important}
+.option.wrong-ans{border-color:var(--red)!important;background:rgba(255,71,87,.08)!important}
+.option.disabled{cursor:default;pointer-events:none}
+.opt-letter{width:26px;height:26px;border-radius:6px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.option.correct-ans .opt-letter{background:var(--green2);color:#fff;border-color:var(--green2)}
+.option.wrong-ans .opt-letter{background:var(--red);color:#fff;border-color:var(--red)}
+.option.selected .opt-letter{background:var(--blue);color:#fff;border-color:var(--blue)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1;font-family:var(--mono)}
+.option.correct-ans .opt-text,.option.wrong-ans .opt-text{color:var(--text)}
+
+/* EXPLANATION */
+.explanation{display:none;margin-top:.75rem;background:rgba(74,158,255,.04);border-right:3px solid var(--blue2);border-radius:0 6px 6px 0;padding:.75rem 1rem}
+.explanation.show{display:block}
+.explanation p{font-size:13px;color:var(--text2);line-height:1.7}
+.explanation strong{color:var(--text);font-weight:600}
+.result-icon{font-size:1.1rem;margin-left:.4rem}
+
+/* FINISH */
+.finish-card{background:linear-gradient(135deg,rgba(188,140,255,.08),rgba(74,158,255,.05));border:1px solid rgba(188,140,255,.2);border-radius:16px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.6rem;font-weight:900;color:var(--purple);margin-bottom:.5rem}
+.finish-score{font-size:3rem;font-weight:900;font-family:var(--mono);margin:.75rem 0}
+.finish-sub{color:var(--text2);font-size:14px}
+.finish-grade{display:inline-block;font-size:1rem;font-weight:700;padding:.4rem 1.2rem;border-radius:20px;margin:.75rem 0}
+.grade-a{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3)}
+.grade-b{background:rgba(74,158,255,.15);color:var(--blue);border:1px solid rgba(74,158,255,.3)}
+.grade-c{background:rgba(255,140,66,.15);color:var(--orange);border:1px solid rgba(255,140,66,.3)}
+.grade-d{background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3)}
+.retry-btn{background:var(--blue);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;margin-top:1rem;transition:all .2s}
+.retry-btn:hover{background:var(--blue);transform:translateY(-1px)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hero{padding:2rem .75rem 1.5rem}
+.hero-title{font-size:1.5rem}
+.hero-sub{font-size:13px}
+.hero-stats{gap:.75rem;flex-wrap:wrap}
+.hero-stat-num{font-size:1.5rem}
+.quiz-container{padding:.75rem}
+.question-card{padding:1rem}
+.q-text{font-size:14px}
+.options{gap:.5rem}
+.option-btn{font-size:13px;padding:.7rem .85rem;text-align:right}
+.explain-box{font-size:13px;padding:.65rem .85rem}
+.nav-links,.nav-cta{display:none}
+.finish-card{padding:2rem 1rem}
+.finish-score{font-size:2.5rem}
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+.opt-text{font-size:11px}
+.score-bar{gap:.75rem}
+.score-track{min-width:80px}
+}
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+
+/* ─── FIREBASE AUTH BAR ─── */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;transition:opacity .15s;font-family:var(--font)}
+.fb-login-btn:hover{opacity:.88}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn:hover{color:var(--text)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;transition:all .3s;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<meta name="description" content="一个用于求职面试准备的 SQL 测验：各个级别的多选题并配有讲解，从基础 SELECT 到 JOIN、GROUP BY 和窗口函数。免费。">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz.html">
+<meta property="og:site_name" content="免费 SQL 课程 - Eliran Grossman">
+<meta property="og:title" content="自我测试 —— SQL 测验">
+<meta property="og:description" content="一个用于求职面试准备的 SQL 测验：各个级别的多选题并配有讲解，从基础 SELECT 到 JOIN、GROUP BY 和窗口函数。免费。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="自我测试 —— SQL 测验">
+<meta name="twitter:description" content="一个用于求职面试准备的 SQL 测验：各个级别的多选题并配有讲解，从基础 SELECT 到 JOIN、GROUP BY 和窗口函数。免费。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "SQL 面试测验",
+        "item": "https://egrosman1.github.io/sql-course/quiz.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "SQL 面试题 —— 在线测验 | SQL.course",
+    "description": "一个用于求职面试准备的 SQL 测验：各个级别的多选题并配有讲解，从基础 SELECT 到 JOIN、GROUP BY 和窗口函数。免费。",
+    "url": "https://egrosman1.github.io/sql-course/quiz.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Quiz",
+    "teaches": "SQL",
+    "educationalLevel": "初级到高级",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL 讲师兼分析负责人，Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "免费 SQL 课程",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body data-quiz-id="advanced">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← 首页</a>
+  <div class="topnav-title">🧠 自我测试 —— SQL 测验</div>
+
+<!-- FIREBASE AUTH BAR -->
+<div class="fb-bar" id="fbBar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    使用 Google 登录
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">
+    💾 保存进度
+  </button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">
+    📊 历史记录
+  </button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">
+    退出登录
+  </button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+  <div class="topnav-links">
+    <a href="quiz-beginner.html" class="topnav-link">🌱 初学者测验</a>
+    <a href="../quiz.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/quiz.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="quiz.html" class="topnav-link on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="course.html" class="topnav-link">📚 学习</a>
+    <a href="practice.html" class="topnav-link">✏️ 练习</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 首页</a>
+  <a href="tirgul-makif.html">🎯 综合练习</a>
+  <a href="course.html">📚 学习材料</a>
+  <a href="practice.html">✏️ 练习</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🧠 Sakila + SQL Server · 33 道题</div>
+  <h1 class="hero-title">自我测试 —— SQL 测验</h1>
+  <p class="hero-sub">关于 CASE WHEN、子查询、JOIN 和窗口函数的多选题</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">33</div><div class="hero-stat-label">道题</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">难度等级</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="heroAnswered">0</div><div class="hero-stat-label">已回答</div></div>
+  </div>
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div class="score-info">得分： <strong id="scoreText">0 / 0</strong></div>
+  <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="score-pct" id="scorePct">0%</div>
+  <button class="reset-btn" onclick="resetQuiz()">🔄 重新开始</button>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const questions = [
+  {
+    num:1, diff:'easy', topic:'CASE WHEN + JOIN',
+    text:"哪个查询能显示影片标题、完整的语言名称，以及一个时长分类（Long/Medium/Short）？",
+    options:[
+      "SELECT f.title, l.name, CASE WHEN f.length > 120 THEN 'Long' WHEN f.length > 60 THEN 'Medium' ELSE 'Short' END FROM film f JOIN language l ON f.language_id = l.language_id",
+      "SELECT f.title, l.name, CASE f.length WHEN 120 THEN 'Long' WHEN 60 THEN 'Medium' ELSE 'Short' END FROM film f JOIN language l ON f.language_id = l.language_id",
+      "SELECT f.title, l.name, IF(f.length > 120, 'Long', 'Short') FROM film f JOIN language l ON f.language_id = l.language_id",
+      "SELECT f.title, l.name FROM film f JOIN language l ON f.language_id = l.language_id WHERE f.length > 120"
+    ],
+    correct:0,
+    explain:"正确地使用 <strong>CASE WHEN</strong> 处理区间（> 120、> 60），并通过 language_id 连接到 language 表。"
+  },
+  {
+    num:2, diff:'easy', topic:'CASE WHEN',
+    text:"我们如何显示客户姓名和门店名称（门店 1 为 'Downtown'，门店 2 为 'Uptown'）？",
+    options:[
+      "SELECT first_name, store_id, CASE WHEN store_id = 1 THEN 'Downtown' ELSE 'Uptown' END FROM customer",
+      "SELECT first_name, store_id, DECODE(store_id, 1, 'Downtown', 2, 'Uptown') FROM customer",
+      "SELECT first_name, store_id, IF store_id = 1 THEN 'Downtown' FROM customer",
+      "SELECT first_name, store_id, SWITCH store_id CASE 1: 'Downtown' FROM customer"
+    ],
+    correct:0,
+    explain:"一个在 MySQL 中有效的 <strong>CASE WHEN</strong> 结构。DECODE 属于 Oracle，而 IF/SWITCH 在这种形式下不是有效语法。"
+  },
+  {
+    num:3, diff:'easy', topic:'IS NULL',
+    text:"我们如何找出尚未归还的影片（return_date 为空）？",
+    options:[
+      "SELECT rental_id, CASE WHEN return_date = 0 THEN 'Still Out' ELSE 'Returned' END FROM rental",
+      "SELECT rental_id, CASE WHEN return_date IS NULL THEN 'Still Out' ELSE 'Returned' END FROM rental",
+      "SELECT rental_id, CASE WHEN return_date = '' THEN 'Still Out' ELSE 'Returned' END FROM rental",
+      "SELECT rental_id, IFNULL(return_date, 'Still Out') FROM rental"
+    ],
+    correct:1,
+    explain:"正确地检查 <strong>NULL</strong> 值始终用 <strong>IS NULL</strong>，绝不用 = 0 或 = 空格。"
+  },
+  {
+    num:4, diff:'easy', topic:'CASE WHEN',
+    text:"哪个查询把低于 2 的价格分类为 'Budget'，高于 4 的分类为 'Premium'？",
+    options:[
+      "SELECT title, CASE WHEN rental_rate < 2 THEN 'Budget' WHEN rental_rate > 4 THEN 'Premium' ELSE 'Standard' END FROM film",
+      "SELECT title, CASE rental_rate WHEN 0.99 THEN 'Budget' WHEN 4.99 THEN 'Premium' END FROM film",
+      "SELECT title, CASE WHEN rental_rate < 2 THEN Budget ELSE Premium END FROM film",
+      "SELECT title, rental_rate WHERE rental_rate < 2 AS Budget FROM film"
+    ],
+    correct:0,
+    explain:"正确地使用了比较运算符（< >）和 CASE 内部带引号的字符串。在选项 3 中，Budget/Premium 两边缺少引号。"
+  },
+  {
+    num:5, diff:'easy', topic:'三表 JOIN',
+    text:"哪个查询把客户连接到其城市，并在 active 的值为 1 时显示 'Active'？",
+    options:[
+      "SELECT c.first_name, ci.city, CASE WHEN c.active = 1 THEN 'Active' ELSE 'Inactive' END FROM customer c JOIN address a ON c.address_id = a.address_id JOIN city ci ON a.city_id = ci.city_id",
+      "SELECT c.first_name, ci.city, IF(c.active, 'Active', 'Inactive') FROM customer c JOIN city ci ON c.city_id = ci.city_id",
+      "SELECT c.first_name, ci.city, CASE c.active WHEN 1 THEN Active ELSE Inactive END FROM customer c JOIN address a ON c.address_id = a.address_id",
+      "SELECT c.first_name, ci.city FROM customer c, city ci WHERE c.active = 1"
+    ],
+    correct:0,
+    explain:"需要一个<strong>三表 JOIN</strong>：customer → address → city。customer 和 city 之间没有直接关联。"
+  },
+  {
+    num:6, diff:'medium', topic:'GROUP BY + CASE',
+    text:"哪个查询能显示员工姓名、总营收，以及高于 35,000 时的 'Top Performer' 分类？",
+    options:[
+      "SELECT s.first_name, SUM(p.amount), CASE WHEN SUM(p.amount) > 35000 THEN 'Top Performer' ELSE 'Standard' END FROM staff s JOIN payment p ON s.staff_id = p.staff_id GROUP BY s.staff_id",
+      "SELECT s.first_name, p.amount, CASE WHEN p.amount > 35000 THEN 'Top Performer' END FROM staff s JOIN payment p ON s.staff_id = p.staff_id",
+      "SELECT s.first_name, SUM(p.amount) FROM staff s JOIN payment p ON s.staff_id = p.staff_id HAVING SUM(p.amount) > 35000",
+      "SELECT s.first_name, SUM(p.amount) AS total FROM staff s JOIN payment p ON s.staff_id = p.staff_id WHERE total > 35000 GROUP BY s.first_name"
+    ],
+    correct:0,
+    explain:"你必须使用 <strong>GROUP BY</strong>，这样 SUM 才会按员工计算。在选项 4 中，你不能在 WHERE 中使用别名。"
+  },
+  {
+    num:7, diff:'medium', topic:'COUNT + CASE',
+    text:"我们如何把影片数超过 70 的类别分类为 'Popular'？",
+    options:[
+      "SELECT c.name, COUNT(fc.film_id), CASE WHEN COUNT(fc.film_id) > 70 THEN 'Popular' ELSE 'Niche' END FROM category c JOIN film_category fc ON c.category_id = fc.category_id GROUP BY c.name",
+      "SELECT c.name, COUNT(fc.film_id) FROM category c JOIN film_category fc ON c.category_id = fc.category_id WHERE COUNT(fc.film_id) > 70",
+      "SELECT c.name, CASE WHEN film_id > 70 THEN 'Popular' END FROM category",
+      "SELECT c.name, COUNT(fc.film_id) AS total FROM category c JOIN film_category fc ON c.category_id = fc.category_id GROUP BY c.name HAVING total > 70"
+    ],
+    correct:0,
+    explain:"在 GROUP BY 中<strong>把 COUNT 用在 CASE 内部</strong>。在选项 2 中，你不能在 WHERE 中使用 COUNT。"
+  },
+  {
+    num:8, diff:'medium', topic:'LEFT JOIN',
+    text:"哪个查询在某门店没有某影片的任何拷贝时显示 'Out of Stock'？",
+    options:[
+      "SELECT f.title, i.store_id, CASE WHEN COUNT(i.inventory_id) = 0 THEN 'Out of Stock' ELSE 'In Stock' END FROM film f LEFT JOIN inventory i ON f.film_id = i.film_id GROUP BY f.title, i.store_id",
+      "SELECT f.title, i.store_id, CASE WHEN i.inventory_id IS NULL THEN 'Out of Stock' END FROM film f JOIN inventory i ON f.film_id = i.film_id",
+      "SELECT f.title, COUNT(i.inventory_id) FROM film f JOIN inventory i ON f.film_id = i.film_id WHERE i.inventory_id = 0",
+      "SELECT f.title, IF(COUNT(inventory_id) > 0, 'In Stock', 'Out of Stock') FROM film f INNER JOIN inventory i ON f.film_id = i.film_id"
+    ],
+    correct:0,
+    explain:"<strong>LEFT JOIN</strong> 对于看到拷贝数为 0 的影片至关重要。用 INNER JOIN 时，没有库存的影片根本不会出现。"
+  },
+  {
+    num:9, diff:'medium', topic:'CASE —— 固定值',
+    text:"我们如何把代码 'R' 转换成单词 'Restricted'？",
+    options:[
+      "SELECT title, CASE rating WHEN 'R' THEN 'Restricted' WHEN 'G' THEN 'General' ELSE 'Other' END FROM film",
+      "SELECT title, IF(rating = 'R', 'Restricted', 'Other') FROM film",
+      "SELECT title, rating AS Restricted FROM film WHERE rating = 'R'",
+      "SELECT title, REPLACE(rating, 'R', 'Restricted') FROM film"
+    ],
+    correct:0,
+    explain:"这是用于替换固定值的 <strong>CASE</strong> 简单形式——CASE 列 WHEN 值 THEN 结果。"
+  },
+  {
+    num:10, diff:'medium', topic:'四表 JOIN',
+    text:"哪个查询把来自美国和加拿大的客户分类为 'North America'？",
+    options:[
+      "SELECT c.first_name, co.country, CASE WHEN co.country IN ('United States', 'Canada') THEN 'North America' ELSE 'Other' END FROM customer c JOIN address a ON c.address_id = a.address_id JOIN city ci ON a.city_id = ci.city_id JOIN country co ON ci.country_id = co.country_id",
+      "SELECT c.first_name, co.country, CASE co.country WHEN 'United States' OR 'Canada' THEN 'North America' END FROM customer",
+      "SELECT c.first_name, co.country FROM customer c JOIN country co ON c.country_id = co.country_id WHERE co.country = 'Canada'",
+      "SELECT first_name, CASE WHEN country = 'USA' THEN 'North America' END FROM customer"
+    ],
+    correct:0,
+    explain:"需要完整的 JOIN 链：customer → address → city → country。<strong>IN</strong> 用于测试多个值。"
+  },
+  {
+    num:11, diff:'hard', topic:'DATEDIFF + JOIN',
+    text:"哪个查询检查实际租期（DATEDIFF）是否大于影片所定义的租期（rental_duration）？",
+    options:[
+      "SELECT f.title, CASE WHEN DATEDIFF(r.return_date, r.rental_date) > f.rental_duration THEN 'Late' ELSE 'On Time' END FROM rental r JOIN inventory i ON r.inventory_id = i.inventory_id JOIN film f ON i.film_id = f.film_id",
+      "SELECT f.title, CASE WHEN return_date - rental_date > rental_duration THEN 'Late' END FROM film",
+      "SELECT f.title, IF(r.return_date > f.rental_duration, 'Late', 'On Time') FROM rental r JOIN film f ON r.film_id = f.film_id",
+      "SELECT f.title FROM film f WHERE rental_duration < (SELECT COUNT(*) FROM rental)"
+    ],
+    correct:0,
+    explain:"正确地使用 <strong>DATEDIFF(return_date, rental_date)</strong>，并通过两步 JOIN 与 film 表中的 rental_duration 进行比较。"
+  },
+  {
+    num:12, diff:'hard', topic:'CASE 内部的子查询',
+    text:"哪个查询在客户的总付款高于所有客户的平均值时，把他分类为 'High Spender'？",
+    options:[
+      "SELECT first_name, SUM(amount), CASE WHEN SUM(amount) > (SELECT AVG(total) FROM (SELECT SUM(amount) AS total FROM payment GROUP BY customer_id) AS sub) THEN 'High Spender' ELSE 'Regular' END FROM customer JOIN payment USING (customer_id) GROUP BY customer_id",
+      "SELECT first_name, SUM(amount) FROM payment GROUP BY customer_id HAVING SUM(amount) > AVG(amount)",
+      "SELECT first_name, CASE WHEN amount > AVG(amount) THEN 'High Spender' END FROM payment",
+      "SELECT first_name, SUM(amount) AS total FROM payment WHERE total > AVG(total) GROUP BY customer_id"
+    ],
+    correct:0,
+    explain:"一个 <strong>CASE 内部子查询</strong>的组合——总体平均值在括号内单独计算，然后与每位客户的总额比较。"
+  },
+  {
+    num:13, diff:'hard', topic:'COUNT + GROUP BY',
+    text:"我们如何把出演超过 30 部影片的演员分类为 'Superstar'？",
+    options:[
+      "SELECT a.first_name, COUNT(fa.film_id), CASE WHEN COUNT(fa.film_id) > 30 THEN 'Superstar' ELSE 'Veteran' END FROM actor a JOIN film_actor fa ON a.actor_id = fa.actor_id GROUP BY a.actor_id",
+      "SELECT a.first_name, COUNT(fa.film_id) AS movies FROM actor a JOIN film_actor fa ON a.actor_id = fa.actor_id WHERE movies > 30",
+      "SELECT a.first_name, CASE WHEN film_id > 30 THEN 'Superstar' END FROM film_actor",
+      "SELECT first_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor HAVING COUNT(*) > 30)"
+    ],
+    correct:0,
+    explain:"在聚合查询内部进行计数和分类。<strong>GROUP BY a.actor_id</strong> 让你能按演员统计影片数。"
+  },
+  {
+    num:14, diff:'hard', topic:'窗口函数 LAG',
+    text:"哪个查询比较每月营收，并在当月高于上月时记录 'Growth'（LAG）？",
+    options:[
+      "SELECT month, current_rev, CASE WHEN current_rev > LAG(current_rev) OVER (ORDER BY month) THEN 'Growth' ELSE 'Decline' END FROM (SELECT DATE_FORMAT(payment_date, '%Y-%m') AS month, SUM(amount) AS current_rev FROM payment GROUP BY month) AS t",
+      "SELECT month, SUM(amount), CASE WHEN current > previous THEN 'Growth' END FROM payment",
+      "SELECT month, SUM(amount) FROM payment GROUP BY month HAVING SUM(amount) > SUM(amount)[-1]",
+      "SELECT month, IF(SUM(amount) > (SELECT SUM(amount) FROM payment), 'Growth', 'Decline') FROM payment"
+    ],
+    correct:0,
+    explain:"使用<strong>窗口函数 LAG()</strong> 来访问上一行，位于一个计算每月营收的 CTE/子查询内部。"
+  },
+  {
+    num:15, diff:'hard', topic:'CASE 内部的计算',
+    text:"哪个查询把被租超过 30 次的影片价格上调 20%？",
+    options:[
+      "SELECT f.title, COUNT(r.rental_id), CASE WHEN COUNT(r.rental_id) > 30 THEN f.rental_rate * 1.2 ELSE f.rental_rate END AS New_Price FROM film f JOIN inventory i ON f.film_id = i.film_id JOIN rental r ON i.inventory_id = r.inventory_id GROUP BY f.film_id",
+      "SELECT title, rental_rate * 1.2 FROM film WHERE (SELECT COUNT(*) FROM rental) > 30",
+      "UPDATE film SET rental_rate = rental_rate * 1.2 WHERE film_id IN (SELECT film_id FROM rental GROUP BY film_id HAVING COUNT(*) > 30)",
+      "SELECT f.title, IF(COUNT(r.rental_id) > 30, 'Increase', 'Keep') FROM film f JOIN rental r ON f.film_id = r.film_id"
+    ],
+    correct:0,
+    explain:"在 CASE 内部进行数学计算（<strong>rental_rate * 1.2</strong>），基于通过 inventory 的三表 JOIN 得到的聚合数据。"
+  },
+
+  // ===== Part 4: Sakila Subqueries =====
+  {
+    num:16, diff:'easy', topic:'子查询 · Sakila',
+    text:"哪个查询能显示时长大于平均值的影片名称？",
+    options:[
+      "SELECT title FROM film WHERE length > AVG(length);",
+      "SELECT title FROM film WHERE length > (SELECT AVG(length) FROM film);",
+      "SELECT title FROM film HAVING length > (SELECT AVG(length) FROM film);",
+      "SELECT title FROM film WHERE length > (AVG(length) FROM film);"
+    ],
+    correct:1,
+    explain:"你不能在 WHERE 中直接使用 <strong>AVG()</strong>。你需要一个子查询：WHERE length > (SELECT AVG(length) FROM film)。"
+  },
+  {
+    num:17, diff:'easy', topic:'IN + 子查询 · Sakila',
+    text:"我们如何用子查询检索出现在付款表中的客户姓名？",
+    options:[
+      "SELECT first_name FROM customer WHERE customer_id IN (SELECT customer_id FROM payment);",
+      "SELECT first_name FROM customer WHERE EXISTS (SELECT * FROM payment);",
+      "SELECT first_name FROM customer WHERE customer_id = (SELECT customer_id FROM payment);",
+      "SELECT first_name FROM customer JOIN payment USING (customer_id);"
+    ],
+    correct:0,
+    explain:"带子查询的 <strong>IN</strong>——返回 ID 出现在 payment 表中的客户。选项 B 是错的，因为没有相关条件的 EXISTS 始终返回 TRUE。"
+  },
+  {
+    num:18, diff:'easy', topic:'单值子查询 · Sakila',
+    text:"我们如何在不使用 JOIN 的情况下检索语言为英语的影片？",
+    options:[
+      "SELECT title FROM film WHERE language_id = 'English';",
+      "SELECT title FROM film WHERE language_id = (SELECT language_id FROM language WHERE name = 'English');",
+      "SELECT title FROM film WHERE language_name = (SELECT name FROM language);",
+      "SELECT title FROM film WHERE EXISTS (SELECT name FROM language WHERE name = 'English');"
+    ],
+    correct:1,
+    explain:"一个返回<strong>单个值</strong>（language_id）的子查询——非常适合与 = 搭配使用。选项 A 是错的，因为 language_id 是数字，不是文本。"
+  },
+  {
+    num:19, diff:'easy', topic:'NOT IN + 子查询 · Sakila',
+    text:"哪个查询能找出没有出现在 inventory 表中的影片？",
+    options:[
+      "SELECT title FROM film WHERE film_id NOT IN (SELECT film_id FROM inventory);",
+      "SELECT title FROM film WHERE film_id IN (SELECT film_id FROM inventory WHERE quantity = 0);",
+      "SELECT title FROM film f LEFT JOIN inventory i ON f.film_id = i.film_id WHERE i.inventory_id IS NOT NULL;",
+      "SELECT title FROM film WHERE film_id != (SELECT film_id FROM inventory);"
+    ],
+    correct:0,
+    explain:"带子查询的 <strong>NOT IN</strong> 能找出 ID 没有出现在结果中的行。选项 D 是错的，因为 = 搭配返回多行的子查询会失败。"
+  },
+  {
+    num:20, diff:'easy', topic:'IN + 子查询 · Sakila',
+    text:"我们如何显示出演了 film_id = 1 那部影片的演员姓名？",
+    options:[
+      "SELECT first_name FROM actor WHERE actor_id = (SELECT actor_id FROM film_actor WHERE film_id = 1);",
+      "SELECT first_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = 1);",
+      "SELECT first_name FROM actor JOIN film_actor USING (actor_id) WHERE film_id = 1;",
+      "SELECT first_name FROM actor WHERE film_id = 1;"
+    ],
+    correct:1,
+    explain:"这里需要 <strong>IN</strong>，因为子查询返回<strong>多个演员</strong>。当行数多于一行时，= 会失败。"
+  },
+
+  // ===== Part 5: SQL Server Subqueries =====
+  {
+    num:21, diff:'medium', topic:'子查询 · SQL Server',
+    text:"哪个查询在产品价格高于总体平均值时显示产品名称及其价格？",
+    options:[
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > (SELECT AVG(UnitPrice) FROM Warehouse.StockItems);",
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > AVG(UnitPrice);",
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems GROUP BY StockItemName HAVING UnitPrice > AVG(UnitPrice);",
+      "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > (SELECT SUM(UnitPrice)/COUNT(*) FROM Warehouse.StockItems);"
+    ],
+    correct:0,
+    explain:"<strong>AVG() 不能直接在 WHERE 中使用</strong>——你需要一个子查询。选项 D 在技术上也正确，但可读性较差。"
+  },
+  {
+    num:22, diff:'medium', topic:'相关子查询 · SQL Server',
+    text:"我们如何用相关子查询显示客户姓名及其最近的订单日期？",
+    options:[
+      "SELECT c.CustomerName, MAX(o.OrderDate) FROM Sales.Customers c JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
+      "SELECT c.CustomerName, (SELECT MAX(OrderDate) FROM Sales.Orders o WHERE o.CustomerID = c.CustomerID) AS LastOrderDate FROM Sales.Customers c;",
+      "SELECT CustomerName, (SELECT MAX(OrderDate) FROM Sales.Orders) FROM Sales.Customers;",
+      "SELECT c.CustomerName, o.OrderDate FROM Sales.Customers c WHERE o.OrderDate = (SELECT MAX(OrderDate) FROM Sales.Orders);"
+    ],
+    correct:1,
+    explain:"<strong>相关子查询</strong>——子查询引用了外层查询的 c.CustomerID。它会对每位客户重新计算。"
+  },
+  {
+    num:23, diff:'medium', topic:'派生表 · SQL Server',
+    text:"我们如何计算订单总额的平均值（在子查询中预先计算）？",
+    options:[
+      "SELECT AVG(SUM(Quantity * UnitPrice)) FROM Sales.OrderLines;",
+      "SELECT AVG(Total) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS Total FROM Sales.OrderLines GROUP BY OrderID) AS Sub;",
+      "SELECT SUM(Quantity * UnitPrice) / COUNT(OrderID) FROM Sales.OrderLines;",
+      "SELECT AVG(Total) FROM (SELECT SUM(Quantity * UnitPrice) FROM Sales.OrderLines) AS Sub;"
+    ],
+    correct:1,
+    explain:"<strong>派生表</strong>——FROM 中的一个子查询，先按订单计算总额，然后对结果求 AVG。"
+  },
+  {
+    num:24, diff:'medium', topic:'TOP + 子查询 · SQL Server',
+    text:"哪个查询能找出订单数量最多的员工姓名？",
+    options:[
+      "SELECT FullName FROM Application.People WHERE PersonID = (SELECT TOP 1 SalespersonPersonID FROM Sales.Orders GROUP BY SalespersonPersonID ORDER BY COUNT(*) DESC);",
+      "SELECT FullName FROM Application.People WHERE PersonID IN (SELECT COUNT(OrderID) FROM Sales.Orders);",
+      "SELECT FullName FROM Application.People p JOIN Sales.Orders o ON p.PersonID = o.SalespersonPersonID WHERE COUNT(o.OrderID) = MAX(COUNT(o.OrderID));",
+      "SELECT FullName FROM Application.People WHERE PersonID = MAX(SalespersonPersonID);"
+    ],
+    correct:0,
+    explain:"<strong>TOP 1</strong> 配合 ORDER BY COUNT(*) DESC 返回订单最多的员工。在 SQL Server 中，用 TOP 代替 LIMIT。"
+  },
+  {
+    num:25, diff:'medium', topic:'NOT IN + JOIN · SQL Server',
+    text:"我们如何找出在 2016 年没有被订购的产品？",
+    options:[
+      "SELECT StockItemName FROM Warehouse.StockItems WHERE StockItemID NOT IN (SELECT StockItemID FROM Sales.OrderLines ol JOIN Sales.Orders o ON ol.OrderID = o.OrderID WHERE YEAR(o.OrderDate) = 2016);",
+      "SELECT StockItemName FROM Warehouse.StockItems WHERE YEAR(OrderDate) != 2016;",
+      "SELECT StockItemName FROM Warehouse.StockItems s LEFT JOIN Sales.OrderLines ol ON s.StockItemID = ol.StockItemID WHERE ol.OrderID IS NULL;",
+      "SELECT StockItemName FROM Warehouse.StockItems WHERE NOT EXISTS (SELECT * FROM Sales.Orders WHERE YEAR(OrderDate) = 2016);"
+    ],
+    correct:0,
+    explain:"带子查询的 <strong>NOT IN</strong>，只筛选 2016 年的订单。选项 C 找出的是从未被订购过的产品，而不仅仅是 2016 年。"
+  },
+
+  // ===== Part 6: JOIN + SQL Server =====
+  {
+    num:26, diff:'medium', topic:'INNER JOIN · SQL Server',
+    text:"哪个查询能正确地把产品连接到其供应商？",
+    options:[
+      "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si JOIN Purchasing.Suppliers s ON si.SupplierID = s.SupplierID;",
+      "SELECT StockItemName, SupplierName FROM Warehouse.StockItems, Purchasing.Suppliers;",
+      "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si LEFT JOIN Purchasing.Suppliers s ON si.StockItemID = s.SupplierID;",
+      "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si JOIN Purchasing.Suppliers s ON si.StockItemName = s.SupplierName;"
+    ],
+    correct:0,
+    explain:"<strong>在 SupplierID 上 JOIN</strong>——连接的正确键。选项 B 产生笛卡尔积，选项 C 连接了错误的字段。"
+  },
+  {
+    num:27, diff:'medium', topic:'LEFT JOIN · SQL Server',
+    text:"我们如何显示所有客户，包括那些从未下过订单的？",
+    options:[
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c LEFT JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Orders o LEFT JOIN Sales.Customers c ON o.CustomerID = c.CustomerID;",
+      "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c FULL JOIN Sales.Orders o ON c.CustomerID = o.CustomerID WHERE o.OrderID IS NULL;"
+    ],
+    correct:1,
+    explain:"从 Customers 表做 <strong>LEFT JOIN</strong>——保留所有客户。没有订单的客户在 Orders 列中得到 NULL。"
+  },
+  {
+    num:28, diff:'hard', topic:'五表 JOIN · SQL Server',
+    text:"要显示订单、客户、员工、产品和数量——正确的连接顺序是什么？",
+    options:[
+      "Orders → Customers → People (Salesperson) → OrderLines → StockItems",
+      "Orders → Customers → StockItems → OrderLines",
+      "Customers → People → Orders",
+      "StockItems → Suppliers → Orders → Customers"
+    ],
+    correct:0,
+    explain:"逻辑顺序：<strong>Orders</strong>（中心）→ Customers（谁下单）→ People（谁销售）→ OrderLines（行明细）→ StockItems（产品名称）。"
+  },
+  {
+    num:29, diff:'hard', topic:'自连接 · SQL Server',
+    text:"customers 表有一个 BillToCustomerID 列。我们如何在显示客户姓名的同时，显示为其付款的客户的姓名？",
+    options:[
+      "SELECT c.CustomerName, b.CustomerName FROM Sales.Customers c JOIN Sales.Customers b ON c.BillToCustomerID = b.CustomerID;",
+      "SELECT c.CustomerName, c.BillToCustomerID FROM Sales.Customers c;",
+      "SELECT c1.CustomerName, c2.CustomerName FROM Sales.Customers c1 JOIN Sales.Customers c2 ON c1.CustomerID = c2.CustomerID;",
+      "SELECT CustomerName FROM Sales.Customers WHERE BillToCustomerID IS NOT NULL;"
+    ],
+    correct:0,
+    explain:"<strong>Self JOIN</strong>——用两个不同的别名（c 和 b）把一张表连接到它自己。c 是客户，b 是为其付款的人。"
+  },
+  {
+    num:30, diff:'hard', topic:'LEFT JOIN + IS NULL · SQL Server',
+    text:"我们如何找出没有出现在订单明细表（OrderLines）中的产品？",
+    options:[
+      "SELECT si.StockItemName FROM Warehouse.StockItems si JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID;",
+      "SELECT si.StockItemName FROM Warehouse.StockItems si LEFT JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID WHERE ol.OrderLineID IS NULL;",
+      "SELECT si.StockItemName FROM Warehouse.StockItems si WHERE EXISTS (SELECT * FROM Sales.OrderLines);",
+      "SELECT si.StockItemName FROM Warehouse.StockItems si RIGHT JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID WHERE si.StockItemID IS NULL;"
+    ],
+    correct:1,
+    explain:"<strong>LEFT JOIN + WHERE IS NULL</strong>——经典技巧：先连接，然后只保留没有找到匹配的行（NULL）。"
+  },
+  {
+    num:31, diff:'hard', topic:'CASE + DATEDIFF · Sakila',
+    text:"我们如何检查一部影片是否逾期归还？",
+    options:[
+      "CASE WHEN DATEDIFF(return_date, rental_date) > rental_duration THEN 'Late' ELSE 'On Time' END",
+      "CASE WHEN return_date > rental_duration THEN 'Late' ELSE 'On Time' END",
+      "CASE WHEN return_date - rental_date > 7 THEN 'Late' END",
+      "IF(return_date > rental_date, 'Late', 'On Time')"
+    ],
+    correct:0,
+    explain:"<strong>DATEDIFF(return_date, rental_date)</strong> 计算实际天数并与 rental_duration 比较。选项 B 把一个日期与一个天数比较——错误。"
+  },
+  {
+    num:32, diff:'hard', topic:'CASE + 子查询 · Sakila',
+    text:"我们如何在客户高于总体平均值时把他分类为 'High Spender'？",
+    options:[
+      "CASE WHEN SUM(amount) > (SELECT AVG(total) FROM (SELECT SUM(amount) AS total FROM payment GROUP BY customer_id) AS sub) THEN 'High Spender' ELSE 'Regular' END",
+      "CASE WHEN amount > AVG(amount) THEN 'High Spender' END",
+      "CASE WHEN SUM(amount) > AVG(SUM(amount)) THEN 'High Spender' END",
+      "SELECT first_name FROM payment HAVING SUM(amount) > AVG(amount)"
+    ],
+    correct:0,
+    explain:"<strong>CASE 内部子查询</strong>——总额的平均值单独计算（是各订单总额的平均，而不是各笔付款的平均）。"
+  },
+  {
+    num:33, diff:'hard', topic:'CASE —— 动态计算 · Sakila',
+    text:"我们如何只把被租超过 30 次的影片价格上调 20%？",
+    options:[
+      "CASE WHEN COUNT(rental_id) > 30 THEN rental_rate * 1.2 ELSE rental_rate END",
+      "CASE WHEN rental_count > 30 THEN rental_rate + 20% END",
+      "UPDATE film SET rental_rate = rental_rate * 1.2 WHERE count > 30",
+      "SELECT title, rental_rate * 1.2 AS New_Price FROM film"
+    ],
+    correct:0,
+    explain:"<strong>CASE 内部的数学计算</strong>——rental_rate * 1.2 把它上调 20%。选项 B 是错的，因为 + 20% 不是有效语法。"
+  }
+];
+
+const diffLabel = {easy:'简单',medium:'中等',hard:'困难'};
+const diffClass = {easy:'diff-easy',medium:'diff-medium',hard:'diff-hard'};
+const sectionClass = {easy:'easy',medium:'medium',hard:'hard'};
+const sectionTitle = {easy:'🟢 Part A — CASE WHEN (Sakila)',medium:'🟠 Part B — Subqueries + JOIN',hard:'🔴 Part C — Very Hard'};
+
+let answers = {};
+let correct = 0;
+let answered = 0;
+
+function updateScore(){
+  const total = Object.keys(answers).length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('scoreText').textContent = correct+' / '+total;
+  document.getElementById('scoreFill').style.width = pct+'%';
+  document.getElementById('scorePct').textContent = pct+'%';
+  document.getElementById('heroAnswered').textContent = total;
+  if(total === questions.length) showFinish();
+}
+
+function selectOption(qIdx, optIdx){
+  if(answers[qIdx] !== undefined) return;
+  const q = questions[qIdx];
+  const isCorrect = optIdx === q.correct;
+  answers[qIdx] = optIdx;
+  if(isCorrect) correct++;
+  answered++;
+
+  // Style card
+  const card = document.getElementById('qcard-'+qIdx);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  // Style options
+  const opts = card.querySelectorAll('.option');
+  opts.forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i === q.correct) o.classList.add('correct-ans');
+    if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+
+  // Show explanation
+  document.getElementById('exp-'+qIdx).classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc = document.getElementById('mainContent');
+  let lastDiff = null;
+  questions.forEach((q,i)=>{
+    if(q.diff !== lastDiff){
+      mc.innerHTML += `<div class="section-label ${sectionClass[q.diff]}">${sectionTitle[q.diff]}</div>`;
+      lastDiff = q.diff;
+    }
+    const letters = ['A','B','C','D'];
+    let optsHtml = q.options.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+
+    mc.innerHTML += `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-header">
+        <div class="q-meta">
+          <div class="q-num">第 ${q.num} 题</div>
+          <div class="q-diff ${diffClass[q.diff]}">${diffLabel[q.diff]}</div>
+          <div class="q-topic">${q.topic}</div>
+        </div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="q-body">
+        <div class="options">${optsHtml}</div>
+        <div class="explanation" id="exp-${i}">
+          <p>${q.correct === answers[i] ? '✅' : '❌'} <strong>${q.correct === answers[i] ? '正确！' : '错误——正确答案以绿色标出。'}</strong> ${q.explain}</p>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  mc.innerHTML += `
+  <div class="finish-card" id="finishCard">
+    <div class="finish-emoji">🎉</div>
+    <div class="finish-title">你完成了测验！</div>
+    <div class="finish-score" id="finishScore">0/15</div>
+    <div id="finishGrade"></div>
+    <div class="finish-sub" id="finishSub"></div>
+    <br>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 重新尝试</button>
+  </div>`;
+}
+
+function showFinish(){
+  if(window.fbAutoSave && window.currentUser) window.fbAutoSave(correct, questions.length);
+  const card = document.getElementById('finishCard');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  document.getElementById('finishScore').textContent = correct+'/'+questions.length;
+  const pct = Math.round(correct/questions.length*100);
+  let grade, sub;
+  if(pct>=90){grade='<span class="finish-grade grade-a">⭐ 优秀！A</span>';sub='表现出色——你对 SQL 掌握得很扎实！';}
+  else if(pct>=75){grade='<span class="finish-grade grade-b">👍 很好！B</span>';sub='做得不错！值得复习一下你答错的主题。';}
+  else if(pct>=60){grade='<span class="finish-grade grade-c">📚 及格！C</span>';sub='基础不错，但还有提升空间。复习一下材料吧。';}
+  else{grade='<span class="finish-grade grade-d">💪 继续练习！D</span>';sub='不要放弃——回到学习材料再试一次！';}
+  document.getElementById('finishGrade').innerHTML = grade;
+  document.getElementById('finishSub').textContent = sub;
+}
+
+function resetQuiz(){
+  answers = {}; correct = 0; answered = 0;
+  document.getElementById('mainContent').innerHTML = '';
+  buildQuiz();
+  updateScore();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+buildQuiz();
+updateScore();
+</script>
+
+<!-- Firebase SDK -->
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",
+  authDomain: "sql-course-507b5.firebaseapp.com",
+  projectId: "sql-course-507b5",
+  storageBucket: "sql-course-507b5.firebasestorage.app",
+  messagingSenderId: "999664091380",
+  appId: "1:999664091380:web:349959985ae11ce8c51ea1"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let currentUser = null;
+window.currentUser = null;
+const QUIZ_ID = document.body.dataset.quizId || 'quiz';
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user; window.currentUser = user;
+  const loginBtn = document.getElementById('fb-login-btn');
+  const logoutBtn = document.getElementById('fb-logout-btn');
+  const userInfo = document.getElementById('fb-user-info');
+  const histBtn = document.getElementById('fb-history-btn');
+  const saveBtn = document.getElementById('fb-save-btn');
+  if (user) {
+    document.getElementById('fb-user-name').textContent = user.displayName;
+    document.getElementById('fb-user-photo').src = user.photoURL;
+    document.getElementById('fb-user-photo').style.display = 'block';
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'flex';
+    userInfo.style.display = 'flex';
+    histBtn.style.display = 'flex';
+    saveBtn.style.display = 'flex';
+    await loadProgress();
+    await loadHistory();
+  } else {
+    loginBtn.style.display = 'flex';
+    logoutBtn.style.display = 'none';
+    userInfo.style.display = 'none';
+    histBtn.style.display = 'none';
+    saveBtn.style.display = 'none';
+  }
+});
+
+window.fbLogin = async () => {
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { console.error(e); }
+};
+
+window.fbLogout = async () => { await signOut(auth); };
+
+window.fbToggleHistory = () => {
+  const wrap = document.getElementById('fb-history-wrap');
+  wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+};
+
+window.triggerSave = async () => {
+  if (!currentUser) { fbLogin(); return; }
+  // Get current score from page
+  const scoreEl = document.getElementById('scoreText') || document.getElementById('score-display');
+  const txt = scoreEl ? scoreEl.textContent : '0 / 0';
+  const parts = txt.split('/');
+  const score = parseInt(parts[0]) || 0;
+  const total = parseInt(parts[1]) || 0;
+  if (total === 0) { showToast('⚠️ 请先至少回答一道题！'); return; }
+  await saveProgress(score, total);
+};
+
+async function saveProgress(score, total) {
+  if (!currentUser) return;
+  const pct = Math.round(score/total*100);
+  const ref = doc(db, 'users', currentUser.uid, 'quizzes', QUIZ_ID);
+  await setDoc(ref, { score, total, pct, lastUpdate: new Date().toISOString() }, { merge: true });
+  await addDoc(collection(db, 'users', currentUser.uid, 'history'), {
+    quizId: QUIZ_ID, score, total, pct, date: new Date().toISOString()
+  });
+  showToast('✅ 进度已保存到云端！');
+  await loadHistory();
+}
+
+window.fbAutoSave = saveProgress;
+
+async function loadProgress() {
+  if (!currentUser) return;
+  const snap = await getDoc(doc(db, 'users', currentUser.uid, 'quizzes', QUIZ_ID));
+  if (snap.exists()) {
+    const d = snap.data();
+    const el = document.getElementById('fb-saved-score');
+    el.textContent = `Last attempt: ${d.score}/${d.total} (${d.pct}%)`;
+    el.style.display = 'block';
+  }
+}
+
+async function loadHistory() {
+  if (!currentUser) return;
+  const q = query(collection(db, 'users', currentUser.uid, 'history'), orderBy('date','desc'), limit(10));
+  const snap = await getDocs(q);
+  const hist = [];
+  snap.forEach(d => hist.push(d.data()));
+  renderChart(hist.filter(h => h.quizId === QUIZ_ID));
+}
+
+function renderChart(history) {
+  const panel = document.getElementById('fb-history-panel');
+  if (!history.length) {
+    panel.innerHTML = '<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">No history yet — answer questions and save!</p>';
+    return;
+  }
+  const rev = [...history].reverse();
+  const best = Math.max(...history.map(h=>h.pct));
+  const avg = Math.round(history.reduce((a,h)=>a+h.pct,0)/history.length);
+  const bars = rev.map(h => {
+    const d = new Date(h.date);
+    const lbl = `${d.getDate()}/${d.getMonth()+1}`;
+    const color = h.pct>=80?'var(--aq)':h.pct>=50?'#FFB020':'#FF4060';
+    const ht = Math.max(h.pct*1.1, 8);
+    return `<div class="hbar-wrap">
+      <div class="hbar-val">${h.pct}%</div>
+      <div class="hbar" style="height:${ht}px;background:${color}"></div>
+      <div class="hbar-lbl">${lbl}</div>
+    </div>`;
+  }).join('');
+  panel.innerHTML = `
+    <div class="hstats-row">
+      <div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">Personal best</div></div>
+      <div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">Average</div></div>
+      <div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">Attempts</div></div>
+    </div>
+    <div class="hchart">${bars}</div>`;
+}
+
+function showToast(msg) {
+  let t = document.getElementById('fb-toast');
+  if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+
+</body>
+</html>

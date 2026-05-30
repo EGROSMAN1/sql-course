@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL 课程指南 —— 结构化课程 | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#2A3450;
+  --blue:#2D6FFF;--blue2:#1a52cc;--blue3:#0a2a7a;
+  --cyan:#00E5FF;--green:#00E5A0;--green2:#00b380;
+  --orange:#FFB020;--yellow:#FFB020;--red:#FF4060;--purple:#9B5CFF;
+  --purple:#d2a8ff;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6}
+
+/* NAV */
+.topnav{background:rgba(6,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--cyan);text-decoration:none;font-size:13px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:14px;font-weight:700;color:var(--text2)}
+.topnav-links{margin-right:auto;display:flex;gap:1rem;flex-wrap:wrap}
+.topnav-link{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.topnav-link:hover{color:var(--cyan)}
+
+/* LESSON TABS */
+.lesson-tabs{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 1rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.lesson-tabs::-webkit-scrollbar{display:none}
+.lesson-tab{padding:.85rem 1.2rem;font-size:13px;font-weight:700;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px;background:none;border-top:none;border-right:none;border-left:none;font-family:var(--font)}
+.lesson-tab:hover{color:var(--text2)}
+.lesson-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.lesson-pane{display:none}
+.lesson-pane.active{display:block}
+
+/* LESSON HEADER */
+.lesson-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.lesson-header::before{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.06) 0%,transparent 70%);pointer-events:none}
+.lesson-num{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.4rem}
+.lesson-title{font-size:1.8rem;font-weight:900;margin-bottom:.6rem}
+.lesson-desc{color:var(--text2);font-size:14px;line-height:1.8;max-width:650px}
+.lesson-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.lesson-tag{background:var(--bg4);border:1px solid var(--border2);color:var(--text2);padding:3px 12px;border-radius:12px;font-size:11px;font-family:var(--mono);font-weight:600}
+
+/* SECTION */
+.section{margin-bottom:2.5rem}
+.section-title{font-size:1rem;font-weight:700;color:var(--yellow);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';display:block;width:3px;height:16px;background:var(--yellow);border-radius:2px;flex-shrink:0}
+
+/* CONCEPT BOX */
+.concept-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.concept-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.concept-text{color:var(--text2);font-size:14px;line-height:1.8}
+.concept-text strong{color:var(--text);font-weight:600}
+.concept-text code{background:var(--bg3);border:1px solid var(--border);color:var(--cyan);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12px}
+
+/* HIGHLIGHT BOX */
+.highlight-box{border-radius:10px;padding:1rem 1.25rem;margin:.75rem 0;display:flex;gap:.75rem;align-items:flex-start}
+.highlight-box.info{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);border-right:3px solid var(--blue)}
+.highlight-box.tip{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.2);border-right:3px solid var(--green2)}
+.highlight-box.warn{background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow)}
+.highlight-box.danger{background:rgba(255,71,87,.05);border:1px solid rgba(255,71,87,.2);border-right:3px solid var(--red)}
+.hb-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.hb-text{font-size:13.5px;color:var(--text2);line-height:1.7}
+.hb-text strong{color:var(--text);font-weight:600}
+
+/* CODE BLOCK */
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:.75rem 0}
+.code-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:6px 12px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600}
+.copy-btn{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:11px;font-family:var(--font);padding:2px 8px;border-radius:4px;transition:all .15s}
+.copy-btn:hover{background:var(--bg4);color:var(--text)}
+.copy-btn.ok{color:var(--green)}
+pre{padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.kw{color:#ff7b72}.fn{color:#d2a8ff}.str{color:#a5d6ff}.num{color:#79c0ff}
+.cmt{color:#4a6080;font-style:italic}.tbl{color:#7ee787}.col{color:#e6edf3}.op{color:#ffa657}
+
+/* COMPARISON TABLE */
+.compare-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
+.compare-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.6rem 1rem;text-align:right;border:1px solid var(--border)}
+.compare-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top}
+.compare-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.compare-table .good{color:var(--green)}
+.compare-table .bad{color:var(--red)}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:.6rem;margin:.75rem 0}
+.step{display:flex;gap:.75rem;align-items:flex-start}
+.step-num{width:28px;height:28px;border-radius:8px;background:var(--blue3);color:var(--blue);font-size:12px;font-weight:700;font-family:var(--mono);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{font-size:13.5px;color:var(--text2);line-height:1.6;flex:1}
+.step-text strong{color:var(--text)}
+
+/* DIVIDER */
+hr.div{border:none;border-top:1px solid var(--border);margin:2rem 0}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:200}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;inset:0;top:49px;background:rgba(6,10,15,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text);text-decoration:none;font-size:1.3rem;font-weight:700;padding:.5rem 2rem;border-radius:10px}
+
+@media(max-width:768px){
+.hamburger{display:flex}
+.topnav-links{display:none}
+.main{padding:1rem .75rem 4rem}
+pre{font-size:11px}
+.lesson-tab{font-size:11px;padding:.6rem .6rem}
+.compare-table{font-size:11px}
+}
+
+@media(max-width:768px){
+  /* Better touch targets */
+  a, button{min-height:40px;display:inline-flex;align-items:center}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  /* Better table display on mobile */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Code blocks */
+  pre,code{font-size:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre-wrap;word-break:break-word}
+  /* Images responsive */
+  img{max-width:100%;height:auto}
+}
+@media(max-width:480px){
+  body{font-size:14px}
+  h1{font-size:1.5rem!important}
+  h2{font-size:1.2rem!important}
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+  /* Topnav */
+  .topnav{padding:.5rem .75rem;flex-wrap:wrap;gap:.4rem;height:auto}
+  .topnav-links,.nav-links-desktop{display:none!important}
+  .topnav-title{font-size:12px;max-width:calc(100% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .back-btn{font-size:11px}
+  .hamburger{display:flex!important}
+  
+  /* Layout */
+  .main,.main-content,.content{padding:.75rem .6rem 3rem!important}
+  .layout{flex-direction:column!important}
+  .sidebar-left,.sidebar{display:none!important}
+  
+  /* Typography */
+  h1{font-size:1.5rem!important;line-height:1.2}
+  h2{font-size:1.25rem!important}
+  h3{font-size:1.05rem!important}
+  pre,code{font-size:11px!important;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+  
+  /* Tables */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  
+  /* Practice page */
+  .lesson-tabs{overflow-x:auto;flex-wrap:nowrap!important;gap:.25rem;padding:.25rem .5rem}
+  .lesson-tab{font-size:11px!important;padding:.5rem .6rem!important;white-space:nowrap;flex-shrink:0}
+  .lesson-badge{display:none!important}
+  .q-card{padding:.85rem!important}
+  .q-text{font-size:13.5px!important;line-height:1.6}
+  .q-hint,.q-answer{font-size:12.5px!important;padding:.6rem .75rem!important}
+  .q-actions{flex-wrap:wrap;gap:.4rem}
+  .q-meta{flex-wrap:wrap;gap:.3rem}
+  .section-divider{padding:.5rem .6rem!important;font-size:13px!important}
+  
+  /* Quiz pages */
+  .quiz-container,.quiz-wrap{padding:.75rem!important}
+  .question-card{padding:1rem!important;border-radius:10px}
+  .q-text,.question-text{font-size:14px!important;line-height:1.6}
+  .options,.answers{gap:.5rem!important}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
+  .hero-title,.quiz-title{font-size:1.5rem!important}
+  .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
+  .hero-stat-num,.stat-number{font-size:1.4rem!important}
+  .finish-card{padding:1.5rem 1rem!important}
+  .finish-score{font-size:2.2rem!important}
+  .hero,.quiz-hero{padding:2rem .75rem 1.5rem!important}
+  
+  /* Videos pages */
+  .video-grid{grid-template-columns:1fr!important}
+  .filter-row,.filter-bar{flex-wrap:wrap!important;gap:.35rem!important}
+  .filter-btn{font-size:11px!important;padding:.25rem .6rem!important}
+  .video-card,.vid-card{border-radius:8px}
+  .video-thumb,.vid-thumb{border-radius:8px 8px 0 0}
+  
+  /* Course / Study / Lessons */
+  .chapter,.section-block{padding:.85rem!important}
+  .code-block,.sql-block{margin:.5rem 0!important;border-radius:8px!important;font-size:11.5px!important}
+  .tip-box,.note-box,.info-box{padding:.75rem!important;font-size:13px}
+  .step-body p{font-size:13px!important}
+  .file-grid{grid-template-columns:1fr!important}
+  .progress-section{flex-direction:column!important;gap:.75rem!important}
+  
+  /* Reference page */
+  .cards{grid-template-columns:1fr!important}
+  .catnav,.cat-nav{padding:.3rem .5rem!important}
+  .cbtn,.cat-btn{font-size:10.5px!important;padding:.2rem .55rem!important}
+  
+  /* Setup page */
+  .steps-grid{grid-template-columns:1fr!important}
+  .step-card{padding:1rem!important}
+  
+  /* General touch improvements */
+  a,button{min-height:40px}
+  .btn,.button{padding:.65rem 1.1rem!important;font-size:13px!important}
+  img{max-width:100%;height:auto}
+  
+  /* Score badges */
+  .score-badge,.badge{font-size:11px!important;padding:3px 8px!important}
+  
+  /* Bottom padding for mobile */
+  body{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media(max-width:480px){
+  .topnav-title{font-size:11px}
+  .q-text,.question-text{font-size:13px!important}
+  .option-btn,.answer-btn{font-size:12.5px!important}
+  .hero-title,.quiz-title{font-size:1.3rem!important}
+  pre,code{font-size:10.5px!important}
+  .main,.main-content,.content{padding:.6rem .5rem 2.5rem!important}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+</style>
+
+<meta name="description" content="SQL 课程指南：一条从基础到求职面试的结构化学习路径，带进度跟踪和互动练习。完全免费。">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/lessons.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/lessons.html">
+<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:title" content="Lesson Guide — SQL Course">
+<meta property="og:description" content="SQL 课程指南：一条从基础到求职面试的结构化学习路径，带进度跟踪和互动练习。完全免费。">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lesson Guide — SQL Course">
+<meta name="twitter:description" content="SQL 课程指南：一条从基础到求职面试的结构化学习路径，带进度跟踪和互动练习。完全免费。">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+
+<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "课程指南",
+        "item": "https://egrosman1.github.io/sql-course/lessons.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "SQL 课程指南 —— 结构化课程 | SQL.course",
+    "description": "SQL 课程指南：一条从基础到求职面试的结构化学习路径，带进度跟踪和互动练习。完全免费。",
+    "url": "https://egrosman1.github.io/sql-course/lessons.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Course",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL 讲师兼分析负责人，Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "免费 SQL 课程",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body>
+<h1 class="sr-only">SQL 课程指南</h1>
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← 首页</a>
+  <div class="topnav-title">📖 课程指南</div>
+  <div class="topnav-links">
+    <a href="course.html" class="topnav-link">📚 学习</a>
+    <a href="../lessons.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="../en/lessons.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="lessons.html" class="topnav-link on" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="practice.html" class="topnav-link">✏️ 练习</a>
+    <a href="quiz.html" class="topnav-link">🧠 测验</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 首页</a>
+  <a href="tirgul-makif.html">🎯 综合练习</a>
+  <a href="course.html">📚 学习材料</a>
+  <a href="practice.html">✏️ 练习</a>
+  <a href="quiz.html">🧠 测验</a>
+</div>
+
+<!-- TABS -->
+<div class="lesson-tabs">
+  <button class="lesson-tab active" onclick="showLesson(0)">📗 第 1 课 —— SQL 入门</button>
+  <button class="lesson-tab" onclick="showLesson(1)">📘 第 2 课 —— 字符串函数</button>
+  <button class="lesson-tab" onclick="showLesson(2)">📙 第 3 课 —— WHERE</button>
+  <button class="lesson-tab" onclick="showLesson(3)">📕 第 4 课 —— GROUP BY</button>
+</div>
+
+<div class="main">
+
+<!-- ===================== Lesson 1 ===================== -->
+<div class="lesson-pane active" id="pane-0">
+  <div class="lesson-header">
+    <div class="lesson-num">第 1 课 / 共 4 课</div>
+    <div class="lesson-title">🗄️ SQL 与数据库入门</div>
+    <div class="lesson-desc">什么是 SQL、它为何重要、数据库长什么样，以及 SQL 与 Excel 的区别。</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">SQL</span>
+      <span class="lesson-tag">数据库</span>
+      <span class="lesson-tag">主键</span>
+      <span class="lesson-tag">外键</span>
+      <span class="lesson-tag">Northwind</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 什么是 SQL？</div>
+    <div class="concept-box">
+      <div class="concept-label">定义</div>
+      <div class="concept-text">
+        <strong>SQL = 结构化查询语言</strong> —— 一种结构化查询语言。<br><br>
+        不像 Python 或 Java 这类“通用语言”，SQL 是一种 <strong>领域专用语言</strong> 专门为处理数据而设计。<br><br>
+        SQL 的语法类似于 <strong>近乎自然的英语</strong> —— 像 <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code> 这样的命令让代码可读又清晰。
+      </div>
+    </div>
+    <div class="highlight-box info">
+      <div class="hb-icon">📜</div>
+      <div class="hb-text"><strong>历史：</strong> SQL 于 20 世纪 70 年代在 IBM 实验室开发，最初名为 SEQUEL。从那以后它一直是数据领域的主导语言——已超过 50 年！</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">❓ 为什么要用 SQL，而不是 Excel？</div>
+    <div class="concept-box">
+      <div class="concept-label">3 个主要原因</div>
+      <div class="concept-text">
+        <strong>1. 大数据 —— 海量信息</strong><br>
+        当 Excel 开始“卡顿”（大约一百万行）时——SQL 才刚刚热身。SQL 在几秒内就能处理数十亿行。<br><br>
+        <strong>2. “单一可信数据源” —— 一个中央数据库</strong><br>
+        与在邮件里到处流传、不断变化的文件不同，SQL 维护一个中央数据库，防止错误，并保持逻辑关系完整。<br><br>
+        <strong>3. 精准检索</strong><br>
+        Excel 把整个文件加载到内存中。SQL 检索 <strong>仅</strong> 你需要的特定数据——节省内存并缩短运行时间。
+      </div>
+    </div>
+    <table class="compare-table">
+      <tr><th>对比项</th><th>Excel</th><th>SQL</th></tr>
+      <tr><td>行数</td><td class="bad">最多约 100 万行</td><td class="good">数十亿行</td></tr>
+      <tr><td>速度</td><td class="bad">处理大文件时慢</td><td class="good">非常快</td></tr>
+      <tr><td>数据共享</td><td class="bad">文件到处传递</td><td class="good">一个中央数据库</td></tr>
+      <tr><td>安全性</td><td class="bad">任何人都能编辑</td><td class="good">权限与控制</td></tr>
+      <tr><td>执行计算</td><td class="good">对普通用户方便</td><td class="good">强大而精确</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🗃️ 数据库长什么样？</div>
+    <div class="concept-box">
+      <div class="concept-label">数据库结构</div>
+      <div class="concept-text">
+        数据库由 <strong>表</strong>组成。每张表包含 <strong>列</strong> 和 <strong>行</strong>.<br><br>
+        想象几个相互关联的 Excel 工作表——这就是数据库的样子。
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>数据库</strong> —— 整个数据库（例如 Northwind）</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>表</strong> —— 数据库中的表（例如 customers、orders、products）</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>列</strong> —— 表中的列（例如 id、first_name、city）</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>行</strong> —— 数据行（例如某个具体客户的详细信息）</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔑 键与关系</div>
+    <div class="concept-box">
+      <div class="concept-label">主键</div>
+      <div class="concept-text">
+        一个能 <strong>唯一</strong> 标识每一行的列。任何两个值都不能相同。它不能为 NULL。<br>
+        <strong>示例：</strong> <code>id</code> 列（在 customers 表中）—— 每个客户都有自己唯一的编号。
+      </div>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">外键</div>
+      <div class="concept-text">
+        一个表中的列，指向 <strong>另一个表中的主键</strong>。它在两个表之间建立关系。<br>
+        <strong>示例：</strong> <code>customer_id</code> 列（在 orders 表中）指向 customers 表中的 <code>id</code>。
+      </div>
+    </div>
+    <div class="highlight-box tip">
+      <div class="hb-icon">💡</div>
+      <div class="hb-text"><strong>提示：</strong> 主键与外键之间的关系是 JOIN 命令的基础——你就是这样把来自不同表的信息组合起来的。</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🏪 课程数据库 —— Northwind</div>
+    <div class="concept-box">
+      <div class="concept-label">什么是 Northwind？</div>
+      <div class="concept-text">
+        一个经典的数据库，模拟一家 <strong>贸易公司</strong>。它包含客户、订单、产品、供应商和员工。数十年来被广泛用于教授 SQL。
+      </div>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">主要的表</div>
+      <div class="concept-text">
+        <code>customers</code> —— 客户 | <code>orders</code> —— 订单 | <code>order_details</code> —— 订单行项目<br>
+        <code>products</code> —— 产品 | <code>employees</code> —— 员工 | <code>suppliers</code> —— 供应商 | <code>shippers</code> —— 物流公司
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Lesson 2 ===================== -->
+<div class="lesson-pane" id="pane-1">
+  <div class="lesson-header">
+    <div class="lesson-num">第 2 课 / 共 4 课</div>
+    <div class="lesson-title">📝 字符串函数</div>
+    <div class="lesson-desc">清理、提取、格式化和标准化文本数据。4 大类操作。</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">UPPER / LOWER</span>
+      <span class="lesson-tag">LEFT / RIGHT</span>
+      <span class="lesson-tag">SUBSTRING</span>
+      <span class="lesson-tag">TRIM / REPLACE</span>
+      <span class="lesson-tag">LENGTH</span>
+      <span class="lesson-tag">CONCAT</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧹 第 1 类：清理数据</div>
+    <div class="concept-box">
+      <div class="concept-label">TRIM / LTRIM / RTRIM</div>
+      <div class="concept-text">
+        去除字符串中多余的空格。<br>
+        <code>TRIM</code> —— 两侧 | <code>LTRIM</code> —— 仅左侧 | <code>RTRIM</code> —— 仅右侧
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="kw">SELECT</span> <span class="fn">TRIM</span>(<span class="str">'   hello world   '</span>) <span class="kw">AS</span> <span class="str">clean_text</span>;
+<span class="cmt">-- 结果：'hello world'</span>
+
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">TRIM</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">clean_company</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">REPLACE</div>
+      <div class="concept-text">
+        用另一个子串替换某个子串。<br>
+        <code>REPLACE(列, '要替换的内容', '替换成的内容')</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 移除电话号码中的短横线</span>
+<span class="kw">SELECT</span> <span class="fn">REPLACE</span>(<span class="col">business_phone</span>, <span class="str">'-'</span>, <span class="str">''</span>) <span class="kw">AS</span> <span class="str">clean_phone</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;
+
+<span class="cmt">-- 把 UK 替换为 United Kingdom</span>
+<span class="kw">SELECT</span> <span class="fn">REPLACE</span>(<span class="col">country_region</span>, <span class="str">'UK'</span>, <span class="str">'United Kingdom'</span>)
+<span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">✂️ 第 2 类：提取数据</div>
+    <div class="concept-box">
+      <div class="concept-label">LEFT / RIGHT</div>
+      <div class="concept-text">
+        <code>LEFT(列, N)</code> —— 从开头数 N 个字符<br>
+        <code>RIGHT(列, N)</code> —— 从结尾数 N 个字符
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 公司名称的前 3 个字母</span>
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">LEFT</span>(<span class="col">company</span>, <span class="num">3</span>) <span class="kw">AS</span> <span class="str">short_code</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;
+
+<span class="cmt">-- 电话的后 4 位</span>
+<span class="kw">SELECT</span> <span class="fn">RIGHT</span>(<span class="col">business_phone</span>, <span class="num">4</span>) <span class="kw">AS</span> <span class="str">phone_end</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">SUBSTRING</div>
+      <div class="concept-text">
+        <code>SUBSTRING(列, 起始, 长度)</code> —— 从指定位置提取。<br>
+        <strong>Important:</strong> 位置从 1 开始（不是 0！）。
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 从第 2 个字符开始的 5 个字符</span>
+<span class="kw">SELECT</span> <span class="fn">SUBSTRING</span>(<span class="col">product_name</span>, <span class="num">2</span>, <span class="num">5</span>) <span class="kw">AS</span> <span class="str">middle_text</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
+    </div>
+    <div class="concept-box">
+      <div class="concept-label">LENGTH 和 INSTR</div>
+      <div class="concept-text">
+        <code>LENGTH(column)</code> —— 返回字符串的字符长度<br>
+        <code>INSTR(列, '字符')</code> —— 返回子串的位置
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="kw">SELECT</span> <span class="col">email_address</span>,
+       <span class="fn">LENGTH</span>(<span class="col">email_address</span>) <span class="kw">AS</span> <span class="str">email_length</span>,
+       <span class="fn">INSTR</span>(<span class="col">email_address</span>, <span class="str">'@'</span>) <span class="kw">AS</span> <span class="str">at_position</span>
+<span class="kw">FROM</span> <span class="tbl">employees</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🎨 第 3 类：重新格式化</div>
+    <div class="concept-box">
+      <div class="concept-label">CONCAT 和 CONCAT_WS</div>
+      <div class="concept-text">
+        <code>CONCAT(a, b, c)</code> —— 连接字符串。如果任一值为 NULL——结果就是 NULL。<br>
+        <code>CONCAT_WS(分隔符, a, b, c)</code> —— 用固定的分隔符连接 <strong>并自动跳过 NULL</strong>.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 用逗号连接的完整地址（跳过 NULL）</span>
+<span class="kw">SELECT</span> <span class="fn">CONCAT_WS</span>(<span class="str">', '</span>, <span class="col">city</span>, <span class="col">state_province</span>, <span class="col">zip_postal_code</span>) <span class="kw">AS</span> <span class="str">full_address</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>;
+
+<span class="cmt">-- 带 $ 符号的价格</span>
+<span class="kw">SELECT</span> <span class="fn">CONCAT</span>(<span class="str">'$'</span>, <span class="fn">ROUND</span>(<span class="col">list_price</span>, <span class="num">2</span>)) <span class="kw">AS</span> <span class="str">formatted_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">✅ 第 4 类：标准化与一致性</div>
+    <div class="concept-box">
+      <div class="concept-label">UPPER / LOWER</div>
+      <div class="concept-text">
+        <code>UPPER(column)</code> —— 将所有文本转换为大写<br>
+        <code>LOWER(column)</code> —— 将所有文本转换为小写<br><br>
+        在比较前规范化数据时很有用。
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">company_caps</span>
+<span class="kw">FROM</span> <span class="tbl">suppliers</span>;
+
+<span class="kw">SELECT</span> <span class="fn">LOWER</span>(<span class="col">email_address</span>) <span class="kw">AS</span> <span class="str">standard_email</span>
+<span class="kw">FROM</span> <span class="tbl">employees</span>;</pre>
+    </div>
+    <div class="highlight-box warn">
+      <div class="hb-icon">⚠️</div>
+      <div class="hb-text"><strong>Note:</strong> UPPER/LOWER 只改变 <strong>显示效果</strong> —— 它们不会把更改保存到表中。要永久更改需要使用 UPDATE。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Lesson 3 ===================== -->
+<div class="lesson-pane" id="pane-2">
+  <div class="lesson-header">
+    <div class="lesson-num">第 3 课 / 共 4 课</div>
+    <div class="lesson-title">🔎 WHERE —— 筛选数据</div>
+    <div class="lesson-desc">按条件筛选行。真实查询中最核心的工具——包括 AND/OR、IN、BETWEEN、LIKE 和 IS NULL。</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">WHERE</span>
+      <span class="lesson-tag">AND / OR</span>
+      <span class="lesson-tag">IN</span>
+      <span class="lesson-tag">BETWEEN</span>
+      <span class="lesson-tag">LIKE</span>
+      <span class="lesson-tag">IS NULL</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📍 基本 WHERE</div>
+    <div class="concept-box">
+      <div class="concept-label">Syntax</div>
+      <div class="concept-text">
+        <code>WHERE</code> 位于 <strong>FROM 之后</strong> 并按条件筛选行。<br>
+        比较运算符： <code>=</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 价格超过 50 的产品</span>
+<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;
+
+<span class="cmt">-- 不是销售代表的员工</span>
+<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">job_title</span>
+<span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">job_title</span> != <span class="str">'Sales Representative'</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔗 AND / OR —— 多个条件</div>
+    <div class="concept-box">
+      <div class="concept-label">区别</div>
+      <div class="concept-text">
+        <code>AND</code> — <strong>两个</strong> 条件都必须成立<br>
+        <code>OR</code> — <strong>至少满足一个</strong> of the 条件都必须成立<br><br>
+        括号设定优先级： <code>WHERE (a OR b) AND c</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- AND：来自美国和纽约的客户</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>
+  <span class="kw">AND</span> <span class="col">city</span> = <span class="str">'New York'</span>;
+
+<span class="cmt">-- OR：来自 Beverages 或 Condiments 类别的产品</span>
+<span class="kw">SELECT</span> <span class="col">product_name</span> <span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">WHERE</span> <span class="col">category</span> = <span class="str">'Beverages'</span>
+   <span class="kw">OR</span> <span class="col">category</span> = <span class="str">'Condiments'</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 IN —— 一组值</div>
+    <div class="concept-box">
+      <div class="concept-label">什么是 IN？</div>
+      <div class="concept-text">
+        <code>IN</code> 是多个 OR 的便捷简写。更易读也更简短。<br>
+        <code>WHERE city IN ('Tel Aviv', 'Jerusalem', 'Haifa')</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 来自 3 个城市的供应商（OR 的简写）</span>
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>
+<span class="kw">FROM</span> <span class="tbl">suppliers</span>
+<span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'Tokyo'</span>, <span class="str">'London'</span>, <span class="str">'New York'</span>);
+
+<span class="cmt">-- NOT IN：不来自这些城市</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">WHERE</span> <span class="col">country_region</span> <span class="kw">NOT IN</span> (<span class="str">'USA'</span>, <span class="str">'UK'</span>);</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📏 BETWEEN —— 一段值的范围</div>
+    <div class="concept-box">
+      <div class="concept-label">需要知道</div>
+      <div class="concept-text">
+        <code>BETWEEN x AND y</code> —— 包含两个端点（x 和 y 本身）。<br>
+        等价于： <code>WHERE col >= x AND col <= y</code>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 运费在 20 到 50 之间的订单</span>
+<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>
+<span class="kw">FROM</span> <span class="tbl">orders</span>
+<span class="kw">WHERE</span> <span class="col">shipping_fee</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 LIKE —— 模式搜索</div>
+    <div class="concept-box">
+      <div class="concept-label">通配符</div>
+      <div class="concept-text">
+        <code>%</code> —— 任意数量的字符（包括零个）<br>
+        <code>_</code> —— 恰好一个字符<br><br>
+        <code>'%gmail%'</code> —— 包含 gmail | <code>'j%'</code> —— 以 j 开头 | <code>'%@gmail.com'</code> —— 以 @gmail.com 结尾
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 以 northwindtraders.com 结尾的邮箱</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders.com'</span>;
+
+<span class="cmt">-- 以 A 开头的名字</span>
+<span class="kw">SELECT</span> <span class="col">first_name</span> <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">first_name</span> <span class="kw">LIKE</span> <span class="str">'A%'</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🚫 IS NULL / IS NOT NULL</div>
+    <div class="concept-box">
+      <div class="concept-label">NULL —— 缺失的值</div>
+      <div class="concept-text">
+        NULL 是一个 <strong>缺失 / 未知的</strong> 值——不是零，也不是空！<br>
+        你不能使用 <code>= NULL</code> —— 你必须使用 <code>IS NULL</code>.
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 尚未发货的订单</span>
+<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>
+<span class="kw">FROM</span> <span class="tbl">orders</span>
+<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;
+
+<span class="cmt">-- 有网站的客户</span>
+<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">web_page</span>
+<span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">WHERE</span> <span class="col">web_page</span> <span class="kw">IS NOT NULL</span>;</pre>
+    </div>
+    <div class="highlight-box danger">
+      <div class="hb-icon">❌</div>
+      <div class="hb-text"><strong>常见错误！</strong> <code>WHERE shipped_date = NULL</code> —— 这 <strong>行不通</strong> 在 SQL 中！始终使用 <code>IS NULL</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Lesson 4 ===================== -->
+<div class="lesson-pane" id="pane-3">
+  <div class="lesson-header">
+    <div class="lesson-num">第 4 课 / 共 4 课</div>
+    <div class="lesson-title">📦 GROUP BY 与聚合</div>
+    <div class="lesson-desc">对行分组并计算统计值——COUNT、SUM、AVG、MIN、MAX。包含 HAVING、ROLLUP 和 UNION。</div>
+    <div class="lesson-tags">
+      <span class="lesson-tag">GROUP BY</span>
+      <span class="lesson-tag">COUNT</span>
+      <span class="lesson-tag">SUM / AVG</span>
+      <span class="lesson-tag">MIN / MAX</span>
+      <span class="lesson-tag">HAVING</span>
+      <span class="lesson-tag">ROLLUP</span>
+      <span class="lesson-tag">UNION</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📊 聚合函数</div>
+    <div class="concept-box">
+      <div class="concept-label">主要函数</div>
+      <div class="concept-text">
+        <code>COUNT(*)</code> —— 统计行数 | <code>COUNT(column)</code> —— 统计非 NULL 的值<br>
+        <code>SUM(column)</code> —— 计算总和<br>
+        <code>AVG(column)</code> —— 计算平均值<br>
+        <code>MIN(column)</code> —— 最小值<br>
+        <code>MAX(column)</code> —— 最大值
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- products 表的统计信息</span>
+<span class="kw">SELECT</span>
+  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total_products</span>,
+  <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>,
+  <span class="fn">MIN</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">min_price</span>,
+  <span class="fn">MAX</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">max_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🗂️ GROUP BY —— 分组</div>
+    <div class="concept-box">
+      <div class="concept-label">重要规则</div>
+      <div class="concept-text">
+        SELECT 中每个不是聚合函数的列 <strong>必须</strong> 出现在 GROUP BY 中。<br>
+        GROUP BY 把表拆分成若干组，并为每组计算一个聚合值。
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 每个类别中有多少个产品？</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>;
+
+<span class="cmt">-- 每个类别的平均价格</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>
+<span class="kw">ORDER BY</span> <span class="str">avg_price</span> <span class="kw">DESC</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔍 HAVING —— 分组后筛选</div>
+    <div class="concept-box">
+      <div class="concept-label">WHERE 与 HAVING</div>
+      <div class="concept-text">
+        <code>WHERE</code> —— 筛选行 <strong>before</strong> grouping<br>
+        <code>HAVING</code> —— 筛选组 <strong>after</strong> grouping<br><br>
+        <strong>Rule:</strong> 你不能在 WHERE 中使用聚合函数（COUNT、SUM……）——这就是需要 HAVING 的原因。
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 产品超过 5 个的类别</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">5</span>;
+
+<span class="cmt">-- WHERE（之前）+ HAVING（之后）</span>
+<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">10</span>        <span class="cmt">-- 分组前筛选</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span>
+<span class="kw">HAVING</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) > <span class="num">30</span>; <span class="cmt">-- 分组后筛选</span></pre>
+    </div>
+    <div class="highlight-box tip">
+      <div class="hb-icon">💡</div>
+      <div class="hb-text"><strong>记忆技巧：</strong> WHERE → 在 GROUP BY 之前（作用于行）。HAVING → 在 GROUP BY 之后（作用于组）。</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📈 ROLLUP —— 总计</div>
+    <div class="concept-box">
+      <div class="concept-label">什么是 ROLLUP？</div>
+      <div class="concept-text">
+        <code>GROUP BY column WITH ROLLUP</code> —— 在结果末尾添加一行总计汇总。<br>
+        最后一行在分组列中为 NULL，并包含总计。
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 按类别计数 + 总计</span>
+<span class="kw">SELECT</span>
+  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- TOTAL ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,
+  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔀 UNION —— 合并结果</div>
+    <div class="concept-box">
+      <div class="concept-label">UNION 与 UNION ALL</div>
+      <div class="concept-text">
+        <code>UNION</code> —— 合并两个查询的结果并去除重复<br>
+        <code>UNION ALL</code> —— 合并并保留重复（更快）<br><br>
+        <strong>Requirement:</strong> 两个查询必须返回相同数量的列，且数据类型兼容。
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 复制</button></div>
+      <pre><span class="cmt">-- 来自 customers 和 suppliers 的城市合并列表</span>
+<span class="kw">SELECT</span> <span class="col">city</span>, <span class="str">'customer'</span> <span class="kw">AS</span> <span class="str">type</span> <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">UNION</span>
+<span class="kw">SELECT</span> <span class="col">city</span>, <span class="str">'supplier'</span> <span class="kw">AS</span> <span class="str">type</span> <span class="kw">FROM</span> <span class="tbl">suppliers</span>
+<span class="kw">ORDER BY</span> <span class="col">city</span>;</pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📋 SQL 执行顺序 —— 很重要！</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>FROM</strong> —— 从哪张表读取</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>WHERE</strong> —— 筛选行</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>GROUP BY</strong> —— 分组</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>HAVING</strong> —— 筛选组</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text"><strong>SELECT</strong> —— 选择要显示的列</div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-text"><strong>ORDER BY</strong> —— 对结果排序</div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-text"><strong>LIMIT</strong> —— 限制行数</div></div>
+    </div>
+    <div class="highlight-box info">
+      <div class="hb-icon">💡</div>
+      <div class="hb-text">我们 <strong>编写</strong> SQL 的顺序，不同于数据库 <strong>执行</strong> 它的顺序。这就是为什么你不能在 WHERE 中使用 SELECT 的别名。</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+function showLesson(idx){
+  document.querySelectorAll('.lesson-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.lesson-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function copyThis(btn){
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='✅ Copied';
+    setTimeout(()=>btn.textContent='📋 Copy',2000);
+  });
+}
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+</script>
+</body>
+</html>
