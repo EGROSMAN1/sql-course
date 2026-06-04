@@ -172,603 +172,772 @@
   ]
 }
 </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+/* ========== RESET & TOKENS ========== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+
 :root{
-  --bg:#070d0f;
-  --bg2:#0c1518;
-  --bg3:#111e21;
-  --border:rgba(0,212,200,.08);
-  --border2:rgba(0,212,200,.18);
-  --text:#e8f4f5;
-  --text2:#6b9098;
-  --text3:#2a4048;
-  --aq:#00d4c8;
-  --aq2:rgba(0,212,200,.12);
-  --font:'Heebo',sans-serif;
+  /* Background scale */
+  --bg-0:#070a0c;
+  --bg-1:#0c1114;
+  --bg-2:#11181c;
+  --bg-3:#161f23;
+
+  /* Borders */
+  --line-soft:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20);
+  --line-glow:rgba(0,212,200,.40);
+
+  /* Text */
+  --fg-1:#f0f5f7;
+  --fg-2:#a8b4ba;
+  --fg-3:#6a7780;
+  --fg-4:#3a4750;
+
+  /* Accent */
+  --acc:#00d4c8;
+  --acc-dim:#00a89d;
+  --acc-soft:rgba(0,212,200,.10);
+  --acc-glow:rgba(0,212,200,.25);
+
+  /* Fonts */
+  --font:'Heebo',-apple-system,sans-serif;
   --mono:'IBM Plex Mono',monospace;
-  --sb:260px;
-}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;display:flex;flex-direction:column}
 
-/* TOPBAR */
-.top{position:fixed;top:0;right:0;left:0;height:48px;z-index:300;background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
-.logo{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--text);text-decoration:none}
-.lang-flags{display:flex;gap:5px;align-items:center}
-.lang-flags a{font-size:13px;font-weight:600;color:#fff;line-height:1;display:inline-flex;align-items:center;gap:5px;text-decoration:none;padding:4px 9px;border-radius:6px;opacity:.6;border:1px solid transparent;transition:all .12s}
-.lang-flags a:hover{opacity:1;background:var(--bg2)}
-.lang-flags a.on{opacity:1;border-color:var(--aq);background:var(--aq2)}
-.logo em{color:var(--aq);font-style:normal}
-.top-nav{display:flex;gap:.1rem;list-style:none;flex:1;overflow-x:auto;scrollbar-width:none}
-.top-nav::-webkit-scrollbar{display:none}
-.top-nav a{color:var(--text2);text-decoration:none;font-size:12px;font-weight:600;padding:4px 9px;border-radius:4px;white-space:nowrap;display:block;transition:color .12s}
-.top-nav a:hover{color:var(--aq)}
-.hbg{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:4px;padding:6px}
-.hbg span{width:18px;height:2px;background:var(--text2);border-radius:2px;display:block}
-
-/* SIDEBAR */
-.sb{position:fixed;top:48px;right:0;width:var(--sb);bottom:0;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;z-index:200}
-.sb-hdr{padding:1.2rem 1.3rem .9rem;border-bottom:1px solid var(--border)}
-.sb-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);margin-bottom:.4rem}
-.sb-title{font-size:14px;font-weight:700;color:var(--text)}
-.sb-body{padding:.6rem 0 3rem}
-.sb-group{padding:.6rem 1.3rem .2rem;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-family:var(--mono)}
-.sb-link{display:flex;align-items:center;gap:.6rem;padding:.45rem 1.3rem;text-decoration:none;transition:all .12s}
-.sb-link:hover,.sb-link.on{background:var(--aq2)}
-.sb-link:hover .sl-dot,.sb-link.on .sl-dot{background:var(--aq);border-color:var(--aq)}
-.sb-link:hover .sl-txt,.sb-link.on .sl-txt{color:var(--text)}
-.sl-dot{width:6px;height:6px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0}
-.sl-txt{font-size:12.5px;color:var(--text2)}
-
-/* MAIN */
-.main{margin-top:48px;margin-right:var(--sb);padding:2.5rem 2.5rem 4rem;min-height:calc(100vh - 48px)}
-
-/* HERO */
-.hero{background:var(--bg2);border:1px solid var(--border);border-top:2px solid var(--aq);border-radius:12px;padding:2rem 2.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
-.hero-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--aq);font-family:var(--mono);margin-bottom:.6rem}
-.hero h1{font-size:2.2rem;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:.5rem}
-.hero h1 em{color:var(--aq);font-style:normal}
-.hero-desc{font-size:.9rem;color:var(--text2);line-height:1.7;max-width:460px}
-.hero-desc strong{color:var(--text)}
-.hero-about{font-size:.85rem;color:var(--text2);line-height:1.75;max-width:480px;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border)}
-.hero-about strong{color:var(--aq)}
-.hero-photo{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--aq);flex-shrink:0}
-.hero-photo-ph{width:80px;height:80px;border-radius:50%;background:var(--bg3);border:2px solid var(--aq);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
-
-/* INSTRUCTOR ROW */
-.inst{display:flex;align-items:center;gap:.7rem;margin-top:1.1rem;flex-wrap:wrap}
-.inst-name{font-size:13px;font-weight:700;color:var(--text)}
-.inst-role{font-size:11.5px;color:var(--text2)}
-.inst-sep{color:var(--text3)}
-.ilink{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;text-decoration:none}
-.ilink.li{background:#0a66c2;color:#fff}
-.ilink.wa{background:#25d366;color:#fff}
-
-/* STATS ROW */
-.stats{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
-.stat{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1.1rem;display:flex;align-items:center;gap:.65rem;flex:1;min-width:110px}
-.stat-val{font-size:1.4rem;font-weight:900;font-family:var(--mono);color:var(--aq);line-height:1}
-.stat-lbl{font-size:11px;color:var(--text2);font-weight:600}
-
-/* NAV CARDS */
-.cards-label {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 17px;
-    margin-bottom: 12px;
-    opacity: 1;
-  }
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.5rem}
-.card{display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);transition:all .15s}
-.card:hover{border-color:var(--border2);background:var(--bg3)}
-.card.feat{border-color:var(--border2);border-right:2px solid var(--aq)}
-.card-ico{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
-.card-title{font-size:13px;font-weight:700;color:var(--text)}
-.card.feat .card-title{color:var(--aq)}
-.card-arr{font-size:12px;color:var(--text3);margin-right:auto;transition:transform .12s}
-.card:hover .card-arr{transform:translateX(-3px);color:var(--text2)}
-
-/* MOBILE */
-.mob-nav{display:none;position:fixed;top:48px;right:0;left:0;bottom:0;background:var(--bg);z-index:250;padding:1rem;flex-direction:column;gap:.15rem;overflow-y:auto;border-top:1px solid var(--border)}
-.mob-nav.open{display:flex}
-.mob-nav a{color:var(--text2);text-decoration:none;font-size:14px;padding:10px 14px;border-radius:7px;display:block}
-.mob-nav a:hover{background:var(--bg2);color:var(--text)}
-
-@media(max-width:860px){
-  :root{--sb:0px}
-  .sb{display:none}
-  .hbg{display:flex}
-  .top-nav{display:none}
-  .main{padding:1.5rem 1rem 3rem}
-  .hero{grid-template-columns:1fr;gap:1rem}
-  .hero-photo,.hero-photo-ph{display:none}
-  .hero h1{font-size:1.7rem}
-  .cards{grid-template-columns:1fr}
+  /* Layout */
+  --header-h:64px;
+  --max-w:1240px;
+  --radius:12px;
+  --radius-lg:16px;
 }
 
-/* LEVEL SELECTOR */
-.level-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:.5rem}
-.lcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;transition:all .2s;position:relative;overflow:hidden}
-.lcard:hover{transform:translateY(-3px)}
-.lcard::after{content:'';position:absolute;bottom:0;right:0;left:0;height:3px;background:var(--lc,var(--aq))}
-.lcard-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:.2rem}
-.lc-icon{font-size:1.6rem}
-.lc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);font-family:var(--mono);background:var(--bg3);padding:2px 8px;border-radius:4px}
-.lc-title{font-size:17px;font-weight:800;color:var(--text)}
-.lc-num{font-size:2.4rem;font-weight:900;font-family:var(--mono);color:var(--lc,var(--aq));line-height:1.1}
-.lc-sub{font-size:12px;color:var(--text2);font-weight:600;margin-top:-.2rem}
-.lc-topics{font-size:11.5px;color:var(--text2);line-height:1.5;margin-top:.3rem}
-.lc1{--lc:#00e5a0}.lc1:hover{border-color:rgba(0,229,160,.35)}
-.lc2{--lc:#4a9eff}.lc2:hover{border-color:rgba(74,158,255,.35)}
-.lc3{--lc:#9B5CFF}.lc3:hover{border-color:rgba(155,92,255,.35)}
-.lc4{--lc:#FFB020}.lc4:hover{border-color:rgba(255,176,32,.5)}
-.lcard.feat{border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04)}
-.lc-hot{position:absolute;top:36px;right:8px;background:rgba(255,176,32,.15);color:#FFB020;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(255,176,32,.3)}
-/* MOBILE */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html,body{height:100%;background:var(--bg-0)}
+body{color:var(--fg-1);font-family:var(--font);font-weight:400;line-height:1.55;overflow-x:hidden;font-size:15px}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:var(--acc-soft);color:var(--acc)}
+/* ========== FOCUS STATES (a11y) ========== */
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
+.btn:focus-visible,.sbtn:focus-visible{outline-offset:4px}
+
+/* Reduced motion (a11y) */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important}
+  .photo-orbit{animation:none}
+  .hero-pill::before{animation:none}
+}
+
+/* Visually hidden (a11y) */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Skip link */
+.skip{position:absolute;top:-100px;right:16px;background:var(--acc);color:var(--bg-0);padding:10px 20px;font-weight:600;border-radius:8px;z-index:9999;transition:top .2s}
+.skip:focus{top:16px}
+
+
+/* Background ambient */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 1200px 600px at 85% -200px,rgba(0,212,200,.06),transparent 60%),radial-gradient(ellipse 800px 400px at 15% -100px,rgba(0,212,200,.03),transparent 60%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 100% 80% at 50% 0,#000,transparent 70%);-webkit-mask-image:radial-gradient(ellipse 100% 80% at 50% 0,#000,transparent 70%)}
+
+/* ========== HEADER ========== */
+.header{position:fixed;top:0;inset-inline:0;height:var(--header-h);z-index:100;background:rgba(7,10,12,.75);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--line)}
+.header-inner{max-width:var(--max-w);margin:0 auto;height:100%;padding:0 32px;display:flex;align-items:center;gap:24px}
+
+.logo{font-family:var(--mono);font-size:14px;font-weight:600;letter-spacing:-.3px;color:var(--fg-1);display:flex;align-items:center;gap:8px}
+.logo-dot{width:6px;height:6px;background:var(--acc);border-radius:50%;box-shadow:0 0 12px var(--acc-glow)}
+.logo em{color:var(--acc);font-style:normal;font-weight:600}
+
+.nav{display:flex;gap:4px;flex:1;justify-content:center}
+.nav a{font-size:13px;font-weight:500;color:var(--fg-2);padding:8px 14px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap}
+.nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.nav a.featured{color:var(--acc)}
+.nav a.featured:hover{background:var(--acc-soft)}
+
+.header-right{display:flex;align-items:center;gap:12px}
+.lang{display:flex;gap:2px;padding:3px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px}
+.lang a{font-size:11.5px;font-weight:500;padding:8px 12px;color:var(--fg-3);border-radius:5px;transition:all .15s;min-height:32px;display:inline-flex;align-items:center}
+.lang a:hover{color:var(--fg-1)}
+.lang a.active{background:var(--bg-3);color:var(--fg-1)}
+
+.hbg{display:none;background:none;border:1px solid var(--line);border-radius:6px;cursor:pointer;flex-direction:column;gap:3px;padding:8px;align-items:center;justify-content:center}
+.hbg span{width:16px;height:1.5px;background:var(--fg-2);border-radius:1px;display:block}
+.hbg{transition:transform .2s}
+.hbg.open span:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.hbg.open span:nth-child(2){opacity:0}
+.hbg.open span:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+.hbg span{transition:transform .2s,opacity .2s}
+
+
+/* ========== LAYOUT ========== */
+.main{padding-top:var(--header-h);position:relative;z-index:1}
+.container{max-width:var(--max-w);margin:0 auto;padding:0 32px}
+
+/* ========== HERO ========== */
+.hero{padding:80px 0 96px;display:grid;grid-template-columns:1.4fr 1fr;gap:80px;align-items:center;position:relative}
+
+.hero-pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--acc);padding:7px 14px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:100px;margin-bottom:28px}
+.hero-pill::before{content:'';width:6px;height:6px;background:var(--acc);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.hero h1{font-size:clamp(2.2rem,5vw,4rem);font-weight:700;line-height:1.04;letter-spacing:-2px;margin-bottom:24px;color:var(--fg-1)}
+.hero h1 em{color:var(--acc);font-style:normal;font-weight:700;position:relative;display:inline-block}
+.hero h1 em::after{content:'';position:absolute;right:0;left:0;bottom:-2px;height:1px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.5}
+
+.hero-sub{font-size:1.1rem;color:var(--fg-2);line-height:1.7;max-width:560px;margin-bottom:20px;font-weight:400}
+.hero-sub strong{color:var(--fg-1);font-weight:600}
+
+.hero-vision{font-size:.95rem;color:var(--fg-2);line-height:1.75;max-width:560px;margin-bottom:36px;padding-inline-start:16px;border-inline-start:2px solid var(--line-strong)}
+.hero-vision strong{color:var(--acc);font-weight:600}
+
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:12px 22px;border-radius:8px;transition:all .2s;cursor:pointer;border:1px solid transparent;font-family:var(--font)}
+.btn-primary{background:var(--acc);color:var(--bg-0);border-color:var(--acc)}
+.btn-primary:hover{background:#0fe8db;box-shadow:0 0 24px var(--acc-glow);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--fg-1);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--line-glow);background:var(--bg-2)}
+.btn-arrow{transition:transform .2s}
+.btn:hover .btn-arrow{transform:translateX(-3px)}
+
+/* Hero stats inline */
+.hero-stats{display:flex;gap:32px;margin-top:48px;padding-top:32px;border-top:1px solid var(--line)}
+.stat{}
+.stat-num{font-family:var(--mono);font-size:1.75rem;font-weight:600;color:var(--acc);line-height:1;letter-spacing:-1px}
+.stat-lbl{font-size:11.5px;color:var(--fg-3);margin-top:6px;letter-spacing:.5px;font-weight:500}
+
+/* Hero right - profile */
+.hero-profile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:20px 0}
+.photo-wrap{position:relative;width:300px;height:300px}
+.photo-orbit{position:absolute;inset:-20px;border:1px solid var(--line);border-radius:50%;animation:orbit 30s linear infinite}
+.photo-orbit::before{content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;background:var(--acc);border-radius:50%;box-shadow:0 0 12px var(--acc);transform:translateX(-50%)}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.photo-glow{position:absolute;inset:-40px;background:radial-gradient(circle,var(--acc-glow),transparent 70%);filter:blur(40px);opacity:.6;z-index:0}
+.photo{position:relative;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--bg-1);box-shadow:0 0 0 1px var(--line-strong),0 20px 60px rgba(0,0,0,.5);z-index:1}
+
+.profile-info{text-align:center}
+.profile-name{font-size:1.3rem;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.profile-role{font-size:13px;color:var(--fg-3);font-family:var(--mono);margin-bottom:20px}
+
+.social{display:flex;gap:10px;justify-content:center}
+.sbtn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;color:#fff;transition:all .2s;border:1px solid transparent}
+.sbtn svg{width:15px;height:15px}
+.sbtn.li{background:#0a66c2;border-color:#0a66c2}
+.sbtn.li:hover{background:#0958a8;transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,102,194,.35)}
+.sbtn.wa{background:#25d366;color:#fff;border-color:#25d366}
+.sbtn.wa:hover{background:#1ebd5a;transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,.35)}
+
+/* ========== SECTIONS ========== */
+.section{padding:48px 0 24px}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.section-title{font-size:1.15rem;font-weight:700;letter-spacing:-.3px;color:var(--fg-1)}
+.section-meta{font-family:var(--mono);font-size:11px;color:var(--fg-3);letter-spacing:1.5px;text-transform:uppercase}
+
+/* ========== FEATURED CARD - 370 CHALLENGES ========== */
+.featured{display:block;background:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 100%);border:1px solid var(--line);border-radius:var(--radius-lg);padding:48px;margin-top:24px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.featured::before{content:'';position:absolute;top:0;right:0;left:0;height:1px;background:linear-gradient(90deg,transparent 20%,var(--acc) 50%,transparent 80%);opacity:.6;transition:opacity .3s}
+.featured::after{content:'';position:absolute;top:0;left:0;width:300px;height:300px;background:radial-gradient(circle,var(--acc-soft),transparent 60%);opacity:.4;pointer-events:none}
+.featured:hover{border-color:var(--line-glow);transform:translateY(-2px)}
+.featured:hover::before{opacity:1}
+
+.featured-row{display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:center;position:relative;z-index:1}
+
+.featured-num{font-family:var(--mono);font-size:6.5rem;font-weight:500;color:var(--acc);line-height:.9;letter-spacing:-3px;text-shadow:0 0 40px var(--acc-glow)}
+
+.featured-body{}
+.featured-tag{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:var(--fg-3);margin-bottom:12px}
+.featured-title{font-size:1.8rem;font-weight:700;letter-spacing:-.5px;margin-bottom:12px;line-height:1.2}
+.featured-desc{font-size:14.5px;color:var(--fg-2);line-height:1.65;max-width:520px}
+
+.featured-cta{display:inline-flex;align-items:center;gap:10px;color:var(--acc);font-size:14px;font-weight:600;padding:14px 24px;border:1px solid var(--line-strong);border-radius:8px;transition:all .2s;font-family:var(--mono);background:rgba(0,0,0,.2);white-space:nowrap}
+.featured:hover .featured-cta{background:var(--acc-soft);border-color:var(--line-glow)}
+.featured-arrow{transition:transform .2s}
+.featured:hover .featured-arrow{transform:translateX(-4px)}
+
+/* ========== LEVELS ROW ========== */
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.lvl{display:block;padding:24px 22px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);transition:all .25s;position:relative;overflow:hidden}
+.lvl::before{content:'';position:absolute;top:0;right:0;width:40px;height:1px;background:var(--acc);opacity:.4;transition:width .3s,opacity .3s}
+.lvl::after{content:'←';position:absolute;top:18px;left:20px;color:var(--acc);font-size:14px;opacity:.5;transition:all .25s}
+.lvl:hover{transform:translateY(-2px);background:var(--bg-2);border-color:var(--line-strong)}
+.lvl:hover::before{width:100%;opacity:.8}
+.lvl:hover::after{opacity:1;transform:translateX(-4px)}
+.lvl-num{font-family:var(--mono);font-size:11px;color:var(--fg-3);letter-spacing:1.5px;margin-bottom:18px}
+.lvl-title{font-size:16px;font-weight:600;margin-bottom:8px;letter-spacing:-.2px}
+.lvl-count{font-family:var(--mono);font-size:2rem;font-weight:500;color:var(--acc);line-height:1;margin-bottom:6px;letter-spacing:-1px}
+.lvl-meta{font-size:12px;color:var(--fg-3);font-family:var(--mono);letter-spacing:.3px}
+
+/* ========== GRID CARDS - UNIFIED AQUA STYLE ========== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.card{display:block;padding:24px 26px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--radius);transition:all .25s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;width:40px;height:1px;background:var(--acc);opacity:.4;transition:width .3s,opacity .3s}
+.card:hover{transform:translateY(-2px);background:var(--bg-2);border-color:var(--line-strong)}
+.card:hover::before{width:100%;opacity:.8}
+.card-tag{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:var(--fg-3);margin-bottom:14px}
+.card-title{font-size:15.5px;font-weight:600;color:var(--fg-1);line-height:1.4;margin-bottom:8px;letter-spacing:-.2px}
+.card-desc{font-size:13px;color:var(--fg-2);line-height:1.6}
+.card-arr{position:absolute;top:22px;left:24px;color:var(--acc);font-size:14px;opacity:.5;transition:all .25s}
+.card:hover .card-arr{opacity:1;transform:translateX(-4px)}
+
+
+/* ========== ABOUT SECTION ========== */
+.about-card{padding:44px 48px;background:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 100%);border:1px solid var(--line);border-radius:var(--radius-lg);position:relative;overflow:hidden}
+.about-card::before{content:'';position:absolute;top:0;right:0;left:0;height:1px;background:linear-gradient(90deg,transparent 30%,var(--acc) 50%,transparent 70%);opacity:.5}
+.about-body{max-width:780px}
+.about-text{font-size:15px;color:var(--fg-2);line-height:1.8;margin-bottom:16px}
+.about-text:last-of-type{margin-bottom:24px}
+.about-text strong{color:var(--fg-1);font-weight:600}
+.about-vision{font-size:1.05rem;color:var(--acc);line-height:1.7;margin-bottom:16px;padding:16px 20px;background:var(--acc-soft);border-inline-start:3px solid var(--acc);border-radius:8px;font-weight:500}
+.about-vision strong{color:var(--acc);font-weight:600}
+.about-cta{display:flex;gap:10px;flex-wrap:wrap}
+
 @media(max-width:768px){
-  .level-selector{grid-template-columns:repeat(2,1fr);gap:.6rem}
-  .lc-topics{font-size:11px}
-  .lc-num{font-size:2rem}
-  .lc-title{font-size:15px}
-  .lcard{padding:1rem .85rem}
-}
-@media(max-width:400px){
-  .level-selector{grid-template-columns:1fr 1fr;gap:.5rem}
-  .lc-topics{display:none}
-  .lc-badge{display:none}
-  .lc-num{font-size:1.75rem}
+  .about-card{padding:28px 22px}
+  .about-text{font-size:14px}
+  .about-vision{font-size:.95rem;padding:14px 16px}
+  .about-cta .sbtn{flex:1;justify-content:center;min-width:140px}
 }
 
+/* ========== FOOTER ========== */
+.footer{padding:64px 0 48px;border-top:1px solid var(--line);margin-top:96px}
+.footer-row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.footer-info{display:flex;align-items:center;gap:14px}
+.footer-photo{width:36px;height:36px;border-radius:50%;border:1px solid var(--line)}
+.footer-text{font-size:13px;color:var(--fg-3)}
+.footer-text strong{color:var(--fg-1);font-weight:600}
+.footer-text a{color:var(--acc)}
+.footer-social{display:flex;gap:8px}
 
-/* trilingual flag toggle — compact on mobile (3 langs) */
-@media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
-  .lang-flags{flex-wrap:wrap;gap:4px}
-}
-@media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
-}
+/* ========== MOBILE NAV ========== */
+.mob-nav{display:none;position:fixed;top:var(--header-h);inset-inline:0;bottom:0;background:var(--bg-0);z-index:90;padding:24px;flex-direction:column;gap:4px;overflow-y:auto;border-top:1px solid var(--line)}
+.mob-nav.open{display:flex}
+.mob-nav a{color:var(--fg-2);font-size:15px;padding:14px 16px;border-radius:8px;display:block;font-weight:500}
+.mob-nav a:hover{background:var(--bg-2);color:var(--fg-1)}
 
-/* pandas-100 feature card — mobile tightening */
-@media(max-width:560px){
-  a[href="pandas-100.html"][style*="linear-gradient"]{padding:1.1rem 1rem!important}
-  a[href="pandas-100.html"][style*="linear-gradient"] > div{gap:.7rem!important}
-  a[href="pandas-100.html"][style*="linear-gradient"] > div > div:nth-child(3){width:100%;text-align:center}
-}
+/* ========== RESPONSIVE ========== */
 
-/* ============== UNIVERSAL MOBILE PACK ============== */
-/* Prevent iOS text auto-resize on rotation */
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-/* iOS safe area insets for notched devices */
-body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
-/* Prevent horizontal scroll on tiny phones */
-html,body{overflow-x:hidden;max-width:100vw}
-/* Better tap highlight */
-a,button,select,input{-webkit-tap-highlight-color:rgba(0,229,255,.15)}
-/* Smooth scrolling on iOS */
-.cell-output,.output-box,.theory pre,.df-table{-webkit-overflow-scrolling:touch}
-/* Prevent iOS input zoom (inputs need >=16px) */
-input,select,textarea{font-size:16px !important}
-/* Min touch target 44px (Apple HIG) */
-button:not(.cell-icon-btn):not(.jump-btn):not(.ex-nav-btn):not(.reset-btn):not(.tb-btn){min-height:38px}
-/* iOS Safari sticky header fix */
-@supports (-webkit-touch-callout:none){
-  .topnav{position:-webkit-sticky;position:sticky}
+/* Tablet */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;gap:48px;padding:48px 0 64px;text-align:center}
+  .hero-pill{margin-inline:auto}
+  .hero h1{font-size:clamp(1.8rem,6vw,2.8rem)}
+  .hero-sub{margin-inline:auto}
+  .hero-vision{margin-inline:auto;border-right:none;border-top:2px solid var(--line-strong);padding-inline-start:0;padding-top:16px}
+  .cta-row{justify-content:center}
+  .hero-stats{justify-content:center;flex-wrap:wrap;gap:24px;padding-top:24px}
+  .photo-wrap{width:220px;height:220px}
+  .featured-row{grid-template-columns:1fr;gap:24px;text-align:center}
+  .featured-num{font-size:5rem}
+  .featured{padding:32px 28px}
+  .levels{grid-template-columns:repeat(2,1fr)}
 }
 
-/* index already has comprehensive mobile, just safety */
-@media(max-width:400px){
-  body{font-size:14px}
+/* Mobile */
+@media(max-width:768px){
+  :root{--header-h:56px}
+  .header-inner{padding:0 16px;gap:8px}
+  .logo{font-size:13px}
+  .logo-dot{width:5px;height:5px}
+  .nav{display:none}
+  .hbg{display:flex}
+  .lang{padding:2px}
+  .lang a{padding:6px 9px;font-size:10.5px;min-height:30px}
+  .container{padding:0 16px}
+
+  .hero{padding:24px 0 48px;gap:32px}
+  .hero h1{font-size:1.9rem;line-height:1.1;letter-spacing:-.5px}
+  .hero-pill{font-size:10px;padding:5px 11px;margin-bottom:20px}
+  .hero-sub{font-size:.9rem;margin-bottom:16px}
+  .hero-vision{font-size:.9rem;padding-top:12px;margin-bottom:24px}
+  .hero-stats{margin-top:32px;padding-top:20px;gap:16px}
+  .stat-num{font-size:1.5rem}
+  .stat-lbl{font-size:10.5px}
+  .photo-wrap{width:180px;height:180px}
+  .photo-glow{inset:-30px}
+  .photo-orbit{inset:-14px}
+
+  .sbtn{padding:10px 16px;font-size:13px}
+
+  .cta-row{flex-direction:column;width:100%;gap:10px}
+  .btn{width:100%;justify-content:center;padding:13px 22px}
+
+  .section{padding:32px 0 16px}
+  .section-head{margin-bottom:20px;padding-bottom:14px}
+  .section-title{font-size:1.05rem}
+  .section-meta{font-size:10px}
+
+  .featured{padding:28px 22px}
+  .featured-num{font-size:3.6rem;letter-spacing:-2px}
+  .featured-title{font-size:1.3rem;line-height:1.25}
+  .featured-desc{font-size:13px}
+  .featured-tag{font-size:10px}
+  .featured-cta{width:100%;justify-content:center;padding:13px 20px;font-size:13px}
+
+  .levels{gap:10px}
+  .lvl{padding:18px 16px}
+  .lvl-num{font-size:10px;margin-bottom:12px}
+  .lvl-count{font-size:1.7rem}
+  .lvl-title{font-size:14.5px}
+  .lvl-meta{font-size:11px}
+
+  .grid{grid-template-columns:1fr;gap:10px}
+  .card{padding:18px 20px}
+  .card-arr{top:18px;left:20px}
+
+  .footer{padding:40px 0 32px;margin-top:48px}
+  .footer-row{flex-direction:column;text-align:center;gap:20px}
+  .footer-social{width:100%;justify-content:center}
+  .footer-text{font-size:12px}
 }
 
-
-/* === ULTIMATE MOBILE SAFETY === */
+/* Small mobile */
 @media(max-width:480px){
-  /* All hero feature cards stack & shrink */
-  a[style*="display:block;background:linear-gradient"]{
-    padding:1rem 1.1rem !important;
-    margin-top:.6rem !important;
-  }
-  a[style*="display:block;background:linear-gradient"] > div{
-    gap:.7rem !important;
-  }
-  /* Reduce hero icons */
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:3rem"]{
-    font-size:2rem !important;
-  }
-  /* Title smaller */
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:1.5rem"],
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:1.4rem"]{
-    font-size:1.05rem !important;
-    line-height:1.3 !important;
-  }
-  /* Description smaller */
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:14px"],
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:.95rem"]{
-    font-size:12px !important;
-    line-height:1.5 !important;
-  }
+  .hero h1{font-size:1.65rem}
+  .hero-sub{font-size:.88rem}
+  .hero-vision{font-size:.85rem}
+  .photo-wrap{width:160px;height:160px}
+  .featured-num{font-size:3rem}
+  .featured-title{font-size:1.2rem}
+  .featured{padding:24px 18px}
+  .hero-stats{gap:14px}
+  .stat-num{font-size:1.35rem}
+  .levels{grid-template-columns:1fr 1fr;gap:8px}
+  .lvl{padding:16px 12px}
+  .lvl-count{font-size:1.5rem}
+  .lvl-meta{font-size:10px}
 }
-@media(max-width:400px){
-  a[style*="display:block;background:linear-gradient"]{
-    padding:.85rem .95rem !important;
-  }
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:3rem"]{
-    font-size:1.7rem !important;
-  }
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:1.5rem"],
-  a[style*="display:block;background:linear-gradient"] [style*="font-size:1.4rem"]{
-    font-size:1rem !important;
-  }
-}
+
+/* Tiny mobile */
 @media(max-width:360px){
-  a[style*="display:block;background:linear-gradient"]{
-    padding:.7rem .8rem !important;
-  }
+  .hero h1{font-size:1.5rem}
+  .photo-wrap{width:140px;height:140px}
+  .featured-num{font-size:2.5rem}
+  .featured{padding:20px 16px}
 }
 
-/* === MOBILE OVERFLOW SAFETY === */
-@media(max-width:480px){
-  /* Force all content to wrap, never overflow */
-  *{max-width:100%}
-  pre, code, table{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* Touch targets - Apple HIG 44px min */
+@media(max-width:768px){
+  .nav a,.mob-nav a,.btn,.sbtn,.card,.lvl,.featured{min-height:44px}
 }
 </style>
 
-<!-- Google Analytics 4 -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
+  window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-CKNNVS2HVB');
+  gtag('js',new Date());
+  gtag('config','G-CKNNVS2HVB');
 </script>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<header class="top">
-  <a href="index.html" class="logo">SQL<em>.course</em></a>
-  <ul class="top-nav">
-    <li><a href="course.html">חומר לימוד</a></li>
-    <li><a href="practice.html">תרגולים</a></li>
-    <li><a href="simulator.html">⚡ סימולטור</a></li>
-    <li><a href="tirgul-makif.html">🎯 תרגול מקיף</a></li>
-    <li><a href="pbi-simulator.html">📊 Power BI</a></li>
-    <li><a href="reference.html">מאגר פונקציות</a></li>
-    <li><a href="pandas-100.html">🐼 100 פקודות Pandas</a></li>
-    <li><a href="quiz-pandas.html">🐼 חידון Pandas</a></li>
-    <li><a href="python-course.html">🐍 פייתון בסיס</a></li><li><a href="pandas-course.html">📊 פנדס</a></li><li><a href="quiz-python-100.html">💯 100 תרגילים</a></li><li><a href="python-playground.html">🧪 Playground</a></li>
-    <li><a href="quiz-beginner.html">שאלות מתחילים</a></li>
-    <li><a href="quiz.html">שאלות מתקדמות</a></li>
-    <li><a href="videos.html">MySQL</a></li>
-    <li><a href="videos2.html">SQL Server</a></li>
-    <li><a href="setup.html">התקנה</a></li>
-  </ul>
-  <div class="lang-flags"><a href="index.html" class="on" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="en/index.html" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="zh/index.html" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a></div>
-  <button class="hbg" onclick="toggleMob()" aria-label="תפריט"><span></span><span></span><span></span></button>
+<!-- Skip to content (a11y) -->
+<a href="#main-content" class="skip">דלג לתוכן הראשי</a>
+
+<noscript>
+  <div style="background:#ff4040;color:#fff;padding:14px;text-align:center;font-weight:600">האתר עובד מצוין גם בלי JavaScript, אבל חלק מהאינטראקטיביות מושבתת.</div>
+</noscript>
+
+<!-- ========== HEADER ========== -->
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-dot"></span>
+      SQL<em>.course</em>
+    </a>
+
+    <nav class="nav">
+      <a href="sql-algorithms.html" class="featured">370 אתגרי SQL</a>
+      <a href="#courses">קורסים</a>
+      <a href="#tools">סימולטורים</a>
+      <a href="#practice">תרגול</a>
+      <a href="#about">אודות</a>
+    </nav>
+
+    <div class="header-right">
+      <div class="lang">
+        <a href="index.html" class="active">HE</a>
+        <a href="en/index.html">EN</a>
+        <a href="zh/index.html">中</a>
+      </div>
+      <button class="hbg" onclick="toggleMob()" aria-label="פתח תפריט" aria-expanded="false" aria-controls="mobNav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<!-- MOBILE MENU -->
+<!-- ========== MOBILE NAV ========== -->
 <div class="mob-nav" id="mobNav">
-  <a href="course.html">📚 חומר לימוד</a>
-  <a href="practice.html">✏️ תרגולים</a>
-  <a href="simulator.html">⚡ סימולטור SQL</a>
-  <a href="tirgul-makif.html">🎯 תרגול מקיף</a>
-  <a href="pbi-simulator.html">📊 סימולטור Power BI</a>
-  <a href="reference.html">📘 מאגר פונקציות</a>
-  <a href="pandas-100.html">🐼 100 פקודות Pandas</a>
-  <a href="quiz-beginner.html">🌱 שאלות למתחילים</a>
-  <a href="quiz.html">🧠 שאלות מתקדמות</a>
-  <a href="videos.html">🎬 הדרכות MySQL</a>
-  <a href="videos2.html">🖥️ הדרכות SQL Server</a>
-  <a href="setup.html">🛠️ מדריך התקנה</a>
+  <a href="sql-algorithms.html">370 אתגרי SQL</a>
+  <a href="course.html">קורסים</a>
+  <a href="simulator.html">סימולטור SQL</a>
+  <a href="pbi-simulator.html">סימולטור Power BI</a>
+  <a href="tirgul-makif.html">תרגול מקיף</a>
+  <a href="practice.html">תרגולים</a>
+  <a href="python-course.html">פייתון</a>
+  <a href="pandas-course.html">Pandas</a>
+  <a href="pandas-100.html">100 פקודות Pandas</a>
+  <a href="quiz-beginner.html">שאלות מתחילים</a>
+  <a href="quiz-medium.html">שאלות בינוני</a>
+  <a href="quiz-advanced2.html">שאלות מתקדם</a>
+  <a href="quiz-expert.html">שאלות מומחה</a>
+  <a href="career-path.html">מסלול לימוד</a>
+  <a href="interview-telecom.html">ראיון Telecom</a>
+  <a href="interview-insurance.html">ראיון Insurance</a>
+  <a href="reference.html">מאגר פונקציות</a>
+  <a href="videos.html">סרטוני MySQL</a>
+  <a href="videos2.html">סרטוני SQL Server</a>
 </div>
 
-<!-- SIDEBAR -->
-<aside class="sb">
-  <div class="sb-hdr">
-    <div class="sb-label">כלים</div>
-    <div class="sb-title">SQL.course</div>
-  </div>
-  <div class="sb-body">
-    <a href="simulator.html" class="sb-link on"><div class="sl-dot"></div><div class="sl-txt">⚡ סימולטור SQL</div></a>
-    <a href="tirgul-makif.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🎯 תרגול מקיף</div></a>
-    <a href="pbi-simulator.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📊 סימולטור Power BI</div></a>
-    <a href="reference.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📘 מאגר פונקציות</div></a>
-    <a href="practice.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">✏️ תרגולים</div></a>
-    <a href="quiz-beginner.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🌱 שאלות מתחילים</div></a>
-    <a href="quiz-medium.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">📗 שאלות בינוני</div></a>
-    <a href="quiz-advanced2.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 שאלות מתקדם</div></a>
-    <a href="quiz-expert.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🏆 שאלות מומחה</div></a>
-    <a href="quiz.html" class="sb-link"><div class="sl-dot"></div><div class="sl-txt">🧠 שאלות מתקדמות</div></a>
-  </div>
-</aside>
+<!-- ========== MAIN ========== -->
+<main class="main" id="main-content">
+  <div class="container">
 
-<!-- MAIN -->
-<main class="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-pill">Data · בעברית · חינמי לחלוטין</div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div>
-      <div class="hero-tag">● קורס דאטה חינם · SQL · Python · Pandas · עברית</div>
-      <h1>קורס <em>דאטה</em> חינם בעברית</h1>
-      <p class="hero-desc">מהבסיס ועד <strong>רמת ראיונות עבודה</strong> — קורס דאטה מעשי וחינמי. <strong>SQL · Python · Pandas</strong> עם סימולטורים אינטראקטיביים, 320+ תרגילים וסימולציות Case Study לאנליסטים.</p>
-      <div style="margin: 16px 0 18px;">
-        <a href="career-path.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#00d4c8,#00e5a0);color:#000;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(0,212,200,0.35);transition:transform .15s;">
-          🗺️ צפה במסלול הלימודי שלך
-        </a>
-        <a href="daily.html" class="daily-cta-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#ffd700,#ff8800);color:#1a1a2e;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(255,170,0,0.4);margin-inline-start:8px;">
-          🗓️ אתגר יומי
-        </a>
-        <a href="quiz-pandas-100.html" class="quiz-pandas-cta-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#8b5cf6,#6b21a8);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(139,92,246,0.4);margin-inline-start:8px;">
-          🐼 חידון Pandas 100
-        </a>
-        <a href="python-simulator.html" class="simulator-cta-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(16,185,129,0.4);margin-inline-start:8px;">
-          🎯 סימולטור 170 תרגילים
-        </a>
-        <a href="tags.html" class="tags-cta-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;box-shadow:0 6px 20px rgba(236,72,153,0.4);margin-inline-start:8px;">
-          🔍 חפש תרגיל
-        </a>
-      </div>
-      <p class="hero-about">מרצה דאטה ומנהל אנליסטים בחברת <strong>Partner</strong> עם ניסיון רב-שנתי בעולם הדאטה.<br>
-      המטרה שלי — <strong>ללמד דאטה בחינם, בעברית, בצורה פשוטה ונגישה לכולם</strong> — ולהביא את הניסיון מהשטח לכל מי שרוצה להתקדם בתחום ולהצליח בראיונות עבודה.</p>
-      <div class="inst">
-        <img src="eliran.png" alt="אלירן גרוסמן" width="32" height="32"
-             style="border-radius:50%;border:1.5px solid var(--aq);object-fit:cover;flex-shrink:0"
-             onerror="this.style.display='none'">
-        <span class="inst-name">אלירן גרוסמן</span>
-        <span class="inst-sep">·</span>
-        <span class="inst-role">מרצה SQL · Partner</span>
-        <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" class="ilink li">LinkedIn</a>
-        <a href="https://wa.me/972507514807" target="_blank" class="ilink wa">WhatsApp</a>
-      </div>
-    </div>
-    <img src="eliran.png" alt="אלירן גרוסמן" class="hero-photo"
-         onerror="this.outerHTML='<div class=hero-photo-ph>👨‍💻</div>'">
-  </div>
+        <h1>הנגשת עולם<br>ה<em>דאטה</em> בעברית.<br>בגובה העיניים.</h1>
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">פרקי לימוד</div></div>
-    <div class="stat"><div class="stat-val">110+</div><div class="stat-lbl">תרגולים</div></div>
-    <div class="stat"><div class="stat-val">24K</div><div class="stat-lbl">שורות בסימולטור</div></div>
-    <div class="stat"><div class="stat-val">🆓</div><div class="stat-lbl">חינם לחלוטין</div></div>
-  </div>
+        <p class="hero-sub"><strong>SQL · Python · Pandas · Power BI</strong> — פלטפורמה אחת שמרכזת קורסים, סימולטורים אינטראקטיביים, אלפי תרגילים וסימולציות ראיון אמיתיות מעולם האנליסטים.</p>
 
-  <!-- NAV CARDS -->
-  <div class="cards-label">🗄️ שאלות אמריקאיות SQL — בחר רמה</div>
-  <div class="level-selector">
-    <a href="quiz-beginner.html" class="lcard lc1">
-      <div class="lcard-top">
-        <div class="lc-icon">🌱</div>
-        <div class="lc-badge">LEVEL 1</div>
-    </div>
-    <div class="lcard-title">מתחילים <span style="color:#ffffff;font-weight:700;font-size:1em;opacity:1">· SQL</span></div>
-    </a>
-    <a href="quiz-medium.html" class="lcard lc2">
-      <div class="lcard-top">
-        <div class="lc-icon">🌳</div>
-        <div class="lc-badge">LEVEL 2</div>
-      </div>
-      <div class="lcard-title">בינוני <span style="color:#ffffff;font-weight:700;font-size:1em;opacity:1">· SQL</span></div>
-    </a>
-    <a href="quiz-advanced2.html" class="lcard lc3">
-      <div class="lcard-top">
-        <div class="lc-icon">🔥</div>
-        <div class="lc-badge">LEVEL 3</div>
-      </div>
-      <div class="lcard-title">מתקדם <span style="color:#ffffff;font-weight:700;font-size:1em;opacity:1">· SQL</span></div>
-    </a>
-    <a href="quiz-expert.html" class="lcard lc4">
-      <div class="lcard-top">
-        <div class="lc-icon">🚀</div>
-        <div class="lc-badge">LEVEL 4</div>
-      </div>
-      <div class="lcard-title">מומחה <span style="color:#ffffff;font-weight:700;font-size:1em;opacity:1">· SQL</span></div>
-    </a>
-  </div>
+        <p class="hero-vision">המטרה שלי פשוטה — <strong>להנגיש את עולם הדאטה בעברית לכמה שיותר אנשים</strong>, בלי קורסים יקרים, בלי תרגומים מסורבלים, ובלי מחסום שפה.</p>
 
-  <!-- 🐼 PANDAS 100 — NEW FEATURE CARD -->
-  <div class="cards-label" style="margin-top:2rem">חדש באתר ✨</div>
-  <a href="pandas-100.html" style="display:block;background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(155,92,255,.06));border:1px solid rgba(0,229,255,.25);border-radius:14px;padding:1.4rem 1.6rem;text-decoration:none;color:var(--text);transition:all .15s;position:relative;overflow:hidden" onmouseover="this.style.borderColor='rgba(0,229,255,.6)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(0,229,255,.25)';this.style.transform='translateY(0)'">
-    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <div style="font-size:3rem;line-height:1">🐼</div>
-      <div style="flex:1;min-width:140px">
-        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.3rem">
-          <span style="background:rgba(255,176,32,.15);color:#FFB020;font-size:10px;font-weight:800;padding:3px 9px;border-radius:12px;letter-spacing:.5px">🔥 חדש</span>
-          <span style="color:var(--text2);font-size:11px;font-weight:600">PYTHON · DATA ANALYSIS</span>
+        <div class="cta-row">
+          <a href="sql-algorithms.html" class="btn btn-primary">
+            התחילו ללמוד עכשיו
+            <span class="btn-arrow">←</span>
+          </a>
+          <a href="career-path.html" class="btn btn-ghost">
+            מסלול לימוד מומלץ
+            <span class="btn-arrow">←</span>
+          </a>
         </div>
-        <div style="font-size:1.5rem;font-weight:800;letter-spacing:-.3px;margin-bottom:.3rem">100 פקודות Pandas שכל אנליסט חייב להכיר</div>
-        <div style="color:var(--text2);font-size:14px;line-height:1.6">מטעינת קבצים, דרך פונקציות חלון ו-Pivot, ועד אופטימיזציית זיכרון — 100 פקודות מסודרות ב-14 קטגוריות, עם הסבר ודוגמת קוד לכל אחת. חיפוש חי וסינון לפי נושא.</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.4rem"><div style="background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:#00E5FF;padding:.7rem 1.2rem;border-radius:9px;font-weight:700;font-size:14px;text-align:center">פתח את המדריך ←</div></div>
-    </div>
-  </a>
 
-  <!-- 🐍 PYTHON COURSE — NEW FEATURE CARD -->
-  <a href="python-course.html" style="display:block;background:linear-gradient(135deg,rgba(69,132,182,.15),rgba(255,222,87,.08));border:1px solid rgba(255,222,87,.3);border-radius:14px;padding:1.4rem 1.6rem;text-decoration:none;color:var(--text);transition:all .15s;margin-top:.8rem" onmouseover="this.style.borderColor='rgba(255,222,87,.6)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,222,87,.3)';this.style.transform='translateY(0)'">
-    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <div style="font-size:3rem;line-height:1">🐍</div>
-      <div style="flex:1;min-width:140px">
-        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.3rem">
-          <span style="background:rgba(255,176,32,.15);color:#FFB020;font-size:10px;font-weight:800;padding:3px 9px;border-radius:12px;letter-spacing:.5px">🔥 חדש</span>
-          <span style="color:var(--text2);font-size:11px;font-weight:600">PYTHON · אינטראקטיבי</span>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num">370+</div>
+            <div class="stat-lbl">אתגרי SQL</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">11</div>
+            <div class="stat-lbl">פרקי לימוד</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">24K</div>
+            <div class="stat-lbl">שורות בסימולטור</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-lbl">חינמי</div>
+          </div>
         </div>
-        <div style="font-size:1.5rem;font-weight:800;letter-spacing:-.3px;margin-bottom:.3rem">פייתון בסיס — קורס פייתון מלא עם תרגול בדפדפן</div>
-        <div style="color:var(--text2);font-size:14px;line-height:1.6">11 מודולים, 34 נושאים, 170 תרגילי קוד שרצים בדפדפן (Pyodide). שני מסלולים: <b>לפי הסדר</b> או <b>בחירת נושאים</b>. שומר התקדמות אוטומטית.</div>
       </div>
-      <div style="background:rgba(69,132,182,.15);border:1px solid rgba(255,222,87,.4);color:#FFDE57;padding:.7rem 1.2rem;border-radius:9px;font-weight:700;font-size:14px">התחל ללמוד ←</div>
-    </div>
-  </a>
-  <a href="pandas-course.html" style="display:block;background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(0,229,160,.06));border:1px solid rgba(0,229,255,.35);border-radius:14px;padding:1.4rem 1.6rem;text-decoration:none;color:var(--text);transition:all .15s;margin-top:.8rem" onmouseover="this.style.borderColor='rgba(0,229,255,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(0,229,255,.35)';this.style.transform='translateY(0)'">
-    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <div style="font-size:3rem;line-height:1">📊</div>
-      <div style="flex:1;min-width:140px">
-        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.3rem">
-          <span style="background:rgba(0,229,255,.18);color:#00E5FF;font-size:.7rem;font-weight:800;padding:2px 8px;border-radius:6px;letter-spacing:.5px">חדש</span>
-          <span style="color:#8896AA;font-size:.85rem">10 מודולים · 150 תרגילים</span>
+
+      <!-- Hero right - photo only -->
+      <div class="hero-profile">
+        <div class="photo-wrap">
+          <div class="photo-glow"></div>
+          <div class="photo-orbit"></div>
+          <img src="eliran.png" alt="אלירן גרוסמן" class="photo">
         </div>
-        <div style="font-size:1.4rem;font-weight:800;margin-bottom:.2rem">קורס Pandas בעברית</div>
-        <div style="color:#8896AA;font-size:.95rem">DataFrame, groupby, merge, ניקוי נתונים — מסימולטור חי, 100% עברית</div>
       </div>
-      <div style="font-size:1.6rem;color:#00E5FF">←</div>
-    </div>
-  </a>
+    </section>
 
-  <a href="python-playground.html" style="display:block;background:linear-gradient(135deg,rgba(0,229,160,.08),rgba(0,229,255,.04));border:1px solid rgba(0,229,160,.3);border-radius:14px;padding:1.4rem 1.6rem;text-decoration:none;color:var(--text);transition:all .15s;margin-top:.8rem" onmouseover="this.style.borderColor='rgba(0,229,160,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(0,229,160,.3)';this.style.transform='translateY(0)'">
-    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <div style="font-size:3rem;line-height:1">🧪</div>
-      <div style="flex:1;min-width:140px">
-        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.3rem">
-          <span style="background:rgba(0,229,160,.18);color:#00E5A0;font-size:.7rem;font-weight:800;padding:2px 8px;border-radius:6px;letter-spacing:.5px">דמוי Colab</span>
-          <span style="color:#8896AA;font-size:.85rem">10 תבניות · 62 פונקציות בספריה</span>
+<!-- ABOUT SECTION -->
+    <section class="section about-section" id="about" aria-labelledby="about-title">
+      <div class="section-head">
+        <h2 class="section-title" id="about-title">קצת עליי</h2>
+        <span class="section-meta">ABOUT · קצת עליי</span>
+      </div>
+      <div class="about-card">
+        <div class="about-body">
+          <p class="about-text">היי, אני <strong>אלירן גרוסמן</strong>, אנליסט דאטה ומנהל צוות אנליסטים בחברת <strong>Partner Communications</strong>. במשך שנים ראיתי כמה קשה לאנשים בארץ להיכנס לעולם הדאטה — רוב החומרים באנגלית, הקורסים יקרים, והקפיצה לראיונות עבודה מבלבלת.</p>
+          <p class="about-vision"><strong>המטרה שלי פשוטה — להנגיש את עולם הדאטה בעברית, לכמה שיותר אנשים, ובחינם.</strong></p>
+          <p class="about-text">האתר הזה הוא בדיוק זה: מקום אחד שמרכז את כל מה שצריך כדי ללמוד SQL, Python ו-Pandas מהבסיס ועד לרמת ראיון, עם דוגמאות אמיתיות מהשטח ובשפה שכולנו מבינים.</p>
+          <div class="about-cta">
+            <a href="https://www.linkedin.com/in/eliran-grossman-17a84b245/" target="_blank" rel="noopener" class="sbtn li">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              צור קשר בלינקדאין
+            </a>
+            <a href="https://wa.me/972507514807" target="_blank" rel="noopener" class="sbtn wa">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
         </div>
-        <div style="font-size:1.4rem;font-weight:800;margin-bottom:.2rem">Python Playground</div>
-        <div style="color:#8896AA;font-size:.95rem">סביבת עבודה חופשית עם תבניות מוכנות וספריית פונקציות בעברית</div>
       </div>
-      <div style="font-size:1.6rem;color:#00E5A0">←</div>
-    </div>
-  </a>
+    </section>
 
-  <a href="quiz-python-100.html" style="display:block;background:linear-gradient(135deg,rgba(255,176,32,.08),rgba(255,64,96,.04));border:1px solid rgba(255,176,32,.3);border-radius:14px;padding:1.4rem 1.6rem;text-decoration:none;color:var(--text);transition:all .15s;margin-top:.8rem" onmouseover="this.style.borderColor='rgba(255,176,32,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,176,32,.3)';this.style.transform='translateY(0)'">
-    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
-      <div style="font-size:3rem;line-height:1">💯</div>
-      <div style="flex:1;min-width:140px">
-        <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.3rem">
-          <span style="background:rgba(255,176,32,.18);color:#FFB020;font-size:.7rem;font-weight:800;padding:2px 8px;border-radius:6px;letter-spacing:.5px">תרגול</span>
-          <span style="color:#8896AA;font-size:.85rem">קל · בינוני · קשה</span>
+    <!-- FEATURED: 370 CHALLENGES -->
+    <a href="sql-algorithms.html" class="featured">
+      <div class="featured-row">
+        <div class="featured-num">370</div>
+        <div class="featured-body">
+          <div class="featured-tag">חדש באתר · המאגר הגדול בעברית</div>
+          <div class="featured-title">אתגרי SQL מתקדמים — מבינוני עד מומחה</div>
+          <p class="featured-desc">המאגר הגדול ביותר בעברית של אתגרי SQL מהשטח — 370 שאלות מורכבות עם 8 טבלאות לכל אחת, סינון לפי תגיות, מעקב פתרון אישי ואפשרות לרנדומלי. כל מה שצריך לראיון או לתרגול אמיתי.</p>
         </div>
-        <div style="font-size:1.4rem;font-weight:800;margin-bottom:.2rem">100 תרגילי פייתון</div>
-        <div style="color:#8896AA;font-size:.95rem">קוד חי בסימולטור — מיון לפי רמת קושי, פתרון לכל תרגיל</div>
+        <div class="featured-cta">
+          פתח את האתגרים
+          <span class="featured-arrow">←</span>
+        </div>
       </div>
-      <div style="font-size:1.6rem;color:#FFB020">←</div>
-    </div>
-  </a>
+    </a>
 
+    <!-- LEVELS -->
+    <section class="section" id="practice">
+      <div class="section-head">
+        <h2 class="section-title">שאלות אמריקאיות · בחר רמה</h2>
+        <span class="section-meta">QUIZ · 4 LEVELS</span>
+      </div>
+      <div class="levels">
+        <a href="quiz-beginner.html" class="lvl">
+          <div class="lvl-num">LEVEL 01</div>
+          <div class="lvl-title">מתחילים</div>
+          <div class="lvl-count">150</div>
+          <div class="lvl-meta">SELECT · WHERE · JOIN</div>
+        </a>
+        <a href="quiz-medium.html" class="lvl">
+          <div class="lvl-num">LEVEL 02</div>
+          <div class="lvl-title">בינוני</div>
+          <div class="lvl-count">80</div>
+          <div class="lvl-meta">אגרגציה · מחרוזות</div>
+        </a>
+        <a href="quiz-advanced2.html" class="lvl">
+          <div class="lvl-num">LEVEL 03</div>
+          <div class="lvl-title">מתקדם</div>
+          <div class="lvl-count">60</div>
+          <div class="lvl-meta">Subqueries · Window</div>
+        </a>
+        <a href="quiz-expert.html" class="lvl">
+          <div class="lvl-num">LEVEL 04</div>
+          <div class="lvl-title">מומחה</div>
+          <div class="lvl-count">20</div>
+          <div class="lvl-meta">בחירת שאילתה</div>
+        </a>
+      </div>
+    </section>
 
-      <div class="lc-title">מתחילים</div>
-      <div class="lc-num">150</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">SELECT · WHERE · GROUP BY · JOINs</div>
-    </a>
-    <a href="quiz-medium.html" class="lcard lc2">
-      <div class="lcard-top">
-        <div class="lc-icon">📗</div>
-        <div class="lc-badge">LEVEL 2</div>
+    <!-- SIMULATORS & TOOLS -->
+    <section class="section" id="tools">
+      <div class="section-head">
+        <h2 class="section-title">סימולטורים וכלים</h2>
+        <span class="section-meta">INTERACTIVE</span>
       </div>
-      <div class="lc-title">בינוני</div>
-      <div class="lc-num">80</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">מחרוזות · אגרגציה · JOINs מתקדם</div>
-    </a>
-    <a href="quiz-advanced2.html" class="lcard lc3">
-      <div class="lcard-top">
-        <div class="lc-icon">🧠</div>
-        <div class="lc-badge">LEVEL 3</div>
+      <div class="grid">
+        <a href="simulator.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">SQL</div>
+          <div class="card-title">סימולטור SQL</div>
+          <div class="card-desc">כתוב והרץ שאילתות בדפדפן, 24K שורות נתונים אמיתיים</div>
+        </a>
+        <a href="pbi-simulator.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">POWER BI</div>
+          <div class="card-title">סימולטור Power BI</div>
+          <div class="card-desc">תרגול DAX, בניית דשבורדים ומדדים אינטראקטיביים</div>
+        </a>
+        <a href="tirgul-makif.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">SQL · 135 שאלות</div>
+          <div class="card-title">תרגול מקיף</div>
+          <div class="card-desc">135 שאלות SQL אינטראקטיביות מכל הרמות, סדורות לפי נושא</div>
+        </a>
+        <a href="python-playground.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">PYTHON</div>
+          <div class="card-title">Python Playground</div>
+          <div class="card-desc">סביבת עבודה דמוית Colab עם תבניות מוכנות וספריית פונקציות</div>
+        </a>
       </div>
-      <div class="lc-title">מתקדם</div>
-      <div class="lc-num">60</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">Subqueries · Window Functions</div>
-    </a>
-    <a href="quiz-expert.html" class="lcard lc4 feat">
-      <div class="lc-hot">🔥 הכי קשה</div>
-      <div class="lcard-top">
-        <div class="lc-icon">🏆</div>
-        <div class="lc-badge">LEVEL 4</div>
+    </section>
+
+    <!-- COURSES -->
+    <section class="section" id="courses">
+      <div class="section-head">
+        <h2 class="section-title">קורסים מלאים</h2>
+        <span class="section-meta">COURSES · FREE</span>
       </div>
-      <div class="lc-title">מומחה</div>
-      <div class="lc-num">20</div>
-      <div class="lc-sub">שאלות</div>
-      <div class="lc-topics">בחר את השאילתה הנכונה</div>
-    </a>
+      <div class="grid">
+        <a href="course.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">SQL · 11 פרקים</div>
+          <div class="card-title">קורס SQL מלא</div>
+          <div class="card-desc">מ-SELECT עד Window Functions, עם תרגולים ודוגמאות חיות בדפדפן</div>
+        </a>
+        <a href="python-course.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">PYTHON · 11 מודולים</div>
+          <div class="card-title">פייתון בסיס</div>
+          <div class="card-desc">170 תרגילי קוד שרצים בדפדפן עם Pyodide, שני מסלולי לימוד</div>
+        </a>
+        <a href="pandas-course.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">PANDAS · 10 מודולים</div>
+          <div class="card-title">קורס Pandas</div>
+          <div class="card-desc">DataFrame, groupby, merge, ניקוי נתונים עם 150 תרגילים</div>
+        </a>
+        <a href="pandas-100.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">REFERENCE</div>
+          <div class="card-title">100 פקודות Pandas</div>
+          <div class="card-desc">המדריך המלא לפקודות Pandas שכל אנליסט חייב להכיר</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- INTERVIEW PREP -->
+    <section class="section" id="interview" aria-labelledby="interview-title">
+      <div class="section-head">
+        <h2 class="section-title" id="interview-title">הכנה לראיונות עבודה</h2>
+        <span class="section-meta">INTERVIEW PREP</span>
+      </div>
+      <div class="grid">
+        <a href="career-path.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">CAREER</div>
+          <div class="card-title">מסלול לימוד מומלץ</div>
+          <div class="card-desc">סדר הלימוד האופטימלי לאנליסטים בתחילת דרכם</div>
+        </a>
+        <a href="interview-telecom.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">CASE STUDY</div>
+          <div class="card-title">ראיון Telecom</div>
+          <div class="card-desc">סימולציית ראיון על Customer Churn עם נתוני טלקום אמיתיים</div>
+        </a>
+        <a href="interview-insurance.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">CASE STUDY</div>
+          <div class="card-title">ראיון Insurance</div>
+          <div class="card-desc">סימולציית ראיון על דמי ניהול עם נתוני ביטוח אמיתיים</div>
+        </a>
+        <a href="daily.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">DAILY</div>
+          <div class="card-title">אתגר יומי</div>
+          <div class="card-desc">שאלת SQL חדשה בכל יום לשמירה על הכושר ותרגול שוטף</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- MORE RESOURCES -->
+    <section class="section" id="resources" aria-labelledby="resources-title">
+      <div class="section-head">
+        <h2 class="section-title" id="resources-title">משאבים נוספים</h2>
+        <span class="section-meta">RESOURCES</span>
+      </div>
+      <div class="grid">
+        <a href="reference.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">REFERENCE</div>
+          <div class="card-title">מאגר פונקציות SQL</div>
+          <div class="card-desc">כל הפונקציות של SQL במקום אחד עם דוגמאות שימוש</div>
+        </a>
+        <a href="quiz-python-100.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">PYTHON</div>
+          <div class="card-title">100 תרגילי Python</div>
+          <div class="card-desc">קוד חי בסימולטור, מיון לפי רמת קושי, פתרון לכל תרגיל</div>
+        </a>
+        <a href="practice.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">PRACTICE</div>
+          <div class="card-title">תרגולים מודרכים</div>
+          <div class="card-desc">תרגילים מסודרים עם הסבר וצעד-אחר-צעד</div>
+        </a>
+        <a href="videos.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">VIDEO</div>
+          <div class="card-title">הדרכות MySQL</div>
+          <div class="card-desc">סרטונים מצולמים על MySQL בעברית</div>
+        </a>
+        <a href="videos2.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">VIDEO</div>
+          <div class="card-title">הדרכות SQL Server</div>
+          <div class="card-desc">סרטונים מצולמים על SQL Server בעברית</div>
+        </a>
+        <a href="setup.html" class="card">
+          <span class="card-arr">←</span>
+          <div class="card-tag">SETUP</div>
+          <div class="card-title">מדריך התקנה</div>
+          <div class="card-desc">איך להתקין MySQL ו-SQL Server על המחשב שלך</div>
+        </a>
+      </div>
+    </section>
+
   </div>
 
-  <div class="cards-label" style="margin-top:1.5rem">כלים נוספים</div>
-  <div class="cards">
-    <a href="tirgul-makif.html" class="card feat">
-      <span class="card-ico">🎯</span>
-      <span class="card-title">תרגול מקיף — 135 שאלות SQL אינטראקטיביות</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="simulator.html" class="card feat">
-      <span class="card-ico">⚡</span>
-      <span class="card-title">סימולטור SQL</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="pbi-simulator.html" class="card feat">
-      <span class="card-ico">📊</span>
-      <span class="card-title">סימולטור Power BI — DAX ודשבורדים</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="interview-telecom.html" class="card">
-      <span class="card-ico">🎯</span>
-      <span class="card-title">תרגול ראיון — Customer Churn (טלקום)</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="interview-insurance.html" class="card">
-      <span class="card-ico">🏛️</span>
-      <span class="card-title">תרגול ראיון — דמי ניהול (ביטוח)</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="course.html" class="card">
-      <span class="card-ico">📚</span>
-      <span class="card-title">חומר לימוד</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="practice.html" class="card">
-      <span class="card-ico">✏️</span>
-      <span class="card-title">תרגולים</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="quiz-beginner.html" class="card">
-      <span class="card-ico">🌱</span>
-      <span class="card-title">שאלות אמריקאיות — מתחילים</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="quiz.html" class="card">
-      <span class="card-ico">🧠</span>
-      <span class="card-title">שאלות אמריקאיות — מתקדם</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="reference.html" class="card">
-      <span class="card-ico">📘</span>
-      <span class="card-title">מאגר פונקציות</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="videos.html" class="card">
-      <span class="card-ico">🎬</span>
-      <span class="card-title">הדרכות מצולמות — MySQL</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="videos2.html" class="card">
-      <span class="card-ico">🖥️</span>
-      <span class="card-title">הדרכות מצולמות — SQL Server</span>
-      <span class="card-arr">←</span>
-    </a>
-    <a href="setup.html" class="card">
-      <span class="card-ico">🛠️</span>
-      <span class="card-title">מדריך התקנה</span>
-      <span class="card-arr">←</span>
-    </a>
-  </div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-info">
+          <div class="footer-text">
+            <strong>אלירן גרוסמן</strong> · נבנה באהבה כדי להנגיש דאטה בעברית
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
 
 </main>
 
 <script>
-function toggleMob(){document.getElementById('mobNav').classList.toggle('open');}
-document.addEventListener('click',e=>{
-  const m=document.getElementById('mobNav');
-  if(m.classList.contains('open')&&!e.target.closest('#mobNav')&&!e.target.closest('.hbg'))
-    m.classList.remove('open');
+const mobNav = document.getElementById('mobNav');
+const hbg = document.querySelector('.hbg');
+
+function toggleMob(){
+  const isOpen = mobNav.classList.toggle('open');
+  hbg.classList.toggle('open', isOpen);
+  hbg.setAttribute('aria-expanded', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+function closeMob(){
+  mobNav.classList.remove('open');
+  hbg.classList.remove('open');
+  hbg.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+// Close on link click in mobile menu
+mobNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+
+// Close on outside click
+document.addEventListener('click', e => {
+  if (mobNav.classList.contains('open') && !e.target.closest('#mobNav') && !e.target.closest('.hbg'))
+    closeMob();
+});
+
+// Close on Escape key (a11y)
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && mobNav.classList.contains('open')) closeMob();
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 });
 </script>
+
 </body>
 </html>
