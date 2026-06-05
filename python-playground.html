@@ -117,6 +117,55 @@
 </script>
 
 <style>
+
+/* ========== HARD VIEWPORT LOCK (mobile critical) ========== */
+@media(max-width:1099px){
+  /* Nuclear option - nothing escapes viewport */
+  html {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    position: relative;
+  }
+  body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    position: relative;
+  }
+
+  /* Every container locked */
+  .layout, .main, .sidebar, .dashboard, .tabs, .toolbar,
+  header.header, .header-inner, .dash-row, .ex-head,
+  .exercise-panel, .editor-wrap, .output-wrap, .test-results,
+  .analytics-panel, .mobile-tabs, .qg-wrap, .question-grid {
+    max-width: 100% !important;
+    overflow-x: hidden;
+    box-sizing: border-box !important;
+  }
+
+  /* Code elements - inner scroll only */
+  pre, code, #codeEditor, .output-content, .tr-diff,
+  .sol-modal-code {
+    max-width: 100%;
+    overflow-x: auto;
+    word-break: break-word;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* No element wider than parent */
+  *, *::before, *::after {
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Exception: drawer/modals can use full viewport */
+  .drawer-overlay, .lvl-modal, .sol-modal, .toast, .modal {
+    max-width: 100vw !important;
+  }
+}
+
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
 
 :root{
@@ -481,9 +530,12 @@ body.pandas-mode .qg-stats{color:var(--purple);background:var(--purple-soft)}
   z-index: 50;
   background: var(--bg-1);
   border-bottom: 1px solid var(--line);
-  margin: -8px -12px 12px;
+  margin: 0 0 12px;
   padding: 4px;
   gap: 2px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 .mobile-tab {
   flex: 1;
@@ -510,9 +562,9 @@ body.pandas-mode .qg-stats{color:var(--purple);background:var(--purple-soft)}
 /* Mobile content show/hide via data attribute */
 @media(max-width:1099px){
   /* CRITICAL: Zero horizontal scroll */
-  html, body { overflow-x: hidden !important; max-width: 100vw; }
+  html, body { overflow-x: hidden !important; max-width: 100%; }
   .layout, .main, .sidebar, .dashboard, .header, .tabs, .toolbar {
-    max-width: 100vw;
+    max-width: 100%;
     overflow-x: hidden;
   }
   * { max-width: 100%; box-sizing: border-box; }
@@ -529,23 +581,23 @@ body.pandas-mode .qg-stats{color:var(--purple);background:var(--purple-soft)}
   /* Show mobile tabs */
   .mobile-tabs { display: flex; }
 
-  /* Hide panels not in active tab */
-  .main[data-tab="question"] .editor-wrap,
-  .main[data-tab="question"] .output-wrap,
-  .main[data-tab="question"] .test-results,
-  .main[data-tab="question"] .analytics-panel { display: none !important; }
+  /* CHALLENGE tab: show instructions + editor (unified) */
+  .main[data-tab="challenge"] .output-wrap,
+  .main[data-tab="challenge"] .test-results,
+  .main[data-tab="challenge"] .analytics-panel { display: none !important; }
 
-  .main[data-tab="code"] .exercise-panel,
-  .main[data-tab="code"] .output-wrap,
-  .main[data-tab="code"] .test-results,
-  .main[data-tab="code"] .analytics-panel { display: none !important; }
-
+  /* RESULTS tab: show only output/tests */
   .main[data-tab="results"] .exercise-panel,
   .main[data-tab="results"] .editor-wrap { display: none !important; }
 
-  /* Make code editor full-screen height on Code tab */
-  .main[data-tab="code"] #codeEditor {
-    min-height: 50vh;
+  /* Editor sized comfortably below instructions in challenge tab */
+  .main[data-tab="challenge"] #codeEditor {
+    min-height: 280px;
+  }
+
+  /* Spacing between instructions and editor in unified view */
+  .main[data-tab="challenge"] .editor-wrap {
+    margin-top: 12px;
   }
 
   /* Question grid - compact (50 visible by default which is already paginated) */
@@ -566,115 +618,54 @@ body.pandas-mode .qg-stats{color:var(--purple);background:var(--purple-soft)}
 }
 
 
-/* ========== FINAL MOBILE QA FIXES ========== */
-@media(max-width:1099px){
-  /* HARD width lock - nothing escapes */
-  html, body {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-    width: 100% !important;
-  }
-  /* Every element constrained */
-  body * {
-    max-width: 100% !important;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-  /* Code blocks - allow horizontal scroll INSIDE only */
-  pre, code, .editor-wrap, #codeEditor, .output-content, .tr-diff {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-  /* Editor textarea must stay inside */
-  #codeEditor {
-    width: 100% !important;
-    box-sizing: border-box;
-    white-space: pre;
-    word-break: normal !important;
-  }
 
-  /* Touch targets - min 44px */
-  .tab, .tb-btn, .mobile-tab, .qg-cell, .sb-filter, .kbd-key {
+/* ========== MOBILE SAFE FIXES (minimal, no fixed positioning) ========== */
+@media(max-width:1099px){
+  /* Width lock - prevent horizontal scroll */
+  html, body { overflow-x: hidden; max-width: 100%; }
+
+  /* Touch targets min 44px */
+  .tab, .tb-btn, .mobile-tab, .qg-cell, .sb-filter {
     min-height: 44px;
   }
-  .mobile-tab { font-size: 13px; }
 
-  /* Strong tactile feedback */
+  /* Tactile feedback */
   .tab:active, .tb-btn:active, .mobile-tab:active,
-  .qg-cell:active, .sb-filter:active, .kbd-key:active,
-  .share-btn:active, .ap-action:active, .lvl-btn:active {
-    transform: scale(0.94);
+  .qg-cell:active, .sb-filter:active {
+    transform: scale(0.96);
     transition: transform .05s;
   }
 
-  /* Mobile-tabs - cleaner sticky design */
+  /* Code blocks - inner scroll only */
+  pre, code, #codeEditor {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile-tabs - clean sticky design (NOT fixed) */
   .mobile-tabs {
     position: sticky;
     top: 0;
-    z-index: 90;
+    z-index: 50;
     background: var(--bg-1);
-    margin: 0 -12px 10px;
-    padding: 6px;
     border-bottom: 1px solid var(--line);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  .mobile-tab {
-    padding: 11px 4px;
-    font-weight: 700;
-    position: relative;
+    padding: 5px;
+    gap: 2px;
   }
   .mobile-tab.active {
     background: var(--acc-soft);
     color: var(--acc);
-    box-shadow: 0 0 0 1px rgba(0,212,200,0.3);
-  }
-  .mobile-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -7px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30%;
-    height: 2px;
-    background: var(--acc);
-    border-radius: 2px;
   }
 
-  /* Pulse on results tab when new results arrive */
+  /* Pulse on new results */
   .mobile-tab[data-mtab="results"].has-new {
     animation: pulseGlow 1.2s infinite;
   }
   @keyframes pulseGlow {
     0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,160,0.5); }
-    50% { box-shadow: 0 0 0 6px rgba(0,229,160,0); }
+    50% { box-shadow: 0 0 0 4px rgba(0,229,160,0); }
   }
-
-  /* Keyboard-safe: ensure sticky bottom bar stays visible */
-  .toolbar {
-    position: fixed !important;
-    bottom: env(safe-area-inset-bottom, 0);
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: var(--bg-1);
-    border-top: 1px solid var(--line);
-    padding: 6px 8px;
-    padding-bottom: calc(6px + env(safe-area-inset-bottom, 0));
-  }
-  /* Main needs padding-bottom so toolbar doesn't cover content */
-  .main {
-    padding-bottom: 80px !important;
-  }
-}
-
-/* Reduce dashboard padding on small phones */
-@media(max-width:480px){
-  .dashboard { padding: 0 10px; }
-  .dash-stat { padding: 8px 10px; }
-  .dash-stat-val { font-size: 16px; }
-  .dash-stat-lbl { font-size: 10px; }
-  .mobile-tab { font-size: 12px; padding: 10px 2px; }
 }
 
 /* ========== LEETCODE-STYLE DESKTOP IDE (>1100px) ========== */
@@ -1147,12 +1138,11 @@ button,a,.tb-btn,.tab,.sb-item{min-height:36px}
     <div id="exerciseList"></div>
   </aside>
 
-  <main class="main" data-tab="question">
-    <!-- Mobile-only tab switcher (3 tabs: Question / Code / Results) -->
-    <div class="mobile-tabs" role="tablist" aria-label="עבור בין שאלה, קוד ותוצאות">
-      <button class="mobile-tab active" data-mtab="question" onclick="switchMobileTab('question')">📋 השאלה</button>
-      <button class="mobile-tab" data-mtab="code" onclick="switchMobileTab('code')">💻 הקוד שלי</button>
-      <button class="mobile-tab" data-mtab="results" onclick="switchMobileTab('results')">✓ תוצאות</button>
+  <main class="main" data-tab="challenge">
+    <!-- Mobile-only tab switcher (2 tabs: Challenge+Code unified / Results) -->
+    <div class="mobile-tabs" role="tablist" aria-label="עבור בין אתגר לתוצאות">
+      <button class="mobile-tab active" data-mtab="challenge" onclick="switchMobileTab('challenge')">📋 אתגר ותרגול</button>
+      <button class="mobile-tab" data-mtab="results" onclick="switchMobileTab('results')">✓ קונסול ותוצאות</button>
     </div>
 
     <div class="exercise-panel" id="exercisePanel">
