@@ -175,7 +175,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Heebo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
 
 <style>
 /* ========== RESET & TOKENS ========== */
@@ -379,7 +379,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 .card::before{content:'';position:absolute;top:0;right:0;width:40px;height:1px;background:var(--acc);opacity:.4;transition:width .3s,opacity .3s}
 .card:hover{transform:translateY(-2px);background:var(--bg-2);border-color:var(--line-strong)}
 .card:hover::before{width:100%;opacity:.8}
-.card-tag{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:var(--fg-3);margin-bottom:14px}
+.card-new{position:absolute;top:14px;left:16px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--bg-0);background:var(--acc);border-radius:99px;padding:3px 9px;line-height:1.5}
+    .card-tag{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:var(--fg-3);margin-bottom:14px}
 .card-title{font-size:15.5px;font-weight:600;color:var(--fg-1);line-height:1.4;margin-bottom:8px;letter-spacing:-.2px}
 .card-desc{font-size:13px;color:var(--fg-2);line-height:1.6}
 .card-arr{position:absolute;top:22px;left:24px;color:var(--acc);font-size:14px;opacity:.5;transition:all .25s}
@@ -578,7 +579,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
 <div class="mob-nav" id="mobNav">
   <a href="sql-algorithms.html">370 אתגרי SQL</a>
   <a href="course.html">קורסים</a>
-  <a href="simulator.html">סימולטור SQL</a>
+  <a href="pbi.html">Power BI</a>
+      <a href="simulator.html">סימולטור SQL</a>
   <a href="pbi-simulator.html">סימולטור Power BI</a>
   <a href="tirgul-makif.html">תרגול מקיף</a>
   <a href="practice.html">תרגולים</a>
@@ -793,6 +795,20 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(r
           <div class="card-title">100 פקודות Pandas</div>
           <div class="card-desc">המדריך המלא לפקודות Pandas שכל אנליסט חייב להכיר</div>
         </a>
+        <a href="pbi.html" class="card">
+          <span class="card-arr">←</span>
+          <span class="card-new">חדש</span>
+          <div class="card-tag">POWER BI · 4 שיעורים</div>
+          <div class="card-title">קורס Power BI מלא</div>
+          <div class="card-desc">167 נושאים: מודלינג, Power Query, M ו-DAX, עם רפרנס של 122 פונקציות</div>
+        </a>
+        <a href="pbi-quiz.html" class="card">
+          <span class="card-arr">←</span>
+          <span class="card-new">חדש</span>
+          <div class="card-tag">POWER BI · QUIZ</div>
+          <div class="card-title">בוחן Power BI · 369 שאלות</div>
+          <div class="card-desc">שאלות אמריקאיות עם הסבר לכל תשובה, סינון לפי שיעור ומצב מבחן עם ציון</div>
+        </a>
       </div>
     </section>
 
@@ -939,5 +955,17 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 </script>
 
+
+<style>
+/* --- QA: finger-sized hit areas in the header (WCAG 2.5.5). These were
+   already under 44px before the Power BI cards were added. --- */
+@media (pointer:coarse), (max-width:900px){
+  .logo{display:inline-flex;align-items:center;min-height:44px}
+  .lang a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding-inline:10px}
+  .hbg{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+  .skip{min-height:44px;display:inline-flex;align-items:center}
+  .mob-nav a{display:flex;align-items:center;min-height:44px}
+}
+</style>
 </body>
 </html>
