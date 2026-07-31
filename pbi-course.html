@@ -893,6 +893,19 @@ footer.site a{color:var(--fg-3)}
 .drawer-links a{min-height:40px;display:inline-flex;align-items:center}
 .pb-note{align-self:center;font-size:.78rem;color:var(--fg-3);border:1px dashed var(--line);
   border-radius:999px;padding:4px 10px;white-space:nowrap}
+
+/* --- header rail: on desktop it wraps instead of being clipped by a hidden scroller,
+       on phones it stays a scroller but with a visible fade affordance --- */
+@media(min-width:701px){
+  header.site{height:auto;min-height:var(--header-h)}
+  header.site .hd{flex-wrap:wrap;height:auto;min-height:var(--header-h);padding-block:7px;row-gap:7px}
+  .lesson-rail{flex-wrap:wrap;overflow:visible;row-gap:6px}
+}
+@media(max-width:700px){
+  .lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent)}
+}
 </style>
 </head>
 <body>

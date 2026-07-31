@@ -134,6 +134,9 @@ h2.sec::after{content:"";flex:1 1 auto;height:1px;background:var(--line-soft)}
 .cta-main:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(242,200,17,.24);filter:brightness(1.05)}
 .cta-main:active{transform:translateY(0)}
 .cta-ic{width:24px;height:24px;flex:0 0 auto}
+.cta-alt{background:var(--acc);border-color:var(--acc);color:#04120f}
+.cta-alt:hover{box-shadow:0 12px 30px rgba(0,212,200,.24)}
+[id="practice"]{scroll-margin-top:calc(var(--header-h) + 14px)}
 .cta-t{display:flex;flex-direction:column;line-height:1.25}
 .cta-t b{font-weight:600;font-size:.76rem;opacity:.72}
 
@@ -209,11 +212,18 @@ footer.site a:hover{color:var(--acc)}
                 fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="cta-t">התחלת בוחן<b>693 שאלות · תשובה והסבר אחרי כל שאלה</b></span>
       </a>
+
+      <a class="cta-main cta-alt" href="#practice">
+        <svg class="cta-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 20.5h16M6.5 15.2l9.3-9.3a1.7 1.7 0 0 1 2.4 0l.9.9a1.7 1.7 0 0 1 0 2.4l-9.3 9.3-4 .7z"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="cta-t">מטלות תרגול<b>53 תרגילים · בחרו מטלה, הורידו את הדאטה והתחילו</b></span>
+      </a>
     </div>
 
     <div class="stats">
       <span class="stat"><b>4</b> שיעורים</span>
-      <span class="stat"><b>167</b> נושאים</span>
+      <span class="stat"><b>195</b> נושאים</span>
       <span class="stat"><b>693</b> שאלות בבנק המרוכז</span>
       <span class="stat"><b>122</b> פונקציות DAX</span>
     </div>
@@ -225,10 +235,10 @@ footer.site a:hover{color:var(--acc)}
     <div class="card-wrap"><a class="card" href="pbi-course.html">
       <div class="card-top"><span class="card-n">1</span><h3>Power BI בסיס</h3></div>
       <p>מעולם ה-BI ועד בניית דוח מעוצב: האקוסיסטם, טעינת נתונים, ויזואלים, עיצוב ופרסום.</p>
-      <div class="meta"><span class="chip">35 נושאים</span><span class="chip">44 שאלות</span><span class="chip">תרגיל בית</span></div>
+      <div class="meta"><span class="chip">63 נושאים</span><span class="chip">30 שאלות</span><span class="chip">שתי מטלות סיכום</span></div>
       <span class="go">לשיעור <span aria-hidden="true">←</span></span>
     </a>
-      <a class="quiz-link" href="pbi-quiz.html#lesson=1"><span aria-hidden="true">?</span> בוחן השיעור · 44 שאלות</a>
+      <a class="quiz-link" href="pbi-quiz.html#lesson=1"><span aria-hidden="true">?</span> בוחן השיעור · 30 שאלות</a>
     </div>
 
     <div class="card-wrap"><a class="card" href="pbi-course-2.html">
@@ -260,8 +270,24 @@ footer.site a:hover{color:var(--acc)}
 
   </div>
 
-  <h2 class="sec">כלים לתרגול ולעבודה</h2>
+  <h2 class="sec" id="practice" tabindex="-1">תרגול מעשי וכלי עבודה</h2>
   <div class="grid">
+
+    <a class="card tool" href="pbi-adventureworks.html">
+      <div class="card-top"><span class="card-n">✎</span><h3>מטלת סיכום · AdventureWorks</h3></div>
+      <p>דשבורד מכירות שלם מאפס: 13 מדדי DAX (כולל RANK, WINDOW, OFFSET ו-INDEX), ארבעה קארדים, ארבעה גרפים
+         ורמזור מדינות. 25 תרגילים, כל אחד בדף נפרד עם פתרון מלא וקובץ הדאטה להורדה.</p>
+      <div class="meta"><span class="chip">25 תרגילים</span><span class="chip">פתרון לכל תרגיל</span><span class="chip">דאטה להורדה</span></div>
+      <span class="go">למטלה <span aria-hidden="true">←</span></span>
+    </a>
+
+    <a class="card tool" href="pbi-course.html#p31">
+      <div class="card-top"><span class="card-n">✎</span><h3>מטלת סיכום · NBA</h3></div>
+      <p>מודל כוכב של ליגת NBA: 14 מדדים כולל שלוש פונקציות חלון, שני עמודי דשבורד ועיצוב מותנה בשתי טכניקות.
+         28 תרגילים בתוך שיעור 1, כל אחד בדף נפרד עם פתרון מלא.</p>
+      <div class="meta"><span class="chip">28 תרגילים</span><span class="chip">פתרון לכל תרגיל</span><span class="chip">דאטה להורדה</span></div>
+      <span class="go">למטלה <span aria-hidden="true">←</span></span>
+    </a>
 
     <a class="card tool" href="pbi-quiz.html">
       <div class="card-top"><span class="card-n">?</span><h3>בנק השאלות המרוכז</h3></div>

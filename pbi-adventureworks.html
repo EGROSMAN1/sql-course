@@ -912,6 +912,19 @@ button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:
 .lr-x:hover b{color:var(--pbi)}
 @media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
 
+
+/* --- header rail: on desktop it wraps instead of being clipped by a hidden scroller,
+       on phones it stays a scroller but with a visible fade affordance --- */
+@media(min-width:701px){
+  header.site{height:auto;min-height:var(--header-h)}
+  header.site .hd{flex-wrap:wrap;height:auto;min-height:var(--header-h);padding-block:7px;row-gap:7px}
+  .lesson-rail{flex-wrap:wrap;overflow:visible;row-gap:6px}
+}
+@media(max-width:700px){
+  .lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent)}
+}
 </style>
 </head>
 <body>
