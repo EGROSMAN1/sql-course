@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>עדכון יוני 2026 — פונקציות DAX מוגדרות משתמש | קורס Power BI בעברית</title>
+<meta name="description" content="שיעור מלא בעברית על עדכון Power BI של יוני 2026: הרציונל העסקי, פונקציות מוגדרות משתמש ב-DAX, מערכת הטיפוסים, val מול expr, באגים ידועים ודרכי עקיפה, DAX Query View והתאמה למובייל.">
+<meta property="og:title" content="עדכון יוני 2026 — פונקציות DAX מוגדרות משתמש | קורס Power BI בעברית">
+<meta property="og:description" content="שיעור מלא בעברית על עדכון Power BI של יוני 2026: הרציונל העסקי, פונקציות מוגדרות משתמש ב-DAX, מערכת הטיפוסים, val מול expr, באגים ידועים ודרכי עקיפה, DAX Query View והתאמה למובייל.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Heebo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo','Segoe UI','Arial Hebrew',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:right;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:right}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (איסוף→ארגון→ניתוח→הצגה / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:right;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+table.cmp caption{text-align:right;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:right;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:right;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:1.6rem;color:var(--pbi)}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code-cap{font-size:.86rem;color:var(--fg-3);margin:18px 0 -10px;line-height:1.6}
+.code-wrap{margin:18px 0;max-width:100%}
+.qnav-b-wrap{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+/* 63 topics is too long for a flat list — chapters fold */
+.toc-chap,.lt-chap{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;min-height:40px}
+.toc-chap::after,.lt-chap::after{content:"\25be";font-size:.8rem;opacity:.65;transition:transform .18s;flex:0 0 auto}
+.toc-chap.is-shut::after,.lt-chap.is-shut::after{transform:rotate(90deg)}
+.toc-chap:hover,.lt-chap:hover{color:var(--acc)}
+.toc-group[hidden],.lt-items[hidden]{display:none}
+.toc-chap .cnt,.lt-chap .cnt{font-family:var(--mono);font-size:.62rem;color:var(--fg-4);margin-inline-start:auto;margin-inline-end:6px}
+/* one-tap access to the exercises from anywhere */
+.qjump{display:flex;flex-wrap:wrap;gap:6px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.qjump-t{width:100%;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--acc);margin:0 0 3px}
+.qjump button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:999px;padding:7px 12px;font-family:var(--font);font-size:.78rem;font-weight:600;min-height:38px}
+.qjump button:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.qjump button.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lt-jump{margin:16px 0 10px;border:1px solid var(--line);border-radius:var(--r)}
+/* finger-sized hit area for inline links, without moving the layout */
+.ln-home a,.bullets li a,footer a,.next-cta a,.drawer-links a,.lesson-jump a{position:relative}
+.ln-home a::after,.bullets li a::after,footer a::after,.next-cta a::after,.lesson-jump a::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:44px;transform:translateY(-50%);pointer-events:auto}
+.drawer-links a{min-height:40px;display:inline-flex;align-items:center}
+/* code snippets inside a question, with their own copy button */
+.q-code-wrap{display:block;position:relative;margin:12px 0 2px}
+.q-code{display:block;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;padding:13px 14px;font-family:var(--mono);font-size:.83rem;line-height:1.75;color:var(--fg-1);direction:ltr;text-align:left;overflow-x:auto;white-space:normal}
+.qc-copy{position:absolute;top:6px;left:6px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-3);border-radius:8px;padding:5px 9px;font-family:var(--font);font-size:.72rem;font-weight:600;min-height:32px;line-height:1}
+.qc-copy:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.qc-copy.is-done{border-color:rgba(74,222,128,.5);color:var(--ok);background:rgba(74,222,128,.12)}
+.q-code-wrap:not(:hover) .qc-t{display:none}
+.qc-copy.is-done .qc-t{display:inline}
+@media(pointer:coarse){.qc-t{display:none!important}.qc-copy.is-done .qc-t{display:inline!important}}
+@media(max-width:560px){.q-code{font-size:.78rem;padding:12px 11px}}
+/* grid items default to min-width:auto, so a wide table can blow the track out — pin them */
+.tasks{grid-template-columns:minmax(0,1fr)}
+.tasks>.task,.grid>*{min-width:0}
+.code-cap + .code-wrap{margin-top:10px}
+.code-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-2);
+  border:1px solid var(--line);border-bottom:none;border-radius:var(--r) var(--r) 0 0;padding:6px 8px 6px 12px}
+.code-lang{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--fg-4);
+  unicode-bidi:isolate;flex:0 0 auto}
+.code-copy{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:32px;
+  background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:8px;
+  padding:5px 11px;font-family:var(--font);font-size:.78rem;font-weight:600;line-height:1;
+  transition:border-color .15s,color .15s,background .15s}
+.code-copy:hover{border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-2)}
+.code-copy:active{transform:scale(.97)}
+.code-copy .cc-ic{width:15px;height:15px;flex:0 0 auto}
+.code-copy .ic-done{display:none}
+.code-copy.is-done{border-color:rgba(74,222,128,.45);color:var(--ok);background:rgba(74,222,128,.10)}
+.code-copy.is-done .ic-copy{display:none}
+.code-copy.is-done .ic-done{display:block}
+.code-copy.is-fail{border-color:rgba(248,113,113,.45);color:var(--bad);background:rgba(248,113,113,.10)}
+.code-wrap .code{margin:0;border-radius:0 0 var(--r) var(--r)}
+@media(max-width:560px){
+  .code-bar{padding:6px 8px}
+  .code-copy{font-size:.76rem;padding:5px 10px}
+  .code-lang{font-size:.64rem;letter-spacing:.1em}
+  .code-wrap .code{padding:14px 14px;font-size:.82rem}
+}
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:.92rem;color:var(--fg-2);margin-bottom:12px}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:right;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:right;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:right;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* בטלפון הכותרת מצטמצמת לסרגל השיעורים בלבד — עדיין זמין תמיד */
+  :root{--header-h:44px}
+  /* one short row: ☰ · הקודם · כותרת · הבא · שאלות — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+</style>
+<style>
+/* ============ BI-DIRECTIONAL STORY (Contoso) ============ */
+.bd-src{font-family:var(--mono);font-size:.7rem;color:var(--fg-4);margin:-8px 0 16px}
+.bd-map{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}
+.bd-t{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:11px 10px;text-align:center;
+  transition:border-color .25s,background .25s}
+.bd-t .nm{display:block;font-size:.86rem;font-weight:700;color:var(--fg-2)}
+.bd-t .ct{display:block;font-family:var(--mono);font-size:.9rem;color:var(--fg-4);margin-top:3px}
+.bd-t.fact{grid-column:1/-1;order:9;border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.bd-t.fact .nm{color:var(--pbi);font-size:.95rem;font-weight:900}
+.bd-t.fact .ct{color:var(--pbi)}
+.bd-t.hit{border-color:var(--acc);background:rgba(0,212,200,.10)}
+.bd-t.hit .ct{color:var(--acc);font-weight:700}
+.bd-t.blocked{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.bd-t.blocked .ct{color:#ff8f8f;font-weight:700}
+
+.bd-chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.bd-node{flex:1 1 130px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+.bd-node b{display:block;font-family:var(--mono);font-size:1.15rem;color:var(--fg-2)}
+.bd-node span{display:block;font-size:.76rem;color:var(--fg-4);margin-top:2px}
+.bd-node.on{border-color:var(--acc);background:rgba(0,212,200,.1)}
+.bd-node.on b{color:var(--acc)}
+.bd-node.slicer{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.bd-node.slicer b{color:var(--pbi);font-size:.95rem}
+.bd-node.stuck{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.bd-node.stuck b{color:#ff8f8f}
+.bd-arrow{flex:0 0 auto;align-self:center;font-family:var(--mono);font-size:1.1rem;color:var(--acc);padding:0 2px}
+.bd-arrow.bad{color:#ff6b6b}
+.bd-arrow.both{color:#ffa94d}
+
+.bd-steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.bd-steps button{flex:1 1 auto;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-3);
+  border-radius:10px;padding:9px 10px;font-family:inherit;font-size:.8rem;font-weight:700;min-height:44px;cursor:pointer}
+.bd-steps button[aria-pressed="true"]{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
+.bd-steps button[data-step="3"][aria-pressed="true"]{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.5);color:#ff8f8f}
+.bd-steps button[data-step="4"][aria-pressed="true"]{background:rgba(255,169,77,.14);border-color:rgba(255,169,77,.55);color:#ffa94d}
+.bd-say{background:var(--bg-1);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+  border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--fg-2);min-height:76px}
+.bd-say.bad{border-inline-start-color:#ff6b6b}
+.bd-say.both{border-inline-start-color:#ffa94d}
+.bd-say b{color:var(--fg-1)}
+
+.bd-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:0 0 16px}
+.bd-tbl{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bd-tbl h3{margin:0;padding:9px 12px;font-size:.82rem;background:var(--bg-2);border-bottom:1px solid var(--line);color:var(--fg-2)}
+.bd-tbl table{width:100%;border-collapse:collapse;font-size:.78rem}
+.bd-tbl th{background:rgba(242,200,17,.07);color:var(--pbi);font-family:var(--mono);font-size:.7rem;
+  font-weight:600;padding:6px 8px;text-align:right;border-bottom:1px solid var(--line)}
+.bd-tbl td{padding:6px 8px;border-bottom:1px solid var(--line-soft,rgba(255,255,255,.04));color:var(--fg-2)}
+.bd-tbl tr.yes td{background:rgba(74,222,128,.07);color:var(--fg-1)}
+.bd-tbl tr.no td{color:var(--fg-4);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+.bd-tbl tr.yes td:first-child::before{content:"✓ ";color:var(--ok)}
+.bd-tbl .more{padding:7px 8px;font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.bd-tbl .key{color:var(--pbi);font-family:var(--mono)}
+.bd-big{display:flex;align-items:baseline;gap:10px;justify-content:center;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 16px}
+.bd-big b{font-family:var(--mono);font-size:2rem;color:var(--acc);line-height:1}
+.bd-big span{font-size:.86rem;color:var(--fg-3)}
+.bd-big.warn b{color:#ff8f8f}
+.bd-big.gold b{color:var(--pbi)}
+.bd-two{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:0 0 16px}
+.bd-rule{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.bd-rule h3{margin:0 0 6px;font-size:.92rem}
+.bd-rule.yes{border-inline-start:3px solid var(--ok)}
+.bd-rule.yes h4{color:var(--ok)}
+.bd-rule.no{border-inline-start:3px solid #ff6b6b}
+.bd-rule.no h4{color:#ff8f8f}
+.bd-rule p{font-size:.86rem;color:var(--fg-2);margin:0}
+@media(max-width:560px){
+  .bd-map{grid-template-columns:repeat(2,1fr)}
+  .bd-chain{flex-direction:column}
+  .bd-arrow{transform:rotate(-90deg);align-self:center}
+  .bd-node{flex:1 1 auto}
+  .bd-steps button{flex:1 1 100%}
+}
+</style>
+
+<style>
+figure.shot.mid{max-width:800px}
+figure.shot.narrow{max-width:440px}
+figure.shot.narrow.tall button.shot-btn{max-width:min(var(--nw,100%),400px)}
+figure.shot img{image-rendering:-webkit-optimize-contrast}
+@media(max-width:720px){figure.shot.narrow.tall button.shot-btn{max-width:100%}}
+.bullets{margin:0 0 22px;padding-inline-start:22px}
+.bullets li{margin-bottom:10px}
+.hw{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:0 0 26px}
+.hw h3{margin:0 0 10px;font-size:1rem}
+.hw label{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:.92rem;cursor:pointer}
+.hw label.done{color:var(--fg-4);text-decoration:line-through}
+.hw input{width:18px;height:18px;accent-color:var(--pbi)}
+.hw-progress{margin:10px 0 0;font-family:var(--mono);font-size:.78rem;color:var(--acc)}
+@media(pointer:coarse){.hw label{min-height:44px}}
+</style>
+
+
+<style>
+/* ===== executive summary — first thing on the monthly page ===== */
+.exec{background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%);
+  border:1px solid var(--pbi-glow);border-radius:var(--r);padding:20px 22px;margin:0 0 26px;min-width:0}
+.exec-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.exec-h b{font-size:1.08rem;color:var(--fg-1);font-weight:800}
+.exec-tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:#111;background:var(--pbi);
+  border-radius:99px;padding:3px 9px;font-weight:700;flex:0 0 auto}
+.exec-sub{font-size:.86rem;color:var(--fg-3);margin-bottom:14px;line-height:1.6}
+.exec ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.exec li{position:relative;padding-inline-start:22px;font-size:.95rem;color:var(--fg-2);line-height:1.7;overflow-wrap:break-word}
+.exec li::before{content:"";position:absolute;inset-inline-start:0;top:.62em;width:8px;height:8px;
+  border-radius:2px;background:var(--pbi);transform:rotate(45deg)}
+.exec li b{color:var(--fg-1)}
+.exec-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.exec-foot .btn{flex:0 0 auto}
+.exec-time{font-size:.8rem;color:var(--fg-4);font-family:var(--mono)}
+/* ===== tables become stacked cards on phones — no horizontal scrolling,
+       no clipped Hebrew, every cell keeps its column label ===== */
+@media (max-width:640px){
+  .tbl-wrap.stack{overflow-x:visible;border:0;border-radius:0;background:none}
+  .tbl-wrap.stack table.cmp{min-width:0;font-size:.92rem;display:block}
+  .tbl-wrap.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tbl-wrap.stack tbody{display:block}
+  .tbl-wrap.stack tr{display:block;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg-1);margin-bottom:10px;overflow:hidden}
+  .tbl-wrap.stack td,.tbl-wrap.stack th{display:block;border-bottom:1px solid var(--line-soft);
+    padding:11px 14px;text-align:start;overflow-wrap:break-word}
+  .tbl-wrap.stack tr td:last-child,.tbl-wrap.stack tr th:last-child{border-bottom:0}
+  .tbl-wrap.stack td::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:700;
+    color:var(--fg-4);letter-spacing:.04em;margin-bottom:4px}
+  .tbl-wrap.stack td:not([data-l])::before{content:none}
+}
+@media (max-width:559px){
+  .exec{padding:17px 17px 16px}
+  .exec li{font-size:.9rem}
+  .exec-foot .btn{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">דילוג לתוכן</a>
+<noscript>
+  <style>.page[hidden]{display:block!important}body{display:block;height:auto;overflow:visible}.scroller{overflow:visible;height:auto}.topicbar,.pager,.pg-hint{display:none}</style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">כל 64 הנושאים מוצגים כאן ברצף. הרכיבים האינטראקטיביים דורשים JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="לדף הבית של הקורס"><b>SQL</b> עם אלירן</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="ניווט בין שיעורי הקורס">
+        <a class="lr lr-home" href="pbi.html" title="דף הבית של הפלטפורמה"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>דף הבית</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI בסיס"><b>1</b><span>בסיס</span></a>
+      <a class="lr" href="pbi-course-2.html" title="מודלינג נתונים"><b>2</b><span>מודלינג</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query ו-ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M ו-DAX בסיסי"><b>4</b><span>M ו-DAX</span></a>
+        <a class="lr lr-x is-on" href="pbi-updates.html" aria-current="page" title="עדכוני Power BI החודשיים"><b>◷</b><span>עדכונים</span></a><span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="לדף הבית של הקורס"><b>↩</b><span>הקורס</span></a><a class="lr lr-x" href="pbi-quiz.html" title="בנק השאלות המלא"><b>?</b><span>בנק שאלות</span></a><a class="lr lr-x" href="dax-reference.html" title="אינדקס פונקציות DAX"><b>fx</b><span>רפרנס DAX</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="פתיחת רשימת הנושאים">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">נושאים</span>
+    </button>
+    <button type="button" class="tb-home" id="tb-home" aria-label="חזרה לעמוד הראשון של השיעור">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">ראשי</span>
+    </button>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">הקודם</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">הבא</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-quiz">
+      <span id="tb-quiz-label" class="tb-quiz-t">למבחן</span><span id="tb-quiz-short" class="tb-quiz-s">למבחן</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+
+<div class="all-bar" id="all-bar">
+  <span>מצב קריאה רציפה — כל 20 הנושאים</span>
+  <button type="button" class="btn ghost" id="all-exit">חזרה למצב נושא בודד</button>
+</div>
+
+<div id="hero-block">
+<section class="hero">
+  <span class="kicker">עדכוני Power BI · יוני 2026</span>
+  <h1><em>DAX</em> מקבל פונקציות</h1>
+  <p class="sub">העדכון הגדול של החודש: לוגיקה עסקית נכתבת פעם אחת, מקבלת חתימה וטיפוסים, ונקראת מכל מקום. וגם — DAX Query View, עדכוני הדוח, ורשימת הבאגים הידועים עם דרכי העקיפה.</p>
+  <div class="stats" role="list"><div class="stat" role="listitem"><b>20</b><span>נושאים בשיעור</span></div><div class="stat" role="listitem"><b>12</b><span>שאלות בוחן</span></div><div class="stat" role="listitem"><b>11</b><span>באגים ודרכי עקיפה</span></div><div class="stat" role="listitem"><b>1702</b><span>רמת תאימות נדרשת</span></div></div>
+  <div class="hero-cta">
+    <button type="button" class="btn" data-goto="u6p2">מתחילים — הנושא הראשון ←</button>
+    <button type="button" class="btn ghost" data-goto="u6p19">לבוחן</button>
+    <a class="btn ghost" href="pbi-course-4.html">שיעור 4 — M ו-DAX</a>
+    <a class="btn ghost" href="dax-reference.html">מדריך פונקציות DAX</a>
+  </div>
+</section></div>
+
+<section class="page" id="u6p1" data-chap="פתיחה" data-title="איך עובד השיעור" aria-label="פתיחה — איך עובד השיעור">
+  <div class="sec-num">פתיחה</div>
+  <h2 class="sec-title">איך עובד השיעור</h2>
+  <p class="sec-sub">מודול העדכונים החודשי: מה חדש ב-Power BI, למה מיקרוסופט בנתה את זה, ואיך משתמשים בזה בפועל.</p>
+<div class="exec">
+  <div class="exec-h"><span class="exec-tag">יוני 2026</span><b>תקציר מנהלים — מה חדש החודש</b></div>
+  <p class="exec-sub">חמש דקות קריאה שנותנות את התמונה המלאה, לפני הירידה לעומק. גרסה 2.155.756.0.</p>
+  <ul><li><b>פונקציות מוגדרות משתמש ב-DAX בזמינות כללית.</b> לוגיקה עסקית נכתבת פעם אחת כפונקציה עם חתימה, טיפוסים ופרמטרים אופציונליים, ונקראת ממדד, מעמודה מחושבת ומחישוב ויזואל. דורש רמת תאימות 1702.</li><li><b>מערכת טיפוסים חדשה עם שני מצבי העברה.</b> ההבחנה בין <span class='mono' dir='ltr'>val</span> ל-<span class='mono' dir='ltr'>expr</span> קובעת אילו הקשרים הפונקציה יורשת — וזו הנקודה הטכנית החשובה ביותר בעדכון.</li><li><b>אזהרת ממשל:</b> אבטחה ברמת אובייקט אינה עוברת לפונקציות. פונקציה שמפנה למדד מוגן אינה מוגנת אוטומטית.</li><li><b>מיון וסינון ברשת התוצאות של DAX Query View.</b> הרשת אינה ניתנת לעריכה, והסינון פועל רק על תוצאות שכבר הוחזרו — שעלולות להיות קטומות.</li><li><b>עדכוני דוח שמוחקים תחזוקה ידנית:</b> Date picker לסלייסר שמתגלגל קדימה עם הרענון, טולטיפ במצב משפט בלי מדד DAX, ורוחב עמודה מותנה.</li><li><b>שינוי שמשפיע על דוחות קיימים:</b> כלי הבחירה ב-Azure Maps דלוקים כעת כברירת מחדל.</li><li><b>11 באגים ומגבלות ידועים</b> מתועדים בפרק V, עם דרך עקיפה לכל אחד.</li></ul>
+  <div class="exec-foot"><button type="button" class="btn" data-goto="u6p2">מתחילים ←</button><span class="exec-time">זמן קריאה משוער · 75 דקות</span></div>
+</div>
+<div class="grid g3"><div class="card"><span class="tag">01</span><h3>ניווט בין נושאים</h3><p>הכפתורים <b>הקודם</b> ו<b>הבא</b> קבועים בראש המסך. אפשר גם בחצי המקלדת, בהחלקת אצבע בטלפון, או לקפוץ לנושא מרשימת הנושאים.</p></div><div class="card"><span class="tag">02</span><h3>שאלות ותרגול</h3><p>בסוף השיעור בוחן קצר עם משוב מיידי לכל שאלה, ותרגילי יישום עם פתרון מלא.</p></div><div class="card"><span class="tag">03</span><h3>ההתקדמות נשמרת</h3><p>הנושא שבו עצרתם והנושאים שקראתם נשמרים בדפדפן שלכם בלבד. אפשר לסגור ולחזור, ולאפס מתוך רשימת הנושאים.</p></div></div>
+<nav class="lesson-toc" id="lesson-toc" aria-label="תוכן העניינים המלא של השיעור"></nav>
+<h3 class="p1-h">איך בנוי כל נושא</h3><p class="p1-sub">כל נושא נפתח בהסבר <b>למה</b> הפיצ'ר קיים — הכאב בשטח והחזון מאחוריו — וממשיך לפירוט הטכני עם קוד ודוגמאות. בסוף השיעור: נושא שלם של באגים ידועים עם דרכי עקיפה, בוחן קצר וסיכום.</p><h3 class="p1-h">מה מכסה השיעור</h3><p class="p1-sub">עדכון יוני 2026, גרסה 2.155.756.0.</p><div class="grid g2"><div class="card"><span class="tag teal">DAX</span><h3>פונקציות מוגדרות משתמש</h3><p>היכולת הגדולה של החודש: DAX מקבל פונקציות עם חתימה, טיפוסים ופרמטרים אופציונליים.</p></div><div class="card"><span class="tag teal">כלים</span><h3>DAX Query View</h3><p>מיון וסינון ברשת התוצאות — ומלכודת אחת שחייבים להכיר.</p></div><div class="card"><span class="tag teal">דוחות</span><h3>עדכוני חוויית הדוח</h3><p>Date picker לסלייסר, טולטיפ במצב משפט, רוחב עמודה מותנה והתאמה למובייל.</p></div><div class="card"><span class="tag teal">פרודקשן</span><h3>באגים ודרכי עקיפה</h3><p>מה שבור כרגע, למה, ומה עושים עד שזה נסגר.</p></div></div><div class="note"><b>דרישת סף לשיעור:</b> היכרות עם מדדים, הקשר סינון והקשר שורה. אם CALCULATE עדיין לא לגמרי ברור — כדאי לחזור לשיעור 4 לפני שממשיכים.</div>
+</section>
+<section class="page" id="u6p2" data-chap="פרק I · למה DAX הגיע לנקודה הזו" data-title="הכאב שהוליד את הפיצ'ר" aria-label="פרק I · למה DAX הגיע לנקודה הזו — הכאב שהוליד את הפיצ'ר" hidden>
+  <div class="sec-num">פרק I · למה DAX הגיע לנקודה הזו</div>
+  <h2 class="sec-title">הכאב שהוליד את הפיצ'ר</h2>
+  <p class="sec-sub">לפני התחביר — הבעיה. בלי זה קשה להבין למה זו ההכרזה הגדולה של החודש.</p>
+<p>במודל ארגוני בוגר יש מאות מדדים, ובתוכם אותה לוגיקה עסקית חוזרת שוב ושוב: הגדרת לקוח פעיל, שער המרה, כלל ההכרה בהכנסה, נוסחת עמלה. כשהכלל משתנה — וכללים עסקיים משתנים — מישהו צריך למצוא את כל המקומות שבהם הוא מקודד. בפועל הוא מוצא שמונים אחוז מהם. עשרים האחוזים הנותרים הופכים לדוחות שסותרים זה את זה, וזה בדיוק הרגע שבו ההנהלה מפסיקה לסמוך על ה-BI.</p><div class="grid g3"><div class="card"><span class="tag">01</span><h3>מה היה חסר</h3><p>ל-DAX הייתה יחידת שיתוף אחת: מדד. אבל מדד אינו פונקציה — אי אפשר להעביר לו פרמטרים.</p></div><div class="card"><span class="tag">02</span><h3>הפתרון המאולתר</h3><p>קבוצות חישוב, שמעבירות פרמטרים דרך הקשר הסינון. עובד, אבל עקיף, קשה לניפוי, ויקר כשקוראים לאותה לוגיקה כמה פעמים בשאילתה.</p></div><div class="card"><span class="tag">03</span><h3>החזון</h3><p>המודל הסמנטי כמוצר תוכנה: פונקציה היא אובייקט מדרגה ראשונה, נשמרת כטקסט, נכנסת ל-Git ועוברת קוד-ריוויו.</p></div></div><div class="note">זו אותה תנועה שמובילה גם ל-PBIR, ל-TMDL ול-Desktop Bridge: <b>הכול הופך לקוד</b>. פונקציות DAX הן החלק שנוגע ישירות באנליסט.</div>
+</section>
+<section class="page" id="u6p3" data-chap="פרק I · למה DAX הגיע לנקודה הזו" data-title="מה השתנה בזמינות הכללית" aria-label="פרק I · למה DAX הגיע לנקודה הזו — מה השתנה בזמינות הכללית" hidden>
+  <div class="sec-num">פרק I · למה DAX הגיע לנקודה הזו</div>
+  <h2 class="sec-title">מה השתנה בזמינות הכללית</h2>
+  <p class="sec-sub">הפיצ'ר יצא מתצוגה מקדימה — ואיתו נכנסו דרישות סף שחייבים להכיר.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">מה</th><th scope="col">פרטים</th></tr></thead><tbody><tr><td>סטטוס</td><td>זמינות כללית ב-Power BI Desktop ובשירות החל מגרסת יוני 2026</td></tr><tr><td>רמת תאימות</td><td>1702 ומעלה. מודל שלא שודרג פשוט לא ישמור את הפונקציה</td></tr><tr><td>איפה כותבים</td><td>DAX Query View, TMDL View, ובפורמולה בר של Model Explorer</td></tr><tr><td>איפה זה חי</td><td>צומת <span class="mono" dir="ltr">Functions</span> ב-Model Explorer, ובפרויקט PBIP בקובץ <span class="mono" dir="ltr">functions.tmdl</span></td></tr><tr><td>כמה פרמטרים</td><td>מאפס עד 256</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>הבדיקה הראשונה כשמשהו לא עובד:</b> הפונקציה מסרבת להישמר? כמעט תמיד זו רמת תאימות נמוכה מ-1702. ב-TMDL View מוצג פרומפט שדרוג אוטומטי.</div>
+</section>
+<section class="page" id="u6p4" data-chap="פרק II · יסודות UDF" data-title="הפונקציה הראשונה" aria-label="פרק II · יסודות UDF — הפונקציה הראשונה" hidden>
+  <div class="sec-num">פרק II · יסודות UDF</div>
+  <h2 class="sec-title">הפונקציה הראשונה</h2>
+  <p class="sec-sub">שלוש שורות, ואתם כבר מבינים את כל המבנה.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// מוסיף מע"מ לסכום שהתקבל</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddVat</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( amount : NUMERIC ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amount * 1.18<br><br><span class="k">EVALUATE</span><br>{ <span class="f">AddVat</span> ( 100 ) }<br><span class="c">// מחזיר 118</span></div></div><p class="code-cap">מילת המפתח FUNCTION · שם · רשימת פרמטרים · חץ · גוף הפונקציה</p><ol class="steps"><li><b>כותבים ב-DAX Query View</b><span>מתחת ל-DEFINE, בדיוק כמו שמגדירים מדד בשאילתה.</span></li><li><b>מריצים ובודקים</b><span>בלוק EVALUATE עם קריאה לפונקציה מחזיר את התוצאה מיד.</span></li><li><b>שומרים למודל</b><span>כפתור <span class="mono" dir="ltr">Update model with changes</span> שומר את כל הפונקציות בשאילתה, או השורה <span class="mono" dir="ltr">Update model: Add new function</span> מעל הגדרה בודדת.</span></li></ol><div class="note"><b>שימו לב לשלוש הלוכסנים:</b> רק הערה שמתחילה ב-<span class="mono" dir="ltr">///</span> נכנסת ל-IntelliSense של מי שיקרא לפונקציה. הערה עם <span class="mono" dir="ltr">//</span> או <span class="mono" dir="ltr">/* */</span> לא תופיע שם.</div>
+</section>
+<section class="page" id="u6p5" data-chap="פרק II · יסודות UDF" data-title="תיעוד וכללי שמות" aria-label="פרק II · יסודות UDF — תיעוד וכללי שמות" hidden>
+  <div class="sec-num">פרק II · יסודות UDF</div>
+  <h2 class="sec-title">תיעוד וכללי שמות</h2>
+  <p class="sec-sub">פונקציה שאיש לא מבין איך לקרוא לה היא פונקציה שאיש לא ישתמש בה.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// מחשב אחוז רווחיות בצורה בטוחה מחלוקה באפס</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// @param {NUMERIC} revenue - סכום ההכנסה</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// @param {NUMERIC} [cost] - עלות, ברירת מחדל 0</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// @returns אחוז רווחיות כמספר עשרוני</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">Fin.MarginPct</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( revenue : NUMERIC, cost : NUMERIC = 0 ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">DIVIDE</span> ( revenue - cost, revenue )<br><br><span class="k">EVALUATE</span><br>{ <span class="f">Fin.MarginPct</span> ( 1000, 400 ) }   <span class="c">// 0.6</span></div></div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">כלל</th><th scope="col">מה מותר ומה אסור</th></tr></thead><tbody><tr><td>ייחודיות</td><td>שם ייחודי במודל, שאינו מתנגש בפונקציה מובנית או במילה שמורה כמו <span class="mono" dir="ltr">measure</span> או <span class="mono" dir="ltr">function</span></td></tr><tr><td>נקודות</td><td>מותרות למרחבי שמות כמו <span class="mono" dir="ltr">Fin.MarginPct</span> — אך לא בהתחלה, לא בסוף ולא ברצף</td></tr><tr><td>תווים</td><td>מלבד נקודות: תווים אלפאנומריים וקו תחתון בלבד. בלי רווחים</td></tr><tr><td>שמות פרמטרים</td><td>נקודות אסורות לגמרי, ואסור להשתמש במילה שמורה</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>מוסכמה שמשתלמת:</b> מרחב שמות בקידומת — <span class="mono" dir="ltr">Fin.</span>, <span class="mono" dir="ltr">Dim.</span>, <span class="mono" dir="ltr">Stat.</span>. ב-IntelliSense כל משפחת הפונקציות מופיעה יחד.</div>
+</section>
+<section class="page" id="u6p6" data-chap="פרק II · יסודות UDF" data-title="איפה קוראים לפונקציה" aria-label="פרק II · יסודות UDF — איפה קוראים לפונקציה" hidden>
+  <div class="sec-num">פרק II · יסודות UDF</div>
+  <h2 class="sec-title">איפה קוראים לפונקציה</h2>
+  <p class="sec-sub">אחרי השמירה למודל, הפונקציה מתנהגת כמו כל פונקציית DAX מובנית.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code"><span class="c">-- מדד</span><br><span class="f">Total Sales with VAT</span> = <span class="f">AddVat</span> ( [Total Sales] )<br><br><span class="c">-- עמודה מחושבת (שימו לב להמרת הטיפוס)</span><br><span class="f">Sales Amount with VAT</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">CONVERT</span> ( <span class="f">AddVat</span> ( Sales[Sales Amount] ), CURRENCY )<br><br><span class="c">-- חישוב ויזואל</span><br><span class="f">Sales Amount with VAT</span> = <span class="f">AddVat</span> ( [Sales Amount] )</div></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code"><span class="c">-- ופונקציה יכולה לקרוא לפונקציה אחרת</span><br>DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddVat</span> = ( amount : NUMERIC ) =&gt; amount * 1.18<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddVatAfterDiscount</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( amount : NUMERIC, discount : NUMERIC ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">AddVat</span> ( amount - discount )<br><br><span class="k">EVALUATE</span><br>{ <span class="f">AddVatAfterDiscount</span> ( 100, 20 ) }   <span class="c">// 94.4</span></div></div><div class="note"><b>שתי אזהרות שימוש:</b> בעמודה מחושבת יש לוודא שהפונקציה מחזירה סקלר מטיפוס עקבי, ולהמיר עם <span class="mono" dir="ltr">CONVERT</span> בעת הצורך. בחישוב ויזואל אי אפשר להעביר אובייקטים מהמודל שאינם נמצאים בוויזואל.</div><div class="sol-check"><b>✓</b> רקורסיה — פונקציה שקוראת לעצמה במישרין או בעקיפין — <b>אינה נתמכת</b>. הרכבה של פונקציות שונות כן.</div>
+</section>
+<section class="page" id="u6p7" data-chap="פרק III · מערכת הטיפוסים" data-title="למה DAX צריך טיפוסים" aria-label="פרק III · מערכת הטיפוסים — למה DAX צריך טיפוסים" hidden>
+  <div class="sec-num">פרק III · מערכת הטיפוסים</div>
+  <h2 class="sec-title">למה DAX צריך טיפוסים</h2>
+  <p class="sec-sub">השינוי התפיסתי של העדכון: מזיזים את הכישלון מהדוח לזמן הכתיבה.</p>
+<p>ב-DAX קלאסי, מדד שמקבל קלט לא צפוי מחזיר תוצאה שגויה בשקט. במודל של איש אחד זה נסבל. בספריית פונקציות שצוות שלם צורך, קלט לא צפוי הוא באג שמתגלה בדוח הנהלה.</p><div class="grid g3"><div class="card"><span class="tag">01</span><h3>IntelliSense אמין</h3><p>מי שקורא לפונקציה רואה מה היא מצפה לקבל, לפני שהוא מריץ.</p></div><div class="card"><span class="tag">02</span><h3>מניעת טעות סוג</h3><p>אי אפשר להעביר עמודה במקום מדד כשהחתימה דורשת מדד.</p></div><div class="card"><span class="tag">03</span><h3>המרה מבוקרת</h3><p>תת-טיפוס כופה המרה צפויה, במקום המרה מקרית של המנוע.</p></div></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">SYNTAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code"><span class="k">FUNCTION</span> &lt;Name&gt; =<br>&nbsp;&nbsp;&nbsp;&nbsp;( &lt;Param&gt; : [&lt;Type&gt;] [&lt;Subtype&gt;] [&lt;PassingMode&gt;] [= &lt;Default&gt;], ... )<br>&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &lt;Body&gt;</div></div><div class="note">אפשר לציין הכול, חלק, או כלום. פרמטר שנכתב בלי שום רמז מתנהג כ-<span class="mono" dir="ltr">AnyVal val</span> — כלומר הארגומנט מוערך מיד בזמן הקריאה.</div>
+</section>
+<section class="page" id="u6p8" data-chap="פרק III · מערכת הטיפוסים" data-title="שמונה הטיפוסים ושתי המשפחות" aria-label="פרק III · מערכת הטיפוסים — שמונה הטיפוסים ושתי המשפחות" hidden>
+  <div class="sec-num">פרק III · מערכת הטיפוסים</div>
+  <h2 class="sec-title">שמונה הטיפוסים ושתי המשפחות</h2>
+  <p class="sec-sub">ההבחנה שקובעת את כל ההתנהגות: ערך מול ביטוי.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">משפחה</th><th scope="col">טיפוס</th><th scope="col">מה מקבל</th><th scope="col">מתי מוערך</th></tr></thead><tbody><tr><td>טיפוסי ערך</td><td><span class="mono" dir="ltr">AnyVal</span></td><td>סקלר או טבלה. ברירת המחדל</td><td>מיד, לפני הכניסה לפונקציה</td></tr><tr><td>טיפוסי ערך</td><td><span class="mono" dir="ltr">Scalar</span></td><td>ערך סקלרי, עם תת-טיפוס אופציונלי</td><td>מיד</td></tr><tr><td>טיפוסי ערך</td><td><span class="mono" dir="ltr">Table</span></td><td>טבלה</td><td>מיד</td></tr><tr><td>טיפוסי ביטוי</td><td><span class="mono" dir="ltr">AnyRef</span></td><td>כל הפניה או ביטוי</td><td>בתוך גוף הפונקציה</td></tr><tr><td>טיפוסי ביטוי</td><td><span class="mono" dir="ltr">ColumnRef</span></td><td>הפניה לעמודה</td><td>בתוך גוף הפונקציה</td></tr><tr><td>טיפוסי ביטוי</td><td><span class="mono" dir="ltr">MeasureRef</span></td><td>הפניה למדד</td><td>בתוך גוף הפונקציה</td></tr><tr><td>טיפוסי ביטוי</td><td><span class="mono" dir="ltr">TableRef</span></td><td>הפניה לטבלה</td><td>בתוך גוף הפונקציה</td></tr><tr><td>טיפוסי ביטוי</td><td><span class="mono" dir="ltr">CalendarRef</span></td><td>הפניה ללוח שנה</td><td>בתוך גוף הפונקציה</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>שני כללים שנגזרים מהטבלה:</b> טיפוסי ערך תומכים בהמרת טיפוס אוטומטית, טיפוסי ביטוי לא. וטיפוסי ביטוי חייבים להיות <span class="mono" dir="ltr">expr</span> — ציון <span class="mono" dir="ltr">val</span> עבורם אינו חוקי.</div><h3 style="margin:30px 0 10px">תת-טיפוסים לסקלר</h3><div class="chiplist"><span class="chip" dir="ltr">Variant</span><span class="chip" dir="ltr">Int64</span><span class="chip" dir="ltr">Decimal</span><span class="chip" dir="ltr">Double</span><span class="chip" dir="ltr">String</span><span class="chip" dir="ltr">DateTime</span><span class="chip" dir="ltr">Boolean</span><span class="chip" dir="ltr">Numeric</span></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">CastToInt</span> = ( x : INT64 ) =&gt; x<br><br><span class="k">EVALUATE</span><br>{ <span class="f">CastToInt</span> ( 3.4 ), <span class="f">CastToInt</span> ( 3.5 ), <span class="f">CastToInt</span> ( "5" ) }<br><span class="c">// 3, 4, 5 — מחרוזת לא מספרית תיצור שגיאה</span></div></div><p class="code-cap">ציון תת-טיפוס מייתר את המילה Scalar — וכופה המרה צפויה</p>
+</section>
+<section class="page" id="u6p9" data-chap="פרק III · מערכת הטיפוסים" data-title="val מול expr — התרגיל שמסביר הכול" aria-label="פרק III · מערכת הטיפוסים — val מול expr — התרגיל שמסביר הכול" hidden>
+  <div class="sec-num">פרק III · מערכת הטיפוסים</div>
+  <h2 class="sec-title">val מול expr — התרגיל שמסביר הכול</h2>
+  <p class="sec-sub">שתי פונקציות עם גוף זהה לחלוטין, ושתי תוצאות שונות. זה הנושא החשוב ביותר בשיעור.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// טבלה כערך: מקבלת טבלה שכבר חושבה</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">CountRowsNow</span>   = ( t : TABLE VAL ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">COUNTROWS</span> ( <span class="k">CALCULATETABLE</span> ( t, <span class="k">ALL</span> ( 'Date' ) ) )<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// טבלה כביטוי: מקבלת ביטוי לא מחושב</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">CountRowsLater</span> = ( t : TABLE EXPR ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">COUNTROWS</span> ( <span class="k">CALCULATETABLE</span> ( t, <span class="k">ALL</span> ( 'Date' ) ) )<br><br><span class="k">EVALUATE</span><br>{<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">CALCULATE</span> ( <span class="f">CountRowsNow</span>   ( Sales ), 'Date'[Fiscal Year] = "FY2020" ),<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">CALCULATE</span> ( <span class="f">CountRowsLater</span> ( Sales ), 'Date'[Fiscal Year] = "FY2020" )<br>}</div></div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">הפונקציה</th><th scope="col">מה היא מחזירה</th><th scope="col">למה</th></tr></thead><tbody><tr><td><span class="mono" dir="ltr">CountRowsNow</span></td><td>רק את שורות FY2020</td><td>הטבלה כבר סוננה לפני הכניסה לפונקציה, ולכן ה-ALL שבפנים כבר לא משנה דבר</td></tr><tr><td><span class="mono" dir="ltr">CountRowsLater</span></td><td>את כל השנים</td><td>הפונקציה קיבלה ביטוי לא מחושב והעריכה אותו בעצמה תחת ALL, כלומר הסירה את הסינון החיצוני</td></tr></tbody></table></div><div class="note"><b>הכלל שכדאי לשנן:</b> פרמטר <span class="mono" dir="ltr">val</span> מוערך אצל הקורא ולכן יורש הקשר שורה <b>והקשר סינון</b>. פרמטר <span class="mono" dir="ltr">expr</span> מוערך בתוך הפונקציה ולכן יורש הקשר סינון בלבד.</div><div class="sol-check"><b>✓</b> <b>טיפ מקצועי:</b> כשפרמטר <span class="mono" dir="ltr">expr</span> עשוי לקבל מדד או נוסחה, כפו מעבר הקשר בתוך הפונקציה עם <span class="mono" dir="ltr">CALCULATE</span> מפורש. כך הפונקציה עובדת נכון גם בשימוש שלא צפיתם.</div>
+</section>
+<section class="page" id="u6p10" data-chap="פרק IV · פרמטרים ובדיקות" data-title="פרמטרים אופציונליים" aria-label="פרק IV · פרמטרים ובדיקות — פרמטרים אופציונליים" hidden>
+  <div class="sec-num">פרק IV · פרמטרים ובדיקות</div>
+  <h2 class="sec-title">פרמטרים אופציונליים</h2>
+  <p class="sec-sub">ברירת מחדל בחתימה הופכת את הפרמטר לאופציונלי — עם ארבעה כללים שחייבים להכיר.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddNum</span> = ( x : NUMERIC = 1, y : NUMERIC = 2 ) =&gt; x + y<br><br><span class="k">EVALUATE</span><br>{ <span class="f">AddNum</span> (), <span class="f">AddNum</span> ( 1 ), <span class="f">AddNum</span> ( , 2 ), <span class="f">AddNum</span> ( 5, 5 ) }<br><span class="c">// 3, 3, 3, 10</span></div></div><p class="code-cap">פסיק ריק מדלג על ארגומנט ומשתמש בברירת המחדל</p><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">הכלל</th><th scope="col">מה זה אומר</th></tr></thead><tbody><tr><td>מיקום</td><td>פרמטר אופציונלי יכול להופיע בכל מקום. אבל מספר הארגומנטים המינימלי נקבע לפי הפרמטר <b>הנדרש הימני ביותר</b> — בפונקציה עם שלושה פרמטרים שרק השני אופציונלי, עדיין חייבים למסור שלושה</td></tr><tr><td>הקשר</td><td>ירושת הקשר שורה והקשר סינון נקבעת לפי מצב ההעברה של אותו פרמטר</td></tr><tr><td>תחום ראייה</td><td>ביטוי ברירת המחדל רואה רק שמות שגלויים במקום <b>ההגדרה</b>, לא במקום הקריאה. הוא גם אינו יכול להפנות לפרמטר אופציונלי אחר</td></tr><tr><td>בדיקת טיפוס</td><td>רמז הטיפוס נאכף על ברירת המחדל רק כשמשתמשים בה בפועל. אם הקורא סיפק ארגומנט, הבדיקה מתבצעת מולו</td></tr></tbody></table></div>
+</section>
+<section class="page" id="u6p11" data-chap="פרק IV · פרמטרים ובדיקות" data-title="בדיקת טיפוס בזמן ריצה" aria-label="פרק IV · פרמטרים ובדיקות — בדיקת טיפוס בזמן ריצה" hidden>
+  <div class="sec-num">פרק IV · פרמטרים ובדיקות</div>
+  <h2 class="sec-title">בדיקת טיפוס בזמן ריצה</h2>
+  <p class="sec-sub">כשהפונקציה צריכה לקבל יותר מסוג קלט אחד — בודקים בגוף הפונקציה.</p>
+<div class="chiplist"><span class="chip" dir="ltr">ISNUMERIC</span><span class="chip" dir="ltr">ISNUMBER</span><span class="chip" dir="ltr">ISINT64</span><span class="chip" dir="ltr">ISINTEGER</span><span class="chip" dir="ltr">ISDECIMAL</span><span class="chip" dir="ltr">ISCURRENCY</span><span class="chip" dir="ltr">ISDOUBLE</span><span class="chip" dir="ltr">ISSTRING</span><span class="chip" dir="ltr">ISTEXT</span><span class="chip" dir="ltr">ISBOOLEAN</span><span class="chip" dir="ltr">ISLOGICAL</span><span class="chip" dir="ltr">ISDATETIME</span></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// מחזיר שם מטבע לפי מפתח מספרי או לפי קוד טקסטואלי</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">Dim.GetCurrencyName</span> = ( currency ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">IF</span> (<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">ISINT64</span> ( currency ),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">LOOKUPVALUE</span> ( 'Currency'[Currency], 'Currency'[CurrencyKey], currency ),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">LOOKUPVALUE</span> ( 'Currency'[Currency], 'Currency'[Code], currency )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br><br><span class="k">EVALUATE</span><br>{ <span class="f">Dim.GetCurrencyName</span> ( 36 ), <span class="f">Dim.GetCurrencyName</span> ( "USD" ) }</div></div><div class="note"><b>עיתוי הבדיקה:</b> בפרמטר <span class="mono" dir="ltr">expr</span> הבדיקה מתרחשת כשמפנים לפרמטר בגוף הפונקציה — <b>לא</b> בזמן הקריאה. זה משנה מתי תראו את השגיאה.</div>
+</section>
+<section class="page" id="u6p12" data-chap="פרק IV · פרמטרים ובדיקות" data-title="TABLEOF ו-NAMEOF" aria-label="פרק IV · פרמטרים ובדיקות — TABLEOF ו-NAMEOF" hidden>
+  <div class="sec-num">פרק IV · פרמטרים ובדיקות</div>
+  <h2 class="sec-title">TABLEOF ו-NAMEOF</h2>
+  <p class="sec-sub">שתי פונקציות עזר חדשות שמאפשרות לכתוב פונקציות גנריות באמת.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">פונקציה</th><th scope="col">מה מחזירה</th></tr></thead><tbody><tr><td><span class="mono" dir="ltr">TABLEOF</span></td><td>את הטבלה שאליה שייכת עמודה, מדד או לוח שנה</td></tr><tr><td><span class="mono" dir="ltr">NAMEOF</span></td><td>את השם של טבלה, עמודה, מדד או לוח שנה — כטקסט</td></tr></tbody></table></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// מחזיר את הערך השכיח ביותר של ביטוי מעל הטבלה שאליה הוא שייך</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">Stat.ModeX</span> = ( e : ANYREF ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">VAR</span> newTable  = <span class="k">ADDCOLUMNS</span> ( <span class="k">TABLEOF</span> ( e ), "expr", e )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">VAR</span> freqTable = <span class="k">GROUPBY</span> ( newTable, [expr], "count", <span class="k">SUMX</span> ( <span class="k">CURRENTGROUP</span> (), 1 ) )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">VAR</span> maxCount  = <span class="k">MAXX</span> ( freqTable, [count] )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">RETURN</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">SELECTCOLUMNS</span> ( <span class="k">FILTER</span> ( freqTable, [count] = maxCount ), "expr", [expr] )<br><br><span class="k">EVALUATE</span> <span class="f">Stat.ModeX</span> ( [Total Sales] )</div></div><p class="code-cap">הפונקציה לא מקודדת שם טבלה קשיח — TABLEOF מוצאת אותה מהביטוי שהתקבל</p><div class="sol-check"><b>✓</b> זה מה שהופך פונקציה מ<b>תלוית מודל</b> ל<b>ניידת</b>: אפשר להעתיק אותה למודל אחר בלי לשנות שורה.</div>
+</section>
+<section class="page" id="u6p13" data-chap="פרק V · מפרודקשן וממשל" data-title="מגבלות וסיכוני ממשל" aria-label="פרק V · מפרודקשן וממשל — מגבלות וסיכוני ממשל" hidden>
+  <div class="sec-num">פרק V · מפרודקשן וממשל</div>
+  <h2 class="sec-title">מגבלות וסיכוני ממשל</h2>
+  <p class="sec-sub">מה שחייבים לבדוק לפני שפונקציה נכנסת למודל ארגוני.</p>
+<div class="note"><b>הסיכון החמור ביותר — אבטחה ברמת אובייקט:</b> OLS <b>אינו עובר</b> לפונקציות ולהפך. אם פונקציה מפנה למדד מוגן, היא עצמה אינה מוגנת אוטומטית; כשהיא רצה תחת זהות בלי הרשאה, המערכת מתנהגת כאילו המדד לא קיים. ההמלצה הרשמית: לא לחשוף שמות של אובייקטים מוגנים בשמות ובתיאורי פונקציות.</div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">מגבלה</th><th scope="col">ההשלכה המעשית</th></tr></thead><tbody><tr><td>שמות לא מוסמכים</td><td>שם ללא קידומת טבלה מפורש כהפניה למדד, ולכן לא נכלל במעקב תלויות. תמיד <span class="mono" dir="ltr">'Sales'[Amount]</span> ולעולם לא <span class="mono" dir="ltr">[Amount]</span></td></tr><tr><td>אין רקורסיה</td><td>לא במישרין ולא הדדית</td></tr><tr><td>אין העמסה</td><td>אי אפשר לשתי פונקציות לחלוק שם עם חתימות שונות</td></tr><tr><td>אין טיפוס החזרה מפורש</td><td>צריך להבטיח עקביות בגוף הפונקציה עצמה</td></tr><tr><td>אין תיקיות תצוגה</td><td>וגם אי אפשר להסתיר או לחשוף פונקציה</td></tr><tr><td>אין שילוב עם תרגומים</td><td>מודל מתורגם — הפונקציות נשארות בחוץ</td></tr><tr><td>אין החזרת enum</td><td>פונקציה מובנית שמצפה ל-enum לא תקבל UDF</td></tr></tbody></table></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code"><span class="c">-- לבדוק אילו פונקציות קיימות במודל</span><br><span class="k">EVALUATE</span> <span class="k">INFO.USERDEFINEDFUNCTIONS</span> ()   <span class="c">// מטא-דאטה מלאה, דורש הרשאת כתיבה</span><br><br><span class="k">EVALUATE</span> <span class="k">INFO.FUNCTIONS</span> ( "ORIGIN", "2" )  <span class="c">// שמות בלבד, בלי הרשאת כתיבה</span></div></div>
+</section>
+<section class="page" id="u6p14" data-chap="פרק V · מפרודקשן וממשל" data-title="UDF או קבוצת חישוב" aria-label="פרק V · מפרודקשן וממשל — UDF או קבוצת חישוב" hidden>
+  <div class="sec-num">פרק V · מפרודקשן וממשל</div>
+  <h2 class="sec-title">UDF או קבוצת חישוב</h2>
+  <p class="sec-sub">שתי יכולות שנראות דומות ופותרות בעיות שונות לגמרי.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">מתי</th><th scope="col">הכלי</th><th scope="col">למה</th></tr></thead><tbody><tr><td>לוגיקה עסקית עם פרמטרים משתנים</td><td><b>UDF</b></td><td>העברת פרמטרים דרך חתימה מפורשת חוסכת את התקורה של העברתם דרך הקשר הסינון, במיוחד כשקוראים לאותה לוגיקה כמה פעמים בשאילתה אחת</td></tr><tr><td>וריאציות תצוגה על כל המדדים</td><td><b>קבוצת חישוב</b></td><td>שנה קודמת, מצטבר מתחילת שנה, אחוז מסך הכול — משהו שצריך לחול על מאה מדדים בלי לכתוב אותם מחדש</td></tr><tr><td>שילוב</td><td><b>שתיהן</b></td><td>קבוצת חישוב שקוראת בתוכה לפונקציה משותפת — זה הדפוס שמומלץ במודלים גדולים</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>מבחן ההחלטה בשאלה אחת:</b> האם הלוגיקה צריכה לקבל קלט משתנה? אם כן — UDF. אם היא רק משנה את ההקשר של מדד קיים — קבוצת חישוב.</div>
+</section>
+<section class="page" id="u6p15" data-chap="פרק V · מפרודקשן וממשל" data-title="באגים ידועים ודרכי עקיפה" aria-label="פרק V · מפרודקשן וממשל — באגים ידועים ודרכי עקיפה" hidden>
+  <div class="sec-num">פרק V · מפרודקשן וממשל</div>
+  <h2 class="sec-title">באגים ידועים ודרכי עקיפה</h2>
+  <p class="sec-sub">מה שבור כרגע לפי סעיפי הבאגים בתיעוד הרשמי ודיווחי קהילה — ומה עושים עד שזה נסגר.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">התופעה</th><th scope="col">הסיבה</th><th scope="col">דרך העקיפה</th></tr></thead><tbody><tr><td>קווים אדומים ושגיאות ולידציה כשמעבירים עמודה כפרמטר <span class="mono" dir="ltr">expr</span></td><td>חוסר עקביות ידוע של המנתח בתרחישים מתקדמים</td><td>להריץ ולבדוק את התוצאה בפועל; לכתוב הפניות מוסמכות מלאות; לפצל לפונקציית עזר פשוטה יותר</td></tr><tr><td>רמז טיפוס <span class="mono" dir="ltr">ColumnRef</span> או <span class="mono" dir="ltr">MeasureRef</span> נדחה באתר הקריאה</td><td>באג ידוע: טיפוסי ההפניה הספציפיים אינם מתקבלים בכל אתרי הקריאה</td><td>לרדת ל-<span class="mono" dir="ltr">AnyRef</span> ולבצע ולידציה בגוף הפונקציה</td></tr><tr><td>הודעת שגיאה מותאמת עם <span class="mono" dir="ltr">ERROR</span> לא מוצגת</td><td>DAX מייצר שגיאה פנימית משימוש שגוי בפרמטר לפני שקוד הוולידציה רץ</td><td>לא להסתמך על הודעות מותאמות בשלב זה; לתעד את הדרישה ב-<span class="mono" dir="ltr">///</span></td></tr><tr><td>שינוי שם עמודה שובר פונקציה</td><td>שם לא מוסמך מפורש כהפניה למדד ולכן אינו נכלל במעקב תלויות</td><td>תמיד להשתמש בשם טבלה מלא בתוך פונקציה</td></tr><tr><td>הפונקציה מסרבת להישמר</td><td>רמת תאימות נמוכה מ-1702, או מודל בלי טבלאות</td><td>לשדרג רמת תאימות; ב-TMDL View מוצג פרומפט אוטומטי</td></tr><tr><td>אין IntelliSense בחישוב ויזואל, ב-TMDL או ב-SSMS</td><td>תמיכה חלקית בשלב זה</td><td>לכתוב ולבדוק ב-DAX Query View ואז להעתיק</td></tr><tr><td>מדד בדוח עם live connect אינו רואה פונקציה של מודל המקור</td><td>מדד ברמת דוח יכול להפנות אך בלי IntelliSense; מדד ברמת מודל במודל מורכב אינו יכול כלל</td><td>להגדיר את הלוגיקה במודל המקור גם כמדד ולא רק כפונקציה</td></tr><tr><td>עמודה מחושבת מחזירה טיפוס לא עקבי</td><td>פונקציה שמחזירה טיפוסים שונים לפי הענף שנבחר</td><td>לעטוף ב-<span class="mono" dir="ltr">CONVERT</span> או לפצל לשתי פונקציות עם טיפוס אחיד</td></tr><tr><td>שאילתות DAX שמורות לא נכנסו ל-Git</td><td>הקמת אינטגרציית Git ראשונית מסביבת העבודה אינה כוללת אותן</td><td>לשמור שאילתות קריטיות כקובצי טקסט במאגר במקביל</td></tr><tr><td>מפות התחילו להתנהג אחרת בדוח ותיק</td><td>כלי הבחירה ב-Azure Maps דלוקים כעת כברירת מחדל, גם בדוחות קיימים</td><td>לכבות את מתג <span class="mono" dir="ltr">Selection</span> בקטע Controls</td></tr><tr><td>Date picker לא מופיע אצל עמית בצוות</td><td>פיצ'ר בתצוגה מקדימה שמופעל לכל מכשיר בנפרד</td><td>לוודא שכולם הפעילו את התצוגה המקדימה, ולא להסתמך עליו בדוח פרודקשן</td></tr></tbody></table></div><div class="note"><b>סתירה בתיעוד:</b> עמוד ה-Best Practices ב-Learn עדיין נושא סימון תצוגה מקדימה ומפרט מגבלה של אי-יצירת פונקציות בשירות, בעוד הבלוג הרשמי של יוני מכריז על עריכה מלאה בדפדפן. כדאי לבדוק את ההתנהגות בסביבה שלכם.</div>
+</section>
+<section class="page" id="u6p16" data-chap="פרק VI · DAX Query View" data-title="מיון וסינון ברשת התוצאות" aria-label="פרק VI · DAX Query View — מיון וסינון ברשת התוצאות" hidden>
+  <div class="sec-num">פרק VI · DAX Query View</div>
+  <h2 class="sec-title">מיון וסינון ברשת התוצאות</h2>
+  <p class="sec-sub">שיפור קטן בממשק שחוסך סבבי הרצה — עם מלכודת אחת גדולה.</p>
+<h3 style="margin:26px 0 10px">למה מיקרוסופט הכניסה את זה</h3><p>ניפוי שגיאות ב-DAX הוא לולאה: מריצים, מסתכלים, משנים, מריצים שוב. עד היום כל שאלה קטנה על התוצאה — מה הערך הגבוה ביותר, האם יש שורות שליליות — חייבה לשכתב את השאילתה ולהריץ מחדש. כל סבב עולה זמן וגם משאבי קיבולת.</p><h3 style="margin:26px 0 10px">מה נוסף בפועל</h3><p>כל כותרת עמודה מציגה אייקון מיון להחלפה בין סדר עולה ליורד בלחיצה. תפריט שלוש הנקודות מוסיף ניקוי המיון, חיפוש ערכים, וסינון לפי בחירת ערכים.</p><div class="note"><b>דיוק חשוב:</b> הרשת <b>אינה ניתנת לעריכה</b>. נוספו מיון, חיפוש וסינון בלבד — אין עריכת ערכים ואין כתיבה חזרה לנתונים. זו טעות פרשנות שרווחת בכמה סיכומים ברשת.</div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">המגבלה</th><th scope="col">הערך</th><th scope="col">מה זה אומר בפועל</th></tr></thead><tbody><tr><td>נפח לשאילתה</td><td>15MB</td><td>בחריגה השורה הנוכחית מסתיימת ולא נכתבות שורות נוספות</td></tr><tr><td>ערכים לשאילתה</td><td>1,000,000</td><td>ב-20 עמודות מקבלים לכל היותר 50,000 שורות</td></tr><tr><td>שורות בדפדפן</td><td>99,999</td><td>ונדרשת הרשאת כתיבה על המודל הסמנטי</td></tr><tr><td>פורמט תצוגה</td><td>לא מוצג</td><td>מטבע ומפרידי אלפים לא יופיעו ברשת</td></tr></tbody></table></div><div class="note"><b>המלכודת המרכזית:</b> המיון והסינון פועלים <b>רק על התוצאות שכבר הוחזרו</b>, ואלה עשויות להיות קטומות. אם התוצאה נקטעה, מה שתראו אינו משקף את מלוא קבוצת התוצאות.</div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="העתקת הקוד ללוח"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">העתקה</span></button></div><div class="code"><span class="c">-- ולידציה נכונה: הסינון בשאילתה, לא ברשת</span><br><span class="k">EVALUATE</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FILTER</span> (<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">SUMMARIZECOLUMNS</span> (<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Product'[Category],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Date'[Month of Year],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sales", [Total Sales]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Sales] &gt; 100000<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br><span class="k">ORDER BY</span> [Sales] <span class="k">DESC</span></div></div><div class="sol-check"><b>✓</b> <b>כלל לתלמידים:</b> הרשת היא כלי דיבוג, לא כלי ולידציה. סטודנט שמסנן ברשת ומדווח "בדקתי, אין חריגות" עלול לטעות על מודל גדול.</div>
+</section>
+<section class="page" id="u6p17" data-chap="פרק VII · הדוח והמובייל" data-title="עדכוני חוויית הדוח" aria-label="פרק VII · הדוח והמובייל — עדכוני חוויית הדוח" hidden>
+  <div class="sec-num">פרק VII · הדוח והמובייל</div>
+  <h2 class="sec-title">עדכוני חוויית הדוח</h2>
+  <p class="sec-sub">הקו המשותף: מחיקת עבודה ידנית חוזרת.</p>
+<h3 style="margin:26px 0 10px">למה מיקרוסופט הכניסה את זה</h3><p>כמעט כל שינוי כאן מוחק תחזוקה: סלייסר תאריכים שצריך לעדכן כל חודש, מדד טקסט שנכתב רק כדי שטולטיפ יהיה קריא, כוונון ידני של טווחי צירים כדי שבועה לא תיחתך. במקביל, הפעלת כלי הבחירה במפות כברירת מחדל מלמדת עיקרון שני: פיצ'ר שקיים אך מוסתר מאחורי מתג כבוי הוא פיצ'ר שלא קיים.</p><div class="grid g3"><div class="card"><span class="tag">01</span><h3>Date picker לסלייסר</h3><p>בחירה יחסית שמתגלגלת קדימה עם כל רענון. מעוגנת להיום, לתאריך הראשון או <b>לתאריך האחרון בנתונים</b> — וזה מה שמונע דוח שנשבר כשה-ETL מתעכב. בתצוגה מקדימה.</p></div><div class="card"><span class="tag">02</span><h3>פתיחה אוטומטית במטריצה</h3><p>מוגדרת בנפרד לשורות ולעמודות. הערך הגדול הוא ב-Personalize this visual: שדה שהקורא מוסיף נפתח מיד.</p></div><div class="card"><span class="tag">03</span><h3>טולטיפ במצב משפט</h3><p>משפט חופשי שמפנה לשדות הטולטיפ — בלי מדד DAX ייעודי. חוסך מדדי טקסט מיותרים במודל.</p></div><div class="card"><span class="tag">04</span><h3>רוחב עמודה מותנה</h3><p>מפעילים Custom widths ולוחצים fx. הדפוס המעניין: קשירת הרוחב לפרמטר What-If עם סליידר.</p></div><div class="card"><span class="tag">05</span><h3>Azure Maps</h3><p>כלי הבחירה דלוקים כברירת מחדל — עיגול, מלבן, פוליגון, זמן נסיעה ומרחק. סגירת פוליגון במקש C.</p></div><div class="card"><span class="tag">06</span><h3>Shape map</h3><p>בזמינות כללית, עם העלאת TopoJSON ו-GeoJSON והורדה חוזרת של מפה שהעליתם.</p></div></div><div class="note"><b>שינוי שמשפיע על דוחות קיימים:</b> הפעלת הבחירה ב-Azure Maps אינה חלה רק על דוחות חדשים. מי שרוצה את ההתנהגות הקודמת צריך לכבות את המתג ידנית.</div>
+</section>
+<section class="page" id="u6p18" data-chap="פרק VII · הדוח והמובייל" data-title="התאמת הדוח למובייל" aria-label="פרק VII · הדוח והמובייל — התאמת הדוח למובייל" hidden>
+  <div class="sec-num">פרק VII · הדוח והמובייל</div>
+  <h2 class="sec-title">התאמת הדוח למובייל</h2>
+  <p class="sec-sub">פריסת מובייל היא לא הקטנה של הדסקטופ — היא דוח אחר.</p>
+<div class="note"><b>איך זה עובד:</b> תצוגה מותאמת מובייל מוצגת <b>רק</b> באפליקציות ל-iOS ולאנדרואיד, ורק כשהמכשיר במצב לאורך. בדפדפן הדוח תמיד מוצג בפריסה הרגילה. בונים ב-<span class="mono" dir="ltr">View > Mobile layout</span> ב-Desktop, או דרך עריכת הדוח בשירות.</div><ol class="steps"><li><b>בונים את שתי הפריסות יחד</b><span>שכפול עמוד משכפל את שתי הפריסות, כך שעמוד עם כותרת וניווט משמש תבנית לשאר העמודים.</span></li><li><b>בוחרים רק את מה שחשוב</b><span>גודל מינימלי מומלץ: רוחב 323 נקודות לוויזואל גדול, 158 לקטן. גופן לא קטן מתשע נקודות.</span></li><li><b>מנקים רעש</b><span>מסירים כותרות ציר, קווי רשת ומקרא; מסדרים ניווט וסלייסרים אופקית; מצמצמים רווח לבן.</span></li><li><b>בודקים אינטראקציה</b><span>טולטיפים מושבתים בקנבס העריכה אך פועלים באפליקציה. בחירות בסלייסר בקנבס אינן עוברות לפריסת הרשת.</span></li></ol><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">העדכון החדש</th><th scope="col">מה הוא נותן במסך קטן</th></tr></thead><tbody><tr><td>Date picker</td><td>בחירה יחסית חוסכת הקלדה, ועדיפה על שני סלייסרים נפרדים לטווח</td></tr><tr><td>רוחב עמודה מותנה</td><td>אותה טבלה בשני רוחבים שונים לדסקטופ ולמובייל, בלי לשכפל ויזואל</td></tr><tr><td>טולטיפ במצב משפט</td><td>משפט אחד קריא במקום רשימת שדות שנחתכת במסך צר</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> רספונסיביות אוטומטית עשויה להתנגש בעיצוב ידני. אפשר לכבות אותה ב-<span class="mono" dir="ltr">General > Properties > Advanced options</span>.</div>
+</section>
+<section class="page" id="u6p19" data-chap="פרק VIII · בדיקה עצמית" data-title="בוחן — 12 שאלות" aria-label="פרק VIII · בדיקה עצמית — בוחן — 12 שאלות" hidden>
+  <div class="sec-num">פרק VIII · בדיקה עצמית</div>
+  <h2 class="sec-title">בוחן — 12 שאלות</h2>
+  <p class="sec-sub">שאלה אחת בכל פעם. תשובה נכונה נצבעת בירוק, שגויה באדום, והתשובה הנכונה תמיד נחשפת יחד עם הסבר טכני מלא.</p>
+<div class="quiz" id="quiz-u6"><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q1">מה מצב ההעברה של פרמטר שנכתב בלי שום רמז טיפוס?</h3><div class="q-opts" role="group" aria-labelledby="u6q1"><button type="button" class="q-opt" data-key="a">expr — הערכה עצלה</button><button type="button" class="q-opt" data-key="b">val — הערכה מיידית</button><button type="button" class="q-opt" data-key="c">תלוי בסוג הארגומנט שנשלח</button><button type="button" class="q-opt" data-key="d">אין ברירת מחדל, חובה לציין</button></div><div class="q-exp" role="status"><b>הסבר:</b> ברירת המחדל היא <em>AnyVal val</em>. משמעות הדבר שהארגומנט מוערך במלואו <b>לפני</b> הכניסה לגוף הפונקציה, והערך שכבר חושב הוא זה שנכנס פנימה. זו הסיבה שפונקציה פשוטה עובדת כמצופה בלי לציין כלום — אבל גם הסיבה שניסיון לשנות הקשר בתוך הפונקציה לא ישפיע, כי אין יותר ביטוי לשנות לו הקשר. התשובה 'תלוי בארגומנט' שגויה כי מצב ההעברה נקבע בחתימת הפונקציה, לא בקריאה אליה.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q2">פרמטר במצב expr יורש איזה הקשר?</h3><div class="q-opts" role="group" aria-labelledby="u6q2"><button type="button" class="q-opt" data-key="a">הקשר שורה בלבד</button><button type="button" class="q-opt" data-key="b">הקשר שורה והקשר סינון</button><button type="button" class="q-opt" data-key="c">הקשר סינון בלבד</button><button type="button" class="q-opt" data-key="d">שום הקשר — הוא מוערך בבידוד</button></div><div class="q-exp" role="status"><b>הסבר:</b> פרמטר <em>expr</em> מועבר כביטוי לא מחושב ומוערך בתוך גוף הפונקציה, ולכן הוא רואה את הקשר הסינון ששורר שם אך לא את הקשר השורה של הקורא. פרמטר <em>val</em>, לעומת זאת, מוערך אצל הקורא ולכן יורש את שניהם. זו בדיוק הסיבה שאותו גוף פונקציה מחזיר תוצאות שונות בשתי הפונקציות CountRowsNow ו-CountRowsLater: באחת הטבלה כבר סוננה, ובשנייה ה-ALL בפנים עוד יכול להסיר את הסינון.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u6q3">מה קורה כשפונקציה מפנה למדד שמוגן באבטחה ברמת אובייקט?</h3><div class="q-opts" role="group" aria-labelledby="u6q3"><button type="button" class="q-opt" data-key="a">הפונקציה אינה מוגנת אוטומטית ויש לטפל בזה ידנית</button><button type="button" class="q-opt" data-key="b">הפונקציה יורשת את ההגנה של המדד</button><button type="button" class="q-opt" data-key="c">הפונקציה נכשלת בשמירה למודל</button><button type="button" class="q-opt" data-key="d">המדד מוחזר כ-BLANK לכל משתמש</button></div><div class="q-exp" role="status"><b>הסבר:</b> OLS <b>אינו עובר</b> לפונקציות ולהפך — זו מגבלה מתועדת ולא באג. כשהפונקציה רצה תחת זהות שאין לה הרשאה למדד, המנוע מתנהג כאילו המדד אינו קיים כלל, מה שעלול להחזיר תוצאה שגויה בשקט במקום לחסום. ההמלצה הרשמית נגזרת מכך: אין לחשוף שמות של אובייקטים מוגנים בשמות הפונקציות ובתיאורים שלהן, וחובה לבדוק כל פונקציה תחת כל תפקיד לפני פרסום.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q4">למה אסור להסתמך על סינון ברשת התוצאות של DAX Query View כדי לאמת נתונים?</h3><div class="q-opts" role="group" aria-labelledby="u6q4"><button type="button" class="q-opt" data-key="a">כי הסינון משנה את המודל</button><button type="button" class="q-opt" data-key="b">כי הסינון אינו נשמר בין סשנים</button><button type="button" class="q-opt" data-key="c">כי הוא פועל רק על תוצאות שהוחזרו, שעשויות להיות קטומות</button><button type="button" class="q-opt" data-key="d">כי הוא מתעלם ממדדים ומחשב רק עמודות</button></div><div class="q-exp" role="status"><b>הסבר:</b> המיון והסינון הם פעולת ממשק על מה שכבר חזר מהמנוע, לא שאילתה חדשה. אם התוצאה נקטעה — במגבלת 15MB, במיליון ערכים לשאילתה, או ב-99,999 שורות בדפדפן — אתם מסננים חלק מהנתונים ומסיקים על הכול. לוולידציה אמיתית יש להעביר את הלוגיקה לשאילתה עצמה עם FILTER ו-ORDER BY ולהריץ מחדש.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q5">רמז הטיפוס MeasureRef נדחה באתר הקריאה. מה הפתרון?</h3><div class="q-opts" role="group" aria-labelledby="u6q5"><button type="button" class="q-opt" data-key="a">להסיר את רמז הטיפוס ולהעביר את המדד כערך</button><button type="button" class="q-opt" data-key="b">לרדת ל-AnyRef ולוודא את הטיפוס בגוף הפונקציה</button><button type="button" class="q-opt" data-key="c">לשדרג את רמת התאימות ל-1702</button><button type="button" class="q-opt" data-key="d">להפוך את הפונקציה למדד רגיל</button></div><div class="q-exp" role="status"><b>הסבר:</b> זהו באג ידוע ומתועד: טיפוסי ההפניה הספציפיים — CalendarRef, ColumnRef, MeasureRef ו-TableRef — אינם מתקבלים בכל אתרי הקריאה, ודרך העקיפה הרשמית היא נפילה חזרה ל-AnyRef שהוא הטיפוס הכללי של המשפחה. האפשרות להעביר כערך שגויה כי הפניה חייבת להיות expr; שדרוג רמת תאימות לא רלוונטי כאן, כי אילו הייתה נמוכה מדי הפונקציה כלל לא הייתה נשמרת.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q6">מהי רמת התאימות המינימלית הנדרשת לפונקציות מוגדרות משתמש?</h3><div class="q-opts" role="group" aria-labelledby="u6q6"><button type="button" class="q-opt" data-key="a">1550</button><button type="button" class="q-opt" data-key="b">1702</button><button type="button" class="q-opt" data-key="c">1601</button><button type="button" class="q-opt" data-key="d">1400</button></div><div class="q-exp" role="status"><b>הסבר:</b> 1702 ומעלה. רמת התאימות קובעת אילו אובייקטים ומאפיינים המודל מסוגל להכיל בכלל, ולכן מודל ותיק שלא שודרג פשוט יסרב לשמור את הפונקציה — וזו הסיבה הראשונה לבדוק כשמשהו לא עובד. ב-TMDL View מוצג פרומפט שדרוג אוטומטי שמציין בדיוק איזה אובייקט מחייב את השדרוג.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q7">בפונקציה עם שלושה פרמטרים שרק השני אופציונלי — כמה ארגומנטים חייב הקורא למסור?</h3><div class="q-opts" role="group" aria-labelledby="u6q7"><button type="button" class="q-opt" data-key="a">אחד</button><button type="button" class="q-opt" data-key="b">שניים</button><button type="button" class="q-opt" data-key="c">שלושה</button><button type="button" class="q-opt" data-key="d">תלוי אם משתמשים בפסיק ריק</button></div><div class="q-exp" role="status"><b>הסבר:</b> מספר הארגומנטים המינימלי — הארינות של הפונקציה — נקבע לפי מיקום הפרמטר <b>הנדרש הימני ביותר</b>, ולא לפי כמה פרמטרים אופציונליים יש. מכיוון שהפרמטר השלישי נדרש, חובה למסור שלושה ארגומנטים. מותר לדלג על השני בפסיק ריק בסגנון MyFunc(1,,3), וברירת המחדל שלו תיכנס לתמונה.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u6q8">מה מייחד הערה שמתחילה בשלושה לוכסנים?</h3><div class="q-opts" role="group" aria-labelledby="u6q8"><button type="button" class="q-opt" data-key="a">רק היא נכנסת ל-IntelliSense של הפונקציה</button><button type="button" class="q-opt" data-key="b">היא מונעת שמירה למודל</button><button type="button" class="q-opt" data-key="c">היא מסמנת קוד מושבת</button><button type="button" class="q-opt" data-key="d">היא מחייבת רמת תאימות גבוהה יותר</button></div><div class="q-exp" role="status"><b>הסבר:</b> התחביר <em>///</em> נשמר אל תוך המודל כמאפיין תיאור של האובייקט, בדיוק כפי ש-TMDL תומך בו למדדים ולפונקציות. הערה רגילה עם // או /* */ נשארת בקוד השאילתה בלבד ולא מגיעה למי שקורא לפונקציה. בתוך הבלוק אפשר גם להשתמש בתגיות בסגנון JSDoc כמו @param ו-@returns כדי לתאר כל פרמטר בנפרד.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q9">מה יקרה אם תשתמשו בתוך פונקציה בהפניה לא מוסמכת בסגנון [Amount] כשהכוונה לעמודה?</h3><div class="q-opts" role="group" aria-labelledby="u6q9"><button type="button" class="q-opt" data-key="a">שגיאת תחביר בשמירה</button><button type="button" class="q-opt" data-key="b">DAX יפרש אותה כמדד, ומעקב התלויות עלול להישבר</button><button type="button" class="q-opt" data-key="c">הפונקציה תעבוד אך תרוץ לאט</button><button type="button" class="q-opt" data-key="d">אין הבדל — DAX מזהה לבד</button></div><div class="q-exp" role="status"><b>הסבר:</b> שם לא מוסמך מפורש תמיד כהפניה למדד. זו מגבלה ידועה בתיקון הנוסחאות ובמעקב התלויות: אם התכוונתם לעמודה, השם לא ייכלל בגרף התלויות ולכן שינוי שם עתידי לא יתקן את הפונקציה והיא תישבר בשקט. הכלל המעשי: בתוך UDF תמיד לכתוב 'Sales'[Amount] עם שם הטבלה.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u6q10">איפה מוצגת פריסת המובייל שבניתם לדוח?</h3><div class="q-opts" role="group" aria-labelledby="u6q10"><button type="button" class="q-opt" data-key="a">רק באפליקציית המובייל, במצב לאורך</button><button type="button" class="q-opt" data-key="b">בכל דפדפן צר מ-768 פיקסלים</button><button type="button" class="q-opt" data-key="c">בכל מכשיר נייד, גם בדפדפן</button><button type="button" class="q-opt" data-key="d">רק אחרי פרסום לאפליקציה ארגונית</button></div><div class="q-exp" role="status"><b>הסבר:</b> פריסת המובייל היא ארטיפקט נפרד שנשמר לצד פריסת הרשת, והיא נטענת רק על ידי אפליקציות Power BI ל-iOS ולאנדרואיד כשהמכשיר מוחזק לאורך. בדפדפן — גם בטלפון — תמיד תוצג הפריסה הרגילה, ולכן אי אפשר לבדוק פריסת מובייל דרך הדפדפן. הטיית המכשיר לרוחב מחזירה את התצוגה הרגילה גם באפליקציה.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q11">מתי בוחרים UDF ולא קבוצת חישוב?</h3><div class="q-opts" role="group" aria-labelledby="u6q11"><button type="button" class="q-opt" data-key="a">כשרוצים להחיל 'שנה קודמת' על כל המדדים</button><button type="button" class="q-opt" data-key="b">כשהלוגיקה צריכה לקבל קלט משתנה כפרמטר</button><button type="button" class="q-opt" data-key="c">כשרוצים לשנות את ההקשר של מדד קיים</button><button type="button" class="q-opt" data-key="d">כשהמודל קטן ופשוט</button></div><div class="q-exp" role="status"><b>הסבר:</b> פרמטרים מפורשים בחתימה הם היתרון המובהק של UDF: הקלט עובר ישירות, בלי לעבור דרך הקשר הסינון. כשאותה לוגיקה נקראת כמה פעמים באותה שאילתה, ההבדל הזה מצטבר גם לביצועים. קבוצת חישוב, לעומת זאת, נועדה בדיוק לתשובות א' ו-ג': להחיל וריאציית תצוגה אחידה על מדדים קיימים בלי לשכתב אותם.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q12">פונקציה שמוגדרת עם ( t : TABLE ) ונקראת בתוך CALCULATE עם סינון שנה — מה היא תחזיר?</h3><div class="q-opts" role="group" aria-labelledby="u6q12"><button type="button" class="q-opt" data-key="a">את כל השנים, כי ALL שבתוכה מסיר את הסינון</button><button type="button" class="q-opt" data-key="b">שגיאה, כי חסר מצב העברה</button><button type="button" class="q-opt" data-key="c">רק את השנה המסוננת</button><button type="button" class="q-opt" data-key="d">תלוי אם הטבלה מסוג Import או DirectQuery</button></div><div class="q-exp" role="status"><b>הסבר:</b> בהיעדר מצב העברה מפורש, ברירת המחדל היא val. הטבלה מחושבת אצל הקורא — כלומר כבר מסוננת לשנה — ורק אז נכנסת לפונקציה, ולכן ALL שבפנים כבר לא יכול להסיר סינון מטבלה שחושבה. התיקון הוא הצהרה מפורשת: ( t : TABLE EXPR ). זו הטעות הנפוצה ביותר בכתיבת UDF ראשונה.</div></article></div><div class="quiz-summary" role="status" aria-live="polite"><div class="qs-bar"><span class="qs-fill"></span></div><p class="qs-text">טרם ענית על שאלות — 0 מתוך 12</p></div><div class="quiz-actions"><button type="button" class="btn ghost quiz-reset">איפוס הבוחן</button></div>
+</section>
+<section class="page" id="u6p20" data-chap="פרק VIII · בדיקה עצמית" data-title="סיכום ומה הלאה" aria-label="פרק VIII · בדיקה עצמית — סיכום ומה הלאה" hidden>
+  <div class="sec-num">פרק VIII · בדיקה עצמית</div>
+  <h2 class="sec-title">סיכום ומה הלאה</h2>
+  <p class="sec-sub">עשר שורות שמסכמות את כל השיעור.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">נושא</th><th scope="col">מה לזכור</th></tr></thead><tbody><tr><td>הרציונל</td><td>לוגיקה עסקית הופכת לספרייה מנוהלת בקוד, לא להעתק-הדבק בין מדדים</td></tr><tr><td>הגדרה</td><td><span class="mono" dir="ltr">FUNCTION Name = ( p : TYPE SUBTYPE MODE = default ) => body</span> עם תיעוד ב-<span class="mono" dir="ltr">///</span></td></tr><tr><td>val מול expr</td><td>val אצל הקורא ויורש שורה וסינון; expr בפנים ויורש סינון בלבד</td></tr><tr><td>טיפוסי הפניה</td><td>ColumnRef, MeasureRef, TableRef, CalendarRef — תמיד expr, בלי המרת טיפוס</td></tr><tr><td>אופציונליים</td><td>הארגומנט המינימלי נקבע לפי הפרמטר הנדרש הימני ביותר</td></tr><tr><td>סיכון עיקרי</td><td>OLS אינו עובר לפונקציות</td></tr><tr><td>כלל זהב</td><td>תמיד שמות מוסמכים מלאים בתוך פונקציה</td></tr><tr><td>DAX Query View</td><td>מיון וסינון בלבד, ורק על תוצאות שהוחזרו</td></tr><tr><td>מובייל</td><td>בונים פריסת מובייל יחד עם הדסקטופ, לא אחריה</td></tr><tr><td>מקור אמת</td><td><span class="mono" dir="ltr">functions.tmdl</span> בפרויקט PBIP, בסביבת עבודה מחוברת ל-Git</td></tr></tbody></table></div><div class="next-cta"><h2>מכאן ליולי 2026</h2><p>אחרי שהלוגיקה הפכה לקוד, השלב הבא הוא המודל עצמו: TMDL בדפדפן, Model Options בשירות, וסיכוני הדריסה מול Desktop.</p><div class="quiz-actions" style="justify-content:center"><a class="btn" href="pbi-lesson-2026-07.html">לשיעור יולי 2026 ←</a><button type="button" class="btn ghost" data-goto="u6p1">לתחילת השיעור</button></div></div>
+</section>
+<nav class="pager" aria-label="ניווט בין נושאי השיעור">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ הקודם</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">הבא ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">אפשר לנווט גם בכפתורים שבראש המסך, בחצי המקלדת, ובטלפון בהחלקת אצבע</p>
+<div class="lesson-jump">
+  <a class="btn ghost" href="pbi-course-4.html">לשיעור 4 — M ו-DAX ←</a>
+  <a class="btn ghost" href="pbi-lesson-2026-07.html">לעדכון יולי 2026 ←</a>
+  <button type="button" class="btn ghost" id="open-lessons">כל שיעורי הקורס</button>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Power BI · מודול עדכונים — יוני 2026 · <a href="index.html">SQL עם אלירן</a></p>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="תצוגה מוגדלת של צילום המסך">
+  <div class="lb-bar">
+    <button type="button" class="lb-close" id="lb-close">סגירה ✕</button>
+    <button type="button" class="lb-zoom" id="lb-zoom" aria-pressed="false">גודל מלא</button>
+    <span id="lb-cap"></span>
+  </div>
+  <div class="lb-body"><img id="lb-img" src="" alt=""></div>
+</div>
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="רשימת נושאי השיעור">
+  <div class="drawer-head">
+    <b>נושאי השיעור</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="סגירת רשימת הנושאים">✕</button>
+  </div>
+  <nav class="drawer-lessons" aria-label="מעבר בין שיעורי הקורס">
+    <div class="dl-head">שיעורי הקורס</div>
+    <div class="dl-list"><a class="dl-item" href="pbi-course.html"><span class="dl-n">1</span><span class="dl-t">Power BI בסיס</span><span class="dl-s">מעבר ←</span></a><a class="dl-item" href="pbi-course-2.html"><span class="dl-n">2</span><span class="dl-t">מודלינג נתונים</span><span class="dl-s">מעבר ←</span></a><a class="dl-item" href="pbi-course-3.html"><span class="dl-n">3</span><span class="dl-t">Power Query ו-ETL</span><span class="dl-s">מעבר ←</span></a><a class="dl-item" href="pbi-course-4.html"><span class="dl-n">4</span><span class="dl-t">M ו-DAX בסיסי</span><span class="dl-s">מעבר ←</span></a><div class="dl-item is-current" aria-current="page"><span class="dl-n">06</span><span class="dl-t">עדכון יוני 2026</span><span class="dl-s">אתם כאן</span></div><a class="dl-item" href="pbi-lesson-2026-07.html"><span class="dl-n">07</span><span class="dl-t">עדכון יולי 2026</span><span class="dl-s">מעבר ←</span></a></div>
+    <a class="dl-home" href="pbi-updates.html">→ כל עדכוני Power BI</a>
+  </nav>
+  <div class="toc" id="toc"><div class="toc-chap">פתיחה</div><button type="button" class="toc-item" data-go="0"><span class="toc-n">01</span><span class="toc-t">איך עובד השיעור</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק I · למה DAX הגיע לנקודה הזו</div><button type="button" class="toc-item" data-go="1"><span class="toc-n">02</span><span class="toc-t">הכאב שהוליד את הפיצ'ר</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="2"><span class="toc-n">03</span><span class="toc-t">מה השתנה בזמינות הכללית</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק II · יסודות UDF</div><button type="button" class="toc-item" data-go="3"><span class="toc-n">04</span><span class="toc-t">הפונקציה הראשונה</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="4"><span class="toc-n">05</span><span class="toc-t">תיעוד וכללי שמות</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="5"><span class="toc-n">06</span><span class="toc-t">איפה קוראים לפונקציה</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק III · מערכת הטיפוסים</div><button type="button" class="toc-item" data-go="6"><span class="toc-n">07</span><span class="toc-t">למה DAX צריך טיפוסים</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="7"><span class="toc-n">08</span><span class="toc-t">שמונה הטיפוסים ושתי המשפחות</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="8"><span class="toc-n">09</span><span class="toc-t">val מול expr — התרגיל שמסביר הכול</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק IV · פרמטרים ובדיקות</div><button type="button" class="toc-item" data-go="9"><span class="toc-n">10</span><span class="toc-t">פרמטרים אופציונליים</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="10"><span class="toc-n">11</span><span class="toc-t">בדיקת טיפוס בזמן ריצה</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="11"><span class="toc-n">12</span><span class="toc-t">TABLEOF ו-NAMEOF</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק V · מפרודקשן וממשל</div><button type="button" class="toc-item" data-go="12"><span class="toc-n">13</span><span class="toc-t">מגבלות וסיכוני ממשל</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="13"><span class="toc-n">14</span><span class="toc-t">UDF או קבוצת חישוב</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="14"><span class="toc-n">15</span><span class="toc-t">באגים ידועים ודרכי עקיפה</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק VI · DAX Query View</div><button type="button" class="toc-item" data-go="15"><span class="toc-n">16</span><span class="toc-t">מיון וסינון ברשת התוצאות</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק VII · הדוח והמובייל</div><button type="button" class="toc-item" data-go="16"><span class="toc-n">17</span><span class="toc-t">עדכוני חוויית הדוח</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="17"><span class="toc-n">18</span><span class="toc-t">התאמת הדוח למובייל</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">פרק VIII · בדיקה עצמית</div><button type="button" class="toc-item" data-go="18"><span class="toc-n">19</span><span class="toc-t">בוחן — 12 שאלות</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="19"><span class="toc-n">20</span><span class="toc-t">סיכום ומה הלאה</span><span class="toc-done" aria-hidden="true">✓</span></button></div>
+  <div class="drawer-foot">
+    <button type="button" class="btn ghost" id="toc-reset">איפוס ההתקדמות</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+"use strict";
+
+/* Each module is isolated: a failure in one must never break the others. */
+function mod(name,fn){ try{ fn(); }catch(err){ if(window.console)console.error('[pbi-course] '+name,err); } }
+function $(sel,root){ return (root||document).querySelector(sel); }
+function $$(sel,root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+var SCROLLER=document.getElementById('scroller');
+function scrollTop0(){ if(SCROLLER)SCROLLER.scrollTop=0; else try{ window.scrollTo(0,0); }catch(e){} }
+function lockScroll(on){ if(SCROLLER)SCROLLER.style.overflowY=on?'hidden':''; }
+
+
+/* ---------- measure the fixed header stack (header + progress + topic bar) ---------- */
+
+/* ---------- paged lesson router ---------- */
+var LESSON={pages:[],index:0,go:function(){}}; window.LESSON=LESSON;
+mod('router',function(){
+  var pages=$$('.page'); if(!pages.length)return;
+  var total=pages.length;
+  var bar=$('#pbar'), tbChap=$('#tb-chap'), tbTitle=$('#tb-title'), tbCount=$('#tb-count');
+  var prev=$('#pg-prev'), next=$('#pg-next'), prevName=$('#pg-prev-name'), nextName=$('#pg-next-name');
+  var tbPrev=$('#tb-prev'), tbNext=$('#tb-next'), tbHome=$('#tb-home');
+  var tocItems=$$('.toc-item'), hero=$('#hero-block');
+  var KEY='pbi-u06-page-v1', VKEY='pbi-u06-visited-v1';
+  var visited={};
+  try{ visited=JSON.parse(localStorage.getItem(VKEY)||'{}')||{}; }catch(e){ visited={}; }
+
+  function save(i){
+    try{
+      localStorage.setItem(KEY,String(i));
+      visited[i]=1; localStorage.setItem(VKEY,JSON.stringify(visited));
+    }catch(e){}
+  }
+  function markVisited(){
+    tocItems.forEach(function(it,k){ it.classList.toggle('visited',!!visited[k]); });
+  }
+  function show(i,push,noScroll){
+    i=Math.max(0,Math.min(total-1,i));
+    if(allOn && LESSON.setAll)document.body.classList.remove('all-topics'), allOn=false;
+    pages.forEach(function(pg,k){
+      var on=(k===i);
+      pg.hidden=!on; pg.style.display=on?'':'none';
+    });
+    LESSON.index=i;
+    var cur=pages[i];
+    if(tbChap)tbChap.textContent=cur.dataset.chap||'';
+    if(tbTitle)tbTitle.textContent=cur.dataset.title||'';
+    if(tbCount)tbCount.textContent=(i+1)+' / '+total;
+    if(bar)bar.style.width=((i+1)/total*100)+'%';
+    if(hero){ hero.hidden=(i>0); hero.style.display=(i>0)?'none':''; }
+    if(prev){
+      prev.disabled=(i===0);
+      if(prevName)prevName.textContent=i>0?pages[i-1].dataset.title:'';
+    }
+    if(next){
+      next.disabled=(i===total-1);
+      if(nextName)nextName.textContent=i<total-1?pages[i+1].dataset.title:'סיימתם את השיעור';
+    }
+    /* the top strip mirrors the pager, and names its target for screen readers */
+    if(tbHome){
+      tbHome.disabled=(i===0);
+      tbHome.setAttribute('aria-label',i===0?'אתם בעמוד הראשון של השיעור':'חזרה לעמוד הראשון של השיעור');
+    }
+    if(tbPrev){
+      tbPrev.disabled=(i===0);
+      tbPrev.setAttribute('aria-label',i>0?('הנושא הקודם — '+pages[i-1].dataset.title):'זהו הנושא הראשון');
+    }
+    if(tbNext){
+      tbNext.disabled=(i===total-1);
+      tbNext.setAttribute('aria-label',i<total-1?('הנושא הבא — '+pages[i+1].dataset.title):'זהו הנושא האחרון');
+    }
+    tocItems.forEach(function(it,k){ it.classList.toggle('on',k===i); });
+    if(typeof syncQuizBtn==='function')syncQuizBtn(i);
+    save(i); markVisited();
+    if(push){
+      try{
+        if(window.history && history.replaceState) history.replaceState(null,'','#'+cur.id);
+        else window.location.hash=cur.id;
+      }catch(e){/* sandboxed/file:// contexts forbid history writes — navigation must continue */}
+    }
+    if(!noScroll)scrollTop0();
+    if(push){                       /* land the caret inside the new topic, not back at the top of the DOM */
+      var h=cur.querySelector('.sec-title');
+      if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(e){ h.focus(); } }
+    }
+    try{ document.title=(cur.dataset.title||'')+' · Power BI בסיס'; }catch(e){}
+  }
+  LESSON.pages=pages; LESSON.go=function(i){show(i,true);};
+
+  if(prev)prev.addEventListener('click',function(){show(LESSON.index-1,true);});
+  if(next)next.addEventListener('click',function(){show(LESSON.index+1,true);});
+  if(tbHome)tbHome.addEventListener('click',function(){ show(0,true); });   /* always one tap from the opening topic */
+  if(tbPrev)tbPrev.addEventListener('click',function(){show(LESSON.index-1,true);});
+  if(tbNext)tbNext.addEventListener('click',function(){show(LESSON.index+1,true);});
+  tocItems.forEach(function(it,k){
+    it.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+  });
+
+  /* contents list on the opening topic — the whole lesson at a glance */
+  var lt=$('#lesson-toc');
+  if(lt){
+    var html='<h3>תוכן השיעור המלא</h3><p class="lt-sub">'+total+' נושאים. אפשר לקפוץ ישירות לכל אחד מהם, או לעבור נושא-נושא בכפתורים שבראש המסך.</p>';
+    var lastChap=null, open=false;
+    pages.forEach(function(pg,k){
+      if(pg.dataset.chap!==lastChap){
+        if(open)html+='</div>';
+        html+='<div class="lt-chap">'+pg.dataset.chap+'</div><div class="lt-items">';
+        lastChap=pg.dataset.chap; open=true;
+      }
+      html+='<button type="button" class="lt-item" data-go="'+k+'"><span class="n">'+
+            (k+1<10?'0':'')+(k+1)+'</span><span>'+pg.dataset.title+'</span></button>';
+    });
+    if(open)html+='</div>';
+    html+='<div class="lt-actions"><button type="button" class="btn ghost" id="lt-all">הצגת כל השיעור ברצף אחד</button></div>';
+    lt.innerHTML=html;
+    $$('.lt-item',lt).forEach(function(b){
+      b.addEventListener('click',function(){ show(+b.dataset.go,true); });
+    });
+  }
+
+  /* continuous mode — every topic in one scroll, for review or for teaching from the page */
+  var allBar=$('#all-bar'), allOn=false;
+  function setAll(on){
+    allOn=on;
+    document.body.classList.toggle('all-topics',on);
+    pages.forEach(function(pg,k){
+      if(on){ pg.hidden=false; pg.style.display=''; }
+      else { var vis=(k===LESSON.index); pg.hidden=!vis; pg.style.display=vis?'':'none'; }
+    });
+    var hero=$('#hero-block');
+    if(hero && on){ hero.hidden=false; hero.style.display=''; }
+    if(tbTitle)tbTitle.textContent=on?'כל השיעור ברצף':pages[LESSON.index].dataset.title;
+    if(tbCount)tbCount.textContent=on?(total+' / '+total):((LESSON.index+1)+' / '+total);
+    scrollTop0();
+  }
+  var ltAll=$('#lt-all');
+  if(ltAll)ltAll.addEventListener('click',function(){ setAll(true); closeDrawer(); });
+  var allExit=$('#all-exit');
+  if(allExit)allExit.addEventListener('click',function(){ setAll(false); show(LESSON.index,true); });
+  LESSON.setAll=setAll;
+
+  /* the questions block: self-check quiz → homework → multiple-choice quiz.
+     One button in the strip owns it, and it always leads back to the first questions page. */
+  var Q_IDS=['u6p19'];
+  var qIdx=[];
+  Q_IDS.forEach(function(id){ pages.forEach(function(pg,k){ if(pg.id===id)qIdx.push(k); }); });
+  qIdx.sort(function(a,b){return a-b;});
+  var qFirst=qIdx.length?qIdx[0]:-1;
+  var quizBtn=$('#tb-quiz'), quizLabel=$('#tb-quiz-label'), quizShort=$('#tb-quiz-short'), returnTo=null;
+  if(quizBtn && qFirst<0) quizBtn.hidden=true;
+  function syncQuizBtn(i){
+    if(!quizBtn||qFirst<0)return;
+    var atFirst=(i===qFirst), inBlock=(qIdx.indexOf(i)>-1);
+    quizBtn.classList.toggle('on-quiz',atFirst);
+    var label=atFirst?'חזרה לשיעור':(inBlock?'לתחילת המבחן':'למבחן');
+    var short=atFirst?'חזרה':(inBlock?'לתחילה':'למבחן');
+    if(quizLabel) quizLabel.textContent=label;
+    if(quizShort) quizShort.textContent=short;
+    quizBtn.setAttribute('aria-label',atFirst
+      ? 'חזרה לנושא שממנו הגעתם'
+      : (inBlock?'חזרה לעמוד המבחן':'למבחן — 12 שאלות על עדכון זה'));
+    /* the strip inside the questions pages marks where you are */
+    $$('.qnav-b').forEach(function(b){
+      var on=(b.getAttribute('data-goto')===pages[i].id);
+      b.classList.toggle('is-on',on);
+      if(on)b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
+  }
+  var practiceIdx=-1;
+  pages.forEach(function(pg,k){ if(pg.querySelector('.tasks')) practiceIdx=k; });
+  var goPractice=$('#go-practice');
+  if(goPractice)goPractice.addEventListener('click',function(){ if(practiceIdx>=0)show(practiceIdx,true); });
+
+  /* any control with data-goto="<page id>" jumps to that topic */
+  $$('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=b.getAttribute('data-goto');
+      for(var k=0;k<pages.length;k++){ if(pages[k].id===id){ show(k,true); break; } }
+    });
+  });
+
+  if(quizBtn)quizBtn.addEventListener('click',function(){
+    if(qFirst<0)return;
+    if(LESSON.index===qFirst){
+      show(returnTo!==null?returnTo:0,true);          /* back to the topic you came from */
+    }else{
+      if(qIdx.indexOf(LESSON.index)<0) returnTo=LESSON.index;   /* remember only lesson topics */
+      show(qFirst,true);
+    }
+  });
+
+  /* drawer */
+  var drawer=$('#drawer'), back=$('#drawer-back'), menu=$('#tb-menu'), x=$('#drawer-x');
+  var lastFocus=null;
+  function focusables(){
+    return $$('button:not([disabled])',drawer);
+  }
+  function trap(e){
+    if(e.key!=='Tab'||!drawer||drawer.hidden)return;
+    var f=focusables(); if(!f.length)return;
+    var first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  function openDrawer(){
+    if(!drawer)return;
+    lastFocus=document.activeElement;
+    drawer.hidden=false; if(back)back.hidden=false;
+    if(menu)menu.setAttribute('aria-expanded','true');
+    lockScroll(true);
+    document.addEventListener('keydown',trap,true);
+    var on=$('.toc-item.on'); if(on){on.focus();on.scrollIntoView({block:'center'});}
+  }
+  function closeDrawer(){
+    if(!drawer||drawer.hidden)return;
+    drawer.hidden=true; if(back)back.hidden=true;
+    if(menu)menu.setAttribute('aria-expanded','false');
+    lockScroll(false);
+    document.removeEventListener('keydown',trap,true);
+    var restorable=lastFocus&&document.contains(lastFocus)&&
+      (lastFocus.matches?lastFocus.matches('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'):false);
+    var target=restorable?lastFocus:menu;
+    if(target&&target.focus)target.focus();
+  }
+  if(menu)menu.addEventListener('click',function(){ drawer && drawer.hidden?openDrawer():closeDrawer(); });
+  if(x)x.addEventListener('click',closeDrawer);
+  if(back)back.addEventListener('click',closeDrawer);
+
+  var drawerAll=document.createElement('button');
+  drawerAll.type='button'; drawerAll.className='btn ghost'; drawerAll.id='drawer-all';
+  drawerAll.textContent='כל השיעור ברצף';
+  drawerAll.style.marginBottom='8px';
+  drawerAll.addEventListener('click',function(){ setAll(true); closeDrawer(); });
+  var foot=$('.drawer-foot'); if(foot)foot.insertBefore(drawerAll,foot.firstChild);
+
+  var resetBtn=$('#toc-reset');
+  if(resetBtn)resetBtn.addEventListener('click',function(){
+    visited={};
+    try{localStorage.removeItem(VKEY);localStorage.removeItem(KEY);}catch(e){}
+    markVisited(); show(0,true); closeDrawer();
+  });
+
+  /* touch: swipe across the page moves between topics, like flipping a slide.
+     Ignored inside anything that scrolls sideways on its own, and while an overlay is open. */
+  var tx=0, ty=0, tracking=false;
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){ tracking=false; return; }
+    var t=e.target;
+    if(t&&t.closest&&t.closest('.tbl-wrap,.drawer,.lightbox,figure.shot,input[type="range"],.topicbar')){ tracking=false; return; }
+    if(document.body.classList.contains('all-topics')){ tracking=false; return; }
+    var d=$('#drawer'), lb=$('#lightbox');
+    if((d&&!d.hidden)||(lb&&!lb.hidden)){ tracking=false; return; }
+    tx=e.touches[0].clientX; ty=e.touches[0].clientY; tracking=true;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!tracking)return; tracking=false;
+    var t=e.changedTouches&&e.changedTouches[0]; if(!t)return;
+    var dx=t.clientX-tx, dy=t.clientY-ty;
+    if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.6)return;   /* horizontal, and clearly deliberate */
+    show(LESSON.index+(dx<0?1:-1),true);                        /* RTL: swipe left = next topic */
+  },{passive:true});
+
+  /* keyboard: arrows move between topics, Esc closes drawer */
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ closeDrawer(); return; }
+    var t=e.target, tag=t&&t.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable))return;
+    if(t&&t.closest&&t.closest('[role="tablist"],[role="tab"]'))return;   /* tabs own the arrows */
+    if(drawer&&!drawer.hidden)return;
+    if(e.key==='ArrowLeft'){ e.preventDefault(); show(LESSON.index+1,true); }   /* RTL: left = forward */
+    else if(e.key==='ArrowRight'){ e.preventDefault(); show(LESSON.index-1,true); }
+  });
+
+  window.addEventListener('hashchange',function(){
+    var id=''; try{ id=location.hash.slice(1); }catch(e){ return; }
+    var k=pages.findIndex?pages.findIndex(function(pg){return pg.id===id;}):-1;
+    if(k>=0 && k!==LESSON.index) show(k,false);
+  });
+
+  /* opening position: hash wins, then last saved page */
+  var startIdx=0, hashId='';
+  try{ hashId=location.hash.slice(1); }catch(e){}
+  var byHash=-1;
+  pages.forEach(function(pg,k){ if(pg.id===hashId) byHash=k; });
+  if(byHash>=0) startIdx=byHash;
+  else{ try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved)) startIdx=saved; }catch(e){} }
+  show(startIdx,false,true);
+});
+
+/* ---------- DIKW pyramid ---------- */
+mod('dikw',function(){
+  $$('#dikw button').forEach(function(btn){
+    var panel=document.getElementById(btn.getAttribute('aria-controls'));
+    if(!panel)return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      panel.classList.toggle('open',!open);
+    });
+  });
+});
+
+/* ---------- analyst time bars ---------- */
+mod('bars',function(){
+  var bars=$('#bars'); if(!bars)return;
+  var fills=$$('.bar-fill',bars);
+  function fill(){ fills.forEach(function(f){ f.style.width=(f.dataset.w||0)+'%'; }); }
+  var page=bars.closest('.page');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting) fill(); });
+    },{threshold:.25});
+    io.observe(bars);
+  }
+  /* pages are display:none until opened, so also fill whenever this topic becomes visible */
+  if(page && 'MutationObserver' in window){
+    new MutationObserver(function(){ if(!page.hidden) setTimeout(fill,60); })
+      .observe(page,{attributes:true,attributeFilter:['hidden']});
+  }
+  if(!page || !page.hidden) fill();
+  setTimeout(function(){ if(!page||!page.hidden) fill(); },1200);
+});
+
+/* ---------- before / after toggle ---------- */
+mod('beforeAfter',function(){
+  var bBefore=$('#ba-before'), bAfter=$('#ba-after');
+  var lBefore=$('#ba-list-before'), lAfter=$('#ba-list-after');
+  if(!bBefore||!bAfter||!lBefore||!lAfter)return;
+  function set(after){
+    bBefore.setAttribute('aria-pressed',String(!after));
+    bAfter.setAttribute('aria-pressed',String(after));
+    lBefore.hidden=after;  lBefore.style.display=after?'none':'';
+    lAfter.hidden=!after;  lAfter.style.display=after?'':'none';
+  }
+  bBefore.addEventListener('click',function(){set(false);});
+  bAfter.addEventListener('click',function(){set(true);});
+  set(false);
+});
+
+/* ---------- 8 reasons accordion ---------- */
+mod('reasons',function(){
+  $$('.reason>button').forEach(function(btn){
+    var body=btn.parentElement.querySelector('.body'); if(!body)return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.classList.toggle('open',!open);
+    });
+  });
+});
+
+/* ---------- tabs (scoped per tablist) ---------- */
+mod('tabs',function(){
+  $$('[role="tablist"]').forEach(function(list){
+    var tabs=$$('[role="tab"]',list); if(!tabs.length)return;
+    function select(tab,focus){
+      tabs.forEach(function(t){
+        var sel=(t===tab);
+        t.setAttribute('aria-selected',String(sel));
+        t.tabIndex=sel?0:-1;
+        var pnl=document.getElementById(t.getAttribute('aria-controls'));
+        if(pnl){ pnl.hidden=!sel; pnl.classList.toggle('open',sel); pnl.style.display=sel?'':'none'; }
+      });
+      if(focus)tab.focus();
+    }
+    tabs.forEach(function(t,i){
+      t.addEventListener('click',function(){select(t,false);});
+      t.addEventListener('keydown',function(e){
+        var dir=0;
+        if(e.key==='ArrowLeft')dir=1;          /* RTL: left arrow = next tab */
+        else if(e.key==='ArrowRight')dir=-1;
+        else if(e.key==='Home'){e.preventDefault();select(tabs[0],true);return;}
+        else if(e.key==='End'){e.preventDefault();select(tabs[tabs.length-1],true);return;}
+        if(dir){e.preventDefault();select(tabs[(i+dir+tabs.length)%tabs.length],true);}
+      });
+    });
+    var initial=tabs.filter(function(t){return t.getAttribute('aria-selected')==='true';})[0]||tabs[0];
+    select(initial,false);
+  });
+});
+
+/* ---------- matrix demo ---------- */
+mod('matrix',function(){
+  var table=$('#mx'), hint=$('#mx-hint'); if(!table)return;
+  var head=table.tHead?table.tHead.rows[0]:null;
+  $$('#mx tbody td').forEach(function(td){
+    function on(){
+      $$('#mx td.hot').forEach(function(x){x.classList.remove('hot');});
+      td.classList.add('hot');
+      if(!hint)return;
+      var rowTh=td.parentElement.querySelector('th');
+      var colTh=head?head.cells[td.cellIndex]:null;
+      hint.textContent='הערך המודגש כרגע: '+(rowTh?rowTh.textContent:'')+' · '+(colTh?colTh.textContent:'')+' — '+td.textContent+' אלף ₪';
+    }
+    td.addEventListener('mouseenter',on);
+    td.addEventListener('focus',on);
+    td.addEventListener('click',on);
+  });
+});
+
+/* ---------- self-check quiz ----------
+   Data lives in the HTML (data-correct on each .q-item, data-key on each .q-opt);
+   this module holds logic only, so questions can be edited without touching JS. */
+mod('quiz',function(){
+  $$('.quiz').forEach(setupQuiz);   /* every .quiz block on the page runs on its own score */
+});
+function setupQuiz(quiz){
+  if(!quiz)return;
+  var scope=(quiz.closest?quiz.closest('.page'):null)||document;
+  var items=$$('.q-item',quiz);
+  var fill=$('.qs-fill',scope), text=$('.qs-text',scope), reset=$('.quiz-reset',scope);
+  var total=items.length, answered=0, right=0;
+
+  function updateSummary(){
+    if(fill)fill.style.width=(total?answered/total*100:0)+'%';
+    if(!text)return;
+    if(!answered){ text.textContent='טרם ענית על שאלות — 0 מתוך '+total; return; }
+    var msg=answered<total
+      ? 'ענית על '+answered+' מתוך '+total+' — נכונות עד כה: '+right
+      : 'סיימת! '+right+' תשובות נכונות מתוך '+total+
+        (right===total?' — מושלם'
+          :right>=total*0.8?' — שליטה יפה בחומר'
+          :right>=total*0.6?' — כדאי לחזור על הנושאים שנפלו'
+          :' — שווה לעבור שוב על השיעור');
+    text.textContent=msg;
+  }
+
+  function answer(item,btn){
+    if(item.classList.contains('answered'))return;          /* one attempt per question */
+    var correctKey=item.dataset.correct;
+    var isRight=btn.dataset.key===correctKey;
+
+    $$('.q-opt',item).forEach(function(opt){
+      opt.setAttribute('aria-disabled','true');   /* stays focusable & readable, unlike [disabled] */
+      if(opt.dataset.key===correctKey) opt.classList.add('correct');   /* always reveal the right answer */
+    });
+    if(!isRight) btn.classList.add('incorrect');
+
+    item.classList.add('answered', isRight?'is-correct':'is-incorrect');
+    var exp=$('.q-exp',item);
+    if(exp && !$('.q-verdict',exp)){
+      var verdict=document.createElement('span');
+      verdict.className='q-verdict visually-hidden';
+      verdict.textContent=isRight?'תשובה נכונה. ':'תשובה שגויה. ';
+      exp.insertBefore(verdict,exp.firstChild);
+    }
+
+    answered++; if(isRight)right++;
+    updateSummary();
+  }
+
+  items.forEach(function(item){
+    $$('.q-opt',item).forEach(function(btn){
+      btn.addEventListener('click',function(){ answer(item,btn); });
+    });
+  });
+
+  if(reset)reset.addEventListener('click',function(){
+    items.forEach(function(item){
+      item.classList.remove('answered','is-correct','is-incorrect');
+      var v=$('.q-verdict',item); if(v)v.parentNode.removeChild(v);
+      $$('.q-opt',item).forEach(function(opt){
+        opt.removeAttribute('aria-disabled');
+        opt.classList.remove('correct','incorrect');
+      });
+    });
+    answered=0; right=0; updateSummary();
+    var first=$('.q-item',quiz); if(first)first.scrollIntoView({block:'center',behavior:'smooth'});
+  });
+
+  updateSummary();
+}
+
+/* ---------- practice: per-task solution toggles ---------- */
+mod('solutions',function(){
+  $$('.sol-toggle').forEach(function(btn){
+    var body=btn.nextElementSibling;
+    if(!body||!body.classList.contains('sol-body'))return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.classList.toggle('open',!open);
+      btn.textContent=open?'הצגת הפתרון':'הסתרת הפתרון';
+    });
+  });
+});
+
+/* ---------- screenshot lightbox ---------- */
+mod('lightbox',function(){
+  var box=$('#lightbox'), img=$('#lb-img'), cap=$('#lb-cap'), close=$('#lb-close'), zoom=$('#lb-zoom');
+  if(!box)return;
+  var opener=null;
+  var touch = !!(window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+  function setZoom(on){
+    on=!!on;
+    box.classList.toggle('zoomed',on);
+    if(zoom){
+      zoom.setAttribute('aria-pressed',String(on));
+      zoom.textContent = on ? 'התאמה למסך' : 'גודל מלא';
+    }
+  }
+  function open(src,alt,caption,natW){
+    opener=document.activeElement;
+    img.src=src; img.alt=alt||'';
+    if(cap)cap.textContent=caption||'';
+    box.hidden=false; lockScroll(true);
+    /* a screenshot wider than the screen opens at natural size — that is the readable state.
+       one that already fits opens fitted, so nothing is needlessly enlarged. */
+    var wider=!natW||natW>(window.innerWidth||0);
+    setZoom(touch&&wider);
+    var body=$('.lb-body',box);
+    if(body)setTimeout(function(){                    /* start in the middle: panning works both ways */
+      try{ body.scrollLeft=Math.max(0,(body.scrollWidth-body.clientWidth)/2); }catch(e){}
+    },0);
+    close.focus();
+  }
+  function shut(){
+    box.hidden=true; img.src=''; lockScroll(false);
+    if(opener&&opener.focus)opener.focus();
+  }
+  $$('.shot-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var im=$('img',btn), fig=btn.closest('figure');
+      var cp=fig?$('figcaption',fig):null;
+      open(im.getAttribute('src'), im.getAttribute('alt'), cp?cp.textContent.trim():'', +im.getAttribute('width')||0);
+    });
+  });
+  if(zoom)zoom.addEventListener('click',function(){ setZoom(!box.classList.contains('zoomed')); });
+  if(close)close.addEventListener('click',shut);
+  box.addEventListener('click',function(e){ if(e.target===box||e.target.className==='lb-body')shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!box.hidden)shut(); });
+});
+
+/* ---------- layers demo (Bring to front / Send to back) ---------- */
+mod('layersDemo',function(){
+  var shape=$('#lshape'), status=$('#lstatus'); if(!shape)return;
+  $$('#layers-demo [data-layer]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var back=btn.dataset.layer==='back';
+      shape.classList.toggle('back',back);
+      if(status)status.textContent=back
+        ? 'כרגע: הצורה ברקע — הגרף חשוף ונקרא במלואו'
+        : 'כרגע: הצורה מעל הגרף ומכסה אותו לגמרי';
+    });
+  });
+});
+
+/* ---------- selection pane demo (reorder + show/hide) ---------- */
+mod('selectionDemo',function(){
+  var list=$('#sel-list'), canvas=$('#sc'), status=$('#sstatus');
+  if(!list||!canvas)return;
+  var objs=[{key:'shape',name:'Shape',on:true},{key:'chart',name:'Count of Product_ID',on:true}];
+
+  function render(){
+    list.innerHTML='';
+    objs.forEach(function(o,i){
+      var li=document.createElement('li');
+      li.className='sel-item'+(o.on?'':' off');
+      li.innerHTML='<button type="button" class="sel-btn" data-act="up" '+(i===0?'disabled':'')+
+          ' aria-label="העלאת '+o.name+' שכבה אחת">▲</button>'+
+        '<button type="button" class="sel-btn" data-act="down" '+(i===objs.length-1?'disabled':'')+
+          ' aria-label="הורדת '+o.name+' שכבה אחת">▼</button>'+
+        '<span class="nm">'+o.name+'</span>'+
+        '<button type="button" class="sel-btn" data-act="eye" aria-pressed="'+(!o.on)+'"'+
+          ' aria-label="'+(o.on?'הסתרת ':'הצגת ')+o.name+'">'+(o.on?'👁':'🚫')+'</button>';
+      li.querySelectorAll('.sel-btn').forEach(function(b){
+        b.addEventListener('click',function(){
+          var act=b.dataset.act;
+          if(act==='up'&&i>0){ objs.splice(i-1,0,objs.splice(i,1)[0]); }
+          else if(act==='down'&&i<objs.length-1){ objs.splice(i+1,0,objs.splice(i,1)[0]); }
+          else if(act==='eye'){ o.on=!o.on; }
+          render();
+        });
+      });
+      list.appendChild(li);
+    });
+    objs.forEach(function(o,i){
+      var el=canvas.querySelector('[data-obj="'+o.key+'"]');
+      if(!el)return;
+      el.style.zIndex=String(objs.length-i);      /* first in the list is drawn on top */
+      el.classList.toggle('hidden',!o.on);
+    });
+    if(status)status.textContent='סדר נוכחי: '+objs.map(function(o){
+      return o.name+(o.on?'':' (מוסתר)');
+    }).join(' ← ')+'  |  הפריט הראשון מצויר מעל השאר';
+  }
+  render();
+});
+
+/* ---------- conditional formatting preview (Gradient vs Rules) ---------- */
+mod('cfDemo',function(){
+  var wrap=$('#cf-cells'), caption=$('#cf-caption'), legend=$('#cf-legend');
+  if(!wrap)return;
+  var values=[18,42,55,63,78,94], min=18, max=94;
+  function paint(style){
+    wrap.innerHTML='';
+    values.forEach(function(v){
+      var cell=document.createElement('div');
+      cell.className='cf-cell';
+      cell.textContent=v;
+      if(style==='gradient'){
+        var t=(v-min)/(max-min);                       /* light blue -> deep blue */
+        cell.style.background='rgb('+Math.round(214-150*t)+','+Math.round(233-120*t)+','+Math.round(250-70*t)+')';
+        cell.style.color=t>0.55?'#fff':'#04120f';
+      }else{
+        var c = v<50 ? '#f87171' : (v<70 ? '#f2c811' : '#4ade80');
+        cell.style.background=c; cell.style.color='#111';
+      }
+      wrap.appendChild(cell);
+    });
+    if(caption)caption.textContent='תצוגה מקדימה — סגנון '+(style==='gradient'?'Gradient':'Rules');
+    if(legend)legend.textContent=style==='gradient'
+      ? 'הצבע נע ברצף: ' + min + ' בכחול בהיר עד ' + max + ' בכחול כהה — אין ספים, רק יחס.'
+      : 'שלושה חוקים: מתחת ל-50 אדום · 50 עד 70 צהוב · 70 ומעלה ירוק.';
+  }
+  paint('gradient');
+  var tabs=$$('#cf-demo [role="tab"]');
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){ paint(t.id.indexOf('rules')>-1?'rules':'gradient'); });
+    t.addEventListener('keyup',function(e){
+      if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='Home'||e.key==='End'){
+        var sel=tabs.filter(function(x){return x.getAttribute('aria-selected')==='true';})[0];
+        if(sel)paint(sel.id.indexOf('rules')>-1?'rules':'gradient');
+      }
+    });
+  });
+});
+
+/* ---------- what-if parameter (Numeric range) ---------- */
+mod('paramNumeric',function(){
+  var slider=$('#disc'), val=$('#disc-val'), rev=$('#disc-rev'), delta=$('#disc-delta');
+  if(!slider)return;
+  var base=5019000;
+  function money(n){
+    return n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+Math.round(n/1000)+'K';
+  }
+  function update(){
+    var pct=+slider.value;
+    var after=base*(1-pct/100);
+    if(val)val.textContent=pct+'%';
+    if(rev)rev.textContent=money(after);
+    if(delta)delta.textContent=pct===0?'$0':'−'+money(base-after);
+    slider.setAttribute('aria-valuetext',pct+' אחוז הנחה, הכנסה '+money(after));
+  }
+  slider.addEventListener('input',update);
+  update();
+});
+
+/* ---------- field parameter (switch the displayed measure) ---------- */
+mod('paramFields',function(){
+  var chart=$('#fs-chart'), desc=$('#fs-desc'); if(!chart)return;
+  var data={
+    sales:{label:'מכירות',unit:'$',rows:[['Clothing',1310000],['Furniture',1260000],['Electronics',1240000],['Food',1200000]]},
+    qty:{label:'כמות',unit:'',rows:[['Clothing',268],['Furniture',260],['Electronics',246],['Food',226]]},
+    profit:{label:'רווח',unit:'$',rows:[['Clothing',315000],['Furniture',214000],['Electronics',372000],['Food',180000]]}
+  };
+  function fmt(n,unit){
+    if(unit!=='$')return String(n);
+    return n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+Math.round(n/1000)+'K';
+  }
+  function draw(key){
+    var d=data[key]; if(!d)return;
+    var max=Math.max.apply(null,d.rows.map(function(r){return r[1];}));
+    chart.innerHTML=d.rows.map(function(r){
+      return '<div class="mc-row"><span class="lbl">'+r[0]+'</span>'+
+             '<span class="track"><span class="fill" style="width:'+(r[1]/max*100).toFixed(1)+'%"></span></span>'+
+             '<span class="val">'+fmt(r[1],d.unit)+'</span></div>';
+    }).join('');
+    chart.setAttribute('aria-label',d.label+' לפי קטגוריה');
+    if(desc)desc.textContent='מוצג כעת: '+d.label+' לפי קטגוריה — הסלייסר החליף את השדה, לא את הוויזואל';
+  }
+  $$('.fs-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      $$('.fs-btn').forEach(function(b){
+        b.classList.toggle('on',b===btn);
+        b.setAttribute('aria-pressed',String(b===btn));
+      });
+      draw(btn.dataset.measure);
+    });
+  });
+  draw('sales');
+});
+
+/* ---------- homework checklist ---------- */
+
+/* ---------- copy button on every code block ---------- */
+mod('codeCopy',function(){
+  function codeText(el){
+    var clone=el.cloneNode(true), brs=clone.getElementsByTagName('br');
+    while(brs.length){ var br=brs[0]; br.parentNode.replaceChild(document.createTextNode('\n'),br); }
+    var t=clone.textContent||'';
+    return t.replace(/\u00a0/g,' ').replace(/[ \t]+(\n)/g,'$1').replace(/\n{3,}/g,'\n\n').replace(/[ \t]+$/,'').trim();
+  }
+  function legacyCopy(text){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.top='0'; ta.style.left='-9999px'; ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.select(); try{ ta.setSelectionRange(0,ta.value.length); }catch(e){}
+      var ok=document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    }catch(e){ return false; }
+  }
+  function copyText(text,done){
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(function(){ done(true); },function(){ done(legacyCopy(text)); });
+    } else { done(legacyCopy(text)); }
+  }
+  function flash(btn,ok){
+    var t=$('.cc-t',btn);
+    btn.classList.remove('is-done','is-fail');
+    btn.classList.add(ok?'is-done':'is-fail');
+    if(t)t.textContent=ok?'הועתק':'לא הצליח';
+    if(btn._ccT)clearTimeout(btn._ccT);
+    btn._ccT=setTimeout(function(){
+      btn.classList.remove('is-done','is-fail');
+      if(t)t.textContent='העתקה';
+    },1900);
+  }
+  $$('.code-wrap').forEach(function(wrap){
+    var btn=$('.code-copy',wrap), block=$('.code',wrap);
+    if(!btn||!block)return;
+    btn.addEventListener('click',function(){
+      copyText(codeText(block),function(ok){ flash(btn,ok); });
+    });
+  });
+});
+
+/* ---------- "כל שיעורי הקורס" פותח את המגירה מכל נושא ---------- */
+mod('lessonJump',function(){
+  var b=$('#open-lessons'), menu=$('#tb-menu');
+  if(!b||!menu)return;
+  b.addEventListener('click',function(){ menu.click(); });
+});
+
+/* ---------- the active lesson pill scrolls itself into view ---------- */
+mod('lessonRail',function(){
+  var rail=$('#lesson-rail'); if(!rail)return;
+  var on=$('.lr.is-on',rail); if(!on)return;
+  var target = on.offsetLeft - (rail.clientWidth - on.offsetWidth)/2;
+  try{ rail.scrollTo({left:target, behavior:'auto'}); }catch(e){ rail.scrollLeft=target; }
+});
+
+mod('homework',function(){
+  [['#hw-dax','#hw-dax-progress','pbi-l4-hw']].forEach(function(cfg){
+    buildChecklist(cfg[0],cfg[1],cfg[2]);
+  });
+});
+function buildChecklist(sel,outSel,KEY){
+  var hw=$(sel), out=$(outSel); if(!hw)return;
+  var boxes=$$('input',hw);
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(boxes.map(function(b){return b.checked;}))); }catch(e){} }
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY); if(!raw)return;
+      var arr=JSON.parse(raw);
+      if(Object.prototype.toString.call(arr)==='[object Array]')
+        arr.forEach(function(v,i){ if(boxes[i])boxes[i].checked=!!v; });
+    }catch(e){}
+  }
+  function update(){
+    boxes.forEach(function(b){
+      var lab=b.closest('label'); if(lab)lab.classList.toggle('done',b.checked);
+    });
+    if(!out)return;
+    var n=boxes.filter(function(b){return b.checked;}).length;
+    out.textContent=n+' מתוך '+boxes.length+' משימות הושלמו'+(n===boxes.length?' — כל הכבוד!':'');
+  }
+  boxes.forEach(function(b){ b.addEventListener('change',function(){save();update();}); });
+  load(); update();
+}
+
+})();
+</script>
+<script>
+// nav-scale.js — injected before </body> by build.py
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+  if(!window.LESSON||!LESSON.pages)return;
+  var pages=LESSON.pages;
+
+  function shortTitle(t){
+    return String(t||'').split(' \u2014 ')[0].split(' \u00b7 ')[0].replace(/^\u05d1\u05e0\u05e7 /,'').trim();
+  }
+
+  /* exercise pages = anything holding a question bank or the task list */
+  var exercises=[];
+  pages.forEach(function(p,i){
+    if(p.querySelector('.quiz')||p.querySelector('.tasks')){
+      var n=p.querySelectorAll('.q-item').length||p.querySelectorAll('.task').length;
+      exercises.push({i:i,label:shortTitle(p.dataset.title),n:n});
+    }
+  });
+
+  function buildJump(cls){
+    var box=document.createElement('div');
+    box.className='qjump '+cls;
+    var t=document.createElement('span');
+    t.className='qjump-t';
+    t.textContent='\u05de\u05e2\u05d1\u05e8 \u05de\u05d4\u05d9\u05e8 \u05dc\u05ea\u05e8\u05d2\u05d9\u05dc\u05d9\u05dd';
+    box.appendChild(t);
+    exercises.forEach(function(e){
+      var b=document.createElement('button');
+      b.type='button';
+      b.setAttribute('data-jump',e.i);
+      b.textContent=e.label+' \u00b7 '+e.n;
+      box.appendChild(b);
+    });
+    box.addEventListener('click',function(ev){
+      var b=ev.target.closest?ev.target.closest('button[data-jump]'):null;
+      if(!b)return;
+      LESSON.go(+b.getAttribute('data-jump'));
+      var d=$('#drawer'), x=$('#drawer-x');
+      if(d && x && !d.hidden) x.click();
+    });
+    return box;
+  }
+
+  function syncJump(){
+    var cur=pages[LESSON.index]?pages[LESSON.index].id:null;
+    $$('.qjump button[data-jump]').forEach(function(b){
+      b.classList.toggle('is-on',pages[+b.getAttribute('data-jump')].id===cur);
+    });
+  }
+
+  function toggle(h,g){
+    var shut=!h.classList.contains('is-shut');
+    h.classList.toggle('is-shut',shut);
+    g.hidden=shut;
+    h.setAttribute('aria-expanded',String(!shut));
+  }
+
+  function wire(h,g){
+    var c=document.createElement('span');
+    c.className='cnt';
+    c.textContent=g.children.length;
+    h.appendChild(c);
+    h.setAttribute('role','button');
+    h.setAttribute('tabindex','0');
+    h.addEventListener('click',function(){ toggle(h,g); });
+    h.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(h,g); }
+    });
+  }
+
+  /* ---- drawer: shortcut strip, then fold every chapter ---- */
+  var toc=$('.toc');
+  if(toc){
+    if(exercises.length) toc.parentNode.insertBefore(buildJump('qjump-drawer'),toc);
+    $$('.toc-chap',toc).forEach(function(h){
+      var g=document.createElement('div');
+      g.className='toc-group';
+      var n=h.nextSibling;
+      while(n && !(n.nodeType===1 && n.classList.contains('toc-chap'))){
+        var nx=n.nextSibling;
+        if(n.nodeType===1) g.appendChild(n); else n.parentNode.removeChild(n);
+        n=nx;
+      }
+      h.parentNode.insertBefore(g,h.nextSibling);
+      wire(h,g);
+    });
+  }
+
+  /* ---- opening topic: same treatment for the full contents list ---- */
+  var lt=$('#lesson-toc');
+  if(lt){
+    if(exercises.length){
+      var sub=lt.querySelector('.lt-sub');
+      var jb=buildJump('lt-jump');
+      if(sub && sub.nextSibling) lt.insertBefore(jb,sub.nextSibling); else lt.appendChild(jb);
+    }
+    $$('.lt-chap',lt).forEach(function(h){
+      var g=h.nextElementSibling;
+      if(g && g.classList.contains('lt-items')) wire(h,g);
+    });
+  }
+
+  function label(h){
+    return h.childNodes[0]?String(h.childNodes[0].textContent).trim():'';
+  }
+
+  function openCurrentOnly(){
+    var cur=pages[LESSON.index]?pages[LESSON.index].dataset.chap:null;
+    $$('.toc-chap').concat($$('.lt-chap')).forEach(function(h){
+      var g=h.nextElementSibling;
+      if(!g)return;
+      var open=(label(h)===cur);
+      h.classList.toggle('is-shut',!open);
+      g.hidden=!open;
+      h.setAttribute('aria-expanded',String(open));
+    });
+  }
+
+  openCurrentOnly();
+  syncJump();
+
+  /* keep the strip and the open chapter in step as the reader moves */
+  var seen=LESSON.index;
+  setInterval(function(){
+    if(LESSON.index===seen)return;
+    seen=LESSON.index;
+    syncJump();
+    var cur=pages[LESSON.index].dataset.chap;
+    $$('.toc-chap').forEach(function(h){
+      var g=h.nextElementSibling;
+      if(!g)return;
+      if(label(h)===cur){
+        h.classList.remove('is-shut');
+        g.hidden=false;
+        h.setAttribute('aria-expanded','true');
+      }
+    });
+  },240);
+})();
+
+/* ---- copy button on code snippets inside questions (delegated, so it also
+        covers questions that are rendered later) ---- */
+(function(){
+  function text(el){
+    var c = el.cloneNode(true), brs = c.getElementsByTagName('br');
+    while (brs.length){ var b = brs[0]; b.parentNode.replaceChild(document.createTextNode('\n'), b); }
+    return (c.textContent || '').replace(/\u00a0/g, ' ').replace(/[ \t]+(\n)/g, '$1').trim();
+  }
+  function legacy(t){
+    try{
+      var a = document.createElement('textarea');
+      a.value = t; a.setAttribute('readonly','');
+      a.style.position='fixed'; a.style.left='-9999px';
+      document.body.appendChild(a); a.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(a); return ok;
+    }catch(e){ return false; }
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.qc-copy') : null;
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    var wrap = btn.closest('.q-code-wrap');
+    var code = wrap && wrap.querySelector('.q-code');
+    if (!code) return;
+    var t = text(code);
+    var done = function(ok){
+      btn.classList.toggle('is-done', ok);
+      var lbl = btn.querySelector('.qc-t');
+      if (lbl) lbl.textContent = ok ? 'הועתק' : 'לא הצליח';
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function(){
+        btn.classList.remove('is-done');
+        if (lbl) lbl.textContent = 'העתקה';
+      }, 1700);
+    };
+    if (navigator.clipboard && window.isSecureContext)
+      navigator.clipboard.writeText(t).then(function(){ done(true); }, function(){ done(legacy(t)); });
+    else done(legacy(t));
+  }, true);
+})();
+</script>
+<style>
+/* --- QA fix: finger-sized hit areas on touch devices (WCAG 2.5.5).
+   Placed last in the document so it wins over the in-body stylesheet. --- */
+@media (pointer:coarse), (max-width:900px){
+  .lesson-rail .lr{min-height:44px}
+  .qjump button,.lt-jump button,.qnav-b,.tb-nav,.tb-menu,.tb-home,.tb-quiz,
+  .btn,.sol-toggle,.shot-btn,.toc-item,.lt-item{min-height:44px}
+  .lt-chap{min-height:44px;display:flex;align-items:center}
+  .ln-home a,.foot a,footer a{display:inline-flex;align-items:center;min-height:44px}
+}
+</style>
+
+<style>
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+</style>
+
+<script>
+/* The toolbar meta labels are single-line with ellipsis. Mirror their text into
+   a title attribute so the full string stays reachable when it is truncated. */
+(function(){
+  var t=document.querySelector('.tb-title'), c=document.querySelector('.tb-chap');
+  if(!t&&!c) return;
+  function sync(el){ if(el){ var v=(el.textContent||'').trim(); if(v) el.setAttribute('title',v); } }
+  [t,c].forEach(function(el){
+    if(!el) return;
+    sync(el);
+    try{ new MutationObserver(function(){ sync(el); })
+           .observe(el,{childList:true,characterData:true,subtree:true}); }catch(e){}
+  });
+})();
+</script>
+
+<style>
+/* --- mobile QA: the topic label clipped from 390px down. Instead of hiding it,
+   let it take its own full-width row so nothing is cut and nothing is lost. --- */
+@media(max-width:900px){
+  .topicbar-inner{flex-wrap:wrap}
+  .tb-now{order:9;flex:1 0 100%;min-width:0;text-align:center;padding-top:3px}
+  .tb-title{display:block;white-space:normal;overflow:visible;text-overflow:clip;
+    font-size:.8rem;line-height:1.35}
+  .tb-chap{white-space:normal;overflow:visible;text-overflow:clip}
+}
+/* above the mobile breakpoint keep the single row, but let a long topic name
+   wrap inside its own box instead of being cut by an ellipsis */
+@media(min-width:901px){
+  .tb-title,.tb-chap{white-space:normal;overflow:visible;text-overflow:clip}
+  .tb-now{padding-block:2px}
+}
+</style>
+
+<style>
+/* return path to the main course site, reachable on mobile too */
+.lr-site b{font-family:var(--mono);font-size:.8rem;color:var(--acc)}
+.lr-site:hover b{color:var(--pbi)}
+</style>
+</body>
+</html>
