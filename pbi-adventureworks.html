@@ -89,6 +89,8 @@ header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-b
   transition:border-color .15s,color .15s,background .15s}
 .tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
 .tb-home:active{transform:scale(.97)}
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
 .tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
 .tb-ic{font-size:1rem}
 
@@ -1445,6 +1447,11 @@ function show(i,scrollTop){
   tCount.textContent=(i+1)+' / '+N;
   bar.style.width=((i+1)/N*100)+'%';
   prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* FIX: 'ראשי' and 'לסיכום' looked broken when you were already on that page.
+     Disable them there, exactly like prev/next at the ends. */
+  var hb=$('#tb-home'), sb=$('#tb-sum');
+  if(hb)hb.disabled=(i===0);
+  if(sb)sb.disabled=(i===N-1);
   pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
   if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
   if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');

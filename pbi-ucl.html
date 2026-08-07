@@ -89,6 +89,8 @@ header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-b
   transition:border-color .15s,color .15s,background .15s}
 .tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
 .tb-home:active{transform:scale(.97)}
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
 .tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
 .tb-ic{font-size:1rem}
 
@@ -1010,8 +1012,7 @@ button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:
   לומר את זה לכיתה במפורש, כי מישהו תמיד ינסה להצליב מול הזיכרון שלו.</p>
 
   <p class="note"><b>לפני שמתחילים — בניית המודל.</b> בקובץ 44 קשרים; המטלה נשענת על עשרה מהם.
-  גיליון <span class="mono" dir="ltr">02_Relationships</span> מכיל את הרשימה המלאה וגיליון <span class="mono" dir="ltr">01_QA_Report</span> את דוח
-  הבדיקות. סמנו את <span class="mono" dir="ltr">Dim_Date</span> כטבלת תאריכים (<span class="mono" dir="ltr">Mark as date table</span> על
+  הטבלה שבהמשך העמוד מפרטת אותם אחד-אחד. סמנו את <span class="mono" dir="ltr">Dim_Date</span> כטבלת תאריכים (<span class="mono" dir="ltr">Mark as date table</span> על
   <span class="mono" dir="ltr">Full_Date</span>), כבו <span class="mono" dir="ltr">Autodetect</span> ובנו ידנית, וודאו שכל הקשרים בכיוון
   <span class="mono" dir="ltr">Single</span> מהמימד אל העובדה — בקובץ 11 טבלאות עובדה שחולקות מימדים, ו-<span class="mono" dir="ltr">Both</span>
   ייצור לולאה.</p>
@@ -1507,8 +1508,7 @@ Rule 3:  &gt;= 60              -&gt;  #132449</pre>
       <div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>כל התוצאות המאומתות במקום אחד</caption><thead><tr><th scope="col">מדד / רכיב</th><th scope="col">תוצאה מאומתת</th></tr></thead><tbody><tr><th scope='row'>Total Goals</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2,970</span></td></tr><tr><th scope='row'>סך שערים ב-Fact_Matches (כולל עצמיים)</th><td class="pbi" data-label="תוצאה מאומתת">3,051 — הפרש של 81</td></tr><tr><th scope='row'>Matches Played</th><td class="pbi" data-label="תוצאה מאומתת">1,500 (COUNT היה מחזיר 50,799)</td></tr><tr><th scope='row'>Goals per Match</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">1.98</span></td></tr><tr><th scope='row'>Total Assists</th><td class="pbi" data-label="תוצאה מאומתת">9,169 (6.11 למשחק)</td></tr><tr><th scope='row'>Knockout Goals</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">671 (22.59%)</span></td></tr><tr><th scope='row'>Home Goals</th><td class="pbi" data-label="תוצאה מאומתת">1,794 (58.8%) · חוץ 1,257</td></tr><tr><th scope='row'>% of Competition Goals</th><td class="pbi" data-label="תוצאה מאומתת">מוביל 3.16% · Total 100.00%</td></tr><tr><th scope='row'>Club Status (IF)</th><td class="pbi" data-label="תוצאה מאומתת">30 מעל · 34 מתחת · ממוצע 46.41</td></tr><tr><th scope='row'>Club Tier (SWITCH)</th><td class="pbi" data-label="תוצאה מאומתת">12 צמרת · 31 אמצע · 21 תחתית</td></tr><tr><th scope='row'>Club Rank (RANK)</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Dynamo Kyiv = 1 · Lazio = 64</span></td></tr><tr><th scope='row'>Leader Goals (INDEX)</th><td class="pbi" data-label="תוצאה מאומתת">94 בכל שורה · האחרון 13.8%</td></tr><tr><th scope='row'>Running Goals (WINDOW)</th><td class="pbi" data-label="תוצאה מאומתת">שורה אחרונה = 2,970</td></tr><tr><th scope='row'>Total Attendance</th><td class="pbi" data-label="תוצאה מאומתת">68,442,087 · ממוצע 45,628</td></tr><tr><th scope='row'>המועדון המוביל</th><td class="pbi" data-label="תוצאה מאומתת">Dynamo Kyiv — 94 שערים ב-87 משחקים</td></tr><tr><th scope='row'>מוביל הקליעה</th><td class="pbi" data-label="תוצאה מאומתת">Mateo Wagner — 12 שערים</td></tr><tr><th scope='row'>עונת השיא</th><td class="pbi" data-label="תוצאה מאומתת">2020/21 — 292 שערים</td></tr><tr><th scope='row'>גרף משולב</th><td class="pbi" data-label="תוצאה מאומתת">חלוצים 52.5% מהשערים · קשרים 50.4% מהבישולים</td></tr></tbody></table></div>
       <p class="sol-check">כל התוצאות אומתו ב-pandas מול <span class="mono" dir="ltr">UCL_PowerBI_Model.xlsx</span>
       (50,799 שורות עובדה), וכל 44 הקשרים נבדקו תכנותית — 0 מפתחות יתומים,
-      0 מפתחות ריקים, 0 תלויות מעגליות ו-0 נתיבי סינון כפולים. דוח ה-QA המלא בגיליון
-      <span class="mono" dir="ltr">01_QA_Report</span> בתוך הקובץ.</p></div>
+      0 מפתחות ריקים, 0 תלויות מעגליות ו-0 נתיבי סינון כפולים.</p></div>
     </article>
   </div>
 </section>
@@ -1589,6 +1589,11 @@ function show(i,scrollTop){
   tCount.textContent=(i+1)+' / '+N;
   bar.style.width=((i+1)/N*100)+'%';
   prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* FIX: 'ראשי' and 'לסיכום' looked broken when you were already on that page.
+     Disable them there, exactly like prev/next at the ends. */
+  var hb=$('#tb-home'), sb=$('#tb-sum');
+  if(hb)hb.disabled=(i===0);
+  if(sb)sb.disabled=(i===N-1);
   pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
   if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
   if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');

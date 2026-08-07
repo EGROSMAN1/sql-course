@@ -89,6 +89,8 @@ header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-b
   transition:border-color .15s,color .15s,background .15s}
 .tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
 .tb-home:active{transform:scale(.97)}
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
 .tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
 .tb-ic{font-size:1rem}
 
@@ -1496,8 +1498,7 @@ Rule 3:  &gt;= 1,700,000                    -&gt;  #132449</pre>
       <div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>כל התוצאות המאומתות במקום אחד</caption><thead><tr><th scope="col">מדד / רכיב</th><th scope="col">תוצאה מאומתת</th></tr></thead><tbody><tr><th scope='row'>Total Sales</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">€62,929,759</span></td></tr><tr><th scope='row'>Gross לפני הנחה</th><td class="pbi" data-label="תוצאה מאומתת">€67,937,751 — הנחה €5,007,992</td></tr><tr><th scope='row'>Total Orders</th><td class="pbi" data-label="תוצאה מאומתת">13,892 (COUNT היה מחזיר 30,000)</td></tr><tr><th scope='row'>Avg Order Value</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">€4,530</span></td></tr><tr><th scope='row'>Total Profit / Margin</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">€25,282,189 · 40.18%</span></td></tr><tr><th scope='row'>Digital Sales</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">€25,531,540 (40.57%)</span></td></tr><tr><th scope='row'>Promotion Sales</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">€26,793,724 (42.58%)</span></td></tr><tr><th scope='row'>% of All Sales</th><td class="pbi" data-label="תוצאה מאומתת">מוביל 3.01% · Total 100.00%</td></tr><tr><th scope='row'>Rep Status (IF)</th><td class="pbi" data-label="תוצאה מאומתת">20 מעל · 20 מתחת · ממוצע €1,573,244</td></tr><tr><th scope='row'>Rep Tier (SWITCH)</th><td class="pbi" data-label="תוצאה מאומתת">9 צמרת · 21 אמצע · 10 תחתית</td></tr><tr><th scope='row'>Rep Rank (RANK)</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Kenji Smith = 1 · Piotr Levi = 40</span></td></tr><tr><th scope='row'>Leader Sales (INDEX)</th><td class="pbi" data-label="תוצאה מאומתת">€1,896,727 · האחרון 65.4%</td></tr><tr><th scope='row'>Running Sales (WINDOW)</th><td class="pbi" data-label="תוצאה מאומתת">שורה אחרונה = €62,929,759</td></tr><tr><th scope='row'>Target Attainment %</th><td class="pbi" data-label="תוצאה מאומתת">99.86% (יעד €63,014,903)</td></tr><tr><th scope='row'>Total Refunds</th><td class="pbi" data-label="תוצאה מאומתת">€2,364,425 (3.76%) ב-1,649 שורות</td></tr><tr><th scope='row'>המוצר המוביל</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Ardex Audio 1228 — €583,483</span></td></tr><tr><th scope='row'>הקטגוריה הרווחית</th><td class="pbi" data-label="תוצאה מאומתת">Office Supplies — 41.5% שולי רווח</td></tr><tr><th scope='row'>חודש השיא</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2025-07 — €2,114,749</span></td></tr></tbody></table></div>
       <p class="sol-check">כל התוצאות אומתו ב-pandas מול <span class="mono" dir="ltr">Retail_StarSchema_PowerBI.xlsx</span>
       (30,000 שורות מכירה). 11 הקשרים נבדקו תכנותית — 0 מפתחות יתומים, 0 מפתחות ריקים,
-      0 תלויות מעגליות ו-0 נתיבי סינון כפולים. דוח ה-QA המלא בגיליון <span class="mono" dir="ltr">01_QA_Report</span>
-      בתוך הקובץ.</p></div>
+      0 תלויות מעגליות ו-0 נתיבי סינון כפולים.</p></div>
     </article>
   </div>
 </section>
@@ -1578,6 +1579,11 @@ function show(i,scrollTop){
   tCount.textContent=(i+1)+' / '+N;
   bar.style.width=((i+1)/N*100)+'%';
   prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* FIX: 'ראשי' and 'לסיכום' looked broken when you were already on that page.
+     Disable them there, exactly like prev/next at the ends. */
+  var hb=$('#tb-home'), sb=$('#tb-sum');
+  if(hb)hb.disabled=(i===0);
+  if(sb)sb.disabled=(i===N-1);
   pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
   if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
   if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');

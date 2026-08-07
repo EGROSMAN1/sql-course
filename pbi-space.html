@@ -89,6 +89,8 @@ header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-b
   transition:border-color .15s,color .15s,background .15s}
 .tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
 .tb-home:active{transform:scale(.97)}
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
 .tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
 .tb-ic{font-size:1rem}
 
@@ -1009,7 +1011,7 @@ button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:
   ומספר בקובץ נוצרו באופן מלאכותי. אין להסיק מהם דבר על תעשיית החלל האמיתית.</p>
 
   <p class="note"><b>לפני שמתחילים — בניית המודל.</b> בקובץ 44 קשרים; המטלה נשענת על עשרה מהם.
-  גיליון <span class="mono" dir="ltr">02_Relationships</span> מכיל את הרשימה המלאה וגיליון <span class="mono" dir="ltr">01_QA_Report</span> את דוח הבדיקות.
+  הטבלה שבהמשך העמוד מפרטת אותם אחד-אחד.
   סמנו את <span class="mono" dir="ltr">Dim_Date</span> כטבלת תאריכים (<span class="mono" dir="ltr">Mark as date table</span> על <span class="mono" dir="ltr">Full_Date</span>),
   כבו <span class="mono" dir="ltr">Autodetect</span> ובנו ידנית, וודאו שכל הקשרים בכיוון <span class="mono" dir="ltr">Single</span> מהמימד אל העובדה —
   בקובץ 11 טבלאות עובדה שחולקות מימדים, ו-<span class="mono" dir="ltr">Both</span> ייצור לולאה.</p>
@@ -1501,8 +1503,7 @@ Rule 3:  &gt;= 703000                     →  #132449</pre>
       <div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>כל התוצאות המאומתות במקום אחד</caption><thead><tr><th scope="col">מדד / רכיב</th><th scope="col">תוצאה מאומתת</th></tr></thead><tbody><tr><th scope='row'>Total Mass Delivered</th><td class="pbi" data-label="תוצאה מאומתת">35,093,955 ק"ג</td></tr><tr><th scope='row'>Launches Flown</th><td class="pbi" data-label="תוצאה מאומתת">1,500 (COUNT היה מחזיר 50,794)</td></tr><tr><th scope='row'>Mass per Launch</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">23395.97</span></td></tr><tr><th scope='row'>Total Telemetry Packets</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">23,875,538</span></td></tr><tr><th scope='row'>Deep Space Mass</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2,073,879 (5.91%)</span></td></tr><tr><th scope='row'>Prime Mass</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">17,573,747 (50.08%) · Partner 17,520,208</span></td></tr><tr><th scope='row'>% of Program Mass</th><td class="pbi" data-label="תוצאה מאומתת">מוביל 3.42% · Total 100.00%</td></tr><tr><th scope='row'>Agency Status (IF)</th><td class="pbi" data-label="תוצאה מאומתת">30 מעל · 34 מתחת · ממוצע 548343.05</td></tr><tr><th scope='row'>Agency Tier (SWITCH)</th><td class="pbi" data-label="תוצאה מאומתת">12 צמרת · 30 אמצע · 22 תחתית</td></tr><tr><th scope='row'>Agency Rank (RANK)</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Perigee Space Group = 1 · Vega Astronautics = 64</span></td></tr><tr><th scope='row'>Leader Mass (INDEX)</th><td class="pbi" data-label="תוצאה מאומתת">1,199,926 בכל שורה</td></tr><tr><th scope='row'>Running Mass (WINDOW)</th><td class="pbi" data-label="תוצאה מאומתת">שורה אחרונה = 35,093,955</td></tr><tr><th scope='row'>Total Slot Revenue</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">122,426,598,258.00 USD</span></td></tr><tr><th scope='row'>הסוכנות המובילה</th><td class="pbi" data-label="תוצאה מאומתת">Perigee Space Group — 1,199,926 ק"ג ב-78 שיגורים</td></tr><tr><th scope='row'>המטען הכבד ביותר</th><td class="pbi" data-label="תוצאה מאומתת">PLD-1105 — 164,460 ק"ג</td></tr><tr><th scope='row'>שנת השיא</th><td class="pbi" data-label="תוצאה מאומתת">FY2023 — 3,768,619 ק"ג</td></tr><tr><th scope='row'>מחלקת המטען המובילה</th><td class="pbi" data-label="תוצאה מאומתת">Satellite — 30.3% מהמסה</td></tr></tbody></table></div>
       <p class="sol-check">כל התוצאות אומתו ב-pandas מול <span class="mono" dir="ltr">Space_PowerBI_Model.xlsx</span>
       (50,794 שורות עובדה), וכל 44 הקשרים נבדקו תכנותית — 0 מפתחות יתומים, 0 מפתחות
-      ריקים, 0 תלויות מעגליות ו-0 נתיבי סינון כפולים. דוח ה-QA המלא נמצא בגיליון
-      <span class="mono" dir="ltr">01_QA_Report</span> בתוך הקובץ עצמו.</p></div>
+      ריקים, 0 תלויות מעגליות ו-0 נתיבי סינון כפולים.</p></div>
     </article>
   </div>
 </section>
@@ -1583,6 +1584,11 @@ function show(i,scrollTop){
   tCount.textContent=(i+1)+' / '+N;
   bar.style.width=((i+1)/N*100)+'%';
   prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* FIX: 'ראשי' and 'לסיכום' looked broken when you were already on that page.
+     Disable them there, exactly like prev/next at the ends. */
+  var hb=$('#tb-home'), sb=$('#tb-sum');
+  if(hb)hb.disabled=(i===0);
+  if(sb)sb.disabled=(i===N-1);
   pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
   if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
   if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');
