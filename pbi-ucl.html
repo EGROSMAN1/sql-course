@@ -89,6 +89,8 @@ header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-b
   transition:border-color .15s,color .15s,background .15s}
 .tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
 .tb-home:active{transform:scale(.97)}
+.tb-home{text-decoration:none}
+
 .tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
 .tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
 .tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
@@ -960,9 +962,9 @@ button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:
     <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="פתיחת רשימת התרגילים">
       <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">תרגילים</span>
     </button>
-    <button type="button" class="tb-home" id="tb-home" aria-label="חזרה לעמוד הפתיחה של המטלה">
+    <a class="tb-home" id="tb-home" href="pbi.html" aria-label="חזרה לדף הבית של פלטפורמת Power BI" title="דף הבית">
       <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">ראשי</span>
-    </button>
+    </a>
     <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
       <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">הקודם</span>
     </button>
@@ -1589,10 +1591,10 @@ function show(i,scrollTop){
   tCount.textContent=(i+1)+' / '+N;
   bar.style.width=((i+1)/N*100)+'%';
   prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
-  /* FIX: 'ראשי' and 'לסיכום' looked broken when you were already on that page.
-     Disable them there, exactly like prev/next at the ends. */
-  var hb=$('#tb-home'), sb=$('#tb-sum');
-  if(hb)hb.disabled=(i===0);
+  /* 'ראשי' is a real link to the site home, always active.
+     'לסיכום' is in-page navigation, so it is disabled on the summary page
+     itself, exactly like prev/next at the ends. */
+  var sb=$('#tb-sum');
   if(sb)sb.disabled=(i===N-1);
   pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
   if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
@@ -1612,7 +1614,6 @@ prevBtn.addEventListener('click',function(){step(-1);});
 nextBtn.addEventListener('click',function(){step(1);});
 pgPrev.addEventListener('click',function(){step(-1);});
 pgNext.addEventListener('click',function(){step(1);});
-$('#tb-home').addEventListener('click',function(){show(0,true);});
 $('#tb-sum').addEventListener('click',function(){show(N-1,true);});
 $$('[data-goto]').forEach(function(b){
   b.addEventListener('click',function(){
