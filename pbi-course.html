@@ -1027,7 +1027,7 @@ footer.site a{color:var(--fg-3)}
 <p class="ln-home"><a href="index.html">→ לדף הבית של האתר</a></p>
 
   <h3 class="p1-h">הכנה לתרגול</h3>
-  <p class="p1-sub">שתי מטלות סיכום, שתיהן עם פתרון מלא לכל תרגיל: מטלת ה-NBA שיושבת בתוך השיעור (נושאים 33–62), ומטלת AdventureWorks שפתוחה בעמוד נפרד. כדאי להוריד את קובצי הדאטה ולהתקין את Power BI Desktop כבר עכשיו, כדי שלא תיתקעו באמצע. שימו לב: ההורדה והתרגול הם <b>במחשב בלבד</b> — Power BI Desktop אינו קיים בטלפון.</p>
+  <p class="p1-sub">חמש מטלות סיכום, כולן עם פתרון מלא לכל תרגיל: מטלת ה-NBA שיושבת בתוך השיעור (נושאים 33–62), ומטלות AdventureWorks, שיגורי החלל, ליגת האלופות והמכירות הקמעונאיות שפתוחות בעמודים נפרדים. כדאי להוריד את קובצי הדאטה ולהתקין את Power BI Desktop כבר עכשיו, כדי שלא תיתקעו באמצע. שימו לב: ההורדה והתרגול הם <b>במחשב בלבד</b> — Power BI Desktop אינו קיים בטלפון.</p>
   <section class="practice-box" aria-labelledby="pb-nba-title" style="margin-top:14px">
     <div>
       <span class="tag teal">דאטהסט</span>
@@ -1051,6 +1051,45 @@ footer.site a{color:var(--fg-3)}
       <a class="btn" href="assets/AdventureWorks_Sales.xlsx" download>הורדת הדאטהסט</a>
       <span class="pb-note">להורדה במחשב בלבד</span>
       <a class="btn ghost" href="pbi-adventureworks.html">למטלת AdventureWorks ←</a>
+    </div>
+  </section>
+
+  <section class="practice-box" aria-labelledby="pb-space-title" style="margin-top:14px">
+    <div>
+      <span class="tag teal">מטלה</span>
+      <h3 id="pb-space-title">Space_PowerBI_Model.xlsx — מטלת שיגורי חלל</h3>
+      <p>32 טבלאות, 100,000 שורות ו-44 קשרים: 14 מדדי DAX (כולל RANK, INDEX ו-WINDOW), שני עמודי דשבורד ועיצוב מותנה כפול. 27 תרגילים בעמוד נפרד, כל אחד עם פתרון מלא. הקובץ כולל גיליון קשרים וגיליון דוח QA.</p>
+    </div>
+    <div class="pb-actions">
+      <a class="btn" href="assets/Space_PowerBI_Model.xlsx" download>הורדת הדאטהסט</a>
+      <span class="pb-note">להורדה במחשב בלבד</span>
+      <a class="btn ghost" href="pbi-space.html">למטלת החלל ←</a>
+    </div>
+  </section>
+
+  <section class="practice-box" aria-labelledby="pb-ucl-title" style="margin-top:14px">
+    <div>
+      <span class="tag teal">מטלה</span>
+      <h3 id="pb-ucl-title">UCL_PowerBI_Model.xlsx — מטלת ליגת האלופות</h3>
+      <p>32 טבלאות, 100,000 שורות ו-44 קשרים: 14 מדדי DAX (כולל RANK, INDEX ו-WINDOW), שני עמודי דשבורד ועיצוב מותנה כפול. 27 תרגילים בעמוד נפרד, כל אחד עם פתרון מלא. הקובץ כולל גיליון קשרים וגיליון דוח QA.</p>
+    </div>
+    <div class="pb-actions">
+      <a class="btn" href="assets/UCL_PowerBI_Model.xlsx" download>הורדת הדאטהסט</a>
+      <span class="pb-note">להורדה במחשב בלבד</span>
+      <a class="btn ghost" href="pbi-ucl.html">למטלת ליגת האלופות ←</a>
+    </div>
+  </section>
+
+  <section class="practice-box" aria-labelledby="pb-retail-title" style="margin-top:14px">
+    <div>
+      <span class="tag teal">מטלה</span>
+      <h3 id="pb-retail-title">Retail_StarSchema_PowerBI.xlsx — מטלת מכירות קמעונאיות</h3>
+      <p>11 טבלאות ו-30,000 שורות מכירה: 14 מדדי DAX (כולל RANK, INDEX ו-WINDOW), שני עמודי דשבורד ועיצוב מותנה כפול. שני ענפי Snowflake, שלוש טבלאות עובדה והבדלי גרעין בין מכירות יומיות ליעדים חודשיים. 27 תרגילים עם פתרון מלא.</p>
+    </div>
+    <div class="pb-actions">
+      <a class="btn" href="assets/Retail_StarSchema_PowerBI.xlsx" download>הורדת הדאטהסט</a>
+      <span class="pb-note">להורדה במחשב בלבד</span>
+      <a class="btn ghost" href="pbi-retail.html">למטלה הקמעונאית ←</a>
     </div>
   </section>
 </section>
@@ -1436,6 +1475,20 @@ footer.site a{color:var(--fg-3)}
   <h2 class="sec-title">קובץ התרגול והדגמת חיבור</h2>
 <h3 style="margin-bottom:6px">קובץ התרגול שלנו — sales_data.csv</h3>
   <p style="color:var(--fg-3);font-size:.9rem;margin-bottom:16px">נתוני מכירות לשנת 2023 — טבלה אחת, 1,000 שורות, 14 עמודות. תמיד הבינו את הנתונים לפני שבונים.</p>
+
+  <div class="practice-cta" style="margin-bottom:26px">
+    <a class="btn" href="assets/sales_data.csv" download>הורדת הקובץ — sales_data.csv</a>
+    <a class="btn ghost" href="assets/sales_data.xlsx" download>אותם נתונים כאקסל — sales_data.xlsx</a>
+    <span class="pc-note">1,000 שורות · 14 עמודות · <b style="color:var(--pbi)">להורדה במחשב בלבד</b></span>
+  </div>
+
+  <p class="note" style="margin-bottom:26px"><b>איזה מהשניים להוריד:</b> ההדגמה למטה עוברת דרך
+  <span class="mono" dir="ltr">Get Data ← Text/CSV</span>, ולכן לתרגול הראשון הורידו את קובץ ה-CSV.
+  קובץ האקסל מכיל בדיוק את אותן 1,000 השורות, אבל עם טיפוסים כבר מוגדרים — תאריך אמיתי בעמודת
+  <span class="mono" dir="ltr">Sale_Date</span>, אחוז בעמודת <span class="mono" dir="ltr">Discount</span>
+  ומספרים עשרוניים בעמודות הכסף. הגיליון נקרא <span class="mono" dir="ltr">sales_data</span>, כך שכל
+  שורת DAX בשיעור עובדת בלי שינוי גם אחרי טעינה מאקסל. מי שנתקע בקידוד עברית או בפסיקים ב-CSV —
+  יתחיל מהאקסל.</p>
   <div class="grid g2" style="margin-bottom:34px">
     <div class="card"><h3 class="mono" dir="ltr" style="color:var(--pbi)">Sales_Amount</h3><p>סכום המכירה בשקלים — מדד המפתח לכל ניתוח</p></div>
     <div class="card"><h3 class="mono" dir="ltr" style="color:var(--pbi)">Product_Category</h3><p>קטגוריית המוצר: Electronics, Clothing, Food, Furniture</p></div>
@@ -2037,7 +2090,10 @@ Revenue after Discount =
       <button type="button" class="qnav-b" data-goto="p33"><b>1</b><span>בוחן עצמי · 30 שאלות</span></button>
       <button type="button" class="qnav-b" data-goto="p31"><b>2</b><span>מטלת NBA · 28 תרגילים</span></button>
       <a class="qnav-b" href="pbi-adventureworks.html"><b>3</b><span>מטלת AdventureWorks · 25 תרגילים</span></a>
-      <a class="qnav-b" href="pbi-quiz.html"><b>4</b><span>בנק השאלות · 693 שאלות</span></a>
+      <a class="qnav-b" href="pbi-space.html"><b>4</b><span>מטלת שיגורי חלל · 27 תרגילים</span></a>
+      <a class="qnav-b" href="pbi-ucl.html"><b>5</b><span>מטלת ליגת האלופות · 27 תרגילים</span></a>
+      <a class="qnav-b" href="pbi-retail.html"><b>6</b><span>מטלת מכירות קמעונאיות · 27 תרגילים</span></a>
+      <a class="qnav-b" href="pbi-quiz.html"><b>7</b><span>בנק השאלות · 693 שאלות</span></a>
     </div>
   </nav>
   <p class="quiz-intro">לחצו על תשובה כדי לבדוק אותה מיד. אחרי הבחירה ייפתח הסבר קצר, והתשובה הנכונה תסומן בירוק. הבוחן לא נשמר בשום מקום — הוא רק בשבילכם.</p>
@@ -2433,7 +2489,10 @@ Revenue after Discount =
       <button type="button" class="qnav-b" data-goto="p33"><b>1</b><span>בוחן עצמי · 30 שאלות</span></button>
       <button type="button" class="qnav-b" data-goto="p31"><b>2</b><span>מטלת NBA · 28 תרגילים</span></button>
       <a class="qnav-b" href="pbi-adventureworks.html"><b>3</b><span>מטלת AdventureWorks · 25 תרגילים</span></a>
-      <a class="qnav-b" href="pbi-quiz.html"><b>4</b><span>בנק השאלות · 693 שאלות</span></a>
+      <a class="qnav-b" href="pbi-space.html"><b>4</b><span>מטלת שיגורי חלל · 27 תרגילים</span></a>
+      <a class="qnav-b" href="pbi-ucl.html"><b>5</b><span>מטלת ליגת האלופות · 27 תרגילים</span></a>
+      <a class="qnav-b" href="pbi-retail.html"><b>6</b><span>מטלת מכירות קמעונאיות · 27 תרגילים</span></a>
+      <a class="qnav-b" href="pbi-quiz.html"><b>7</b><span>בנק השאלות · 693 שאלות</span></a>
     </div>
   </nav>
   <p class="sec-sub">מטלה מלאה על <span class="mono" dir="ltr">NBA_PowerBI_Dataset_Star.xlsx</span>: 14 מדדי DAX שאתם כותבים מאפס, שני עמודי דשבורד, ועיצוב מותנה בשתי טכניקות. כל מספר בדשבורד מגיע ממדד שכתבתם — לא מגרירת עמודה. 28 התרגילים מחולקים לדפים נפרדים, ולכל אחד פתרון מלא שנפתח בלחיצה.</p>

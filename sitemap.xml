@@ -812,6 +812,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://egrosman1.github.io/sql-course/pbi-space.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/pbi-ucl.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman1.github.io/sql-course/pbi-retail.html</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://egrosman1.github.io/sql-course/dax-reference.html</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
