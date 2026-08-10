@@ -1036,7 +1036,7 @@ figure.shot img{image-rendering:-webkit-optimize-contrast}
     <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="פתיחת רשימת הנושאים">
       <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">נושאים</span>
     </button>
-    <button type="button" class="tb-home" id="tb-home" aria-label="חזרה לעמוד הראשון של השיעור">
+    <button type="button" class="tb-home" id="tb-home" aria-label="לעמוד הראשי של Power BI" title="לעמוד הראשי של Power BI">
       <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">ראשי</span>
     </button>
     <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
@@ -1319,8 +1319,10 @@ mod('router',function(){
     }
     /* the top strip mirrors the pager, and names its target for screen readers */
     if(tbHome){
-      tbHome.disabled=(i===0);
-      tbHome.setAttribute('aria-label',i===0?'אתם בעמוד הראשון של השיעור':'חזרה לעמוד הראשון של השיעור');
+      /* on the monthly-update pages this button leaves the lesson for the Power BI home page,
+         so it must never be disabled and its label never depends on the current topic */
+      tbHome.disabled=false;
+      tbHome.setAttribute('aria-label','לעמוד הראשי של Power BI');
     }
     if(tbPrev){
       tbPrev.disabled=(i===0);
@@ -1350,7 +1352,7 @@ mod('router',function(){
 
   if(prev)prev.addEventListener('click',function(){show(LESSON.index-1,true);});
   if(next)next.addEventListener('click',function(){show(LESSON.index+1,true);});
-  if(tbHome)tbHome.addEventListener('click',function(){ show(0,true); });   /* always one tap from the opening topic */
+  if(tbHome)tbHome.addEventListener('click',function(){ window.location.href='pbi.html'; });   /* leaves the update lesson for the Power BI home page */
   if(tbPrev)tbPrev.addEventListener('click',function(){show(LESSON.index-1,true);});
   if(tbNext)tbNext.addEventListener('click',function(){show(LESSON.index+1,true);});
   tocItems.forEach(function(it,k){
