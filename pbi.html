@@ -181,13 +181,13 @@ footer.site a:hover{color:var(--acc)}
   <div class="hd">
     <a class="brand" href="index.html" title="לדף הבית של הקורס"><b>SQL</b> עם אלירן</a>
     <nav class="lesson-rail" aria-label="ניווט בין חלקי הפלטפורמה">
-      <a class="lr lr-home is-on" href="pbi.html" aria-current="page" title="דף הבית של הפלטפורמה"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>דף הבית</span></a>
+      <a class="lr lr-site" href="index.html" title="חזרה לדף הבית של האתר"><b>↩</b><span>דף הבית של האתר</span></a>
+      <span class="lr-sep" aria-hidden="true"></span>
+      <a class="lr lr-home is-on" href="pbi.html" aria-current="page" title="מרכז Power BI"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Power BI</span></a>
       <a class="lr" href="pbi-course.html" title="Power BI בסיס"><b>1</b><span>בסיס</span></a>
       <a class="lr" href="pbi-course-2.html" title="מודלינג נתונים"><b>2</b><span>מודלינג</span></a>
       <a class="lr" href="pbi-course-3.html" title="Power Query ו-ETL"><b>3</b><span>Power Query</span></a>
       <a class="lr" href="pbi-course-4.html" title="M ו-DAX בסיסי"><b>4</b><span>M ו-DAX</span></a>
-      <span class="lr-sep" aria-hidden="true"></span>
-      <a class="lr lr-site" href="index.html" title="לדף הבית של הקורס"><b>↩</b><span>הקורס</span></a>
       <a class="lr lr-x" href="pbi-updates.html" title="עדכוני Power BI החודשיים"><b>◷</b><span>עדכונים</span></a><a class="lr lr-x" href="pbi-quiz.html" title="בנק השאלות המלא"><b>?</b><span>בנק שאלות</span></a>
       <a class="lr lr-x" href="dax-reference.html" title="אינדקס פונקציות DAX"><b>fx</b><span>רפרנס DAX</span></a>
     </nav>
@@ -348,6 +348,26 @@ footer.site a:hover{color:var(--acc)}
 <footer class="site">
   נבנה על ידי <a href="index.html">אלירן גרוסמן</a> · קורס Power BI בעברית, חופשי לשימוש
 </footer>
+
+
+<!-- ===== כפתור חזרה לדף הבית — קבוע, נגיש מכל מקום בעמוד ===== -->
+<style>
+.gh-home{position:fixed;z-index:9500;inset-block-end:max(16px,env(safe-area-inset-bottom));
+ inset-inline-start:max(16px,env(safe-area-inset-left));display:inline-flex;align-items:center;gap:8px;
+ min-height:44px;padding:0 16px;border-radius:99px;text-decoration:none;white-space:nowrap;
+ font-family:"Heebo","Segoe UI",Arial,sans-serif;font-size:13.5px;font-weight:600;
+ background:rgba(18,22,29,.94);color:#e6edf3;border:1px solid rgba(255,255,255,.16);
+ box-shadow:0 6px 22px rgba(0,0,0,.45);backdrop-filter:blur(8px);
+ transition:transform .15s,border-color .15s,background .15s}
+.gh-home:hover{background:rgba(28,34,45,.97);border-color:#00d4c8;transform:translateY(-2px);color:#fff}
+.gh-home:focus-visible{outline:2px solid #00d4c8;outline-offset:3px}
+.gh-home .gh-ico{font-size:15px;line-height:1}
+@media(max-width:430px){.gh-home{padding:0 13px;font-size:13px}}
+@media print{.gh-home{display:none}}
+</style>
+<a class="gh-home" href="index.html" aria-label="חזרה לדף הבית של האתר">
+  <span class="gh-ico" aria-hidden="true">&#127968;</span><span>דף הבית</span>
+</a>
 
 </body>
 </html>
