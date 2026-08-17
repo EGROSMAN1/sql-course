@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>200 תרגילי פייתון מתקדמים · סימולטור מראה | קורס דאטה בעברית</title>
+<meta name="description" content="200 תרגילי פייתון בעברית מדורגים מרמת מתחילים ועד מתקדמים מאוד, עם סימולטור מראה שמריץ את הקוד בזמן אמת והשלמה אוטומטית חכמה.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="200 תרגילי פייתון מתקדמים · סימולטור מראה">
+<meta property="og:description" content="מדורג מקל למתקדם מאוד. הרצה חיה, בדיקות אוטומטיות, והשלמה אוטומטית בעורך.">
+<meta property="og:locale" content="he_IL">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- CodeMirror 5.65.16 — אותה גרסה שכבר בשימוש באתר -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/selection/active-line.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+
+<!-- ============================================================
+     Skulpt — טעינה עם fallback בין כמה CDN
+     זהה בגישתה לטעינה שכבר קיימת ב-python-playground.html
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+  var CDNS = [
+    { js: 'https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt.min.js',
+      lib: 'https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt-stdlib.js' },
+    { js: 'https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js',
+      lib: 'https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js' },
+    { js: 'https://unpkg.com/skulpt@1.2.0/dist/skulpt.min.js',
+      lib: 'https://unpkg.com/skulpt@1.2.0/dist/skulpt-stdlib.js' }
+  ];
+  function load(url, timeoutMs) {
+    return new Promise(function (res, rej) {
+      var s = document.createElement('script');
+      var done = false;
+      var timer = setTimeout(function () { if (!done) { done = true; rej(new Error('timeout')); } }, timeoutMs || 9000);
+      s.src = url;
+      s.onload = function () { if (!done) { done = true; clearTimeout(timer); res(); } };
+      s.onerror = function () { if (!done) { done = true; clearTimeout(timer); rej(new Error('load failed')); } };
+      document.head.appendChild(s);
+    });
+  }
+  (async function () {
+    for (var i = 0; i < CDNS.length; i++) {
+      try {
+        await load(CDNS[i].js);
+        await load(CDNS[i].lib);
+        if (typeof Sk !== 'undefined') {
+          window.__skulptReady = true;
+          if (window.__onSkulptReady) window.__onSkulptReady();
+          return;
+        }
+      } catch (e) { /* ננסה את ה-CDN הבא */ }
+    }
+    window.__skulptFailed = true;
+    if (window.__onSkulptFail) window.__onSkulptFail();
+  })();
+})();
+</script>
+
+<style>
+/* ============================================================
+   עיצוב — תואם לשפה הוויזואלית של האתר (כהה, RTL, טורקיז)
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --bg-0:#0b0e13; --bg-1:#12161d; --bg-2:#181d26; --bg-3:#1f2530;
+  --line:#2a3140; --line-2:#39414f;
+  --fg-1:#e6edf3; --fg-2:#a9b4c2; --fg-3:#8e99a8;
+  --accent:#00d4c8; --accent-dim:rgba(0,212,200,.14);
+  --green:#4ade80; --red:#ff6b6b; --amber:#ffb84d; --blue:#7aa7ff; --purple:#c084fc;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --sans:"Heebo","Segoe UI",Arial,sans-serif;
+  --r:10px; --shadow:0 8px 28px rgba(0,0,0,.4);
+  --sidebar-w:310px;
+}
+
+html, body { height:100%; max-width:100%; overflow-x:hidden; }
+body {
+  margin:0; background:var(--bg-0); color:var(--fg-1);
+  font:15px/1.7 var(--sans); overflow:hidden;
+}
+button { font:inherit; cursor:pointer; }
+::-webkit-scrollbar { width:9px; height:9px; }
+::-webkit-scrollbar-track { background:var(--bg-1); }
+::-webkit-scrollbar-thumb { background:var(--line-2); border-radius:99px; }
+::-webkit-scrollbar-thumb:hover { background:#4a5464; }
+
+/* ---------- שלד העמוד ---------- */
+.app { display:flex; flex-direction:column; height:100vh; height:100dvh;
+  min-width:0; max-width:100%; overflow-x:hidden; }
+
+.topbar {
+  display:flex; align-items:center; gap:14px; padding:0 16px; height:56px;
+  background:var(--bg-1); border-bottom:1px solid var(--line); flex:0 0 auto;
+  min-width:0; overflow:hidden;
+}
+.brand { display:flex; align-items:center; gap:9px; font-weight:700; font-size:16px; }
+.brand .dot { width:9px; height:9px; border-radius:99px; background:var(--accent);
+  box-shadow:0 0 12px var(--accent); }
+.brand small { color:var(--fg-3); font-weight:500; font-size:12px; }
+
+.kernel { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--fg-2);
+  background:var(--bg-2); border:1px solid var(--line); border-radius:99px; padding:5px 12px; }
+.kernel .led { width:7px; height:7px; border-radius:99px; background:var(--amber); }
+.kernel.ready .led { background:var(--green); box-shadow:0 0 8px var(--green); }
+.kernel.err   .led { background:var(--red); }
+
+.xp { margin-inline-start:auto; display:flex; align-items:center; gap:14px; font-size:12.5px; color:var(--fg-2); }
+.xp b { color:var(--accent); font-size:14px; }
+.xp .bar { width:120px; height:6px; background:var(--bg-3); border-radius:99px; overflow:hidden; }
+.xp .bar i { display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--blue)); }
+
+.icon-btn { background:var(--bg-2); border:1px solid var(--line); color:var(--fg-2);
+  border-radius:8px; padding:6px 11px; font-size:13px; }
+.icon-btn:hover { color:var(--fg-1); border-color:var(--accent); }
+
+.body { display:flex; flex:1 1 auto; min-height:0; min-width:0; }
+
+/* ---------- סרגל צד ---------- */
+.sidebar { width:var(--sidebar-w); flex:0 0 var(--sidebar-w); background:var(--bg-1);
+  border-inline-start:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+.sb-top { padding:12px; border-bottom:1px solid var(--line); }
+.sb-search { width:100%; background:var(--bg-2); border:1px solid var(--line); color:var(--fg-1);
+  border-radius:8px; padding:8px 11px; font:inherit; font-size:13.5px; }
+.sb-search:focus { outline:none; border-color:var(--accent); }
+.sb-filters { display:flex; gap:6px; margin-top:9px; flex-wrap:wrap; }
+.chip { background:var(--bg-2); border:1px solid var(--line); color:var(--fg-3);
+  border-radius:99px; padding:4px 11px; font-size:12px; user-select:none; }
+.chip:hover { color:var(--fg-1); }
+.chip.on { background:var(--accent); color:#04302d; border-color:var(--accent); font-weight:600; }
+.sb-list { flex:1 1 auto; overflow-y:auto; padding:8px; }
+.lvl-head { position:sticky; top:0; z-index:2; background:var(--bg-1); padding:9px 8px 6px;
+  font-size:11.5px; font-weight:700; color:var(--accent); letter-spacing:.03em;
+  display:flex; align-items:center; gap:8px; }
+.lvl-head .ln { flex:1; height:1px; background:var(--line); }
+.ex-item { display:flex; align-items:center; gap:9px; padding:7px 9px; border-radius:8px;
+  cursor:pointer; font-size:13px; color:var(--fg-2); }
+.ex-item:hover { background:var(--bg-2); color:var(--fg-1); }
+.ex-item.active { background:var(--accent-dim); color:var(--fg-1);
+  box-shadow:inset 2px 0 0 var(--accent); }
+.ex-item .n { font-family:var(--mono); font-size:11.5px; color:var(--fg-3); min-width:26px; }
+.ex-item.done .n { color:var(--green); }
+.ex-item .t { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ex-item .st { width:15px; text-align:center; font-size:12px; }
+.d-tag { font-size:10px; padding:1px 6px; border-radius:5px; font-weight:600; }
+.d-easy   { background:rgba(74,222,128,.15); color:var(--green); }
+.d-med    { background:rgba(122,167,255,.15); color:var(--blue); }
+.d-hard   { background:rgba(255,184,77,.15);  color:var(--amber); }
+.d-expert { background:rgba(192,132,252,.16); color:var(--purple); }
+
+/* ---------- אזור עבודה ---------- */
+.main { flex:1 1 auto; display:flex; min-width:0; min-height:0; }
+.pane { display:flex; flex-direction:column; min-width:0; min-height:0; }
+.pane-desc   { flex:0 0 33%; border-inline-start:1px solid var(--line); overflow-y:auto; background:var(--bg-1); }
+.pane-work   { flex:1 1 auto; }
+
+.ex-head { padding:16px 20px 12px; border-bottom:1px solid var(--line); }
+.ex-head h1 { margin:0 0 8px; font-size:19px; line-height:1.4; }
+.ex-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--fg-3); }
+.ex-meta .pts { color:var(--accent); font-weight:600; }
+.tag { background:var(--bg-3); border:1px solid var(--line); color:var(--fg-3);
+  border-radius:6px; padding:1px 8px; font-size:11px; }
+
+.ex-body { padding:16px 20px 28px; font-size:14.5px; line-height:1.85; }
+.ex-body h3 { color:var(--accent); font-size:14px; margin:20px 0 7px; }
+.ex-body code { background:var(--bg-3); padding:1px 6px; border-radius:5px;
+  font-family:var(--mono); font-size:12.5px; direction:ltr; display:inline-block; }
+.ex-body pre { background:var(--bg-0); border:1px solid var(--line); border-radius:var(--r);
+  padding:11px 13px; overflow-x:auto; direction:ltr; text-align:left;
+  font-family:var(--mono); font-size:12.5px; line-height:1.65; margin:10px 0; }
+.ex-body ul { padding-inline-start:20px; margin:8px 0; }
+.ex-body li { margin:4px 0; }
+.ex-body b { color:var(--fg-1); }
+
+.disclosure { margin:14px 0; border:1px solid var(--line); border-radius:var(--r); overflow:hidden; }
+.disclosure > summary { padding:10px 14px; cursor:pointer; font-size:13.5px; font-weight:600;
+  color:var(--fg-2); background:var(--bg-2); list-style:none; user-select:none; }
+.disclosure > summary::-webkit-details-marker { display:none; }
+.disclosure > summary::before { content:'▸ '; color:var(--accent); }
+.disclosure[open] > summary::before { content:'▾ '; }
+.disclosure > summary:hover { color:var(--fg-1); }
+.disclosure .inner { padding:12px 14px; border-top:1px solid var(--line); font-size:13.5px; }
+.disclosure.hint > summary { color:var(--amber); }
+.disclosure.sol  > summary { color:var(--purple); }
+
+/* ---------- עורך + מראה ---------- */
+.split { display:flex; flex-direction:column; flex:1 1 auto; min-height:0; min-width:0; }
+.sec-bar { display:flex; align-items:center; gap:10px; padding:8px 14px; flex-wrap:wrap;
+  background:var(--bg-1); border-bottom:1px solid var(--line); flex:0 0 auto; font-size:12.5px;
+  min-width:0; }
+.sec-bar .ttl { font-weight:600; color:var(--fg-2); display:flex; align-items:center; gap:7px; }
+.sec-bar .ttl .sq { width:7px; height:7px; border-radius:2px; background:var(--accent); }
+.sec-bar .sp { margin-inline-start:auto; display:flex; gap:8px; align-items:center; }
+.kbd { font-family:var(--mono); font-size:10.5px; background:var(--bg-3); border:1px solid var(--line);
+  border-bottom-width:2px; border-radius:5px; padding:1px 6px; color:var(--fg-3); }
+
+.editor-wrap { flex:1 1 58%; min-height:0; min-width:0; position:relative; overflow:hidden; }
+.CodeMirror { height:100% !important; font-family:var(--mono) !important; font-size:13.5px;
+  line-height:1.7; direction:ltr; text-align:left; background:var(--bg-0) !important; }
+.CodeMirror-gutters { background:var(--bg-1) !important; border-inline-end:1px solid var(--line) !important; }
+.CodeMirror-activeline-background { background:rgba(255,255,255,.03) !important; }
+/* ערכת material-darker נותנת להערות ולמספרי השורה ניגודיות 2.55:1 — מתחת ל-AA.
+   מעלים אותם לרמה קריאה בלי לשנות את שאר הצבעים. */
+.cm-s-material-darker .cm-comment { color:#8a99a3 !important; }
+.cm-s-material-darker .CodeMirror-linenumber { color:#7f8c99 !important; }
+.cm-s-material-darker .CodeMirror-cursor { border-inline-start:2px solid var(--accent) !important; }
+.CodeMirror-hints { z-index:9999; font-family:var(--mono); font-size:12.5px; direction:ltr;
+  background:var(--bg-2); border:1px solid var(--line-2); border-radius:8px;
+  box-shadow:var(--shadow); max-height:260px; padding:4px; }
+.CodeMirror-hint { color:var(--fg-1); padding:4px 9px; border-radius:6px; }
+li.CodeMirror-hint-active { background:var(--accent); color:#04302d; font-weight:600; }
+.hint-kind { float:right; font-size:10px; opacity:.65; margin-inline-start:10px; font-family:var(--sans); }
+
+.mirror-wrap { flex:1 1 42%; min-height:0; display:flex; flex-direction:column;
+  border-top:1px solid var(--line); background:var(--bg-0); }
+.mirror-out { flex:1 1 auto; overflow:auto; padding:12px 14px; margin:0;
+  font-family:var(--mono); font-size:13px; line-height:1.7; direction:ltr; text-align:left;
+  white-space:pre-wrap; word-break:break-word; color:var(--fg-1); }
+.mirror-out.err { color:#ffb3bc; }
+.mirror-out .muted { color:var(--fg-2); }
+.live-dot { width:7px; height:7px; border-radius:99px; background:var(--fg-3); }
+.live-dot.on { background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 1.4s infinite; }
+.live-dot.run { background:var(--amber); box-shadow:0 0 8px var(--amber); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+.switch { display:inline-flex; align-items:center; gap:7px; color:var(--fg-3); font-size:12px;
+  cursor:pointer; user-select:none; min-height:34px; padding:4px 2px; }
+.switch input { appearance:none; -webkit-appearance:none; flex:0 0 auto;
+  width:34px; height:19px; min-width:34px; background:var(--bg-3); border:1px solid var(--line);
+  border-radius:99px; position:relative; cursor:pointer; transition:.15s; margin:0; }
+.switch input::after { content:''; position:absolute; top:2px; inset-inline-start:2px; width:13px; height:13px;
+  border-radius:99px; background:var(--fg-3); transition:.15s; }
+.switch input:checked { background:var(--accent-dim); border-color:var(--accent); }
+.switch input:checked::after { inset-inline-start:17px; background:var(--accent); }
+.switch input:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+/* ---------- כפתורים ופאנל בדיקות ---------- */
+.actions { display:flex; gap:9px; padding:10px 14px; background:var(--bg-1);
+  border-top:1px solid var(--line); flex:0 0 auto; align-items:center; flex-wrap:wrap; min-width:0; }
+.btn { border:1px solid var(--line); background:var(--bg-2); color:var(--fg-1);
+  border-radius:9px; padding:8px 16px; font-size:13.5px; font-weight:600; transition:.14s; }
+.btn:hover { border-color:var(--line-2); }
+.btn.primary { background:var(--accent); color:#04302d; border-color:var(--accent); }
+.btn.primary:hover { filter:brightness(1.08); }
+.btn.ghost { background:transparent; color:var(--fg-2); }
+.btn:disabled { opacity:.45; cursor:not-allowed; }
+
+.tests { border-top:1px solid var(--line); background:var(--bg-1); flex:0 0 auto;
+  max-height:38vh; overflow-y:auto; display:none; }
+.tests.show { display:block; }
+.tests-head { padding:11px 15px; display:flex; align-items:center; gap:10px;
+  font-weight:700; font-size:14px; position:sticky; top:0; background:var(--bg-1); z-index:2; }
+.tests-head .badge { border-radius:99px; padding:2px 11px; font-size:12px; }
+.tests-head.pass .badge { background:rgba(74,222,128,.16); color:var(--green); }
+.tests-head.fail .badge { background:rgba(255,107,107,.16); color:var(--red); }
+.t-row { display:flex; gap:10px; padding:8px 15px; border-top:1px solid var(--line); font-size:13px; align-items:flex-start; }
+.t-row .ic { font-family:var(--mono); font-weight:700; }
+.t-row.ok .ic { color:var(--green); }
+.t-row.no .ic { color:var(--red); }
+.t-row .nm { flex:1; }
+.t-row .msg { display:block; color:var(--fg-3); font-family:var(--mono); font-size:11.5px;
+  direction:ltr; text-align:left; margin-top:3px; }
+
+.why { margin:12px 15px 16px; padding:13px 15px; border-radius:var(--r);
+  background:var(--accent-dim); border:1px solid rgba(0,212,200,.3); font-size:14px; line-height:1.85; }
+.why h4 { margin:0 0 7px; color:var(--accent); font-size:13px; }
+.why code { background:rgba(0,0,0,.34); padding:1px 5px; border-radius:4px;
+  font-family:var(--mono); font-size:12.5px; direction:ltr; display:inline-block; }
+.why pre { background:rgba(0,0,0,.34); border-radius:8px; padding:10px 12px; overflow-x:auto;
+  direction:ltr; text-align:left; font-family:var(--mono); font-size:12.5px; margin:8px 0; }
+
+.toast { position:fixed; inset-block-end:22px; inset-inline-start:50%; transform:translateX(50%);
+  background:var(--bg-2); border:1px solid var(--accent); color:var(--fg-1);
+  border-radius:10px; padding:11px 20px; font-size:13.5px; font-weight:600;
+  box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:.22s; z-index:999; }
+.toast.show { opacity:1; transform:translateX(50%) translateY(-6px); }
+
+/* ---------- רספונסיבי ---------- */
+.mobile-only { display:none; }
+@media (max-width:1100px) { .pane-desc { flex:0 0 40%; } }
+@media (max-width:430px) {
+  /* מסכי טלפון צרים — פריסה מינימלית */
+  .btn { padding:9px 11px; font-size:12.5px; }
+  .actions { gap:6px; }
+  .xp span:first-child { display:none; }
+  .sec-bar .switch span { display:none; }   /* משאירים את המתג, מוותרים על התווית */
+  .ex-head { padding:13px 14px 10px; }
+  .ex-head h1 { font-size:17px; }
+  .ex-body { padding:13px 14px 22px; font-size:14px; }
+}
+
+@media (max-width:900px) {
+  .mobile-only { display:inline-flex; }
+  /* בנייד אין מקלדת פיזית — הקיצורים רק תופסים מקום */
+  .sec-bar .sp .kbd, .sec-bar .sp .kbd + span { display:none; }
+  .brand small { display:none; }
+  .brand { font-size:15px; }
+  .topbar { gap:10px; padding:0 12px; }
+  .xp { gap:10px; font-size:11.5px; }
+  .actions { gap:7px; padding:9px 10px; }
+  .btn { padding:9px 13px; font-size:13px; }
+  .sec-bar { padding:7px 10px; gap:8px; }
+  /* בעמוד RTL, inset-inline-end:0 מציב את המגירה בקצה השמאלי —
+     ולכן ההסתרה חייבת להיות translateX שלילי. חיובי היה משאיר אותה בתוך המסך. */
+  .sidebar { position:fixed; inset-block:56px 0; inset-inline-end:0; z-index:60;
+    transform:translateX(-100%); transition:transform .22s; box-shadow:var(--shadow);
+    visibility:hidden; }
+  .sidebar.open { transform:translateX(0); visibility:visible; }
+  /* שכבת רקע: נותנת אזור ברור לסגירת המגירה, ומונעת נגיעות בטעות בתוכן שמאחור */
+  .scrim { position:fixed; inset:56px 0 0 0; background:rgba(0,0,0,.55); z-index:55;
+    opacity:0; pointer-events:none; transition:opacity .22s; }
+  .scrim.show { opacity:1; pointer-events:auto; }
+  .main { flex-direction:column; }
+  .pane-desc { flex:0 0 auto; max-height:38vh; border-inline-start:none; border-bottom:1px solid var(--line); }
+  .xp .bar { display:none; }
+  /* בנייד: העורך והמראה מתחלקים בגובה שנשאר, בלי שהעורך יימעך */
+  .editor-wrap { flex:1 1 auto; min-height:150px; }
+  .mirror-wrap { flex:0 0 auto; min-height:120px; max-height:34vh; }
+  .tests { max-height:44vh; }
+  /* משאירים רצועת scrim נוחה לנגיעה (לפחות ~70px) גם בטלפון צר */
+  .sidebar { width:min(300px, 80vw); flex-basis:min(300px, 80vw); }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ========================= סרגל עליון ========================= -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <span>200 תרגילי פייתון</span>
+      <small>סימולטור מראה</small>
+    </div>
+
+    <div class="kernel" id="kernel"><span class="led"></span><span id="kernelTxt">טוען מנוע…</span></div>
+
+    <div class="xp">
+      <span>נפתרו <b id="statDone">0</b> / 200</span>
+      <div class="bar"><i id="statBar" style="width:0%"></i></div>
+      <span>ניקוד <b id="statXp">0</b></span>
+      <button class="icon-btn mobile-only" id="btnDrawer" type="button"
+              aria-label="רשימת תרגילים" aria-controls="sidebar" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <div class="body">
+
+    <!-- ========================= אזור עבודה ========================= -->
+    <main class="main">
+
+      <!-- ----- עורך + מראה ----- -->
+      <section class="pane pane-work">
+        <div class="split">
+
+          <div class="sec-bar">
+            <span class="ttl"><span class="sq"></span>עורך הקוד</span>
+            <label class="switch" title="השלמה אוטומטית תוך כדי הקלדה">
+              <input type="checkbox" id="tglAuto" checked><span>השלמה אוטומטית</span>
+            </label>
+            <div class="sp">
+              <span class="kbd">Ctrl+רווח</span><span style="color:var(--fg-3)">השלמה</span>
+              <span class="kbd">Ctrl+Enter</span><span style="color:var(--fg-3)">הרצה</span>
+            </div>
+          </div>
+
+          <div class="editor-wrap"><textarea id="code"></textarea></div>
+
+          <div class="mirror-wrap">
+            <div class="sec-bar">
+              <span class="ttl"><span class="live-dot" id="liveDot"></span>מראה — פלט חי</span>
+              <label class="switch" title="הרצה אוטומטית בכל הפסקת הקלדה">
+                <input type="checkbox" id="tglMirror" checked><span>מצב מראה</span>
+              </label>
+              <div class="sp">
+                <span id="runMs" style="color:var(--fg-3);font-family:var(--mono);font-size:11.5px"></span>
+                <button class="icon-btn" id="btnClear">נקה</button>
+              </div>
+            </div>
+            <pre class="mirror-out" id="out"><span class="muted">התחל להקליד — הפלט ישתקף כאן בזמן אמת.</span></pre>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn primary" id="btnSubmit">בדוק פתרון</button>
+            <button type="button" class="btn" id="btnRun">הרץ</button>
+            <button type="button" class="btn ghost" id="btnReset">אפס</button>
+            <button type="button" class="btn ghost" id="btnPrev">→ הקודם</button>
+            <button type="button" class="btn ghost" id="btnNext">הבא ←</button>
+          </div>
+
+          <div class="tests" id="tests"></div>
+        </div>
+      </section>
+
+      <!-- ----- תיאור התרגיל ----- -->
+      <section class="pane pane-desc">
+        <div class="ex-head">
+          <h1 id="exTitle">טוען…</h1>
+          <div class="ex-meta" id="exMeta"></div>
+        </div>
+        <div class="ex-body" id="exBody"></div>
+      </section>
+
+    </main>
+
+    <!-- ========================= רשימת תרגילים ========================= -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-top">
+        <input type="search" class="sb-search" id="search" placeholder="חיפוש לפי כותרת או נושא…">
+        <div class="sb-filters" id="filters">
+          <span class="chip on" data-f="all">הכל</span>
+          <span class="chip" data-f="easy">קל</span>
+          <span class="chip" data-f="med">בינוני</span>
+          <span class="chip" data-f="hard">קשה</span>
+          <span class="chip" data-f="expert">מומחה</span>
+          <span class="chip" data-f="todo">לא נפתרו</span>
+        </div>
+      </div>
+      <div class="sb-list" id="list"></div>
+    </aside>
+
+  </div>
+</div>
+
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+<div class="toast" id="toast"></div>
+<script src="python-200-data.js"></script>
+<script>
+/* ============================================================================
+   200 תרגילי פייתון — לוגיקת הסימולטור
+   ----------------------------------------------------------------------------
+   מבנה הקובץ:
+     1. עזרי DOM ואחסון
+     2. מצב (state) והתקדמות
+     3. מנוע Skulpt — הרצה בטוחה
+     4. סימולטור המראה — הרצה חיה עם debounce
+     5. השלמה אוטומטית (autocomplete) מודעת־הקשר
+     6. רינדור: רשימה, תיאור, בדיקות
+     7. אירועים וקיצורי מקלדת
+   ============================================================================ */
+(function () {
+'use strict';
+
+/* ===== 1. עזרי DOM ואחסון ============================================== */
+var $  = function (id) { return document.getElementById(id); };
+var EX = window.PY200_EXERCISES || [];
+
+/** אחסון מקומי עמיד — לא מפיל את העמוד אם localStorage חסום (iframe/פרטי). */
+var store = (function () {
+  var mem = {}, ok = true;
+  try { window.localStorage.setItem('__t', '1'); window.localStorage.removeItem('__t'); }
+  catch (e) { ok = false; }
+  return {
+    get: function (k, d) {
+      try { var v = ok ? localStorage.getItem(k) : mem[k]; return v === null || v === undefined ? d : JSON.parse(v); }
+      catch (e) { return d; }
+    },
+    set: function (k, v) {
+      try { var s = JSON.stringify(v); if (ok) localStorage.setItem(k, s); else mem[k] = s; } catch (e) {}
+    }
+  };
+})();
+
+var KEY = { done: 'py200_done', code: 'py200_code', xp: 'py200_xp', last: 'py200_last', seen: 'py200_seen' };
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
+  });
+}
+
+var toastTimer = null;
+function toast(msg, ms) {
+  var el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { el.classList.remove('show'); }, ms || 2200);
+}
+
+/* ===== 2. מצב והתקדמות =============================================== */
+var state = {
+  cur: null,             // התרגיל הפעיל
+  filter: 'all',
+  search: '',
+  done: store.get(KEY.done, {}),   // { id: true }
+  xp: store.get(KEY.xp, 0),
+  drafts: store.get(KEY.code, {}), // { id: "קוד שנשמר" }
+  seenSolution: store.get(KEY.seen, {}),
+  editor: null,
+  ready: false,
+  running: false
+};
+
+function saveProgress() {
+  store.set(KEY.done, state.done);
+  store.set(KEY.xp, state.xp);
+  store.set(KEY.seen, state.seenSolution);
+}
+
+function updateStats() {
+  var n = Object.keys(state.done).length;
+  $('statDone').textContent = n;
+  $('statXp').textContent = state.xp.toLocaleString('he-IL');
+  $('statBar').style.width = (n / EX.length * 100).toFixed(1) + '%';
+}
+
+/* ===== 3. מנוע Skulpt ================================================== */
+var DIFF_LABEL = { easy: 'קל', med: 'בינוני', hard: 'קשה', expert: 'מומחה' };
+var LEVEL_NAME = {
+  1: 'רמה 1 · יסודות',
+  2: 'רמה 2 · תנאים ולולאות',
+  3: 'רמה 3 · מבני נתונים',
+  4: 'רמה 4 · פונקציות ורקורסיה',
+  5: 'רמה 5 · אלגוריתמים',
+  6: 'רמה 6 · מבני נתונים מתקדמים',
+  7: 'רמה 7 · מתקדם מאוד'
+};
+
+function setKernel(cls, txt) {
+  var el = $('kernel');
+  el.className = 'kernel' + (cls ? ' ' + cls : '');
+  $('kernelTxt').textContent = txt;
+}
+
+/**
+ * מריץ קוד פייתון ב-Skulpt ומחזיר Promise עם { ok, out, err, ms }.
+ * הרצה סינכרונית עטופה ב-Promise כדי לשמור על ממשק אחיד.
+ * @param {string} code   קוד להרצה
+ * @param {number} limit  תקרת זמן במילישניות
+ */
+function runPython(code, limit) {
+  return new Promise(function (resolve) {
+    if (!state.ready || typeof Sk === 'undefined') {
+      resolve({ ok: false, out: '', err: 'המנוע עדיין נטען. נסה שוב בעוד רגע.', ms: 0 });
+      return;
+    }
+    var buffer = '';
+    var t0 = performance.now();
+    try {
+      Sk.configure({
+        output: function (t) { buffer += String(t || ''); },
+        read: function (f) {
+          if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][f] === undefined) {
+            throw "File not found: '" + f + "'";
+          }
+          return Sk.builtinFiles['files'][f];
+        },
+        execLimit: limit || 5000,
+        __future__: Sk.python3,
+        retainGlobals: false,
+        killableWhile: true,
+        killableFor: true
+      });
+    } catch (e) {
+      resolve({ ok: false, out: '', err: String(e), ms: 0 });
+      return;
+    }
+
+    Sk.misceval.asyncToPromise(function () {
+      return Sk.importMainWithBody('<simulator>', false, code, true);
+    }).then(function () {
+      resolve({ ok: true, out: buffer, err: null, ms: Math.round(performance.now() - t0) });
+    }, function (e) {
+      resolve({ ok: false, out: buffer, err: cleanError(e), ms: Math.round(performance.now() - t0) });
+    });
+  });
+}
+
+/** ממיר הודעת שגיאה של Skulpt לטקסט קריא, ומתרגם את הנפוצות. */
+function cleanError(e) {
+  var msg = (e && e.toString) ? e.toString() : String(e);
+  msg = msg.replace(/ on line (\d+)/, ' — שורה $1');
+  if (/TimeLimitError|execution timed out/i.test(msg)) {
+    return 'הריצה נעצרה: הקוד רץ יותר מדי זמן. בדוק אם יש לולאה אינסופית.';
+  }
+  return msg;
+}
+
+/* ===== 4. סימולטור המראה ============================================== */
+var mirrorTimer = null;
+var MIRROR_DELAY = 650;   // המתנה אחרי הפסקת הקלדה, במילישניות
+
+/** מתזמן הרצת מראה. נקרא בכל שינוי בעורך. */
+function scheduleMirror() {
+  if (!$('tglMirror').checked) return;
+  $('liveDot').className = 'live-dot on';
+  clearTimeout(mirrorTimer);
+  mirrorTimer = setTimeout(runMirror, MIRROR_DELAY);
+}
+
+/** מריץ את הקוד הנוכחי ומשקף את הפלט. תקרת זמן קצרה כדי לא לתקוע את הדפדפן. */
+function runMirror() {
+  if (state.running) return;
+  var code = state.editor.getValue();
+  if (!code.trim()) {
+    $('out').innerHTML = '<span class="muted">התחל להקליד — הפלט ישתקף כאן בזמן אמת.</span>';
+    $('out').className = 'mirror-out';
+    $('liveDot').className = 'live-dot';
+    $('runMs').textContent = '';
+    return;
+  }
+  state.running = true;
+  $('liveDot').className = 'live-dot run';
+  runPython(code, 3000).then(function (r) {
+    state.running = false;
+    $('liveDot').className = 'live-dot on';
+    $('runMs').textContent = r.ms + 'ms';
+    if (r.err) {
+      $('out').className = 'mirror-out err';
+      $('out').textContent = (r.out ? r.out + '\n' : '') + '⚠ ' + r.err;
+    } else {
+      $('out').className = 'mirror-out';
+      if (r.out) $('out').textContent = r.out;
+      else $('out').innerHTML = '<span class="muted">הקוד רץ בהצלחה, בלי פלט מודפס. השתמש ב-print() כדי לראות ערכים.</span>';
+    }
+  });
+}
+
+/* ===== 5. השלמה אוטומטית מודעת־הקשר ==================================== */
+/* ----------------------------------------------------------------------------
+   ההשלמה בנויה משכבות, לפי מה שנמצא לפני הסמן:
+     א. אחרי נקודה  →  מתודות לפי הטיפוס שהוסק מהמשתנה שלפני הנקודה
+     ב. אחרי import →  שמות המודולים שנתמכים ב-Skulpt
+     ג. אחרי mod.   →  חברי המודול
+     ד. אחרת       →  מילות מפתח, פונקציות מובנות, שמות מהקובץ, וקטעי קוד
+   כל פריט מקבל תווית סוג (מתודה / מובנה / משתנה / קטע) שמוצגת בצד.
+---------------------------------------------------------------------------- */
+
+var PY_KEYWORDS = ['and','as','assert','break','class','continue','def','del','elif','else',
+  'except','False','finally','for','from','global','if','import','in','is','lambda','None',
+  'not','or','pass','raise','return','True','try','while','with','yield'];
+
+var PY_BUILTINS = ['abs','all','any','bin','bool','chr','dict','divmod','enumerate','filter',
+  'float','format','frozenset','hex','input','int','isinstance','len','list','map','max','min',
+  'oct','ord','pow','print','range','repr','reversed','round','set','sorted','str','sum','tuple','zip','type'];
+
+var METHODS = {
+  str:  ['upper','lower','strip','lstrip','rstrip','split','rsplit','join','replace','find','rfind',
+         'index','count','startswith','endswith','isdigit','isalpha','isalnum','isupper','islower',
+         'title','capitalize','zfill','ljust','rjust','center','format','splitlines','encode'],
+  list: ['append','extend','insert','remove','pop','clear','index','count','sort','reverse','copy'],
+  dict: ['get','keys','values','items','pop','popitem','update','setdefault','clear','copy'],
+  set:  ['add','remove','discard','pop','clear','union','intersection','difference',
+         'symmetric_difference','issubset','issuperset','update','copy'],
+  tuple:['count','index']
+};
+
+/* מודולים שנתמכים בפועל ב-Skulpt 1.2 — אומת בהרצה */
+var MODULES = {
+  math:        ['sqrt','floor','ceil','pow','pi','e','fabs','factorial','gcd','log','log2','log10',
+                'exp','sin','cos','tan','inf','trunc','isclose'],
+  random:      ['random','randint','randrange','choice','shuffle','sample','uniform','seed'],
+  string:      ['ascii_lowercase','ascii_uppercase','ascii_letters','digits','punctuation','whitespace'],
+  collections: ['Counter','defaultdict','deque','OrderedDict','namedtuple'],
+  itertools:   ['permutations','combinations','product','chain','count','cycle','repeat','groupby'],
+  re:          ['findall','match','search','compile','split','escape'],
+  bisect:      ['bisect','bisect_left','bisect_right','insort','insort_left','insort_right'],
+  copy:        ['copy','deepcopy'],
+  operator:    ['itemgetter','attrgetter','add','sub','mul']
+};
+
+/* קטעי קוד נפוצים — נטענים עם Tab ומכניסים תבנית שלמה */
+var SNIPPETS = [
+  { t: 'def',       code: 'def name(args):\n    ',                  d: 'הגדרת פונקציה' },
+  { t: 'forrange',  code: 'for i in range(n):\n    ',               d: 'לולאת for על טווח' },
+  { t: 'forin',     code: 'for item in items:\n    ',               d: 'לולאת for על אוסף' },
+  { t: 'forenum',   code: 'for i, item in enumerate(items):\n    ', d: 'לולאה עם אינדקס' },
+  { t: 'foritems',  code: 'for key, value in d.items():\n    ',     d: 'מעבר על מילון' },
+  { t: 'while',     code: 'while condition:\n    ',                 d: 'לולאת while' },
+  { t: 'ifelse',    code: 'if condition:\n    \nelse:\n    ',        d: 'תנאי עם else' },
+  { t: 'tryexcept', code: 'try:\n    \nexcept ValueError as e:\n    ', d: 'טיפול בשגיאות' },
+  { t: 'listcomp',  code: '[x for x in items if condition]',        d: 'list comprehension' },
+  { t: 'dictcomp',  code: '{k: v for k, v in items}',               d: 'dict comprehension' },
+  { t: 'class',     code: 'class Name:\n    def __init__(self):\n        ', d: 'הגדרת מחלקה' },
+  { t: 'counter',   code: 'from collections import Counter\n',      d: 'ייבוא Counter' },
+  { t: 'defaultdict', code: 'from collections import defaultdict\n', d: 'ייבוא defaultdict' },
+  { t: 'deque',     code: 'from collections import deque\n',        d: 'ייבוא deque' },
+  { t: 'main',      code: 'if __name__ == "__main__":\n    ',       d: 'נקודת כניסה' }
+];
+
+/**
+ * מנחשת את טיפוס המשתנה מתוך ההשמה האחרונה שלו בקובץ.
+ * גישה פרגמטית שמכסה את רוב המקרים בתרגילים, בלי לנתח את כל הקוד.
+ * @returns {string|null} 'str' | 'list' | 'dict' | 'set' | 'tuple' | null
+ */
+function guessType(code, varName) {
+  var re = new RegExp('(?:^|\\n)\\s*' + varName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*=\\s*([^\\n]+)');
+  var m = code.match(re);
+  if (!m) {
+    /* אולי זה פרמטר של פונקציה עם ערך ברירת מחדל */
+    var p = code.match(new RegExp(varName + '\\s*=\\s*(\\[|\\{|["\'])'));
+    if (p) m = [null, p[1]];
+    else return null;
+  }
+  var rhs = m[1].trim();
+  if (/^["']/.test(rhs) || /^f["']/.test(rhs) || /\.(join|upper|lower|strip|replace|format)\s*\(/.test(rhs) || /^str\s*\(/.test(rhs)) return 'str';
+  if (/^\[/.test(rhs) || /^list\s*\(/.test(rhs) || /^sorted\s*\(/.test(rhs) || /\.split\s*\(/.test(rhs)) return 'list';
+  if (/^\{\s*\}/.test(rhs) || /^dict\s*\(/.test(rhs) || /^defaultdict\s*\(/.test(rhs) || /^Counter\s*\(/.test(rhs)) return 'dict';
+  if (/^set\s*\(/.test(rhs)) return 'set';
+  if (/^\{/.test(rhs)) return /:/.test(rhs) ? 'dict' : 'set';
+  if (/^\(/.test(rhs) && /,/.test(rhs)) return 'tuple';
+  return null;
+}
+
+/** אוסף שמות שהוגדרו בקובץ: משתנים, פונקציות, מחלקות ופרמטרים. */
+function collectNames(code) {
+  var names = {};
+  var add = function (n) { if (n && !/^\d/.test(n)) names[n] = true; };
+  (code.match(/(?:^|\n)\s*([A-Za-z_]\w*)\s*=/g) || []).forEach(function (s) { add(s.replace(/[\s=\n]/g, '')); });
+  (code.match(/def\s+([A-Za-z_]\w*)/g)   || []).forEach(function (s) { add(s.slice(4).trim()); });
+  (code.match(/class\s+([A-Za-z_]\w*)/g) || []).forEach(function (s) { add(s.slice(6).trim()); });
+  (code.match(/for\s+([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)\s+in/g) || []).forEach(function (s) {
+    s.slice(4).split(/\s+in/)[0].split(',').forEach(function (p) { add(p.trim()); });
+  });
+  (code.match(/def\s+\w+\s*\(([^)]*)\)/g) || []).forEach(function (s) {
+    var inner = s.slice(s.indexOf('(') + 1, -1);
+    inner.split(',').forEach(function (p) { add(p.split('=')[0].replace(/[*\s]/g, '')); });
+  });
+  return Object.keys(names);
+}
+
+/** בונה פריט השלמה עם תווית סוג בצד. */
+function hintItem(text, kind, replaceWith) {
+  return {
+    text: replaceWith === undefined ? text : replaceWith,
+    displayText: text,
+    render: function (el) {
+      var a = document.createElement('span'); a.textContent = text;
+      var b = document.createElement('span'); b.className = 'hint-kind'; b.textContent = kind;
+      el.appendChild(a); el.appendChild(b);
+    }
+  };
+}
+
+/** ספק ההשלמות של CodeMirror. */
+function pythonHint(cm) {
+  var cur   = cm.getCursor();
+  var line  = cm.getLine(cur.line);
+  var left  = line.slice(0, cur.ch);
+  var code  = cm.getValue();
+  var list  = [];
+  var start = cur.ch, end = cur.ch;
+
+  /* א. השלמת מתודות אחרי נקודה */
+  var dot = left.match(/([A-Za-z_]\w*)\s*\.\s*(\w*)$/);
+  if (dot) {
+    var owner = dot[1], typed = dot[2];
+    start = cur.ch - typed.length;
+
+    if (MODULES[owner]) {
+      MODULES[owner].forEach(function (m) { list.push(hintItem(m, 'מודול')); });
+    } else {
+      var t = guessType(code, owner);
+      if (t) METHODS[t].forEach(function (m) { list.push(hintItem(m, DIFF_TYPE_LABEL[t] || 'מתודה')); });
+      else {
+        /* לא הצלחנו להסיק טיפוס — נציע את כל המתודות, ללא כפילויות */
+        var seen = {};
+        Object.keys(METHODS).forEach(function (k) {
+          METHODS[k].forEach(function (m) { if (!seen[m]) { seen[m] = 1; list.push(hintItem(m, 'מתודה')); } });
+        });
+      }
+    }
+    list = list.filter(function (i) { return i.displayText.indexOf(typed) === 0; });
+    return { list: list, from: CodeMirror.Pos(cur.line, start), to: CodeMirror.Pos(cur.line, end) };
+  }
+
+  /* ב. אחרי import / from — שמות מודולים */
+  var imp = left.match(/(?:^|\s)(?:import|from)\s+(\w*)$/);
+  if (imp) {
+    start = cur.ch - imp[1].length;
+    Object.keys(MODULES).forEach(function (m) {
+      if (m.indexOf(imp[1]) === 0) list.push(hintItem(m, 'מודול'));
+    });
+    return { list: list, from: CodeMirror.Pos(cur.line, start), to: CodeMirror.Pos(cur.line, end) };
+  }
+
+  /* ג. אחרי "from X import" — חברי המודול */
+  var frm = left.match(/from\s+(\w+)\s+import\s+(\w*)$/);
+  if (frm && MODULES[frm[1]]) {
+    start = cur.ch - frm[2].length;
+    MODULES[frm[1]].forEach(function (m) {
+      if (m.indexOf(frm[2]) === 0) list.push(hintItem(m, 'חבר'));
+    });
+    return { list: list, from: CodeMirror.Pos(cur.line, start), to: CodeMirror.Pos(cur.line, end) };
+  }
+
+  /* ד. מילה רגילה */
+  var word = left.match(/([A-Za-z_]\w*)$/);
+  var typedWord = word ? word[1] : '';
+  start = cur.ch - typedWord.length;
+  if (typedWord.length === 0) return null;   /* בלי טריגר על מחרוזת ריקה */
+
+  var pushIf = function (name, kind, replaceWith) {
+    if (name.toLowerCase().indexOf(typedWord.toLowerCase()) === 0) list.push(hintItem(name, kind, replaceWith));
+  };
+
+  collectNames(code).forEach(function (n) { if (n !== typedWord) pushIf(n, 'בקובץ'); });
+  PY_KEYWORDS.forEach(function (k) { pushIf(k, 'מילת מפתח'); });
+  PY_BUILTINS.forEach(function (b) { pushIf(b, 'מובנה', b + '('); });
+  Object.keys(MODULES).forEach(function (m) { pushIf(m, 'מודול'); });
+  SNIPPETS.forEach(function (s) {
+    if (s.t.indexOf(typedWord.toLowerCase()) === 0) list.push(hintItem(s.t, s.d, s.code));
+  });
+
+  /* הסרת כפילויות תוך שמירה על הסדר */
+  var seenTxt = {};
+  list = list.filter(function (i) {
+    if (seenTxt[i.displayText]) return false;
+    seenTxt[i.displayText] = 1; return true;
+  });
+
+  return list.length
+    ? { list: list, from: CodeMirror.Pos(cur.line, start), to: CodeMirror.Pos(cur.line, end) }
+    : null;
+}
+
+var DIFF_TYPE_LABEL = { str: 'מחרוזת', list: 'רשימה', dict: 'מילון', set: 'סט', tuple: 'טאפל' };
+
+/** מפעיל השלמה אוטומטית תוך כדי הקלדה, בלי להפריע לניווט. */
+function maybeAutoComplete(cm, change) {
+  if (!$('tglAuto').checked) return;
+  if (!change || change.origin !== '+input') return;
+  var txt = change.text[0];
+  if (!txt) return;
+  if (!/[A-Za-z_.]/.test(txt)) return;
+
+  var cur = cm.getCursor();
+  var left = cm.getLine(cur.line).slice(0, cur.ch);
+  /* לא נציע בתוך מחרוזת או הערה */
+  if (/#/.test(left)) return;
+  var quotes = (left.match(/["']/g) || []).length;
+  if (quotes % 2 === 1) return;
+  /* נציע רק אחרי נקודה, או אחרי 2 תווים לפחות */
+  if (txt !== '.' && !/[A-Za-z_]\w{1,}$/.test(left)) return;
+
+  cm.showHint({ hint: pythonHint, completeSingle: false, closeOnUnfocus: true });
+}
+
+/* ===== 6. רינדור ======================================================= */
+
+/**
+ * ניהול מרוכז של מגירת הנייד — מצב אחד לשלושת הרכיבים: המגירה, שכבת הרקע ו-aria.
+ * מוגדרת בסקופ המודול כדי שגם loadExercise תוכל לסגור את המגירה.
+ * @param {boolean} open
+ */
+function setDrawer(open) {
+  $('sidebar').classList.toggle('open', open);
+  $('scrim').classList.toggle('show', open);
+  $('btnDrawer').setAttribute('aria-expanded', open ? 'true' : 'false');
+  $('scrim').setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+
+/** מרנדר את רשימת התרגילים בסרגל הצד, מקובצת לפי רמה. */
+function renderList() {
+  var q = state.search.toLowerCase();
+  var items = EX.filter(function (x) {
+    if (state.filter === 'todo') { if (state.done[x.id]) return false; }
+    else if (state.filter !== 'all' && x.diff !== state.filter) return false;
+    if (q) {
+      var hay = (x.title + ' ' + (x.tags || []).join(' ') + ' ' + x.id).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+
+  if (!items.length) {
+    $('list').innerHTML = '<div style="padding:24px 10px;text-align:center;color:var(--fg-3);font-size:13px">לא נמצאו תרגילים</div>';
+    return;
+  }
+
+  var html = '', lastLevel = null;
+  items.forEach(function (x) {
+    if (x.level !== lastLevel) {
+      lastLevel = x.level;
+      var total = EX.filter(function (e) { return e.level === x.level; }).length;
+      var did   = EX.filter(function (e) { return e.level === x.level && state.done[e.id]; }).length;
+      html += '<div class="lvl-head"><span>' + LEVEL_NAME[x.level] + '</span><span class="ln"></span>'
+            + '<span style="color:var(--fg-3);font-weight:500">' + did + '/' + total + '</span></div>';
+    }
+    var done = !!state.done[x.id];
+    html += '<div class="ex-item' + (done ? ' done' : '') + (state.cur && state.cur.id === x.id ? ' active' : '') + '" data-id="' + x.id + '">'
+          +   '<span class="n">' + x.id + '</span>'
+          +   '<span class="t">' + escapeHtml(x.title) + '</span>'
+          +   '<span class="d-tag d-' + x.diff + '">' + DIFF_LABEL[x.diff] + '</span>'
+          +   '<span class="st">' + (done ? '✓' : '') + '</span>'
+          + '</div>';
+  });
+  $('list').innerHTML = html;
+}
+
+/** טוען תרגיל לתצוגה ולעורך. */
+function loadExercise(id) {
+  var x = EX.filter(function (e) { return e.id === id; })[0];
+  if (!x) return;
+  state.cur = x;
+  store.set(KEY.last, id);
+
+  $('exTitle').textContent = x.title;
+  $('exMeta').innerHTML =
+      '<span class="d-tag d-' + x.diff + '">' + DIFF_LABEL[x.diff] + '</span>'
+    + '<span class="pts">' + x.points + ' נקודות</span>'
+    + '<span>·</span><span>' + LEVEL_NAME[x.level] + '</span>'
+    + '<span>·</span><span>תרגיל ' + x.id + ' מתוך ' + EX.length + '</span>'
+    + (x.tags || []).map(function (t) { return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('');
+
+  var body = '<div>' + x.desc + '</div>';
+  body += '<details class="disclosure hint"><summary>רמז</summary><div class="inner">' + x.hint + '</div></details>';
+  body += '<details class="disclosure sol" id="solBox"><summary>הצג פתרון מלא</summary><div class="inner">'
+        + '<pre>' + escapeHtml(x.solution) + '</pre>'
+        + '<div style="margin-top:10px">' + x.explanation + '</div>'
+        + '</div></details>';
+  $('exBody').innerHTML = body;
+
+  /* חשיפת פתרון מסמנת את התרגיל — הניקוד יהיה חלקי */
+  var solBox = $('solBox');
+  solBox.addEventListener('toggle', function () {
+    if (solBox.open && !state.done[x.id]) {
+      state.seenSolution[x.id] = true;
+      saveProgress();
+    }
+  });
+
+  state.editor.setValue(state.drafts[x.id] !== undefined ? state.drafts[x.id] : (x.starter || ''));
+  state.editor.clearHistory();
+  $('tests').className = 'tests';
+  $('tests').innerHTML = '';
+  $('out').innerHTML = '<span class="muted">התחל להקליד — הפלט ישתקף כאן בזמן אמת.</span>';
+  $('out').className = 'mirror-out';
+  $('runMs').textContent = '';
+  renderList();
+  setTimeout(function () { state.editor.refresh(); state.editor.focus(); }, 30);
+  if (window.innerWidth < 900) setDrawer(false);
+}
+
+/** מריץ את כל בדיקות התרגיל ומרנדר את התוצאה. */
+function submit() {
+  if (!state.ready) { toast('המנוע עדיין נטען'); return; }
+  var x = state.cur;
+  var code = state.editor.getValue();
+  if (!code.trim()) { toast('העורך ריק'); return; }
+
+  $('btnSubmit').disabled = true;
+  $('tests').className = 'tests show';
+  $('tests').innerHTML = '<div class="tests-head"><span>מריץ בדיקות…</span></div>';
+
+  /* מריצים כל בדיקה בנפרד כדי לדעת בדיוק איזו נכשלה */
+  var results = [];
+  var chain = Promise.resolve();
+  x.tests.forEach(function (t) {
+    chain = chain.then(function () {
+      return runPython(code + '\n\n' + t.code, 30000).then(function (r) {
+        results.push({ name: t.name, ok: r.ok, err: r.err });
+      });
+    });
+  });
+
+  chain.then(function () {
+    $('btnSubmit').disabled = false;
+    var passed = results.filter(function (r) { return r.ok; }).length;
+    var all = passed === results.length;
+
+    var html = '<div class="tests-head ' + (all ? 'pass' : 'fail') + '">'
+             + '<span>' + (all ? 'כל הבדיקות עברו' : 'עוד לא') + '</span>'
+             + '<span class="badge">' + passed + '/' + results.length + '</span></div>';
+    results.forEach(function (r) {
+      html += '<div class="t-row ' + (r.ok ? 'ok' : 'no') + '">'
+            +   '<span class="ic">' + (r.ok ? '✓' : '✕') + '</span>'
+            +   '<span class="nm">' + escapeHtml(r.name)
+            +     (r.ok ? '' : '<span class="msg">' + escapeHtml(r.err || '') + '</span>')
+            +   '</span></div>';
+    });
+
+    if (all) {
+      if (!state.done[x.id]) {
+        state.done[x.id] = true;
+        var earned = state.seenSolution[x.id] ? Math.floor(x.points / 2) : x.points;
+        state.xp += earned;
+        saveProgress();
+        updateStats();
+        renderList();
+        toast('כל הכבוד — ' + earned + ' נקודות' + (state.seenSolution[x.id] ? ' (פתרון נצפה)' : ''));
+      }
+      html += '<div class="why"><h4>למה זה עובד</h4>' + x.explanation + '</div>';
+    }
+    $('tests').innerHTML = html;
+  });
+}
+
+/* ===== 7. אתחול, אירועים וקיצורי מקלדת ================================= */
+
+function initEditor() {
+  state.editor = CodeMirror.fromTextArea($('code'), {
+    mode: 'python',
+    theme: 'material-darker',
+    lineNumbers: true,
+    indentUnit: 4,
+    tabSize: 4,
+    indentWithTabs: false,
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    styleActiveLine: true,
+    lineWrapping: false,
+    direction: 'ltr',
+    extraKeys: {
+      'Ctrl-Space': function (cm) { cm.showHint({ hint: pythonHint, completeSingle: false }); },
+      'Ctrl-Enter': function () { runMirror(); },
+      'Cmd-Enter':  function () { runMirror(); },
+      'Shift-Ctrl-Enter': function () { submit(); },
+      'Shift-Cmd-Enter':  function () { submit(); },
+      'Ctrl-/': 'toggleComment',
+      'Cmd-/':  'toggleComment',
+      Tab: function (cm) {
+        if (cm.somethingSelected()) cm.indentSelection('add');
+        else cm.replaceSelection('    ', 'end');
+      }
+    }
+  });
+
+  /* שמירת טיוטה + הרצת מראה */
+  state.editor.on('change', function (cm, change) {
+    if (state.cur) {
+      state.drafts[state.cur.id] = cm.getValue();
+      clearTimeout(state._saveTimer);
+      state._saveTimer = setTimeout(function () { store.set(KEY.code, state.drafts); }, 800);
+    }
+    maybeAutoComplete(cm, change);
+    scheduleMirror();
+  });
+}
+
+function initSkulpt() {
+  var go = function () {
+    if (window.__skulptFailed || typeof Sk === 'undefined') {
+      setKernel('err', 'המנוע לא נטען — רענן את הדף');
+      return;
+    }
+    state.ready = true;
+    setKernel('ready', 'Python מוכן');
+  };
+  if (window.__skulptReady) { go(); return; }
+  window.__onSkulptReady = go;
+  window.__onSkulptFail  = go;
+  setTimeout(function () { if (!state.ready) go(); }, 20000);
+}
+
+function initEvents() {
+  /* בחירת תרגיל */
+  $('list').addEventListener('click', function (e) {
+    var row = e.target.closest('.ex-item');
+    if (row) loadExercise(parseInt(row.dataset.id, 10));
+  });
+
+  /* סינון וחיפוש */
+  $('filters').addEventListener('click', function (e) {
+    var c = e.target.closest('.chip');
+    if (!c) return;
+    document.querySelectorAll('#filters .chip').forEach(function (x) { x.classList.remove('on'); });
+    c.classList.add('on');
+    state.filter = c.dataset.f;
+    renderList();
+  });
+  $('search').addEventListener('input', function (e) {
+    state.search = e.target.value.trim();
+    renderList();
+  });
+
+  /* פעולות */
+  $('btnRun').addEventListener('click', runMirror);
+  $('btnSubmit').addEventListener('click', submit);
+  $('btnClear').addEventListener('click', function () {
+    $('out').innerHTML = '<span class="muted">נוקה.</span>';
+    $('out').className = 'mirror-out';
+    $('runMs').textContent = '';
+  });
+  $('btnReset').addEventListener('click', function () {
+    if (!state.cur) return;
+    state.editor.setValue(state.cur.starter || '');
+    delete state.drafts[state.cur.id];
+    store.set(KEY.code, state.drafts);
+    toast('הקוד אופס לשלד המקורי');
+  });
+
+  var step = function (d) {
+    if (!state.cur) return;
+    var i = EX.findIndex(function (e) { return e.id === state.cur.id; });
+    var n = EX[i + d];
+    if (n) loadExercise(n.id); else toast(d > 0 ? 'זה התרגיל האחרון' : 'זה התרגיל הראשון');
+  };
+  $('btnNext').addEventListener('click', function () { step(1); });
+  $('btnPrev').addEventListener('click', function () { step(-1); });
+
+  /* מצב מראה */
+  $('tglMirror').addEventListener('change', function (e) {
+    if (e.target.checked) { runMirror(); toast('מצב מראה פועל'); }
+    else { $('liveDot').className = 'live-dot'; toast('מצב מראה כבוי — השתמש בכפתור הרצה'); }
+  });
+  $('tglAuto').addEventListener('change', function (e) {
+    toast(e.target.checked ? 'השלמה אוטומטית פועלת' : 'השלמה אוטומטית כבויה (Ctrl+רווח עדיין עובד)');
+  });
+
+  /* מגירה בנייד */
+  $('btnDrawer').addEventListener('click', function (e) {
+    e.stopPropagation();
+    setDrawer(!$('sidebar').classList.contains('open'));
+  });
+  /* נגיעה בשכבת הרקע סוגרת — זה אזור הסגירה הברור בנייד */
+  $('scrim').addEventListener('click', function () { setDrawer(false); });
+  /* Escape סוגר גם הוא */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && $('sidebar').classList.contains('open')) setDrawer(false);
+  });
+
+  /* קיצורים גלובליים */
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      if (e.shiftKey) submit(); else runMirror();
+    }
+  });
+
+  window.addEventListener('resize', function () { if (state.editor) state.editor.refresh(); });
+}
+
+function boot() {
+  if (!EX.length) {
+    document.body.innerHTML = '<div style="padding:40px;text-align:center;color:#ff6b6b">'
+      + 'קובץ הנתונים python-200-data.js לא נטען. ודא שהוא נמצא באותה תיקייה.</div>';
+    return;
+  }
+  initEditor();
+  initSkulpt();
+  initEvents();
+  updateStats();
+  renderList();
+  var last = store.get(KEY.last, EX[0].id);
+  loadExercise(EX.some(function (e) { return e.id === last; }) ? last : EX[0].id);
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+
+})();
+</script>
+</body>
+</html>

@@ -872,84 +872,96 @@ const EXERCISES_100 = [
   // ============== TIER 1: קשה (1-30) — פונקציות, מבני נתונים, לוגיקה ==============
   
   { num: 1, difficulty: 'hard', topic: 'קבצים + try/except',
-    q: 'כתוב פונקציה <code>load_data()</code> שמדמה טעינה מקובץ: בהינתן <code>raw = "אלירן,32\\nתומר,28"</code>, פצל לשורות ובנה מילון של שם→גיל. החזר את המילון.',
+    q: "כתוב פונקציה <code>load_data()</code> שמדמה טעינה מקובץ: בהינתן <code>raw = \"אלירן,32\\nתומר,28\"</code>, פצל לשורות, פצל כל שורה בפסיק, ובנה מילון שבו המפתח הוא השם והערך הוא הגיל כמספר שלם (<code>int</code>). החזר את המילון מהפונקציה, שמור אותו במשתנה והדפס אותו.",
+    explain: "פירוק טקסט לשורות ואז לשדות הוא הצעד הראשון בכל טעינת קובץ: split('\\n') מפריד שורות, split(',') מפריד עמודות. שים לב ש-split תמיד מחזיר מחרוזות — הגיל '32' הוא טקסט עד שתמיר אותו ב-int(), ובלי ההמרה כל חישוב עליו ייכשל או יתנהג כשרשור. הצורה name, age = line.split(',') קריאה יותר מ-parts[0]/parts[1], אבל היא מתפוצצת אם בשורה יש מספר שדות אחר — לכן בקוד אמיתי בודקים את אורך הרשימה לפני הפירוק.",
     starter: '',
-    solution: 'raw = "אלירן,32\\nתומר,28"\n\ndef load_data():\n    result = {}\n    for line in raw.split("\\n"):\n        parts = line.split(",")\n        result[parts[0]] = parts[1]\n    return result\n\nprint(load_data())',
-    expected: '32',
-    check: (out, code) => /אלירן/.test(out) && /32/.test(out) && /def\s+load_data/.test(code) && /split/.test(code)
+    solution: "raw = \"אלירן,32\\nתומר,28\"\n\ndef load_data():\n    result = {}\n    for line in raw.split(\"\\n\"):\n        name, age = line.split(\",\")\n        result[name] = int(age)\n    return result\n\ndata = load_data()\nprint(data)",
+    expected: "{'אלירן': 32, 'תומר': 28}",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\{/.test(out) && /אלירן/.test(out) && /תומר/.test(out) && /32/.test(out) && /28/.test(out) && !/אלירן,32/.test(out) && /def\s+load_data/.test(c) && /\breturn\b/.test(c) && /\.split\s*\(/.test(c) && /load_data\s*\(\s*\)/.test(c.replace(/def\s+load_data\s*\(\s*\)/,"")); }
   },
   { num: 2, difficulty: 'hard', topic: 'while + לולאת תפריט',
-    q: 'בנה לולאת <code>while True</code> שעוברת על רשימת <code>actions = ["work", "rest", "exit"]</code>. בכל איטרציה הדפס את הפעולה. כשמגיע ל-"exit", הוסף "Finished" לרשימת לוג ושבור.',
+    q: "בנה לולאת <code>while True</code> המדמה תפריט: היא עוברת אחד-אחד על <code>actions = [\"work\", \"rest\", \"exit\"]</code>, מדפיסה בכל איטרציה את הפעולה הנוכחית, וכשהיא מגיעה ל-<code>\"exit\"</code> מוסיפה <code>\"Finished\"</code> לרשימת <code>log</code> ושוברת. בסוף הדפס את <code>log</code>.",
+    explain: "while True יוצר לולאה אינסופית שהיציאה ממנה היא באחריותך — break הוא היציאה. התבנית הזו נכונה כשלא ידוע מראש כמה איטרציות יהיו (תפריט שממתין לפקודת המשתמש), אבל היא מסוכנת: אם האינדקס i גדל בלי גבול ותנאי ה-break לא מתקיים, תקבל IndexError או לולאה תקועה. כשעוברים על רשימה שאורכה ידוע — for הוא הכלי הנכון.",
     starter: '',
     solution: 'actions = ["work", "rest", "exit"]\nlog = []\ni = 0\nwhile True:\n    action = actions[i]\n    print(action)\n    if action == "exit":\n        log.append("Finished")\n        break\n    i += 1\n\nprint(log)',
-    expected: 'Finished',
-    check: (out, code) => /Finished/.test(out) && /while True/.test(code) && /break/.test(code)
+    expected: "work\nrest\nexit\n['Finished']",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /work/.test(out) && /rest/.test(out) && /exit/.test(out) && /Finished/.test(out) && /while\s+True/.test(c) && /\bbreak\b/.test(c) && /actions\s*\[/.test(c) && /\.append\s*\(/.test(c); }
   },
   { num: 3, difficulty: 'hard', topic: 'רשימת מילונים',
-    q: 'תן: <code>products = [{"name": "PC", "price": 1000}, {"name": "Mouse", "price": 50}, {"name": "Keyboard", "price": 300}]</code>. כתוב פונקציה <code>get_expensive(products)</code> שמחזירה רשימה של שמות מוצרים מעל 100. הדפס.',
+    q: "תן: <code>products = [{\"name\": \"PC\", \"price\": 1000}, {\"name\": \"Mouse\", \"price\": 50}, {\"name\": \"Keyboard\", \"price\": 300}]</code>. כתוב פונקציה <code>get_expensive(items)</code> שמקבלת רשימת מוצרים ומחזירה רשימה של <b>שמות</b> המוצרים שמחירם מעל 100 (ולא את המילונים עצמם). הפעל אותה על <code>products</code> והדפס את התוצאה.",
+    explain: "רשימת מילונים היא המבנה הכי נפוץ לייצוג טבלה בפייתון טהור — כל מילון הוא שורה וכל מפתח הוא עמודה. הלולאה עוברת שורה-שורה, התנאי מסנן, ו-append אוסף רק את מה שביקשו — כאן p['name'] ולא p כולו, אחרת מוחזרות שורות שלמות במקום שמות. אותה לוגיקה בשורה אחת: [p['name'] for p in items if p['price'] > 100].",
     starter: '',
     solution: 'products = [{"name": "PC", "price": 1000}, {"name": "Mouse", "price": 50}, {"name": "Keyboard", "price": 300}]\n\ndef get_expensive(items):\n    result = []\n    for p in items:\n        if p["price"] > 100:\n            result.append(p["name"])\n    return result\n\nprint(get_expensive(products))',
-    expected: 'PC',
-    check: (out, code) => /PC/.test(out) && /Keyboard/.test(out) && !/Mouse/.test(out) && /def\s+get_expensive/.test(code)
+    expected: "['PC', 'Keyboard']",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\['PC',\s*'Keyboard'\]/.test(out) && !/price/.test(out) && !/Mouse/.test(out) && /def\s+get_expensive/.test(c) && /\breturn\b/.test(c) && /100/.test(c) && /get_expensive\s*\(\s*products\s*\)/.test(c); }
   },
   { num: 4, difficulty: 'hard', topic: 'try/except מרובה',
-    q: 'תפוס שתי שגיאות שונות: נסה לחלק <code>10 / 0</code> ב-try אחד, ובשני נסה <code>int("abc")</code>. הדפס הודעה ייחודית לכל סוג שגיאה.',
+    q: "תפוס שתי שגיאות שונות בשני בלוקי <code>try</code> <b>נפרדים</b>: בבלוק הראשון חשב <code>10 / 0</code> ותפוס <code>ZeroDivisionError</code>, בבלוק השני חשב <code>int(\"abc\")</code> ותפוס <code>ValueError</code>. הדפס הודעה ייחודית לכל סוג שגיאה.",
+    explain: "כל בלוק try נעצר בשגיאה הראשונה — כל מה שאחריה בתוך אותו try פשוט לא רץ. לכן כדי לבדוק שתי שגיאות שונות צריך שני בלוקי try נפרדים, ולא try אחד עם שני except. תפיסת סוג שגיאה ספציפי (ZeroDivisionError, ValueError) עדיפה על except חשוף, כי היא מטפלת רק במה שציפית לו ומשאירה באגים אמיתיים גלויים.",
     starter: '',
     solution: 'try:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print("Cannot divide by zero")\n\ntry:\n    print(int("abc"))\nexcept ValueError:\n    print("Please enter numbers only")',
     expected: 'Cannot divide by zero\nPlease enter numbers only',
-    check: (out, code) => /Cannot divide by zero/.test(out) && /numbers only/.test(out) && /ZeroDivisionError/.test(code) && /ValueError/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Cannot divide by zero/.test(out) && /numbers only/.test(out) && (c.match(/\btry\s*:/g) || []).length >= 2 && /except\s+ZeroDivisionError/.test(c) && /except\s+ValueError/.test(c) && /10\s*\/\s*0/.test(c) && /int\s*\(\s*["']abc["']\s*\)/.test(c); }
   },
   { num: 5, difficulty: 'hard', topic: 'סטים - חיתוך',
     q: 'תן: <code>set_a = {1, 2, 3, 7}</code> ו-<code>set_b = {3, 4, 5, 7}</code>. הפק רשימה ממוינת של איברים משותפים בלבד.',
+    explain: "חיתוך סטים עונה על 'מה משותף לשתי הקבוצות' בפעולה אחת, במקום לולאה כפולה עם in. הכתיב set_a & set_b זהה במשמעותו ל-set_a.intersection(set_b). כיוון שסט אינו שומר סדר, עוטפים ב-sorted() כדי לקבל פלט קבוע וניתן להשוואה — sorted מחזיר רשימה חדשה, בעוד ש-.sort() קיים רק על רשימות ומשנה אותן במקום.",
     starter: '',
     solution: 'set_a = {1, 2, 3, 7}\nset_b = {3, 4, 5, 7}\ncommon = list(set_a.intersection(set_b))\ncommon.sort()\nprint(common)',
     expected: '[3, 7]',
-    check: (out, code) => /\[3,\s*7\]/.test(out) && /(intersection|&)/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\[3,\s*7\]/.test(out) && /set_a\s*&\s*set_b|set_a\.intersection\s*\(\s*set_b|set_b\.intersection\s*\(\s*set_a/.test(c) && /sorted\s*\(|\.sort\s*\(/.test(c); }
   },
   { num: 6, difficulty: 'hard', topic: 'מילון דינמי',
     q: 'בנה <code>update_inventory(inventory, item)</code>: אם הפריט קיים, הוסף 1 לכמות. אם לא, הוסף עם כמות 1. הוסף "apple" שלוש פעמים ו-"banana" פעם אחת, הדפס את המילון.',
+    explain: "מילון שמועבר לפונקציה מועבר כהפניה: הפונקציה משנה את המילון המקורי גם בלי return — לכן inventory מתעדכן אחרי הקריאות. תבנית if item in inv / else היא הצורה המפורשת; הקיצור המקצועי הוא inv[item] = inv.get(item, 0) + 1, שמחזיר 0 כשהמפתח חסר. אם תכתוב inv[item] += 1 בלי בדיקה תקבל KeyError בפעם הראשונה.",
     starter: '',
     solution: 'def update_inventory(inv, item):\n    if item in inv:\n        inv[item] += 1\n    else:\n        inv[item] = 1\n\ninventory = {}\nupdate_inventory(inventory, "apple")\nupdate_inventory(inventory, "apple")\nupdate_inventory(inventory, "apple")\nupdate_inventory(inventory, "banana")\nprint(inventory)',
     expected: "'apple': 3",
     check: (out, code) => /apple.*3/.test(out) && /banana.*1/.test(out) && /def\s+update_inventory/.test(code)
   },
   { num: 7, difficulty: 'hard', topic: 'מילון + f-string',
-    q: 'תן: <code>students = {"Gal": 95, "Tomer": 78, "Yael": 92, "Noa": 65}</code>. בלולאה הדפס רק את שמות הסטודנטים מעל 90 בפורמט: <code>{name} got {grade}</code>.',
+    q: "תן: <code>students = {\"Gal\": 95, \"Tomer\": 78, \"Yael\": 92, \"Dan\": 90, \"Noa\": 65}</code>. בלולאה הדפס רק את הסטודנטים שציונם <b>מעל</b> 90 (90 בדיוק אינו נכלל) בפורמט: <code>{name} got {grade}</code>.",
+    explain: "for name, grade in students.items() פורק כל זוג מפתח-ערך לשני משתנים; בלי .items() הלולאה מחזירה מפתחות בלבד וה-grade לא היה קיים. שים לב לגבול: 'מעל 90' הוא > 90 ולכן סטודנט עם 90 בדיוק לא נכלל — החלפה ל->= היא הטעות הנפוצה ביותר בסינון, וכאן היא משנה את התוצאה.",
     starter: '',
-    solution: 'students = {"Gal": 95, "Tomer": 78, "Yael": 92, "Noa": 65}\nfor name, grade in students.items():\n    if grade > 90:\n        print(f"{name} got {grade}")',
-    expected: 'Gal got 95',
-    check: (out, code) => /Gal got 95/.test(out) && /Yael got 92/.test(out) && !/Tomer/.test(out) && /\.items\(\)/.test(code) && /f["']/.test(code)
+    solution: "students = {\"Gal\": 95, \"Tomer\": 78, \"Yael\": 92, \"Dan\": 90, \"Noa\": 65}\nfor name, grade in students.items():\n    if grade > 90:\n        print(f\"{name} got {grade}\")",
+    expected: "Gal got 95\nYael got 92",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Gal got 95/.test(out) && /Yael got 92/.test(out) && !/Tomer/.test(out) && !/Dan/.test(out) && !/Noa/.test(out) && /\.items\s*\(\s*\)/.test(c) && /f["']/.test(c) && /grade\s*>\s*90/.test(c); }
   },
   { num: 8, difficulty: 'hard', topic: 'פונקציה + default',
     q: 'בנה <code>calculate_discount(price, discount=0.10)</code> שמחזירה את המחיר אחרי הנחה. הפעל פעמיים: <code>(100)</code> ו-<code>(200, 0.25)</code>. הדפס תוצאות.',
+    explain: "ערך ברירת מחדל הופך פרמטר לאופציונלי: קריאה עם ארגומנט אחד משתמשת ב-0.10, וקריאה עם שניים דורסת אותו. הכתיב 0.1 ו-0.10 זהים לחלוטין למחשב. שני כללים לזכור: פרמטר עם ברירת מחדל חייב לבוא אחרי פרמטרים בלעדיה, וברירת מחדל מסוג רשימה או מילון היא מלכודת — היא נוצרת פעם אחת ומשותפת לכל הקריאות.",
     starter: '',
     solution: 'def calculate_discount(price, discount=0.10):\n    return price - (price * discount)\n\nprint(calculate_discount(100))\nprint(calculate_discount(200, 0.25))',
     expected: '90.0\n150.0',
-    check: (out, code) => /90/.test(out) && /150/.test(out) && /discount\s*=\s*0\.10/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b90(\.0)?\b/.test(out) && /\b150(\.0)?\b/.test(out) && /def\s+calculate_discount\s*\(\s*price\s*,\s*discount\s*=\s*0\.10?\b/.test(c) && /\breturn\b/.test(c) && /calculate_discount\s*\(\s*100\s*\)/.test(c) && /calculate_discount\s*\(\s*200\s*,\s*0\.25\s*\)/.test(c); }
   },
   { num: 9, difficulty: 'hard', topic: 'set לניקוי כפילויות',
-    q: 'תן: <code>words = ["apple", "banana", "apple", "cherry", "banana", "date"]</code>. הפק רשימה ללא כפילויות, ממוינת אלפבית. הדפס את הרשימה ואת כמות האיברים הייחודיים.',
+    q: "תן: <code>words = [\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\", \"date\"]</code>. הפק רשימה ללא כפילויות וממוינת אלפביתית (המיון הכרחי — סט אינו שומר סדר). הדפס את הרשימה ואת כמות האיברים הייחודיים.",
+    explain: "set(words) מסיר כפילויות בשורה אחת, אבל משלם על כך בסדר: סט הוא אוסף לא מסודר, ולכן חייבים sorted() כדי לקבל פלט יציב. sorted() כבר מחזיר רשימה — list() סביבו מיותר. אם דווקא חשוב לשמור את סדר ההופעה המקורי, השתמש ב-list(dict.fromkeys(words)).",
     starter: '',
     solution: 'words = ["apple", "banana", "apple", "cherry", "banana", "date"]\nunique = sorted(list(set(words)))\nprint(unique)\nprint(len(unique))',
-    expected: '4',
-    check: (out, code) => /apple/.test(out) && /4/.test(out) && /set\s*\(/.test(code)
+    expected: "['apple', 'banana', 'cherry', 'date']\n4",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\['apple',\s*'banana',\s*'cherry',\s*'date'\]/.test(out) && /\b4\b/.test(out) && /set\s*\(\s*words\s*\)/.test(c) && /sorted\s*\(|\.sort\s*\(/.test(c) && /len\s*\(/.test(c); }
   },
   { num: 10, difficulty: 'hard', topic: 'FizzBuzz - תנאים מורכבים',
-    q: 'הדפס "Bingo" עבור כל מספר 1-30 שמתחלק גם ב-3 וגם ב-5. עבור מספרים אחרים — דלג בעזרת <code>continue</code> ואל תדפיס דבר.',
+    q: "הדפס \"Bingo\" עבור כל מספר בטווח 1-30 שמתחלק גם ב-3 וגם ב-5. השתמש ב-<code>continue</code> כדי לדלג על כל מספר שאינו מקיים את התנאי (guard clause) — כך ל-continue יש תפקיד אמיתי.",
+    explain: "continue קופץ לאיטרציה הבאה, ולכן יש לו ערך רק כשהוא מופיע לפני קוד נוסף — else: continue בסוף הלולאה הוא קוד מת. התבנית המקצועית היא guard clause: פוסלים מוקדם את מה שלא מעניין (if i % 3 != 0 or i % 5 != 0: continue) ומשאירים את הקוד העיקרי ישר ולא מקונן. שים לב שהיפוך התנאי הפך את and ל-or — זהו כלל דה-מורגן, ומתחלק ב-3 וב-5 שקול למתחלק ב-15.",
     starter: '',
-    solution: 'for i in range(1, 31):\n    if i % 3 == 0 and i % 5 == 0:\n        print("Bingo")\n    else:\n        continue',
+    solution: "for i in range(1, 31):\n    if i % 3 != 0 or i % 5 != 0:\n        continue\n    print(\"Bingo\")",
     expected: 'Bingo\nBingo',
-    check: (out, code) => out.split('\n').filter(l=>l==='Bingo').length === 2 && /continue/.test(code) && /%\s*3/.test(code) && /%\s*5/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return out.trim().split(/\s+/).filter(l => l === "Bingo").length === 2 && /\bcontinue\b/.test(c) && /%\s*3/.test(c) && /%\s*5/.test(c) && /range\s*\(\s*1\s*,\s*31/.test(c); }
   },
   { num: 11, difficulty: 'hard', topic: 'מילון - יצירה/הוספה/מחיקה',
     q: 'צור מילון ריק <code>config</code>. הוסף את המפתח <code>"theme"</code> עם הערך <code>"dark"</code>. הוסף עוד מפתח <code>"font"</code> = <code>14</code>. מחק את <code>"theme"</code>. הדפס את המילון.',
+    explain: "מילון נבנה דינמית: השמה למפתח חדש יוצרת אותו, השמה למפתח קיים דורסת. למחיקה יש שתי דרכים — del config['theme'] היא הצהרה שלא מחזירה כלום, ואילו config.pop('theme') מוחקת ומחזירה את הערך. שתיהן זורקות KeyError על מפתח לא קיים; רק ל-pop יש רשת ביטחון בדמות ערך ברירת מחדל: config.pop('theme', None).",
     starter: '',
     solution: 'config = {}\nconfig["theme"] = "dark"\nconfig["font"] = 14\ndel config["theme"]\nprint(config)',
     expected: 'font',
-    check: (out, code) => /font/.test(out) && !/theme/.test(out) && /\bdel\b/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\{'font':\s*14\}/.test(out) && !/theme/.test(out) && /config\s*\[\s*["']theme["']\s*\]\s*=/.test(c) && /(\bdel\s+config|config\.pop\s*\()/.test(c); }
   },
   { num: 12, difficulty: 'hard', topic: 'dict.get()',
     q: 'תן: <code>data = {"name": "Eliran", "age": 32}</code>. שלוף את <code>"status"</code> בצורה בטוחה עם <code>.get()</code> וערך ברירת מחדל <code>"Offline"</code>. הדפס.',
+    explain: "data['status'] היה מפיל את התוכנית ב-KeyError, כי המפתח לא קיים. .get מחזיר במקום זה ערך ברירת מחדל — כאן 'Offline', ובלי ארגומנט שני הוא מחזיר None. זה הכלי הנכון לנתונים חלקיים מ-API או מקובץ, אבל שים לב לצד השני: .get יבלע גם טעות הקלדה במפתח ויחזיר ברירת מחדל במקום להתריע.",
     starter: '',
     solution: 'data = {"name": "Eliran", "age": 32}\nprint(data.get("status", "Offline"))',
     expected: 'Offline',
@@ -957,13 +969,15 @@ const EXERCISES_100 = [
   },
   { num: 13, difficulty: 'hard', topic: 'Scope - משתנה לוקאלי',
     q: 'בנה פונקציה <code>my_func()</code> שמגדירה בתוכה <code>x = 10</code>. תפוס את ה-NameError שמתקבל כשמנסים להדפיס את <code>x</code> מחוץ לפונקציה. הדפס: <code>"x is local"</code>.',
+    explain: "משתנה שנוצר בתוך פונקציה חי רק בזמן ריצתה ונמחק ביציאה — זהו scope לוקאלי, ולכן הגישה ל-x מבחוץ מייצרת NameError. הדרך הנכונה להוציא ערך החוצה היא return, לא global. הווריאציה שתפגוש בעבודה היא UnboundLocalError: פונקציה שקוראת משתנה גלובלי ואז מבצעת לו השמה — פייתון מחליט שהוא לוקאלי לכל אורך הפונקציה.",
     starter: '',
     solution: 'def my_func():\n    x = 10\n\nmy_func()\ntry:\n    print(x)\nexcept NameError:\n    print("x is local")',
     expected: 'x is local',
-    check: (out, code) => /x is local/.test(out) && /NameError/.test(code) && /def\s+my_func/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /x is local/.test(out) && /def\s+my_func/.test(c) && /x\s*=\s*10/.test(c) && /except\s+NameError/.test(c) && /print\s*\(\s*x\s*\)/.test(c); }
   },
   { num: 14, difficulty: 'hard', topic: 'strip + int',
     q: 'תן: <code>user_input = "   123   "</code> (עם רווחים). נקה רווחים ב-<code>.strip()</code> והמר ל-int. הדפס את התוצאה כפול 2.',
+    explain: "קלט טקסטואלי מגיע כמעט תמיד מלוכלך ברווחים: strip() מנקה רווחים מתחילת המחרוזת ומסופה בלבד — לא באמצע. int() ממיר מחרוזת נקייה למספר, ומכאן אפשר לחשב; בלי ההמרה '123' * 2 היה מייצר '123123'. אם המחרוזת אינה מספר, int זורק ValueError — בקוד אמיתי עוטפים ב-try/except.",
     starter: '',
     solution: 'user_input = "   123   "\nnum = int(user_input.strip())\nprint(num * 2)',
     expected: '246',
@@ -971,27 +985,31 @@ const EXERCISES_100 = [
   },
   { num: 15, difficulty: 'hard', topic: 'append + pop',
     q: 'תן: <code>names = ["Alice", "Bob", "Carol"]</code>. הוסף <code>"David"</code> לסוף ואז מחק את הראשון (אינדקס 0). הדפס את הרשימה.',
+    explain: "לרשימה יש שלוש דרכי מחיקה שקל להתבלבל ביניהן: pop(0) מוחקת לפי אינדקס ומחזירה את הערך, del names[0] מוחקת לפי אינדקס בלי להחזיר, ו-remove('Alice') מוחקת לפי ערך. pop() בלי ארגומנט מסירה את האיבר האחרון. שים לב: מחיקה מרשימה בזמן שאתה עובר עליה בלולאה מדלגת על איברים — עבוד על עותק.",
     starter: '',
     solution: 'names = ["Alice", "Bob", "Carol"]\nnames.append("David")\nnames.pop(0)\nprint(names)',
     expected: 'David',
-    check: (out, code) => /David/.test(out) && !/Alice/.test(out) && /\.append/.test(code) && /\.pop/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\['Bob',\s*'Carol',\s*'David'\]/.test(out) && !/Alice/.test(out) && /\.append\s*\(\s*["']David["']\s*\)/.test(c) && /(\.pop\s*\(\s*0\s*\)|del\s+names\s*\[\s*0\s*\])/.test(c); }
   },
   { num: 16, difficulty: 'hard', topic: 'tuple immutability',
     q: 'תן: <code>my_tuple = (10, 20, 30)</code>. נסה לעדכן את <code>my_tuple[1] = 5</code> ותפוס את ה-TypeError. הדפס: <code>"Tuples cannot be modified"</code>.',
+    explain: "טופל הוא immutable: אחרי היצירה אי אפשר להחליף איבר, ולכן ההשמה זורקת TypeError. אפשר ליצור טופל חדש (my_tuple = my_tuple + (4,)) אבל זה אובייקט אחר, לא שינוי במקום. שים לב לדקות: אם בתוך הטופל יושבת רשימה, הרשימה עצמה כן ניתנת לשינוי — הקיבעון הוא על ההפניות, לא על התוכן שלהן.",
     starter: '',
     solution: 'my_tuple = (10, 20, 30)\ntry:\n    my_tuple[1] = 5\nexcept TypeError:\n    print("Tuples cannot be modified")',
     expected: 'Tuples cannot be modified',
     check: (out, code) => /Tuples cannot be modified/.test(out) && /TypeError/.test(code)
   },
   { num: 17, difficulty: 'hard', topic: 'from import',
-    q: 'ייבא רק את <code>choice</code> מתוך <code>random</code>. הגדר <code>random.seed(7)</code>. בחר ערך מתוך <code>["Heads", "Tails"]</code> והדפס.',
+    q: "ייבא את המודול <code>random</code> וקבע <code>random.seed(7)</code> כדי שהתוצאה תהיה ניתנת לשחזור. בנוסף ייבא את הפונקציה <code>choice</code> ישירות בעזרת <code>from random import choice</code>, בחר בעזרתה ערך מתוך <code>[\"Heads\", \"Tails\"]</code> והדפס אותו.",
+    explain: "import random מייבא את המודול כולו ואז ניגשים דרכו (random.seed, random.choice), ואילו from random import choice מכניס את הפונקציה עצמה למרחב השמות שלך — ואז random.seed אינו זמין אלא אם ייבאת גם את המודול. seed קובע את נקודת הפתיחה של מחולל האקראיות כדי שהריצות יהיו ניתנות לשחזור — אבל ההבטחה הזו תקפה בתוך אותו מנוע ואותה גרסה, לא בין Skulpt ל-CPython.",
     starter: '',
     solution: 'import random\nrandom.seed(7)\nfrom random import choice\nprint(choice(["Heads", "Tails"]))',
     expected: '',
-    check: (out, code) => /(Heads|Tails)/.test(out) && /from random import choice/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^(Heads|Tails)\s*$/.test(out.trim()) && /from\s+random\s+import\s+choice/.test(c) && /random\.seed\s*\(\s*7\s*\)/.test(c) && /choice\s*\(\s*\[/.test(c); }
   },
   { num: 18, difficulty: 'hard', topic: 'pip - מושגי',
     q: 'אי אפשר להריץ <code>pip install</code> מקוד פייתון — היא פקודת טרמינל. הדפס את הפקודה שמתקינה את ספריית <code>requests</code> כמחרוזת.',
+    explain: "pip הוא כלי שורת פקודה שמתקין חבילות לסביבת פייתון — הוא לא חלק משפת פייתון עצמה, ולכן pip install בתוך קובץ .py הוא שגיאת תחביר. בנוטבוק (Jupyter/Colab) מקדימים סימן קריאה: !pip install requests. בסביבה עם כמה גרסאות פייתון הצורה הבטוחה היא python -m pip install requests, ובפרויקט אמיתי מרכזים את הכל ב-requirements.txt.",
     starter: '',
     solution: 'print("pip install requests")',
     expected: 'pip install requests',
@@ -999,6 +1017,7 @@ const EXERCISES_100 = [
   },
   { num: 19, difficulty: 'hard', topic: 'string.replace',
     q: 'תן: <code>email = "admin@site.com"</code>. החלף <code>"site"</code> ב-<code>"company"</code>. הדפס את התוצאה.',
+    explain: "מחרוזות בפייתון הן immutable: replace לא משנה את המקור אלא מחזירה מחרוזת חדשה — ולכן חייבים לשמור את התוצאה בחזרה למשתנה, אחרת הקוד 'רץ' ולא קורה כלום. אם התת-מחרוזת לא נמצאה, replace מחזירה את המקור בשקט בלי שגיאה, ואפשר להגביל את מספר ההחלפות בפרמטר שלישי: replace('a', 'b', 1).",
     starter: '',
     solution: 'email = "admin@site.com"\nemail = email.replace("site", "company")\nprint(email)',
     expected: 'admin@company.com',
@@ -1006,55 +1025,63 @@ const EXERCISES_100 = [
   },
   { num: 20, difficulty: 'hard', topic: 'while + counter',
     q: 'התחל <code>count = 0</code>. כל עוד <code>count < 5</code> — הדפס את הערך ואז קדם ב-1. הדפס שורה אחרונה: <code>"Done"</code>.',
+    explain: "while בודק את התנאי לפני כל איטרציה, ולכן האחריות לקדם את המונה היא שלך — שכחת count += 1 מייצרת לולאה אינסופית. שים לב שאחרי הלולאה count שווה 5 ולא 4: התנאי נבדק ונכשל דווקא בערך הזה. ההדפסה של Done נמצאת מחוץ ללולאה רק בזכות ההזחה — הזחה בפייתון היא תחביר, לא עיצוב.",
     starter: '',
     solution: 'count = 0\nwhile count < 5:\n    print(count)\n    count += 1\nprint("Done")',
     expected: '0\n1\n2\n3\n4\nDone',
-    check: (out, code) => /^0/.test(out) && /4/.test(out) && /Done/.test(out) && /while/.test(code) && /count\s*\+=\s*1/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^0\s*\n1\s*\n2\s*\n3\s*\n4\s*\nDone/.test(out.trim()) && /while\s+count\s*<\s*5/.test(c) && /count\s*\+=\s*1/.test(c) && /print\s*\(\s*count\s*\)/.test(c); }
   },
   { num: 21, difficulty: 'hard', topic: 'negative index',
     q: 'תן: <code>txt = "Python"</code>. הדפס את האות האחרונה בלבד (השתמש באינדקס שלילי <code>-1</code>).',
+    explain: "אינדקס שלילי סופר מהסוף: -1 הוא האיבר האחרון, -2 שלפניו — קיצור נוח ל-txt[len(txt)-1]. שים לב ש--0 אינו קיים (0 ו--0 זהים), ושעל מחרוזת ריקה כל אינדקס כולל -1 זורק IndexError. אותו כלל בדיוק עובד על רשימות.",
     starter: '',
     solution: 'txt = "Python"\nprint(txt[-1])',
     expected: 'n',
-    check: (out, code) => out.trim() === 'n' && /\[-1\]/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /n\s*$/.test(out.trim()) && !/Python/.test(out) && /txt\s*\[\s*-1\s*\]/.test(c); }
   },
   { num: 22, difficulty: 'hard', topic: 'slicing',
     q: 'תן: <code>nums = [1, 2, 3, 4, 5]</code>. חתוך אותה ל-<code>[2, 3, 4]</code> בעזרת slicing. הדפס.',
+    explain: "החיתוך [start:stop] כולל את start ואינו כולל את stop — לכן [1:4] מחזיר שלושה איברים, מאינדקס 1 עד 3. אפשר להשמיט צד ([:3] מההתחלה, [2:] עד הסוף), להשתמש באינדקסים שליליים ([1:-1]), ולהוסיף צעד ([::2] כל שני, [::-1] היפוך). חיתוך תמיד מחזיר אובייקט חדש — עותק רדוד — בעוד nums[1] מחזיר את האיבר עצמו.",
     starter: '',
     solution: 'nums = [1, 2, 3, 4, 5]\nprint(nums[1:4])',
     expected: '[2, 3, 4]',
-    check: (out, code) => /\[2,\s*3,\s*4\]/.test(out) && /\[1:4\]/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\[2,\s*3,\s*4\]/.test(out) && /nums\s*\[\s*-?\d*\s*:\s*-?\d*\s*\]/.test(c); }
   },
   { num: 23, difficulty: 'hard', topic: 'or operator',
     q: 'תן: <code>x = 12</code> ו-<code>y = 5</code>. בדוק האם <code>x > 10</code> או <code>y == 5</code>. אם כן הדפס <code>"Match"</code>.',
+    explain: "or מחזיר אמת אם לפחות אחד התנאים מתקיים, ופייתון עוצר ברגע שהתשובה ידועה (short-circuit): אם x > 10 נכון, הביטוי y == 5 לא ייבדק בכלל. זה לא ייעול בלבד — זו הדרך להגן על תנאי מסוכן, למשל if not data or data[0] == 5. שים לב לסדר הקדימות: and חזק מ-or, ובספק עדיף סוגריים.",
     starter: '',
     solution: 'x = 12\ny = 5\nif x > 10 or y == 5:\n    print("Match")',
     expected: 'Match',
-    check: (out, code) => /Match/.test(out) && /\bor\b/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Match/.test(out) && /if\s+[^\n]*\bor\b/.test(c) && /x\s*>\s*10/.test(c) && /y\s*==\s*5/.test(c); }
   },
   { num: 24, difficulty: 'hard', topic: 'file write (simulated)',
     q: 'סמלץ כתיבה לקובץ: שמור את המחרוזת <code>"Done"</code> במשתנה <code>file_content</code>, ואז הדפס אותו.',
+    explain: "הסימולטור רץ בדפדפן ואין לו גישה למערכת קבצים, ולכן 'כתיבה' כאן היא רק שמירת טקסט במשתנה. בפייתון אמיתי הצורה התקנית היא with open('data.txt', 'w', encoding='utf-8') as f: f.write(file_content) — ה-with סוגר את הקובץ אוטומטית גם אם נזרקה שגיאה. שים לב ש-'w' דורס קובץ קיים ואילו 'a' מוסיף לסופו.",
     starter: '',
     solution: 'file_content = "Done"\nprint(file_content)',
     expected: 'Done',
-    check: (out, code) => /Done/.test(out) && /file_content/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Done/.test(out) && /file_content\s*=\s*["']Done["']/.test(c) && /print\s*\(\s*file_content\s*\)/.test(c); }
   },
   { num: 25, difficulty: 'hard', topic: 'function + return + if/else',
     q: 'בנה <code>get_max(a, b)</code> שמחזיר את הגדול מבין השניים. הפעל עם <code>(7, 12)</code> ו-<code>(20, 5)</code>. הדפס תוצאות.',
+    explain: "פונקציה שמחזירה ערך (return) שימושית יותר מפונקציה שמדפיסה: אפשר להשתמש בתוצאה בהמשך החישוב. return גם מסיים את הפונקציה מיד — לכן ה-else כאן אינו חובה. שים לב למקרה a == b: התנאי a > b נכשל והפונקציה מחזירה את b, וזו התנהגות נכונה. בפועל היית פשוט כותב max(a, b), או return a if a > b else b.",
     starter: '',
     solution: 'def get_max(a, b):\n    if a > b:\n        return a\n    else:\n        return b\n\nprint(get_max(7, 12))\nprint(get_max(20, 5))',
     expected: '12\n20',
     check: (out, code) => /12/.test(out) && /20/.test(out) && /def\s+get_max/.test(code) && /\breturn\b/.test(code)
   },
   { num: 26, difficulty: 'hard', topic: 'mini-pandas equivalent',
-    q: 'בנה DataFrame "ידני" - מילון של רשימות: <code>{"name": ["A", "B", "C"], "score": [80, 90, 70]}</code>. הדפס את עמודת <code>score</code> ואת הממוצע שלה.',
+    q: "בנה DataFrame \"ידני\" — מילון של רשימות: <code>{\"name\": [\"A\", \"B\", \"C\"], \"score\": [80, 90, 70]}</code>. הדפס את עמודת <code>score</code>, ואז חשב והדפס את הממוצע שלה (סכום הערכים חלקי <b>מספר השורות בעמודה</b> — שים לב ש-<code>len(df)</code> מחזיר את מספר העמודות).",
+    explain: "מילון של רשימות הוא 'טבלה' מינימלית: המפתחות הם שמות העמודות והרשימות הן הערכים. שים לב להבדל שמפיל אנשים: len(df) מחזיר את מספר העמודות (המפתחות), ואילו len(df['score']) הוא מספר השורות — ממוצע חייב להתחלק במספר השורות. בפנדס אמיתי כל זה מתקצר ל-df['score'].mean(), עם הבדל אחד חשוב: mean מתעלם מערכים חסרים (NaN) בעוד sum/len סופרים אותם.",
     starter: '',
-    solution: 'df = {"name": ["A", "B", "C"], "score": [80, 90, 70]}\nprint(df["score"])\nprint(sum(df["score"]) / len(df["score"]))',
-    expected: '80',
-    check: (out, code) => /\[80/.test(out) && /80/.test(out) && /sum/.test(code) && /len/.test(code)
+    solution: "df = {\"name\": [\"A\", \"B\", \"C\"], \"score\": [80, 90, 70]}\nscores = df[\"score\"]\nprint(scores)\nprint(sum(scores) / len(scores))",
+    expected: "[80, 90, 70]\n80.0",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\[80,\s*90,\s*70\]/.test(out) && /\b80\.0\b/.test(out) && /df\s*\[\s*["']score["']\s*\]/.test(c) && /sum\s*\(/.test(c) && /len\s*\(/.test(c); }
   },
   { num: 27, difficulty: 'hard', topic: 'return vs print',
     q: 'בנה <code>add(a, b)</code> שמחזיר את הסכום (לא מדפיס). שמור את התוצאה במשתנה <code>result</code> והדפס אותו.',
+    explain: "return מוציא ערך מהפונקציה כדי שאפשר יהיה להמשיך לעבוד איתו; print רק מציג טקסט על המסך ומחזיר None. ההבדל מתגלה ברגע שמנסים להשתמש בתוצאה: result = add(5, 7) שומר 12, אבל אם add הייתה מדפיסה, result היה None. פונקציה בלי return מחזירה None תמיד — וזה המקור הנפוץ ל-TypeError מאוחר בקוד.",
     starter: '',
     solution: 'def add(a, b):\n    return a + b\n\nresult = add(5, 7)\nprint(result)',
     expected: '12',
@@ -1062,6 +1089,7 @@ const EXERCISES_100 = [
   },
   { num: 28, difficulty: 'hard', topic: 'f-string with variables',
     q: 'הגדר <code>user = "Eliran"</code> ו-<code>score = 95</code>. השתמש ב-f-string להדפיס: <code>User Eliran scored 95 points</code>.',
+    explain: "f-string משלב ערכי משתנים בתוך מחרוזת: כל מה שבתוך {} מחושב ומוחלף. שכחת ה-f היא הטעות הנפוצה — התוצאה תהיה 'User {user}' מילולית. הכוח האמיתי הוא בעיצוב: f'{price:.2f}' לשתי ספרות אחרי הנקודה, f'{n:,}' עם מפריד אלפים — בדיוק מה שצריך בדוחות.",
     starter: '',
     solution: 'user = "Eliran"\nscore = 95\nprint(f"User {user} scored {score} points")',
     expected: 'User Eliran scored 95 points',
@@ -1069,6 +1097,7 @@ const EXERCISES_100 = [
   },
   { num: 29, difficulty: 'hard', topic: '"in" operator',
     q: 'תן: <code>users = {"admin": "Eliran", "guest": "Anonymous"}</code>. בדוק אם <code>"admin"</code> נמצא במילון. אם כן הדפס <code>"User exists"</code>.',
+    explain: "האופרטור in על מילון בודק מפתחות בלבד — 'admin' in users נכון, אבל 'Eliran' in users שקרי למרות שהוא ערך במילון; לערכים משתמשים ב-in users.values(). זו גם הסיבה שמילון מהיר: החיפוש הוא בזמן קבוע דרך טבלת גיבוב, בעוד חיפוש ברשימה עובר איבר-איבר.",
     starter: '',
     solution: 'users = {"admin": "Eliran", "guest": "Anonymous"}\nif "admin" in users:\n    print("User exists")',
     expected: 'User exists',
@@ -1076,6 +1105,7 @@ const EXERCISES_100 = [
   },
   { num: 30, difficulty: 'hard', topic: 'list.sort()',
     q: 'תן: <code>scores = [85, 72, 95, 60, 88]</code>. מיין מהקטן לגדול ב-<code>.sort()</code>. הדפס את הרשימה ואת הציון הקטן ביותר.',
+    explain: ".sort() ממיין את הרשימה במקום ומחזיר None — לכן scores = scores.sort() הוא באג קלאסי שמוחק לך את הנתונים. אם דרוש עותק ממוין בלי לפגוע במקור, השתמש ב-sorted(scores). אחרי מיון עולה scores[0] הוא המינימום, אבל min(scores) קורא יותר ולא דורש מיון.",
     starter: '',
     solution: 'scores = [85, 72, 95, 60, 88]\nscores.sort()\nprint(scores)\nprint(scores[0])',
     expected: '60',
@@ -1086,6 +1116,7 @@ const EXERCISES_100 = [
   
   { num: 31, difficulty: 'medium', topic: 'range עם קפיצה',
     q: 'הדפס את כל המספרים הזוגיים מ-0 עד 10 (כולל) באמצעות <code>range(0, 11, 2)</code>.',
+    explain: "range(start, stop, step) כולל את ההתחלה ולא כולל את הסוף — לכן כדי להגיע ל-10 חייבים לכתוב 11. הצעד השלישי קובע קפיצות, ויכול להיות שלילי לספירה לאחור: range(10, -1, -2). שים לב ש-range אינו רשימה אלא אובייקט שמייצר ערכים תוך כדי; כדי לראות אותם צריך לעבור בלולאה או לעטוף ב-list().",
     starter: '',
     solution: 'for i in range(0, 11, 2):\n    print(i)',
     expected: '0\n2\n4\n6\n8\n10',
@@ -1093,27 +1124,31 @@ const EXERCISES_100 = [
   },
   { num: 32, difficulty: 'medium', topic: 'len()',
     q: 'תן: <code>list_a = [10, 20, 30, 40, 50]</code>. הדפס את אורך הרשימה.',
+    explain: "len() מחזיר את מספר האיברים ועובד על כל אוסף: רשימה, מחרוזת, טופל, סט ומילון (שם הוא סופר מפתחות). על מספר הוא זורק TypeError, כי למספר אין אורך. זכור שהאינדקס האחרון הוא len(x) - 1 — הבלבול הזה הוא המקור הנפוץ ביותר ל-IndexError.",
     starter: '',
     solution: 'list_a = [10, 20, 30, 40, 50]\nprint(len(list_a))',
     expected: '5',
-    check: (out, code) => out.trim() === '5' && /len\s*\(/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b5\b/.test(out) && /len\s*\(\s*list_a\s*\)/.test(c); }
   },
   { num: 33, difficulty: 'medium', topic: 'type()',
     q: 'הדפס את סוג הנתון של <code>3.14</code>. אמור להדפיס <code>&lt;class \'float\'&gt;</code>.',
+    explain: "type() חושף את טיפוס הנתון בזמן ריצה — שימושי לאבחון כשמשהו לא מתנהג כצפוי. לבדיקות בקוד עצמו עדיף isinstance(x, float), שמכיר גם יורשים. שים לב ש-3.0 הוא float גם בלי שבר, ושחישובי float אינם מדויקים לחלוטין: 0.1 + 0.2 אינו שווה ל-0.3 בדיוק — לכספים משתמשים ב-Decimal או בעיגול מפורש.",
     starter: '',
     solution: "print(type(3.14))",
     expected: "float",
-    check: (out, code) => /float/.test(out) && /type\s*\(/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /float/.test(out) && /type\s*\(\s*3\.14\s*\)/.test(c); }
   },
   { num: 34, difficulty: 'medium', topic: 'str to int',
     q: 'תן: <code>x = "50"</code>. המר ל-int והכפל ב-2. הדפס.',
+    explain: "המרה מפורשת בין טיפוסים היא הצעד שמפריד בין טקסט למספר: '50' * 2 מחזיר '5050' (שרשור) ואילו int('50') * 2 מחזיר 100 — הראשון לא זורק שגיאה ולכן קל לפספס אותו. int נכשל ב-ValueError על טקסט לא-מספרי, וגם על '50.0' — שם צריך int(float('50.0')). זו בדיוק הסיבה שעמודה שנקראה מקובץ צריכה המרה מפורשת לפני חישוב.",
     starter: '',
     solution: 'x = "50"\nprint(int(x) * 2)',
     expected: '100',
-    check: (out, code) => /100/.test(out) && /int\s*\(/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b100\b/.test(out) && /int\s*\(\s*x\s*\)/.test(c) && /x\s*=\s*["']50["']/.test(c) && /\*\s*2/.test(c); }
   },
   { num: 35, difficulty: 'medium', topic: 'if/else',
     q: 'תן: <code>age = 16</code>. אם פחות מ-18 הדפס <code>"Minor"</code>, אחרת <code>"Adult"</code>.',
+    explain: "if/else מפצל את הזרימה לשני מסלולים בלעדיים — בדיוק אחד מהם ירוץ. שים לב לגבול: age < 18 אינו כולל את 18 עצמו, ולכן בן 18 יקבל 'Adult'. כשמדובר בהשמת ערך אפשר לקצר לשורה אחת: status = 'Minor' if age < 18 else 'Adult'.",
     starter: '',
     solution: 'age = 16\nif age < 18:\n    print("Minor")\nelse:\n    print("Adult")',
     expected: 'Minor',
@@ -1121,20 +1156,23 @@ const EXERCISES_100 = [
   },
   { num: 36, difficulty: 'medium', topic: 'random.randint',
     q: 'ייבא <code>random</code>. הגדר <code>random.seed(10)</code>. צור מספר אקראי בין 1 ל-10 והדפס. (השתמש ב-seed כדי שיהיה צפוי)',
+    explain: "seed קובע את נקודת הפתיחה של מחולל האקראיות: אותו seed מייצר את אותה סדרה, וזה מה שמאפשר לשחזר ניסוי או בדיקה. ההבטחה הזו תקפה בתוך אותו מנוע וגרסה — Skulpt בדפדפן ו-CPython במחשב יחזירו ערכים שונים לאותו seed. שים לב ש-randint(1, 10) כולל את 1 ואת 10, בשונה מ-range שאינו כולל את הגבול העליון.",
     starter: '',
     solution: 'import random\nrandom.seed(10)\nprint(random.randint(1, 10))',
     expected: '',
-    check: (out, code) => /\d+/.test(out) && /random\.randint/.test(code) && /random\.seed/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^([1-9]|10)$/.test(out.trim()) && /random\.randint\s*\(\s*1\s*,\s*10\s*\)/.test(c) && /random\.seed\s*\(/.test(c); }
   },
   { num: 37, difficulty: 'medium', topic: 'dict access',
     q: 'תן: <code>address = {"city": "Tel Aviv", "street": "Rothschild"}</code>. שלוף את ערך המפתח <code>"city"</code> והדפס.',
+    explain: "גישה למילון בסוגריים מרובעים מחזירה את הערך של המפתח — ומרכאות בודדות וכפולות שקולות לחלוטין בפייתון. אם המפתח לא קיים תקבל KeyError; לנתונים לא ודאיים השתמש ב-.get('city', 'Unknown'). מפתחות רגישים לאותיות: 'City' ו-'city' הם שני מפתחות שונים.",
     starter: '',
     solution: 'address = {"city": "Tel Aviv", "street": "Rothschild"}\nprint(address["city"])',
     expected: 'Tel Aviv',
-    check: (out, code) => /Tel Aviv/.test(out) && /address\["city"\]/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Tel Aviv/.test(out) && !/Rothschild/.test(out) && /address\s*\[\s*["']city["']\s*\]/.test(c); }
   },
   { num: 38, difficulty: 'medium', topic: 'string.upper',
     q: 'תן: <code>title = "welcome to python"</code>. הפוך לאותיות גדולות והדפס.',
+    explain: "upper() מחזירה מחרוזת חדשה באותיות גדולות — המקור נשאר כפי שהיה, כי מחרוזות אינן ניתנות לשינוי. השימוש היומיומי אינו אסתטי אלא נרמול: לפני השוואת ערכים ממקורות שונים משווים ב-lower() משני הצדדים, אחרת 'Tel Aviv' ו-'TEL AVIV' ייחשבו לשני ערכים שונים.",
     starter: '',
     solution: 'title = "welcome to python"\nprint(title.upper())',
     expected: 'WELCOME TO PYTHON',
@@ -1142,27 +1180,31 @@ const EXERCISES_100 = [
   },
   { num: 39, difficulty: 'medium', topic: 'modulo for even check',
     q: 'תן: <code>num = 14</code>. בדוק עם <code>%</code> אם זוגי. הדפס <code>"Even"</code> או <code>"Odd"</code>.',
+    explain: "אופרטור % מחזיר את שארית החלוקה, ולכן num % 2 == 0 הוא המבחן הסטנדרטי לזוגיות. שים לב להתנהגות בפייתון עם שליליים: -3 % 2 מחזיר 1 (הסימן נקבע לפי המחלק), בשונה מכמה שפות אחרות. אותו כלי משמש גם לחלוקה מחזורית — למשל i % 3 כדי לפזר פריטים לשלוש קבוצות.",
     starter: '',
     solution: 'num = 14\nif num % 2 == 0:\n    print("Even")\nelse:\n    print("Odd")',
     expected: 'Even',
-    check: (out, code) => /Even/.test(out) && /%\s*2/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^Even$/.test(out.trim()) && /if\s+num\s*%\s*2\s*==\s*0/.test(c) && /\belse\b/.test(c); }
   },
   { num: 40, difficulty: 'medium', topic: 'for range simple',
     q: 'הדפס את המילה <code>"Hi"</code> חמש פעמים בעזרת לולאת for.',
+    explain: "for + range הוא הכלי לחזרה מספר ידוע של פעמים: range(5) מייצר 0,1,2,3,4 — חמישה ערכים, ולכן חמש הדפסות. כשהמשתנה עצמו לא משמש נהוג לקרוא לו _ (for _ in range(5)) כדי לאותת לקורא שהערך לא רלוונטי. אם ידוע מראש כמה איטרציות — for; אם התנאי דינמי — while.",
     starter: '',
     solution: 'for i in range(5):\n    print("Hi")',
     expected: 'Hi\nHi\nHi\nHi\nHi',
-    check: (out, code) => out.split('\n').filter(l=>l==='Hi').length === 5 && /range\s*\(\s*5/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return out.trim().split(/\s+/).filter(l => l === "Hi").length === 5 && /for\s+\w+\s+in\s+range\s*\(\s*5\s*\)/.test(c); }
   },
   { num: 41, difficulty: 'medium', topic: 'compound assignment',
     q: 'תן: <code>x = 10</code>. הוסף לו 5 בעזרת <code>+=</code>. הדפס.',
+    explain: "x += 5 הוא קיצור ל-x = x + 5, וקיים בכל האופרטורים החשבוניים (-=, *=, /=). לגבי מספרים ההתנהגות זהה, אבל לגבי רשימות יש הבדל אמיתי: += מרחיב את הרשימה הקיימת במקום, כך שכל מי שמחזיק הפניה לאותה רשימה יראה את השינוי. שים לב שהמשתנה חייב להיות מוגדר לפני — אחרת NameError.",
     starter: '',
     solution: 'x = 10\nx += 5\nprint(x)',
     expected: '15',
-    check: (out, code) => out.trim() === '15' && /x\s*\+=\s*5/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b15\b/.test(out) && /x\s*=\s*10/.test(c) && /x\s*\+=\s*5/.test(c) && /print\s*\(\s*[^)]*x/.test(c); }
   },
   { num: 42, difficulty: 'medium', topic: 'bool conversion',
     q: 'הדפס את <code>bool(0)</code> ו-<code>bool(1)</code>. אמור להדפיס False ואז True.',
+    explain: "bool ממיר כל ערך לאמת או שקר, וזה בדיוק מה שקורה מאחורי הקלעים בכל if. הכלל: 0, 0.0, מחרוזת ריקה, רשימה ריקה, מילון ריק ו-None הם False — כל השאר True. שים לב למלכודת הקלאסית: המחרוזת 'False' היא מחרוזת לא ריקה ולכן True.",
     starter: '',
     solution: 'print(bool(0))\nprint(bool(1))',
     expected: 'False\nTrue',
@@ -1170,34 +1212,39 @@ const EXERCISES_100 = [
   },
   { num: 43, difficulty: 'medium', topic: 'fake input (assignment)',
     q: 'הסימולטור לא תומך ב-input() במלואו, אז נדמה: הגדר <code>name = "Eliran"</code> ישירות. הדפס <code>Hello {name}!</code>.',
+    explain: "בקוד אמיתי היית כותב name = input('Name: '), והפעולה הייתה עוצרת עד שהמשתמש מקיש Enter — בסימולטור בדפדפן אין קלט כזה, ולכן מציבים את הערך ישירות. הנקודה שחשוב לזכור לכשתעבור לסביבה אמיתית: input מחזיר תמיד מחרוזת, גם כשהוקלד מספר, ולכן age = int(input(...)) לפני כל חישוב.",
     starter: '',
     solution: 'name = "Eliran"\nprint(f"Hello {name}!")',
     expected: 'Hello Eliran!',
-    check: (out, code) => /Hello Eliran/.test(out) && /name/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Hello Eliran!/.test(out) && /name\s*=\s*["']Eliran["']/.test(c) && /\{name\}/.test(c) && /f["']/.test(c); }
   },
   { num: 44, difficulty: 'medium', topic: 'with open simulation',
     q: 'נדמה פתיחת קובץ ע"י עבודה עם מחרוזת. תן: <code>file_text = "line1\\nline2\\nline3"</code>. פצל לשורות והדפס כל שורה.',
+    explain: "טקסט של קובץ הוא מחרוזת אחת עם '\\n' בין השורות, ולכן split('\\n') מפצל אותה לרשימת שורות שאפשר לעבור עליה בלולאה. בעבודה עם קובץ אמיתי עדיף splitlines(), שמטפל נכון גם בסופי שורה של ווינדוס ('\\r\\n'), או פשוט לעבור על אובייקט הקובץ עצמו — for line in f — שקורא שורה-שורה בלי לטעון את כל הקובץ לזיכרון.",
     starter: '',
     solution: 'file_text = "line1\\nline2\\nline3"\nfor line in file_text.split("\\n"):\n    print(line)',
     expected: 'line1\nline2\nline3',
-    check: (out, code) => /line1/.test(out) && /line3/.test(out) && /split/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /line1/.test(out) && /line2/.test(out) && /line3/.test(out) && /file_text\.split\s*\(/.test(c) && /\bfor\b/.test(c); }
   },
   { num: 45, difficulty: 'medium', topic: 'list.remove',
     q: 'תן: <code>fruits = ["apple", "banana", "cherry"]</code>. הסר את <code>"apple"</code> והדפס.',
+    explain: "remove מוחקת לפי ערך ולא לפי מיקום, ומסירה רק את המופע הראשון — אם 'apple' מופיע פעמיים, השני יישאר. אם הערך אינו קיים כלל נזרק ValueError, ולכן בקוד אמיתי בודקים if 'apple' in fruits לפני. להסרה לפי מיקום השתמש ב-pop(i) או ב-del.",
     starter: '',
     solution: 'fruits = ["apple", "banana", "cherry"]\nfruits.remove("apple")\nprint(fruits)',
     expected: 'banana',
     check: (out, code) => /banana/.test(out) && !/apple/.test(out) && /\.remove/.test(code)
   },
   { num: 46, difficulty: 'medium', topic: 'mixed list',
-    q: 'צור רשימה <code>data</code> המכילה: המספר 1, הטקסט <code>"A"</code>, והערך <code>True</code>. הדפס את הרשימה ואת אורכה.',
+    q: "צור רשימה <code>data</code> המכילה שלושה טיפוסים שונים: המספר <code>1</code>, הטקסט <code>\"A\"</code>, והערך <code>True</code>. הדפס את הרשימה עצמה (לא כמחרוזת) ואת אורכה בעזרת <code>len</code>.",
+    explain: "רשימה בפייתון יכולה להכיל טיפוסים מעורבים — זו גמישות שאין בעמודת נתונים אמיתית. שים לב לפרט מפתיע: bool הוא תת-סוג של int, ולכן True == 1 מחזיר אמת ו-set([1, True]) מכווץ לאיבר אחד. בעבודת נתונים ערבוב טיפוסים בעמודה הוא סימן אזהרה: בפנדס העמודה תהפוך ל-object וכל חישוב מספרי עליה ייכשל או יאט.",
     starter: '',
     solution: 'data = [1, "A", True]\nprint(data)\nprint(len(data))',
-    expected: '3',
-    check: (out, code) => /1/.test(out) && /A/.test(out) && /True/.test(out) && /3/.test(out)
+    expected: "[1, 'A', True]\n3",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\[1,\s*'A',\s*True\]/.test(out) && /\b3\b/.test(out) && /data\s*=\s*\[/.test(c) && /len\s*\(\s*data\s*\)/.test(c); }
   },
   { num: 47, difficulty: 'medium', topic: 'syntax error - colon',
     q: 'תקן את הקוד: השלם את הנקודתיים החסרות בסוף שורת ה-if. הדפס "Big" אם x > 5.',
+    explain: "בפייתון כל שורה שפותחת בלוק — if, for, while, def, else — מסתיימת בנקודתיים, והשורות שאחריה מוזחות פנימה. SyntaxError נזרק עוד לפני שהקוד רץ, ולכן אין שום פלט חלקי. טיפ לקריאת השגיאה: המספר שהיא מציינת הוא לרוב המקום שבו פייתון גילה את הבעיה, והתיקון נמצא בשורה שלפניו.",
     starter: 'x = 10\nif x > 5\n    print("Big")\n',
     solution: 'x = 10\nif x > 5:\n    print("Big")',
     expected: 'Big',
@@ -1205,20 +1252,23 @@ const EXERCISES_100 = [
   },
   { num: 48, difficulty: 'medium', topic: 'string concat',
     q: 'חבר את המילים <code>"Good"</code>, רווח, ו-<code>"Morning"</code>. הדפס: <code>Good Morning</code>.',
+    explain: "האופרטור + מחבר מחרוזות בדיוק כפי שהוא מחבר מספרים — אבל אסור לערבב: 'Good' + 5 זורק TypeError, וצריך str(5) או f-string. לחיבור של הרבה חלקים אל תשרשר בלולאה (נוצרת מחרוזת חדשה בכל סיבוב) אלא השתמש ב-' '.join([...]) — קריא ומהיר יותר.",
     starter: '',
     solution: 'print("Good" + " " + "Morning")',
     expected: 'Good Morning',
-    check: (out, code) => /Good Morning/.test(out) && /\+/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^Good Morning$/.test(out.trim()) && /["']Good["']\s*\+/.test(c); }
   },
   { num: 49, difficulty: 'medium', topic: 'mini-pandas shape',
-    q: 'בנה DataFrame ידני (מילון של רשימות) עם 4 שורות ו-2 עמודות. הדפס את ה-"shape" (כפלט: <code>(4, 2)</code>) באמצעות מספר שורות × עמודות.',
+    q: "בנה DataFrame ידני (מילון של רשימות) עם 4 שורות ו-2 עמודות. חשב את מספר השורות בעזרת <code>len</code> על אחת העמודות, ואת מספר העמודות בעזרת <code>len</code> על המילון עצמו, והדפס אותם כטופל בצורה <code>(4, 2)</code> — בדיוק כמו <code>df.shape</code> בפנדס (זהו טופל, לא מכפלה).",
+    explain: "shape הוא טופל של (מספר שורות, מספר עמודות) — לא מכפלה. במילון של רשימות מספר העמודות הוא len(df) (מספר המפתחות), ומספר השורות הוא len של אחת הרשימות: len(df['a']). זו גם החולשה של המבנה הידני — שום דבר לא מוודא שכל העמודות באותו אורך, בעוד DataFrame אמיתי אוכף זאת ומציג df.shape כמאפיין בלי סוגריים.",
     starter: '',
     solution: 'df = {"a": [1,2,3,4], "b": [5,6,7,8]}\nrows = len(df["a"])\ncols = len(df)\nprint((rows, cols))',
     expected: '(4, 2)',
-    check: (out, code) => /\(4,\s*2\)/.test(out) && /len/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\(4,\s*2\)/.test(out) && /len\s*\(\s*df\s*\[/.test(c) && /len\s*\(\s*df\s*\)/.test(c); }
   },
   { num: 50, difficulty: 'medium', topic: 'break',
     q: 'לולאת for על range(20). כשמגיעים ל-7 — שבור עם <code>break</code>. הדפס את כל המספרים עד 6 (כולל).',
+    explain: "break עוצר את הלולאה כולה ברגע שהתנאי מתקיים — ולכן 7 לא מודפס והלולאה לא ממשיכה ל-19. אל תבלבל בינו לבין continue, שרק מדלג לאיטרציה הבאה. שתי דקויות שכדאי להכיר: break יוצא רק מהלולאה הפנימית ביותר בלולאות מקוננות, ולפייתון יש for...else שבו בלוק ה-else רץ רק אם הלולאה הסתיימה בלי break.",
     starter: '',
     solution: 'for i in range(20):\n    if i == 7:\n        break\n    print(i)',
     expected: '0\n1\n2\n3\n4\n5\n6',
@@ -1226,27 +1276,31 @@ const EXERCISES_100 = [
   },
   { num: 51, difficulty: 'medium', topic: 'continue',
     q: 'לולאה על range(10). דלג על מספרים זוגיים עם <code>continue</code>. הדפס רק את האי-זוגיים.',
+    explain: "continue מדלג לאיטרציה הבאה ומשמש כ'שומר סף' בתחילת הלולאה: פוסלים מוקדם את מה שלא מעניין, והקוד העיקרי נשאר לא מקונן. באותה מידה אפשר לכתוב if i % 2 != 0: print(i), ולמקרה הפרטי הזה אפילו range(1, 10, 2) — הבחירה בין השלוש היא בחירת קריאוּת, לא נכונות.",
     starter: '',
     solution: 'for i in range(10):\n    if i % 2 == 0:\n        continue\n    print(i)',
     expected: '1\n3\n5\n7\n9',
-    check: (out, code) => /1\n3\n5/.test(out.replace(/\s+/g,'\n')) && /continue/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return out.trim().split(/\s+/).join(",") === "1,3,5,7,9" && /\bcontinue\b/.test(c) && /range\s*\(\s*10\s*\)/.test(c) && /%\s*2/.test(c); }
   },
   { num: 52, difficulty: 'medium', topic: 'tuple creation',
     q: 'צור טופל בשם <code>my_tuple</code> המכיל את הערכים 1 ו-2. הדפס אותו ואת סוג הנתון.',
+    explain: "טופל הוא רשימה שאי אפשר לשנות — נוח לנתונים קבועים, להחזרת כמה ערכים מפונקציה, ולשמש כמפתח במילון (רשימה לא יכולה). שים לב למלכודת: (1) הוא פשוט המספר 1 בסוגריים; טופל בן איבר אחד נכתב (1,) עם פסיק. הסוגריים בכלל אינם חובה — x = 1, 2 יוצר טופל.",
     starter: '',
     solution: 'my_tuple = (1, 2)\nprint(my_tuple)\nprint(type(my_tuple))',
     expected: '(1, 2)',
-    check: (out, code) => /\(1,\s*2\)/.test(out) && /tuple/.test(out) && /\(1,\s*2\)/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\(1,\s*2\)/.test(out) && /tuple/.test(out) && /my_tuple\s*=\s*\(\s*1\s*,\s*2\s*\)/.test(c) && /type\s*\(\s*my_tuple\s*\)/.test(c); }
   },
   { num: 53, difficulty: 'medium', topic: 'and operator',
     q: 'תן: <code>num = 8</code>. בדוק אם num קטן מ-10 וגם שונה מ-5. אם כן הדפס <code>"Valid"</code>.',
+    explain: "and דורש ששני התנאים יתקיימו, ופייתון עוצר מיד כשהתשובה ידועה: אם num < 10 שקרי, num != 5 לא ייבדק בכלל. פייתון מרשה גם שרשור טבעי של השוואות — 0 < num < 10 — שקריא יותר מ-num > 0 and num < 10. שים לב ש-!= משווה ערכים, בעוד is not משווה זהות אובייקט ואינו מתאים להשוואת מספרים.",
     starter: '',
     solution: 'num = 8\nif num < 10 and num != 5:\n    print("Valid")',
     expected: 'Valid',
-    check: (out, code) => /Valid/.test(out) && /\band\b/.test(code) && /!=/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^Valid$/.test(out.trim()) && /if\s+[^\n]*\band\b/.test(c) && /num\s*<\s*10/.test(c) && /num\s*!=\s*5/.test(c); }
   },
   { num: 54, difficulty: 'medium', topic: 'list head/first 5',
     q: 'תן: <code>data = list(range(1, 21))</code>. הדפס את 5 האיברים הראשונים בלבד (סימולציית <code>df.head()</code>).',
+    explain: "החיתוך [:5] מחזיר את חמשת הראשונים ומתחיל מאינדקס 0 כברירת מחדל. יתרון חשוב: חיתוך לעולם לא זורק IndexError — אם ברשימה שלושה איברים בלבד תקבל שלושה, בעוד data[4] היה מתפוצץ. זו בדיוק ההתנהגות של df.head() בפנדס, שנועדה להצצה מהירה לפני עבודה על כל הנתונים.",
     starter: '',
     solution: 'data = list(range(1, 21))\nprint(data[:5])',
     expected: '[1, 2, 3, 4, 5]',
@@ -1254,6 +1308,7 @@ const EXERCISES_100 = [
   },
   { num: 55, difficulty: 'medium', topic: 'elif',
     q: 'תן: <code>score = 75</code>. אם מעל 90 הדפס "A", elif מעל 70 הדפס "B", אחרת "C".',
+    explain: "שרשרת if/elif/else נבדקת מלמעלה למטה ועוצרת בענף הראשון שמתקיים — ולכן הסדר הוא חלק מהלוגיקה: אילו הצבת את score > 70 ראשון, גם ציון 95 היה מקבל B. שים לב לגבולות: score > 70 אינו כולל 70 עצמו, וציון 70 בדיוק ייפול ל-C.",
     starter: '',
     solution: 'score = 75\nif score > 90:\n    print("A")\nelif score > 70:\n    print("B")\nelse:\n    print("C")',
     expected: 'B',
@@ -1261,6 +1316,7 @@ const EXERCISES_100 = [
   },
   { num: 56, difficulty: 'medium', topic: 'list.clear',
     q: 'תן: <code>my_list = [1, 2, 3, 4, 5]</code>. נקה אותה לחלוטין עם <code>.clear()</code>. הדפס אותה.',
+    explain: "clear() מרוקן את הרשימה הקיימת במקום. ההבדל מ-my_list = [] אינו סגנוני: השמה יוצרת רשימה חדשה, וכל משתנה אחר שהצביע על הרשימה המקורית ימשיך לראות את הערכים הישנים — clear משנה את האובייקט עצמו וכל המצביעים אליו רואים רשימה ריקה.",
     starter: '',
     solution: 'my_list = [1, 2, 3, 4, 5]\nmy_list.clear()\nprint(my_list)',
     expected: '[]',
@@ -1268,20 +1324,23 @@ const EXERCISES_100 = [
   },
   { num: 57, difficulty: 'medium', topic: 'IndexError catch',
     q: 'תן: <code>nums = [1, 2, 3]</code>. נסה לגשת ל-<code>nums[10]</code>. תפוס את ה-IndexError והדפס <code>"Out of range"</code>.',
+    explain: "אינדקס מחוץ לתחום זורק IndexError, ותפיסה שלו מאפשרת להמשיך בזרימה מסודרת במקום לקרוס. שים לב להבדל: nums[10] מתפוצץ אבל nums[10:] מחזיר רשימה ריקה בשקט — חיתוך סלחני יותר מאינדוקס. במילון המקבילה היא KeyError, ושם החלופה הנקייה היא .get.",
     starter: '',
     solution: 'nums = [1, 2, 3]\ntry:\n    print(nums[10])\nexcept IndexError:\n    print("Out of range")',
     expected: 'Out of range',
     check: (out, code) => /Out of range/.test(out) && /IndexError/.test(code)
   },
   { num: 58, difficulty: 'medium', topic: 'dict.keys',
-    q: 'תן: <code>my_dict = {"a": 1, "b": 2, "c": 3}</code>. הדפס את רשימת המפתחות בלבד.',
+    q: "תן: <code>my_dict = {\"a\": 1, \"b\": 2, \"c\": 3}</code>. הדפס רשימה של המפתחות בלבד (ללא הערכים) בעזרת <code>.keys()</code>.",
+    explain: ".keys() מחזיר תצוגה (view) חיה על מפתחות המילון — לא רשימה: אם תוסיף מפתח אחרי שיצרת אותה, היא תשקף זאת. list() סביבה מקבע אותה לרשימה רגילה שאפשר לחתוך ולמיין. שים לב ש-for k in my_dict כבר עובר על המפתחות, ושמפייתון 3.7 הסדר נשמר לפי סדר ההכנסה.",
     starter: '',
     solution: 'my_dict = {"a": 1, "b": 2, "c": 3}\nprint(list(my_dict.keys()))',
-    expected: 'a',
-    check: (out, code) => /a/.test(out) && /b/.test(out) && /\.keys/.test(code)
+    expected: "['a', 'b', 'c']",
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\['a',\s*'b',\s*'c'\]/.test(out) && !/:/.test(out) && /my_dict\.keys\s*\(\s*\)/.test(c); }
   },
   { num: 59, difficulty: 'medium', topic: 'dict.values',
     q: 'תן: <code>my_dict = {"a": 1, "b": 2, "c": 3}</code>. הדפס את רשימת הערכים בלבד.',
+    explain: ".values() מחזיר תצוגה חיה על הערכים; אפשר לעבור עליה בלולאה ולהעביר ל-sum, אבל לא לגשת באינדקס — לשם כך list(). ערכים, בשונה ממפתחות, יכולים לחזור על עצמם. כשצריך גם מפתח וגם ערך באותה לולאה, .items() הוא הכלי הנכון.",
     starter: '',
     solution: 'my_dict = {"a": 1, "b": 2, "c": 3}\nprint(list(my_dict.values()))',
     expected: '[1, 2, 3]',
@@ -1289,6 +1348,7 @@ const EXERCISES_100 = [
   },
   { num: 60, difficulty: 'medium', topic: 'import datetime',
     q: 'ייבא <code>datetime</code>. הדפס את <code>datetime.date(2025, 1, 1)</code>.',
+    explain: "מודול datetime מכיל מחלקה date לתאריך בלבד, time לשעה, ו-datetime לשילוב — ומכאן הבלבול הנפוץ datetime.datetime. הדפסת אובייקט date מציגה תמיד בפורמט ISO (YYYY-MM-DD), שהוא גם הפורמט הבטוח לשמירה ולמיון. לעיצוב אחר משתמשים ב-strftime, ולקריאת תאריך ממחרוזת ב-strptime; הפרש בין שני תאריכים מחזיר timedelta עם מספר הימים.",
     starter: '',
     solution: 'import datetime\nprint(datetime.date(2025, 1, 1))',
     expected: '2025-01-01',
@@ -1299,6 +1359,7 @@ const EXERCISES_100 = [
   
   { num: 61, difficulty: 'easy', topic: 'print',
     q: 'הדפס את הטקסט <code>"Hello World"</code>.',
+    explain: "print הוא חלון התצוגה של התוכנית — הוא מציג טקסט למסך ומוסיף ירידת שורה בסוף. אפשר לשלוט בכך: print('a', end='') לא יורד שורה, ו-print(a, b, sep=', ') קובע את המפריד בין ערכים. מרכאות בודדות וכפולות שקולות בפייתון; בוחרים לפי מה שנמצא בתוך הטקסט.",
     starter: '',
     solution: 'print("Hello World")',
     expected: 'Hello World',
@@ -1306,27 +1367,31 @@ const EXERCISES_100 = [
   },
   { num: 62, difficulty: 'easy', topic: 'variable assignment',
     q: 'הגדר משתנה <code>age</code> שערכו 25. הדפס אותו.',
+    explain: "השמה יוצרת את המשתנה ומצמידה לו ערך — אין צורך להצהיר טיפוס, פייתון גוזר אותו מהערך. שם משתנה טוב הוא תיעוד: age ולא a, בכתיב snake_case. פנייה למשתנה לפני שהושם לו ערך מייצרת NameError — סימן כמעט ודאי לשגיאת כתיב בשם.",
     starter: '',
     solution: 'age = 25\nprint(age)',
     expected: '25',
-    check: (out, code) => out.trim() === '25' && /age\s*=\s*25/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b25\b/.test(out) && /age\s*=\s*25/.test(c) && /print\s*\(\s*[^)]*age/.test(c); }
   },
   { num: 63, difficulty: 'easy', topic: 'division float',
     q: 'הדפס את התוצאה של <code>10 / 2</code>. שים לב שהתוצאה היא Float.',
+    explain: "בפייתון 3 האופרטור / מחזיר תמיד float — גם כשהחלוקה 'יוצאת שלמה', ולכן 10 / 2 הוא 5.0 ולא 5. לתוצאה שלמה משתמשים ב-// . שים לב לשני דברים: חלוקה באפס זורקת ZeroDivisionError, ותוצאות float אינן מדויקות לחלוטין — אל תשווה אותן ב-== אלא בהפרש קטן.",
     starter: '',
     solution: 'print(10 / 2)',
     expected: '5.0',
-    check: (out) => /5\.0/.test(out)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /5\.0/.test(out) && /10\s*\/\s*2/.test(c); }
   },
   { num: 64, difficulty: 'easy', topic: 'integer division',
     q: 'הדפס את התוצאה של <code>10 // 3</code> (חילוק שלמים).',
+    explain: "// מבצע חלוקה שלמה ומעגל כלפי מטה — לא 'חותך'. ההבדל מתגלה בשליליים: -10 // 3 מחזיר -4, בעוד int(-10 / 3) מחזיר -3. אם צריך גם מנה וגם שארית, divmod(10, 3) מחזיר את שתיהן בטופל. שים לב ש-// על float מחזיר float.",
     starter: '',
     solution: 'print(10 // 3)',
     expected: '3',
-    check: (out, code) => /3/.test(out) && /\/\//.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^3$/.test(out.trim()) && /10\s*\/\/\s*3/.test(c); }
   },
   { num: 65, difficulty: 'easy', topic: 'boolean True',
     q: 'הגדר <code>is_open = True</code> והדפס אותו.',
+    explain: "בוליאני מחזיק שני ערכים בלבד, True ו-False, ונכתב תמיד באות ראשונה גדולה. בתנאים כותבים if is_open ולא if is_open == True — קצר וקריא יותר. טריק שימושי לניתוח נתונים: True שווה חשבונית ל-1, ולכן sum([True, False, True]) מחזיר 2 — כך סופרים כמה שורות עונות על תנאי.",
     starter: '',
     solution: 'is_open = True\nprint(is_open)',
     expected: 'True',
@@ -1334,6 +1399,7 @@ const EXERCISES_100 = [
   },
   { num: 66, difficulty: 'easy', topic: 'equality ==',
     q: 'בדוק אם <code>5 == 5</code> והדפס את התוצאה.',
+    explain: "== משווה ערכים ומחזיר בוליאני, בעוד = מבצע השמה — בלבול ביניהם הוא מקור השגיאות מספר אחת אצל מתחילים. שים לב לשתי דקויות: '5' == 5 מחזיר False כי הטיפוסים שונים, ו-is אינו תחליף ל-== — הוא בודק אם מדובר באותו אובייקט בזיכרון ומשמש בעיקר מול None.",
     starter: '',
     solution: 'print(5 == 5)',
     expected: 'True',
@@ -1341,6 +1407,7 @@ const EXERCISES_100 = [
   },
   { num: 67, difficulty: 'easy', topic: 'not equal !=',
     q: 'בדוק אם <code>5 != 3</code> והדפס את התוצאה.',
+    explain: "!= מחזיר אמת כאשר הערכים שונים — ההיפוך המדויק של ==. אפשר לכתוב גם not (5 == 3), אבל != קריא יותר. שים לב: להשוואה מול None משתמשים תמיד ב-is None / is not None ולא ב-==, כי שם מדובר בזהות אובייקט ולא בערך.",
     starter: '',
     solution: 'print(5 != 3)',
     expected: 'True',
@@ -1348,6 +1415,7 @@ const EXERCISES_100 = [
   },
   { num: 68, difficulty: 'easy', topic: 'int to float',
     q: 'המר את המספר השלם <code>7</code> ל-float והדפס.',
+    explain: "float() ממיר מספר שלם למספר עשרוני — 7 הופך ל-7.0. בפועל פייתון מבצע את ההמרה לבד ברגע שמערבבים טיפוסים: 7 + 0.5 כבר מחזיר float. ההמרה ההפוכה מסוכנת יותר: int(7.9) מחזיר 7 (חיתוך, לא עיגול) — לעיגול נכון השתמש ב-round.",
     starter: '',
     solution: 'print(float(7))',
     expected: '7.0',
@@ -1355,6 +1423,7 @@ const EXERCISES_100 = [
   },
   { num: 69, difficulty: 'easy', topic: 'empty function',
     q: 'הגדר פונקציה <code>start()</code> שלא עושה כלום (השתמש ב-<code>pass</code>). קרא לה והדפס <code>"Called"</code>.',
+    explain: "בפייתון בלוק לא יכול להיות ריק — pass הוא ממלא המקום שמאפשר להגדיר שלד של פונקציה, מחלקה או except ולהשלים אחר כך. פונקציה כזו רצה בהצלחה ומחזירה None. חלופה מקובלת היא docstring כגוף הפונקציה, שגם מתעד את מה שעתיד להיכתב.",
     starter: '',
     solution: 'def start():\n    pass\n\nstart()\nprint("Called")',
     expected: 'Called',
@@ -1362,6 +1431,7 @@ const EXERCISES_100 = [
   },
   { num: 70, difficulty: 'easy', topic: 'string length',
     q: 'תן: <code>word = "Python"</code>. הדפס את האורך שלו.',
+    explain: "len על מחרוזת מחזיר את מספר התווים — כולל רווחים וסימני פיסוק, ולכן len('Hi there') הוא 8. זכור שהאינדקס האחרון הוא len(word) - 1, או פשוט word[-1]. במחרוזות יוניקוד (עברית, אמוג'י) מספר התווים לא תמיד תואם למה שהעין רואה כאות אחת.",
     starter: '',
     solution: 'word = "Python"\nprint(len(word))',
     expected: '6',
@@ -1369,6 +1439,7 @@ const EXERCISES_100 = [
   },
   { num: 71, difficulty: 'easy', topic: 'comments',
     q: 'כתוב שורת הערה (<code>#</code>) ואז הדפס <code>"Comments work"</code>.',
+    explain: "כל מה שמופיע אחרי # מתעלם ממנו המפרש — משמש להסבר ולנטרול זמני של קוד בזמן דיבוג. הערה יכולה להופיע גם בסוף שורת קוד. הכלל המקצועי: אל תתאר את מה שהקוד כבר אומר, אלא את הסיבה — למה נבחר הסף הזה, למה נדרשת העקיפה הזו.",
     starter: '',
     solution: '# This is a comment\nprint("Comments work")',
     expected: 'Comments work',
@@ -1376,20 +1447,23 @@ const EXERCISES_100 = [
   },
   { num: 72, difficulty: 'easy', topic: 'list with one item',
     q: 'צור רשימה <code>nums</code> עם איבר בודד: המספר 100. הדפס אותה.',
+    explain: "רשימה עם איבר אחד היא עדיין רשימה — [100] שונה מ-100 ומ-'[100]'. ההבדל מתגלה מיד: nums[0] מחזיר את המספר, len(nums) מחזיר 1, ואילו על המספר 100 שתי הפעולות ייכשלו. שים לב ש-[100] * 3 אינו כפל מתמטי אלא שכפול לרשימה [100, 100, 100].",
     starter: '',
     solution: 'nums = [100]\nprint(nums)',
     expected: '[100]',
-    check: (out, code) => /\[100\]/.test(out) && /\[100\]/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\[100\]/.test(out) && /nums\s*=\s*\[\s*100\s*\]/.test(c) && /print\s*\(\s*nums\s*\)/.test(c); }
   },
   { num: 73, difficulty: 'easy', topic: 'string with numbers',
     q: 'הדפס את <code>type("45")</code> (מחרוזת שמכילה ספרות) — אמור להראות שזו מחרוזת.',
+    explain: "מרכאות הופכות כל דבר למחרוזת — '45' הוא טקסט שנראה כמספר, ופייתון מתייחס אליו כטקסט לכל דבר. ההשלכה המעשית מגיעה בניתוח נתונים: עמודה שנקראה מ-CSV כמחרוזת תמוין לקסיקוגרפית ('100' יופיע לפני '9') וכל חישוב עליה ייכשל או ישרשר. הפתרון הוא המרה מפורשת ב-int או ב-float.",
     starter: '',
     solution: 'print(type("45"))',
     expected: 'str',
-    check: (out, code) => /str/.test(out) && /type\s*\(/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /str/.test(out) && /type\s*\(\s*["']45["']\s*\)/.test(c); }
   },
   { num: 74, difficulty: 'easy', topic: 'exponent',
     q: 'הדפס את <code>5 ** 2</code> (5 בחזקת 2).',
+    explain: "** הוא אופרטור החזקה: 5 ** 2 הוא 25. הוא עובד גם עם מעריכים לא שלמים — 9 ** 0.5 הוא שורש ריבועי, ו-2 ** -1 הוא 0.5. שים לב שהסימן ^ אינו חזקה בפייתון אלא XOR ביטי, ושהחזקה נקשרת מימין לשמאל: 2 ** 3 ** 2 שווה 512 ולא 64.",
     starter: '',
     solution: 'print(5 ** 2)',
     expected: '25',
@@ -1397,6 +1471,7 @@ const EXERCISES_100 = [
   },
   { num: 75, difficulty: 'easy', topic: 'True case sensitive',
     q: 'נסה להגדיר <code>x = true</code> (אות קטנה) — תקבל NameError. תפוס את השגיאה והדפס <code>"Use True with capital T"</code>.',
+    explain: "פייתון רגיש לאותיות גדולות וקטנות: True הוא ערך בוליאני מובנה, ואילו true הוא פשוט שם משתנה שלא הוגדר — ומכאן NameError. אותה שגיאה תתקבל מכל טעות כתיב בשם משתנה או מפנייה למשתנה לפני שהוגדר. מקבילות משפות אחרות שלא קיימות כאן: null ו-nil — בפייתון הערך הריק הוא None.",
     starter: '',
     solution: 'try:\n    x = true\nexcept NameError:\n    print("Use True with capital T")',
     expected: 'Use True with capital T',
@@ -1404,20 +1479,23 @@ const EXERCISES_100 = [
   },
   { num: 76, difficulty: 'easy', topic: 'string multiplication',
     q: 'הדפס את התוצאה של <code>"A" * 3</code>.',
+    explain: "כפל מחרוזת במספר משכפל אותה: 'A' * 3 הוא 'AAA'. שימושי לעיצוב פלט, למשל '-' * 40 כקו מפריד. שים לב ש-'A' * 0 מחזיר מחרוזת ריקה, ושעל רשימות אותו אופרטור משכפל הפניות — [[0]] * 3 יוצר שלוש הפניות לאותה רשימה פנימית, וזו מלכודת ידועה.",
     starter: '',
     solution: 'print("A" * 3)',
     expected: 'AAA',
-    check: (out, code) => /AAA/.test(out) && /\*\s*3/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^AAA$/.test(out.trim()) && /["']A["']\s*\*\s*3/.test(c); }
   },
   { num: 77, difficulty: 'easy', topic: '*= operator',
     q: 'תן: <code>x = 10</code>. הכפל אותו ב-2 בעזרת <code>*=</code> והדפס.',
+    explain: "*= מכפיל את המשתנה בערך ושומר בחזרה — קיצור ל-x = x * 2. האופרטור עובד גם על מחרוזות ורשימות, שם הכפל הוא שכפול ולא חשבון. שים לב ש-/= מחזיר תמיד float, גם כשהתוצאה שלמה.",
     starter: '',
     solution: 'x = 10\nx *= 2\nprint(x)',
     expected: '20',
-    check: (out, code) => out.trim() === '20' && /x\s*\*=\s*2/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b20\b/.test(out) && /x\s*=\s*10/.test(c) && /x\s*\*=\s*2/.test(c) && /print\s*\(\s*[^)]*x/.test(c); }
   },
   { num: 78, difficulty: 'easy', topic: 'string.lower',
     q: 'תן: <code>title = "DATA SCIENCE"</code>. הפוך לאותיות קטנות והדפס.',
+    explain: "lower() מחזירה מחרוזת חדשה באותיות קטנות; המקור אינו משתנה. הערך האמיתי אינו אסתטי אלא ניקוי נתונים: לפני קיבוץ או השוואה מנרמלים את שני הצדדים ב-lower() ו-strip(), אחרת ' Tel Aviv' ו-'TEL AVIV' ייספרו כשתי קטגוריות נפרדות.",
     starter: '',
     solution: 'title = "DATA SCIENCE"\nprint(title.lower())',
     expected: 'data science',
@@ -1425,6 +1503,7 @@ const EXERCISES_100 = [
   },
   { num: 79, difficulty: 'easy', topic: 'invalid variable name',
     q: 'הגדר משתנה בשם <code>name1</code> (לא <code>1st_name</code>!) שמכיל את הטקסט <code>"Eliran"</code> והדפס אותו. <i>(שם משתנה לא יכול להתחיל במספר.)</i>',
+    explain: "שם משתנה חייב להתחיל באות או בקו תחתון — 1st_name הוא SyntaxError. אסורים גם רווחים, מקפים ומילים שמורות של השפה. מלכודת מסוכנת יותר: פייתון יאפשר לך לקרוא למשתנה list או str, וכך תדרוס פונקציה מובנית ותשבור את הקוד בהמשך.",
     starter: '',
     solution: 'name1 = "Eliran"\nprint(name1)',
     expected: 'Eliran',
@@ -1432,6 +1511,7 @@ const EXERCISES_100 = [
   },
   { num: 80, difficulty: 'easy', topic: 'type of variable',
     q: 'תן: <code>z = 42</code>. הדפס את הסוג שלו.',
+    explain: "type() מחזיר את המחלקה של הערך, ולכן ההדפסה נראית <class 'int'> ולא 'int' בלבד. כלי אבחון חשוב כשמשתנה 'לא מתנהג' — לרוב מפני שהוא מחרוזת שנראית כמספר. בבדיקות בתוך קוד עדיף isinstance(z, int). שים לב שבפייתון int אינו מוגבל בגודל, ואין גלישה כמו בשפות אחרות.",
     starter: '',
     solution: 'z = 42\nprint(type(z))',
     expected: 'int',
@@ -1439,13 +1519,15 @@ const EXERCISES_100 = [
   },
   { num: 81, difficulty: 'easy', topic: 'empty dict',
     q: 'צור מילון ריק <code>my_dict</code>. הדפס אותו ואת אורכו.',
+    explain: "{} יוצר מילון ריק — לא סט. סט ריק נוצר רק ב-set(), כי הסוגריים המסולסלות תפוסות למילון. מילון ריק הוא falsy, ולכן if my_dict הוא הדרך הפייתונית לבדוק אם הוא מכיל משהו, ו-len(my_dict) מחזיר את מספר המפתחות.",
     starter: '',
     solution: 'my_dict = {}\nprint(my_dict)\nprint(len(my_dict))',
     expected: '0',
-    check: (out, code) => /\{\}/.test(out) && /0/.test(out) && /\{\}/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\{\}/.test(out) && /\b0\b/.test(out) && /my_dict\s*=\s*\{\s*\}/.test(c) && /len\s*\(\s*my_dict\s*\)/.test(c); }
   },
   { num: 82, difficulty: 'easy', topic: 'empty list',
     q: 'צור רשימה ריקה <code>my_list</code>. הוסף לה איבר אחד ("apple"). הדפס.',
+    explain: "רשימה ריקה היא נקודת פתיחה לצבירה בלולאה, ו-append מוסיף איבר אחד לסופה. שתי מלכודות: append מחזיר None, ולכן my_list = my_list.append('apple') ימחק לך את הרשימה; ולהוספת כמה איברים בבת אחת יש extend — append([1, 2]) יכניס רשימה בתוך רשימה.",
     starter: '',
     solution: 'my_list = []\nmy_list.append("apple")\nprint(my_list)',
     expected: 'apple',
@@ -1453,6 +1535,7 @@ const EXERCISES_100 = [
   },
   { num: 83, difficulty: 'easy', topic: 'index 0',
     q: 'תן: <code>fruits = ["apple", "banana", "cherry"]</code>. הדפס את האיבר הראשון (אינדקס 0).',
+    explain: "אינדוקס בפייתון מתחיל ב-0: האיבר הראשון הוא fruits[0] והאחרון fruits[len(fruits)-1] או פשוט fruits[-1]. פנייה לאינדקס שאינו קיים זורקת IndexError. הפעולה ההפוכה — מציאת המיקום של ערך — היא fruits.index('banana').",
     starter: '',
     solution: 'fruits = ["apple", "banana", "cherry"]\nprint(fruits[0])',
     expected: 'apple',
@@ -1460,6 +1543,7 @@ const EXERCISES_100 = [
   },
   { num: 84, difficulty: 'easy', topic: 'not operator',
     q: 'הדפס את <code>not True</code>.',
+    explain: "not הופך ערך אמת לשקר ולהפך, ופועל על כל ערך — לא רק על בוליאני: not [] מחזיר True, ולכן if not data הוא הניב המקובל לבדיקת אוסף ריק. שים לב לקדימות: not חזק מ-and ומ-or, ו-not x == y מתפרש כ-not (x == y).",
     starter: '',
     solution: 'print(not True)',
     expected: 'False',
@@ -1467,6 +1551,7 @@ const EXERCISES_100 = [
   },
   { num: 85, difficulty: 'easy', topic: 'def keyword',
     q: 'הגדר פונקציה <code>greet()</code> שמדפיסה <code>"Hi from function"</code>. קרא לה.',
+    explain: "def מגדיר פונקציה אבל אינו מריץ אותה — הקוד בגוף הפונקציה מחכה עד לקריאה greet(). כתיבת greet בלי סוגריים לא תריץ דבר אלא רק תפנה לאובייקט הפונקציה. שים לב שהפונקציה חייבת להיות מוגדרת לפני שורת הקריאה בזמן הריצה, ושפונקציה שמדפיסה אינה מחזירה ערך שאפשר להשתמש בו.",
     starter: '',
     solution: 'def greet():\n    print("Hi from function")\n\ngreet()',
     expected: 'Hi from function',
@@ -1474,6 +1559,7 @@ const EXERCISES_100 = [
   },
   { num: 86, difficulty: 'easy', topic: 'bool of 1',
     q: 'הדפס את <code>bool(1)</code>.',
+    explain: "כל מספר שאינו אפס נחשב אמת — bool(1), bool(-3) ו-bool(0.5) כולם True, ורק 0 הוא False. יחד עם המחרוזת הריקה, הרשימה הריקה, המילון הריק ו-None אלה כל הערכים ה'שקריים' בפייתון; כל השאר אמת. זו בדיוק הלוגיקה שמופעלת כשכותבים if x בלי השוואה מפורשת.",
     starter: '',
     solution: 'print(bool(1))',
     expected: 'True',
@@ -1481,48 +1567,55 @@ const EXERCISES_100 = [
   },
   { num: 87, difficulty: 'easy', topic: 'and in conditions',
     q: 'תן: <code>a, b = 5, 10</code>. אם <code>a < b</code> וגם <code>b > 0</code> הדפס <code>"Both true"</code>.',
+    explain: "השורה a, b = 5, 10 היא פירוק טופל (unpacking) — דרך קצרה להשים שני ערכים בבת אחת, ומאותה סיבה אפשר להחליף משתנים ב-a, b = b, a. התנאי המורכב עם and דורש ששני החלקים יתקיימו, ופייתון מפסיק לבדוק ברגע שהתשובה ידועה. לתנאי טווח יש קיצור פייתוני: a < b < 100.",
     starter: '',
     solution: 'a, b = 5, 10\nif a < b and b > 0:\n    print("Both true")',
     expected: 'Both true',
-    check: (out, code) => /Both true/.test(out) && /\band\b/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^Both true$/.test(out.trim()) && /if\s+[^\n]*\band\b/.test(c) && /a\s*<\s*b/.test(c) && /b\s*>\s*0/.test(c); }
   },
   { num: 88, difficulty: 'easy', topic: 'or in conditions',
     q: 'תן: <code>x = 0</code>. אם <code>x == 0</code> או <code>x > 100</code> הדפס <code>"Special"</code>.',
+    explain: "or מסתפק בכך שאחד התנאים מתקיים. שים לב לדקות שהתרגיל הזה חושף: x שווה 0, שהוא ערך falsy — כתיבת if x הייתה נכשלת, ורק ההשוואה המפורשת x == 0 עובדת. זו בדיוק הסיבה שבבדיקת 'האם הערך קיים' משתמשים ב-is not None ולא בבדיקת אמת סתמית.",
     starter: '',
     solution: 'x = 0\nif x == 0 or x > 100:\n    print("Special")',
     expected: 'Special',
-    check: (out, code) => /Special/.test(out) && /\bor\b/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /^Special$/.test(out.trim()) && /if\s+[^\n]*\bor\b/.test(c) && /x\s*==\s*0/.test(c) && /x\s*>\s*100/.test(c); }
   },
   { num: 89, difficulty: 'easy', topic: 'int truncates float',
     q: 'הדפס את <code>int(4.8)</code> — אמור להדפיס 4 (חיתוך כלפי מטה).',
+    explain: "int() על מספר עשרוני חותך את החלק השברי ואינו מעגל — int(4.8) הוא 4. שים לב לשליליים: החיתוך הוא לכיוון האפס, ולכן int(-4.8) הוא -4 בעוד math.floor(-4.8) הוא -5. אם דרוש עיגול אמיתי השתמש ב-round, ודע ש-round(0.5) מחזיר 0 בשל עיגול בנקאי.",
     starter: '',
     solution: 'print(int(4.8))',
     expected: '4',
-    check: (out, code) => out.trim() === '4' && /int\s*\(\s*4\.8/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /\b4\b(?!\.)/.test(out) && /int\s*\(\s*4\.8\s*\)/.test(c); }
   },
   { num: 90, difficulty: 'easy', topic: 'except keyword',
-    q: 'נסה לבצע <code>1 / 0</code>. תפוס את ה-Exception עם <code>except</code> והדפס <code>"Error caught"</code>.',
+    q: "נסה לבצע <code>1 / 0</code> בתוך <code>try</code>. תפוס את השגיאה בעזרת <code>except Exception</code> (ולא <code>except</code> חשוף, שתופס גם אירועי מערכת ומסתיר באגים) והדפס <code>\"Error caught\"</code>.",
+    explain: "try/except מאפשר לתוכנית להמשיך גם כשפעולה נכשלה. עדיף לתפוס את הסוג הצפוי (ZeroDivisionError) או לכל היותר except Exception — except חשוף לגמרי תופס גם אירועי מערכת כמו הפסקה מהמקלדת ומבליע באגים אמיתיים, כך שהתוכנית 'עובדת' בזמן שהיא שגויה. הוסף as e והדפס את e כדי לדעת מה באמת קרה.",
     starter: '',
-    solution: 'try:\n    1 / 0\nexcept:\n    print("Error caught")',
+    solution: "try:\n    print(1 / 0)\nexcept Exception:\n    print(\"Error caught\")",
     expected: 'Error caught',
-    check: (out, code) => /Error caught/.test(out) && /except/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Error caught/.test(out) && /\btry\s*:/.test(c) && /except\b/.test(c) && /1\s*\/\s*0/.test(c); }
   },
   { num: 91, difficulty: 'easy', topic: 'function call',
     q: 'הגדר פונקציה <code>run_program()</code> שמדפיסה <code>"Running"</code>. קרא לה.',
+    explain: "def רק מגדיר; הסוגריים הם שמריצים. run_program בלי סוגריים מחזיר את אובייקט הפונקציה ולא מדפיס דבר — טעות שקטה שקשה לאתר. בקובץ אמיתי מפרידים בין הגדרות להרצה בעזרת if __name__ == '__main__':, כדי שאפשר יהיה לייבא את הקובץ בלי שיריץ את עצמו.",
     starter: '',
     solution: 'def run_program():\n    print("Running")\n\nrun_program()',
     expected: 'Running',
-    check: (out, code) => /Running/.test(out) && /run_program\s*\(\s*\)/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /Running/.test(out) && /def\s+run_program\s*\(\s*\)/.test(c) && /^\s*run_program\s*\(\s*\)\s*$/m.test(c); }
   },
   { num: 92, difficulty: 'easy', topic: 'string index',
     q: 'תן: <code>s = "hello"</code>. הדפס את התו הראשון (<code>s[0]</code>).',
+    explain: "אינדוקס על מחרוזת עובד כמו על רשימה, ומחזיר תו — שהוא בעצמו מחרוזת באורך 1, כי אין בפייתון טיפוס char נפרד. מחרוזות אינן ניתנות לשינוי: s[0] = 'H' זורק TypeError, ולהחלפת אות בונים מחרוזת חדשה. על מחרוזת ריקה s[0] מתפוצץ בעוד s[0:1] מחזיר '' בשקט.",
     starter: '',
     solution: 's = "hello"\nprint(s[0])',
     expected: 'h',
-    check: (out, code) => out.trim() === 'h' && /s\[0\]/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /h/.test(out) && !/hello/.test(out) && /s\s*=\s*["']hello["']/.test(c) && /s\s*\[\s*0\s*\]/.test(c); }
   },
   { num: 93, difficulty: 'easy', topic: 'f-string basic',
     q: 'תן: <code>color = "red"</code>. הדפס בעזרת f-string: <code>The color is red</code>.',
+    explain: "f-string מחליף כל ביטוי שבתוך {} בערכו בזמן ההדפסה — ואפשר לשים בפנים לא רק משתנה אלא חישוב שלם, למשל f'{price * 1.17:.2f}'. שכחת ה-f תדפיס את הסוגריים כטקסט. לצורכי דיבוג יש קיצור נוח: f'{color=}' מדפיס גם את שם המשתנה וגם את ערכו.",
     starter: '',
     solution: 'color = "red"\nprint(f"The color is {color}")',
     expected: 'The color is red',
@@ -1530,6 +1623,7 @@ const EXERCISES_100 = [
   },
   { num: 94, difficulty: 'easy', topic: 'newline \\n',
     q: 'הדפס שני קטעי טקסט בשורות נפרדות בעזרת <code>\\n</code> בתוך מחרוזת אחת.',
+    explain: "\\n הוא תו בריחה שמייצג ירידת שורה בתוך מחרוזת אחת. באותה משפחה: \\t לטאב, \\\\ לבקסלש ממשי. לנתיבי קבצים בווינדוס השתמש במחרוזת גולמית r'C:\\new\\table' — אחרת \\n ו-\\t יתפרשו כתווי בריחה. לטקסט ארוך רב-שורתי נוחה יותר מחרוזת משולשת.",
     starter: '',
     solution: 'print("Line 1\\nLine 2")',
     expected: 'Line 1\nLine 2',
@@ -1537,13 +1631,15 @@ const EXERCISES_100 = [
   },
   { num: 95, difficulty: 'easy', topic: '<= operator',
     q: 'תן: <code>x = 10</code>. בדוק אם <code>x <= 10</code> והדפס את התוצאה.',
+    explain: "<= מחזיר אמת גם בשוויון — וזה בדיוק ההבדל שנבדק כאן: 10 <= 10 אמת בעוד 10 < 10 שקר. תוצאת ההשוואה היא ערך בוליאני לכל דבר, שאפשר להדפיס או לשמור במשתנה. פייתון מאפשר גם שרשור טבעי: 1 <= x <= 10.",
     starter: '',
     solution: 'x = 10\nprint(x <= 10)',
     expected: 'True',
-    check: (out, code) => /True/.test(out) && /<=/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /True/.test(out) && /x\s*=\s*10/.test(c) && /x\s*<=\s*10/.test(c); }
   },
   { num: 96, difficulty: 'easy', topic: 'str(10)',
     q: 'המר את המספר 10 למחרוזת והדפס את הטיפוס שלו.',
+    explain: "str() ממיר כל ערך לייצוג טקסטואלי — בדיוק מה ש-print עושה מאחורי הקלעים. ההמרה נחוצה כשמשרשרים: 'Total: ' + str(10), אחרת TypeError (או פשוט f-string, שממיר לבד). דקות שכדאי להכיר: repr() מציג ייצוג 'טכני' יותר עם מרכאות, ומזה נובע ההבדל בין הדפסת רשימה למחרוזת שבתוכה.",
     starter: '',
     solution: 's = str(10)\nprint(s)\nprint(type(s))',
     expected: 'str',
@@ -1551,6 +1647,7 @@ const EXERCISES_100 = [
   },
   { num: 97, difficulty: 'easy', topic: 'function 2 params',
     q: 'הגדר פונקציה <code>add(a, b)</code> שמדפיסה את הסכום. קרא לה עם <code>(3, 4)</code>.',
+    explain: "פרמטרים מקבלים ערכים לפי סדר הארגומנטים בקריאה: add(3, 4) שם 3 ב-a ו-4 ב-b; אפשר גם לפי שם, add(b=4, a=3), וזה קריא יותר כשיש הרבה פרמטרים. קריאה עם מספר ארגומנטים שגוי זורקת TypeError. שים לב שהפונקציה כאן מדפיסה ולא מחזירה — ולכן אי אפשר להשתמש בתוצאה בהמשך.",
     starter: '',
     solution: 'def add(a, b):\n    print(a + b)\n\nadd(3, 4)',
     expected: '7',
@@ -1558,6 +1655,7 @@ const EXERCISES_100 = [
   },
   { num: 98, difficulty: 'easy', topic: 'string concat with +',
     q: 'תן: <code>a = "Py"</code>, <code>b = "thon"</code>. חבר אותם והדפס.',
+    explain: "+ בין שתי מחרוזות מדביק אותן בלי להוסיף רווח — 'Py' + 'thon' הוא 'Python'. שים לב להבדל מ-print(a, b), שמוסיף רווח בין הערכים בזכות sep. שרשור מחרוזת עם מספר זורק TypeError; שם משתמשים ב-f-string או ב-str().",
     starter: '',
     solution: 'a = "Py"\nb = "thon"\nprint(a + b)',
     expected: 'Python',
@@ -1565,13 +1663,15 @@ const EXERCISES_100 = [
   },
   { num: 99, difficulty: 'easy', topic: 'input simulation',
     q: 'מאחר ש-input() לא מוצג בסימולטור, סמלץ אותו: <code>user_input = "Eliran"</code>. הדפס <code>type(user_input)</code> — אמור להיות str.',
+    explain: "בסביבה אמיתית user_input היה מגיע מ-input(), והנקודה החשובה זהה: input מחזיר תמיד מחרוזת — גם אם המשתמש הקליד 42. לכן כל חישוב מחייב המרה מפורשת (int או float), ורצוי לעטוף אותה ב-try/except ValueError כי המשתמש עלול להקליד טקסט.",
     starter: '',
     solution: 'user_input = "Eliran"\nprint(type(user_input))',
     expected: 'str',
-    check: (out, code) => /str/.test(out) && /type/.test(code)
+    check: (out, code) => { const c = code.replace(/#.*/g, ""); return /str/.test(out) && /user_input\s*=\s*["']Eliran["']/.test(c) && /type\s*\(\s*user_input\s*\)/.test(c); }
   },
   { num: 100, difficulty: 'easy', topic: 'simple assignment',
     q: 'הגדר משתנה <code>greeting</code> שערכו <code>"Hello"</code>. הדפס אותו.',
+    explain: "השמה של מחרוזת למשתנה היא אבן הבניין הבסיסית: המרכאות מסמנות לפייתון שמדובר בטקסט, והן אינן חלק מהערך — לכן print(greeting) מדפיס Hello ללא מרכאות. מרכאות בודדות וכפולות שקולות; בוחרים לפי מה שנמצא בתוך הטקסט, כדי לא להיאלץ לברוח עם בקסלש.",
     starter: '',
     solution: 'greeting = "Hello"\nprint(greeting)',
     expected: 'Hello',
@@ -1839,6 +1939,12 @@ async function checkAnswer(num) {
   if (passed) {
     verdict.className = 'verdict success show';
     verdict.textContent = '✓ מצוין! התשובה נכונה.';
+    if (ex.explain) {
+      const _w = document.createElement('div');
+      _w.className = 'why-box';
+      _w.innerHTML = '<div class="why-title">למה זה עובד</div>' + ex.explain;
+      verdict.appendChild(_w);
+    }
     markDone(num);
 
     try {
@@ -2191,13 +2297,23 @@ if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
     `;
     document.body.appendChild(div);
     setTimeout(() => div.classList.add('show'), 10);
-    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+    // סגירה מרוכזת: כפתור, לחיצה מחוץ לחלון, מקש Escape, וסגירה אוטומטית.
+    // בלי אלה החלון נשאר פרוס על כל המסך (z-index 10000) וחוסם כל לחיצה בדף.
+    var __closed = false;
+    var __auto;
+    var __closeCel = function () {
+      if (__closed) return;
+      __closed = true;
+      clearTimeout(__auto);
+      document.removeEventListener('keydown', __onKey);
       div.classList.remove('show');
-      setTimeout(() => div.remove(), 400);
-    });
-    div.addEventListener('click', e => {
-      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
-    });
+      setTimeout(function () { div.remove(); }, 400);
+    };
+    var __onKey = function (e) { if (e.key === 'Escape') __closeCel(); };
+    __auto = setTimeout(__closeCel, 6000);
+    div.querySelector('.gam-celebration-close').addEventListener('click', __closeCel);
+    div.addEventListener('click', function (e) { if (e.target === div) __closeCel(); });
+    document.addEventListener('keydown', __onKey);
   }
   
   function showBadgeUnlock(badge) {
@@ -2216,13 +2332,23 @@ if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
     `;
     document.body.appendChild(div);
     setTimeout(() => div.classList.add('show'), 10);
-    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+    // סגירה מרוכזת: כפתור, לחיצה מחוץ לחלון, מקש Escape, וסגירה אוטומטית.
+    // בלי אלה החלון נשאר פרוס על כל המסך (z-index 10000) וחוסם כל לחיצה בדף.
+    var __closed = false;
+    var __auto;
+    var __closeCel = function () {
+      if (__closed) return;
+      __closed = true;
+      clearTimeout(__auto);
+      document.removeEventListener('keydown', __onKey);
       div.classList.remove('show');
-      setTimeout(() => div.remove(), 400);
-    });
-    div.addEventListener('click', e => {
-      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
-    });
+      setTimeout(function () { div.remove(); }, 400);
+    };
+    var __onKey = function (e) { if (e.key === 'Escape') __closeCel(); };
+    __auto = setTimeout(__closeCel, 6000);
+    div.querySelector('.gam-celebration-close').addEventListener('click', __closeCel);
+    div.addEventListener('click', function (e) { if (e.target === div) __closeCel(); });
+    document.addEventListener('keydown', __onKey);
   }
   
   // ---- UI: Progress Panel ----
@@ -3272,7 +3398,18 @@ if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
             body { background: #fff; }
             .cert-doc { margin: 0; }
           }
-        </style>
+        
+/* ===== הסבר מעמיק אחרי פתרון נכון ===== */
+.why-box{margin-top:11px;padding:11px 13px;border-radius:9px;background:rgba(0,212,200,.07);
+ border:1px solid rgba(0,212,200,.26);font-size:13.5px;line-height:1.8;text-align:right;
+ direction:rtl;font-weight:400}
+.why-box .why-title{font-weight:700;font-size:12px;margin-bottom:5px;opacity:.9}
+.why-box code{background:rgba(0,0,0,.3);padding:1px 5px;border-radius:4px;
+ font-family:ui-monospace,Consolas,monospace;font-size:12.5px;direction:ltr;display:inline-block}
+.why-box pre{background:rgba(0,0,0,.32);border-radius:8px;padding:9px 11px;overflow:auto;
+ direction:ltr;text-align:left;margin:7px 0;font-size:12.5px}
+.why-box ul{margin:6px 0;padding-inline-start:20px}.why-box li{margin:3px 0}
+</style>
       </head>
       <body>
         <div class="cert-print-bar">
