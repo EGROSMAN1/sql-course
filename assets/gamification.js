@@ -324,13 +324,22 @@
     `;
     document.body.appendChild(div);
     setTimeout(() => div.classList.add('show'), 10);
-    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+    // סגירה מרוכזת: כפתור, לחיצה מחוץ לחלון, מקש Escape, וסגירה אוטומטית.
+    // בלי אלה החלון נשאר פרוס על כל המסך וחוסם כל לחיצה בדף.
+    let closed = false;
+    const closeCelebration = () => {
+      if (closed) return;
+      closed = true;
+      clearTimeout(autoTimer);
+      document.removeEventListener('keydown', onKey);
       div.classList.remove('show');
       setTimeout(() => div.remove(), 400);
-    });
-    div.addEventListener('click', e => {
-      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
-    });
+    };
+    const onKey = e => { if (e.key === 'Escape') closeCelebration(); };
+    const autoTimer = setTimeout(closeCelebration, 6000);
+    div.querySelector('.gam-celebration-close').addEventListener('click', closeCelebration);
+    div.addEventListener('click', e => { if (e.target === div) closeCelebration(); });
+    document.addEventListener('keydown', onKey);
   }
   
   function showBadgeUnlock(badge) {
@@ -349,13 +358,22 @@
     `;
     document.body.appendChild(div);
     setTimeout(() => div.classList.add('show'), 10);
-    div.querySelector('.gam-celebration-close').addEventListener('click', () => {
+    // סגירה מרוכזת: כפתור, לחיצה מחוץ לחלון, מקש Escape, וסגירה אוטומטית.
+    // בלי אלה החלון נשאר פרוס על כל המסך וחוסם כל לחיצה בדף.
+    let closed = false;
+    const closeCelebration = () => {
+      if (closed) return;
+      closed = true;
+      clearTimeout(autoTimer);
+      document.removeEventListener('keydown', onKey);
       div.classList.remove('show');
       setTimeout(() => div.remove(), 400);
-    });
-    div.addEventListener('click', e => {
-      if (e.target === div) { div.classList.remove('show'); setTimeout(() => div.remove(), 400); }
-    });
+    };
+    const onKey = e => { if (e.key === 'Escape') closeCelebration(); };
+    const autoTimer = setTimeout(closeCelebration, 6000);
+    div.querySelector('.gam-celebration-close').addEventListener('click', closeCelebration);
+    div.addEventListener('click', e => { if (e.target === div) closeCelebration(); });
+    document.addEventListener('keydown', onKey);
   }
   
   // ---- UI: Progress Panel ----

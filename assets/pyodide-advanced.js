@@ -82,7 +82,7 @@
       
       // Load common packages
       updateStatus(T.loadingPackages);
-      await pyodide.loadPackage(['pandas', 'numpy', 'matplotlib']);
+      await pyodide.loadPackage(['pandas', 'numpy', 'matplotlib', 'scikit-learn']);
       
       // Setup matplotlib backend for browser
       pyodide.runPython(`
