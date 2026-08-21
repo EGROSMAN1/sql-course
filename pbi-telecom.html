@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070a0c">
+<meta name="color-scheme" content="dark">
+<title>מטלת סיכום טלקום — סכמת כוכב ב-Power BI | אלירן גרוסמן</title>
+<meta name="description" content="מטלת סיכום ב-Power BI על מודל טלקום: 29 תרגילים עם פתרונות מלאים — 14 מדדי DAX כולל פונקציות חלון, אחד-עשר עמודי דשבורד ותובנת רווחיות ערוצים.">
+<meta property="og:title" content="מטלת סיכום טלקום — סכמת כוכב">
+<meta property="og:description" content="29 תרגילים עם פתרונות מלאים: 14 מדדי DAX כולל RANK, INDEX ו-WINDOW, אחד-עשר עמודי דשבורד ותובנת רווחיות ערוצים.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+/* overflow guard: a wide child (code line, table, long token) must never widen the column */
+.wrap,.page,.tasks,.task,.sol-body,.practice-box,.kpi{min-width:0}
+.tasks{grid-template-columns:minmax(0,1fr)}
+.page>*,.task>*,.sol-body>*{max-width:100%}
+.mono,.steps code,code{max-width:100%;overflow-wrap:anywhere}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:100%;width:min(1080px,100%);margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;min-width:0;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-home{text-decoration:none}
+
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 1 auto;min-width:0;overflow:hidden;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:right;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:right}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+button.sec-num{background:none;border:0;padding:6px 0;text-align:right;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px;font-size:clamp(.94rem,2.9vw,1.05rem);overflow-wrap:break-word}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (איסוף→ארגון→ניתוח→הצגה / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:right;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+
+/* PHONES: the table stops being a table. Every row becomes a card, every cell a
+   label/value pair (label comes from data-label). No min-width, so nothing can
+   ever force the page wider than the screen — the root cause of the clipping. */
+@media(max-width:620px){
+  .tbl-wrap{overflow-x:visible;border:0;border-radius:0;background:none}
+  table.cmp{display:block;min-width:0;width:100%;font-size:.9rem;border-collapse:separate}
+  table.cmp caption{padding:0 2px 10px;background:none;font-size:.8rem;line-height:1.55}
+  table.cmp thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  table.cmp tbody{display:grid;gap:10px}
+  table.cmp tbody tr{display:block;background:var(--bg-1);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px}
+  table.cmp tbody tr>th[scope="row"]{display:block;background:none;border:0;padding:0 0 9px;
+    margin-bottom:7px;border-bottom:1px solid var(--line);color:var(--fg-1);font-size:.95rem;font-weight:700}
+  table.cmp tbody td{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+    gap:2px 14px;padding:5px 0;border:0;min-width:0}
+  table.cmp tbody td+td{border-top:1px dashed var(--line-soft)}
+  table.cmp tbody td::before{content:attr(data-label);flex:0 0 auto;color:var(--fg-3);
+    font-size:.76rem;font-weight:600;letter-spacing:.01em}
+  table.cmp tbody td:not([data-label])::before{display:none}
+  /* long free-text cells get the label on its own line and the full card width */
+  table.cmp tbody td[data-long]{display:block}
+  table.cmp tbody td[data-long]::before{display:block;margin-bottom:3px}
+  table.cmp tbody td.pbi,table.cmp tbody td.xl{color:var(--fg-1);font-weight:600}
+}
+table.cmp caption{text-align:right;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:right;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:right;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:clamp(1.25rem,5vw,1.6rem);color:var(--pbi);overflow-wrap:break-word}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;max-width:100%;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap;min-width:0;max-width:100%}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;min-width:0;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:clamp(.92rem,2.8vw,1rem);color:var(--fg-2);margin-bottom:12px;overflow-wrap:break-word}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+.dax{font-family:var(--mono);font-size:clamp(.74rem,2.9vw,.82rem);line-height:1.6;background:var(--bg-2);border:1px solid var(--line-soft);
+  border-radius:10px;padding:12px 14px;color:var(--acc);direction:ltr;text-align:left;overflow-x:auto;max-width:100%;
+  white-space:pre;margin-bottom:14px;unicode-bidi:isolate;-webkit-overflow-scrolling:touch}
+@media(max-width:760px){
+  .dax,.code{white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:hidden;font-size:.8rem;padding:12px}
+  .dax{line-height:1.8;padding-inline-start:2.4em;text-indent:-2.2em}
+}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:right;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:right;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4;
+  max-width:100%;overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:420px){.btn{padding:11px 16px;font-size:.9rem;width:100%}}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:right;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* בטלפון הכותרת מצטמצמת לסרגל השיעורים בלבד — עדיין זמין תמיד */
+  :root{--header-h:44px}
+  /* one short row: ☰ · הקודם · כותרת · הבא · שאלות — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+
+/* ---- assignment-specific ---- */
+button.sec-num{background:none;border:0;padding:6px 0;text-align:right;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.ask{display:flex;gap:9px;align-items:flex-start;background:var(--acc-soft);border:1px solid var(--line-strong);
+  border-radius:10px;padding:11px 13px;margin:14px 0 4px;font-size:.9rem;color:var(--fg-2);min-width:0}
+.ask b{color:var(--acc);flex:0 0 auto}
+.hd .brand{white-space:nowrap}
+.aw-back{margin-inline-start:auto;font-size:.82rem;color:var(--fg-3);border:1px solid var(--line);
+  border-radius:999px;padding:6px 12px;white-space:nowrap}
+.aw-back:hover{color:var(--pbi);border-color:var(--pbi-glow)}
+
+/* ============================================================
+   v3 — TRUNCATION POLICY: no label in this document is ever cut.
+   Every rule that used to clip text now wraps it instead; the only
+   exceptions left are the two horizontal rails, which are scrollers.
+   ============================================================ */
+.qnav-b span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.35}
+.qnav-b{padding:11px 12px}
+.dl-t,.mc-row .lbl,.sel-item .nm{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.toc-t{overflow-wrap:anywhere}
+.toc{min-height:0}                     /* flex-column child must be allowed to shrink, or it never scrolls */
+.ask span{min-width:0}
+@media(max-width:620px){
+  /* the topic name gets two full lines instead of an ellipsis */
+  .tb-title{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;line-height:1.25;font-size:.8rem}
+  .tb-chap{display:none}               /* the chapter is already the first line of every topic */
+  .tb-meta{gap:0}
+  .tb-meta .tb-count::before{content:none;margin:0}
+}
+/* numbers, currency and Latin identifiers keep their own direction inside RTL prose */
+[dir="ltr"]{unicode-bidi:isolate}
+/* inner scrollers never hand their momentum back to the page */
+.tbl-wrap,.dax,.code{overscroll-behavior-x:contain}
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+
+
+/* --- header rail: on desktop it wraps instead of being clipped by a hidden scroller,
+       on phones it stays a scroller but with a visible fade affordance --- */
+@media(min-width:701px){
+  header.site{height:auto;min-height:var(--header-h)}
+  header.site .hd{flex-wrap:wrap;height:auto;min-height:var(--header-h);padding-block:7px;row-gap:7px}
+  .lesson-rail{flex-wrap:wrap;overflow:visible;row-gap:6px}
+}
+@media(max-width:700px){
+  .lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent)}
+}
+</style>
+<style id="fixes">
+/* ---- layout fixes only. never edited into the template sheet above ---- */
+@media (max-width:900px){
+  nav.lesson-rail{
+    -webkit-mask-image:linear-gradient(to left,#000 0,#000 84%,rgba(0,0,0,.15) 100%);
+            mask-image:linear-gradient(to left,#000 0,#000 84%,rgba(0,0,0,.15) 100%)}
+}
+@media (max-width:620px){
+  .tb-title{white-space:normal;display:-webkit-box;display:box;
+    -webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;
+    overflow:hidden;text-overflow:clip;line-height:1.3;max-height:3.9em}
+}
+@media (max-width:374px){
+  .tb-title{display:none}
+}
+@media (min-width:621px){
+  .tb-title{white-space:normal;display:-webkit-box;display:box;
+    -webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;text-overflow:clip;line-height:1.35;max-height:2.7em}
+}
+@media (max-width:430px){
+  .pg-name{-webkit-line-clamp:3;line-clamp:3;max-height:4.05em}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">דלג לתוכן הראשי</a>
+<noscript>
+  <style>
+    .page[hidden]{display:block!important}
+    body{display:block;height:auto;overflow:visible}
+    .scroller{overflow:visible;height:auto}
+    .topicbar,.pager,.pg-hint{display:none}
+  </style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">כל 31 עמודי המטלה מוצגים כאן ברצף. פתיחת הפתרונות דורשת JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="לדף הבית של הקורס"><b>SQL</b> עם אלירן</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="ניווט בין שיעורי הקורס">
+        <a class="lr lr-home is-on" href="pbi.html" aria-current="page" title="דף הבית של הפלטפורמה"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>דף הבית</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI בסיס"><b>1</b><span>בסיס</span></a>
+      <a class="lr" href="pbi-course-2.html" title="מודלינג נתונים"><b>2</b><span>מודלינג</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query ו-ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M ו-DAX בסיסי"><b>4</b><span>M ו-DAX</span></a>
+        <span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="לדף הבית של הקורס"><b>↩</b><span>הקורס</span></a><a class="lr lr-x" href="pbi-updates.html" title="עדכוני Power BI החודשיים"><b>◷</b><span>עדכונים</span></a><a class="lr lr-x" href="pbi-quiz.html" title="בנק השאלות המלא"><b>?</b><span>בנק שאלות</span></a><a class="lr lr-x" href="dax-reference.html" title="אינדקס פונקציות DAX"><b>fx</b><span>רפרנס DAX</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="פתיחת רשימת התרגילים">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">תרגילים</span>
+    </button>
+    <a class="tb-home" id="tb-home" href="pbi.html" aria-label="חזרה לדף הבית של פלטפורמת Power BI" title="דף הבית">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">ראשי</span>
+    </a>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">הקודם</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">הבא</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-sum">
+      <span class="tb-quiz-t">לסיכום</span><span class="tb-quiz-s">סיכום</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+
+<section class="page" id="tc-intro" data-chap="מטלת סיכום · טלקום" data-title="טלקום — הכנה ומבנה המטלה"
+ aria-label="מטלת סיכום · טלקום — טלקום — הכנה ומבנה המטלה" hidden>
+  <div class="sec-num">מטלת סיכום · טלקום</div>
+  <h2 class="sec-title">מודל טלקום — הכנה ומבנה המטלה</h2>
+  <p class="sec-sub">שני עמודי דשבורד שכל מספר בהם מגיע ממדד שאתם כותבים מאפס, עם חיווי צבע אוטומטי למצב האזורים. עובדים על <span class="mono" dir="ltr">Telecom_PowerBI_Star.xlsx</span> — סכמת כוכב טהורה: טבלת עובדות אחת, שבעה מימדים, 30,000 שורות ושבעה קשרים. 29 תרגילים, כל אחד בדף נפרד ועם פתרון מלא. שימו לב: ההורדה והתרגול הם <b>במחשב בלבד</b> — Power BI Desktop אינו קיים בטלפון.</p>
+  <div class="practice-cta">
+    <a class="btn" href="assets/Telecom_PowerBI_Star.xlsx" download>הורדת הדאטהסט — Telecom_PowerBI_Star.xlsx</a>
+    <span class="pc-note">8 טבלאות · 30,000 שורות עובדה · 7 קשרים · <b style="color:var(--pbi)">להורדה במחשב בלבד</b></span>
+  </div>
+
+  <div class="kpis" style="margin:22px 0">
+    <div class="kpi"><b><span dir="ltr">2,594,253.85</span></b><span>USD הכנסה מחויבת — מספר העוגן</span></div>
+    <div class="kpi"><b><span dir="ltr">30,000</span></b><span>שורות בטבלת העובדות</span></div>
+    <div class="kpi"><b><span dir="ltr">1,236</span></b><span>לקוחות פעילים</span></div>
+    <div class="kpi"><b>14</b><span>מדדים לכתיבה</span></div>
+  </div>
+
+  <p class="note"><b>הנתונים סינתטיים.</b> שמות המדינות אמיתיים, אבל כל לקוח, חבילה, מכשיר, ערוץ ומספר בקובץ נוצרו באופן מלאכותי עם זרע אקראי קבוע <span class="mono" dir="ltr">20260821</span>. אין להסיק מהם דבר על שוק הטלקום האמיתי.</p>
+  <p class="note"><b>לפני שמתחילים — בניית המודל.</b> הקובץ הוא סכמת כוכב טהורה: טבלת עובדות אחת <span class="mono" dir="ltr">Fact_Usage</span> ושבעה מימדים, וכל מימד מתחבר <b>ישירות</b> אליה. אין קשר מימד-למימד ואין שרשור. סמנו את <span class="mono" dir="ltr">Dim_Date</span> כטבלת תאריכים (<span class="mono" dir="ltr">Mark as date table</span> על <span class="mono" dir="ltr">Full_Date</span>), כבו <span class="mono" dir="ltr">Autodetect</span> ובנו את שבעת הקשרים ידנית, כולם <span class="mono" dir="ltr">Single</span> מהמימד אל העובדה. <span class="mono" dir="ltr">Both</span> כאן מיותר לחלוטין.</p>
+  <p class="note"><b>המלכודת של הקובץ הזה — שורות עם מרווח שלילי בכוונה.</b> בטבלת <span class="mono" dir="ltr">Fact_Usage</span> יש <span dir="ltr">2,824</span> שורות (<span dir="ltr">9.41%</span>) שבהן <span class="mono" dir="ltr">Gross_Margin_USD</span> שלילי — מכשירים מסובסדים וחבילות נדידה שנקנו בעלות סיטונאית גבוהה מהמחיר ללקוח. הן נושאות <span dir="ltr">241,146.59</span> USD הכנסה ומוחקות <span dir="ltr">50,484.13</span> USD מרווח. מדד מרווח כולל מקזז אותן בשקט ומראה <span dir="ltr">889,705.65</span> במקום <span dir="ltr">940,189.78</span>. <b>ההפסד לא נעלם — הוא רק מתחבא בסכימה.</b> תרגיל 3.3 מפרק אותו.</p>
+  <p class="note"><b>עמודה שנראית אדיטיבית ואינה.</b> <span class="mono" dir="ltr">Fact_Usage[Revenue_Per_GB]</span> היא יחס, לא סכום. גרירה שלה עם <span class="mono" dir="ltr">Sum</span> מחזירה <span dir="ltr">1,374,449.63</span> — מספר חסר כל משמעות. תרגיל 3.2 מסביר בדיוק למה, ומה כן עושים.</p>
+  <p class="note"><b>מילון סוגריים.</b> <span class="mono" dir="ltr">Table[Column]</span> = עמודה · <span class="mono">[מדד]</span> = סוגריים מרובעים בלי שם טבלה. לכל מדד: קליק ימני על <span class="mono" dir="ltr">Fact_Usage</span> בחלונית <span class="mono" dir="ltr">Data</span> ← <span class="mono" dir="ltr">New measure</span> ← הנוסחה ← Enter. השם חייב להיות בדיוק כפי שמופיע בתרגיל.</p>
+
+  <h3 style="margin:34px 0 14px">מבנה המטלה</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">חלק 1</span><h3>14 מדדי DAX</h3><p>שני SUM, שני DISTINCTCOUNT, DIVIDE, שני CALCULATE, ALL, IF, שני SWITCH — ושלוש פונקציות חלון: RANK, INDEX ו-WINDOW.</p></div>
+    <div class="card"><span class="tag">חלק 2</span><h3>אחד-עשר עמודי דשבורד</h3><p>מגש KPI, דונאט מול עמודות, Small multiples, פיזור, מד מול יעד, Drill-through, Tooltip, Bookmark, Waterfall, Treemap וניווט.</p></div>
+    <div class="card"><span class="tag">חלק 3</span><h3>צבע, מלכודת ותובנה</h3><p>עיצוב מותנה בשתי טכניקות, שני תרגילי חשיבה על מספרים מטעים, ותובנת הסיום על רווחיות הערוצים.</p></div>
+  </div>
+
+  <h3 style="margin:34px 0 14px">שבעת הקשרים — בדיוק כפי שצריך לבנות אותם</h3>
+  <div class="tbl-wrap"><table class="cmp"><caption>שבעת הקשרים במודל</caption><thead><tr><th scope="col">מימד</th><th scope="col">מפתח</th><th scope="col">קרדינליות</th><th scope="col">כיוון סינון</th></tr></thead><tbody><tr><th scope='row'><span class="mono" dir="ltr">Dim_Date</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Date_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr><tr><th scope='row'><span class="mono" dir="ltr">Dim_Customer</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Customer_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr><tr><th scope='row'><span class="mono" dir="ltr">Dim_Plan</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Plan_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr><tr><th scope='row'><span class="mono" dir="ltr">Dim_Region</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Region_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr><tr><th scope='row'><span class="mono" dir="ltr">Dim_Device</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Device_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr><tr><th scope='row'><span class="mono" dir="ltr">Dim_Channel</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Channel_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr><tr><th scope='row'><span class="mono" dir="ltr">Dim_Service_Type</span></th><td class="pbi" data-label="מפתח"><span class="mono" dir="ltr">Service_Type_ID</span></td><td class="pbi" data-label="קרדינליות">1 : Many</td><td class="pbi" data-label="כיוון סינון">Single</td></tr></tbody></table></div>
+
+  <h3 style="margin:34px 0 14px">האזורים — לוח האימות לפרק I</h3>
+  <div class="tbl-wrap"><table class="cmp"><caption>הכנסה, שכבה ולקוחות לכל אזור</caption><thead><tr><th scope="col">אזור</th><th scope="col">הכנסה USD</th><th scope="col">שכבה</th><th scope="col">לקוחות</th><th scope="col">שורות</th></tr></thead><tbody><tr><th scope='row'>North Metro</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">367,098.76</span></td><td class="pbi" data-label="שכבה">Top</td><td class="pbi" data-label="לקוחות"><span dir="ltr">1,087</span></td><td class="pbi" data-label="שורות"><span dir="ltr">4,277</span></td></tr><tr><th scope='row'>South Metro</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">335,335.68</span></td><td class="pbi" data-label="שכבה">Top</td><td class="pbi" data-label="לקוחות"><span dir="ltr">1,070</span></td><td class="pbi" data-label="שורות"><span dir="ltr">3,772</span></td></tr><tr><th scope='row'>Thames Corridor</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">282,052.63</span></td><td class="pbi" data-label="שכבה">Top</td><td class="pbi" data-label="לקוחות"><span dir="ltr">1,030</span></td><td class="pbi" data-label="שורות"><span dir="ltr">3,311</span></td></tr><tr><th scope='row'>West Valley</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">268,760.12</span></td><td class="pbi" data-label="שכבה">Top</td><td class="pbi" data-label="לקוחות"><span dir="ltr">993</span></td><td class="pbi" data-label="שורות"><span dir="ltr">2,991</span></td></tr><tr><th scope='row'>Rhine Belt</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">253,778.56</span></td><td class="pbi" data-label="שכבה">Top</td><td class="pbi" data-label="לקוחות"><span dir="ltr">994</span></td><td class="pbi" data-label="שורות"><span dir="ltr">2,989</span></td></tr><tr><th scope='row'>East Coastal</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">250,554.98</span></td><td class="pbi" data-label="שכבה">Top</td><td class="pbi" data-label="לקוחות"><span dir="ltr">980</span></td><td class="pbi" data-label="שורות"><span dir="ltr">2,942</span></td></tr><tr><th scope='row'>Pacific Rim</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">216,630.96</span></td><td class="pbi" data-label="שכבה">Mid</td><td class="pbi" data-label="לקוחות"><span dir="ltr">935</span></td><td class="pbi" data-label="שורות"><span dir="ltr">2,542</span></td></tr><tr><th scope='row'>Northern Lakes</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">188,973.52</span></td><td class="pbi" data-label="שכבה">Mid</td><td class="pbi" data-label="לקוחות"><span dir="ltr">861</span></td><td class="pbi" data-label="שורות"><span dir="ltr">2,061</span></td></tr><tr><th scope='row'>Iberian Coast</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">155,388.98</span></td><td class="pbi" data-label="שכבה">Mid</td><td class="pbi" data-label="לקוחות"><span dir="ltr">825</span></td><td class="pbi" data-label="שורות"><span dir="ltr">1,794</span></td></tr><tr><th scope='row'>Central Plains</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">125,991.31</span></td><td class="pbi" data-label="שכבה">Low</td><td class="pbi" data-label="לקוחות"><span dir="ltr">783</span></td><td class="pbi" data-label="שורות"><span dir="ltr">1,560</span></td></tr><tr><th scope='row'>Alpine South</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">81,044.73</span></td><td class="pbi" data-label="שכבה">Low</td><td class="pbi" data-label="לקוחות"><span dir="ltr">578</span></td><td class="pbi" data-label="שורות"><span dir="ltr">893</span></td></tr><tr><th scope='row'>Highland West</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">68,643.62</span></td><td class="pbi" data-label="שכבה">Low</td><td class="pbi" data-label="לקוחות"><span dir="ltr">559</span></td><td class="pbi" data-label="שורות"><span dir="ltr">868</span></td></tr></tbody></table></div>
+
+  <div class="practice-cta" style="margin-top:26px">
+    <button type="button" class="btn" data-goto="tc-1-1">לתרגיל הראשון — 1.1 Total Billed Revenue ←</button>
+    <span class="pc-note">כל המספרים אומתו ב-pandas מול הקובץ</span>
+  </div>
+</section>
+
+<section class="page" id="tc-1-1" data-chap="פרק I · מדדי בסיס" data-title="1.1 · Total Billed Revenue"
+ aria-label="פרק I · מדדי בסיס — 1.1 · Total Billed Revenue" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.1 · Total Billed Revenue — מדד העוגן</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Total Billed Revenue</b> שמסכם את <span class="mono" dir="ltr">Fact_Usage[Billed_Amount_USD]</span>. עצבו עם מפריד אלפים ושתי ספרות אחרי הנקודה.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Total Billed Revenue =
+SUM ( Fact_Usage[Billed_Amount_USD] )</pre><ol class='steps'><li><b>יצירה</b><span>קליק ימני על <code>Fact_Usage</code> ← <code>New measure</code></span></li><li><b>עיצוב</b><span><code>Format</code> ← <code>Currency</code> ← שתי ספרות</span></li><li><b>בדיקה</b><span>גררו לקארד ריק כדי לוודא שהמספר מופיע</span></li></ol><p class="task-q"><b>למה זה מדד ולא עמודה:</b> עמודה מחושבת הייתה נשמרת פעם אחת לכל שורה מתוך 30,000 ולא הייתה יודעת להגיב לסלייסר. מדד מחושב מחדש בכל תא של כל ויזואל, לפי בועת הסינון שהתא הזה מייצר. זה ההבדל היחיד שחשוב באמת.</p><p class="sol-check">תוצאה: <b><span dir="ltr">2,594,253.85</span></b> USD — מספר העוגן של כל המטלה.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-2" data-chap="פרק I · מדדי בסיס" data-title="1.2 · Total Gross Margin"
+ aria-label="פרק I · מדדי בסיס — 1.2 · Total Gross Margin" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.2 · Total Gross Margin — ה-SUM השני</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Total Gross Margin</b> שמסכם את <span class="mono" dir="ltr">Fact_Usage[Gross_Margin_USD]</span>. שימו לב שזו עמודה <b>אחרת</b> מזו של תרגיל 1.1.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Total Gross Margin =
+SUM ( Fact_Usage[Gross_Margin_USD] )</pre><p class="task-q"><b>העמודה נגזרת, לא הומצאה:</b> <span class="mono" dir="ltr">Gross_Margin_USD = Billed_Amount_USD - Service_Cost_USD</span> בכל אחת מ-30,000 השורות. לכן <span dir="ltr">2,594,253.85</span> פחות <span dir="ltr">1,704,548.20</span> שווה בדיוק <span dir="ltr">889,705.65</span>. אם אצלכם יוצא אחרת — הטעינה שברה משהו, לא המודל.</p><p class="task-q"><b>אזהרה מוקדמת:</b> המרווח הכולל הזה כבר מקזז בתוכו <span dir="ltr">2,824</span> שורות הפסד. תרגיל 3.3 מפרק אותן.</p><p class="sol-check">תוצאה: <b><span dir="ltr">889,705.65</span></b> USD — <span dir="ltr">34.3%</span> מההכנסה.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-3" data-chap="פרק I · מדדי בסיס" data-title="1.3 · Active Customers"
+ aria-label="פרק I · מדדי בסיס — 1.3 · Active Customers" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.3 · Active Customers — כמה לקוחות באמת</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Active Customers</b> שסופר לקוחות <b>ייחודיים</b> על בסיס <span class="mono" dir="ltr">Fact_Usage[Customer_ID]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Active Customers =
+DISTINCTCOUNT ( Fact_Usage[Customer_ID] )</pre><p class="task-q"><b>למה לא COUNT:</b> <span class="mono" dir="ltr">COUNT(Customer_ID)</span> היה מחזיר <span dir="ltr">30,000</span> — הוא סופר שורות שיש בהן ערך, לא ערכים ייחודיים. כל לקוח נושא <span dir="ltr">24.3</span> שורות שימוש בממוצע, ולכן <span dir="ltr">30,000</span> ÷ <span dir="ltr">1,236</span> ≈ <span dir="ltr">24.3</span>.</p><p class="sol-check">תוצאה: <b><span dir="ltr">1,236</span></b> לקוחות פעילים.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-4" data-chap="פרק I · מדדי בסיס" data-title="1.4 · Devices In Use"
+ aria-label="פרק I · מדדי בסיס — 1.4 · Devices In Use" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.4 · Devices In Use — ה-DISTINCTCOUNT השני</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Devices In Use</b> שסופר דגמי מכשיר ייחודיים על בסיס <span class="mono" dir="ltr">Fact_Usage[Device_ID]</span> — עמודה אחרת מזו של תרגיל 1.3. המדד משרת את ה-Treemap בתרגיל 2.10.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Devices In Use =
+DISTINCTCOUNT ( Fact_Usage[Device_ID] )</pre><p class="task-q"><b>שימו לב לרמת הפירוט:</b> המדד סופר דגמים, לא יחידות פיזיות. <span class="mono" dir="ltr">Dim_Device</span> מכילה <span dir="ltr">48</span> דגמים וכולם מופיעים בעובדות, ולכן ברמת הסך הכל המדד מחזיר בדיוק את מספר השורות במימד. ברגע שמסננים אזור או תקופה המספר יורד — וזה בדיוק מה שהופך אותו למדד שימושי.</p><p class="sol-check">תוצאה: <b><span dir="ltr">48</span></b> דגמי מכשיר.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-5" data-chap="פרק I · מדדי בסיס" data-title="1.5 · Revenue per Customer"
+ aria-label="פרק I · מדדי בסיס — 1.5 · Revenue per Customer" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.5 · Revenue per Customer — עקרון הלגו</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Revenue per Customer</b> — אך ורק משני המדדים הקיימים, בלי סימן החלוקה / ובלי AVERAGE. עצבו לשתי ספרות.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Revenue per Customer =
+DIVIDE ( [Total Billed Revenue],
+         [Active Customers] )</pre><p class="task-q"><b>ממוצע של מה:</b> <span class="mono" dir="ltr">AVERAGE(Billed_Amount_USD)</span> היה מחזיר את הממוצע לשורת שימוש (<span dir="ltr">86.48</span> USD), לא ללקוח. כשהמדד בנוי משני מדדים קיימים המכנה מוגדר במפורש ואתם יודעים בדיוק מה חילקתם. <span class="mono" dir="ltr">DIVIDE</span> עדיף על / כי הוא מחזיר ריק במקום שגיאה כשהמכנה אפס.</p><p class="task-q"><b>המדד מתגלגל אוטומטית לכל הקשר:</b> גררו אותו לטבלת האזורים והוא יחזיר את ה-ARPU של כל אזור בנפרד — בלי לכתוב שורה נוספת.</p><p class="sol-check">תוצאה: <b><span dir="ltr">2,098.91</span></b> USD ללקוח.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-6" data-chap="פרק I · מדדי בסיס" data-title="1.6 · Postpaid Revenue"
+ aria-label="פרק I · מדדי בסיס — 1.6 · Postpaid Revenue" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.6 · Postpaid Revenue — CALCULATE ראשון</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Postpaid Revenue</b> שמחזיר את ההכנסה מחבילות פוסטפייד בלבד. השתמשו ב-CALCULATE עם <span class="mono" dir="ltr">[Total Billed Revenue]</span> כביטוי, ותנאי על <span class="mono" dir="ltr">Dim_Plan[Plan_Type]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Postpaid Revenue =
+CALCULATE (
+    [Total Billed Revenue],
+    Dim_Plan[Plan_Type] = &quot;Postpaid&quot;
+)</pre><p class="task-q"><b>מה קורה כאן:</b> CALCULATE מוסיפה את התנאי לבועת הסינון ורק אז מריצה את <span class="mono" dir="ltr">[Total Billed Revenue]</span>. הפילטר יושב על עמודת טקסט בטבלת המימד, זורם דרך הקשר <span class="mono" dir="ltr">Dim_Plan[Plan_ID] → Fact_Usage[Plan_ID]</span> ומשם אל שורות העובדה — בלי שום JOIN.</p><div class="tbl-wrap"><table class="cmp"><caption>הכנסה לפי סוג חבילה</caption><thead><tr><th scope="col">סוג חבילה</th><th scope="col">הכנסה USD</th><th scope="col">אחוז</th></tr></thead><tbody><tr><th scope='row'>Postpaid</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">1,742,988.22</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">67.19%</span></td></tr><tr><th scope='row'>Business</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">681,426.86</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">26.27%</span></td></tr><tr><th scope='row'>Prepaid</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">169,838.77</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">6.55%</span></td></tr></tbody></table></div><p class="sol-check">תוצאה: <b><span dir="ltr">1,742,988.22</span></b> USD — <span dir="ltr">67.19%</span> מכלל ההכנסה.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-7" data-chap="פרק I · מדדי בסיס" data-title="1.7 · Core Services Revenue"
+ aria-label="פרק I · מדדי בסיס — 1.7 · Core Services Revenue" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.7 · Core Services Revenue — CALCULATE עם IN</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Core Services Revenue</b> שמחזיר את ההכנסה משלושה שירותי ליבה בלבד: <span class="mono" dir="ltr">Mobile Data</span>, <span class="mono" dir="ltr">Fiber Broadband</span> ו-<span class="mono" dir="ltr">IPTV</span>. השתמשו באופרטור <span class="mono" dir="ltr">IN { }</span> ולא בשלושה תנאי OR.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Core Services Revenue =
+CALCULATE (
+    [Total Billed Revenue],
+    Dim_Service_Type[Service_Name] IN {
+        &quot;Mobile Data&quot;,
+        &quot;Fiber Broadband&quot;,
+        &quot;IPTV&quot;
+    }
+)</pre><p class="task-q"><b>למה IN ולא OR:</b> שלושה תנאי <span class="mono" dir="ltr">||</span> על אותה עמודה עובדים, אבל הם מתרחבים לשלושה פילטרים נפרדים שהמנוע חייב לאחד. <span class="mono" dir="ltr">IN { }</span> מייצר רשימת ערכים אחת — קצר יותר, מהיר יותר, וקל להוסיף לו ערך רביעי בלי לגעת בלוגיקה.</p><p class="task-q"><b>המלכודת בסוגריים המסולסלים:</b> <span class="mono" dir="ltr">{ }</span> ב-DAX הוא בנאי טבלה, לא רשימה. אם תכתבו שם ערך שלא קיים בעמודה — לא תקבלו שגיאה, פשוט תקבלו פחות הכנסה. בדקו את האיות מול <span class="mono" dir="ltr">Dim_Service_Type</span> לפני שאתם מאשימים את המדד.</p><div class="tbl-wrap"><table class="cmp"><caption>שלושת שירותי הליבה</caption><thead><tr><th scope="col">שירות</th><th scope="col">הכנסה USD</th></tr></thead><tbody><tr><th scope='row'>Mobile Data</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">768,275.52</span></td></tr><tr><th scope='row'>Fiber Broadband</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">437,010.40</span></td></tr><tr><th scope='row'>IPTV</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">260,392.29</span></td></tr><tr><th scope='row'><b>Core Services Revenue</b></th><td class="pbi" data-label="הכנסה USD"><b><span dir="ltr">1,465,678.21</span></b></td></tr></tbody></table></div><p class="sol-check">תוצאה: <b><span dir="ltr">1,465,678.21</span></b> USD — <span dir="ltr">56.5%</span> מכלל ההכנסה.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-8" data-chap="פרק I · מדדי בסיס" data-title="1.8 · Pct of All Usage"
+ aria-label="פרק I · מדדי בסיס — 1.8 · Pct of All Usage" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.8 · Pct of All Usage — ALL ואחוז מכלל העובדות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Pct of All Usage</b> שמחזיר את חלקה של השורה הנוכחית מתוך <b>כל</b> ההכנסה בטבלת העובדות. הציגו אותו בטבלה לפי <span class="mono" dir="ltr">Dim_Service_Type[Service_Name]</span> ובדקו שהעמודה מסתכמת ל-100%.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Pct of All Usage =
+DIVIDE (
+    [Total Billed Revenue],
+    CALCULATE (
+        [Total Billed Revenue],
+        ALL ( Fact_Usage ),
+        ALL ( Dim_Service_Type )
+    )
+)</pre><p class="task-q"><b>למה שני ALL ולא אחד — זו הנקודה של התרגיל:</b> <span class="mono" dir="ltr">ALL ( Fact_Usage )</span> מנקה פילטרים שיושבים על עמודות טבלת העובדות. הוא <b>לא</b> מנקה פילטר שהגיע מ-<span class="mono" dir="ltr">Dim_Service_Type</span> וזרם פנימה דרך הקשר. אם תשאירו רק את ה-ALL הראשון, המונה והמכנה יהיו זהים בכל שורה והמדד יחזיר <span dir="ltr">100.00%</span> בכל שורה — וזו הטעות הנפוצה ביותר במדד הזה.</p><p class="task-q"><b>בדיקת שפיות מיידית:</b> אם סכום העמודה בטבלה אינו בדיוק <span dir="ltr">100.00%</span> — המכנה לא באמת השתחרר. זו הבדיקה היחידה שצריך.</p><div class="tbl-wrap"><table class="cmp"><caption>אחוז ההכנסה לכל שירות</caption><thead><tr><th scope="col">שירות</th><th scope="col">הכנסה USD</th><th scope="col">אחוז מהכל</th></tr></thead><tbody><tr><th scope='row'>Mobile Data</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">768,275.52</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">29.61%</span></td></tr><tr><th scope='row'>Roaming Package</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">513,156.72</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">19.78%</span></td></tr><tr><th scope='row'>Fiber Broadband</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">437,010.40</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">16.85%</span></td></tr><tr><th scope='row'>IPTV</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">260,392.29</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">10.04%</span></td></tr><tr><th scope='row'>Device Instalment</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">228,696.21</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">8.82%</span></td></tr><tr><th scope='row'>Cloud Storage</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">149,152.69</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">5.75%</span></td></tr><tr><th scope='row'>Voice Domestic</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">125,399.74</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">4.83%</span></td></tr><tr><th scope='row'>SMS Messaging</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">58,374.38</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">2.25%</span></td></tr><tr><th scope='row'>Voice International</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">53,795.90</span></td><td class="pbi" data-label="אחוז מהכל"><span dir="ltr">2.07%</span></td></tr><tr><th scope='row'><b>Total</b></th><td class="pbi" data-label="הכנסה USD"><b><span dir="ltr">2,594,253.85</span></b></td><td class="pbi" data-label="אחוז מהכל"><b><span dir="ltr">100.00%</span></b></td></tr></tbody></table></div><p class="sol-check">תוצאה: המוביל <b>Mobile Data</b> עם <b><span dir="ltr">29.61%</span></b>; העמודה מסתכמת ל-<span dir="ltr">100.00%</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-9" data-chap="פרק I · מדדי בסיס" data-title="1.9 · Margin Status"
+ aria-label="פרק I · מדדי בסיס — 1.9 · Margin Status" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.9 · Margin Status — IF מול נקודת איזון מחושבת</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד טקסט בשם <b dir="ltr">Margin Status</b> שמשווה את ההכנסה לנקודת האיזון — כלומר לעלות השירות באותו הקשר — ומחזיר <span class="mono" dir="ltr">Above Break-Even</span> או <span class="mono" dir="ltr">Below Break-Even</span>. נקודת האיזון חייבת להיות <b>מחושבת</b> בתוך המדד, לא מספר קשיח.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Margin Status =
+VAR BreakEven =
+    SUM ( Fact_Usage[Service_Cost_USD] )
+VAR Revenue = [Total Billed Revenue]
+RETURN
+IF (
+    Revenue &gt;= BreakEven,
+    &quot;Above Break-Even&quot;,
+    &quot;Below Break-Even&quot;
+)</pre><p class="task-q"><b>למה VAR ולא לכתוב את הסכום פעמיים:</b> VAR מחושב פעם אחת לכל תא ואז נעשה בו שימוש חוזר. זה גם מהיר יותר וגם מונע את הטעות הקלאסית שבה מישהו משנה את הנוסחה במקום אחד ושוכח את השני.</p><p class="task-q"><b>נקודת האיזון זזה עם ההקשר:</b> ברמת הסך הכל היא <span dir="ltr">1,704,548.20</span> USD, ובכל שורת שירות היא העלות של אותו שירות בלבד. זה בדיוק ההבדל בין מדד לבין מספר קשיח — מספר קשיח היה מסמן הכול כרווחי או הכול כהפסדי.</p><div class="tbl-wrap"><table class="cmp"><caption>נקודת איזון לכל שירות</caption><thead><tr><th scope="col">שירות</th><th scope="col">הכנסה USD</th><th scope="col">עלות USD</th><th scope="col">Margin Status</th></tr></thead><tbody><tr><th scope='row'>Mobile Data</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">768,275.52</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">414,499.34</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>Roaming Package</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">513,156.72</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">411,929.20</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>Fiber Broadband</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">437,010.40</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">233,766.61</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>IPTV</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">260,392.29</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">186,268.21</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>Device Instalment</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">228,696.21</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">264,819.00</span></td><td class="pbi" data-label="Margin Status">Below Break-Even</td></tr><tr><th scope='row'>Cloud Storage</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">149,152.69</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">68,839.97</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>Voice Domestic</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">125,399.74</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">60,184.93</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>SMS Messaging</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">58,374.38</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">25,012.54</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr><tr><th scope='row'>Voice International</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">53,795.90</span></td><td class="pbi" data-label="עלות USD"><span dir="ltr">39,228.40</span></td><td class="pbi" data-label="Margin Status">Above Break-Even</td></tr></tbody></table></div><p class="sol-check">תוצאה: <b><span dir="ltr">8</span></b> שירותים מעל נקודת האיזון ו-<b><span dir="ltr">1</span></b> מתחתיה (Device Instalment). ברמת הערוצים: <span dir="ltr">8</span> מעל, <span dir="ltr">0</span> מתחת.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-10" data-chap="פרק I · מדדי בסיס" data-title="1.10 · Region Tier"
+ aria-label="פרק I · מדדי בסיס — 1.10 · Region Tier" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.10 · Region Tier — SWITCH ( TRUE ( ) )</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Region Tier</b> שמחלק אזורים לשלוש שכבות לפי ההכנסה: <span class="mono" dir="ltr">Top</span> מ-250,000 USD ומעלה, <span class="mono" dir="ltr">Mid</span> מ-150,000 ומעלה, וכל השאר <span class="mono" dir="ltr">Low</span>. השתמשו ב-SWITCH ( TRUE ( ) ) ולא ב-IF מקונן.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Region Tier =
+VAR Revenue = [Total Billed Revenue]
+RETURN
+SWITCH (
+    TRUE (),
+    Revenue &gt;= 250000, &quot;Top&quot;,
+    Revenue &gt;= 150000, &quot;Mid&quot;,
+    &quot;Low&quot;
+)</pre><p class="task-q"><b>למה SWITCH ( TRUE ( ) ):</b> הוא קורא את התנאים מלמעלה למטה ועוצר בראשון שמתקיים, בדיוק כמו IF מקונן — אבל בלי קינון. הוספת שכבה רביעית היא שורה אחת, ולא ניתוח מחדש של סוגריים.</p><p class="task-q"><b>הסדר הוא הלוגיקה:</b> אם תהפכו את שתי השורות ותשימו <span class="mono" dir="ltr">150000</span> ראשון, כל אזור מעל 250,000 יקבל <span class="mono" dir="ltr">Mid</span> — כי הוא עונה גם על התנאי הרופף יותר. אין שגיאה, יש רק תוצאה שקטה ושגויה.</p><div class="tbl-wrap"><table class="cmp"><caption>שכבת ההכנסה לכל אזור</caption><thead><tr><th scope="col">אזור</th><th scope="col">הכנסה USD</th><th scope="col">שכבה</th></tr></thead><tbody><tr><th scope='row'>North Metro</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">367,098.76</span></td><td class="pbi" data-label="שכבה">Top</td></tr><tr><th scope='row'>South Metro</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">335,335.68</span></td><td class="pbi" data-label="שכבה">Top</td></tr><tr><th scope='row'>Thames Corridor</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">282,052.63</span></td><td class="pbi" data-label="שכבה">Top</td></tr><tr><th scope='row'>West Valley</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">268,760.12</span></td><td class="pbi" data-label="שכבה">Top</td></tr><tr><th scope='row'>Rhine Belt</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">253,778.56</span></td><td class="pbi" data-label="שכבה">Top</td></tr><tr><th scope='row'>East Coastal</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">250,554.98</span></td><td class="pbi" data-label="שכבה">Top</td></tr><tr><th scope='row'>Pacific Rim</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">216,630.96</span></td><td class="pbi" data-label="שכבה">Mid</td></tr><tr><th scope='row'>Northern Lakes</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">188,973.52</span></td><td class="pbi" data-label="שכבה">Mid</td></tr><tr><th scope='row'>Iberian Coast</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">155,388.98</span></td><td class="pbi" data-label="שכבה">Mid</td></tr><tr><th scope='row'>Central Plains</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">125,991.31</span></td><td class="pbi" data-label="שכבה">Low</td></tr><tr><th scope='row'>Alpine South</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">81,044.73</span></td><td class="pbi" data-label="שכבה">Low</td></tr><tr><th scope='row'>Highland West</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">68,643.62</span></td><td class="pbi" data-label="שכבה">Low</td></tr></tbody></table></div><p class="sol-check">תוצאה: <b><span dir="ltr">6</span></b> אזורים <span class="mono" dir="ltr">Top</span> · <b><span dir="ltr">3</span></b> <span class="mono" dir="ltr">Mid</span> · <b><span dir="ltr">3</span></b> <span class="mono" dir="ltr">Low</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-11" data-chap="פרק I · מדדי בסיס" data-title="1.11 · Tier Color"
+ aria-label="פרק I · מדדי בסיס — 1.11 · Tier Color" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.11 · Tier Color — SWITCH על ערך</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Tier Color</b> שמקבל את התוצאה של <span class="mono" dir="ltr">[Region Tier]</span> ומחזיר קוד הקסה: <span class="mono" dir="ltr">Top</span> ← <span class="mono" dir="ltr">#132449</span>, <span class="mono" dir="ltr">Mid</span> ← <span class="mono" dir="ltr">#F5C518</span>, כל השאר ← <span class="mono" dir="ltr">#A9B4CC</span>. זהו SWITCH על <b>ערך</b>, לא על TRUE ( ).</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Tier Color =
+SWITCH (
+    [Region Tier],
+    &quot;Top&quot;, &quot;#132449&quot;,
+    &quot;Mid&quot;, &quot;#F5C518&quot;,
+    &quot;#A9B4CC&quot;
+)</pre><p class="task-q"><b>שתי צורות של אותה פונקציה:</b> ב-1.10 הארגומנט הראשון היה <span class="mono" dir="ltr">TRUE ()</span> וכל זוג היה תנאי-ותוצאה. כאן הארגומנט הראשון הוא ביטוי, וכל זוג הוא ערך-ותוצאה — השוואת שוויון פשוטה. הארגומנט האחרון בלי בן זוג הוא תמיד ברירת המחדל.</p><p class="task-q"><b>המדד הזה לא מיועד לעין:</b> הוא מיועד ל-<span class="mono" dir="ltr">Conditional formatting</span> ← <span class="mono" dir="ltr">Field value</span>. גררו אותו לטבלה כדי לוודא שהוא מחזיר מחרוזות תקינות, ואז הסתירו את העמודה. תרגיל 3.1 מחבר אותו בפועל.</p><div class="tbl-wrap"><table class="cmp"><caption>פלטת הצבעים</caption><thead><tr><th scope="col">שכבה</th><th scope="col">קוד הקסה</th></tr></thead><tbody><tr><th scope='row'>Top</th><td class="pbi" data-label="קוד הקסה"><span class="mono" dir="ltr">#132449</span></td></tr><tr><th scope='row'>Mid</th><td class="pbi" data-label="קוד הקסה"><span class="mono" dir="ltr">#F5C518</span></td></tr><tr><th scope='row'>Low</th><td class="pbi" data-label="קוד הקסה"><span class="mono" dir="ltr">#A9B4CC</span></td></tr></tbody></table></div><p class="sol-check">תוצאה: שלוש מחרוזות הקסה תקינות — <span class="mono" dir="ltr">#132449</span> · <span class="mono" dir="ltr">#F5C518</span> · <span class="mono" dir="ltr">#A9B4CC</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-12" data-chap="פרק I · מדדי בסיס" data-title="1.12 · Region Rank"
+ aria-label="פרק I · מדדי בסיס — 1.12 · Region Rank" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.12 · Region Rank by Customers — RANK</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Region Rank by Customers</b> שמדרג אזורים לפי <b>מספר הלקוחות</b> (לא לפי הכנסה), מהגבוה לנמוך, בדירוג צפוף. השתמשו ב-RANK עם ORDERBY.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Region Rank by Customers =
+RANK (
+    DENSE,
+    ALLSELECTED ( Dim_Region ),
+    ORDERBY ( [Active Customers], DESC )
+)</pre><p class="task-q"><b>שלושת החלקים של RANK:</b> <span class="mono" dir="ltr">DENSE</span> קובע שאין קפיצות במספור, <span class="mono" dir="ltr">ALLSELECTED ( Dim_Region )</span> מגדיר את קבוצת ההשוואה — כל האזורים שהסלייסר השאיר על המסך — ו-<span class="mono" dir="ltr">ORDERBY</span> קובע לפי מה ממיינים. בלי הארגומנט השני כל שורה תדרג את עצמה מול עצמה ותקבל 1.</p><p class="task-q"><b>למה ALLSELECTED ולא ALL:</b> <span class="mono" dir="ltr">ALL</span> היה מתעלם גם מהסלייסר, וכך אזור שסוננה החוצה עדיין היה תופס מקום בדירוג. <span class="mono" dir="ltr">ALLSELECTED</span> מדרג בתוך מה שהמשתמש באמת רואה — וזה כמעט תמיד מה שרוצים בדשבורד.</p><div class="tbl-wrap"><table class="cmp"><caption>דירוג לפי מספר לקוחות</caption><thead><tr><th scope="col">אזור</th><th scope="col">לקוחות</th><th scope="col">דירוג</th></tr></thead><tbody><tr><th scope='row'>North Metro</th><td class="pbi" data-label="לקוחות"><span dir="ltr">1,087</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">1</span></td></tr><tr><th scope='row'>South Metro</th><td class="pbi" data-label="לקוחות"><span dir="ltr">1,070</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">2</span></td></tr><tr><th scope='row'>Thames Corridor</th><td class="pbi" data-label="לקוחות"><span dir="ltr">1,030</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">3</span></td></tr><tr><th scope='row'>Rhine Belt</th><td class="pbi" data-label="לקוחות"><span dir="ltr">994</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">4</span></td></tr><tr><th scope='row'>West Valley</th><td class="pbi" data-label="לקוחות"><span dir="ltr">993</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">5</span></td></tr><tr><th scope='row'>East Coastal</th><td class="pbi" data-label="לקוחות"><span dir="ltr">980</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">6</span></td></tr><tr><th scope='row'>Pacific Rim</th><td class="pbi" data-label="לקוחות"><span dir="ltr">935</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">7</span></td></tr><tr><th scope='row'>Northern Lakes</th><td class="pbi" data-label="לקוחות"><span dir="ltr">861</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">8</span></td></tr><tr><th scope='row'>Iberian Coast</th><td class="pbi" data-label="לקוחות"><span dir="ltr">825</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">9</span></td></tr><tr><th scope='row'>Central Plains</th><td class="pbi" data-label="לקוחות"><span dir="ltr">783</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">10</span></td></tr><tr><th scope='row'>Alpine South</th><td class="pbi" data-label="לקוחות"><span dir="ltr">578</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">11</span></td></tr><tr><th scope='row'>Highland West</th><td class="pbi" data-label="לקוחות"><span dir="ltr">559</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">12</span></td></tr></tbody></table></div><p class="sol-check">תוצאה: <b>North Metro</b> במקום <span dir="ltr">1</span> עם <span dir="ltr">1,087</span> לקוחות · <b>Highland West</b> במקום <span dir="ltr">12</span> עם <span dir="ltr">559</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-13" data-chap="פרק I · מדדי בסיס" data-title="1.13 · Top Margin Channel"
+ aria-label="פרק I · מדדי בסיס — 1.13 · Top Margin Channel" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.13 · Top Margin Channel Rev — INDEX</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Top Margin Channel Rev</b> שמחזיר את ההכנסה של הערוץ עם <b>המרווח הגבוה ביותר</b> — אותו מספר בכל שורה של הטבלה, כדי שאפשר יהיה להשוות אליו. השתמשו ב-INDEX עם ORDERBY.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Top Margin Channel Rev =
+VAR TopRow =
+    INDEX (
+        1,
+        ALLSELECTED ( Dim_Channel ),
+        ORDERBY (
+            [Total Gross Margin], DESC
+        )
+    )
+RETURN
+CALCULATE (
+    [Total Billed Revenue],
+    TopRow
+)</pre><p class="task-q"><b>INDEX מחזיר שורה, לא מספר:</b> <span class="mono" dir="ltr">INDEX ( 1, ... )</span> בוחר את השורה הראשונה במיון שהגדרתם ומחזיר טבלה בת שורה אחת. כדי לקבל ממנה מספר צריך להזין אותה כפילטר ל-CALCULATE — וזו הסיבה שהמדד בנוי בשני שלבים.</p><p class="task-q"><b>המיון הוא לפי מרווח, הפלט הוא הכנסה:</b> וזו בדיוק הנקודה. הערוץ שמוביל במרווח הוא <b>Web Self Service</b> עם <span dir="ltr">203,233.89</span> USD מרווח, ואילו הערוץ שמוביל בהכנסה הוא <b>Authorised Dealer</b> עם <span dir="ltr">518,340.19</span> USD. שני מובילים שונים — תרגיל 3.4 חוזר לזה.</p><div class="tbl-wrap"><table class="cmp"><caption>הכנסה ומרווח לכל ערוץ</caption><thead><tr><th scope="col">ערוץ</th><th scope="col">הכנסה USD</th><th scope="col">מרווח USD</th><th scope="col">שיעור מרווח</th></tr></thead><tbody><tr><th scope='row'>Web Self Service</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">409,216.29</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">203,233.89</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">49.66%</span></td></tr><tr><th scope='row'>Mobile App</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">369,873.34</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">179,382.20</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">48.5%</span></td></tr><tr><th scope='row'>Authorised Dealer</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">518,340.19</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">136,924.32</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">26.42%</span></td></tr><tr><th scope='row'>Own Retail Store</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">353,217.67</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">130,295.07</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">36.89%</span></td></tr><tr><th scope='row'>Inbound Call Center</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">240,639.08</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">95,938.14</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">39.87%</span></td></tr><tr><th scope='row'>Retail Chain</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">289,874.03</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">65,925.50</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">22.74%</span></td></tr><tr><th scope='row'>Online Marketplace</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">256,111.85</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">54,088.01</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">21.12%</span></td></tr><tr><th scope='row'>Field Sales Agency</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">156,981.40</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">23,918.52</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">15.24%</span></td></tr></tbody></table></div><p class="sol-check">תוצאה: <b><span dir="ltr">409,216.29</span></b> USD בכל שורה — ההכנסה של Web Self Service.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-1-14" data-chap="פרק I · מדדי בסיס" data-title="1.14 · Trailing Avg"
+ aria-label="פרק I · מדדי בסיס — 1.14 · Trailing Avg" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.14 · Trailing Avg Excl Current — WINDOW</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir="ltr">Trailing Avg Excl Current</b> שמחזיר את ממוצע ההכנסה של <b>שלושת החודשים שקדמו</b> לחודש הנוכחי — בלי לכלול את החודש הנוכחי עצמו. השתמשו ב-WINDOW עם ORDERBY על <span class="mono" dir="ltr">Dim_Date[Month_Key]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Trailing Avg Excl Current =
+AVERAGEX (
+  WINDOW (
+    -3, REL, -1, REL,
+    ALLSELECTED ( Dim_Date[Month_Key] ),
+    ORDERBY ( Dim_Date[Month_Key], ASC )
+  ),
+  [Total Billed Revenue]
+)</pre><p class="task-q"><b>קריאת הגבולות:</b> <span class="mono" dir="ltr">-3, REL</span> הוא שלוש שורות אחורה מהשורה הנוכחית, <span class="mono" dir="ltr">-1, REL</span> הוא שורה אחת אחורה. החלון נעצר <b>לפני</b> החודש הנוכחי, ולכן הממוצע לא כולל אותו. אם תכתבו <span class="mono" dir="ltr">0, REL</span> בגבול העליון — קיבלתם ממוצע נע רגיל של ארבעה חודשים, וזה תרגיל אחר.</p><p class="task-q"><b>למה Month_Key ולא Month_Label:</b> WINDOW ממיין את השורות לפי העמודה שנתתם ל-ORDERBY, וזו חייבת להיות אותה עמודה שמופיעה על ציר הוויזואל. <span class="mono" dir="ltr">Month_Key</span> הוא מספר (<span dir="ltr">202401</span>) ולכן ממיין נכון גם בין שנים. שימו אותו על הציר.</p><p class="task-q"><b>החודש הראשון מחזיר ריק:</b> אין לפניו שורות, והחלון ריק. זה נכון ולא באג — אל תעטפו ב-<span class="mono" dir="ltr">COALESCE</span> רק כדי לראות אפס.</p><div class="tbl-wrap"><table class="cmp"><caption>הכנסה חודשית מול הממוצע הנגרר</caption><thead><tr><th scope="col">חודש</th><th scope="col">הכנסה USD</th><th scope="col">Trailing Avg</th></tr></thead><tbody><tr><th scope='row'><span dir="ltr">2024-01</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">82,029.81</span></td><td class="pbi" data-label="Trailing Avg">BLANK</td></tr><tr><th scope='row'><span dir="ltr">2024-02</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">72,960.34</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">82,029.81</span></td></tr><tr><th scope='row'><span dir="ltr">2024-03</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">95,505.01</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">77,495.07</span></td></tr><tr><th scope='row'><span dir="ltr">2024-04</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">97,030.72</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">83,498.39</span></td></tr><tr><th scope='row'><span dir="ltr">2024-05</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">102,307.88</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">88,498.69</span></td></tr><tr><th scope='row'><span dir="ltr">2024-06</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">95,712.73</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">98,281.20</span></td></tr><tr><th scope='row'><span dir="ltr">2024-07</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">151,134.88</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">98,350.44</span></td></tr><tr><th scope='row'><span dir="ltr">2024-08</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">144,246.34</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">116,385.16</span></td></tr><tr><th scope='row'><span dir="ltr">2024-09</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">102,500.84</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">130,364.65</span></td></tr><tr><th scope='row'><span dir="ltr">2024-10</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">101,186.78</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">132,627.35</span></td></tr><tr><th scope='row'><span dir="ltr">2024-11</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">107,624.55</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">115,977.99</span></td></tr><tr><th scope='row'><span dir="ltr">2024-12</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">133,989.19</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">103,770.72</span></td></tr><tr><th scope='row'><span dir="ltr">2025-01</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">88,243.35</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">114,266.84</span></td></tr><tr><th scope='row'><span dir="ltr">2025-02</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">87,518.17</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">109,952.36</span></td></tr><tr><th scope='row'><span dir="ltr">2025-03</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">115,544.53</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">103,250.24</span></td></tr><tr><th scope='row'><span dir="ltr">2025-04</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">92,545.61</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">97,102.02</span></td></tr><tr><th scope='row'><span dir="ltr">2025-05</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">106,137.18</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">98,536.10</span></td></tr><tr><th scope='row'><span dir="ltr">2025-06</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">97,856.65</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">104,742.44</span></td></tr><tr><th scope='row'><span dir="ltr">2025-07</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">135,264.34</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">98,846.48</span></td></tr><tr><th scope='row'><span dir="ltr">2025-08</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">160,572.15</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">113,086.06</span></td></tr><tr><th scope='row'><span dir="ltr">2025-09</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">96,813.81</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">131,231.05</span></td></tr><tr><th scope='row'><span dir="ltr">2025-10</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">101,957.78</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">130,883.43</span></td></tr><tr><th scope='row'><span dir="ltr">2025-11</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">95,232.77</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">119,781.25</span></td></tr><tr><th scope='row'><span dir="ltr">2025-12</span></th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">130,338.44</span></td><td class="pbi" data-label="Trailing Avg"><span dir="ltr">98,001.45</span></td></tr></tbody></table></div><p class="sol-check">תוצאה: <span dir="ltr">2025-12</span> = <b><span dir="ltr">130,338.44</span></b> USD מול ממוצע נגרר <b><span dir="ltr">98,001.45</span></b> USD. <span dir="ltr">2024-01</span> מחזיר BLANK.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-1" data-chap="פרק II · הדשבורד" data-title="2.1 · פריסה ומגש KPI"
+ aria-label="פרק II · הדשבורד — 2.1 · פריסה ומגש KPI" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.1 · רקע, כותרת ומגש KPI</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו את עמוד הדשבורד הראשון: רקע כהה, כותרת עליונה, ומגש עם ארבעה קארדים שמציגים את <span class="mono" dir="ltr">[Total Billed Revenue]</span>, <span class="mono" dir="ltr">[Total Gross Margin]</span>, <span class="mono" dir="ltr">[Active Customers]</span> ו-<span class="mono" dir="ltr">[Revenue per Customer]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>גודל הדף</b><span><code>Format page</code> ← <code>Canvas settings</code> ← <code>16:9</code> ← <code>1280x720</code></span></li><li><b>רקע</b><span><code>Canvas background</code> ← צבע <code>#132449</code> ← שקיפות <code>0%</code></span></li><li><b>כותרת</b><span><code>Text box</code> ברוחב מלא בראש הדף — <span dir='ltr'>Telecom Performance</span>, גופן 28, לבן</span></li><li><b>מגש</b><span>מלבן אחד ברוחב 1240 וגובה 130 מתחת לכותרת, מילוי <code>#1B2E5A</code>, פינות מעוגלות 8</span></li><li><b>ארבעה קארדים</b><span><code>Card</code> ← מדד אחד לכל קארד ← סדרו אותם בתוך המגש עם רווח שווה</span></li><li><b>יישור</b><span>בחרו את ארבעתם ← <code>Format</code> ← <code>Align top</code> ← <code>Distribute horizontally</code></span></li><li><b>קטגוריה</b><span>בכל קארד: <code>Category label</code> דלוק, גופן 11, צבע <code>#A9B4CC</code></span></li></ol><p class="sol-check">ארבעה קארדים: <span dir="ltr">2,594,253.85</span> · <span dir="ltr">889,705.65</span> · <span dir="ltr">1,236</span> · <span dir="ltr">2,098.91</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-2" data-chap="פרק II · הדשבורד" data-title="2.2 · דונאט מול עמודות"
+ aria-label="פרק II · הדשבורד — 2.2 · דונאט מול עמודות" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.2 · דונאט מול עמודות — אותו נתון, שתי צורות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו שני ויזואלים זה לצד זה על אותו נתון בדיוק: <span class="mono" dir="ltr">[Total Billed Revenue]</span> לפי <span class="mono" dir="ltr">Dim_Service_Type[Service_Name]</span> — פעם כדונאט ופעם כעמודות מדורגות. כתבו בתיבת טקסט מתחתם משפט אחד שמסביר איזה מהם עונה מהר יותר על השאלה ״מי השני״.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>דונאט</b><span><code>Donut chart</code> ← <code>Legend</code> = <code>Service_Name</code> ← <code>Values</code> = <code>[Total Billed Revenue]</code></span></li><li><b>תוויות</b><span><code>Detail labels</code> ← <code>Label style</code> = <code>Category, percent of total</code></span></li><li><b>עמודות</b><span><code>Clustered bar chart</code> ← <code>Y axis</code> = <code>Service_Name</code> ← <code>X axis</code> = אותו מדד</span></li><li><b>מיון</b><span>בגרף העמודות: שלוש נקודות ← <code>Sort axis</code> ← המדד ← <code>Descending</code></span></li><li><b>צבע אחיד</b><span>שני הוויזואלים עם אותה פלטה, כדי שההשוואה תהיה על הצורה ולא על הצבע</span></li><li><b>המסקנה</b><span>בדונאט צריך להשוות זוויות; בעמודות התשובה היא השורה השנייה מלמעלה</span></li></ol><div class="tbl-wrap"><table class="cmp"><caption>חמשת השירותים המובילים</caption><thead><tr><th scope="col">שירות</th><th scope="col">הכנסה USD</th><th scope="col">אחוז</th></tr></thead><tbody><tr><th scope='row'>Mobile Data</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">768,275.52</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">29.61%</span></td></tr><tr><th scope='row'>Roaming Package</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">513,156.72</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">19.78%</span></td></tr><tr><th scope='row'>Fiber Broadband</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">437,010.40</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">16.85%</span></td></tr><tr><th scope='row'>IPTV</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">260,392.29</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">10.04%</span></td></tr><tr><th scope='row'>Device Instalment</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">228,696.21</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">8.82%</span></td></tr></tbody></table></div><p class="sol-check">המוביל Mobile Data עם <span dir="ltr">29.61%</span>; השני Roaming Package עם <span dir="ltr">19.78%</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-3" data-chap="פרק II · הדשבורד" data-title="2.3 · Small multiples"
+ aria-label="פרק II · הדשבורד — 2.3 · Small multiples" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.3 · Small multiples — אזור אחר בכל תא</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו גרף עמודות של <span class="mono" dir="ltr">[Total Billed Revenue]</span> לפי <span class="mono" dir="ltr">Dim_Date[Month_Key]</span>, ופצלו אותו ל-Small multiples לפי <span class="mono" dir="ltr">Dim_Region[Market_Cluster]</span>. שלושה תאים, אחד לכל אשכול שוק.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>גרף בסיס</b><span><code>Clustered column chart</code> ← <code>X axis</code> = <code>Month_Key</code> ← <code>Y axis</code> = <code>[Total Billed Revenue]</code></span></li><li><b>פיצול</b><span>גררו את <code>Market_Cluster</code> אל השדה <code>Small multiples</code></span></li><li><b>רשת</b><span><code>Format</code> ← <code>Small multiples</code> ← <code>Rows</code> = 1 ← <code>Columns</code> = 3</span></li><li><b>ציר משותף</b><span><code>Y axis</code> ← <code>Shared axis</code> דלוק — בלי זה ההשוואה בין התאים חסרת ערך</span></li><li><b>כותרות</b><span><code>Header</code> ← גופן 12 ← צבע <code>#F5C518</code></span></li></ol><p class="sol-check">שלושה תאים: <span class="mono" dir="ltr">Urban Core</span>, <span class="mono" dir="ltr">Suburban</span>, <span class="mono" dir="ltr">Rural</span> — עם ציר Y משותף.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-4" data-chap="פרק II · הדשבורד" data-title="2.4 · גרף פיזור"
+ aria-label="פרק II · הדשבורד — 2.4 · גרף פיזור" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.4 · פיזור — הכנסה מול מרווח לכל ערוץ</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו גרף פיזור שבו כל נקודה היא ערוץ: ציר X = <span class="mono" dir="ltr">[Total Billed Revenue]</span>, ציר Y = <span class="mono" dir="ltr">[Total Gross Margin]</span>, גודל = <span class="mono" dir="ltr">[Active Customers]</span>. הוסיפו קו מגמה וסמנו את החריג.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Scatter chart</code> ← <code>Details</code> = <code>Dim_Channel[Channel_Name]</code></span></li><li><b>צירים</b><span><code>X Axis</code> = <code>[Total Billed Revenue]</code> ← <code>Y Axis</code> = <code>[Total Gross Margin]</code></span></li><li><b>גודל</b><span><code>Size</code> = <code>[Active Customers]</code></span></li><li><b>קו מגמה</b><span><code>Analytics</code> ← <code>Trend line</code> ← מקווקו ← <code>#A9B4CC</code></span></li><li><b>החריג</b><span>הנקודה שהכי רחוקה מתחת לקו היא הערוץ שמייצר הכנסה יקרה מדי</span></li></ol><p class="sol-check">החריג: <b>Authorised Dealer</b> — <span dir="ltr">518,340.19</span> USD הכנסה אך רק <span dir="ltr">26.42%</span> מרווח.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-5" data-chap="פרק II · הדשבורד" data-title="2.5 · מד מול יעד"
+ aria-label="פרק II · הדשבורד — 2.5 · מד מול יעד" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.5 · מד מול יעד — Gauge על המרווח</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Gauge</span> שמציג את <span class="mono" dir="ltr">[Total Gross Margin]</span> מול יעד שנתי של <span dir="ltr">900,000.00</span> USD. הגדירו מינימום 0, מקסימום <span dir="ltr">1,200,000.00</span> ויעד קבוע.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Gauge</code> ← <code>Value</code> = <code>[Total Gross Margin]</code></span></li><li><b>גבולות</b><span><code>Format</code> ← <code>Gauge axis</code> ← <code>Min</code> = 0 ← <code>Max</code> = 1200000</span></li><li><b>יעד</b><span><code>Target value</code> = 900000 — ידני, כי אין טבלת יעדים בקובץ</span></li><li><b>צבע</b><span>מילוי <code>#F5C518</code> ← קו היעד <code>#A9B4CC</code></span></li><li><b>תווית</b><span><code>Callout value</code> דלוק, שתי ספרות אחרי הנקודה</span></li></ol><p class="sol-check">המרווח <span dir="ltr">889,705.65</span> USD מול יעד <span dir="ltr">900,000.00</span> — פער של <span dir="ltr">-10,294.35</span> USD (<span dir="ltr">98.9%</span> מהיעד).</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-6" data-chap="פרק II · הדשבורד" data-title="2.6 · Drill-through"
+ aria-label="פרק II · הדשבורד — 2.6 · Drill-through" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.6 · Drill-through — מערוץ אל פירוט השירותים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו עמוד שלישי בשם <span class="mono" dir="ltr">Channel Detail</span> שמוגדר כיעד Drill-through לפי <span class="mono" dir="ltr">Dim_Channel[Channel_Name]</span>. בעמוד היעד: כרטיס עם שם הערוץ, טבלת שירותים וגרף חודשי — כולם מסוננים אוטומטית לערוץ שממנו הגיעו.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>עמוד יעד</b><span>צרו עמוד חדש ← <code>Format page</code> ← <code>Page information</code> ← <code>Allow use as drill-through</code></span></li><li><b>שדה הצלילה</b><span>גררו את <code>Channel_Name</code> אל <code>Add drill-through fields here</code></span></li><li><b>כרטיס כותרת</b><span><code>Card</code> עם <code>Channel_Name</code> — כדי שיהיה ברור לאן צללתם</span></li><li><b>טבלה</b><span><code>Table</code> ← <code>Service_Name</code>, <code>[Total Billed Revenue]</code>, <code>[Total Gross Margin]</code>, <code>[Margin Status]</code></span></li><li><b>גרף</b><span><code>Line chart</code> ← <code>Month_Key</code> מול <code>[Total Billed Revenue]</code></span></li><li><b>כפתור חזרה</b><span>Power BI מוסיף חץ חזרה אוטומטית — עצבו אותו ואל תמחקו אותו</span></li><li><b>בדיקה</b><span>בעמוד הראשי: קליק ימני על עמודת ערוץ ← <code>Drill through</code> ← <code>Channel Detail</code></span></li></ol><p class="sol-check">צלילה על Authorised Dealer מציגה <span dir="ltr">518,340.19</span> USD ותשעה שירותים.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-7" data-chap="פרק II · הדשבורד" data-title="2.7 · עמוד Tooltip"
+ aria-label="פרק II · הדשבורד — 2.7 · עמוד Tooltip" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.7 · עמוד Tooltip — חלונית שמופיעה בריחוף</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו עמוד Tooltip ייעודי בגודל <span class="mono" dir="ltr">320x240</span> שמציג שלושה מספרים על האזור שמרחפים מעליו: הכנסה, מרווח ושכבה. חברו אותו לגרף העמודות של האזורים.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>עמוד חדש</b><span><code>Format page</code> ← <code>Page information</code> ← <code>Allow use as tooltip</code></span></li><li><b>גודל</b><span><code>Canvas settings</code> ← <code>Type</code> = <code>Tooltip</code> ← 320x240</span></li><li><b>תוכן</b><span>שלושה קארדים קטנים: <code>[Total Billed Revenue]</code>, <code>[Total Gross Margin]</code>, <code>[Region Tier]</code></span></li><li><b>רקע</b><span><code>#132449</code> בשקיפות 0 — אחרת החלונית תיראה שקופה מעל הגרף</span></li><li><b>חיבור</b><span>בגרף האזורים: <code>Format</code> ← <code>Tooltips</code> ← <code>Type</code> = <code>Report page</code> ← בחרו את העמוד</span></li><li><b>בדיקה</b><span>רחפו מעל <span dir='ltr'>North Metro</span> — צריכות להופיע שלוש שורות</span></li></ol><p class="sol-check">ריחוף מעל North Metro מציג <span dir="ltr">367,098.76</span> USD ושכבה <span class="mono" dir="ltr">Top</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-8" data-chap="פרק II · הדשבורד" data-title="2.8 · Bookmark"
+ aria-label="פרק II · הדשבורד — 2.8 · Bookmark" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.8 · Bookmark — החלפת תצוגה בלחיצה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו שני Bookmarks שמחליפים בין תצוגת הכנסה לתצוגת מרווח באותו אזור על הדף, וחברו אותם לשני כפתורים.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>שני ויזואלים</b><span>גרף הכנסה וגרף מרווח, אחד בדיוק מעל השני, באותם קואורדינטות וגודל</span></li><li><b>Selection</b><span><code>View</code> ← <code>Selection</code> — כאן מכבים ומדליקים עין לכל ויזואל</span></li><li><b>Bookmark ראשון</b><span>הכנסה דלוק, מרווח כבוי ← <code>Bookmarks</code> ← <code>Add</code> ← שם <span dir='ltr'>Revenue View</span></span></li><li><b>Bookmark שני</b><span>הפוך ← <code>Add</code> ← שם <span dir='ltr'>Margin View</span></span></li><li><b>חשוב</b><span>בכל Bookmark: קליק ימני ← בטלו <code>Data</code> ← השאירו רק <code>Display</code> — אחרת הוא יקפיא גם את הסלייסרים</span></li><li><b>כפתורים</b><span>שני <code>Button</code> ← <code>Action</code> ← <code>Bookmark</code> ← בחרו את המתאים</span></li></ol><p class="sol-check">לחיצה מחליפה בין <span dir="ltr">2,594,253.85</span> USD לבין <span dir="ltr">889,705.65</span> USD באותו מקום על הדף.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-9" data-chap="פרק II · הדשבורד" data-title="2.9 · Waterfall"
+ aria-label="פרק II · הדשבורד — 2.9 · Waterfall" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.9 · Waterfall — מהיכן המרווח נבנה ומהיכן נשחק</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Waterfall chart</span> של <span class="mono" dir="ltr">[Total Gross Margin]</span> לפי <span class="mono" dir="ltr">Dim_Service_Type[Service_Name]</span>. השירות היחיד עם עמודה יורדת הוא זה שמפסיד כסף.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Waterfall chart</code> ← <code>Category</code> = <code>Service_Name</code> ← <code>Y axis</code> = <code>[Total Gross Margin]</code></span></li><li><b>מיון</b><span><code>Sort axis</code> ← המדד ← <code>Descending</code> — כדי שהתורמים יופיעו לפני השוחקים</span></li><li><b>צבעים</b><span><code>Sentiment colors</code> ← <code>Increase</code> = <code>#132449</code> ← <code>Decrease</code> = <code>#F5C518</code></span></li><li><b>Breakdown</b><span><code>Format</code> ← <code>Breakdown</code> ← <code>Max breakdowns</code> = 9 — כדי שכל תשעת השירותים יופיעו ולא יתקבצו ל-Other</span></li><li><b>קריאה</b><span>עמודת ה-Total בסוף חייבת להיות שווה בדיוק ל-<code>[Total Gross Margin]</code></span></li></ol><div class="tbl-wrap"><table class="cmp"><caption>תרומת כל שירות למרווח</caption><thead><tr><th scope="col">שירות</th><th scope="col">מרווח USD</th></tr></thead><tbody><tr><th scope='row'>Mobile Data</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">353,776.18</span></td></tr><tr><th scope='row'>Roaming Package</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">101,227.52</span></td></tr><tr><th scope='row'>Fiber Broadband</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">203,243.79</span></td></tr><tr><th scope='row'>IPTV</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">74,124.08</span></td></tr><tr><th scope='row'>Device Instalment</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">-36,122.79</span></td></tr><tr><th scope='row'>Cloud Storage</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">80,312.72</span></td></tr><tr><th scope='row'>Voice Domestic</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">65,214.81</span></td></tr><tr><th scope='row'>SMS Messaging</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">33,361.84</span></td></tr><tr><th scope='row'>Voice International</th><td class="pbi" data-label="מרווח USD"><span dir="ltr">14,567.50</span></td></tr></tbody></table></div><p class="sol-check">עמודה יורדת אחת: <b>Device Instalment</b> עם <span dir="ltr">-36,122.79</span> USD. ה-Total מסתכם ל-<span dir="ltr">889,705.65</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-10" data-chap="פרק II · הדשבורד" data-title="2.10 · Treemap"
+ aria-label="פרק II · הדשבורד — 2.10 · Treemap" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.10 · Treemap — נתח לפי סוג מכשיר</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Treemap</span> של <span class="mono" dir="ltr">[Total Billed Revenue]</span> לפי <span class="mono" dir="ltr">Dim_Device[Device_Class]</span>, עם <span class="mono" dir="ltr">Dim_Device[Device_Vendor]</span> כפירוט פנימי. הוסיפו קארד עם <span class="mono" dir="ltr">[Devices In Use]</span> לצידו.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Treemap</code> ← <code>Category</code> = <code>Device_Class</code> ← <code>Values</code> = <code>[Total Billed Revenue]</code></span></li><li><b>פירוט</b><span><code>Details</code> = <code>Device_Vendor</code> — יוצר תיבות פנימיות בתוך כל מלבן</span></li><li><b>תוויות</b><span><code>Data labels</code> דלוק ← <code>Value</code> דלוק — בלי זה ה-Treemap הוא רק ציור</span></li><li><b>קארד לצד</b><span><code>Card</code> עם <code>[Devices In Use]</code> — ההקשר משתנה עם הסלייסר</span></li><li><b>אזהרה</b><span>Treemap טוב להראות מי גדול ורע להראות בכמה. אם צריך להשוות מספרים — עמודות</span></li></ol><div class="tbl-wrap"><table class="cmp"><caption>הכנסה לפי סוג מכשיר</caption><thead><tr><th scope="col">סוג מכשיר</th><th scope="col">הכנסה USD</th></tr></thead><tbody><tr><th scope='row'>Smartphone</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">522,228.62</span></td></tr><tr><th scope='row'>Mobile Hotspot</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">404,352.95</span></td></tr><tr><th scope='row'>Feature Phone</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">384,515.09</span></td></tr><tr><th scope='row'>Fiber Router</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">374,095.97</span></td></tr><tr><th scope='row'>Tablet</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">315,831.16</span></td></tr><tr><th scope='row'>IoT Module</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">298,428.47</span></td></tr><tr><th scope='row'>Fixed Modem</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">294,801.59</span></td></tr></tbody></table></div><p class="sol-check">המלבן הגדול: <b>Smartphone</b> עם <span dir="ltr">522,228.62</span> USD. הקארד: <span dir="ltr">48</span> דגמים.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-2-11" data-chap="פרק II · הדשבורד" data-title="2.11 · ניווט ופוליש"
+ aria-label="פרק II · הדשבורד — 2.11 · ניווט ופוליש" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.11 · ניווט ופוליש — הדף שהופך את זה לדשבורד</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">סגרו את הדשבורד: סלייסר אזורים משותף, ניווט בין העמודים, יישור אחיד, וכיבוי כל מה שמיותר. זהו העמוד שמבדיל בין אוסף ויזואלים לבין מוצר.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>סלייסר</b><span><code>Slicer</code> ← <code>Dim_Region[Region_Name]</code> ← <code>Format</code> ← <code>Dropdown</code></span></li><li><b>סנכרון</b><span><code>View</code> ← <code>Sync slicers</code> ← סמנו <code>Sync</code> ו-<code>Visible</code> בשני העמודים</span></li><li><b>ניווט</b><span><code>Insert</code> ← <code>Buttons</code> ← <code>Navigator</code> ← <code>Page navigator</code></span></li><li><b>יישור</b><span>בחרו הכול ← <code>Format</code> ← <code>Align</code> — רווחים לא אחידים הם מה שהעין קולטת ראשון</span></li><li><b>ניקוי</b><span>בכל ויזואל: <code>Title</code> קצר, <code>Background</code> כבוי, <code>Border</code> כבוי, <code>Shadow</code> כבוי</span></li><li><b>Focus mode</b><span>כבו <code>Visual header</code> על ויזואלים דקורטיביים בלבד</span></li><li><b>בדיקה אחרונה</b><span><code>File</code> ← <code>Options</code> ← <code>Report settings</code> ← ודאו ש-<code>Persistent filters</code> דלוק</span></li></ol><p class="sol-check">שני עמודים + עמוד Drill-through + עמוד Tooltip, סלייסר מסונכרן וניווט עובד. כל מספר על המסך מגיע מאחד מ-14 המדדים.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-3-1" data-chap="פרק III · צבע ותובנה" data-title="3.1 · עיצוב מותנה כפול"
+ aria-label="פרק III · צבע ותובנה — 3.1 · עיצוב מותנה כפול" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · צבע ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.1 · אותה חלוקה, שתי טכניקות צביעה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צבעו את טבלת האזורים לפי השכבה — פעם עם <span class="mono" dir="ltr">Rules</span> בתוך הוויזואל, ופעם עם המדד <span class="mono" dir="ltr">[Tier Color]</span> דרך <span class="mono" dir="ltr">Field value</span>. השוו בין השתיים וכתבו משפט אחד על מתי כל אחת עדיפה.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>טבלה</b><span><code>Table</code> ← <code>Region_Name</code>, <code>[Total Billed Revenue]</code>, <code>[Region Tier]</code></span></li><li><b>טכניקה א</b><span><code>Format</code> ← <code>Cell elements</code> ← <code>Background color</code> ← <code>Format style</code> = <code>Rules</code></span></li><li><b>כללים</b><span>&gt;= 250000 ← <code>#132449</code> · &gt;= 150000 ← <code>#F5C518</code> · אחרת <code>#A9B4CC</code></span></li><li><b>טכניקה ב</b><span>אותו מסך ← <code>Format style</code> = <code>Field value</code> ← <code>[Tier Color]</code></span></li><li><b>הבדיקה</b><span>שתי הטכניקות חייבות לתת בדיוק את אותה תמונה — 6 כהים, 3 צהובים, 3 אפורים</span></li><li><b>ההבדל</b><span>Rules חי בתוך הוויזואל; המדד חי במודל ומשרת כל ויזואל בקובץ</span></li></ol><p class="task-q"><b>מתי כל אחת:</b> <span class="mono" dir="ltr">Rules</span> מהיר לוויזואל בודד ולא דורש מדד. <span class="mono" dir="ltr">Field value</span> הוא היחיד שמבטיח שכל ויזואל בדוח מספר את אותו סיפור צבע — וכשמישהו ישנה את הסף מ-250,000 ל-260,000, זו שורה אחת במדד במקום עריכה של כל ויזואל בנפרד.</p><p class="sol-check">שתי הטכניקות: <b><span dir="ltr">6</span></b> תאים <span class="mono" dir="ltr">#132449</span> · <b><span dir="ltr">3</span></b> <span class="mono" dir="ltr">#F5C518</span> · <b><span dir="ltr">3</span></b> <span class="mono" dir="ltr">#A9B4CC</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-3-2" data-chap="פרק III · צבע ותובנה" data-title="3.2 · הממוצע שמשקר"
+ aria-label="פרק III · צבע ותובנה — 3.2 · הממוצע שמשקר" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · צבע ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.2 · למה התשובה הנאיבית שגויה — ולא לכתוב מדד</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q"><b>התרגיל הזה לא מבקש מדד.</b> מנהל שואל ״כמה אנחנו גובים בממוצע לג״ב?״. אנליסט גורר את <span class="mono" dir="ltr">Fact_Usage[Revenue_Per_GB]</span> לקארד, בוחר <span class="mono" dir="ltr">Average</span> ומקבל <span dir="ltr">45.8150</span> USD. התשובה הנכונה היא <span dir="ltr">1.2057</span> USD — פי <span dir="ltr">38.0</span> פחות. <b>כתבו בשתי-שלוש שורות למה הנאיבי שגוי, ומה עושים במקום.</b></p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><p class="task-q"><b>התשובה: ממוצע של יחסים אינו היחס של הסכומים.</b> <span class="mono" dir="ltr">Revenue_Per_GB</span> מחושבת לכל שורה בנפרד — <span class="mono" dir="ltr">Billed_Amount_USD / Data_Volume_GB</span> — ולכן שורה שצרכה <span dir="ltr">0.03</span> ג״ב ושילמה <span dir="ltr">6.00</span> USD תורמת יחס של <span dir="ltr">200</span> בדיוק כמו שורה שצרכה <span dir="ltr">400</span> ג״ב. <span class="mono" dir="ltr">AVERAGE</span> נותן לשתיהן משקל זהה, והשורות הקטנות — שהן הרוב — מושכות את התוצאה למעלה.</p><p class="task-q"><b>מה עושים במקום:</b> מחשבים את היחס פעם אחת ברמת האגרגט, לא ממצעים יחסים:</p><pre class="dax">True Revenue per GB =
+DIVIDE (
+    [Total Billed Revenue],
+    SUM ( Fact_Usage[Data_Volume_GB] )
+)</pre><p class="task-q"><b>ולמה בכלל אסור לסכם את העמודה:</b> <span class="mono" dir="ltr">SUM(Revenue_Per_GB)</span> מחזיר <span dir="ltr">1,374,449.63</span> — מספר שאין לו יחידת מידה ואין לו משמעות. <b>כל עמודה שכבר עברה חלוקה אינה אדיטיבית</b>, ולכן היא צריכה להיות מוסתרת במודל (<span class="mono" dir="ltr">Hide in report view</span>) כדי שאף אחד לא יגרור אותה בטעות.</p><div class="tbl-wrap"><table class="cmp"><caption>שלושה מספרים, רק אחד נכון</caption><thead><tr><th scope="col">חישוב</th><th scope="col">תוצאה</th><th scope="col">תקין?</th></tr></thead><tbody><tr><th scope='row'><span class="mono" dir="ltr">AVERAGE ( Revenue_Per_GB )</span></th><td class="pbi" data-label="תוצאה"><span dir="ltr">45.8150</span></td><td class="pbi" data-label="תקין?">לא — ממוצע של יחסים</td></tr><tr><th scope='row'><span class="mono" dir="ltr">SUM ( Revenue_Per_GB )</span></th><td class="pbi" data-label="תוצאה"><span dir="ltr">1,374,449.63</span></td><td class="pbi" data-label="תקין?">לא — עמודה לא אדיטיבית</td></tr><tr><th scope='row'><span class="mono" dir="ltr">DIVIDE ( Revenue, GB )</span></th><td class="pbi" data-label="תוצאה"><span dir="ltr">1.2057</span></td><td class="pbi" data-label="תקין?">כן — יחס ברמת האגרגט</td></tr></tbody></table></div><p class="sol-check">התשובה הנכונה: <b><span dir="ltr">1.2057</span></b> USD לג״ב (<span dir="ltr">2,594,253.85</span> ÷ <span dir="ltr">2,151,653.92</span> ג״ב).</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-3-3" data-chap="פרק III · צבע ותובנה" data-title="3.3 · שורות המרווח השלילי"
+ aria-label="פרק III · צבע ותובנה — 3.3 · שורות המרווח השלילי" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · צבע ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.3 · המלכודת — ההפסד שהסכימה מחביאה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">כתבו שני מדדי עזר שמפרקים את המרווח הכולל לשני חלקים: מה שנרוויח ומה שנשרף. המטרה היא להראות שהמרווח המדווח הוא <b>תוצאה של קיזוז</b>, לא של רווחיות אחידה.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Margin From Loss Rows =
+CALCULATE (
+    [Total Gross Margin],
+    Fact_Usage[Gross_Margin_USD] &lt; 0
+)</pre><pre class="dax">Loss Rows Revenue =
+CALCULATE (
+    [Total Billed Revenue],
+    Fact_Usage[Gross_Margin_USD] &lt; 0
+)</pre><p class="task-q"><b>מה המספרים אומרים:</b> <span dir="ltr">2,824</span> שורות מתוך <span dir="ltr">30,000</span> (<span dir="ltr">9.41%</span>) נושאות מרווח שלילי. הן מייצרות <span dir="ltr">241,146.59</span> USD הכנסה — ומוחקות <span dir="ltr">50,484.13</span> USD מרווח. בלעדיהן המרווח היה <span dir="ltr">940,189.78</span> במקום <span dir="ltr">889,705.65</span>.</p><p class="task-q"><b>למה זה חשוב דווקא כאן:</b> <span dir="ltr">9.41%</span> מהשורות נראה זניח, אבל הן מרוכזות בשירות אחד — Device Instalment — שכולו יורד מתחת לנקודת האיזון. סכימה על פני כל הקובץ מחביאה את זה לחלוטין; רק פילוח לפי שירות חושף אותו. זו בדיוק הסיבה שתרגיל 2.9 בנוי כ-Waterfall ולא כעמודות.</p><div class="tbl-wrap"><table class="cmp"><caption>פירוק המרווח לשני חלקים</caption><thead><tr><th scope="col">חלק</th><th scope="col">שורות</th><th scope="col">הכנסה USD</th><th scope="col">מרווח USD</th></tr></thead><tbody><tr><th scope='row'>שורות רווחיות</th><td class="pbi" data-label="שורות"><span dir="ltr">27,176</span></td><td class="pbi" data-label="הכנסה USD"><span dir="ltr">2,353,107.26</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">940,189.78</span></td></tr><tr><th scope='row'>שורות הפסד</th><td class="pbi" data-label="שורות"><span dir="ltr">2,824</span></td><td class="pbi" data-label="הכנסה USD"><span dir="ltr">241,146.59</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">-50,484.13</span></td></tr><tr><th scope='row'><b>סך הכל</b></th><td class="pbi" data-label="שורות"><b><span dir="ltr">30,000</span></b></td><td class="pbi" data-label="הכנסה USD"><b><span dir="ltr">2,594,253.85</span></b></td><td class="pbi" data-label="מרווח USD"><b><span dir="ltr">889,705.65</span></b></td></tr></tbody></table></div><p class="sol-check">הקיזוז: <span dir="ltr">940,189.78</span> מינוס <span dir="ltr">50,484.13</span> שווה <span dir="ltr">889,705.65</span> USD.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-3-4" data-chap="פרק III · צבע ותובנה" data-title="3.4 · רווחיות ערוצים"
+ aria-label="פרק III · צבע ותובנה — 3.4 · רווחיות ערוצים" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · צבע ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.4 · תובנת הסיום — הערוץ שמוכר הכי הרבה אינו הרווחי</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">השאלה הסוגרת: <b>איזה ערוץ באמת מרוויח לנו כסף?</b> בנו טבלה אחת עם ארבע עמודות — ערוץ, הכנסה, מרווח ושיעור מרווח — מיינו לפי הכנסה, ואז מיינו שוב לפי מרווח. כתבו שלוש שורות: מה ראיתם, מה זה אומר, ומה הייתם ממליצים.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>טבלה</b><span><code>Table</code> ← <code>Channel_Name</code>, <code>[Total Billed Revenue]</code>, <code>[Total Gross Margin]</code></span></li><li><b>שיעור מרווח</b><span>מדד עזר: <code>DIVIDE ( [Total Gross Margin], [Total Billed Revenue] )</code> בפורמט אחוז</span></li><li><b>מיון ראשון</b><span>לפי הכנסה יורד — ורשמו מי בראש</span></li><li><b>מיון שני</b><span>לפי מרווח יורד — ורשמו מי בראש עכשיו</span></li><li><b>השוואה</b><span>הוסיפו את <code>[Top Margin Channel Rev]</code> מתרגיל 1.13 כעמודת ייחוס</span></li></ol><p class="task-q"><b>מה רואים:</b> <b>Authorised Dealer</b> מוביל בהכנסה עם <span dir="ltr">518,340.19</span> USD — אבל שיעור המרווח שלו הוא רק <span dir="ltr">26.42%</span>, והמרווח בפועל <span dir="ltr">136,924.32</span> USD. לעומתו <b>Web Self Service</b> מייצר פחות הכנסה (<span dir="ltr">409,216.29</span>) אבל <b>יותר מרווח</b> — <span dir="ltr">203,233.89</span> USD בשיעור <span dir="ltr">49.66%</span>.</p><p class="task-q"><b>מה זה אומר:</b> הפער אינו במחיר שהלקוח משלם — הוא בעלות הרכישה. הערוצים הדיגיטליים הישירים לא משלמים עמלה, והערוצים השותפים כן. לכן <span class="mono" dir="ltr">Field Sales Agency</span> מסיים עם <span dir="ltr">15.24%</span> בלבד. דירוג ערוצים לפי הכנסה הוא דירוג של מחזור, לא של תרומה.</p><p class="task-q"><b>מה ממליצים:</b> לא לסגור את ערוץ השותפים — הוא עדיין מייצר <span dir="ltr">280,856.35</span> USD מרווח חיובי. ההמלצה היא להזיז לקוחות קיימים לחידוש דיגיטלי ולשמור את השותפים לגיוס חדש בלבד. וכל מדד יעד לערוץ צריך להיות על מרווח, לא על מחזור.</p><div class="tbl-wrap"><table class="cmp"><caption>ערוצים ישירים מול שותפים</caption><thead><tr><th scope="col">קבוצת ערוץ</th><th scope="col">הכנסה USD</th><th scope="col">מרווח USD</th><th scope="col">שיעור מרווח</th></tr></thead><tbody><tr><th scope='row'>Direct</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">1,372,946.38</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">608,849.30</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">44.35%</span></td></tr><tr><th scope='row'>Partner</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">1,221,307.47</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">280,856.35</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">23.0%</span></td></tr></tbody></table></div><div class="tbl-wrap"><table class="cmp"><caption>כל שמונת הערוצים לפי מרווח</caption><thead><tr><th scope="col">ערוץ</th><th scope="col">הכנסה USD</th><th scope="col">מרווח USD</th><th scope="col">שיעור מרווח</th></tr></thead><tbody><tr><th scope='row'>Web Self Service</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">409,216.29</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">203,233.89</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">49.66%</span></td></tr><tr><th scope='row'>Mobile App</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">369,873.34</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">179,382.20</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">48.5%</span></td></tr><tr><th scope='row'>Authorised Dealer</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">518,340.19</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">136,924.32</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">26.42%</span></td></tr><tr><th scope='row'>Own Retail Store</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">353,217.67</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">130,295.07</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">36.89%</span></td></tr><tr><th scope='row'>Inbound Call Center</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">240,639.08</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">95,938.14</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">39.87%</span></td></tr><tr><th scope='row'>Retail Chain</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">289,874.03</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">65,925.50</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">22.74%</span></td></tr><tr><th scope='row'>Online Marketplace</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">256,111.85</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">54,088.01</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">21.12%</span></td></tr><tr><th scope='row'>Field Sales Agency</th><td class="pbi" data-label="הכנסה USD"><span dir="ltr">156,981.40</span></td><td class="pbi" data-label="מרווח USD"><span dir="ltr">23,918.52</span></td><td class="pbi" data-label="שיעור מרווח"><span dir="ltr">15.24%</span></td></tr></tbody></table></div><p class="sol-check">המוביל בהכנסה <b>Authorised Dealer</b>; המוביל במרווח <b>Web Self Service</b>. פער שיעורי מרווח: <span dir="ltr">49.66%</span> מול <span dir="ltr">15.24%</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="tc-sum" data-chap="סיכום" data-title="סיכום — כל התוצאות"
+ aria-label="סיכום — סיכום — כל התוצאות" hidden>
+  <button type="button" class="sec-num" data-goto="tc-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>סיכום</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">סיכום — כל התוצאות במקום אחד</h2>
+  <div class="tasks" style="margin-top:18px">
+    <article class="task">
+      <p class="task-q">טבלת אימות מרוכזת לכל 14 המדדים ולכל מספר במטלה. פתחו אותה רק אחרי שסיימתם — היא נותנת את כל התשובות.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>כל התוצאות המאומתות במקום אחד</caption><thead><tr><th scope="col">מדד / רכיב</th><th scope="col">תוצאה מאומתת</th></tr></thead><tbody><tr><th scope='row'>Total Billed Revenue</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2,594,253.85</span> USD</td></tr><tr><th scope='row'>Total Gross Margin</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">889,705.65</span> USD (<span dir="ltr">34.3%</span>)</td></tr><tr><th scope='row'>Active Customers</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">1,236</span> (COUNT היה מחזיר <span dir="ltr">30,000</span>)</td></tr><tr><th scope='row'>Devices In Use</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">48</span></td></tr><tr><th scope='row'>Revenue per Customer</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2,098.91</span> USD</td></tr><tr><th scope='row'>Postpaid Revenue</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">1,742,988.22</span> USD (<span dir="ltr">67.19%</span>)</td></tr><tr><th scope='row'>Core Services Revenue</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">1,465,678.21</span> USD (<span dir="ltr">56.5%</span>)</td></tr><tr><th scope='row'>Pct of All Usage</th><td class="pbi" data-label="תוצאה מאומתת">מוביל <span dir="ltr">29.61%</span> · Total <span dir="ltr">100.00%</span></td></tr><tr><th scope='row'>Margin Status</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">8</span> מעל · <span dir="ltr">1</span> מתחת · נקודת איזון <span dir="ltr">1,704,548.20</span></td></tr><tr><th scope='row'>Region Tier</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">6</span> Top · <span dir="ltr">3</span> Mid · <span dir="ltr">3</span> Low</td></tr><tr><th scope='row'>Tier Color</th><td class="pbi" data-label="תוצאה מאומתת"><span class="mono" dir="ltr">#132449</span> · <span class="mono" dir="ltr">#F5C518</span> · <span class="mono" dir="ltr">#A9B4CC</span></td></tr><tr><th scope='row'>Region Rank by Customers</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">North Metro = 1</span> · <span dir="ltr">Highland West = 12</span></td></tr><tr><th scope='row'>Top Margin Channel Rev</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">409,216.29</span> בכל שורה (Web Self Service)</td></tr><tr><th scope='row'>Trailing Avg Excl Current</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2025-12</span> = <span dir="ltr">98,001.45</span> · <span dir="ltr">2024-01</span> = BLANK</td></tr><tr><th scope='row'>True Revenue per GB</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">1.2057</span> USD לג״ב</td></tr><tr><th scope='row'>הערוץ המוביל בהכנסה</th><td class="pbi" data-label="תוצאה מאומתת">Authorised Dealer — <span dir="ltr">518,340.19</span> USD</td></tr><tr><th scope='row'>הערוץ המוביל במרווח</th><td class="pbi" data-label="תוצאה מאומתת">Web Self Service — <span dir="ltr">203,233.89</span> USD</td></tr><tr><th scope='row'>האזור המוביל</th><td class="pbi" data-label="תוצאה מאומתת">North Metro — <span dir="ltr">367,098.76</span> USD</td></tr><tr><th scope='row'>חודש השיא</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2025-08</span> — <span dir="ltr">160,572.15</span> USD</td></tr><tr><th scope='row'>החודש החלש</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2024-02</span> — <span dir="ltr">72,960.34</span> USD</td></tr><tr><th scope='row'>השירות המפסיד</th><td class="pbi" data-label="תוצאה מאומתת">Device Instalment — <span dir="ltr">-36,122.79</span> USD</td></tr><tr><th scope='row'>שורות מרווח שלילי</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2,824</span> (<span dir="ltr">9.41%</span>)</td></tr></tbody></table></div>
+      <p class="sol-check">כל התוצאות אומתו ב-pandas מול <span class="mono" dir="ltr">Telecom_PowerBI_Star.xlsx</span> (30,000 שורות עובדה), וכל שבעת הקשרים נבדקו תכנותית — 0 מפתחות יתומים, 0 מפתחות ריקים, 0 תלויות מעגליות ו-0 נתיבי סינון כפולים.</p></div>
+    </article>
+  </div>
+</section>
+
+<nav class="pager" aria-label="ניווט בין תרגילי המטלה">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ הקודם</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">הבא ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">אפשר לנווט גם בכפתורים שבראש המסך, בחצי המקלדת, ובטלפון בהחלקת אצבע</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    מטלת סיכום טלקום · אלירן גרוסמן · <a href="pbi.html">חזרה לפלטפורמת Power BI</a>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="רשימת תרגילי המטלה">
+  <div class="drawer-head">
+    <b>תרגילי המטלה</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="סגירת הרשימה">✕</button>
+  </div>
+  <div class="toc" id="toc-list"></div>
+</aside>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s);},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+var pages=$$('.page'), N=pages.length;
+if(!N)return;
+var KEY='telecom-page-v1', VKEY='telecom-visited-v1';
+var visited={}; try{visited=JSON.parse(localStorage.getItem(VKEY)||'{}');}catch(e){}
+
+var scroller=$('#scroller'), bar=$('#pbar'),
+    tTitle=$('#tb-title'), tChap=$('#tb-chap'), tCount=$('#tb-count'),
+    prevBtn=$('#tb-prev'), nextBtn=$('#tb-next'),
+    pgPrev=$('#pg-prev'), pgNext=$('#pg-next'),
+    pgPrevName=$('#pg-prev-name'), pgNextName=$('#pg-next-name'),
+    tocList=$('#toc-list'), idx=0;
+
+/* ---------- table of contents ---------- */
+var items=[];
+(function buildToc(){
+  var lastChap=null;
+  pages.forEach(function(pg,k){
+    var chap=pg.getAttribute('data-chap')||'';
+    if(chap!==lastChap){
+      var h=document.createElement('div'); h.className='toc-chap'; h.textContent=chap;
+      tocList.appendChild(h); lastChap=chap;
+    }
+    var b=document.createElement('button');
+    b.type='button'; b.className='toc-item';
+    b.innerHTML='<span class="toc-n">'+(k+1)+'</span><span class="toc-t"></span>'+
+                '<span class="toc-done" aria-hidden="true">\u2713</span>';
+    b.querySelector('.toc-t').textContent=pg.getAttribute('data-title')||'';
+    b.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+    tocList.appendChild(b); items.push(b);
+  });
+})();
+
+/* ---------- router ---------- */
+function show(i,scrollTop){
+  i=Math.max(0,Math.min(N-1,i));
+  pages.forEach(function(p,k){ p.hidden=(k!==i); });
+  idx=i;
+  var pg=pages[i];
+  tTitle.textContent=pg.getAttribute('data-title')||'';
+  tChap.textContent=pg.getAttribute('data-chap')||'';
+  tCount.textContent=(i+1)+' / '+N;
+  bar.style.width=((i+1)/N*100)+'%';
+  prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* 'ראשי' is a real link to the site home, always active.
+     'לסיכום' is in-page navigation, so it is disabled on the summary page
+     itself, exactly like prev/next at the ends. */
+  var sb=$('#tb-sum');
+  if(sb)sb.disabled=(i===N-1);
+  pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
+  if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
+  if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');
+  visited[pg.id]=1;
+  try{localStorage.setItem(KEY,String(i));localStorage.setItem(VKEY,JSON.stringify(visited));}catch(e){}
+  items.forEach(function(b,k){
+    b.classList.toggle('on',k===i);
+    b.classList.toggle('visited',!!visited[pages[k].id]);
+  });
+  if(scrollTop!==false&&scroller)scroller.scrollTop=0;
+  syncRegions();
+}
+function step(d){ show(idx+d,true); }
+
+prevBtn.addEventListener('click',function(){step(-1);});
+nextBtn.addEventListener('click',function(){step(1);});
+pgPrev.addEventListener('click',function(){step(-1);});
+pgNext.addEventListener('click',function(){step(1);});
+$('#tb-sum').addEventListener('click',function(){show(N-1,true);});
+$$('[data-goto]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var id=b.getAttribute('data-goto');
+    for(var k=0;k<N;k++){ if(pages[k].id===id){ show(k,true); return; } }
+  });
+});
+
+/* ---------- drawer ---------- */
+var drawer=$('#drawer'), back=$('#drawer-back'), menuBtn=$('#tb-menu');
+function openDrawer(){ drawer.hidden=false; back.hidden=false; menuBtn.setAttribute('aria-expanded','true');
+  var on=tocList.querySelector('.on'); if(on)on.scrollIntoView({block:'center'}); }
+function closeDrawer(){ drawer.hidden=true; back.hidden=true; menuBtn.setAttribute('aria-expanded','false'); }
+menuBtn.addEventListener('click',function(){ drawer.hidden?openDrawer():closeDrawer(); });
+back.addEventListener('click',closeDrawer);
+$('#drawer-x').addEventListener('click',closeDrawer);
+
+/* ---------- solutions ---------- */
+$$('.sol-toggle').forEach(function(btn){
+  var body=btn.nextElementSibling;
+  if(!body||!body.classList.contains('sol-body'))return;
+  btn.addEventListener('click',function(){
+    var open=btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded',String(!open));
+    body.classList.toggle('open',!open);
+    btn.textContent=open?'הצגת הפתרון':'הסתרת הפתרון';
+    setTimeout(syncRegions,0);
+  });
+});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',function(e){
+  if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+  if(e.key==='Escape'&&!drawer.hidden){ closeDrawer(); return; }
+  if(e.key==='ArrowLeft')step(1);
+  else if(e.key==='ArrowRight')step(-1);
+});
+
+/* ---------- swipe (never inside a horizontal scroll area) ---------- */
+var sx=0,sy=0,track=false;
+document.addEventListener('touchstart',function(e){
+  var t=e.target;
+  if(t.closest&&t.closest('.tbl-wrap,.dax,.code,pre,.drawer,.hd,input,textarea'))return;
+  if(e.touches.length!==1)return;
+  sx=e.touches[0].clientX; sy=e.touches[0].clientY; track=true;
+},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(!track)return; track=false;
+  var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<60||Math.abs(dy)>50)return;
+  step(dx>0?-1:1);   /* RTL: swipe right = previous */
+},{passive:true});
+
+/* ---------- horizontal scroll areas reachable by keyboard ---------- */
+function syncRegions(){
+  $$('.tbl-wrap,.dax').forEach(function(el){
+    var scrolls=el.scrollWidth>el.clientWidth+1;
+    if(scrolls){
+      if(!el.hasAttribute('tabindex')){
+        el.setAttribute('tabindex','0'); el.setAttribute('role','region');
+        el.setAttribute('aria-label','אזור נגלל לרוחב');
+      }
+    }else if(el.getAttribute('role')==='region'){
+      el.removeAttribute('tabindex'); el.removeAttribute('role'); el.removeAttribute('aria-label');
+    }
+  });
+}
+var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(syncRegions,150); },{passive:true});
+
+/* ---------- ?qa=1 overflow inspector ---------- */
+(function(){
+  if(!/(\?|&|#)qa=1/.test(location.search+location.hash))return;
+  var css=document.createElement('style');
+  css.textContent='.qa-bad{outline:2px dashed #f87171!important;outline-offset:-2px}'+
+   '#qa-badge{position:fixed;inset-block-end:10px;inset-inline-start:10px;z-index:9999;background:#111;color:#fff;'+
+   'font:12px/1.5 monospace;padding:8px 10px;border-radius:8px;max-width:80vw;max-height:40vh;overflow:auto;'+
+   'border:1px solid #f87171;direction:ltr;text-align:left;white-space:pre-wrap}';
+  document.head.appendChild(css);
+  var badge=document.createElement('div'); badge.id='qa-badge'; document.body.appendChild(badge);
+  function scan(){
+    var vw=document.documentElement.clientWidth, bad=[];
+    $$('.qa-bad').forEach(function(e){e.classList.remove('qa-bad');});
+    $$('.page:not([hidden]) *, .topicbar *').forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(!r.width&&!r.height)return;
+      if(r.right>vw+1||r.left<-1){
+        el.classList.add('qa-bad');
+        bad.push(el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className?'.'+el.className.trim().split(/\s+/).slice(0,2).join('.'):'')+' w='+Math.round(r.width));
+      }
+    });
+    badge.textContent='viewport '+vw+' · scrollW '+document.documentElement.scrollWidth+' · offenders '+bad.length+
+      (bad.length?('\n'+bad.slice(0,10).join('\n')):' — clean');
+  }
+  scan(); window.addEventListener('resize',scan,{passive:true});
+  document.addEventListener('click',function(){setTimeout(scan,80);});
+})();
+
+/* ---------- start ---------- */
+var start=0;
+try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved))start=saved; }catch(e){}
+if(location.hash){
+  var h=location.hash.slice(1);
+  for(var k=0;k<N;k++){ if(pages[k].id===h){ start=k; break; } }
+}
+show(start,true);
+})();
+</script>
+</body>
+</html>
