@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070a0c">
+<meta name="color-scheme" content="dark">
+<title>מטלת סיכום מוסד לימודים — סכמת כוכב ב-Power BI | אלירן גרוסמן</title>
+<meta name="description" content="מטלת סיכום ב-Power BI על מודל מוסד לימודים: 29 תרגילים עם פתרונות מלאים — 14 מדדי DAX כולל KEEPFILTERS ופונקציות חלון, שני עמודי דשבורד ועיצוב מותנה כפול.">
+<meta property="og:title" content="מטלת סיכום מוסד לימודים — סכמת כוכב">
+<meta property="og:description" content="29 תרגילים עם פתרונות מלאים: 14 מדדי DAX כולל RANK, INDEX ו-WINDOW, שני עמודי דשבורד ועיצוב מותנה כפול.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+/* overflow guard: a wide child (code line, table, long token) must never widen the column */
+.wrap,.page,.tasks,.task,.sol-body,.practice-box,.kpi{min-width:0}
+.tasks{grid-template-columns:minmax(0,1fr)}
+.page>*,.task>*,.sol-body>*{max-width:100%}
+.mono,.steps code,code{max-width:100%;overflow-wrap:anywhere}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:100%;width:min(1080px,100%);margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;min-width:0;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-home{text-decoration:none}
+
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 1 auto;min-width:0;overflow:hidden;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:right;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:right}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+button.sec-num{background:none;border:0;padding:6px 0;text-align:right;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px;font-size:clamp(.94rem,2.9vw,1.05rem);overflow-wrap:break-word}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (איסוף→ארגון→ניתוח→הצגה / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:right;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+
+/* PHONES: the table stops being a table. Every row becomes a card, every cell a
+   label/value pair (label comes from data-label). No min-width, so nothing can
+   ever force the page wider than the screen — the root cause of the clipping. */
+@media(max-width:620px){
+  .tbl-wrap{overflow-x:visible;border:0;border-radius:0;background:none}
+  table.cmp{display:block;min-width:0;width:100%;font-size:.9rem;border-collapse:separate}
+  table.cmp caption{padding:0 2px 10px;background:none;font-size:.8rem;line-height:1.55}
+  table.cmp thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  table.cmp tbody{display:grid;gap:10px}
+  table.cmp tbody tr{display:block;background:var(--bg-1);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px}
+  table.cmp tbody tr>th[scope="row"]{display:block;background:none;border:0;padding:0 0 9px;
+    margin-bottom:7px;border-bottom:1px solid var(--line);color:var(--fg-1);font-size:.95rem;font-weight:700}
+  table.cmp tbody td{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+    gap:2px 14px;padding:5px 0;border:0;min-width:0}
+  table.cmp tbody td+td{border-top:1px dashed var(--line-soft)}
+  table.cmp tbody td::before{content:attr(data-label);flex:0 0 auto;color:var(--fg-3);
+    font-size:.76rem;font-weight:600;letter-spacing:.01em}
+  table.cmp tbody td:not([data-label])::before{display:none}
+  /* long free-text cells get the label on its own line and the full card width */
+  table.cmp tbody td[data-long]{display:block}
+  table.cmp tbody td[data-long]::before{display:block;margin-bottom:3px}
+  table.cmp tbody td.pbi,table.cmp tbody td.xl{color:var(--fg-1);font-weight:600}
+}
+table.cmp caption{text-align:right;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:right;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:right;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:clamp(1.25rem,5vw,1.6rem);color:var(--pbi);overflow-wrap:break-word}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;max-width:100%;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap;min-width:0;max-width:100%}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;min-width:0;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:clamp(.92rem,2.8vw,1rem);color:var(--fg-2);margin-bottom:12px;overflow-wrap:break-word}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+.dax{font-family:var(--mono);font-size:clamp(.74rem,2.9vw,.82rem);line-height:1.6;background:var(--bg-2);border:1px solid var(--line-soft);
+  border-radius:10px;padding:12px 14px;color:var(--acc);direction:ltr;text-align:left;overflow-x:auto;max-width:100%;
+  white-space:pre;margin-bottom:14px;unicode-bidi:isolate;-webkit-overflow-scrolling:touch}
+@media(max-width:760px){
+  .dax,.code{white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:hidden;font-size:.8rem;padding:12px}
+  .dax{line-height:1.8;padding-inline-start:2.4em;text-indent:-2.2em}
+}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:right;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:right;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4;
+  max-width:100%;overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:420px){.btn{padding:11px 16px;font-size:.9rem;width:100%}}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:right;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* בטלפון הכותרת מצטמצמת לסרגל השיעורים בלבד — עדיין זמין תמיד */
+  :root{--header-h:44px}
+  /* one short row: ☰ · הקודם · כותרת · הבא · שאלות — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+
+/* ---- assignment-specific ---- */
+button.sec-num{background:none;border:0;padding:6px 0;text-align:right;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.ask{display:flex;gap:9px;align-items:flex-start;background:var(--acc-soft);border:1px solid var(--line-strong);
+  border-radius:10px;padding:11px 13px;margin:14px 0 4px;font-size:.9rem;color:var(--fg-2);min-width:0}
+.ask b{color:var(--acc);flex:0 0 auto}
+.hd .brand{white-space:nowrap}
+.aw-back{margin-inline-start:auto;font-size:.82rem;color:var(--fg-3);border:1px solid var(--line);
+  border-radius:999px;padding:6px 12px;white-space:nowrap}
+.aw-back:hover{color:var(--pbi);border-color:var(--pbi-glow)}
+
+/* ============================================================
+   v3 — TRUNCATION POLICY: no label in this document is ever cut.
+   Every rule that used to clip text now wraps it instead; the only
+   exceptions left are the two horizontal rails, which are scrollers.
+   ============================================================ */
+.qnav-b span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.35}
+.qnav-b{padding:11px 12px}
+.dl-t,.mc-row .lbl,.sel-item .nm{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.toc-t{overflow-wrap:anywhere}
+.toc{min-height:0}                     /* flex-column child must be allowed to shrink, or it never scrolls */
+.ask span{min-width:0}
+@media(max-width:620px){
+  /* the topic name gets two full lines instead of an ellipsis */
+  .tb-title{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;line-height:1.25;font-size:.8rem}
+  .tb-chap{display:none}               /* the chapter is already the first line of every topic */
+  .tb-meta{gap:0}
+  .tb-meta .tb-count::before{content:none;margin:0}
+}
+/* numbers, currency and Latin identifiers keep their own direction inside RTL prose */
+[dir="ltr"]{unicode-bidi:isolate}
+/* inner scrollers never hand their momentum back to the page */
+.tbl-wrap,.dax,.code{overscroll-behavior-x:contain}
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+
+
+/* --- header rail: on desktop it wraps instead of being clipped by a hidden scroller,
+       on phones it stays a scroller but with a visible fade affordance --- */
+@media(min-width:701px){
+  header.site{height:auto;min-height:var(--header-h)}
+  header.site .hd{flex-wrap:wrap;height:auto;min-height:var(--header-h);padding-block:7px;row-gap:7px}
+  .lesson-rail{flex-wrap:wrap;overflow:visible;row-gap:6px}
+}
+@media(max-width:700px){
+  .lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent)}
+}
+</style>
+
+<style id="fixes">
+/* ---- layout fixes; never edit the template sheet above ---- */
+@media (max-width:900px){
+  nav.lesson-rail{
+    -webkit-mask-image:linear-gradient(to left,#000 82%,transparent 100%);
+    mask-image:linear-gradient(to left,#000 82%,transparent 100%);
+  }
+}
+@media (max-width:620px){
+  .tb-title{
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;
+    line-clamp:3;overflow:hidden;white-space:normal;
+  }
+}
+@media (max-width:374px){
+  .tb-title{display:none}
+}
+@media (min-width:621px){
+  .tb-title{
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+    line-clamp:2;overflow:hidden;white-space:normal;
+    max-height:none;line-height:1.35;
+  }
+}
+@media (max-width:430px){
+  .pg-name{
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;
+    line-clamp:3;overflow:hidden;white-space:normal;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">דלג לתוכן הראשי</a>
+<noscript>
+  <style>
+    .page[hidden]{display:block!important}
+    body{display:block;height:auto;overflow:visible}
+    .scroller{overflow:visible;height:auto}
+    .topicbar,.pager,.pg-hint{display:none}
+  </style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">כל 31 עמודי המטלה מוצגים כאן ברצף. פתיחת הפתרונות דורשת JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="לדף הבית של הקורס"><b>SQL</b> עם אלירן</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="ניווט בין שיעורי הקורס">
+        <a class="lr lr-home is-on" href="pbi.html" aria-current="page" title="דף הבית של הפלטפורמה"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>דף הבית</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI בסיס"><b>1</b><span>בסיס</span></a>
+      <a class="lr" href="pbi-course-2.html" title="מודלינג נתונים"><b>2</b><span>מודלינג</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query ו-ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M ו-DAX בסיסי"><b>4</b><span>M ו-DAX</span></a>
+        <span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="לדף הבית של הקורס"><b>↩</b><span>הקורס</span></a><a class="lr lr-x" href="pbi-updates.html" title="עדכוני Power BI החודשיים"><b>◷</b><span>עדכונים</span></a><a class="lr lr-x" href="pbi-quiz.html" title="בנק השאלות המלא"><b>?</b><span>בנק שאלות</span></a><a class="lr lr-x" href="dax-reference.html" title="אינדקס פונקציות DAX"><b>fx</b><span>רפרנס DAX</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="פתיחת רשימת התרגילים">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">תרגילים</span>
+    </button>
+    <a class="tb-home" id="tb-home" href="pbi.html" aria-label="חזרה לדף הבית של פלטפורמת Power BI" title="דף הבית">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">ראשי</span>
+    </a>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">הקודם</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">הבא</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-sum">
+      <span class="tb-quiz-t">לסיכום</span><span class="tb-quiz-s">סיכום</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+<section class="page" id="ed-intro" data-chap="מטלת סיכום · מוסד לימודים" data-title="מוסד לימודים — הכנה ומבנה"
+ aria-label="מטלת סיכום · מוסד לימודים — מוסד לימודים — הכנה ומבנה" hidden>
+  <div class="sec-num">מטלת סיכום · מוסד לימודים</div>
+  <h2 class="sec-title">מודל מוסד הלימודים — הכנה ומבנה המטלה</h2>
+  
+  <p class="sec-sub">שני עמודי דשבורד שכל מספר בהם מגיע ממדד שאתם כותבים מאפס, עם חיווי צבע אוטומטי
+  למצב התוכניות. עובדים על <span class="mono" dir="ltr">Education_PowerBI_Star.xlsx</span> — סכמת כוכב טהורה: טבלת עובדות אחת,
+  שבעה מימדים, 28,640 שורות ושבעה קשרים. 29 תרגילים, כל אחד בדף נפרד ועם פתרון מלא. שימו לב: ההורדה
+  והתרגול הם <b>במחשב בלבד</b> — Power BI Desktop אינו קיים בטלפון.</p>
+
+  <div class="practice-cta">
+    <a class="btn" href="assets/Education_PowerBI_Star.xlsx" download>הורדת הדאטהסט — Education_PowerBI_Star.xlsx</a>
+    <span class="pc-note">9 גיליונות · 28,640 שורות עובדה · 7 קשרים · <b style="color:var(--pbi)">להורדה במחשב בלבד</b></span>
+  </div>
+
+  <div class="kpis" style="margin:22px 0">
+    <div class="kpi"><b><span dir="ltr">50,294,057</span></b><span>דולר שכר לימוד שנגבה — מספר העוגן</span></div>
+    <div class="kpi"><b><span dir="ltr">28,640</span></b><span>שורות רישום</span></div>
+    <div class="kpi"><b><span dir="ltr">4,198</span></b><span>סטודנטים</span></div>
+    <div class="kpi"><b><span dir="ltr">14</span></b><span>מדדים לכתיבה</span></div>
+  </div>
+
+  <p class="note"><b>הנתונים סינתטיים.</b> שמות הערים והמדינות אמיתיים, אבל כל סטודנט, קורס, מרצה,
+  תוכנית ומספר בקובץ נוצרו באופן מלאכותי עם זרע אקראי קבוע. אין להסיק מהם דבר על מוסד לימודים אמיתי.</p>
+
+  <p class="note"><b>לפני שמתחילים — בניית המודל.</b> טענו את שמונה טבלאות המודל
+  (<span class="mono" dir="ltr">Relationships</span> הוא גיליון תיעוד — אל תטענו אותו). כבו <span class="mono" dir="ltr">Autodetect</span>,
+  בנו את שבעת הקשרים ידנית, וודאו שכולם <span class="mono" dir="ltr">One to Many</span> בכיוון <span class="mono" dir="ltr">Single</span> מהמימד אל
+  <span class="mono" dir="ltr">Fact_Enrollments</span>. סמנו את <span class="mono" dir="ltr">Dim_Date</span> כטבלת תאריכים
+  (<span class="mono" dir="ltr">Mark as date table</span> על <span class="mono" dir="ltr">Full_Date</span>).</p>
+
+  <p class="note"><b>המלכודת הגדולה של הקובץ הזה — שורות מבוטלות שנושאות הכנסה שלא מומשה.</b>
+  בטבלת העובדות שתי עמודות כסף שנראות תאומות: <span class="mono" dir="ltr">Tuition_Billed_USD</span> ו-<span class="mono" dir="ltr">Tuition_Collected_USD</span>.
+  לכל שורה שהסטטוס שלה שייך ל-<span class="mono" dir="ltr">Status_Group = "Lost"</span> — כלומר <span class="mono" dir="ltr">Withdrawn</span> ו-<span class="mono" dir="ltr">Cancelled</span> —
+  יש חיוב חיובי אבל גבייה <b>אפס</b>. מי שיסכם את עמודת החיוב יקבל
+  <span dir="ltr">61,236,519.19</span> במקום <span dir="ltr">50,294,056.87</span> — ניפוח של
+  <span dir="ltr">10,942,462.32</span> דולר, 17.9% מסך החיוב, שמעולם לא נכנס לקופה.
+  <b>בכל המטלה מסכמים <span class="mono" dir="ltr">Tuition_Collected_USD</span>.</b> חיוב הוא כוונה, גבייה היא הכנסה.</p>
+
+  <p class="note"><b>מילון סוגריים.</b> <span class="mono" dir="ltr">Table[Column]</span> = עמודה · <span class="mono">[מדד]</span> =
+  סוגריים מרובעים בלי שם טבלה. לכל מדד: קליק ימני על <span class="mono" dir="ltr">Fact_Enrollments</span> בחלונית
+  <span class="mono" dir="ltr">Data</span> ← <span class="mono" dir="ltr">New measure</span> ← הנוסחה ← Enter. השם חייב להיות בדיוק כפי שמופיע בתרגיל.</p>
+
+  <h3 style="margin:34px 0 14px">מבנה המטלה</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">חלק 1</span><h3>14 מדדי DAX</h3><p>אחד-עשר מדדי בסיס — שני SUM, שני DISTINCTCOUNT, DIVIDE, שני CALCULATE, ALL, IF ושני SWITCH — ושלוש פונקציות חלון: RANK, INDEX ו-WINDOW.</p></div>
+    <div class="card"><span class="tag">חלק 2</span><h3>שני עמודי דשבורד</h3><p>ארבעה קארדים על מגש, גרף עמודות, גרף קו מוחלק, סלייסר, טבלת תוכניות, Top N, Matrix וגרף משולב.</p></div>
+    <div class="card"><span class="tag">חלק 3</span><h3>עיצוב מותנה וחשיבה</h3><p>אותה חלוקה לשלוש שכבות בשתי טכניקות, ואז שני תרגילי חשיבה: פירוק המלכודת ותובנת רווחיות הערוצים.</p></div>
+  </div>
+
+  <div class="practice-cta" style="margin-top:26px">
+    <button type="button" class="btn" data-goto="ed-1-1">לתרגיל הראשון — 1.1 Total Tuition Collected ←</button>
+    <span class="pc-note">כל המספרים אומתו ב-pandas מול הקובץ</span>
+  </div>
+</section>
+
+<section class="page" id="ed-1-1" data-chap="פרק I · מדדי בסיס" data-title="1.1 Total Tuition Collected"
+ aria-label="פרק I · מדדי בסיס — 1.1 Total Tuition Collected" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.1 · Total Tuition Collected — מדד הבסיס</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Total Tuition Collected</b> שמסכם את <span class="mono" dir="ltr">Fact_Enrollments[Tuition_Collected_USD]</span>. עצבו עם מפריד אלפים ושתי ספרות אחרי הנקודה.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Total Tuition Collected =
+SUM (
+  Fact_Enrollments[Tuition_Collected_USD]
+)</pre><ol class='steps'><li><b>יצירה</b><span>קליק ימני על <code>Fact_Enrollments</code> ← <code>New measure</code></span></li><li><b>עיצוב</b><span><code>Measure tools</code> ← <code>Format: Currency</code> ← 2 ספרות</span></li><li><b>בדיקה</b><span>גררו לקארד ריק כדי לוודא שהמספר מופיע</span></li></ol><p class="task-q"><b>למה דווקא העמודה הזאת:</b> בטבלה יושבת גם <span class="mono" dir="ltr">Tuition_Billed_USD</span>, והיא מחזירה <span dir='ltr'>61,236,519.19</span>. ההפרש של <span dir='ltr'>10,942,462.32</span> דולר הוא בדיוק החיוב של השורות שבוטלו — כסף שנרשם כחוב ומעולם לא נגבה. תרגיל 4.1 מפרק את זה לגמרי.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>50,294,056.87</span></b> דולר — מספר העוגן של כל המטלה.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-2" data-chap="פרק I · מדדי בסיס" data-title="1.2 Students Enrolled"
+ aria-label="פרק I · מדדי בסיס — 1.2 Students Enrolled" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.2 · Students Enrolled — כמה סטודנטים באמת</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Students Enrolled</b> שסופר סטודנטים <b>ייחודיים</b> על בסיס <span class="mono" dir="ltr">Fact_Enrollments[Student_ID]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Students Enrolled =
+DISTINCTCOUNT (
+  Fact_Enrollments[Student_ID]
+)</pre><p class="task-q"><b>למה לא COUNT:</b> <span class="mono" dir="ltr">COUNT(Student_ID)</span> היה מחזיר <b>28,640</b> — הוא סופר שורות שיש בהן ערך, לא ערכים ייחודיים. כל סטודנט נרשם ל-6.8 קורסים בממוצע, ולכן 28,640 ÷ 4,198 ≈ 6.82.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>4,198</span></b> סטודנטים.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-3" data-chap="פרק I · מדדי בסיס" data-title="1.3 Tuition per Student"
+ aria-label="פרק I · מדדי בסיס — 1.3 Tuition per Student" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.3 · Tuition per Student — עקרון הלגו</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Tuition per Student</b> — אך ורק משני המדדים הקיימים, בלי סימן החלוקה / ובלי AVERAGE. עצבו לשתי ספרות.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Tuition per Student =
+DIVIDE (
+  [Total Tuition Collected],
+  [Students Enrolled]
+)</pre><p class="task-q"><b>ממוצע של מה:</b> <span class="mono" dir="ltr">AVERAGE(Tuition_Collected_USD)</span> היה מחזיר את הממוצע לשורת רישום (1,756.08), לא לסטודנט. כשהמדד בנוי משני מדדים קיימים המכנה מוגדר במפורש ואתם יודעים בדיוק מה חילקתם. <span class="mono" dir="ltr">DIVIDE</span> עדיף על / כי הוא מחזיר ריק במקום שגיאה כשהמכנה אפס.</p><p class="task-q"><b>המדד מתגלגל אוטומטית לכל הקשר:</b> גררו אותו לטבלת התוכניות והוא יחזיר את שכר הלימוד לסטודנט בכל תוכנית בנפרד — בלי לכתוב שורה נוספת.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>11,980.48</span></b> דולר לסטודנט.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-4" data-chap="פרק I · מדדי בסיס" data-title="1.4 Total Credit Hours"
+ aria-label="פרק I · מדדי בסיס — 1.4 Total Credit Hours" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.4 · Total Credit Hours — SUM על עמודה אחרת</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Total Credit Hours</b> שמסכם את <span class="mono" dir="ltr">Fact_Enrollments[Credit_Hours]</span>. המדד משרת את הגרף המשולב בתרגיל 2.10.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Total Credit Hours =
+SUM ( Fact_Enrollments[Credit_Hours] )</pre><p class="task-q"><b>העמודה הזאת נגזרת באמת:</b> <span class="mono" dir="ltr">Credit_Hours</span> בטבלת העובדות שווה תמיד ל-<span class="mono" dir="ltr">Credit_Value</span> של הקורס ב-<span class="mono" dir="ltr">Dim_Course</span>. אפשר היה לוותר עליה ולסכם דרך הקשר — היא יושבת בעובדות כדי שתוכלו לסכם בלי לגעת במימד.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>481,915</span></b> שעות זכות.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-5" data-chap="פרק I · מדדי בסיס" data-title="1.5 Courses Delivered"
+ aria-label="פרק I · מדדי בסיס — 1.5 Courses Delivered" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.5 · Courses Delivered — DISTINCTCOUNT שני</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Courses Delivered</b> שסופר קורסים ייחודיים על בסיס <span class="mono" dir="ltr">Fact_Enrollments[Course_ID]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Courses Delivered =
+DISTINCTCOUNT (
+  Fact_Enrollments[Course_ID]
+)</pre><p class="task-q"><b>שימו לב להבדל מ-1.2:</b> אותה פונקציה, עמודה אחרת, ותוצאה בסדר גודל אחר לגמרי. <span class="mono" dir="ltr">DISTINCTCOUNT</span> תמיד סופר את הערכים הייחודיים <b>בהקשר הנוכחי</b> — גררו את המדד לטבלה לפי <span class="mono" dir="ltr">Dim_Campus[Campus_Name]</span> והוא יראה כמה קורסים שונים רצו בכל קמפוס, לא 180 בכל שורה.</p><p class="sol-check">תוצאה: <b>180</b> קורסים — כל הקטלוג פעיל.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-6" data-chap="פרק I · מדדי בסיס" data-title="1.6 Online Tuition"
+ aria-label="פרק I · מדדי בסיס — 1.6 Online Tuition" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.6 · Online Tuition — CALCULATE ראשון</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Online Tuition</b> שמחזיר את שכר הלימוד שנגבה מקורסים מקוונים בלבד. השתמשו ב-CALCULATE עם <span class="mono" dir="ltr">[Total Tuition Collected]</span> כביטוי ותנאי על <span class="mono" dir="ltr">Dim_Course[Delivery_Mode]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Online Tuition =
+CALCULATE (
+  [Total Tuition Collected],
+  Dim_Course[Delivery_Mode] = &quot;Online&quot;
+)</pre><p class="task-q"><b>מה קורה כאן:</b> CALCULATE מוסיפה את התנאי לבועת הסינון ורק אז מריצה את <span class="mono" dir="ltr">[Total Tuition Collected]</span>. הפילטר יושב על עמודת טקסט בטבלת המימד, זורם דרך הקשר אל 28,640 שורות העובדה — בלי שום JOIN.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>14,331,147.98</span></b> דולר — 28.49% מסך הגבייה.<br>הפירוק המלא: Campus <span dir='ltr'>24,521,003.34</span> · Online <span dir='ltr'>14,331,147.98</span> · Hybrid <span dir='ltr'>11,441,905.55</span></p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-7" data-chap="פרק I · מדדי בסיס" data-title="1.7 Realized Tuition"
+ aria-label="פרק I · מדדי בסיס — 1.7 Realized Tuition" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.7 · Realized Tuition — CALCULATE עם KEEPFILTERS</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Realized Tuition</b> שמחזיר רק את הגבייה מרישומים שהסתיימו — <span class="mono" dir="ltr">Dim_Status[Status_Group] = &quot;Realized&quot;</span>. עטפו את התנאי ב-<span class="mono" dir="ltr">KEEPFILTERS</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Realized Tuition =
+CALCULATE (
+  [Total Tuition Collected],
+  KEEPFILTERS (
+    Dim_Status[Status_Group] = &quot;Realized&quot;
+  )
+)</pre><p class="task-q"><b>מה KEEPFILTERS משנה:</b> תנאי רגיל בתוך CALCULATE <b>דורס</b> כל פילטר קיים על אותה עמודה. <span class="mono" dir="ltr">KEEPFILTERS</span> מחליף את הדריסה בהצטלבות. הבדיקה: שימו סלייסר על <span class="mono" dir="ltr">Status_Group</span> ובחרו <span class="mono" dir="ltr">Open</span> בלבד. בלי KEEPFILTERS המדד ימשיך להחזיר <span dir='ltr'>35,487,304.63</span> ויתעלם מהסלייסר; עם KEEPFILTERS הוא יחזיר <b>ריק</b> — כי החיתוך של Open עם Realized הוא קבוצה ריקה. זו התשובה הנכונה.</p><p class="task-q"><b>למה זה חשוב כאן במיוחד:</b> הקבוצה השלישית, <span class="mono" dir="ltr">Lost</span>, מחזיקה גבייה <b>אפס</b> אבל חיוב של <span dir='ltr'>10,410,534.43</span> דולר. הפילוח לפי סטטוס הוא בדיוק המקום שבו המלכודת של הקובץ נחשפת בעין.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>35,487,304.63</span></b> דולר.<br>לפי קבוצת סטטוס: Realized <span dir='ltr'>35,487,304.63</span> · Open <span dir='ltr'>14,806,752.24</span> · Lost <span dir='ltr'>0.00</span></p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-8" data-chap="פרק I · מדדי בסיס" data-title="1.8 % of All Programs"
+ aria-label="פרק I · מדדי בסיס — 1.8 % of All Programs" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.8 · % of All Programs — ALL משחררת את הפילטר</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>% of All Programs</b> שמחזיר את חלקה של כל תוכנית מתוך <b>כל שורות <span class="mono" dir="ltr">Dim_Program</span></b> — גם כשהוויזואל מסונן לתוכנית אחת. עצבו כאחוז בשתי ספרות.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">% of All Programs =
+DIVIDE (
+  [Total Tuition Collected],
+  CALCULATE (
+    [Total Tuition Collected],
+    ALL ( Dim_Program )
+  )
+)</pre><p class="task-q"><b>איפה ALL עובדת:</b> המונה מחושב בהקשר השורה — שכר הלימוד של התוכנית הנוכחית. המכנה עטוף ב-<span class="mono" dir="ltr">CALCULATE</span> עם <span class="mono" dir="ltr">ALL ( Dim_Program )</span>, שמוחק את הפילטר על <b>כל</b> העמודות של המימד ומחזיר תמיד את סך 24 התוכניות. אילו כתבתם <span class="mono" dir="ltr">ALL ( Dim_Program[Program_Name] )</span> הייתם משחררים רק עמודה אחת — פילטר על <span class="mono" dir="ltr">Faculty_Name</span> היה ממשיך לחתוך את המכנה.</p><p class="task-q"><b>מבחן השפיות:</b> גררו את המדד לטבלת התוכניות. עמודת האחוזים חייבת להסתכם בדיוק ל-100.00%. אם היא לא — סימן שהמכנה שלכם מסונן.</p><p class="sol-check">תוצאה: <b>Public Health</b> = <b>5.20%</b> (<span dir='ltr'>2,613,332.23</span>) · <b>Digital Marketing</b> = <b>2.88%</b> (<span dir='ltr'>1,449,455.63</span>) · סך העמודה = <b>100.00%</b></p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-9" data-chap="פרק I · מדדי בסיס" data-title="1.9 Program Status"
+ aria-label="פרק I · מדדי בסיס — 1.9 Program Status" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.9 · Program Status — IF מול יעד קבוע</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Program Status</b> שמחזיר <span dir='ltr'>"Above Target"</span> כששכר הלימוד של התוכנית מגיע ליעד השנתי של <span dir='ltr'>2,100,000</span> דולר, ו-<span dir='ltr'>"Below Target"</span> אחרת.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Program Status =
+IF (
+  [Total Tuition Collected] &gt;= 2100000,
+  &quot;Above Target&quot;,
+  &quot;Below Target&quot;
+)</pre><p class="task-q"><b>יעד קבוע, לא ממוצע:</b> היעד כאן הוא מספר מוסכם מראש שנקבע בתקציב, לא ערך שמחושב מהנתונים. היתרון: התוצאה יציבה ולא זזה כשמסננים את הוויזואל. החיסרון: אם תשנו את היעד תצטרכו לערוך את הנוסחה — בתרגיל 2.6 תראו איך פרמטר What-if פותר את זה.</p><p class="task-q"><b>מדד טקסט אינו מדד מספרי:</b> אי אפשר לדרג אותו, לסכם אותו או להזין ממנו גרף. מקומו בטבלה ובקארד בלבד.</p><p class="sol-check">תוצאה: <b>14</b> תוכניות מעל היעד · <b>10</b> מתחתיו. התוכנית הראשונה מתחת ליעד: <b>Social Work</b> (<span dir='ltr'>1,995,665</span>).</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-10" data-chap="פרק I · מדדי בסיס" data-title="1.10 Program Tier"
+ aria-label="פרק I · מדדי בסיס — 1.10 Program Tier" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.10 · Program Tier — SWITCH לשלוש שכבות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Program Tier</b> שמחלק את התוכניות לשלוש שכבות: <span dir='ltr'>"Top"</span> מ-<span dir='ltr'>2,400,000</span> ומעלה, <span dir='ltr'>"Mid"</span> מ-<span dir='ltr'>1,900,000</span> ומעלה, והשאר <span dir='ltr'>"Low"</span>. השתמשו ב-<span dir='ltr'>SWITCH(TRUE())</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Program Tier =
+SWITCH (
+  TRUE (),
+  [Total Tuition Collected] &gt;= 2400000,
+    &quot;Top&quot;,
+  [Total Tuition Collected] &gt;= 1900000,
+    &quot;Mid&quot;,
+  &quot;Low&quot;
+)</pre><p class="task-q"><b>למה SWITCH(TRUE()) ולא IF מקונן:</b> <span class="mono" dir="ltr">TRUE()</span> כארגומנט ראשון הופך את SWITCH לרשימת תנאים שנבדקים <b>מלמעלה למטה</b>, והראשון שמתקיים מנצח. הסדר קריטי: אילו שורת ה-Mid הייתה ראשונה, כל התוכניות מעל 2.4 מיליון היו מקבלות Mid כי הן עוברות גם את הסף הנמוך.</p><p class="task-q"><b>הארגומנט האחרון בלי תנאי</b> הוא ברירת המחדל. בלעדיו תוכנית שלא עונה לאף תנאי תחזיר ריק, והוויזואל יראה שורה ריקה במקום תווית.</p><p class="sol-check">תוצאה: <b>6</b> תוכניות Top · <b>13</b> Mid · <b>5</b> Low. סך הכל 24 — כל תוכנית קיבלה בדיוק תווית אחת.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-11" data-chap="פרק I · מדדי בסיס" data-title="1.11 Tier Color"
+ aria-label="פרק I · מדדי בסיס — 1.11 Tier Color" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.11 · Tier Color — SWITCH שמחזיר צבע</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Tier Color</b> שמתרגם את <span dir='ltr'>[Program Tier]</span> לקוד הקסה: <span dir='ltr'>Top → #132449</span>, <span dir='ltr'>Mid → #F5C518</span>, וברירת מחדל <span dir='ltr'>#A9B4CC</span>. זה SWITCH על ערך, לא על TRUE().</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Tier Color =
+SWITCH (
+  [Program Tier],
+  &quot;Top&quot;, &quot;#132449&quot;,
+  &quot;Mid&quot;, &quot;#F5C518&quot;,
+  &quot;#A9B4CC&quot;
+)</pre><p class="task-q"><b>שתי צורות של אותה פונקציה:</b> בתרגיל הקודם SWITCH קיבלה <span class="mono" dir="ltr">TRUE()</span> והשוותה תנאים. כאן היא מקבלת <b>ביטוי</b> ומשווה אותו לערכים. הצורה הזאת קצרה יותר וקריאה יותר כשיש רשימת ערכים סגורה.</p><p class="task-q"><b>המדד הזה לא מיועד לעין.</b> הוא מזין את חלונית העיצוב המותנה בתרגיל 3.2. אם תגררו אותו לטבלה תראו מחרוזות הקסה — זה תקין.</p><p class="sol-check">תוצאה: <b>6</b> תוכניות מקבלות <span dir='ltr'>#132449</span> · <b>13</b> מקבלות <span dir='ltr'>#F5C518</span> · <b>5</b> מקבלות <span dir='ltr'>#A9B4CC</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-12" data-chap="פרק Iב · פונקציות חלון" data-title="1.12 Program Rank"
+ aria-label="פרק Iב · פונקציות חלון — 1.12 Program Rank" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק Iב · פונקציות חלון</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.12 · Program Rank — RANK צפוף</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Program Rank</b> שמדרג את התוכניות לפי שכר הלימוד שנגבה, מהגבוה לנמוך, בדירוג <b>צפוף</b> (<span dir='ltr'>DENSE</span>).</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Program Rank =
+RANK (
+  DENSE,
+  ALLSELECTED (
+    Dim_Program[Program_Name]
+  ),
+  ORDERBY (
+    [Total Tuition Collected], DESC
+  )
+)</pre><p class="task-q"><b>שלושת החלקים:</b> <span class="mono" dir="ltr">DENSE</span> קובע שאחרי תיקו הדירוג הבא הוא הבא בתור ולא קופץ · <span class="mono" dir="ltr">ALLSELECTED</span> מגדיר את החלון — כל התוכניות שהסלייסר משאיר גלויות · <span class="mono" dir="ltr">ORDERBY</span> קובע לפי מה ממיינים. בלי ORDERBY, RANK תמיין לפי סדר העמודה ותחזיר דירוג אלפביתי.</p><p class="task-q"><b>למה ALLSELECTED ולא ALL:</b> עם <span class="mono" dir="ltr">ALL</span> הדירוג היה מתעלם מהסלייסרים ותמיד נע בין 1 ל-24. עם <span class="mono" dir="ltr">ALLSELECTED</span> סינון לפקולטה אחת מדרג מחדש בתוך הפקולטה — מספר 1 יהיה המוביל בבחירה הנוכחית.</p><p class="sol-check">תוצאה: <b>Public Health = 1</b> · <b>Digital Marketing = 24</b>. 24 תוכניות, 24 דירוגים — אין תיקו בקובץ הזה, ולכן DENSE ו-SKIP מחזירים כאן אותו דבר. ההבדל יתגלה ברגע שתסננו לפקולטה עם ערכים זהים.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-13" data-chap="פרק Iב · פונקציות חלון" data-title="1.13 Leader Tuition"
+ aria-label="פרק Iב · פונקציות חלון — 1.13 Leader Tuition" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק Iב · פונקציות חלון</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.13 · Leader Tuition — INDEX מחזיר את המוביל</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Leader Tuition</b> שמחזיר בכל שורה את שכר הלימוד של התוכנית <b>המובילה</b> — אותו מספר בכל שורות הטבלה. השתמשו ב-<span dir='ltr'>INDEX</span> עם <span dir='ltr'>ORDERBY</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Leader Tuition =
+CALCULATE (
+  [Total Tuition Collected],
+  INDEX (
+    1,
+    ALLSELECTED (
+      Dim_Program[Program_Name]
+    ),
+    ORDERBY (
+      [Total Tuition Collected], DESC
+    )
+  )
+)</pre><p class="task-q"><b>INDEX מחזירה שורה, לא מספר.</b> היא בוררת את השורה במיקום שביקשתם בתוך החלון — <span class="mono" dir="ltr">1</span> = הראשונה אחרי המיון. כדי להפוך שורה למספר עוטפים ב-<span class="mono" dir="ltr">CALCULATE</span>, שמשתמש בשורה שנבחרה כפילטר ומריץ עליה את המדד. <span class="mono" dir="ltr">INDEX ( -1, ... )</span> היה מחזיר את האחרונה.</p><p class="task-q"><b>מה עושים עם זה:</b> מדד עזר טבעי הוא <span dir='ltr'>DIVIDE ( [Total Tuition Collected], [Leader Tuition] )</span> — אחוז מהמוביל. אצל Public Health הוא יחזיר 100%, ואצל Digital Marketing 55.46%.</p><p class="sol-check">תוצאה: <b><span dir='ltr'>2,613,332.23</span></b> — אותו מספר בכל 24 השורות. אם הוא משתנה משורה לשורה, החלון שלכם לא ALLSELECTED.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-1-14" data-chap="פרק Iב · פונקציות חלון" data-title="1.14 Moving Avg 3M"
+ aria-label="פרק Iב · פונקציות חלון — 1.14 Moving Avg 3M" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק Iב · פונקציות חלון</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.14 · Tuition Moving Avg 3M — WINDOW</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו מדד בשם <b dir='ltr'>Tuition Moving Avg 3M</b> שמחזיר ממוצע נע של שלושה חודשים — החודש הנוכחי ושני החודשים שלפניו. השתמשו ב-<span dir='ltr'>WINDOW</span> עם <span dir='ltr'>REL</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><pre class="dax">Tuition Moving Avg 3M =
+AVERAGEX (
+  WINDOW (
+    -2, REL, 0, REL,
+    ALLSELECTED ( Dim_Date[Year_Month] ),
+    ORDERBY ( Dim_Date[Year_Month], ASC )
+  ),
+  [Total Tuition Collected]
+)</pre><p class="task-q"><b>ארבעת המספרים הראשונים:</b> <span class="mono" dir="ltr">-2, REL</span> = גבול תחתון, שתי שורות אחורה יחסית לשורה הנוכחית · <span class="mono" dir="ltr">0, REL</span> = גבול עליון, השורה הנוכחית עצמה. <span class="mono" dir="ltr">REL</span> = יחסי לשורה הנוכחית; <span class="mono" dir="ltr">ABS</span> היה סופר מתחילת החלון.</p><p class="task-q"><b>למה AVERAGEX ולא AVERAGE:</b> <span class="mono" dir="ltr">WINDOW</span> מחזירה <b>טבלה</b> של עד שלוש שורות. <span class="mono" dir="ltr">AVERAGEX</span> רצה עליה שורה-שורה, מחשבת את המדד בכל אחת, ורק אז ממצעת. החלפה ל-<span class="mono" dir="ltr">SUMX</span> תיתן סכום נגרר במקום ממוצע נע.</p><p class="task-q"><b>שתי השורות הראשונות שונות:</b> בינואר 2023 יש שורה אחת בחלון ובפברואר שתיים, ולכן הממוצע שם הוא של פחות משלושה חודשים. זו התנהגות נכונה, לא באג — מי שרוצה ריק בשורות האלה חייב לספור אותן במפורש.</p><p class="sol-check">הציגו לפי <span class="mono" dir="ltr">Dim_Date[Year_Month]</span> (36 חודשים).<br>תוצאה: <b><span dir='ltr'>2023-03</span></b> = <b><span dir='ltr'>2,059,545.77</span></b> · <b><span dir='ltr'>2025-12</span></b> = <b><span dir='ltr'>1,593,617.98</span></b> (החודש עצמו: <span dir='ltr'>817,666.91</span> — הממוצע הנע מרכך את צניחת הסמסטר).</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-1" data-chap="פרק II · בניית הדשבורד" data-title="2.1 רקע, כותרת ומגש KPI"
+ aria-label="פרק II · בניית הדשבורד — 2.1 רקע, כותרת ומגש KPI" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.1 · רקע, כותרת ומגש KPI — הפריסה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו את עמוד 1 של הדשבורד: רקע כהה, כותרת, ומגש שיארח את ארבעת הקארדים. עדיין בלי ויזואלים — רק השלד.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>גודל הקנבס</b><span><code>View</code> ← <code>Page size</code> ← <code>16:9</code> (1280×720)</span></li><li><b>רקע</b><span><code>Format page</code> ← <code>Canvas background</code> ← <code>#132449</code> ← שקיפות 0%</span></li><li><b>כותרת</b><span><code>Insert</code> ← <code>Text box</code> ← "Education Performance Overview" ← Segoe UI 28 · לבן</span></li><li><b>תת-כותרת</b><span>תיבה שנייה, 13pt, בצבע #A9B4CC: "Tuition collected, FY2023-FY2025"</span></li><li><b>מגש</b><span><code>Insert</code> ← <code>Shapes</code> ← <code>Rectangle</code> ← מלא #1B3060 ← פינות מעוגלות 8 ← שלחו לאחור</span></li><li><b>שם העמוד</b><span>לחיצה כפולה על לשונית העמוד ← Overview</span></li></ol><p class="task-q"><b>למה מגש ולא ארבעה רקעים נפרדים:</b> צורה אחת מאחורי ארבעה קארדים נותנת מרווח אחיד וקל להזזה. ארבעה רקעים נפרדים מתחילים לזחול ברגע שמזיזים ויזואל אחד.</p><p class="task-q"><b>הקפידו על גריד:</b> הפעילו <span class="mono" dir="ltr">View → Gridlines</span> ו-<span class="mono" dir="ltr">Snap to grid</span> לפני שאתם מניחים משהו. פריסה שנבנתה בעין תיראה עקומה בכל רזולוציה אחרת.</p><p class="sol-check">בסוף התרגיל יש עמוד כהה עם כותרת, תת-כותרת ומלבן ריק ברוחב הדשבורד. אין עדיין אף ויזואל.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-2" data-chap="פרק II · בניית הדשבורד" data-title="2.2 תמונות בדשבורד"
+ aria-label="פרק II · בניית הדשבורד — 2.2 תמונות בדשבורד" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.2 · תמונות — חיפוש, הוספה ומיקום</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">הוסיפו לוגו בפינה העליונה ותמונת רקע עדינה לאזור הכותרת, בלי לפגוע בקריאוּת.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>מקור</b><span>חפשו תמונה חופשית לשימוש (Unsplash / Pexels) בנושא campus או library</span></li><li><b>הוספה</b><span><code>Insert</code> ← <code>Image</code> ← בחרו את הקובץ</span></li><li><b>התאמה</b><span><code>Format image</code> ← <code>Scaling: Fit</code> כדי לא לעוות יחס</span></li><li><b>שקיפות</b><span>לתמונת הרקע: הוסיפו מלבן #132449 מעליה בשקיפות 70%</span></li><li><b>סדר</b><span><code>Selection pane</code> ← גררו את התמונה מתחת לכל הטקסט</span></li><li><b>נגישות</b><span><code>General</code> ← <code>Alt text</code> ← תיאור קצר לקורא מסך</span></li></ol><p class="task-q"><b>כלל אצבע:</b> תמונה בדשבורד היא רקע, לא תוכן. אם היא מושכת את העין לפני המספרים — הורידו את השקיפות שלה עוד. יחס ניגודיות של 4.5:1 בין טקסט לרקע הוא המינימום.</p><p class="task-q"><b>גודל הקובץ נכנס ל-PBIX:</b> תמונה של 4MB מנפחת את הקובץ ומאיטה את הפתיחה. כווצו ל-200KB לפני ההוספה.</p><p class="sol-check">בסוף התרגיל יש לוגו קטן בפינה ותמונת רקע מעומעמת מאחורי הכותרת, והכותרת עדיין נקראת בבירור.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-3" data-chap="פרק II · בניית הדשבורד" data-title="2.3 ארבעה קארדים"
+ aria-label="פרק II · בניית הדשבורד — 2.3 ארבעה קארדים" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.3 · ארבעת הקארדים — רק מדדים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">הניחו על המגש ארבעה קארדים: <span dir='ltr'>[Total Tuition Collected]</span>, <span dir='ltr'>[Students Enrolled]</span>, <span dir='ltr'>[Courses Delivered]</span> ו-<span dir='ltr'>[Tuition per Student]</span>. <b>אסור לגרור עמודה גולמית לאף אחד מהם.</b></p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>הוספה</b><span><code>Visualizations</code> ← <code>Card</code> ← גררו את המדד ל-<code>Fields</code></span></li><li><b>כותרת</b><span><code>Format</code> ← <code>Callout value</code> ← 32pt · לבן</span></li><li><b>תווית</b><span><code>Category label</code> ← 12pt · #A9B4CC</span></li><li><b>יישור</b><span>בחרו את ארבעתם ← Format ← Align top ← Distribute horizontally</span></li><li><b>רקע</b><span>כבו את הרקע של כל קארד — המגש מתרגיל 2.1 הוא הרקע</span></li></ol><p class="task-q"><b>למה לא עמודה גולמית:</b> קארד שמקבל עמודה מציג <span class="mono" dir="ltr">First</span> או <span class="mono" dir="ltr">Count</span> לפי הסוג, וברגע שמישהו מסנן הוא עלול להחזיר מספר שאין לו משמעות. מדד מוגדר במפורש ומתגלגל נכון בכל הקשר.</p><p class="sol-check">ארבעת הקארדים מציגים: <span dir='ltr'>50,294,056.87</span> · <span dir='ltr'>4,198</span> · <span dir='ltr'>180</span> · <span dir='ltr'>11,980.48</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-4" data-chap="פרק II · בניית הדשבורד" data-title="2.4 גרף עמודות"
+ aria-label="פרק II · בניית הדשבורד — 2.4 גרף עמודות" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.4 · גרף עמודות — שכר לימוד לפי תוכנית</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Clustered bar chart</span> עם <span class="mono" dir="ltr">Dim_Program[Program_Name]</span> על הציר ו-<span dir='ltr'>[Total Tuition Collected]</span> בערכים, ממוין מהגבוה לנמוך.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Clustered bar chart</code></span></li><li><b>ציר Y</b><span><code>Dim_Program[Program_Name]</code></span></li><li><b>ערכים</b><span>[Total Tuition Collected]</span></li><li><b>מיון</b><span>שלוש נקודות ← <code>Sort axis</code> ← <code>Total Tuition Collected</code> ← <code>Descending</code></span></li><li><b>תוויות</b><span><code>Format</code> ← <code>Data labels</code> ← On ← <code>Display units: Millions</code></span></li><li><b>ציר</b><span>כבו את כותרת הציר — שם הוויזואל כבר אומר מה זה</span></li></ol><p class="task-q"><b>גררו את השם מהמימד, לא מהעובדות.</b> ב-<span class="mono" dir="ltr">Fact_Enrollments</span> יש רק <span class="mono" dir="ltr">Program_ID</span>. ויזואל שבנוי על המפתח יראה קודים במקום שמות, ולא יגיב לסלייסר על <span class="mono" dir="ltr">Faculty_Name</span>.</p><p class="task-q"><b>Bar ולא Column:</b> 24 שמות תוכניות ארוכים על ציר אופקי נחתכים או מסתובבים באלכסון. עמודות אופקיות נותנות לשם שורה מלאה.</p><p class="sol-check">התוכנית העליונה: <b>Public Health</b> — <span dir='ltr'>2,613,332.23</span>. התחתונה: <b>Digital Marketing</b> — <span dir='ltr'>1,449,455.63</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-5" data-chap="פרק II · בניית הדשבורד" data-title="2.5 גרף קו מוחלק"
+ aria-label="פרק II · בניית הדשבורד — 2.5 גרף קו מוחלק" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.5 · גרף קו מוחלק — המגמה החודשית</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Line chart</span> עם <span class="mono" dir="ltr">Dim_Date[Year_Month]</span> על הציר, <span dir='ltr'>[Total Tuition Collected]</span> ו-<span dir='ltr'>[Tuition Moving Avg 3M]</span> כשני קווים. הפעילו החלקה על הקו הראשי.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Line chart</code></span></li><li><b>ציר X</b><span><code>Dim_Date[Year_Month]</code> — ודאו שהוא <code>Categorical</code> ולא Date hierarchy</span></li><li><b>ערכים</b><span>[Total Tuition Collected] ו-[Tuition Moving Avg 3M]</span></li><li><b>החלקה</b><span><code>Format</code> ← <code>Lines</code> ← <code>Shape</code> ← <code>Smooth line: On</code></span></li><li><b>צבעים</b><span>הקו הראשי #F5C518 ברוחב 3 · הממוצע הנע #A9B4CC ברוחב 2 מקווקו</span></li><li><b>מיון</b><span><code>Sort axis</code> ← <code>Year_Month</code> ← <code>Ascending</code></span></li></ol><p class="task-q"><b>עונתיות שתראו מיד:</b> ספטמבר-אוקטובר וינואר-פברואר מזנקים, יולי-אוגוסט צונחים. זה לוח השנה האקדמי, לא רעש. סך הכל: Spring <span dir='ltr'>24,763,017</span> · Fall <span dir='ltr'>21,537,164</span> · Summer <span dir='ltr'>3,993,875</span>.</p><p class="task-q"><b>ההחלקה משקרת קצת.</b> Smooth line מצייר עקומה בין נקודות ולכן ממציא ערכי ביניים שלא קיימים. הוא יפה למגמה ומסוכן לקריאה מדויקת — לכן הממוצע הנע נשאר קו ישר.</p><p class="sol-check">הקו המוחלק מתחיל ב-<span dir='ltr'>2,568,361.43</span> (2023-01) ומסתיים ב-<span dir='ltr'>817,666.91</span> (2025-12). הממוצע הנע בנקודה האחרונה: <span dir='ltr'>1,593,617.98</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-6" data-chap="פרק II · בניית הדשבורד" data-title="2.6 עמוד שני וסלייסר"
+ aria-label="פרק II · בניית הדשבורד — 2.6 עמוד שני וסלייסר" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.6 · עמוד 2 וסלייסר שנת הלימודים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צרו עמוד שני בשם <span class="mono" dir="ltr">Detail</span>, העתיקו אליו את המגש והכותרת, והוסיפו סלייסר על <span class="mono" dir="ltr">Dim_Date[Academic_Year]</span> שמסנכרן את שני העמודים.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>עמוד</b><span><code>+</code> בתחתית ← שם: Detail ← אותו רקע ואותה כותרת</span></li><li><b>סלייסר</b><span><code>Slicer</code> ← <code>Dim_Date[Academic_Year]</code></span></li><li><b>סגנון</b><span><code>Format</code> ← <code>Slicer settings</code> ← <code>Style: Tile</code> ← אופקי</span></li><li><b>סנכרון</b><span><code>View</code> ← <code>Sync slicers</code> ← סמנו Sync ו-Visible בשני העמודים</span></li><li><b>ברירת מחדל</b><span>השאירו את הסלייסר ריק — ריק פירושו הכול</span></li><li><b>What-if</b><span><code>Modeling</code> ← <code>New parameter</code> ← <code>Numeric range</code> ← Target · 1,000,000 עד 3,000,000 · צעד 100,000</span></li></ol><p class="task-q"><b>הפרמטר משחרר את היעד מ-1.9:</b> החליפו בנוסחת <span class="mono" dir="ltr">Program Status</span> את המספר 2100000 ב-<span class="mono" dir="ltr">[Target Value]</span>, והמשתמש יזיז את הסליידר ויראה כמה תוכניות עוברות את היעד בזמן אמת.</p><p class="task-q"><b>שימו לב לסנכרון:</b> <span class="mono" dir="ltr">Sync</span> בלי <span class="mono" dir="ltr">Visible</span> מסנן את העמוד השני בלי להראות שם את הסלייסר — מצב מבלבל שגורם למשתמשים לדווח על "מספרים שגויים".</p><p class="sol-check">בחירת <span dir='ltr'>AY2024</span> מורידה את הקארד הראשון ל-<span dir='ltr'>16,814,633.91</span>. שלוש השנים: AY2023 <span dir='ltr'>16,802,711.36</span> · AY2024 <span dir='ltr'>16,814,633.91</span> · AY2025 <span dir='ltr'>16,676,711.60</span> — סכומן הוא בדיוק מספר העוגן.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-7" data-chap="פרק II · בניית הדשבורד" data-title="2.7 טבלת פירוט"
+ aria-label="פרק II · בניית הדשבורד — 2.7 טבלת פירוט" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.7 · טבלת התוכניות — כאן חיים IF ו-SWITCH</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בעמוד <span class="mono" dir="ltr">Detail</span> בנו <span class="mono" dir="ltr">Table</span> עם <span class="mono" dir="ltr">Dim_Program[Program_Name]</span>, <span class="mono" dir="ltr">Dim_Program[Faculty_Name]</span> וחמשת המדדים: <span dir='ltr'>[Total Tuition Collected]</span>, <span dir='ltr'>[% of All Programs]</span>, <span dir='ltr'>[Program Rank]</span>, <span dir='ltr'>[Program Status]</span> ו-<span dir='ltr'>[Program Tier]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Table</code> — לא Matrix, אין כאן היררכיה</span></li><li><b>עמודות</b><span>שתי עמודות מימד ואז חמשת המדדים לפי הסדר</span></li><li><b>מיון</b><span>לחצו על כותרת <code>Program Rank</code> ← עולה</span></li><li><b>סכום</b><span><code>Format</code> ← <code>Totals</code> ← On — ודאו ש-% מסתכם ל-100.00%</span></li><li><b>רוחב</b><span>גררו את גבולות העמודות ידנית; אל תסמכו על ההתאמה האוטומטית</span></li></ol><p class="task-q"><b>מבחן האדיטיביות:</b> שורת הסיכום של <span class="mono" dir="ltr">[Total Tuition Collected]</span> חייבת להראות <span dir='ltr'>50,294,056.87</span> ושל <span class="mono" dir="ltr">[% of All Programs]</span> בדיוק 100.00%. <span class="mono" dir="ltr">[Program Rank]</span> בשורת הסיכום יראה 1 — זה תקין, כי בהקשר הסיכום אין תוכנית לדרג.</p><p class="task-q"><b>מה לא לשים כאן:</b> את <span class="mono" dir="ltr">Revenue_Per_Credit_Hour</span> מטבלת העובדות. הוא יחס ברמת שורה, ו-Power BI יסכם אותו בברירת מחדל ויציג מספר חסר משמעות לגמרי. יחס מחשבים תמיד כמדד DIVIDE ברמת הסיכום.</p><p class="sol-check">השורה הראשונה: <b>Public Health · Faculty of Health · <span dir='ltr'>2,613,332.23</span> · 5.20% · 1 · Above Target · Top</b>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-8" data-chap="פרק II · בניית הדשבורד" data-title="2.8 Top N קורסים"
+ aria-label="פרק II · בניית הדשבורד — 2.8 Top N קורסים" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.8 · Top 10 קורסים — Bar עם פילטר Top N</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו גרף עמודות של עשרת הקורסים המובילים לפי <span dir='ltr'>[Total Tuition Collected]</span>, באמצעות פילטר <span class="mono" dir="ltr">Top N</span> ולא מיון ידני.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Clustered bar chart</code> ← ציר: <code>Dim_Course[Course_Name]</code></span></li><li><b>ערכים</b><span>[Total Tuition Collected]</span></li><li><b>פילטר</b><span><code>Filters</code> ← <code>Course_Name</code> ← <code>Filter type: Top N</code></span></li><li><b>הגדרה</b><span><code>Show items: Top</code> ← 10 ← <code>By value</code>: [Total Tuition Collected]</span></li><li><b>החלה</b><span><code>Apply filter</code> — בלי הלחיצה הזאת שום דבר לא קורה</span></li></ol><p class="task-q"><b>Top N הוא פילטר דינמי.</b> ברגע שיבחרו AY2024 בסלייסר, הרשימה תחושב מחדש ועשרת המובילים עשויים להתחלף. מיון ידני עם "הצג 10 ראשונים" לא היה עושה את זה.</p><p class="task-q"><b>שימו לב לאשליית הריכוזיות:</b> עשרת הקורסים המובילים מחזיקים יחד רק <b>11.47%</b> מהגבייה. בקטלוג של 180 קורסים אין זנב ארוך אמיתי — התפלגות שטוחה למדי, וזו תובנה בפני עצמה.</p><p class="sol-check">הקורס המוביל: <b>Finance Practice</b> — <span dir='ltr'>634,376.62</span>. סך עשרת המובילים: 11.47% מ-<span dir='ltr'>50,294,056.87</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-9" data-chap="פרק II · בניית הדשבורד" data-title="2.9 Matrix"
+ aria-label="פרק II · בניית הדשבורד — 2.9 Matrix" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.9 · Matrix — פקולטה × אופן הוראה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Matrix</span> עם <span class="mono" dir="ltr">Dim_Program[Faculty_Name]</span> בשורות, <span class="mono" dir="ltr">Dim_Course[Delivery_Mode]</span> בעמודות ו-<span dir='ltr'>[Total Tuition Collected]</span> בערכים.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Matrix</code></span></li><li><b>שורות</b><span><code>Dim_Program[Faculty_Name]</code></span></li><li><b>עמודות</b><span><code>Dim_Course[Delivery_Mode]</code></span></li><li><b>ערכים</b><span>[Total Tuition Collected]</span></li><li><b>סכומים</b><span><code>Format</code> ← <code>Row subtotals</code> ו-<code>Column subtotals</code> ← On</span></li><li><b>יחידות</b><span><code>Format</code> ← <code>Display units: Millions</code> ← ספרה אחת</span></li></ol><p class="task-q"><b>שני מימדים שונים בצלעות אחת מטריצה.</b> זה בדיוק מה שסכמת כוכב נותנת: <span class="mono" dir="ltr">Dim_Program</span> ו-<span class="mono" dir="ltr">Dim_Course</span> לא מכירות זו את זו, אבל שתיהן מסננות את אותה טבלת עובדות, ולכן החיתוך ביניהן מחושב לבד.</p><p class="task-q"><b>מבחן הפינה הימנית התחתונה:</b> הסכום הכולל של המטריצה חייב להיות <span dir='ltr'>50,294,056.87</span>. אם הוא גדול יותר — יש לכם קשר דו-כיווני או נתיב סינון כפול במודל.</p><p class="sol-check">סכומי העמודות: Campus <span dir='ltr'>24,521,003.34</span> · Online <span dir='ltr'>14,331,147.98</span> · Hybrid <span dir='ltr'>11,441,905.55</span> · סך הכל <span dir='ltr'>50,294,056.87</span>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-10" data-chap="פרק II · בניית הדשבורד" data-title="2.10 גרף משולב"
+ aria-label="פרק II · בניית הדשבורד — 2.10 גרף משולב" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.10 · גרף משולב — כסף מול שעות זכות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו <span class="mono" dir="ltr">Line and clustered column chart</span>: עמודות = <span dir='ltr'>[Total Tuition Collected]</span>, קו = <span dir='ltr'>[Total Credit Hours]</span>, ציר = <span class="mono" dir="ltr">Dim_Course[Subject_Area]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>ויזואל</b><span><code>Line and clustered column chart</code></span></li><li><b>ציר</b><span><code>Dim_Course[Subject_Area]</code></span></li><li><b>עמודות</b><span>[Total Tuition Collected]</span></li><li><b>קו</b><span>[Total Credit Hours] ← באזור Line y-axis</span></li><li><b>ציר שני</b><span><code>Format</code> ← <code>Y-axis (secondary)</code> ← On — בלעדיו הקו יימעך</span></li><li><b>מיון</b><span>לפי [Total Tuition Collected] יורד</span></li></ol><p class="task-q"><b>שני צירים = שתי יחידות מידה.</b> דולרים ושעות זכות אינם אותו סדר גודל. בלי ציר משני הקו ייצמד לקרקע ולא תראו בו כלום.</p><p class="task-q"><b>מה לחפש:</b> תחום שבו העמודה גבוהה והקו נמוך גובה הרבה כסף על מעט שעות — כלומר תעריף לשעת זכות גבוה. תחום הפוך הוא תחום עתיר הוראה. זה מקדים את תובנת הסיום בתרגיל 4.2.</p><p class="sol-check">סך הקו על כל התחומים: <b><span dir='ltr'>481,915</span></b> שעות זכות. סך העמודות: <b><span dir='ltr'>50,294,056.87</span></b> דולר.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-2-11" data-chap="פרק II · בניית הדשבורד" data-title="2.11 ניווט ופוליש"
+ aria-label="פרק II · בניית הדשבורד — 2.11 ניווט ופוליש" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · בניית הדשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.11 · ניווט ופוליש — סגירת הדשבורד</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">חברו את שני העמודים בכפתורי ניווט, ועברו על רשימת הפוליש הסופית.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>כפתור</b><span><code>Insert</code> ← <code>Buttons</code> ← <code>Navigator</code> ← <code>Page navigator</code></span></li><li><b>סגנון</b><span>צבע לא-פעיל #1B3060 · פעיל #F5C518 · טקסט לבן</span></li><li><b>כותרות</b><span>כל ויזואל מקבל כותרת בעברית ברורה ב-Format ← Title</span></li><li><b>Tooltip</b><span><code>Format</code> ← <code>Tooltips</code> ← On לכל גרף</span></li><li><b>סדר טאב</b><span><code>View</code> ← <code>Selection</code> ← <code>Tab order</code> — כותרת, קארדים, גרפים</span></li><li><b>Alt text</b><span>תיאור קצר לכל ויזואל ב-General ← Alt text</span></li></ol><p class="task-q"><b>רשימת הפוליש הסופית:</b> אין ויזואל עם כותרת ברירת מחדל (<span class="mono" dir="ltr">Total Tuition Collected by Program_Name</span>) · אין פס גלילה בתוך ויזואל בגודל הסטנדרטי · כל המספרים באותו מספר ספרות · אין שני גוונים של אותו כחול · אין ויזואל שנחתך בקצה הקנבס.</p><p class="task-q"><b>בדיקת סגירה:</b> לחצו על עמודה בגרף התוכניות וודאו שכל שאר הוויזואלים מגיבים. אם אחד מהם לא זז — הוא בנוי על עמודה מטבלת העובדות במקום מהמימד.</p><p class="sol-check">בסוף התרגיל: שני עמודים מקושרים, כל ויזואל עם כותרת, וכל מספר בדשבורד מגיע ממדד שכתבתם.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-3-1" data-chap="פרק III · עיצוב מותנה" data-title="3.1 Rules בגרף העמודות"
+ aria-label="פרק III · עיצוב מותנה — 3.1 Rules בגרף העמודות" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · עיצוב מותנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.1 · Rules — עיצוב מותנה בתוך ויזואל אחד</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צבעו את גרף העמודות מתרגיל 2.4 בשלוש שכבות באמצעות <span class="mono" dir="ltr">Rules</span> — בלי להיעזר במדד הצבע.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>פתיחה</b><span>בחרו את הגרף ← <code>Format</code> ← <code>Bars</code> ← <code>Colors</code> ← <code>fx</code></span></li><li><b>סוג</b><span><code>Format style: Rules</code></span></li><li><b>שדה</b><span><code>Based on field</code>: [Total Tuition Collected] ← <code>Summarization: Sum</code></span></li><li><b>כלל 1</b><span>If value <code>>=</code> 2400000 and <code><</code> 999999999 ← #132449</span></li><li><b>כלל 2</b><span>If value <code>>=</code> 1900000 and <code><</code> 2400000 ← #F5C518</span></li><li><b>כלל 3</b><span>If value <code>>=</code> 0 and <code><</code> 1900000 ← #A9B4CC</span></li></ol><p class="task-q"><b>הסדר בחלונית הוא הסדר שנבדק.</b> Power BI עוצר בכלל הראשון שמתקיים, בדיוק כמו SWITCH(TRUE()). כלל שמכסה טווח רחב מדי בראש הרשימה יבלע את כל השאר.</p><p class="task-q"><b>המגבלה של Rules:</b> הן חיות בתוך הוויזואל הזה בלבד. אם תרצו את אותה חלוקה בטבלה, ב-Matrix ובקארד — תצטרכו להגדיר אותה שלוש פעמים ולשמור על סנכרון ידני. זו בדיוק הבעיה שתרגיל 3.2 פותר.</p><p class="sol-check">שש עמודות כחולות כהות · שלוש-עשרה צהובות · חמש אפורות. אותה חלוקה בדיוק כמו <span dir='ltr'>[Program Tier]</span> בתרגיל 1.10.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-3-2" data-chap="פרק III · עיצוב מותנה" data-title="3.2 Field value מהמדד"
+ aria-label="פרק III · עיצוב מותנה — 3.2 Field value מהמדד" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · עיצוב מותנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.2 · Field value — המדד SWITCH מזין את הצבע</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">צבעו את טבלת התוכניות מתרגיל 2.7 באותה חלוקה, הפעם באמצעות <span class="mono" dir="ltr">Field value</span> והמדד <span dir='ltr'>[Tier Color]</span> מתרגיל 1.11.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><ol class='steps'><li><b>פתיחה</b><span>בחרו את הטבלה ← <code>Format</code> ← <code>Cell elements</code></span></li><li><b>שדה</b><span><code>Apply to</code>: [Total Tuition Collected]</span></li><li><b>סוג</b><span><code>Background color</code> ← On ← <code>fx</code></span></li><li><b>מצב</b><span><code>Format style: Field value</code></span></li><li><b>מדד</b><span><code>What field should we base this on</code>: [Tier Color]</span></li><li><b>חזרה</b><span>חזרו על אותו הליך על גרף העמודות — אותו מדד, אפס הגדרות חדשות</span></li></ol><p class="task-q"><b>זה ההבדל המהותי:</b> ב-Rules הלוגיקה גרה בוויזואל; ב-Field value היא גרה במודל. שינוי סף אחד במדד <span class="mono" dir="ltr">Program Tier</span> מעדכן בבת אחת את כל הוויזואלים שמשתמשים ב-<span class="mono" dir="ltr">Tier Color</span>. זו הסיבה שכתבנו שני מדדי SWITCH נפרדים — אחד ללוגיקה ואחד לתרגום שלה לצבע.</p><p class="task-q"><b>מה חייב לחזור מהמדד:</b> מחרוזת הקסה תקינה בת שבעה תווים או שם צבע מוכר. מדד שמחזיר ריק ייתן תא בלי צבע — לא שגיאה, פשוט חוסר.</p><p class="sol-check">הטבלה וגרף העמודות מציגים כעת בדיוק את אותה חלוקה, משני מקורות שונים לחלוטין — וזו הבדיקה שהמדד נכון.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-4-1" data-chap="פרק IV · חשיבה אנליטית" data-title="4.1 המלכודת — למה זה שגוי"
+ aria-label="פרק IV · חשיבה אנליטית — 4.1 המלכודת — למה זה שגוי" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק IV · חשיבה אנליטית</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">4.1 · המלכודת — הסבירו למה התשובה הנאיבית שגויה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q"><b>בתרגיל הזה לא כותבים מדד.</b> עמית בקורס בנה מדד <span dir='ltr'>Total Revenue = SUM ( Fact_Enrollments[Tuition_Billed_USD] )</span>, קיבל <span dir='ltr'>61,236,519.19</span> דולר, ומציג את המספר להנהלה כ"הכנסות המוסד". כתבו בשלוש-ארבע שורות מה בדיוק שגוי כאן, כמה הפער, ואיזו בדיקה במודל הייתה חושפת אותו בתוך דקה.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><p class="task-q"><b>התשובה המלאה — מה שגוי:</b> העמודה <span class="mono" dir="ltr">Tuition_Billed_USD</span> מתעדת <b>חיוב</b>, לא <b>גבייה</b>. שתי קבוצות סטטוס מתוך שלוש — <span class="mono" dir="ltr">Withdrawn</span> ו-<span class="mono" dir="ltr">Cancelled</span>, שיחד הן <span class="mono" dir="ltr">Status_Group = &quot;Lost&quot;</span> — נושאות חיוב חיובי וגבייה אפס. הרישום בוטל, הכסף מעולם לא נכנס, אבל שורת החיוב נשארה בטבלת העובדות. מדד שמסכם חיוב סופר את הכסף הזה כאילו התקבל.</p><p class="task-q"><b>כמה הפער:</b> <span dir='ltr'>61,236,519.19</span> פחות <span dir='ltr'>50,294,056.87</span> = <b><span dir='ltr'>10,942,462.32</span></b> דולר — 17.9% מסך החיוב, וכולו מיוחס לקבוצה אחת. הפירוק לפי קבוצת סטטוס: Realized <span dir='ltr'>35,487,304.63</span> חויב ונגבה במלואו · Open <span dir='ltr'>15,338,680.13</span> חויב מול <span dir='ltr'>14,806,752.24</span> שנגבה · Lost <span dir='ltr'>10,410,534.43</span> חויב מול <b>0.00</b> שנגבה.</p><p class="task-q"><b>הבדיקה שחושפת את זה בדקה:</b> בנו Matrix עם <span class="mono" dir="ltr">Dim_Status[Status_Group]</span> בשורות ושני מדדים בערכים — סכום החיוב מול סכום הגבייה. שורה שבה עמודה אחת גדולה מאפס והשנייה אפס היא דגל אדום ואי אפשר לפספס אותה. הכלל הכללי: <b>כל אימת ששתי עמודות כסף בטבלת עובדות נראות תאומות, פלחו את שתיהן לפי מימד הסטטוס לפני שאתם בוחרים אחת.</b></p><p class="task-q"><b>מה כן היה לגיטימי:</b> להציג את שני המספרים זה לצד זה ולקרוא להם בשמם — "חויב" ו"נגבה" — ולהוסיף מדד שלישי לפער. זה הופך את המלכודת לתובנה תפעולית על אחוז הנשירה.</p><p class="sol-check">הפער: <b><span dir='ltr'>10,942,462.32</span></b> דולר · 17.9% מהחיוב · כולו מקבוצת <b>Lost</b>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-4-2" data-chap="פרק IV · חשיבה אנליטית" data-title="4.2 תובנה — רווחיות ערוצים"
+ aria-label="פרק IV · חשיבה אנליטית — 4.2 תובנה — רווחיות ערוצים" hidden>
+  <button type="button" class="sec-num" data-goto="ed-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק IV · חשיבה אנליטית</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">4.2 · תובנת הסיום — איזה ערוץ הוראה באמת רווחי</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">בנו טבלה עם <span class="mono" dir="ltr">Dim_Course[Delivery_Mode]</span> בשורות, ושלושה מדדים: <span dir='ltr'>[Total Tuition Collected]</span>, <span dir='ltr'>Net Margin = SUM ( Fact_Enrollments[Net_Margin_USD] )</span> ו-<span dir='ltr'>Margin % = DIVIDE ( [Net Margin], [Total Tuition Collected] )</span>. ואז ענו: איזה ערוץ הוראה המוסד צריך להרחיב, ולמה זה לא הערוץ הגדול ביותר?</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><p class="task-q"><b>הטבלה שתקבלו:</b></p><div class="tbl-wrap"><table class="cmp"><caption>רווחיות לפי אופן הוראה</caption><thead><tr><th scope="col">Delivery Mode</th><th scope="col">שכר לימוד שנגבה</th><th scope="col">רווח נקי</th><th scope="col">שיעור רווח</th></tr></thead><tbody><tr><th scope="row">Campus</th><td class="pbi" data-label="שכר לימוד שנגבה"><span dir="ltr">24,521,003.34</span></td><td class="pbi" data-label="רווח נקי"><span dir="ltr">2,150,521.44</span></td><td class="pbi" data-label="שיעור רווח">8.77%</td></tr><tr><th scope="row">Online</th><td class="pbi" data-label="שכר לימוד שנגבה"><span dir="ltr">14,331,147.98</span></td><td class="pbi" data-label="רווח נקי"><span dir="ltr">4,509,735.15</span></td><td class="pbi" data-label="שיעור רווח">31.47%</td></tr><tr><th scope="row">Hybrid</th><td class="pbi" data-label="שכר לימוד שנגבה"><span dir="ltr">11,441,905.55</span></td><td class="pbi" data-label="רווח נקי"><span dir="ltr">2,392,673.81</span></td><td class="pbi" data-label="שיעור רווח">20.91%</td></tr><tr><th scope="row">סך הכל</th><td class="pbi" data-label="שכר לימוד שנגבה"><span dir="ltr">50,294,056.87</span></td><td class="pbi" data-label="רווח נקי"><span dir="ltr">9,052,930.40</span></td><td class="pbi" data-label="שיעור רווח">18.00%</td></tr></tbody></table></div><p class="task-q"><b>התובנה:</b> Campus הוא הערוץ הגדול — 48.8% מהגבייה — אבל הוא מייצר רק 23.8% מהרווח, בשיעור של 8.77%. Online גובה 41% פחות ממנו ומייצר <b>יותר רווח בערכים מוחלטים</b>: <span dir='ltr'>4,509,735</span> מול <span dir='ltr'>2,150,521</span>. הערוץ שנראה הכי חשוב בגרף העמודות הוא הפחות רווחי בפועל.</p><p class="task-q"><b>למה זה קורה — הסבר מהנתונים, לא מהניחוש:</b> שני כוחות פועלים באותו כיוון. ראשית, <span class="mono" dir="ltr">Contact_Minutes</span> לשעת זכות בקורס מקוון עומד על 72% מזה של קורס בקמפוס. שנית, עלות דקת הוראה בקמפוס גבוהה ב-12% מזו של דקה מקוונת — כיתות, טכנאים, נסיעות. פחות דקות שכל אחת מהן זולה יותר. מנגד, קורס מקוון גובה תעריף נמוך ב-14% לשעת זכות — וזה עדיין לא מספיק כדי לסגור את הפער.</p><p class="task-q"><b>מה זה אומר להנהלה:</b> החלטה על הרחבת Online אינה החלטה על גודל אלא על תמהיל. אבל לפני שממליצים — שימו לב למה שהנתונים <b>לא</b> אומרים: אין כאן מדידה של איכות למידה, שביעות רצון או שיעור השלמה לפי ערוץ. ניתוח רווחיות הוא צד אחד של ההחלטה בלבד, וכדאי לומר את זה במפורש בשקף.</p><p class="task-q"><b>הרחבה למי שרוצה עוד:</b> הוסיפו לטבלה עמודת <span class="mono" dir="ltr">Dim_Program[Program_Level]</span> וראו אם הפער בין הערוצים נשמר בכל רמת תוכנית או שהוא מתרכז ברמה אחת. זו הבדיקה שמפרידה בין תובנה אמיתית לבין פרדוקס סימפסון.</p><p class="sol-check"><b>Online</b> — 31.47% שיעור רווח, ורווח מוחלט גבוה ב-110% מזה של Campus, למרות שהוא גובה 41% פחות.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ed-results" data-chap="מטלת סיכום · מוסד לימודים" data-title="סיכום — כל התוצאות"
+ aria-label="מטלת סיכום · מוסד לימודים — סיכום — כל התוצאות" hidden>
+  <div class="sec-num">מטלת סיכום · מוסד לימודים</div>
+  <h2 class="sec-title">סיכום — כל התוצאות במקום אחד</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">טבלת אימות מרוכזת לכל 14 המדדים ולכל מספר עוגן במטלה. פתחו אותה רק אחרי שסיימתם — היא נותנת את כל התשובות.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button>
+      <div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>כל התוצאות המאומתות במקום אחד</caption><thead><tr><th scope="col">מדד / רכיב</th><th scope="col">תוצאה מאומתת</th></tr></thead><tbody><tr><th scope="row">1.1 Total Tuition Collected</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">50,294,056.87</span></td></tr><tr><th scope="row">1.2 Students Enrolled</th><td class="pbi" data-label="תוצאה מאומתת">4,198 (COUNT היה מחזיר 28,640)</td></tr><tr><th scope="row">1.3 Tuition per Student</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">11,980.48</span></td></tr><tr><th scope="row">1.4 Total Credit Hours</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">481,915</span></td></tr><tr><th scope="row">1.5 Courses Delivered</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">180</span></td></tr><tr><th scope="row">1.6 Online Tuition</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">14,331,147.98 (28.49%)</span></td></tr><tr><th scope="row">1.7 Realized Tuition</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">35,487,304.63 · Open 14,806,752.24 · Lost 0.00</span></td></tr><tr><th scope="row">1.8 % of All Programs</th><td class="pbi" data-label="תוצאה מאומתת">מוביל 5.20% · סך העמודה 100.00%</td></tr><tr><th scope="row">1.9 Program Status</th><td class="pbi" data-label="תוצאה מאומתת">14 מעל היעד · 10 מתחת · יעד 2,100,000</td></tr><tr><th scope="row">1.10 Program Tier</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">6 Top · 13 Mid · 5 Low</span></td></tr><tr><th scope="row">1.11 Tier Color</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">6 × #132449 · 13 × #F5C518 · 5 × #A9B4CC</span></td></tr><tr><th scope="row">1.12 Program Rank</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Public Health = 1 · Digital Marketing = 24</span></td></tr><tr><th scope="row">1.13 Leader Tuition</th><td class="pbi" data-label="תוצאה מאומתת">2,613,332.23 בכל 24 השורות</td></tr><tr><th scope="row">1.14 Tuition Moving Avg 3M</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">2023-03 = 2,059,545.77 · 2025-12 = 1,593,617.98</span></td></tr><tr><th scope="row">סך החיוב (המלכודת)</th><td class="pbi" data-label="תוצאה מאומתת">61,236,519.19 — פער של 10,942,462.32</td></tr><tr><th scope="row">Net Margin</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">9,052,930.40 (18.00%)</span></td></tr><tr><th scope="row">התוכנית המובילה</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Public Health — 2,613,332.23</span></td></tr><tr><th scope="row">הקורס המוביל</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Finance Practice — 634,376.62</span></td></tr><tr><th scope="row">הקמפוס המוביל</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">Distance Learning Hub — 5,832,708.10</span></td></tr><tr><th scope="row">שנת השיא</th><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">AY2024 — 16,814,633.91</span></td></tr><tr><th scope="row">הערוץ הרווחי ביותר</th><td class="pbi" data-label="תוצאה מאומתת">Online — 31.47% שיעור רווח</td></tr></tbody></table></div><p class="sol-check">כל התוצאות אומתו ב-pandas מול <span class="mono" dir="ltr">Education_PowerBI_Star.xlsx</span> (28,640 שורות עובדה), וכל שבעת הקשרים נבדקו תכנותית — 0 מפתחות יתומים, 0 מפתחות ריקים, 0 תלויות מעגליות ו-0 נתיבי סינון כפולים. שתי העמודות הנגזרות בטבלת העובדות אומתו מול הנוסחה שלהן שורה-שורה.</p></div>
+    </article></div>
+</section>
+<nav class="pager" aria-label="ניווט בין תרגילי המטלה">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ הקודם</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">הבא ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">אפשר לנווט גם בכפתורים שבראש המסך, בחצי המקלדת, ובטלפון בהחלקת אצבע</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    מטלת סיכום מוסד לימודים · אלירן גרוסמן · <a href="pbi.html">חזרה לפלטפורמת Power BI</a>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="רשימת תרגילי המטלה">
+  <div class="drawer-head">
+    <b>תרגילי המטלה</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="סגירת הרשימה">✕</button>
+  </div>
+  <div class="toc" id="toc-list"></div>
+</aside>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s);},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+var pages=$$('.page'), N=pages.length;
+if(!N)return;
+var KEY='education-page-v1', VKEY='education-visited-v1';
+var visited={}; try{visited=JSON.parse(localStorage.getItem(VKEY)||'{}');}catch(e){}
+
+var scroller=$('#scroller'), bar=$('#pbar'),
+    tTitle=$('#tb-title'), tChap=$('#tb-chap'), tCount=$('#tb-count'),
+    prevBtn=$('#tb-prev'), nextBtn=$('#tb-next'),
+    pgPrev=$('#pg-prev'), pgNext=$('#pg-next'),
+    pgPrevName=$('#pg-prev-name'), pgNextName=$('#pg-next-name'),
+    tocList=$('#toc-list'), idx=0;
+
+/* ---------- table of contents ---------- */
+var items=[];
+(function buildToc(){
+  var lastChap=null;
+  pages.forEach(function(pg,k){
+    var chap=pg.getAttribute('data-chap')||'';
+    if(chap!==lastChap){
+      var h=document.createElement('div'); h.className='toc-chap'; h.textContent=chap;
+      tocList.appendChild(h); lastChap=chap;
+    }
+    var b=document.createElement('button');
+    b.type='button'; b.className='toc-item';
+    b.innerHTML='<span class="toc-n">'+(k+1)+'</span><span class="toc-t"></span>'+
+                '<span class="toc-done" aria-hidden="true">\u2713</span>';
+    b.querySelector('.toc-t').textContent=pg.getAttribute('data-title')||'';
+    b.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+    tocList.appendChild(b); items.push(b);
+  });
+})();
+
+/* ---------- router ---------- */
+function show(i,scrollTop){
+  i=Math.max(0,Math.min(N-1,i));
+  pages.forEach(function(p,k){ p.hidden=(k!==i); });
+  idx=i;
+  var pg=pages[i];
+  tTitle.textContent=pg.getAttribute('data-title')||'';
+  tChap.textContent=pg.getAttribute('data-chap')||'';
+  tCount.textContent=(i+1)+' / '+N;
+  bar.style.width=((i+1)/N*100)+'%';
+  prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* 'ראשי' is a real link to the site home, always active.
+     'לסיכום' is in-page navigation, so it is disabled on the summary page
+     itself, exactly like prev/next at the ends. */
+  var sb=$('#tb-sum');
+  if(sb)sb.disabled=(i===N-1);
+  pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
+  if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
+  if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');
+  visited[pg.id]=1;
+  try{localStorage.setItem(KEY,String(i));localStorage.setItem(VKEY,JSON.stringify(visited));}catch(e){}
+  items.forEach(function(b,k){
+    b.classList.toggle('on',k===i);
+    b.classList.toggle('visited',!!visited[pages[k].id]);
+  });
+  if(scrollTop!==false&&scroller)scroller.scrollTop=0;
+  syncRegions();
+}
+function step(d){ show(idx+d,true); }
+
+prevBtn.addEventListener('click',function(){step(-1);});
+nextBtn.addEventListener('click',function(){step(1);});
+pgPrev.addEventListener('click',function(){step(-1);});
+pgNext.addEventListener('click',function(){step(1);});
+$('#tb-sum').addEventListener('click',function(){show(N-1,true);});
+$$('[data-goto]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var id=b.getAttribute('data-goto');
+    for(var k=0;k<N;k++){ if(pages[k].id===id){ show(k,true); return; } }
+  });
+});
+
+/* ---------- drawer ---------- */
+var drawer=$('#drawer'), back=$('#drawer-back'), menuBtn=$('#tb-menu');
+function openDrawer(){ drawer.hidden=false; back.hidden=false; menuBtn.setAttribute('aria-expanded','true');
+  var on=tocList.querySelector('.on'); if(on)on.scrollIntoView({block:'center'}); }
+function closeDrawer(){ drawer.hidden=true; back.hidden=true; menuBtn.setAttribute('aria-expanded','false'); }
+menuBtn.addEventListener('click',function(){ drawer.hidden?openDrawer():closeDrawer(); });
+back.addEventListener('click',closeDrawer);
+$('#drawer-x').addEventListener('click',closeDrawer);
+
+/* ---------- solutions ---------- */
+$$('.sol-toggle').forEach(function(btn){
+  var body=btn.nextElementSibling;
+  if(!body||!body.classList.contains('sol-body'))return;
+  btn.addEventListener('click',function(){
+    var open=btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded',String(!open));
+    body.classList.toggle('open',!open);
+    btn.textContent=open?'הצגת הפתרון':'הסתרת הפתרון';
+    setTimeout(syncRegions,0);
+  });
+});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',function(e){
+  if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+  if(e.key==='Escape'&&!drawer.hidden){ closeDrawer(); return; }
+  if(e.key==='ArrowLeft')step(1);
+  else if(e.key==='ArrowRight')step(-1);
+});
+
+/* ---------- swipe (never inside a horizontal scroll area) ---------- */
+var sx=0,sy=0,track=false;
+document.addEventListener('touchstart',function(e){
+  var t=e.target;
+  if(t.closest&&t.closest('.tbl-wrap,.dax,.code,pre,.drawer,.hd,input,textarea'))return;
+  if(e.touches.length!==1)return;
+  sx=e.touches[0].clientX; sy=e.touches[0].clientY; track=true;
+},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(!track)return; track=false;
+  var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<60||Math.abs(dy)>50)return;
+  step(dx>0?-1:1);   /* RTL: swipe right = previous */
+},{passive:true});
+
+/* ---------- horizontal scroll areas reachable by keyboard ---------- */
+function syncRegions(){
+  $$('.tbl-wrap,.dax').forEach(function(el){
+    var scrolls=el.scrollWidth>el.clientWidth+1;
+    if(scrolls){
+      if(!el.hasAttribute('tabindex')){
+        el.setAttribute('tabindex','0'); el.setAttribute('role','region');
+        el.setAttribute('aria-label','אזור נגלל לרוחב');
+      }
+    }else if(el.getAttribute('role')==='region'){
+      el.removeAttribute('tabindex'); el.removeAttribute('role'); el.removeAttribute('aria-label');
+    }
+  });
+}
+var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(syncRegions,150); },{passive:true});
+
+/* ---------- ?qa=1 overflow inspector ---------- */
+(function(){
+  if(!/(\?|&|#)qa=1/.test(location.search+location.hash))return;
+  var css=document.createElement('style');
+  css.textContent='.qa-bad{outline:2px dashed #f87171!important;outline-offset:-2px}'+
+   '#qa-badge{position:fixed;inset-block-end:10px;inset-inline-start:10px;z-index:9999;background:#111;color:#fff;'+
+   'font:12px/1.5 monospace;padding:8px 10px;border-radius:8px;max-width:80vw;max-height:40vh;overflow:auto;'+
+   'border:1px solid #f87171;direction:ltr;text-align:left;white-space:pre-wrap}';
+  document.head.appendChild(css);
+  var badge=document.createElement('div'); badge.id='qa-badge'; document.body.appendChild(badge);
+  function scan(){
+    var vw=document.documentElement.clientWidth, bad=[];
+    $$('.qa-bad').forEach(function(e){e.classList.remove('qa-bad');});
+    $$('.page:not([hidden]) *, .topicbar *').forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(!r.width&&!r.height)return;
+      if(r.right>vw+1||r.left<-1){
+        el.classList.add('qa-bad');
+        bad.push(el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className?'.'+el.className.trim().split(/\s+/).slice(0,2).join('.'):'')+' w='+Math.round(r.width));
+      }
+    });
+    badge.textContent='viewport '+vw+' · scrollW '+document.documentElement.scrollWidth+' · offenders '+bad.length+
+      (bad.length?('\n'+bad.slice(0,10).join('\n')):' — clean');
+  }
+  scan(); window.addEventListener('resize',scan,{passive:true});
+  document.addEventListener('click',function(){setTimeout(scan,80);});
+})();
+
+/* ---------- start ---------- */
+var start=0;
+try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved))start=saved; }catch(e){}
+if(location.hash){
+  var h=location.hash.slice(1);
+  for(var k=0;k<N;k++){ if(pages[k].id===h){ start=k; break; } }
+}
+show(start,true);
+})();
+</script>
+</body>
+</html>
