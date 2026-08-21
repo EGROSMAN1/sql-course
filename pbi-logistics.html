@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070a0c">
+<meta name="color-scheme" content="dark">
+<title>מטלת סיכום שילוח יבשתי — סכמת כוכב ב-Power BI | אלירן גרוסמן</title>
+<meta name="description" content="מטלת סיכום ב-Power BI על מודל שילוח יבשתי: 29 תרגילים עם פתרונות מלאים — 14 מדדי DAX כולל פונקציות חלון, שני עמודי דשבורד ועיצוב מותנה כפול.">
+<meta property="og:title" content="מטלת סיכום שילוח יבשתי — סכמת כוכב">
+<meta property="og:description" content="29 תרגילים עם פתרונות מלאים: 14 מדדי DAX כולל RANK, INDEX ו-WINDOW, שני עמודי דשבורד ועיצוב מותנה כפול.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+/* overflow guard: a wide child (code line, table, long token) must never widen the column */
+.wrap,.page,.tasks,.task,.sol-body,.practice-box,.kpi{min-width:0}
+.tasks{grid-template-columns:minmax(0,1fr)}
+.page>*,.task>*,.sol-body>*{max-width:100%}
+.mono,.steps code,code{max-width:100%;overflow-wrap:anywhere}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:100%;width:min(1080px,100%);margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;min-width:0;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-home{text-decoration:none}
+
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 1 auto;min-width:0;overflow:hidden;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:right;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:right}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+button.sec-num{background:none;border:0;padding:6px 0;text-align:right;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px;font-size:clamp(.94rem,2.9vw,1.05rem);overflow-wrap:break-word}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (איסוף→ארגון→ניתוח→הצגה / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:right;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+
+/* PHONES: the table stops being a table. Every row becomes a card, every cell a
+   label/value pair (label comes from data-label). No min-width, so nothing can
+   ever force the page wider than the screen — the root cause of the clipping. */
+@media(max-width:620px){
+  .tbl-wrap{overflow-x:visible;border:0;border-radius:0;background:none}
+  table.cmp{display:block;min-width:0;width:100%;font-size:.9rem;border-collapse:separate}
+  table.cmp caption{padding:0 2px 10px;background:none;font-size:.8rem;line-height:1.55}
+  table.cmp thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  table.cmp tbody{display:grid;gap:10px}
+  table.cmp tbody tr{display:block;background:var(--bg-1);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px}
+  table.cmp tbody tr>th[scope="row"]{display:block;background:none;border:0;padding:0 0 9px;
+    margin-bottom:7px;border-bottom:1px solid var(--line);color:var(--fg-1);font-size:.95rem;font-weight:700}
+  table.cmp tbody td{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+    gap:2px 14px;padding:5px 0;border:0;min-width:0}
+  table.cmp tbody td+td{border-top:1px dashed var(--line-soft)}
+  table.cmp tbody td::before{content:attr(data-label);flex:0 0 auto;color:var(--fg-3);
+    font-size:.76rem;font-weight:600;letter-spacing:.01em}
+  table.cmp tbody td:not([data-label])::before{display:none}
+  /* long free-text cells get the label on its own line and the full card width */
+  table.cmp tbody td[data-long]{display:block}
+  table.cmp tbody td[data-long]::before{display:block;margin-bottom:3px}
+  table.cmp tbody td.pbi,table.cmp tbody td.xl{color:var(--fg-1);font-weight:600}
+}
+table.cmp caption{text-align:right;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:right;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:right;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:clamp(1.25rem,5vw,1.6rem);color:var(--pbi);overflow-wrap:break-word}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;max-width:100%;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap;min-width:0;max-width:100%}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;min-width:0;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:clamp(.92rem,2.8vw,1rem);color:var(--fg-2);margin-bottom:12px;overflow-wrap:break-word}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+.dax{font-family:var(--mono);font-size:clamp(.74rem,2.9vw,.82rem);line-height:1.6;background:var(--bg-2);border:1px solid var(--line-soft);
+  border-radius:10px;padding:12px 14px;color:var(--acc);direction:ltr;text-align:left;overflow-x:auto;max-width:100%;
+  white-space:pre;margin-bottom:14px;unicode-bidi:isolate;-webkit-overflow-scrolling:touch}
+@media(max-width:760px){
+  .dax,.code{white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:hidden;font-size:.8rem;padding:12px}
+  .dax{line-height:1.8;padding-inline-start:2.4em;text-indent:-2.2em}
+}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:right;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:right;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4;
+  max-width:100%;overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:420px){.btn{padding:11px 16px;font-size:.9rem;width:100%}}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:right;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* בטלפון הכותרת מצטמצמת לסרגל השיעורים בלבד — עדיין זמין תמיד */
+  :root{--header-h:44px}
+  /* one short row: ☰ · הקודם · כותרת · הבא · שאלות — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+
+/* ---- assignment-specific ---- */
+button.sec-num{background:none;border:0;padding:6px 0;text-align:right;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.ask{display:flex;gap:9px;align-items:flex-start;background:var(--acc-soft);border:1px solid var(--line-strong);
+  border-radius:10px;padding:11px 13px;margin:14px 0 4px;font-size:.9rem;color:var(--fg-2);min-width:0}
+.ask b{color:var(--acc);flex:0 0 auto}
+.hd .brand{white-space:nowrap}
+.aw-back{margin-inline-start:auto;font-size:.82rem;color:var(--fg-3);border:1px solid var(--line);
+  border-radius:999px;padding:6px 12px;white-space:nowrap}
+.aw-back:hover{color:var(--pbi);border-color:var(--pbi-glow)}
+
+/* ============================================================
+   v3 — TRUNCATION POLICY: no label in this document is ever cut.
+   Every rule that used to clip text now wraps it instead; the only
+   exceptions left are the two horizontal rails, which are scrollers.
+   ============================================================ */
+.qnav-b span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.35}
+.qnav-b{padding:11px 12px}
+.dl-t,.mc-row .lbl,.sel-item .nm{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.toc-t{overflow-wrap:anywhere}
+.toc{min-height:0}                     /* flex-column child must be allowed to shrink, or it never scrolls */
+.ask span{min-width:0}
+@media(max-width:620px){
+  /* the topic name gets two full lines instead of an ellipsis */
+  .tb-title{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;line-height:1.25;font-size:.8rem}
+  .tb-chap{display:none}               /* the chapter is already the first line of every topic */
+  .tb-meta{gap:0}
+  .tb-meta .tb-count::before{content:none;margin:0}
+}
+/* numbers, currency and Latin identifiers keep their own direction inside RTL prose */
+[dir="ltr"]{unicode-bidi:isolate}
+/* inner scrollers never hand their momentum back to the page */
+.tbl-wrap,.dax,.code{overscroll-behavior-x:contain}
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+
+
+/* --- header rail: on desktop it wraps instead of being clipped by a hidden scroller,
+       on phones it stays a scroller but with a visible fade affordance --- */
+@media(min-width:701px){
+  header.site{height:auto;min-height:var(--header-h)}
+  header.site .hd{flex-wrap:wrap;height:auto;min-height:var(--header-h);padding-block:7px;row-gap:7px}
+  .lesson-rail{flex-wrap:wrap;overflow:visible;row-gap:6px}
+}
+@media(max-width:700px){
+  .lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent)}
+}
+</style>
+<style id="fixes">
+/* layout fixes for this page only - never edited into the template sheet */
+@media (max-width:900px){
+  nav.lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 26px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 26px),transparent)}
+}
+@media (max-width:620px){
+  .tb-title{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+    white-space:normal;overflow:hidden;text-overflow:clip;line-height:1.25}
+}
+@media (max-width:374px){
+  .tb-title{display:none}
+}
+@media (min-width:621px){
+  .tb-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    white-space:normal;overflow:hidden;text-overflow:clip;line-height:1.3}
+}
+@media (max-width:430px){
+  .pg-name{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+    white-space:normal;overflow:hidden}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">דלג לתוכן הראשי</a>
+<noscript>
+  <style>
+    .page[hidden]{display:block!important}
+    body{display:block;height:auto;overflow:visible}
+    .scroller{overflow:visible;height:auto}
+    .topicbar,.pager,.pg-hint{display:none}
+  </style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">כל 29 עמודי המטלה מוצגים כאן ברצף. פתיחת הפתרונות דורשת JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="לדף הבית של הקורס"><b>SQL</b> עם אלירן</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="ניווט בין שיעורי הקורס">
+        <a class="lr lr-home is-on" href="pbi.html" aria-current="page" title="דף הבית של הפלטפורמה"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>דף הבית</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI בסיס"><b>1</b><span>בסיס</span></a>
+      <a class="lr" href="pbi-course-2.html" title="מודלינג נתונים"><b>2</b><span>מודלינג</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query ו-ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M ו-DAX בסיסי"><b>4</b><span>M ו-DAX</span></a>
+        <span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="לדף הבית של הקורס"><b>↩</b><span>הקורס</span></a><a class="lr lr-x" href="pbi-updates.html" title="עדכוני Power BI החודשיים"><b>◷</b><span>עדכונים</span></a><a class="lr lr-x" href="pbi-quiz.html" title="בנק השאלות המלא"><b>?</b><span>בנק שאלות</span></a><a class="lr lr-x" href="dax-reference.html" title="אינדקס פונקציות DAX"><b>fx</b><span>רפרנס DAX</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="פתיחת רשימת התרגילים">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">תרגילים</span>
+    </button>
+    <a class="tb-home" id="tb-home" href="pbi.html" aria-label="חזרה לדף הבית של פלטפורמת Power BI" title="דף הבית">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">ראשי</span>
+    </a>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">הקודם</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">הבא</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-sum">
+      <span class="tb-quiz-t">לסיכום</span><span class="tb-quiz-s">סיכום</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+
+<section class="page" id="logistics-intro" data-chap="מטלת סיכום · לוגיסטיקה" data-title="לוגיסטיקה — הכנה ומבנה"
+ aria-label="מטלת סיכום · לוגיסטיקה — לוגיסטיקה — הכנה ומבנה" hidden>
+  <div class="sec-num">מטלת סיכום · לוגיסטיקה</div>
+  <h2 class="sec-title">מודל שילוח יבשתי — הכנה ומבנה המטלה</h2>
+  
+  <p class="sec-sub">שני עמודי דשבורד שכל מספר בהם מגיע ממדד שאתם כותבים מאפס, עם חיווי צבע אוטומטי
+  לרווחיות המובילים. עובדים על <span class="mono" dir="ltr">Logistics_PowerBI_Star.xlsx</span> — סכמת כוכב טהורה עם טבלת עובדות
+  אחת, שבעה מימדים ו-<span dir="ltr">28,400</span> שורות משלוח. 29 תרגילים, כל אחד בדף נפרד ועם פתרון
+  מלא. שימו לב: ההורדה והתרגול הם <b>במחשב בלבד</b> — Power BI Desktop אינו קיים בטלפון.</p>
+
+  <div class="practice-cta">
+    <a class="btn" href="assets/Logistics_PowerBI_Star.xlsx" download>הורדת הדאטהסט — Logistics_PowerBI_Star.xlsx</a>
+    <span class="pc-note">8 טבלאות · <span dir="ltr">28,400</span> שורות עובדה · 7 קשרים · <b style="color:var(--pbi)">להורדה במחשב בלבד</b></span>
+  </div>
+
+  <div class="kpis" style="margin:22px 0">
+    <div class="kpi"><b><span dir="ltr">8,466,765.26</span></b><span>דולר הכנסת שילוח — מספר העוגן</span></div>
+    <div class="kpi"><b><span dir="ltr">26,825,847.8</span></b><span>ק"ג משוקללים</span></div>
+    <div class="kpi"><b><span dir="ltr">28,400</span></b><span>שורות משלוח</span></div>
+    <div class="kpi"><b><span dir="ltr">14</span></b><span>מדדים לכתיבה</span></div>
+  </div>
+
+  <p class="note"><b>הנתונים סינתטיים.</b> שמות הערים והמדינות אמיתיים, אבל כל לקוח, מוביל, משלוח ומספר בקובץ נוצרו באופן מלאכותי עם זרע אקראי קבוע. אין להסיק מהם דבר על שוק השילוח האמיתי.</p>
+
+  <p class="note"><b>לפני שמתחילים — בניית המודל.</b> בקובץ שבעה קשרים בדיוק, כולם מהמימד אל טבלת העובדות. סמנו את <span class="mono" dir="ltr">Dim_Date</span> כטבלת תאריכים (<span class="mono" dir="ltr">Mark as date table</span> על <span class="mono" dir="ltr">Full_Date</span>), כבו <span class="mono" dir="ltr">Autodetect</span> ובנו ידנית, וודאו שכל קשר הוא <span class="mono" dir="ltr">One to many</span> בכיוון <span class="mono" dir="ltr">Single</span> מהמימד אל <span class="mono" dir="ltr">Fact_Shipments</span>. גיליון <span class="mono" dir="ltr">Relationships</span> בקובץ מפרט את שבעת הקשרים אחד-אחד. אין קשר מימד-למימד ואין טבלת גשר — כל מימד נוגע ישירות בעובדות ורק בהן.</p>
+
+  <p class="note"><b>המלכודת הגדולה של הקובץ הזה.</b> בטבלת <span class="mono" dir="ltr">Dim_Carrier</span> יש <span dir="ltr">12</span> מובילים, אבל בטבלת העובדות מופיעים רק <span dir="ltr">11</span>. השורה <span class="mono" dir="ltr">Danube Barge Union</span> היא <b>שורת מימד שאף שורת עובדה לא מפנה אליה</b>. המשמעות מעשית ומיידית: ויזואל שמציג מובילים יראה <span dir="ltr">11</span> שורות ולא <span dir="ltr">12</span>, כי Power BI מסתיר ברירת-מחדל ערכי מימד בלי נתונים; <span class="mono" dir="ltr">COUNTROWS ( Dim_Carrier )</span> יחזיר <span dir="ltr">12</span> בעוד <span class="mono" dir="ltr">DISTINCTCOUNT ( Fact_Shipments[Carrier_ID] )</span> יחזיר <span dir="ltr">11</span>; ובכל פונקציית חלון שנשענת על <span class="mono" dir="ltr">ALLSELECTED ( Dim_Carrier[Carrier_Name] )</span> תופיע שורה שתים-עשרה ריקה שתשבש דירוג, חציון ואחוז מצטבר אם לא תסננו אותה. שתי המלכודות הקטנות: עמודת <span class="mono" dir="ltr">Revenue_Per_KG_USD</span> היא יחס ואסור לסכם אותה, ושורות <span class="mono" dir="ltr">Cancelled</span> ו-<span class="mono" dir="ltr">Returned</span> נושאות הכנסה שלא מומשה.</p>
+
+  <p class="note"><b>מילון סוגריים.</b> <span class="mono" dir="ltr">Table[Column]</span> = עמודה · <span class="mono">[מדד]</span> = סוגריים מרובעים בלי שם טבלה. לכל מדד: קליק ימני על <span class="mono" dir="ltr">Fact_Shipments</span> בחלונית <span class="mono" dir="ltr">Data</span> ← <span class="mono" dir="ltr">New measure</span> ← הנוסחה ← Enter. השם חייב להיות בדיוק כפי שמופיע בתרגיל, אחרת המדדים שבנויים עליו לא ימצאו אותו.</p>
+
+  <h3 style="margin:34px 0 14px">מבנה המטלה</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">חלק 1</span><h3>14 מדדי DAX</h3><p>עשרה מדדי בסיס — שני SUM, שני DISTINCTCOUNT, DIVIDE, שני CALCULATE, ALL, IF ושני SWITCH — ושלוש פונקציות חלון: RANK, INDEX ו-WINDOW. ועוד תרגיל אחד שבו לא כותבים מדד אלא מסבירים למה תשובה נאיבית שגויה.</p></div>
+    <div class="card"><span class="tag">חלק 2</span><h3>שני עמודי דשבורד</h3><p>מגש KPI, גרף קו מוחלק, סלייסר בעמוד שני, טבלת פירוט, Top N, Matrix, גרף משולב, דונאט מול עמודות, small multiples, פיזור ועמוד פוליש.</p></div>
+    <div class="card"><span class="tag">חלק 3</span><h3>עיצוב מותנה ותובנה</h3><p>שתי דרכים לצבוע לפי רמת רווחיות — Field value מול Rules — ושאלת סיכום אחת: מיהו המוביל שמוביל בהכנסות ואינו הרווחי.</p></div>
+  </div>
+
+  <div class="tbl-wrap"><table class="cmp"><caption>שבעת הקשרים במודל</caption><thead><tr><th scope="col">מהמימד</th><th scope="col">אל טבלת העובדות</th><th scope="col">סוג</th></tr></thead><tbody><tr><th scope="row"><span class="mono" dir="ltr">Dim_Date[Date_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Ship_Date_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr><tr><th scope="row"><span class="mono" dir="ltr">Dim_Customer[Customer_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Customer_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr><tr><th scope="row"><span class="mono" dir="ltr">Dim_Carrier[Carrier_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Carrier_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr><tr><th scope="row"><span class="mono" dir="ltr">Dim_Route[Route_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Route_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr><tr><th scope="row"><span class="mono" dir="ltr">Dim_Service_Level[Service_Level_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Service_Level_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr><tr><th scope="row"><span class="mono" dir="ltr">Dim_Warehouse[Warehouse_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Warehouse_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr><tr><th scope="row"><span class="mono" dir="ltr">Dim_Cargo_Type[Cargo_Type_ID]</span></th><td class="pbi" data-label="אל טבלת העובדות"><span class="mono" dir="ltr">Fact_Shipments[Cargo_Type_ID]</span></td><td class="pbi" data-label="סוג">1:Many · Single</td></tr></tbody></table></div>
+
+  <div class="practice-cta" style="margin-top:26px">
+    <button type="button" class="btn" data-goto="logistics-1-1">לתרגיל הראשון — 1.1 Total Freight Revenue ←</button>
+    <span class="pc-note">כל המספרים בעמודים הבאים אומתו ב-pandas מול הקובץ</span>
+  </div>
+
+</section>
+
+<section class="page" id="logistics-1-1" data-chap="פרק I · מדדי בסיס" data-title="1.1 · Total Freight Revenue"
+ aria-label="פרק I · מדדי בסיס — 1.1 · Total Freight Revenue" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.1 · Total Freight Revenue — מדד הבסיס</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Total Freight Revenue</b> שמסכם את <span class="mono" dir="ltr">Fact_Shipments[Freight_Revenue_USD]</span>. עצבו עם מפריד אלפים ושתי ספרות.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Total Freight Revenue =
+SUM (
+    Fact_Shipments[Freight_Revenue_USD]
+)</pre><ol class="steps"><li><b>יצירה</b><span>קליק ימני על <span class="mono" dir="ltr">Fact_Shipments</span> ← <span class="mono" dir="ltr">New measure</span></span></li><li><b>עיצוב</b><span>בלשונית <span class="mono" dir="ltr">Measure tools</span> בחרו <span class="mono" dir="ltr">Decimal number</span> ו-<span class="mono" dir="ltr">2</span> ספרות</span></li><li><b>בדיקה</b><span>גררו לקארד ריק כדי לוודא שהמספר מופיע</span></li></ol><p class="task-q"><b>שימו לב לפני שממשיכים:</b> המספר הזה כולל את כל ארבעת הסטטוסים — גם <span class="mono" dir="ltr">Cancelled</span> וגם <span class="mono" dir="ltr">Returned</span>. זו הכנסה רשומה, לא הכנסה שמומשה. בתרגיל 1.6 נצמצם אותה, ותראו בדיוק כמה נשר.</p><p class="sol-check">תוצאה: <b><span dir="ltr">8,466,765.26</span></b> דולר — מספר העוגן של כל המטלה.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-2" data-chap="פרק I · מדדי בסיס" data-title="1.2 · Total Weight Shipped"
+ aria-label="פרק I · מדדי בסיס — 1.2 · Total Weight Shipped" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.2 · Total Weight Shipped — עמודה שנייה, לא אותה עמודה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Total Weight Shipped</b> שמסכם את <span class="mono" dir="ltr">Fact_Shipments[Weight_KG]</span>. ספרה עשרונית אחת.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Total Weight Shipped =
+SUM ( Fact_Shipments[Weight_KG] )</pre><p class="task-q"><b>למה דווקא העמודה הזאת:</b> בטבלת העובדות יש גם <span class="mono" dir="ltr">Volume_M3</span>, וגם היא אדיטיבית לגמרי. ההבדל הוא מה שהמדד הבא יעשה איתה — משקל הוא המכנה שמקובל בענף לתמחור שילוח, ולכן הוא זה שיזין את <span class="mono" dir="ltr">Revenue per KG</span> בתרגיל 1.5.</p><p class="sol-check">תוצאה: <b><span dir="ltr">26,825,847.8</span></b> ק"ג.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-3" data-chap="פרק I · מדדי בסיס" data-title="1.3 · Active Customers"
+ aria-label="פרק I · מדדי בסיס — 1.3 · Active Customers" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.3 · Active Customers — ספירה ייחודית ראשונה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Active Customers</b> שסופר לקוחות <b>ייחודיים</b> על בסיס <span class="mono" dir="ltr">Fact_Shipments[Customer_ID]</span>.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Active Customers =
+DISTINCTCOUNT (
+    Fact_Shipments[Customer_ID]
+)</pre><p class="task-q"><b>למה לא COUNT:</b> <span class="mono" dir="ltr">COUNT ( Customer_ID )</span> היה מחזיר <span dir="ltr">28,400</span> — הוא סופר שורות שיש בהן ערך, לא ערכים ייחודיים. כל לקוח שלח בממוצע <span dir="ltr">157.8</span> משלוחים בשנתיים, ולכן הפער עצום.</p><p class="task-q"><b>ולמה לא לספור את המימד:</b> <span class="mono" dir="ltr">COUNTROWS ( Dim_Customer )</span> יחזיר גם הוא <span dir="ltr">180</span>, כי במקרה של הלקוחות כל שורת מימד באמת מופיעה בעובדות. בתרגיל 1.12 תראו מימד שבו זה בדיוק לא נכון.</p><p class="sol-check">תוצאה: <b><span dir="ltr">180</span></b> לקוחות פעילים.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-4" data-chap="פרק I · מדדי בסיס" data-title="1.4 · Routes Used"
+ aria-label="פרק I · מדדי בסיס — 1.4 · Routes Used" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.4 · Routes Used — ספירה ייחודית שנייה, עמודה אחרת</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Routes Used</b> שסופר נתיבים <b>ייחודיים</b> על בסיס <span class="mono" dir="ltr">Fact_Shipments[Route_ID]</span>.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Routes Used =
+DISTINCTCOUNT (
+    Fact_Shipments[Route_ID]
+)</pre><p class="task-q"><b>ההבדל משני המדדים הקודמים:</b> שני מדדי הסכימה עבדו על שתי עמודות מידה שונות, ושני מדדי הספירה עובדים על שני מפתחות זרים שונים. זו לא חזרה — כל אחד מהארבעה נוגע בעמודה אחרת בטבלת העובדות, ולכן כל אחד מהם מגיב אחרת לסינון.</p><p class="sol-check">תוצאה: <b><span dir="ltr">60</span></b> נתיבים בשימוש, מתוך <span dir="ltr">60</span> ב-<span class="mono" dir="ltr">Dim_Route</span>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-5" data-chap="פרק I · מדדי בסיס" data-title="1.5 · Revenue per KG"
+ aria-label="פרק I · מדדי בסיס — 1.5 · Revenue per KG" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.5 · Revenue per KG — עקרון הלגו</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Revenue per KG</b> — אך ורק משני המדדים הקיימים, בלי סימן החלוקה / ובלי AVERAGE. עצבו לארבע ספרות.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Revenue per KG =
+DIVIDE (
+    [Total Freight Revenue],
+    [Total Weight Shipped]
+)</pre><p class="task-q"><b>למה DIVIDE ולא /:</b> אם המכנה יוצא אפס או ריק — ולקוח בלי משלוחים בהקשר מסוים בדיוק כזה — הסימן / מחזיר שגיאה שמכתימה את כל הויזואל, בעוד <span class="mono" dir="ltr">DIVIDE</span> מחזיר ריק בשקט.</p><p class="task-q"><b>ולמה משני מדדים ולא מעמודות:</b> כשהמדד בנוי משני מדדים קיימים, הוא מתחשב בהקשר הסינון בכל תא בנפרד ומחשב מחדש את המונה ואת המכנה. בתרגיל 1.15 נראה בדיוק מה קורה כשמנסים לקצר את הדרך.</p><p class="sol-check">תוצאה: <b><span dir="ltr">0.3156</span></b> דולר לק"ג (<span dir="ltr">8,466,765.26</span> חלקי <span dir="ltr">26,825,847.8</span>).</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-6" data-chap="פרק I · מדדי בסיס" data-title="1.6 · Delivered Revenue"
+ aria-label="פרק I · מדדי בסיס — 1.6 · Delivered Revenue" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.6 · Delivered Revenue — CALCULATE הראשון</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Delivered Revenue</b> שמחזיר את ההכנסה של משלוחים בסטטוס <span class="mono" dir="ltr">Delivered</span> בלבד, בעזרת <span class="mono" dir="ltr">CALCULATE</span> עם פילטר בוליאני אחד.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Delivered Revenue =
+CALCULATE (
+    [Total Freight Revenue],
+    Fact_Shipments[Shipment_Status]
+        = &quot;Delivered&quot;
+)</pre><div class="tbl-wrap"><table class="cmp"><caption>פילוח ההכנסה לפי סטטוס</caption><thead><tr><th scope="col">סטטוס</th><th scope="col">שורות</th><th scope="col">הכנסה בדולר</th></tr></thead><tbody><tr><th scope="row"><span class="mono" dir="ltr">Delivered</span></th><td class="pbi" data-label="שורות"><span dir="ltr">24,968</span></td><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">7,444,128.27</span></td></tr><tr><th scope="row"><span class="mono" dir="ltr">In_Transit</span></th><td class="pbi" data-label="שורות"><span dir="ltr">1,477</span></td><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">424,238.46</span></td></tr><tr><th scope="row"><span class="mono" dir="ltr">Cancelled</span></th><td class="pbi" data-label="שורות"><span dir="ltr">1,172</span></td><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">360,869.18</span></td></tr><tr><th scope="row"><span class="mono" dir="ltr">Returned</span></th><td class="pbi" data-label="שורות"><span dir="ltr">783</span></td><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">237,529.35</span></td></tr></tbody></table></div><p class="task-q"><b>מה בדיוק CALCULATE עושה כאן:</b> הוא לא מסנן את המדד — הוא משנה את הקשר הסינון שבתוכו המדד מחושב. הפילטר <span class="mono" dir="ltr">Fact_Shipments[Shipment_Status] = "Delivered"</span> הוא קיצור ל-<span class="mono" dir="ltr">FILTER ( ALL ( ... ) , ... )</span>, כלומר הוא <b>מחליף</b> כל סינון סטטוס שכבר קיים בויזואל. אם תשימו את המדד הזה בטבלה שמפולחת לפי סטטוס, כל השורות יראו את אותו מספר.</p><p class="sol-check">תוצאה: <b><span dir="ltr">7,444,128.27</span></b> דולר. הפער מול מדד הבסיס — <span dir="ltr">1,022,636.99</span> דולר, שהם <span dir="ltr">12.08</span>% הכנסה רשומה שלא מומשה.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-7" data-chap="פרק I · מדדי בסיס" data-title="1.7 · On Time Delivered Rev"
+ aria-label="פרק I · מדדי בסיס — 1.7 · On Time Delivered Rev" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.7 · On Time Delivered Revenue — שני תנאים עם &amp;&amp;</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">On Time Delivered Revenue</b> שמחזיר את ההכנסה של משלוחים שגם נמסרו וגם הגיעו בזמן: <span class="mono" dir="ltr">Shipment_Status = "Delivered"</span> <b>וגם</b> <span class="mono" dir="ltr">On_Time_Status = "On_Time"</span>. חייבים להשתמש ב-&amp;&amp; בתוך תנאי אחד, לא בשני פילטרים נפרדים.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">On Time Delivered Revenue =
+VAR Ok =
+    FILTER (
+        Fact_Shipments,
+        Fact_Shipments[Shipment_Status]
+            = &quot;Delivered&quot;
+        &amp;&amp; Fact_Shipments[On_Time_Status]
+            = &quot;On_Time&quot;
+    )
+RETURN
+CALCULATE ( [Total Freight Revenue], Ok )</pre><p class="task-q"><b>למה FILTER ולא שני פילטרים בוליאניים:</b> שני פילטרים נפרדים ב-CALCULATE מצטלבים ומחזירים כאן בדיוק את אותה תוצאה — אבל התרגיל מבקש תנאי מרוכב אחד, וזה מה ש-&amp;&amp; נותן. ההבדל האמיתי מתגלה כשרוצים <b>או</b> במקום <b>וגם</b>: את <span class="mono" dir="ltr">||</span> אי אפשר לבטא בשני פילטרים נפרדים, ורק FILTER יאפשר זאת.</p><p class="task-q"><b>המחיר של FILTER:</b> הוא סורק את טבלת העובדות שורה-שורה. על <span dir="ltr">28,400</span> שורות זה לא מורגש, על עשרה מיליון זה כן. הכלל: פילטר בוליאני כשאפשר, FILTER כשחייבים.</p><p class="sol-check">תוצאה: <b><span dir="ltr">5,159,284.25</span></b> דולר — <span dir="ltr">69.31</span>% מההכנסה שנמסרה.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-8" data-chap="פרק I · מדדי בסיס" data-title="1.8 · Pct of Grand Total"
+ aria-label="פרק I · מדדי בסיס — 1.8 · Pct of Grand Total" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.8 · Pct of Grand Total — ALL על שני מימדים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Pct of Grand Total</b> שמחזיר את חלקו של כל תא מתוך סך הכל, כשהמכנה מנוטרל מסינון של <b>שני</b> מימדים בבת אחת — <span class="mono" dir="ltr">Dim_Carrier</span> ו-<span class="mono" dir="ltr">Dim_Service_Level</span>. עצבו כאחוז.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Pct of Grand Total =
+VAR Grand =
+    CALCULATE (
+        [Total Freight Revenue],
+        ALL ( Dim_Carrier ),
+        ALL ( Dim_Service_Level )
+    )
+RETURN
+    DIVIDE (
+        [Total Freight Revenue],
+        Grand
+    )</pre><p class="task-q"><b>למה ALL על הטבלה ולא על העמודה:</b> <span class="mono" dir="ltr">ALL ( Dim_Carrier )</span> מנטרל את כל עמודות המימד בבת אחת — גם <span class="mono" dir="ltr">Carrier_Name</span> וגם <span class="mono" dir="ltr">Carrier_Mode</span> וגם <span class="mono" dir="ltr">Contract_Tier</span>. אם תכתבו <span class="mono" dir="ltr">ALL ( Dim_Carrier[Carrier_Name] )</span> וב-Matrix תשימו את סוג המוביל בשורות, המכנה עדיין יסתנן לפי הסוג והאחוזים לא יסתכמו ל-100.</p><div class="tbl-wrap"><table class="cmp"><caption>Matrix מוביל × רמת שירות — בדיקת שפיות</caption><thead><tr><th scope="col">תא</th><th scope="col">הכנסה בדולר</th><th scope="col">אחוז מסך הכל</th></tr></thead><tbody><tr><th scope="row">Northwind Freight × Express</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">346,752.47</span></td><td class="pbi" data-label="אחוז מסך הכל"><span dir="ltr">4.0955</span>%</td></tr><tr><th scope="row">Northwind Freight — כל השורה</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,655,574.35</span></td><td class="pbi" data-label="אחוז מסך הכל"><span dir="ltr">19.5538</span>%</td></tr><tr><th scope="row">סך כל התאים</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">8,466,765.26</span></td><td class="pbi" data-label="אחוז מסך הכל"><span dir="ltr">100.00</span>%</td></tr></tbody></table></div><p class="task-q"><b>הבדיקה שסוגרת את התרגיל:</b> הפעילו סיכומי שורות ועמודות ב-Matrix. אם התא התחתון-הימני מציג 100.00% בדיוק — המכנה נכון. אם הוא מציג משהו אחר, ALL לא מכסה את כל מה שנמצא בויזואל.</p><p class="sol-check">תוצאה: התא Northwind Freight × Express = <b><span dir="ltr">4.0955</span>%</b>; סך כל התאים <b><span dir="ltr">100.00</span>%</b>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-9" data-chap="פרק I · מדדי בסיס" data-title="1.9 · Revenue vs Prev Month"
+ aria-label="פרק I · מדדי בסיס — 1.9 · Revenue vs Prev Month" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.9 · Revenue vs Prev Month — IF מול התקופה הקודמת</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Revenue vs Prev Month</b> שמחזיר את המחרוזת <b dir="ltr">Up</b> אם ההכנסה בחודש הנוכחי גדולה או שווה להכנסה בחודש הקודם, ואחרת <b dir="ltr">Down</b>. השתמשו בשני משתני VAR.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Revenue vs Prev Month =
+VAR Cur = [Total Freight Revenue]
+VAR Prev =
+    CALCULATE (
+        [Total Freight Revenue],
+        DATEADD (
+            Dim_Date[Full_Date],
+            -1,
+            MONTH
+        )
+    )
+RETURN
+    IF ( Cur &gt;= Prev, &quot;Up&quot;, &quot;Down&quot; )</pre><p class="task-q"><b>למה זה עובד רק אחרי Mark as date table:</b> <span class="mono" dir="ltr">DATEADD</span> היא פונקציית מודיעין-זמן, והיא דורשת טבלת תאריכים רציפה ומסומנת. <span class="mono" dir="ltr">Dim_Date</span> מכילה <span dir="ltr">731</span> ימים רצופים בלי חור אחד — זה לא מקרי, זו הדרישה.</p><p class="task-q"><b>ולמה לא לחסר מהחודש הקודם ידנית:</b> <span class="mono" dir="ltr">Month_Number - 1</span> נשבר בינואר. DATEADD יודע לחצות שנה.</p><div class="tbl-wrap"><table class="cmp"><caption>שתי בדיקות שכדאי להריץ</caption><thead><tr><th scope="col">חודש</th><th scope="col">הכנסה</th><th scope="col">חודש קודם</th><th scope="col">תוצאת המדד</th></tr></thead><tbody><tr><th scope="row">2025-12</th><td class="pbi" data-label="הכנסה"><span dir="ltr">437,472.12</span></td><td class="pbi" data-label="חודש קודם"><span dir="ltr">433,142.51</span></td><td class="pbi" data-label="תוצאת המדד"><b dir="ltr">Up</b></td></tr><tr><th scope="row">2025-02</th><td class="pbi" data-label="הכנסה"><span dir="ltr">225,297.76</span></td><td class="pbi" data-label="חודש קודם"><span dir="ltr">249,097.61</span></td><td class="pbi" data-label="תוצאת המדד"><b dir="ltr">Down</b></td></tr></tbody></table></div><p class="sol-check">תוצאה: מתוך <span dir="ltr">23</span> השוואות חודש-מול-חודש בקובץ, <b><span dir="ltr">12</span></b> מחזירות <b dir="ltr">Up</b>. החודש החזק הוא <span dir="ltr">2025-10</span> עם <span dir="ltr">507,396.90</span> דולר, והחלש הוא <span dir="ltr">2025-02</span> עם <span dir="ltr">225,297.76</span>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-10" data-chap="פרק I · מדדי בסיס" data-title="1.10 · Margin Tier"
+ aria-label="פרק I · מדדי בסיס — 1.10 · Margin Tier" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.10 · Margin Tier — SWITCH ( TRUE () )</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Margin Tier</b> שמסווג כל מוביל לפי אחוז המרווח הגולמי שלו לשלוש רמות: <b dir="ltr">Leader</b> מ-20% ומעלה, <b dir="ltr">Challenger</b> מ-12% ומעלה, וכל השאר <b dir="ltr">Laggard</b>. השתמשו ב-SWITCH עם TRUE.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Margin Tier =
+VAR TotMargin =
+    SUM (
+        Fact_Shipments[Gross_Margin_USD]
+    )
+VAR MarginPct =
+    DIVIDE (
+        TotMargin,
+        [Total Freight Revenue]
+    )
+RETURN
+    SWITCH (
+        TRUE (),
+        MarginPct &gt;= 0.20, &quot;Leader&quot;,
+        MarginPct &gt;= 0.12, &quot;Challenger&quot;,
+        &quot;Laggard&quot;
+    )</pre><p class="task-q"><b>למה SWITCH ( TRUE () ) ולא IF מקונן:</b> IF מקונן בשלוש רמות עדיין קריא, בשש הוא כבר לא. SWITCH עם TRUE שומר על טור אחד של תנאים שנבדקים מלמעלה למטה, והראשון שמתקיים מנצח — ולכן <b>הסדר קריטי</b>: אם תשימו את סף ה-12% ראשון, כל מוביל מעל 20% יסווג כ-Challenger ואף אחד לא יגיע ל-Leader.</p><div class="tbl-wrap"><table class="cmp"><caption>הסיווג בפועל — 11 המובילים הפעילים</caption><thead><tr><th scope="col">מוביל</th><th scope="col">הכנסה בדולר</th><th scope="col">מרווח %</th><th scope="col">רמה</th></tr></thead><tbody><tr><th scope="row">Northwind Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,655,570.42</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">20.30</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Rhine Express Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,467,050.34</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">22.88</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Baltic Haulage</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,037,060.51</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">13.75</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Iberia Cargo Lines</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">874,699.14</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">16.35</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Nordic Rail Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">661,534.78</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">25.66</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Channel Sea Lines</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">646,970.08</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">27.93</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Skyway Air Cargo</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">526,805.38</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">12.25</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Adriatic Transport</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">516,126.52</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">11.23</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Laggard</b></td></tr><tr><th scope="row">Alpine Rail Cargo</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">434,400.54</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">17.97</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Atlantic Bulk Ships</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">378,313.23</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">29.55</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Meridian Air Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">268,234.32</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">9.74</span>%</td><td class="pbi" data-label="רמה"><b dir="ltr">Laggard</b></td></tr></tbody></table></div><p class="sol-check">תוצאה: <b><span dir="ltr">5</span></b> Leader, <b><span dir="ltr">4</span></b> Challenger ו-<b><span dir="ltr">2</span></b> Laggard. ברמת סך הכל המדד מחזיר <b dir="ltr">Leader</b>, כי המרווח הכולל הוא <span dir="ltr">19.44</span>%.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-11" data-chap="פרק I · מדדי בסיס" data-title="1.11 · Tier Color"
+ aria-label="פרק I · מדדי בסיס — 1.11 · Tier Color" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.11 · Tier Color — SWITCH על ערך</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Tier Color</b> שמקבל את התוצאה של <b dir="ltr">Margin Tier</b> ומחזיר קוד צבע הקסה. זה SWITCH על ערך, לא SWITCH עם TRUE — שימו לב להבדל.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Tier Color =
+SWITCH (
+    [Margin Tier],
+    &quot;Leader&quot;, &quot;#132449&quot;,
+    &quot;Challenger&quot;, &quot;#F5C518&quot;,
+    &quot;#A9B4CC&quot;
+)</pre><div class="tbl-wrap"><table class="cmp"><caption>פלטת ההקסה של המטלה</caption><thead><tr><th scope="col">רמה</th><th scope="col">קוד הקסה</th><th scope="col">תפקיד</th></tr></thead><tbody><tr><th scope="row"><b dir="ltr">Leader</b></th><td class="pbi" data-label="קוד הקסה"><span class="mono" dir="ltr">#132449</span></td><td class="pbi" data-label="תפקיד">כחול עמוק — הרווחי</td></tr><tr><th scope="row"><b dir="ltr">Challenger</b></th><td class="pbi" data-label="קוד הקסה"><span class="mono" dir="ltr">#F5C518</span></td><td class="pbi" data-label="תפקיד">ענבר — הביניים</td></tr><tr><th scope="row"><b dir="ltr">Laggard</b></th><td class="pbi" data-label="קוד הקסה"><span class="mono" dir="ltr">#A9B4CC</span></td><td class="pbi" data-label="תפקיד">אפור-כחלחל — הנחשל</td></tr></tbody></table></div><p class="task-q"><b>ההבדל בין שני ה-SWITCH:</b> בתרגיל הקודם הארגומנט הראשון היה <span class="mono" dir="ltr">TRUE ()</span> וכל ענף היה ביטוי בוליאני שלם. כאן הארגומנט הראשון הוא <b>ערך</b> — <span class="mono" dir="ltr">[Margin Tier]</span> — וכל ענף הוא ערך להשוואה. הצורה השנייה קצרה יותר וגם מהירה יותר, אבל היא עובדת רק כשמשווים ערך אחד לרשימת אפשרויות.</p><p class="task-q"><b>למה שלושה ענפים ולא ארבעה:</b> הארגומנט האחרון בלי זוג הוא ברירת המחדל. בלעדיו, כל ערך לא צפוי היה מחזיר ריק והתא היה נצבע שקוף.</p><p class="sol-check">תוצאה: המדד מחזיר <span class="mono" dir="ltr">#132449</span> לחמשת ה-Leader, <span class="mono" dir="ltr">#F5C518</span> לארבעת ה-Challenger ו-<span class="mono" dir="ltr">#A9B4CC</span> לשני ה-Laggard. בפרק III נחבר אותו לעיצוב מותנה.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-12" data-chap="פרק I · מדדי בסיס" data-title="1.12 · Carrier Rank"
+ aria-label="פרק I · מדדי בסיס — 1.12 · Carrier Rank" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.12 · Carrier Rank by Shipments — RANK לפי כמות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Carrier Rank by Shipments</b> שמדרג את המובילים לפי <b>מספר המשלוחים</b> — לא לפי הכנסה. דירוג מדלג (SKIP), מהגבוה לנמוך, עם ORDERBY מפורש.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Carrier Rank by Shipments =
+RANK (
+    SKIP,
+    ALLSELECTED (
+        Dim_Carrier[Carrier_Name]
+    ),
+    ORDERBY (
+        COUNTROWS ( Fact_Shipments ),
+        DESC
+    )
+)</pre><p class="task-q"><b>למה ALLSELECTED ולא ALL:</b> <span class="mono" dir="ltr">ALL</span> היה מתעלם גם מסלייסרים שהמשתמש בחר, והדירוג היה תמיד מול כל 12 המובילים. <span class="mono" dir="ltr">ALLSELECTED</span> מנטרל רק את הסינון שהויזואל עצמו מייצר ומכבד את הסלייסרים — כך שאם המשתמש מסנן לשלושה מובילים, הדירוג רץ 1 עד 3.</p><p class="task-q"><b>וכאן נפגשים עם המלכודת.</b> <span class="mono" dir="ltr">ALLSELECTED ( Dim_Carrier[Carrier_Name] )</span> מחזיר <span dir="ltr">12</span> שמות — כולל <span class="mono" dir="ltr">Danube Barge Union</span> שאין לו אף שורת עובדה. <span class="mono" dir="ltr">COUNTROWS ( Fact_Shipments )</span> מחזיר עבורו ריק, וברירת המחדל של RANK (<span class="mono" dir="ltr">KEEP</span>) דוחפת ריקים לסוף. לכן הדירוג האחרון בטבלה יהיה <span dir="ltr">12</span> ולא <span dir="ltr">11</span> — ואם תפעילו <span class="mono" dir="ltr">Show items with no data</span> תראו אותו על המסך.</p><div class="tbl-wrap"><table class="cmp"><caption>הדירוג המלא</caption><thead><tr><th scope="col">דירוג</th><th scope="col">מוביל</th><th scope="col">משלוחים</th></tr></thead><tbody><tr><th scope="row"><span dir="ltr">1</span></th><td class="pbi" data-label="מוביל">Northwind Freight</td><td class="pbi" data-label="משלוחים"><span dir="ltr">5,507</span></td></tr><tr><th scope="row"><span dir="ltr">2</span></th><td class="pbi" data-label="מוביל">Rhine Express Group</td><td class="pbi" data-label="משלוחים"><span dir="ltr">4,900</span></td></tr><tr><th scope="row"><span dir="ltr">3</span></th><td class="pbi" data-label="מוביל">Baltic Haulage</td><td class="pbi" data-label="משלוחים"><span dir="ltr">3,517</span></td></tr><tr><th scope="row"><span dir="ltr">4</span></th><td class="pbi" data-label="מוביל">Iberia Cargo Lines</td><td class="pbi" data-label="משלוחים"><span dir="ltr">2,958</span></td></tr><tr><th scope="row"><span dir="ltr">5</span></th><td class="pbi" data-label="מוביל">Nordic Rail Freight</td><td class="pbi" data-label="משלוחים"><span dir="ltr">2,270</span></td></tr><tr><th scope="row"><span dir="ltr">6</span></th><td class="pbi" data-label="מוביל">Channel Sea Lines</td><td class="pbi" data-label="משלוחים"><span dir="ltr">2,118</span></td></tr><tr><th scope="row"><span dir="ltr">7</span></th><td class="pbi" data-label="מוביל">Skyway Air Cargo</td><td class="pbi" data-label="משלוחים"><span dir="ltr">1,784</span></td></tr><tr><th scope="row"><span dir="ltr">8</span></th><td class="pbi" data-label="מוביל">Adriatic Transport</td><td class="pbi" data-label="משלוחים"><span dir="ltr">1,712</span></td></tr><tr><th scope="row"><span dir="ltr">9</span></th><td class="pbi" data-label="מוביל">Alpine Rail Cargo</td><td class="pbi" data-label="משלוחים"><span dir="ltr">1,481</span></td></tr><tr><th scope="row"><span dir="ltr">10</span></th><td class="pbi" data-label="מוביל">Atlantic Bulk Ships</td><td class="pbi" data-label="משלוחים"><span dir="ltr">1,253</span></td></tr><tr><th scope="row"><span dir="ltr">11</span></th><td class="pbi" data-label="מוביל">Meridian Air Freight</td><td class="pbi" data-label="משלוחים"><span dir="ltr">900</span></td></tr><tr><th scope="row"><span dir="ltr">12</span></th><td class="pbi" data-label="מוביל">Danube Barge Union</td><td class="pbi" data-label="משלוחים">ריק</td></tr></tbody></table></div><p class="sol-check">תוצאה: Northwind Freight במקום הראשון עם <span dir="ltr">5,507</span> משלוחים; Meridian Air Freight במקום <span dir="ltr">11</span>; והמוביל היתום במקום <span dir="ltr">12</span> עם ערך ריק.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-13" data-chap="פרק I · מדדי בסיס" data-title="1.13 · Median Carrier Rev"
+ aria-label="פרק I · מדדי בסיס — 1.13 · Median Carrier Rev" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.13 · Median Carrier Revenue — INDEX על ערך החציון</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Median Carrier Revenue</b> שמחזיר את הכנסת המוביל <b>החציוני</b> — לא הממוצע ולא המוביל. השתמשו ב-INDEX עם ORDERBY עולה, וסננו קודם את המובילים בלי נתונים.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Median Carrier Revenue =
+VAR Carriers =
+    FILTER (
+        ALLSELECTED (
+            Dim_Carrier[Carrier_Name]
+        ),
+        NOT ISBLANK (
+            [Total Freight Revenue]
+        )
+    )
+VAR MidPos =
+    ROUNDUP (
+        COUNTROWS ( Carriers ) / 2,
+        0
+    )
+RETURN
+    CALCULATE (
+        [Total Freight Revenue],
+        INDEX (
+            MidPos,
+            Carriers,
+            ORDERBY (
+                [Total Freight Revenue],
+                ASC
+            )
+        )
+    )</pre><p class="task-q"><b>למה FILTER על NOT ISBLANK:</b> בלי השורה הזאת <span class="mono" dir="ltr">COUNTROWS ( Carriers )</span> היה מחזיר <span dir="ltr">12</span> במקום <span dir="ltr">11</span>, <span class="mono" dir="ltr">MidPos</span> היה יוצא <span dir="ltr">6</span> מתוך <span dir="ltr">12</span> — וזה כבר לא החציון אלא הפריט השישי ברשימה שהראשון בה ריק. המלכודת של הקובץ מזיזה את התוצאה בשורה שלמה.</p><p class="task-q"><b>למה ROUNDUP ולא ROUND:</b> ב-<span dir="ltr">11</span> פריטים החציון הוא הפריט השישי — <span dir="ltr">11</span> חלקי <span dir="ltr">2</span> הוא <span dir="ltr">5.5</span>, ורק עיגול כלפי מעלה נותן <span dir="ltr">6</span>. עיגול רגיל היה נותן <span dir="ltr">6</span> גם כן, אבל ב-<span dir="ltr">13</span> פריטים (<span dir="ltr">6.5</span>) הוא היה נותן <span dir="ltr">6</span> במקום <span dir="ltr">7</span>.</p><p class="task-q"><b>מה INDEX מחזיר:</b> לא מספר אלא <b>שורה</b>. לכן הוא יושב כארגומנט פילטר בתוך <span class="mono" dir="ltr">CALCULATE</span>, ולא כערך שמחזירים ישירות.</p><p class="sol-check">תוצאה: <b><span dir="ltr">646,970.08</span></b> דולר — Channel Sea Lines, המקום ה-<span dir="ltr">6</span> מתוך <span dir="ltr">11</span> במיון עולה. בדיקה עצמאית ב-pandas על אותם <span dir="ltr">11</span> ערכים נותנת <span dir="ltr">646,970.08</span> — זהה.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-14" data-chap="פרק I · מדדי בסיס" data-title="1.14 · Cumulative Pct"
+ aria-label="פרק I · מדדי בסיס — 1.14 · Cumulative Pct" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.14 · Cumulative Pct of Revenue — WINDOW מצטבר באחוזים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו מדד בשם <b dir="ltr">Cumulative Pct of Revenue</b> שמחזיר את האחוז המצטבר מההכנסה, כשהמובילים מסודרים מהגדול לקטן. השתמשו ב-WINDOW מהשורה המוחלטת הראשונה ועד השורה הנוכחית.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><pre class="dax">Cumulative Pct of Revenue =
+VAR RunTotal =
+    CALCULATE (
+        [Total Freight Revenue],
+        WINDOW (
+            1, ABS,
+            0, REL,
+            ALLSELECTED (
+                Dim_Carrier[Carrier_Name]
+            ),
+            ORDERBY (
+                [Total Freight Revenue],
+                DESC
+            )
+        )
+    )
+VAR AllCarriers =
+    CALCULATE (
+        [Total Freight Revenue],
+        ALLSELECTED (
+            Dim_Carrier[Carrier_Name]
+        )
+    )
+RETURN
+    DIVIDE ( RunTotal, AllCarriers )</pre><p class="task-q"><b>לקרוא את ארבעת המספרים:</b> <span class="mono" dir="ltr">1, ABS</span> = התחל בשורה הראשונה של הרשימה כולה, ללא תלות במיקום הנוכחי. <span class="mono" dir="ltr">0, REL</span> = סיים בשורה הנוכחית (<span dir="ltr">0</span> שורות ממנה). זה בדיוק ההגדרה של חלון מצטבר. אילו כתבתם <span class="mono" dir="ltr">-2, REL</span> במקום <span class="mono" dir="ltr">1, ABS</span>, הייתם מקבלים חלון נגרר של שלוש שורות במקום צבירה.</p><p class="task-q"><b>למה שני VAR ולא אחד:</b> המונה הוא סכום החלון והמכנה הוא סך הכל של אותה רשימה. שניהם משתמשים באותו <span class="mono" dir="ltr">ALLSELECTED</span> — וזה מה שמבטיח שהאחוז האחרון יהיה בדיוק 100 ולא 99.7.</p><div class="tbl-wrap"><table class="cmp"><caption>האחוז המצטבר, מהגדול לקטן</caption><thead><tr><th scope="col">מוביל</th><th scope="col">הכנסה בדולר</th><th scope="col">מצטבר %</th></tr></thead><tbody><tr><th scope="row">Northwind Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,655,570.42</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">19.55</span>%</td></tr><tr><th scope="row">Rhine Express Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,467,050.34</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">36.88</span>%</td></tr><tr><th scope="row">Baltic Haulage</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,037,060.51</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">49.13</span>%</td></tr><tr><th scope="row">Iberia Cargo Lines</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">874,699.14</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">59.46</span>%</td></tr><tr><th scope="row">Nordic Rail Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">661,534.78</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">67.27</span>%</td></tr><tr><th scope="row">Channel Sea Lines</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">646,970.08</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">74.92</span>%</td></tr><tr><th scope="row">Skyway Air Cargo</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">526,805.38</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">81.14</span>%</td></tr><tr><th scope="row">Adriatic Transport</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">516,126.52</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">87.23</span>%</td></tr><tr><th scope="row">Alpine Rail Cargo</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">434,400.54</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">92.36</span>%</td></tr><tr><th scope="row">Atlantic Bulk Ships</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">378,313.23</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">96.83</span>%</td></tr><tr><th scope="row">Meridian Air Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">268,234.32</span></td><td class="pbi" data-label="מצטבר %"><span dir="ltr">100.00</span>%</td></tr></tbody></table></div><p class="sol-check">תוצאה: שלושת המובילים הראשונים מחזיקים <b><span dir="ltr">49.13</span>%</b> מההכנסה, והשורה האחרונה מגיעה בדיוק ל-<b><span dir="ltr">100.00</span>%</b>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-1-15" data-chap="פרק I · מדדי בסיס" data-title="1.15 · למה התשובה הנאיבית"
+ aria-label="פרק I · מדדי בסיס — 1.15 · למה התשובה הנאיבית" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק I · מדדי בסיס</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">1.15 · תרגיל הסבר — למה הקיצור בעמודת היחס שגוי</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q"><b>בתרגיל הזה לא כותבים מדד.</b> סטודנט הסתכל על <span class="mono" dir="ltr">Fact_Shipments[Revenue_Per_KG_USD]</span>, ראה שהיא כבר מחשבת הכנסה לק"ג בכל שורה, וכתב במקום התרגיל 1.5 את זה:</p><pre class="dax">Naive Revenue per KG =
+AVERAGE (
+    Fact_Shipments[Revenue_Per_KG_USD]
+)</pre><p class="task-q">התוצאה שלו: <b><span dir="ltr">0.3815</span></b>. התוצאה הנכונה מתרגיל 1.5: <b><span dir="ltr">0.3156</span></b>. הפער הוא <span dir="ltr">20.9</span>%. <b>הסבירו במילים שלכם מדוע המדד שלו שגוי, ולא רק שונה.</b> ענו לפני שפותחים.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><p class="task-q"><b>התשובה: ממוצע של יחסים אינו היחס של הממוצעים.</b> <span class="mono" dir="ltr">Revenue_Per_KG_USD</span> היא עמודת יחס — מונה חלקי מכנה ברמת השורה. כשמחשבים עליה AVERAGE, כל משלוח מקבל משקל זהה: משלוח של <span dir="ltr">30</span> ק"ג משפיע על התוצאה בדיוק כמו משלוח של <span dir="ltr">20,000</span> ק"ג.</p><p class="task-q"><b>ולמה זה מטה כלפי מעלה דווקא:</b> בקובץ הזה ההכנסה בנויה מרכיב קבוע לכל משלוח ועוד רכיב לפי משקל. משלוחים קטנים נושאים את אותו רכיב קבוע על מעט מאוד ק"ג, ולכן היחס שלהם גבוה מאוד. הם רבים במספר ומעטים במשקל — ולכן ממוצע פשוט, שסופר משלוחים, מנופח לעומת חישוב שמשקלל לפי ק"ג.</p><p class="task-q"><b>מתי בכל זאת מותר לסכם עמודה נגזרת:</b> כש-<span class="mono" dir="ltr">SUM</span> עליה שווה לנוסחה על הסכומים. <span class="mono" dir="ltr">Gross_Margin_USD</span> עומדת במבחן — סכום ההפרשים שווה להפרש הסכומים, ולכן <span class="mono" dir="ltr">SUM ( Gross_Margin_USD )</span> תקין לגמרי. <span class="mono" dir="ltr">Revenue_Per_KG_USD</span> נכשלת, וגם סכום שלה (<span dir="ltr">10,834.60</span>) הוא מספר חסר משמעות.</p><p class="task-q"><b>הכלל לזכור:</b> חיבור וחיסור עוברים את הסכימה, כפל וחילוק לא. כל עמודה שהיא יחס, אחוז או ממוצע — נוגעים בה רק דרך מדד שמחשב מחדש מהמונה ומהמכנה.</p><p class="sol-check">אין כאן מדד לבדוק. הבדיקה היא שהסברתם את שני הדברים: שהמשקל בממוצע פשוט הוא מספר המשלוחים ולא מספר הק"ג, ושהמבחן הוא האם הסכימה עוברת דרך הפעולה.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-1" data-chap="פרק II · שני עמודי דשבורד" data-title="2.1 · רקע, כותרת ומגש KPI"
+ aria-label="פרק II · שני עמודי דשבורד — 2.1 · רקע, כותרת ומגש KPI" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.1 · עמוד ראשון — רקע, כותרת ומגש KPI</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">בנו את שלד העמוד הראשון: רקע כהה, כותרת, ומגש של ארבעה מקומות ריקים לקארדים. עדיין בלי הקארדים עצמם — רק הפריסה.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>גודל הקנבס</b><span><span class="mono" dir="ltr">View</span> ← <span class="mono" dir="ltr">Page size</span> ← <span class="mono" dir="ltr">16:9</span></span></li><li><b>רקע</b><span><span class="mono" dir="ltr">Format page</span> ← <span class="mono" dir="ltr">Canvas background</span> ← <span class="mono" dir="ltr">#0B1220</span> ← <span class="mono" dir="ltr">Transparency 0%</span></span></li><li><b>כותרת</b><span><span class="mono" dir="ltr">Insert</span> ← <span class="mono" dir="ltr">Text box</span> ← "Freight Performance" ← 28pt ← לבן</span></li><li><b>מגש</b><span><span class="mono" dir="ltr">Insert</span> ← <span class="mono" dir="ltr">Shapes</span> ← <span class="mono" dir="ltr">Rectangle</span> ← מלא <span class="mono" dir="ltr">#132449</span> ← פינות <span dir="ltr">12</span> ← רוחב מלא, גובה <span dir="ltr">140</span>px</span></li><li><b>שם העמוד</b><span>קליק ימני על הלשונית ← <span class="mono" dir="ltr">Rename</span> ← <span class="mono" dir="ltr">Overview</span></span></li></ol><p class="task-q"><b>למה מגש ולא ארבעה רקעים נפרדים:</b> ארבעה מלבנים נפרדים דורשים יישור ידני של ארבעה גבהים. מלבן אחד מאחורי ארבעה קארדים שקופים נשאר מיושר תמיד, וגם מייצר קו רציף שהעין קוראת כשורה אחת.</p><p class="task-q"><b>סדר השכבות:</b> <span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Selection pane</span>. המגש חייב להיות מתחת לקארדים. אם קארד נעלם — הוא מאחורי המלבן, לא נמחק.</p><p class="sol-check">בסוף התרגיל: עמוד בשם Overview, רקע כהה, כותרת לבנה למעלה ומלבן כהה ריק ברוחב מלא. שום נתון עדיין.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-2" data-chap="פרק II · שני עמודי דשבורד" data-title="2.2 · גרף קו מוחלק"
+ aria-label="פרק II · שני עמודי דשבורד — 2.2 · גרף קו מוחלק" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.2 · גרף קו מוחלק — ההכנסה החודשית</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">הוסיפו <span class="mono" dir="ltr">Line chart</span> עם <span class="mono" dir="ltr">Dim_Date[Year_Month]</span> בציר ו-<b dir="ltr">Total Freight Revenue</b> בערכים. החליקו את הקו, כבו את הסמנים, והוסיפו קו ממוצע.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>ויזואל</b><span><span class="mono" dir="ltr">Line chart</span> ← ציר: <span class="mono" dir="ltr">Year_Month</span> ← ערכים: Total Freight Revenue</span></li><li><b>החלקה</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Lines</span> ← <span class="mono" dir="ltr">Shape</span> ← <span class="mono" dir="ltr">Smooth line</span> ← On</span></li><li><b>עובי</b><span><span class="mono" dir="ltr">Lines</span> ← <span class="mono" dir="ltr">Stroke width</span> ← <span dir="ltr">3</span> ← צבע <span class="mono" dir="ltr">#F5C518</span></span></li><li><b>קו ממוצע</b><span><span class="mono" dir="ltr">Analytics</span> ← <span class="mono" dir="ltr">Average line</span> ← <span class="mono" dir="ltr">Add</span> ← מקווקו</span></li><li><b>ציר</b><span><span class="mono" dir="ltr">Y axis</span> ← <span class="mono" dir="ltr">Display units</span> ← <span class="mono" dir="ltr">Thousands</span></span></li></ol><div class="tbl-wrap"><table class="cmp"><caption>שיא ושפל בקובץ</caption><thead><tr><th scope="col">חודש</th><th scope="col">הכנסה בדולר</th></tr></thead><tbody><tr><th scope="row">2025-10 — השיא</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">507,396.90</span></td></tr><tr><th scope="row">2025-02 — השפל</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">225,297.76</span></td></tr><tr><th scope="row">2024-12</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">423,149.65</span></td></tr><tr><th scope="row">2025-12</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">437,472.12</span></td></tr></tbody></table></div><p class="task-q"><b>מתי החלקה מטעה:</b> קו מוחלק מצייר עקומה בין הנקודות, ולכן הוא <b>ממציא</b> ערכים שלא קיימים בין חודש לחודש. בסדרה חודשית זה מקובל כי המגמה חשובה מהנקודה. בסדרה עם קפיצה חדה — למשל שינוי מדיניות — ההחלקה תסתיר בדיוק את מה שרציתם להראות. שם כבו אותה.</p><p class="task-q"><b>שימו לב לעונתיות:</b> ספטמבר עד דצמבר גבוהים בעקביות בשתי השנים, וינואר-פברואר נמוכים. זה מובנה בנתונים ולא רעש.</p><p class="sol-check">בסוף התרגיל: הקו מטפס לשיא של <span dir="ltr">507,396.90</span> ב-<span dir="ltr">2025-10</span> ויורד ל-<span dir="ltr">225,297.76</span> ב-<span dir="ltr">2025-02</span>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-3" data-chap="פרק II · שני עמודי דשבורד" data-title="2.3 · עמוד שני וסלייסר"
+ aria-label="פרק II · שני עמודי דשבורד — 2.3 · עמוד שני וסלייסר" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.3 · עמוד שני וסלייסר מסונכרן</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צרו עמוד שני בשם <span class="mono" dir="ltr">Detail</span>, הוסיפו סלייסר על <span class="mono" dir="ltr">Dim_Service_Level[Service_Level_Name]</span>, וסנכרנו אותו כך שיפעל על שני העמודים אבל יוצג רק באחד.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>עמוד</b><span><span class="mono" dir="ltr">+</span> בתחתית ← <span class="mono" dir="ltr">Rename</span> ← <span class="mono" dir="ltr">Detail</span></span></li><li><b>סלייסר</b><span><span class="mono" dir="ltr">Slicer</span> ← שדה: <span class="mono" dir="ltr">Service_Level_Name</span></span></li><li><b>סגנון</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Slicer settings</span> ← <span class="mono" dir="ltr">Style</span> ← <span class="mono" dir="ltr">Tile</span></span></li><li><b>מיון</b><span><span class="mono" dir="ltr">More options</span> ← <span class="mono" dir="ltr">Sort by</span> ← <span class="mono" dir="ltr">Priority_Rank</span> ← עולה</span></li><li><b>סנכרון</b><span><span class="mono" dir="ltr">View</span> ← <span class="mono" dir="ltr">Sync slicers</span> ← סמנו <span class="mono" dir="ltr">Sync</span> בשני העמודים, <span class="mono" dir="ltr">Visible</span> רק ב-<span class="mono" dir="ltr">Detail</span></span></li></ol><p class="task-q"><b>למה למיין לפי Priority_Rank ולא לפי שם:</b> מיון אלפביתי ייתן <span class="mono" dir="ltr">Bulk, Economy, Express, Same_Day, Standard</span> — סדר חסר משמעות. <span class="mono" dir="ltr">Priority_Rank</span> נמצא במימד בדיוק בשביל זה, ונותן סדר מהיר-לאיטי.</p><p class="task-q"><b>מה סנכרון עושה ומה לא:</b> הוא משתף את <b>הבחירה</b> בין עמודים, לא את הויזואל. אם תשנו עיצוב באחד — השני לא ישתנה. ואם תשכחו לסמן Sync בעמוד השני, הסלייסר יעבוד רק במקום שבו הוא מוצג.</p><div class="tbl-wrap"><table class="cmp"><caption>חמש רמות השירות</caption><thead><tr><th scope="col">רמה</th><th scope="col">הכנסה בדולר</th><th scope="col">משלוחים</th><th scope="col">מרווח %</th></tr></thead><tbody><tr><th scope="row">Standard</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">3,520,041.24</span></td><td class="pbi" data-label="משלוחים"><span dir="ltr">12,086</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">18.44</span>%</td></tr><tr><th scope="row">Express</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,818,986.44</span></td><td class="pbi" data-label="משלוחים"><span dir="ltr">5,345</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">25.62</span>%</td></tr><tr><th scope="row">Economy</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,595,228.22</span></td><td class="pbi" data-label="משלוחים"><span dir="ltr">5,926</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">14.47</span>%</td></tr><tr><th scope="row">Bulk</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">870,028.97</span></td><td class="pbi" data-label="משלוחים"><span dir="ltr">3,296</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">11.54</span>%</td></tr><tr><th scope="row">Same_Day</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">662,480.39</span></td><td class="pbi" data-label="משלוחים"><span dir="ltr">1,747</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">30.21</span>%</td></tr></tbody></table></div><p class="sol-check">בסוף התרגיל: בחירת Express בעמוד Overview משנה גם את עמוד Detail, והסלייסר עצמו נראה רק ב-Detail.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-4" data-chap="פרק II · שני עמודי דשבורד" data-title="2.4 · טבלת פירוט"
+ aria-label="פרק II · שני עמודי דשבורד — 2.4 · טבלת פירוט" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.4 · טבלת פירוט המובילים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">בעמוד <span class="mono" dir="ltr">Detail</span> בנו <span class="mono" dir="ltr">Table</span> עם שם המוביל, ההכנסה, מספר המשלוחים, המרווח והרמה. חמישה מדדים או עמודות, לא יותר.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>ויזואל</b><span><span class="mono" dir="ltr">Table</span> ← שדות: <span class="mono" dir="ltr">Dim_Carrier[Carrier_Name]</span>, Total Freight Revenue, Carrier Rank by Shipments, Margin Tier</span></li><li><b>מיון</b><span>קליק על כותרת ההכנסה ← יורד</span></li><li><b>סה"כ</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Totals</span> ← On</span></li><li><b>רוחב עמודה</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Column headers</span> ← <span class="mono" dir="ltr">Auto-size width</span> ← Off</span></li><li><b>גריד</b><span><span class="mono" dir="ltr">Grid</span> ← <span class="mono" dir="ltr">Horizontal gridlines</span> ← On ← <span class="mono" dir="ltr">#1E2A44</span></span></li></ol><p class="task-q"><b>מה תראו בשורת הסיכום:</b> ההכנסה תסתכם ל-<span dir="ltr">8,466,765.26</span> — נכון. אבל <b dir="ltr">Margin Tier</b> בשורת הסיכום יראה <b dir="ltr">Leader</b>, כי הוא מחושב מחדש על כל הנתונים ולא מסכם את ההערכות של השורות. זה לא באג — זה בדיוק מה שמדד אמור לעשות.</p><p class="task-q"><b>ומה לא תראו:</b> את <span class="mono" dir="ltr">Danube Barge Union</span>. הוא קיים במימד ואין לו נתונים, ולכן Power BI מסתיר אותו. כדי לראות אותו: קליק ימני על השדה בחלונית <span class="mono" dir="ltr">Columns</span> ← <span class="mono" dir="ltr">Show items with no data</span>.</p><div class="tbl-wrap"><table class="cmp"><caption>הטבלה הצפויה</caption><thead><tr><th scope="col">מוביל</th><th scope="col">הכנסה בדולר</th><th scope="col">דירוג</th><th scope="col">רמה</th></tr></thead><tbody><tr><th scope="row">Northwind Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,655,570.42</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">1</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Rhine Express Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,467,050.34</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">2</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Baltic Haulage</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,037,060.51</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">3</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Iberia Cargo Lines</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">874,699.14</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">4</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Nordic Rail Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">661,534.78</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">5</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Channel Sea Lines</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">646,970.08</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">6</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Skyway Air Cargo</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">526,805.38</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">7</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Adriatic Transport</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">516,126.52</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">8</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Laggard</b></td></tr><tr><th scope="row">Alpine Rail Cargo</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">434,400.54</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">9</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Challenger</b></td></tr><tr><th scope="row">Atlantic Bulk Ships</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">378,313.23</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">10</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Leader</b></td></tr><tr><th scope="row">Meridian Air Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">268,234.32</span></td><td class="pbi" data-label="דירוג"><span dir="ltr">11</span></td><td class="pbi" data-label="רמה"><b dir="ltr">Laggard</b></td></tr></tbody></table></div><p class="sol-check">בסוף התרגיל: <span dir="ltr">11</span> שורות, ההכנסה מסתכמת ל-<span dir="ltr">8,466,765.26</span>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-5" data-chap="פרק II · שני עמודי דשבורד" data-title="2.5 · Top N"
+ aria-label="פרק II · שני עמודי דשבורד — 2.5 · Top N" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.5 · Top 10 — עשרת הלקוחות הגדולים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">הוסיפו גרף עמודות אופקי של עשרת הלקוחות הגדולים לפי הכנסה. השתמשו ב-<span class="mono" dir="ltr">Top N</span> בחלונית הפילטרים — לא במיון ידני.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>ויזואל</b><span><span class="mono" dir="ltr">Clustered bar chart</span> ← ציר: <span class="mono" dir="ltr">Dim_Customer[Customer_Name]</span> ← ערכים: Total Freight Revenue</span></li><li><b>פילטר</b><span><span class="mono" dir="ltr">Filters</span> ← <span class="mono" dir="ltr">Customer_Name</span> ← <span class="mono" dir="ltr">Filter type</span> ← <span class="mono" dir="ltr">Top N</span></span></li><li><b>הגדרה</b><span><span class="mono" dir="ltr">Show items</span> ← <span class="mono" dir="ltr">Top</span> ← <span dir="ltr">10</span> ← <span class="mono" dir="ltr">By value</span> ← Total Freight Revenue ← <span class="mono" dir="ltr">Apply filter</span></span></li><li><b>תוויות</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Data labels</span> ← On ← <span class="mono" dir="ltr">Display units</span> ← <span class="mono" dir="ltr">Thousands</span></span></li></ol><p class="task-q"><b>למה Top N ולא מיון:</b> מיון מסדר את כל <span dir="ltr">180</span> הלקוחות ומראה את הראשונים שנכנסים למסך — מספר שמשתנה עם גודל הויזואל. Top N חותך באמת לעשרה, ומה שחשוב יותר: הוא <b>מגיב לסלייסר</b>. אם המשתמש יבחר Express, תקבלו את עשרת הגדולים ב-Express, לא את עשרת הגדולים הכלליים שבמקרה יש להם Express.</p><p class="task-q"><b>לחלופין במדד:</b> אפשר להגיע לאותה תוצאה עם <span class="mono" dir="ltr">TOPN</span> בתוך CALCULATE, וזה שימושי כשרוצים את הסכום של העשירייה כמספר בודד:</p><pre class="dax">Top 10 Customer Filter =
+TOPN (
+    10,
+    ALLSELECTED (
+        Dim_Customer[Customer_Name]
+    ),
+    [Total Freight Revenue],
+    DESC
+)</pre><div class="tbl-wrap"><table class="cmp"><caption>עשרת הלקוחות הגדולים</caption><thead><tr><th scope="col">לקוח</th><th scope="col">הכנסה בדולר</th></tr></thead><tbody><tr><th scope="row">Meridian Manufacturing</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">323,744.48</span></td></tr><tr><th scope="row">Verdant Distribution</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">189,262.57</span></td></tr><tr><th scope="row">Beacon Retail Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">177,161.50</span></td></tr><tr><th scope="row">Aurora Retail Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">171,298.53</span></td></tr><tr><th scope="row">Cobalt Trading Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">166,613.60</span></td></tr><tr><th scope="row">Meridian Logistics Partners</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">151,472.25</span></td></tr><tr><th scope="row">Ironwood Components</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">132,101.92</span></td></tr><tr><th scope="row">Meridian Foods</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">127,609.41</span></td></tr><tr><th scope="row">Anchor Manufacturing</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">120,856.29</span></td></tr><tr><th scope="row">Ridge Retail Group</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">114,907.85</span></td></tr></tbody></table></div><p class="sol-check">בסוף התרגיל: הלקוח המוביל הוא Meridian Manufacturing עם <span dir="ltr">323,744.48</span> דולר.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-6" data-chap="פרק II · שני עמודי דשבורד" data-title="2.6 · Matrix"
+ aria-label="פרק II · שני עמודי דשבורד — 2.6 · Matrix" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.6 · Matrix — מוביל מול רמת שירות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">בנו Matrix עם המובילים בשורות, רמות השירות בעמודות, ו-<b dir="ltr">Pct of Grand Total</b> בערכים. הפעילו סיכומים בשני הכיוונים.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>ויזואל</b><span><span class="mono" dir="ltr">Matrix</span> ← שורות: <span class="mono" dir="ltr">Carrier_Name</span> ← עמודות: <span class="mono" dir="ltr">Service_Level_Name</span> ← ערכים: Pct of Grand Total</span></li><li><b>סיכומים</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Row subtotals</span> On ← <span class="mono" dir="ltr">Column subtotals</span> On</span></li><li><b>עיצוב</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Style preset</span> ← <span class="mono" dir="ltr">Bold header flashy rows</span></span></li><li><b>אחוזים</b><span><span class="mono" dir="ltr">Measure tools</span> ← <span class="mono" dir="ltr">%</span> ← <span dir="ltr">2</span> ספרות</span></li></ol><p class="task-q"><b>בדיקת השפיות של הפרק:</b> התא התחתון-הימני חייב להראות 100.00%. אם הוא מראה מספר אחר — ה-ALL במדד לא מכסה את כל מה שנמצא בויזואל. זה בדיוק המבחן שתרגיל 1.8 בנה את המדד בשבילו.</p><p class="task-q"><b>למה Matrix ולא Table:</b> Table שם את כל השדות בטור אחד. Matrix יוצר הצטלבות אמיתית של שני מימדים, וזה הויזואל היחיד שבו מדד עם ALL על שני מימדים מראה את כל מה שהוא יודע.</p><div class="tbl-wrap"><table class="cmp"><caption>שלוש נקודות ביקורת</caption><thead><tr><th scope="col">תא</th><th scope="col">ערך</th></tr></thead><tbody><tr><th scope="row">Northwind Freight × Express</th><td class="pbi" data-label="ערך"><span dir="ltr">4.0955</span>%</td></tr><tr><th scope="row">Northwind Freight — סיכום שורה</th><td class="pbi" data-label="ערך"><span dir="ltr">19.5538</span>%</td></tr><tr><th scope="row">התא התחתון-הימני</th><td class="pbi" data-label="ערך"><span dir="ltr">100.00</span>%</td></tr></tbody></table></div><p class="sol-check">בסוף התרגיל: <span dir="ltr">11</span> שורות על <span dir="ltr">5</span> עמודות, והסיכום הכולל <span dir="ltr">100.00</span>%.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-7" data-chap="פרק II · שני עמודי דשבורד" data-title="2.7 · גרף משולב"
+ aria-label="פרק II · שני עמודי דשבורד — 2.7 · גרף משולב" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.7 · גרף משולב — עמודות מול קו על שני צירים</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">בנו <b dir="ltr">Line and clustered column chart</b>: המובילים בציר, ההכנסה בעמודות, ו-<b dir="ltr">Revenue per KG</b> בקו על הציר המשני.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>ויזואל</b><span><span class="mono" dir="ltr">Line and clustered column chart</span></span></li><li><b>ציר</b><span><span class="mono" dir="ltr">X axis</span> ← <span class="mono" dir="ltr">Carrier_Name</span></span></li><li><b>עמודות</b><span><span class="mono" dir="ltr">Column y-axis</span> ← Total Freight Revenue</span></li><li><b>קו</b><span><span class="mono" dir="ltr">Line y-axis</span> ← Revenue per KG</span></li><li><b>ציר משני</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Y axis</span> ← <span class="mono" dir="ltr">Secondary</span> ← <span class="mono" dir="ltr">Show</span> On</span></li></ol><p class="task-q"><b>הכלל היחיד שחשוב כאן:</b> שני צירים מותרים רק כששתי הסדרות במידות שונות. הכנסה בדולרים וגם יחס בדולר-לק"ג — לגיטימי. שתי סדרות דולריות על שני צירים שונים — מניפולציה ויזואלית, כי אפשר לגרום לכל סדרה להיראות גבוהה יותר רק בבחירת הסקאלה.</p><p class="task-q"><b>מה הגרף הזה מגלה:</b> Northwind Freight הכי גבוה בעמודות, אבל הקו מעליו אינו הגבוה. זו בדיוק השאלה שתסגור את המטלה בתרגיל 3.3.</p><p class="sol-check">בסוף התרגיל: עמודות יורדות משמאל לימין, קו שאינו יורד איתן, ושני צירים מסומנים.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-8" data-chap="פרק II · שני עמודי דשבורד" data-title="2.8 · דונאט מול עמודות"
+ aria-label="פרק II · שני עמודי דשבורד — 2.8 · דונאט מול עמודות" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.8 · דונאט מול עמודות — אותם נתונים, שתי קריאות</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">בנו <span class="mono" dir="ltr">Donut chart</span> של ההכנסה לפי <span class="mono" dir="ltr">Corridor_Name</span>, ולידו גרף עמודות של אותם נתונים בדיוק. השוו.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>דונאט</b><span><span class="mono" dir="ltr">Donut chart</span> ← מקרא: <span class="mono" dir="ltr">Corridor_Name</span> ← ערכים: Total Freight Revenue</span></li><li><b>עמודות</b><span><span class="mono" dir="ltr">Clustered column chart</span> ← אותם שני שדות</span></li><li><b>תוויות</b><span>בדונאט: <span class="mono" dir="ltr">Detail labels</span> ← <span class="mono" dir="ltr">Label style</span> ← <span class="mono" dir="ltr">Category, percent</span></span></li><li><b>מיון</b><span>בעמודות: מיון יורד לפי ההכנסה</span></li></ol><div class="tbl-wrap"><table class="cmp"><caption>שלושת המסדרונות</caption><thead><tr><th scope="col">מסדרון</th><th scope="col">הכנסה בדולר</th><th scope="col">אחוז</th></tr></thead><tbody><tr><th scope="row">Cross_Border_Europe</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">6,909,598.68</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">81.61</span>%</td></tr><tr><th scope="row">Intra_Europe_West</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,304,538.13</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">15.41</span>%</td></tr><tr><th scope="row">Domestic</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">252,628.45</span></td><td class="pbi" data-label="אחוז"><span dir="ltr">2.98</span>%</td></tr></tbody></table></div><p class="task-q"><b>מתי דונאט עדיף:</b> כשיש שלוש-ארבע קטגוריות והשאלה היא "כמה מהשלם". כאן Cross_Border_Europe תופס יותר משלושה רבעים, וזה נקרא מיד בדונאט.</p><p class="task-q"><b>ומתי הוא נכשל:</b> ברגע שיש שבע קטגוריות ומעלה, או כששתי פרוסות קרובות בגודלן — העין לא יודעת להשוות זוויות. נסו לבנות דונאט של <span dir="ltr">11</span> המובילים ותראו למה. בעמודות ההשוואה מיידית.</p><p class="sol-check">בסוף התרגיל: שני ויזואלים עם אותם שלושה ערכים, Cross_Border_Europe על <span dir="ltr">81.61</span>%.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-9" data-chap="פרק II · שני עמודי דשבורד" data-title="2.9 · Small multiples"
+ aria-label="פרק II · שני עמודי דשבורד — 2.9 · Small multiples" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.9 · Small multiples — רשת קטנה במקום גרף עמוס</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">קחו את גרף העמודות של ההכנסה לפי <span class="mono" dir="ltr">Dim_Date[Quarter_Name]</span> ופצלו אותו ל-small multiples לפי <span class="mono" dir="ltr">Dim_Service_Level[Service_Level_Name]</span>.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>בסיס</b><span><span class="mono" dir="ltr">Clustered column chart</span> ← ציר: <span class="mono" dir="ltr">Quarter_Name</span> ← ערכים: Total Freight Revenue</span></li><li><b>פיצול</b><span>גררו <span class="mono" dir="ltr">Service_Level_Name</span> לשדה <span class="mono" dir="ltr">Small multiples</span></span></li><li><b>רשת</b><span><span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Small multiples</span> ← <span class="mono" dir="ltr">Layout</span> ← <span dir="ltr">3</span> שורות על <span dir="ltr">2</span> עמודות</span></li><li><b>ציר משותף</b><span><span class="mono" dir="ltr">Y axis</span> ← <span class="mono" dir="ltr">Shared axis</span> On</span></li></ol><p class="task-q"><b>ההחלטה שקובעת הכל: ציר משותף או לא.</b> עם ציר משותף אפשר להשוות בין הפאנלים — ורואים מיד ש-Same_Day קטן פי חמישה מ-Standard. בלי ציר משותף כל פאנל נמתח לגובה מלא, כל אחד נראה גדול, וההשוואה בין פאנלים הופכת לשקר. ברירת המחדל היא ציר משותף, ורוב הזמן זה גם הנכון.</p><p class="task-q"><b>מתי לא להשתמש:</b> כשיש יותר משמונה-תשעה פאנלים. אז כל פאנל קטן מכדי לקרוא, ועדיף Matrix.</p><p class="sol-check">בסוף התרגיל: חמישה פאנלים, ציר Y זהה בכולם, ופאנל Standard בולט בבירור מעל השאר.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-10" data-chap="פרק II · שני עמודי דשבורד" data-title="2.10 · פיזור"
+ aria-label="פרק II · שני עמודי דשבורד — 2.10 · פיזור" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.10 · גרף פיזור — משקל מול הכנסה</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">בנו <b dir="ltr">Scatter chart</b> שבו כל נקודה היא מוביל: ציר X = <b dir="ltr">Total Weight Shipped</b>, ציר Y = <b dir="ltr">Total Freight Revenue</b>, גודל הבועה = מספר המשלוחים.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>ויזואל</b><span><span class="mono" dir="ltr">Scatter chart</span></span></li><li><b>פירוט</b><span><span class="mono" dir="ltr">Values</span> ← <span class="mono" dir="ltr">Dim_Carrier[Carrier_Name]</span></span></li><li><b>צירים</b><span>X: Total Weight Shipped · Y: Total Freight Revenue</span></li><li><b>גודל</b><span><span class="mono" dir="ltr">Size</span> ← <span class="mono" dir="ltr">Count of Shipment_ID</span></span></li><li><b>קו מגמה</b><span><span class="mono" dir="ltr">Analytics</span> ← <span class="mono" dir="ltr">Trend line</span> ← <span class="mono" dir="ltr">Add</span></span></li></ol><p class="task-q"><b>המלכודת של Scatter:</b> אם שוכחים לשים שדה ב-<span class="mono" dir="ltr">Values</span>, Power BI מצייר <b>נקודה אחת</b> — הסכום הכולל. זו הטעות הנפוצה ביותר בויזואל הזה, והיא נראית כמו באג.</p><p class="task-q"><b>מה קו המגמה מספר:</b> ההכנסה עולה עם המשקל, אבל לא ביחס ישר — מובילים עם תמהיל אווירי מרוויחים יותר לק"ג. מוביל שיושב מעל הקו גובה מחיר גבוה לק"ג, מי שמתחתיו גובה פחות.</p><p class="sol-check">בסוף התרגיל: 11 בועות, לא אחת. אם יש בועה אחת — חסר שדה ב-Values.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-2-11" data-chap="פרק II · שני עמודי דשבורד" data-title="2.11 · ניווט ופוליש"
+ aria-label="פרק II · שני עמודי דשבורד — 2.11 · ניווט ופוליש" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק II · שני עמודי דשבורד</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">2.11 · ניווט בין העמודים ופוליש אחרון</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">חברו את שני העמודים בכפתורי ניווט, יישרו הכל, וכבו את מה שלא צריך.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>כפתור</b><span><span class="mono" dir="ltr">Insert</span> ← <span class="mono" dir="ltr">Buttons</span> ← <span class="mono" dir="ltr">Navigator</span> ← <span class="mono" dir="ltr">Page navigator</span></span></li><li><b>יישור</b><span>סמנו ויזואלים ← <span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Align</span> ← <span class="mono" dir="ltr">Align top</span> ← <span class="mono" dir="ltr">Distribute horizontally</span></span></li><li><b>כותרות</b><span>לכל ויזואל: <span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Title</span> ← טקסט קצר באנגלית ← <span dir="ltr">12</span>pt</span></li><li><b>ניקוי</b><span>כבו <span class="mono" dir="ltr">Shadow</span> בכל הויזואלים, ותנו לכולם <span class="mono" dir="ltr">Border</span> אחיד <span class="mono" dir="ltr">#1E2A44</span></span></li><li><b>סדר טאב</b><span><span class="mono" dir="ltr">View</span> ← <span class="mono" dir="ltr">Selection</span> ← <span class="mono" dir="ltr">Tab order</span> ← סדרו לפי סדר הקריאה</span></li></ol><p class="task-q"><b>הפוליש שהכי משתלם:</b> יישור. שני ויזואלים שנמצאים במרחק שני פיקסלים זה מזה נראים רשלניים גם אם התוכן מושלם, והעין קולטת את זה לפני שהיא קוראת מספר אחד.</p><p class="task-q"><b>ומה שהכי נשכח:</b> <span class="mono" dir="ltr">Tab order</span>. משתמש מקלדת עובר בין ויזואלים בסדר שבו הם נוצרו, שהוא כמעט תמיד לא סדר הקריאה. שתי דקות עבודה.</p><p class="task-q"><b>בדיקה אחרונה לפני שמגישים:</b> <span class="mono" dir="ltr">View</span> ← <span class="mono" dir="ltr">Page view</span> ← <span class="mono" dir="ltr">Actual size</span>, ואז <span class="mono" dir="ltr">Fit to page</span>. אם משהו קופץ — יש ויזואל שיוצא מהקנבס.</p><p class="sol-check">בסוף הפרק: שני עמודים מקושרים, כל הויזואלים מיושרים, כותרות אחידות וסדר טאב הגיוני.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-3-1" data-chap="פרק III · עיצוב מותנה ותובנה" data-title="3.1 · עיצוב מותנה — Field"
+ aria-label="פרק III · עיצוב מותנה ותובנה — 3.1 · עיצוב מותנה — Field" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · עיצוב מותנה ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.1 · עיצוב מותנה לפי מדד צבע</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">צבעו את רקע התאים בטבלת המובילים לפי <b dir="ltr">Tier Color</b>, בשיטת <span class="mono" dir="ltr">Field value</span>. ואז הוסיפו גם צבע טקסט כדי שיישאר קריא.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><ol class="steps"><li><b>פתיחה</b><span>בטבלת המובילים: <span class="mono" dir="ltr">Format</span> ← <span class="mono" dir="ltr">Cell elements</span></span></li><li><b>בחירת סדרה</b><span><span class="mono" dir="ltr">Apply settings to</span> ← Total Freight Revenue</span></li><li><b>רקע</b><span><span class="mono" dir="ltr">Background color</span> ← On ← <span class="mono" dir="ltr">fx</span></span></li><li><b>שיטה</b><span><span class="mono" dir="ltr">Format style</span> ← <span class="mono" dir="ltr">Field value</span> ← <span class="mono" dir="ltr">What field should we base this on</span> ← Tier Color</span></li><li><b>טקסט</b><span>חזרו על אותו מסלול ב-<span class="mono" dir="ltr">Font color</span> עם המדד Tier Text Color</span></li></ol><pre class="dax">Tier Text Color =
+SWITCH (
+    [Margin Tier],
+    &quot;Leader&quot;, &quot;#FFFFFF&quot;,
+    &quot;Challenger&quot;, &quot;#132449&quot;,
+    &quot;#132449&quot;
+)</pre><p class="task-q"><b>למה Field value ולא Rules:</b> כאן ההיגיון כבר יושב במדד <span class="mono" dir="ltr">[Margin Tier]</span>, ושתי הסדרות — הרקע והטקסט — נשענות עליו. אם מחר הסף ישתנה מ-20% ל-22%, משנים מקום אחד בלבד והכל מתעדכן. עם Rules הייתם צריכים לתקן כל ויזואל בנפרד.</p><p class="task-q"><b>המדד חייב להחזיר מחרוזת הקסה תקינה.</b> <span class="mono" dir="ltr">#132449</span> עובד; <span class="mono" dir="ltr">132449</span> בלי הסולמית לא. אם התא נשאר לבן — זו הסיבה בתשעים אחוז מהמקרים.</p><div class="tbl-wrap"><table class="cmp"><caption>מה ייצא על המסך</caption><thead><tr><th scope="col">רמה</th><th scope="col">רקע</th><th scope="col">טקסט</th><th scope="col">מובילים</th></tr></thead><tbody><tr><th scope="row"><b dir="ltr">Leader</b></th><td class="pbi" data-label="רקע"><span class="mono" dir="ltr">#132449</span></td><td class="pbi" data-label="טקסט"><span class="mono" dir="ltr">#FFFFFF</span></td><td class="pbi" data-label="מובילים"><span dir="ltr">5</span></td></tr><tr><th scope="row"><b dir="ltr">Challenger</b></th><td class="pbi" data-label="רקע"><span class="mono" dir="ltr">#F5C518</span></td><td class="pbi" data-label="טקסט"><span class="mono" dir="ltr">#132449</span></td><td class="pbi" data-label="מובילים"><span dir="ltr">4</span></td></tr><tr><th scope="row"><b dir="ltr">Laggard</b></th><td class="pbi" data-label="רקע"><span class="mono" dir="ltr">#A9B4CC</span></td><td class="pbi" data-label="טקסט"><span class="mono" dir="ltr">#132449</span></td><td class="pbi" data-label="מובילים"><span dir="ltr">2</span></td></tr></tbody></table></div><p class="sol-check">תוצאה: החלוקה על המסך היא <span dir="ltr">5</span> / <span dir="ltr">4</span> / <span dir="ltr">2</span>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-3-2" data-chap="פרק III · עיצוב מותנה ותובנה" data-title="3.2 · עיצוב מותנה — Rules"
+ aria-label="פרק III · עיצוב מותנה ותובנה — 3.2 · עיצוב מותנה — Rules" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · עיצוב מותנה ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.2 · אותה חלוקה בדיוק, בשיטת Rules</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">הגיעו לאותה חלוקה בדיוק — אבל בלי מדד צבע. השתמשו ב-<span class="mono" dir="ltr">Rules</span> על אחוז המרווח. המטרה: להוכיח לעצמכם ששתי הדרכים מייצרות תוצאה זהה, ולהבין מתי כל אחת עדיפה.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><p class="task-q">קודם צרו מדד עזר לפער מול היעד:</p><pre class="dax">Margin Gap vs Target =
+VAR TotMargin =
+    SUM (
+        Fact_Shipments[Gross_Margin_USD]
+    )
+VAR Pct =
+    DIVIDE (
+        TotMargin,
+        [Total Freight Revenue]
+    )
+RETURN Pct - 0.18</pre><ol class="steps"><li><b>פתיחה</b><span><span class="mono" dir="ltr">Cell elements</span> ← <span class="mono" dir="ltr">Background color</span> ← <span class="mono" dir="ltr">fx</span></span></li><li><b>שיטה</b><span><span class="mono" dir="ltr">Format style</span> ← <span class="mono" dir="ltr">Rules</span></span></li><li><b>בסיס</b><span><span class="mono" dir="ltr">What field should we base this on</span> ← Margin Gap vs Target</span></li><li><b>כלל 1</b><span><span class="mono" dir="ltr">If value</span> ≥ <span dir="ltr">0.02</span> ← <span class="mono" dir="ltr">#132449</span></span></li><li><b>כלל 2</b><span><span class="mono" dir="ltr">If value</span> ≥ <span dir="ltr">-0.06</span> ← <span class="mono" dir="ltr">#F5C518</span></span></li><li><b>כלל 3</b><span><span class="mono" dir="ltr">If value</span> < <span dir="ltr">-0.06</span> ← <span class="mono" dir="ltr">#A9B4CC</span></span></li></ol><p class="task-q"><b>למה הספים נראים שונים:</b> המדד מחזיר פער מול יעד של 18%, ולכן סף של 20% הופך ל-<span dir="ltr">+0.02</span> וסף של 12% הופך ל-<span dir="ltr">-0.06</span>. אותה חלוקה, נקודת ייחוס אחרת.</p><p class="task-q"><b>המלכודת של Rules:</b> <span class="mono" dir="ltr">Percent</span> מול <span class="mono" dir="ltr">Number</span> בתפריט. אם תשאירו <span class="mono" dir="ltr">Percent</span>, Power BI יפרש את הספים כאחוזון מהטווח ולא כערך — והחלוקה תצא אחרת לגמרי. בחרו Number.</p><p class="task-q"><b>מתי Rules עדיף בכל זאת:</b> כשההיגיון שייך לויזואל אחד בלבד, כשצריך סקאלה רציפה במקום שלוש מדרגות, או כשאין רשות ליצור מדדים נוספים במודל.</p><p class="sol-check">תוצאה: אותה חלוקה בדיוק — <span dir="ltr">5</span> / <span dir="ltr">4</span> / <span dir="ltr">2</span>. אם יצא אחרת, בדקו את <span class="mono" dir="ltr">Number</span> מול <span class="mono" dir="ltr">Percent</span>.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-3-3" data-chap="פרק III · עיצוב מותנה ותובנה" data-title="3.3 · תובנה — המוביל הרווחי"
+ aria-label="פרק III · עיצוב מותנה ותובנה — 3.3 · תובנה — המוביל הרווחי" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>פרק III · עיצוב מותנה ותובנה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">3.3 · שאלת הסיכום — המוביל שמוביל ואינו הרווחי</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q"><b>שאלת התובנה הסוגרת.</b> Northwind Freight מוביל בהכנסות עם <span dir="ltr">1,655,570.42</span> דולר — <span dir="ltr">19.55</span>% מכל ההכנסה בקובץ. Atlantic Bulk Ships מייצר <span dir="ltr">378,313.23</span> דולר בלבד. <b>מי מהשניים שווה יותר לחברה, ומה תעשו עם התשובה?</b> בנו את הויזואל שעונה על השאלה, כתבו שתי שורות מסקנה, ורק אז פתחו.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><p class="task-q"><b>הויזואל שעונה:</b> גרף פיזור שבו X הוא ההכנסה, Y הוא אחוז המרווח, וגודל הבועה הוא מספר המשלוחים. הוא מפריד מיד בין גודל לאיכות — מה שטבלה ממוינת לפי הכנסה לעולם לא תעשה.</p><div class="tbl-wrap"><table class="cmp"><caption>שני קצוות אחד מול השני</caption><thead><tr><th scope="col">מוביל</th><th scope="col">הכנסה בדולר</th><th scope="col">מרווח בדולר</th><th scope="col">מרווח %</th></tr></thead><tbody><tr><th scope="row">Northwind Freight</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">1,655,570.42</span></td><td class="pbi" data-label="מרווח בדולר"><span dir="ltr">336,144.47</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">20.30</span>%</td></tr><tr><th scope="row">Atlantic Bulk Ships</th><td class="pbi" data-label="הכנסה בדולר"><span dir="ltr">378,313.23</span></td><td class="pbi" data-label="מרווח בדולר"><span dir="ltr">111,779.12</span></td><td class="pbi" data-label="מרווח %"><span dir="ltr">29.55</span>%</td></tr></tbody></table></div><p class="task-q"><b>התשובה: שניהם, ולא באותה דרך.</b> Northwind Freight מייצר <span dir="ltr">336,144.47</span> דולר מרווח מוחלט — יותר מכל מוביל אחר בקובץ — ולכן לוותר עליו יהיה הרסני גם אם אחוז המרווח שלו רק <span dir="ltr">20.30</span>%. Atlantic Bulk Ships מייצר את המרווח היעיל ביותר בקובץ, <span dir="ltr">29.55</span>%, אבל על בסיס קטן. מרווח באחוזים אומר כמה יעיל כל דולר; מרווח בדולרים אומר כמה כסף באמת נכנס. החלטה שנשענת על אחד מהם בלבד תמיד תהיה שגויה.</p><p class="task-q"><b>המסקנה המעשית:</b> ההזדמנות אינה לבחור ביניהם אלא להזיז נפח אל Atlantic Bulk Ships — כל דולר שעובר אליו מייצר בערך <span dir="ltr">9.25</span> סנט מרווח נוסף מכל דולר הכנסה. השאלה שנשארת פתוחה היא <b>למה</b> הוא קטן: מגבלת קיבולת, כיסוי גיאוגרפי, או פשוט שאף אחד לא הסתכל.</p><p class="task-q"><b>ומי שבאמת צריך תשומת לב:</b> Adriatic Transport ו-Meridian Air Freight — שני ה-Laggard. הם לא הקטנים ביותר, ובדיוק לכן הם עולים כסף: נפח משמעותי במרווח דק.</p><p class="sol-check">תוצאה: Northwind Freight מוביל במרווח המוחלט, Atlantic Bulk Ships מוביל באחוז, ושני ה-Laggard הם היעד לתמחור מחדש.</p></div></article></div>
+</section>
+
+<section class="page" id="logistics-results" data-chap="סיכום המטלה" data-title="סיכום — כל התוצאות"
+ aria-label="סיכום המטלה — סיכום — כל התוצאות" hidden>
+  <button type="button" class="sec-num" data-goto="logistics-intro" aria-label="חזרה לעמוד הפתיחה של המטלה"><span>סיכום המטלה</span><span class="crumb-back">חזרה למטלה ←</span></button>
+  <h2 class="sec-title">סיכום — כל התוצאות במקום אחד</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task"><p class="task-q">טבלת אימות מרוכזת לכל 14 המדדים ולכל בדיקת שפיות במטלה. פתחו אותה רק אחרי שסיימתם — היא נותנת את כל התשובות.</p><button type="button" class="sol-toggle" aria-expanded="false">הצגת הפתרון</button><div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>כל התוצאות המאומתות במקום אחד</caption><thead><tr><th scope="col">מדד</th><th scope="col">פונקציה</th><th scope="col">תוצאה מאומתת</th></tr></thead><tbody><tr><th scope="row"><span dir="ltr">Total Freight Revenue</span></th><td class="pbi" data-label="פונקציה">SUM</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">8,466,765.26</span> דולר</td></tr><tr><th scope="row"><span dir="ltr">Total Weight Shipped</span></th><td class="pbi" data-label="פונקציה">SUM</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">26,825,847.8</span> ק"ג</td></tr><tr><th scope="row"><span dir="ltr">Active Customers</span></th><td class="pbi" data-label="פונקציה">DISTINCTCOUNT</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">180</span></td></tr><tr><th scope="row"><span dir="ltr">Routes Used</span></th><td class="pbi" data-label="פונקציה">DISTINCTCOUNT</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">60</span></td></tr><tr><th scope="row"><span dir="ltr">Revenue per KG</span></th><td class="pbi" data-label="פונקציה">DIVIDE</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">0.3156</span></td></tr><tr><th scope="row"><span dir="ltr">Delivered Revenue</span></th><td class="pbi" data-label="פונקציה">CALCULATE</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">7,444,128.27</span> דולר</td></tr><tr><th scope="row"><span dir="ltr">On Time Delivered Revenue</span></th><td class="pbi" data-label="פונקציה">CALCULATE + &&</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">5,159,284.25</span> דולר</td></tr><tr><th scope="row"><span dir="ltr">Pct of Grand Total</span></th><td class="pbi" data-label="פונקציה">ALL</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">4.0955</span>% ל-Northwind Freight × Express · סך הכל <span dir="ltr">100.00</span>%</td></tr><tr><th scope="row"><span dir="ltr">Revenue vs Prev Month</span></th><td class="pbi" data-label="פונקציה">IF</td><td class="pbi" data-label="תוצאה מאומתת"><b dir="ltr">Up</b> ב-<span dir="ltr">2025-12</span> · <b dir="ltr">Down</b> ב-<span dir="ltr">2025-02</span></td></tr><tr><th scope="row"><span dir="ltr">Margin Tier</span></th><td class="pbi" data-label="פונקציה">SWITCH ( TRUE () )</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">5</span> Leader · <span dir="ltr">4</span> Challenger · <span dir="ltr">2</span> Laggard</td></tr><tr><th scope="row"><span dir="ltr">Tier Color</span></th><td class="pbi" data-label="פונקציה">SWITCH</td><td class="pbi" data-label="תוצאה מאומתת"><span class="mono" dir="ltr">#132449</span> · <span class="mono" dir="ltr">#F5C518</span> · <span class="mono" dir="ltr">#A9B4CC</span></td></tr><tr><th scope="row"><span dir="ltr">Carrier Rank by Shipments</span></th><td class="pbi" data-label="פונקציה">RANK</td><td class="pbi" data-label="תוצאה מאומתת">Northwind Freight ראשון · Danube Barge Union במקום <span dir="ltr">12</span> עם ערך ריק</td></tr><tr><th scope="row"><span dir="ltr">Median Carrier Revenue</span></th><td class="pbi" data-label="פונקציה">INDEX</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">646,970.08</span> דולר — Channel Sea Lines</td></tr><tr><th scope="row"><span dir="ltr">Cumulative Pct of Revenue</span></th><td class="pbi" data-label="פונקציה">WINDOW</td><td class="pbi" data-label="תוצאה מאומתת"><span dir="ltr">49.13</span>% לשלושת הראשונים · <span dir="ltr">100.00</span>% בשורה האחרונה</td></tr></tbody></table></div><div class="tbl-wrap"><table class="cmp"><caption>בדיקות שפיות נוספות</caption><thead><tr><th scope="col">בדיקה</th><th scope="col">ערך</th></tr></thead><tbody><tr><th scope="row">שורות בטבלת העובדות</th><td class="pbi" data-label="ערך"><span dir="ltr">28,400</span></td></tr><tr><th scope="row">מובילים במימד מול בעובדות</th><td class="pbi" data-label="ערך"><span dir="ltr">12</span> מול <span dir="ltr">11</span></td></tr><tr><th scope="row">המדד הנאיבי על עמודת היחס</th><td class="pbi" data-label="ערך"><span dir="ltr">0.3815</span> מול <span dir="ltr">0.3156</span> הנכון</td></tr><tr><th scope="row">הכנסה שלא מומשה</th><td class="pbi" data-label="ערך"><span dir="ltr">1,022,636.99</span> דולר</td></tr><tr><th scope="row">מרווח גולמי כולל</th><td class="pbi" data-label="ערך"><span dir="ltr">1,646,331.51</span> דולר · <span dir="ltr">19.44</span>%</td></tr><tr><th scope="row">שורות במרווח שלילי (מכוון)</th><td class="pbi" data-label="ערך"><span dir="ltr">1,911</span> שורות · <span dir="ltr">-34,038.47</span> דולר</td></tr><tr><th scope="row">ימים ב-Dim_Date</th><td class="pbi" data-label="ערך"><span dir="ltr">731</span> רצופים</td></tr><tr><th scope="row">חודש השיא</th><td class="pbi" data-label="ערך"><span dir="ltr">2025-10</span> · <span dir="ltr">507,396.90</span></td></tr><tr><th scope="row">חודש השפל</th><td class="pbi" data-label="ערך"><span dir="ltr">2025-02</span> · <span dir="ltr">225,297.76</span></td></tr></tbody></table></div><p class="sol-check">אם כל 14 המדדים אצלכם מחזירים בדיוק את הערכים האלה — המודל נבנה נכון והמטלה הושלמה.</p></div></article></div>
+</section>
+
+<nav class="pager" aria-label="ניווט בין תרגילי המטלה">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ הקודם</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">הבא ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">אפשר לנווט גם בכפתורים שבראש המסך, בחצי המקלדת, ובטלפון בהחלקת אצבע</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    מטלת סיכום שילוח יבשתי · אלירן גרוסמן · <a href="pbi.html">חזרה לפלטפורמת Power BI</a>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="רשימת תרגילי המטלה">
+  <div class="drawer-head">
+    <b>תרגילי המטלה</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="סגירת הרשימה">✕</button>
+  </div>
+  <div class="toc" id="toc-list"></div>
+</aside>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s);},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+var pages=$$('.page'), N=pages.length;
+if(!N)return;
+var KEY='logistics-page-v1', VKEY='logistics-visited-v1';
+var visited={}; try{visited=JSON.parse(localStorage.getItem(VKEY)||'{}');}catch(e){}
+
+var scroller=$('#scroller'), bar=$('#pbar'),
+    tTitle=$('#tb-title'), tChap=$('#tb-chap'), tCount=$('#tb-count'),
+    prevBtn=$('#tb-prev'), nextBtn=$('#tb-next'),
+    pgPrev=$('#pg-prev'), pgNext=$('#pg-next'),
+    pgPrevName=$('#pg-prev-name'), pgNextName=$('#pg-next-name'),
+    tocList=$('#toc-list'), idx=0;
+
+/* ---------- table of contents ---------- */
+var items=[];
+(function buildToc(){
+  var lastChap=null;
+  pages.forEach(function(pg,k){
+    var chap=pg.getAttribute('data-chap')||'';
+    if(chap!==lastChap){
+      var h=document.createElement('div'); h.className='toc-chap'; h.textContent=chap;
+      tocList.appendChild(h); lastChap=chap;
+    }
+    var b=document.createElement('button');
+    b.type='button'; b.className='toc-item';
+    b.innerHTML='<span class="toc-n">'+(k+1)+'</span><span class="toc-t"></span>'+
+                '<span class="toc-done" aria-hidden="true">\u2713</span>';
+    b.querySelector('.toc-t').textContent=pg.getAttribute('data-title')||'';
+    b.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+    tocList.appendChild(b); items.push(b);
+  });
+})();
+
+/* ---------- router ---------- */
+function show(i,scrollTop){
+  i=Math.max(0,Math.min(N-1,i));
+  pages.forEach(function(p,k){ p.hidden=(k!==i); });
+  idx=i;
+  var pg=pages[i];
+  tTitle.textContent=pg.getAttribute('data-title')||'';
+  tChap.textContent=pg.getAttribute('data-chap')||'';
+  tCount.textContent=(i+1)+' / '+N;
+  bar.style.width=((i+1)/N*100)+'%';
+  prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* 'ראשי' is a real link to the site home, always active.
+     'לסיכום' is in-page navigation, so it is disabled on the summary page
+     itself, exactly like prev/next at the ends. */
+  var sb=$('#tb-sum');
+  if(sb)sb.disabled=(i===N-1);
+  pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
+  if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
+  if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');
+  visited[pg.id]=1;
+  try{localStorage.setItem(KEY,String(i));localStorage.setItem(VKEY,JSON.stringify(visited));}catch(e){}
+  items.forEach(function(b,k){
+    b.classList.toggle('on',k===i);
+    b.classList.toggle('visited',!!visited[pages[k].id]);
+  });
+  if(scrollTop!==false&&scroller)scroller.scrollTop=0;
+  syncRegions();
+}
+function step(d){ show(idx+d,true); }
+
+prevBtn.addEventListener('click',function(){step(-1);});
+nextBtn.addEventListener('click',function(){step(1);});
+pgPrev.addEventListener('click',function(){step(-1);});
+pgNext.addEventListener('click',function(){step(1);});
+$('#tb-sum').addEventListener('click',function(){show(N-1,true);});
+$$('[data-goto]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var id=b.getAttribute('data-goto');
+    for(var k=0;k<N;k++){ if(pages[k].id===id){ show(k,true); return; } }
+  });
+});
+
+/* ---------- drawer ---------- */
+var drawer=$('#drawer'), back=$('#drawer-back'), menuBtn=$('#tb-menu');
+function openDrawer(){ drawer.hidden=false; back.hidden=false; menuBtn.setAttribute('aria-expanded','true');
+  var on=tocList.querySelector('.on'); if(on)on.scrollIntoView({block:'center'}); }
+function closeDrawer(){ drawer.hidden=true; back.hidden=true; menuBtn.setAttribute('aria-expanded','false'); }
+menuBtn.addEventListener('click',function(){ drawer.hidden?openDrawer():closeDrawer(); });
+back.addEventListener('click',closeDrawer);
+$('#drawer-x').addEventListener('click',closeDrawer);
+
+/* ---------- solutions ---------- */
+$$('.sol-toggle').forEach(function(btn){
+  var body=btn.nextElementSibling;
+  if(!body||!body.classList.contains('sol-body'))return;
+  btn.addEventListener('click',function(){
+    var open=btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded',String(!open));
+    body.classList.toggle('open',!open);
+    btn.textContent=open?'הצגת הפתרון':'הסתרת הפתרון';
+    setTimeout(syncRegions,0);
+  });
+});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',function(e){
+  if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+  if(e.key==='Escape'&&!drawer.hidden){ closeDrawer(); return; }
+  if(e.key==='ArrowLeft')step(1);
+  else if(e.key==='ArrowRight')step(-1);
+});
+
+/* ---------- swipe (never inside a horizontal scroll area) ---------- */
+var sx=0,sy=0,track=false;
+document.addEventListener('touchstart',function(e){
+  var t=e.target;
+  if(t.closest&&t.closest('.tbl-wrap,.dax,.code,pre,.drawer,.hd,input,textarea'))return;
+  if(e.touches.length!==1)return;
+  sx=e.touches[0].clientX; sy=e.touches[0].clientY; track=true;
+},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(!track)return; track=false;
+  var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<60||Math.abs(dy)>50)return;
+  step(dx>0?-1:1);   /* RTL: swipe right = previous */
+},{passive:true});
+
+/* ---------- horizontal scroll areas reachable by keyboard ---------- */
+function syncRegions(){
+  $$('.tbl-wrap,.dax').forEach(function(el){
+    var scrolls=el.scrollWidth>el.clientWidth+1;
+    if(scrolls){
+      if(!el.hasAttribute('tabindex')){
+        el.setAttribute('tabindex','0'); el.setAttribute('role','region');
+        el.setAttribute('aria-label','אזור נגלל לרוחב');
+      }
+    }else if(el.getAttribute('role')==='region'){
+      el.removeAttribute('tabindex'); el.removeAttribute('role'); el.removeAttribute('aria-label');
+    }
+  });
+}
+var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(syncRegions,150); },{passive:true});
+
+/* ---------- ?qa=1 overflow inspector ---------- */
+(function(){
+  if(!/(\?|&|#)qa=1/.test(location.search+location.hash))return;
+  var css=document.createElement('style');
+  css.textContent='.qa-bad{outline:2px dashed #f87171!important;outline-offset:-2px}'+
+   '#qa-badge{position:fixed;inset-block-end:10px;inset-inline-start:10px;z-index:9999;background:#111;color:#fff;'+
+   'font:12px/1.5 monospace;padding:8px 10px;border-radius:8px;max-width:80vw;max-height:40vh;overflow:auto;'+
+   'border:1px solid #f87171;direction:ltr;text-align:left;white-space:pre-wrap}';
+  document.head.appendChild(css);
+  var badge=document.createElement('div'); badge.id='qa-badge'; document.body.appendChild(badge);
+  function scan(){
+    var vw=document.documentElement.clientWidth, bad=[];
+    $$('.qa-bad').forEach(function(e){e.classList.remove('qa-bad');});
+    $$('.page:not([hidden]) *, .topicbar *').forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(!r.width&&!r.height)return;
+      if(r.right>vw+1||r.left<-1){
+        el.classList.add('qa-bad');
+        bad.push(el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className?'.'+el.className.trim().split(/\s+/).slice(0,2).join('.'):'')+' w='+Math.round(r.width));
+      }
+    });
+    badge.textContent='viewport '+vw+' · scrollW '+document.documentElement.scrollWidth+' · offenders '+bad.length+
+      (bad.length?('\n'+bad.slice(0,10).join('\n')):' — clean');
+  }
+  scan(); window.addEventListener('resize',scan,{passive:true});
+  document.addEventListener('click',function(){setTimeout(scan,80);});
+})();
+
+/* ---------- start ---------- */
+var start=0;
+try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved))start=saved; }catch(e){}
+if(location.hash){
+  var h=location.hash.slice(1);
+  for(var k=0;k<N;k++){ if(pages[k].id===h){ start=k; break; } }
+}
+show(start,true);
+})();
+</script>
+</body>
+</html>
