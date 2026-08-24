@@ -172,6 +172,69 @@ footer.site a:hover{color:var(--acc)}
   footer.site a{display:inline-flex;align-items:center;min-height:44px}
 }
 </style>
+
+<style>
+/* ===== רצועת עדכונים — הכניסה הראשית למודול העדכונים החודשיים ===== */
+.upd-band{display:flex;flex-direction:column;gap:14px;align-items:stretch;min-width:0;
+  background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 64%);
+  border:1px solid var(--pbi-glow);border-radius:16px;padding:20px;margin:6px 0 34px}
+.upd-band:hover{border-color:var(--pbi)}
+.upd-band-txt{display:flex;flex-direction:column;gap:7px;min-width:0}
+.upd-band-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+.upd-band-tag{flex:0 0 auto;font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;
+  color:#111;background:var(--pbi);border-radius:99px;padding:3px 10px;font-weight:700}
+.upd-band-h{min-width:0;font-size:clamp(1.05rem,3.4vw,1.28rem);font-weight:800;
+  color:var(--fg-1);line-height:1.35;overflow-wrap:break-word}
+.upd-band p{margin:0;font-size:.9rem;color:var(--fg-3);line-height:1.65;overflow-wrap:break-word}
+.upd-band-cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.upd-band-btn{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;background:var(--pbi);color:#111;border-radius:12px;padding:0 20px;
+  font-weight:800;font-size:.95rem;transition:filter .15s ease}
+.upd-band:hover .upd-band-btn{filter:brightness(1.08)}
+.upd-band-alt{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:12px;padding:0 18px;color:var(--fg-2);font-weight:600;font-size:.9rem}
+@media (min-width:760px){
+  .upd-band{flex-direction:row;align-items:center;gap:22px;padding:22px 24px}
+  .upd-band-txt{flex:1 1 auto}
+  .upd-band-cta,.upd-band-btn,.upd-band-alt{flex:0 0 auto}
+}
+@media (prefers-reduced-motion:reduce){.upd-band-btn{transition:none}}
+
+/* ===== בורר החודשים בעמוד העדכונים ===== */
+.yr{display:flex;align-items:center;gap:14px;margin:30px 0 16px}
+.yr-n{flex:0 0 auto;font-family:var(--mono);font-size:clamp(1.5rem,5vw,2rem);font-weight:600;
+  color:var(--pbi);letter-spacing:.06em;line-height:1}
+.yr-line{flex:1 1 auto;height:1px;background:var(--line);min-width:0}
+.yr-count{flex:0 0 auto;font-family:var(--mono);font-size:.78rem;color:var(--fg-4)}
+.m-grid{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:560px){.m-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+@media (min-width:900px){.m-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.m-btn{position:relative;display:flex;flex-direction:column;gap:10px;min-width:0;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  color:var(--fg-1);transition:border-color .16s ease,background .16s ease,transform .16s ease}
+.m-btn:hover{border-color:var(--pbi-glow);background:var(--bg-2);transform:translateY(-2px)}
+.m-btn.is-new{border-color:var(--pbi-glow);background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%)}
+.m-new{position:absolute;top:14px;inset-inline-end:16px;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;color:#111;background:var(--pbi);border-radius:99px;padding:3px 9px;font-weight:700}
+.m-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
+.m-name{font-size:clamp(1.25rem,4.4vw,1.5rem);font-weight:800;line-height:1.2}
+.m-yr{font-family:var(--mono);font-size:.85rem;color:var(--fg-4);letter-spacing:.04em}
+.m-note{font-size:.9rem;color:var(--fg-3);line-height:1.6;overflow-wrap:break-word}
+.m-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.m-chips{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
+.m-chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--fg-4);
+  border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.m-go{flex:0 0 auto;font-size:.85rem;font-weight:700;color:var(--fg-2);display:inline-flex;align-items:center;gap:6px}
+.m-btn:hover .m-go{color:var(--pbi)}
+.m-soon{display:flex;flex-direction:column;gap:8px;justify-content:center;min-width:0;
+  background:transparent;border:1px dashed var(--line);border-radius:16px;padding:20px}
+.m-soon b{font-size:1rem;color:var(--fg-3)}
+.m-soon span{font-size:.86rem;color:var(--fg-4);line-height:1.6}
+@media (max-width:559px){.m-btn{padding:17px 17px 14px}.m-foot{padding-top:10px}}
+@media (pointer:coarse){.m-btn{min-height:44px}}
+@media (prefers-reduced-motion:reduce){.m-btn{transition:none}.m-btn:hover{transform:none}}
+</style>
 </head>
 <body>
 
@@ -228,6 +291,22 @@ footer.site a:hover{color:var(--acc)}
       <span class="stat"><b>122</b> פונקציות DAX</span>
     </div>
   </section>
+
+
+  <a class="upd-band" href="pbi-updates.html">
+    <span class="upd-band-txt">
+      <span class="upd-band-top">
+        <span class="upd-band-tag">חדש</span>
+        <span class="upd-band-h">עדכוני Power BI · אוגוסט 2026 זמין</span>
+      </span>
+      <p>מיקרוסופט משחררת גרסה חדשה כל חודש. לכל עדכון יש כאן שיעור מלא בעברית: תקציר מנהלים,
+         למה הפיצ'ר נבנה, הפירוט הטכני עם קוד, באגים ידועים עם דרכי עקיפה, ובוחן של 12 שאלות.</p>
+    </span>
+    <span class="upd-band-cta">
+      <span class="upd-band-btn">לעדכונים <span aria-hidden="true">←</span></span>
+      <span class="upd-band-alt">יוני · יולי · אוגוסט</span>
+    </span>
+  </a>
 
   <h2 class="sec">מסלול הלימוד</h2>
   <div class="grid">
@@ -363,9 +442,10 @@ footer.site a:hover{color:var(--acc)}
     </a>
 
     <a class="card tool" href="pbi-updates.html">
-      <div class="card-top"><span class="card-n">◷</span><h3>עדכוני Power BI החודשיים</h3></div>
-      <p>שיעור מלא לכל עדכון חודשי של Power BI: למה מיקרוסופט הכניסה כל פיצ'ר, הפירוט הטכני, באגים ידועים ודרכי עקיפה ובוחן עצמי.</p>
-      <div class="meta"><span class="chip">יוני 2026</span><span class="chip">יולי 2026</span><span class="chip">בוחן לכל חודש</span></div>
+      <div class="card-top"><span class="card-n">◷</span><h3>עדכוני Power BI</h3></div>
+      <p>שיעור מלא לכל עדכון חודשי של מיקרוסופט: תקציר מנהלים, הרציונל העסקי מאחורי כל פיצ'ר,
+         הפירוט הטכני עם קוד, באגים ידועים עם דרכי עקיפה ובוחן עצמי. יוני, יולי ואוגוסט 2026.</p>
+      <div class="meta"><span class="chip">3 עדכונים</span><span class="chip">55 נושאים</span><span class="chip">36 שאלות</span></div>
       <span class="go">לעדכונים <span aria-hidden="true">←</span></span>
     </a>
 

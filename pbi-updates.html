@@ -174,60 +174,66 @@ footer.site a:hover{color:var(--acc)}
 </style>
 
 <style>
-/* ===== updates landing — month picker =====
-   mobile-first: one column by default, two from 560px, three from 900px.
-   nothing here uses a fixed width, so the page can never scroll sideways. */
-.upd-main{padding-bottom:8px}
-.upd-hero{max-width:62ch}
-.upd-hero h1{margin-bottom:10px}
-.upd-hero p{color:var(--fg-3);font-size:clamp(.95rem,2.6vw,1.05rem);line-height:1.75}
+/* ===== רצועת עדכונים — הכניסה הראשית למודול העדכונים החודשיים ===== */
+.upd-band{display:flex;flex-direction:column;gap:14px;align-items:stretch;min-width:0;
+  background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 64%);
+  border:1px solid var(--pbi-glow);border-radius:16px;padding:20px;margin:6px 0 34px}
+.upd-band:hover{border-color:var(--pbi)}
+.upd-band-txt{display:flex;flex-direction:column;gap:7px;min-width:0}
+.upd-band-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+.upd-band-tag{flex:0 0 auto;font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;
+  color:#111;background:var(--pbi);border-radius:99px;padding:3px 10px;font-weight:700}
+.upd-band-h{min-width:0;font-size:clamp(1.05rem,3.4vw,1.28rem);font-weight:800;
+  color:var(--fg-1);line-height:1.35;overflow-wrap:break-word}
+.upd-band p{margin:0;font-size:.9rem;color:var(--fg-3);line-height:1.65;overflow-wrap:break-word}
+.upd-band-cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.upd-band-btn{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;background:var(--pbi);color:#111;border-radius:12px;padding:0 20px;
+  font-weight:800;font-size:.95rem;transition:filter .15s ease}
+.upd-band:hover .upd-band-btn{filter:brightness(1.08)}
+.upd-band-alt{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:12px;padding:0 18px;color:var(--fg-2);font-weight:600;font-size:.9rem}
+@media (min-width:760px){
+  .upd-band{flex-direction:row;align-items:center;gap:22px;padding:22px 24px}
+  .upd-band-txt{flex:1 1 auto}
+  .upd-band-cta,.upd-band-btn,.upd-band-alt{flex:0 0 auto}
+}
+@media (prefers-reduced-motion:reduce){.upd-band-btn{transition:none}}
 
-.yr{display:flex;align-items:center;gap:14px;margin:34px 0 16px}
-.yr-n{font-family:var(--mono);font-size:clamp(1.5rem,5vw,2rem);font-weight:600;color:var(--pbi);
-  letter-spacing:.06em;line-height:1;flex:0 0 auto}
+/* ===== בורר החודשים בעמוד העדכונים ===== */
+.yr{display:flex;align-items:center;gap:14px;margin:30px 0 16px}
+.yr-n{flex:0 0 auto;font-family:var(--mono);font-size:clamp(1.5rem,5vw,2rem);font-weight:600;
+  color:var(--pbi);letter-spacing:.06em;line-height:1}
 .yr-line{flex:1 1 auto;height:1px;background:var(--line);min-width:0}
-.yr-count{flex:0 0 auto;font-size:.78rem;color:var(--fg-4);font-family:var(--mono)}
-
+.yr-count{flex:0 0 auto;font-family:var(--mono);font-size:.78rem;color:var(--fg-4)}
 .m-grid{display:grid;gap:12px;grid-template-columns:1fr}
 @media (min-width:560px){.m-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
 @media (min-width:900px){.m-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
 .m-btn{position:relative;display:flex;flex-direction:column;gap:10px;min-width:0;
-  background:var(--bg-1);border:1px solid var(--line);border-radius:16px;
-  padding:20px 20px 16px;color:var(--fg-1);text-align:start;
-  transition:border-color .16s ease,background .16s ease,transform .16s ease}
+  background:var(--bg-1);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  color:var(--fg-1);transition:border-color .16s ease,background .16s ease,transform .16s ease}
 .m-btn:hover{border-color:var(--pbi-glow);background:var(--bg-2);transform:translateY(-2px)}
-.m-btn:active{transform:translateY(0)}
-.m-btn:focus-visible{outline:2px solid var(--pbi);outline-offset:3px}
-.m-top{display:flex;align-items:baseline;gap:9px;min-width:0;flex-wrap:wrap}
-.m-name{font-size:clamp(1.25rem,4.4vw,1.5rem);font-weight:800;line-height:1.2;color:var(--fg-1)}
+.m-btn.is-new{border-color:var(--pbi-glow);background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%)}
+.m-new{position:absolute;top:14px;inset-inline-end:16px;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;color:#111;background:var(--pbi);border-radius:99px;padding:3px 9px;font-weight:700}
+.m-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
+.m-name{font-size:clamp(1.25rem,4.4vw,1.5rem);font-weight:800;line-height:1.2}
 .m-yr{font-family:var(--mono);font-size:.85rem;color:var(--fg-4);letter-spacing:.04em}
 .m-note{font-size:.9rem;color:var(--fg-3);line-height:1.6;overflow-wrap:break-word}
-.m-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin-top:auto;padding-top:12px;border-top:1px solid var(--line-soft);min-width:0}
+.m-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
 .m-chips{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
 .m-chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--fg-4);
   border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
 .m-go{flex:0 0 auto;font-size:.85rem;font-weight:700;color:var(--fg-2);display:inline-flex;align-items:center;gap:6px}
-.m-go .ar{transition:transform .16s ease;display:inline-block}
 .m-btn:hover .m-go{color:var(--pbi)}
-.m-btn:hover .m-go .ar{transform:translateX(-3px)}
-.m-new{position:absolute;top:14px;inset-inline-end:16px;font-family:var(--mono);font-size:.62rem;
-  letter-spacing:.14em;color:#111;background:var(--pbi);border-radius:99px;padding:3px 9px;font-weight:700}
-.m-btn.is-new{border-color:var(--pbi-glow);background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%)}
-
 .m-soon{display:flex;flex-direction:column;gap:8px;justify-content:center;min-width:0;
   background:transparent;border:1px dashed var(--line);border-radius:16px;padding:20px}
 .m-soon b{font-size:1rem;color:var(--fg-3)}
 .m-soon span{font-size:.86rem;color:var(--fg-4);line-height:1.6}
-
-/* touch targets and denser spacing on phones */
-@media (max-width:559px){
-  .m-btn{padding:17px 17px 14px}
-  .m-foot{padding-top:10px}
-}
+@media (max-width:559px){.m-btn{padding:17px 17px 14px}.m-foot{padding-top:10px}}
 @media (pointer:coarse){.m-btn{min-height:44px}}
-@media (prefers-reduced-motion:reduce){.m-btn,.m-go .ar{transition:none}.m-btn:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){.m-btn{transition:none}.m-btn:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -238,50 +244,59 @@ footer.site a:hover{color:var(--acc)}
   <div class="hd">
     <a class="brand" href="index.html" title="לדף הבית של הקורס"><b>SQL</b> עם אלירן</a>
     <nav class="lesson-rail" aria-label="ניווט בין חלקי הפלטפורמה">
-      <a class="lr lr-home" href="pbi.html" title="דף הבית של הפלטפורמה"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>דף הבית</span></a>
+      <a class="lr lr-site" href="index.html" title="חזרה לדף הבית של האתר"><b>↩</b><span>דף הבית של האתר</span></a>
+      <span class="lr-sep" aria-hidden="true"></span>
+      <a class="lr lr-home" href="pbi.html" title="מרכז Power BI"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Power BI</span></a>
       <a class="lr" href="pbi-course.html" title="Power BI בסיס"><b>1</b><span>בסיס</span></a>
       <a class="lr" href="pbi-course-2.html" title="מודלינג נתונים"><b>2</b><span>מודלינג</span></a>
       <a class="lr" href="pbi-course-3.html" title="Power Query ו-ETL"><b>3</b><span>Power Query</span></a>
       <a class="lr" href="pbi-course-4.html" title="M ו-DAX בסיסי"><b>4</b><span>M ו-DAX</span></a>
-      <span class="lr-sep" aria-hidden="true"></span>
-      <a class="lr lr-site" href="index.html" title="לדף הבית של הקורס"><b>↩</b><span>הקורס</span></a>
       <a class="lr lr-x is-on" href="pbi-updates.html" aria-current="page" title="עדכוני Power BI החודשיים"><b>◷</b><span>עדכונים</span></a><a class="lr lr-x" href="pbi-quiz.html" title="בנק השאלות המלא"><b>?</b><span>בנק שאלות</span></a>
       <a class="lr lr-x" href="dax-reference.html" title="אינדקס פונקציות DAX"><b>fx</b><span>רפרנס DAX</span></a>
     </nav>
   </div>
 </header>
 
-<main id="main" tabindex="-1" class="upd-main">
+<main id="main" tabindex="-1">
 
-  <section class="hero upd-hero">
+  <section class="hero">
     <span class="eyebrow">POWER BI · עדכונים חודשיים</span>
     <h1>עדכוני <em>Power BI</em></h1>
-    <p>מיקרוסופט משחררת גרסה חדשה כל חודש. בחרו חודש וקבלו שיעור מלא: למה הפיצ'ר נבנה,
+    <p>מיקרוסופט משחררת גרסה חדשה כל חודש. בחרו חודש וקבלו שיעור מלא בעברית: למה הפיצ'ר נבנה,
        איך הוא עובד בפועל, אילו באגים ידועים ומה דרך העקיפה.</p>
-    <a class="back-site" href="pbi.html"><span aria-hidden="true">→</span> לדף הבית של Power BI</a>
+    <div class="stats">
+      <span class="stat"><b>3</b> עדכונים</span>
+      <span class="stat"><b>55</b> נושאים</span>
+      <span class="stat"><b>36</b> שאלות בוחן</span>
+      <span class="stat"><b>41</b> באגים ודרכי עקיפה</span>
+    </div>
   </section>
 
   <section aria-labelledby="yr-2026">
     <div class="yr">
       <span class="yr-n" id="yr-2026">2026</span>
       <span class="yr-line" aria-hidden="true"></span>
-      <span class="yr-count">2 עדכונים</span>
+      <span class="yr-count">3 עדכונים</span>
     </div>
-
     <div class="m-grid">
-    <a class="m-btn is-new" href="pbi-lesson-2026-07.html" aria-label="עדכון יולי 2026 — לשיעור המלא"><span class="m-new">חדש</span>
+    <a class="m-btn is-new" href="pbi-lesson-2026-08.html" aria-label="עדכון אוגוסט 2026 — לשיעור המלא"><span class="m-new">חדש</span>
+      <span class="m-top"><span class="m-name">אוגוסט</span><span class="m-yr">2026</span></span>
+      <span class="m-note">ערכות הנושא יוצאות מתצוגה מקדימה והופכות לברירת המחדל, הרענון מתפצל לשלוש פעולות, ותמונות מגיעות מ-OneLake.</span>
+      <span class="m-foot"><span class="m-chips"><span class="m-chip">13 נושאים</span><span class="m-chip">14 באגים</span></span><span class="m-go">לשיעור <span aria-hidden="true">←</span></span></span>
+    </a>
+    <a class="m-btn" href="pbi-lesson-2026-07.html" aria-label="עדכון יולי 2026 — לשיעור המלא">
       <span class="m-top"><span class="m-name">יולי</span><span class="m-yr">2026</span></span>
       <span class="m-note">הדפדפן הופך למשטח מידול: TMDL ו-Model Options בשירות, סיכוני דריסה מול Desktop, ואפליקציות ארגוניות עם קהלים.</span>
-      <span class="m-foot"><span class="m-chips"><span class="m-chip">22 נושאים</span><span class="m-chip">16 באגים</span></span><span class="m-go">לשיעור <span class="ar" aria-hidden="true">←</span></span></span>
+      <span class="m-foot"><span class="m-chips"><span class="m-chip">22 נושאים</span><span class="m-chip">16 באגים</span></span><span class="m-go">לשיעור <span aria-hidden="true">←</span></span></span>
     </a>
     <a class="m-btn" href="pbi-lesson-2026-06.html" aria-label="עדכון יוני 2026 — לשיעור המלא">
       <span class="m-top"><span class="m-name">יוני</span><span class="m-yr">2026</span></span>
       <span class="m-note">DAX מקבל פונקציות: חתימה, טיפוסים ופרמטרים אופציונליים. וגם DAX Query View ועדכוני חוויית הדוח.</span>
-      <span class="m-foot"><span class="m-chips"><span class="m-chip">20 נושאים</span><span class="m-chip">11 באגים</span></span><span class="m-go">לשיעור <span class="ar" aria-hidden="true">←</span></span></span>
+      <span class="m-foot"><span class="m-chips"><span class="m-chip">20 נושאים</span><span class="m-chip">11 באגים</span></span><span class="m-go">לשיעור <span aria-hidden="true">←</span></span></span>
     </a>
 
       <div class="m-soon">
-        <b>אוגוסט 2026</b>
+        <b>ספטמבר 2026</b>
         <span>יתווסף כאן עם צאת העדכון. שיעורים קודמים נשארים זמינים תמיד.</span>
       </div>
     </div>
@@ -290,13 +305,33 @@ footer.site a:hover{color:var(--acc)}
   <div class="note">
     <span aria-hidden="true">↺</span>
     <div><b>כל שיעור עדכון בנוי כמו שיעורי הקורס.</b> ניווט בין נושאים בכפתורים או בחצי המקלדת,
-    שמירת מיקום אוטומטית בדפדפן, ובוחן עצמי בסוף עם הסבר לכל תשובה.</div>
+    שמירת מיקום אוטומטית בדפדפן, וכפתור מבחן זמין בכל רגע עם הסבר מלא לכל תשובה.</div>
   </div>
 </main>
 
 <footer class="site">
-  עדכוני Power BI · מבוסס על התיעוד הרשמי של Microsoft · נבנה על ידי <a href="index.html">אלירן גרוסמן</a>
+  נבנה על ידי <a href="index.html">אלירן גרוסמן</a> · קורס Power BI בעברית, חופשי לשימוש
 </footer>
+
+
+<!-- ===== כפתור חזרה לדף הבית — קבוע, נגיש מכל מקום בעמוד ===== -->
+<style>
+.gh-home{position:fixed;z-index:9500;inset-block-end:max(16px,env(safe-area-inset-bottom));
+ inset-inline-start:max(16px,env(safe-area-inset-left));display:inline-flex;align-items:center;gap:8px;
+ min-height:44px;padding:0 16px;border-radius:99px;text-decoration:none;white-space:nowrap;
+ font-family:"Heebo","Segoe UI",Arial,sans-serif;font-size:13.5px;font-weight:600;
+ background:rgba(18,22,29,.94);color:#e6edf3;border:1px solid rgba(255,255,255,.16);
+ box-shadow:0 6px 22px rgba(0,0,0,.45);backdrop-filter:blur(8px);
+ transition:transform .15s,border-color .15s,background .15s}
+.gh-home:hover{background:rgba(28,34,45,.97);border-color:#00d4c8;transform:translateY(-2px);color:#fff}
+.gh-home:focus-visible{outline:2px solid #00d4c8;outline-offset:3px}
+.gh-home .gh-ico{font-size:15px;line-height:1}
+@media(max-width:430px){.gh-home{padding:0 13px;font-size:13px}}
+@media print{.gh-home{display:none}}
+</style>
+<a class="gh-home" href="index.html" aria-label="חזרה לדף הבית של האתר">
+  <span class="gh-ico" aria-hidden="true">&#127968;</span><span>דף הבית</span>
+</a>
 
 </body>
 </html>
