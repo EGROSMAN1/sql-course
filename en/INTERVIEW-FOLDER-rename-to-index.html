@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Full job interview practice | SQL Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-base: #0f1419;
+  --bg-elevated: #181f29;
+  --bg-panel: #1f2733;
+  --bg-input: #131922;
+  --border: #2a3441;
+  --border-strong: #3a4757;
+  --text-primary: #e6edf3;
+  --text-secondary: #97a4b5;
+  --text-muted: #5d6b7d;
+  --aqua: #2dd4c0;
+  --aqua-dim: #1a9a8a;
+  --amber: #e9b949;
+  --cyan: #61d0c4;
+  --green: #7cc47c;
+  --red: #e06c75;
+  --purple: #c678dd;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Heebo', system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top right, rgba(45, 212, 192, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(45, 212, 192, 0.05) 0%, transparent 50%),
+    var(--bg-base);
+  line-height: 1.6;
+}
+
+/* ============ HEADER ============ */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: rgba(24, 31, 41, 0.92);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  display: grid;
+  place-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--bg-base);
+  font-size: 14px;
+  letter-spacing: -0.02em;
+}
+
+.brand-text { display: flex; flex-direction: column; }
+.brand-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+}
+
+.back-link:hover {
+  border-color: var(--aqua);
+  color: var(--aqua);
+  background: rgba(45, 212, 192, 0.05);
+  transform: translateX(2px);
+}
+
+.back-link-arrow {
+  transition: transform 0.18s ease;
+}
+
+.back-link:hover .back-link-arrow {
+  transform: translateX(3px);
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 64px 32px 40px;
+  text-align: center;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(45, 212, 192, 0.1);
+  border: 1px solid rgba(45, 212, 192, 0.3);
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--aqua);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--aqua);
+  box-shadow: 0 0 8px var(--aqua);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.4; }
+}
+
+.hero-title {
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--aqua) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.2vw, 19px);
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+
+.hero-subtitle strong { color: var(--text-primary); font-weight: 600; }
+.hero-subtitle em { color: var(--aqua); font-style: normal; font-weight: 600; }
+
+.hero-features {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.hero-feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hero-feature-icon {
+  color: var(--aqua);
+  font-size: 14px;
+}
+
+/* ============ CASES GRID ============ */
+.cases-section {
+  padding: 32px 32px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: -0.01em;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 22px;
+}
+
+.case-card {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.case-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--aqua), transparent);
+  opacity: 0.4;
+  transition: opacity 0.25s ease;
+}
+
+.case-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(45, 212, 192, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  opacity: 0.6;
+}
+
+.case-card:hover {
+  border-color: rgba(45, 212, 192, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(45, 212, 192, 0.1);
+}
+
+.case-card:hover::before { opacity: 1; }
+.case-card:hover::after { opacity: 1; }
+
+.case-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.case-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--aqua);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(45, 212, 192, 0.25);
+}
+
+.case-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.case-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+
+.case-description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.case-description strong { color: var(--text-primary); font-weight: 600; }
+
+.case-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--bg-panel);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.case-stat { text-align: center; }
+.case-stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--aqua);
+  line-height: 1.1;
+}
+.case-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.case-techniques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.case-technique {
+  padding: 4px 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.case-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  border-radius: 8px;
+  color: var(--bg-base);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.18s ease;
+}
+
+.case-cta-arrow {
+  transition: transform 0.18s ease;
+  font-size: 18px;
+}
+
+.case-card:hover .case-cta {
+  box-shadow: 0 4px 14px rgba(45, 212, 192, 0.4);
+}
+
+.case-card:hover .case-cta-arrow {
+  transform: translateX(-4px);
+}
+
+/* ============ ABOUT SECTION ============ */
+.about-section {
+  padding: 16px 32px 64px;
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.about-item { text-align: center; }
+.about-item-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.about-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.about-item-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============ FOOTER ============ */
+.site-footer {
+  padding: 28px 32px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.footer-link {
+  color: var(--aqua);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+/* ============ MOBILE ============ */
+/* =========================================================
+   MOBILE OPTIMIZATIONS - Comprehensive responsive design
+   ========================================================= */
+
+/* Better touch targets on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .back-link, .case-card { min-height: 44px; }
+}
+
+/* Tablets and small laptops */
+@media (max-width: 900px) {
+  .site-header { padding: 16px 20px; }
+  .hero { padding: 48px 24px 32px; }
+  .hero-title { font-size: clamp(32px, 7vw, 44px); }
+  .hero-subtitle { font-size: 16px; }
+  .cases-section { padding: 28px 20px 64px; }
+  .cases-grid { gap: 18px; }
+}
+
+/* Phones */
+@media (max-width: 700px) {
+  .site-header {
+    padding: 12px 14px;
+    /* Safe area for iPhone notch */
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  .brand-mark { width: 32px; height: 32px; font-size: 12px; }
+  .brand-text { display: none; }
+  .back-link {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+
+  /* Hero - tighter padding, better readable */
+  .hero {
+    padding: 32px 18px 24px;
+  }
+  .hero-tag {
+    font-size: 10px;
+    padding: 5px 12px;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: clamp(28px, 8vw, 36px);
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .hero-subtitle {
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .hero-features {
+    gap: 12px 16px;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .hero-feature { font-size: 11px; }
+
+  /* Cases section */
+  .cases-section { padding: 16px 14px 40px; }
+  .section-eyebrow {
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+  .cases-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* Case cards - critical for the interview entry */
+  .case-card {
+    padding: 20px 18px;
+    border-radius: 12px;
+  }
+  .case-card-header {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .case-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    border-radius: 10px;
+  }
+  .case-tag { font-size: 9px; padding: 3px 10px; }
+  .case-title {
+    font-size: 18px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+  .case-subtitle {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+  .case-description {
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .case-stats {
+    padding: 12px 8px;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .case-stat-value { font-size: 16px; }
+  .case-stat-label { font-size: 9px; }
+  .case-techniques {
+    gap: 5px;
+    margin-bottom: 16px;
+  }
+  .case-technique {
+    padding: 3px 9px;
+    font-size: 10px;
+  }
+  .case-cta {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+  .case-cta-arrow { font-size: 16px; }
+
+  /* About section */
+  .about-section { padding: 4px 14px 32px; }
+  .about-card { padding: 20px 18px; border-radius: 12px; }
+  .about-card h3 { font-size: 16px !important; }
+  .about-card > p { font-size: 12px !important; }
+  .about-grid { gap: 16px; margin-top: 18px; }
+  .about-item-icon { font-size: 24px; margin-bottom: 6px; }
+  .about-item-title { font-size: 13px; }
+  .about-item-desc { font-size: 11px; }
+
+  /* Footer */
+  .site-footer {
+    padding: 20px 16px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .footer-content {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  .footer-text { font-size: 11px; }
+}
+
+/* Small phones */
+@media (max-width: 400px) {
+  .site-header { padding: 10px 12px; gap: 8px; }
+  .back-link { padding: 7px 10px; font-size: 11px; }
+  .back-link-arrow { font-size: 14px; }
+  .hero { padding: 24px 14px 20px; }
+  .hero-title { font-size: 26px; }
+  .hero-subtitle { font-size: 13px; }
+  .hero-features { gap: 10px; }
+  .hero-feature { font-size: 10px; }
+  .cases-section { padding: 14px 12px 32px; }
+  .section-title { font-size: 20px; margin-bottom: 18px; }
+  .case-card { padding: 16px 14px; }
+  .case-icon { width: 42px; height: 42px; font-size: 19px; }
+  .case-title { font-size: 17px; }
+  .case-description { font-size: 12.5px; }
+  .case-stat-value { font-size: 15px; }
+  .case-cta { padding: 11px 14px; font-size: 13px; }
+}
+
+/* Subtle entry animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero, .cases-grid, .about-card {
+  animation: fadeUp 0.6s ease-out;
+}
+
+.cases-grid { animation-delay: 0.1s; animation-fill-mode: backwards; }
+.about-card { animation-delay: 0.2s; animation-fill-mode: backwards; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <div class="brand-mark">DA</div>
+    <div class="brand-text">
+      <div class="brand-title">Job interview practice</div>
+      <div class="brand-sub">SQL Practice Lab</div>
+    </div>
+  </div>
+  <a class="back-link" href="https://egrosman1.github.io/sql-course/">
+    <span class="back-link-arrow">→</span>
+    <span>Back to the SQL course</span>
+  </a>
+</header>
+
+<section class="hero">
+  <div class="hero-tag">
+    <span>Interview Lab · Real Business Cases</span>
+  </div>
+  <h1 class="hero-title">Full job interview practice</h1>
+  <p class="hero-subtitle">
+    <strong>2 Business Case Studies</strong> that simulate a senior data analyst's homework.
+    Each case is built as a real analysis — realistic data, <em>13 built-in steps</em>, automatic validation of the queries,
+    and a score at the end. Exactly like what you'll encounter in a real interview.
+  </p>
+  <div class="hero-features">
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> Real data</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> SQL live in the browser</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> Window Functions</div>
+    <div class="hero-feature"><span class="hero-feature-icon">●</span> Automatic grading</div>
+  </div>
+</section>
+
+<section class="cases-section">
+  <div class="section-eyebrow">Choose the Case</div>
+  <h2 class="section-title">2 business scenarios</h2>
+
+  <div class="cases-grid">
+
+    <a class="case-card" href="case_study_simulator_v2.html">
+      <div class="case-card-header">
+        <div>
+          <div class="case-tag">CASE #01 · TELECOM</div>
+        </div>
+        <div class="case-icon">📊</div>
+      </div>
+      <div class="case-title">A jump in Customer Churn</div>
+      <div class="case-subtitle">Telecom company · Q1 2026</div>
+      <div class="case-description">
+        The CMO identified <strong>A 4× jump in customer churn</strong> in the last quarter.
+        You need to investigate the causes, identify the critical segment, and build an action plan.
+        A data-driven analysis of 6,000 customers, 8,900 service inquiries, and 35,000 monthly usage records.
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-value">50K+</div>
+          <div class="case-stat-label">rows</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">5</div>
+          <div class="case-stat-label">tables</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">13</div>
+          <div class="case-stat-label">steps</div>
+        </div>
+      </div>
+      <div class="case-techniques">
+        <span class="case-technique">GROUP BY</span>
+        <span class="case-technique">CTE</span>
+        <span class="case-technique">RANK() OVER</span>
+        <span class="case-technique">LAG()</span>
+        <span class="case-technique">Subquery</span>
+      </div>
+      <div class="case-cta">
+        <span>Start the Case</span>
+        <span class="case-cta-arrow">←</span>
+      </div>
+    </a>
+
+    <a class="case-card" href="case_study_simulator_insurance.html">
+      <div class="case-card-header">
+        <div>
+          <div class="case-tag">CASE #02 · INSURANCE</div>
+        </div>
+        <div class="case-icon">🏛️</div>
+      </div>
+      <div class="case-title">Management fee decisions — insurance company</div>
+      <div class="case-subtitle">Insurance company · Take-home exam</div>
+      <div class="case-description">
+        Management is deliberating about <strong>Management fee policy</strong> that a large insurance company charges.
+        You need to investigate 1,143 records of 819 members across 4 different employers, answer 9 business questions,
+        and give strategic, data-driven recommendations.
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-value">1,143</div>
+          <div class="case-stat-label">records</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">9</div>
+          <div class="case-stat-label">questions</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-value">13</div>
+          <div class="case-stat-label">steps</div>
+        </div>
+      </div>
+      <div class="case-techniques">
+        <span class="case-technique">GROUP BY</span>
+        <span class="case-technique">HAVING</span>
+        <span class="case-technique">ROW_NUMBER OVER</span>
+        <span class="case-technique">PARTITION BY</span>
+        <span class="case-technique">CTE</span>
+      </div>
+      <div class="case-cta">
+        <span>Start the Case</span>
+        <span class="case-cta-arrow">←</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="about-card">
+    <h3 style="font-size: 18px; margin-bottom: 6px;">What makes this practice different?</h3>
+    <p style="font-size: 13px; color: var(--text-secondary);">
+      Not dry exercises — real business scenarios with immediate feedback at every step.
+    </p>
+    <div class="about-grid">
+      <div class="about-item">
+        <div class="about-item-icon">🎯</div>
+        <div class="about-item-title">Instant feedback</div>
+        <div class="about-item-desc">Every query gets an answer: correct, incorrect, or error</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">🔒</div>
+        <div class="about-item-title">Locked answers</div>
+        <div class="about-item-desc">The sample code opens only after you've tried it yourself</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">🗄️</div>
+        <div class="about-item-title">An overview of the data</div>
+        <div class="about-item-desc">The tables and data view is always available</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-icon">📊</div>
+        <div class="about-item-title">Score 0-100</div>
+        <div class="about-item-desc">At the end - a detailed analysis with ideal recommendations for comparison</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-text">
+      © 2026 · SQL Course · Eliran Grossman
+    </div>
+    <div class="footer-text">
+      <a class="footer-link" href="https://egrosman1.github.io/sql-course/">← To the full course site</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

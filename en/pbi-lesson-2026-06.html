@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>June 2026 Update — User-Defined DAX Functions | Power BI Course</title>
+<meta name="description" content="A full lesson on the June 2026 Power BI update: the business rationale, DAX user-defined functions, the type system, val vs. expr, known bugs and workarounds, DAX Query View and mobile support.">
+<meta property="og:title" content="June 2026 Update — User-Defined DAX Functions | Power BI Course">
+<meta property="og:description" content="A full lesson on the June 2026 Power BI update: the business rationale, DAX user-defined functions, the type system, val vs. expr, known bugs and workarounds, DAX Query View and mobile support.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Heebo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo','Segoe UI','Arial Hebrew',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:left;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:left}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (Collect→Organize→Analyze→Present / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+table.cmp caption{text-align:left;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:left;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:1.6rem;color:var(--pbi)}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code-cap{font-size:.86rem;color:var(--fg-3);margin:18px 0 -10px;line-height:1.6}
+.code-wrap{margin:18px 0;max-width:100%}
+.qnav-b-wrap{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+/* 63 topics is too long for a flat list — chapters fold */
+.toc-chap,.lt-chap{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;min-height:40px}
+.toc-chap::after,.lt-chap::after{content:"\25be";font-size:.8rem;opacity:.65;transition:transform .18s;flex:0 0 auto}
+.toc-chap.is-shut::after,.lt-chap.is-shut::after{transform:rotate(90deg)}
+.toc-chap:hover,.lt-chap:hover{color:var(--acc)}
+.toc-group[hidden],.lt-items[hidden]{display:none}
+.toc-chap .cnt,.lt-chap .cnt{font-family:var(--mono);font-size:.62rem;color:var(--fg-4);margin-inline-start:auto;margin-inline-end:6px}
+/* one-tap access to the exercises from anywhere */
+.qjump{display:flex;flex-wrap:wrap;gap:6px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.qjump-t{width:100%;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--acc);margin:0 0 3px}
+.qjump button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:999px;padding:7px 12px;font-family:var(--font);font-size:.78rem;font-weight:600;min-height:38px}
+.qjump button:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.qjump button.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lt-jump{margin:16px 0 10px;border:1px solid var(--line);border-radius:var(--r)}
+/* finger-sized hit area for inline links, without moving the layout */
+.ln-home a,.bullets li a,footer a,.next-cta a,.drawer-links a,.lesson-jump a{position:relative}
+.ln-home a::after,.bullets li a::after,footer a::after,.next-cta a::after,.lesson-jump a::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:44px;transform:translateY(-50%);pointer-events:auto}
+.drawer-links a{min-height:40px;display:inline-flex;align-items:center}
+/* code snippets inside a question, with their own copy button */
+.q-code-wrap{display:block;position:relative;margin:12px 0 2px}
+.q-code{display:block;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;padding:13px 14px;font-family:var(--mono);font-size:.83rem;line-height:1.75;color:var(--fg-1);direction:ltr;text-align:left;overflow-x:auto;white-space:normal}
+.qc-copy{position:absolute;top:6px;left:6px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-3);border-radius:8px;padding:5px 9px;font-family:var(--font);font-size:.72rem;font-weight:600;min-height:32px;line-height:1}
+.qc-copy:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.qc-copy.is-done{border-color:rgba(74,222,128,.5);color:var(--ok);background:rgba(74,222,128,.12)}
+.q-code-wrap:not(:hover) .qc-t{display:none}
+.qc-copy.is-done .qc-t{display:inline}
+@media(pointer:coarse){.qc-t{display:none!important}.qc-copy.is-done .qc-t{display:inline!important}}
+@media(max-width:560px){.q-code{font-size:.78rem;padding:12px 11px}}
+/* grid items default to min-width:auto, so a wide table can blow the track out — pin them */
+.tasks{grid-template-columns:minmax(0,1fr)}
+.tasks>.task,.grid>*{min-width:0}
+.code-cap + .code-wrap{margin-top:10px}
+.code-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-2);
+  border:1px solid var(--line);border-bottom:none;border-radius:var(--r) var(--r) 0 0;padding:6px 8px 6px 12px}
+.code-lang{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--fg-4);
+  unicode-bidi:isolate;flex:0 0 auto}
+.code-copy{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:32px;
+  background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:8px;
+  padding:5px 11px;font-family:var(--font);font-size:.78rem;font-weight:600;line-height:1;
+  transition:border-color .15s,color .15s,background .15s}
+.code-copy:hover{border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-2)}
+.code-copy:active{transform:scale(.97)}
+.code-copy .cc-ic{width:15px;height:15px;flex:0 0 auto}
+.code-copy .ic-done{display:none}
+.code-copy.is-done{border-color:rgba(74,222,128,.45);color:var(--ok);background:rgba(74,222,128,.10)}
+.code-copy.is-done .ic-copy{display:none}
+.code-copy.is-done .ic-done{display:block}
+.code-copy.is-fail{border-color:rgba(248,113,113,.45);color:var(--bad);background:rgba(248,113,113,.10)}
+.code-wrap .code{margin:0;border-radius:0 0 var(--r) var(--r)}
+@media(max-width:560px){
+  .code-bar{padding:6px 8px}
+  .code-copy{font-size:.76rem;padding:5px 10px}
+  .code-lang{font-size:.64rem;letter-spacing:.1em}
+  .code-wrap .code{padding:14px 14px;font-size:.82rem}
+}
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:.92rem;color:var(--fg-2);margin-bottom:12px}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:left;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:left;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:left;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* On phone the header shrinks to just the lessons bar — still always available */
+  :root{--header-h:44px}
+  /* one short row: ☰ · Previous · Title · Next · Questions — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+</style>
+<style>
+/* ============ BI-DIRECTIONAL STORY (Contoso) ============ */
+.bd-src{font-family:var(--mono);font-size:.7rem;color:var(--fg-4);margin:-8px 0 16px}
+.bd-map{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}
+.bd-t{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:11px 10px;text-align:center;
+  transition:border-color .25s,background .25s}
+.bd-t .nm{display:block;font-size:.86rem;font-weight:700;color:var(--fg-2)}
+.bd-t .ct{display:block;font-family:var(--mono);font-size:.9rem;color:var(--fg-4);margin-top:3px}
+.bd-t.fact{grid-column:1/-1;order:9;border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.bd-t.fact .nm{color:var(--pbi);font-size:.95rem;font-weight:900}
+.bd-t.fact .ct{color:var(--pbi)}
+.bd-t.hit{border-color:var(--acc);background:rgba(0,212,200,.10)}
+.bd-t.hit .ct{color:var(--acc);font-weight:700}
+.bd-t.blocked{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.bd-t.blocked .ct{color:#ff8f8f;font-weight:700}
+
+.bd-chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.bd-node{flex:1 1 130px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+.bd-node b{display:block;font-family:var(--mono);font-size:1.15rem;color:var(--fg-2)}
+.bd-node span{display:block;font-size:.76rem;color:var(--fg-4);margin-top:2px}
+.bd-node.on{border-color:var(--acc);background:rgba(0,212,200,.1)}
+.bd-node.on b{color:var(--acc)}
+.bd-node.slicer{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.bd-node.slicer b{color:var(--pbi);font-size:.95rem}
+.bd-node.stuck{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.bd-node.stuck b{color:#ff8f8f}
+.bd-arrow{flex:0 0 auto;align-self:center;font-family:var(--mono);font-size:1.1rem;color:var(--acc);padding:0 2px}
+.bd-arrow.bad{color:#ff6b6b}
+.bd-arrow.both{color:#ffa94d}
+
+.bd-steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.bd-steps button{flex:1 1 auto;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-3);
+  border-radius:10px;padding:9px 10px;font-family:inherit;font-size:.8rem;font-weight:700;min-height:44px;cursor:pointer}
+.bd-steps button[aria-pressed="true"]{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
+.bd-steps button[data-step="3"][aria-pressed="true"]{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.5);color:#ff8f8f}
+.bd-steps button[data-step="4"][aria-pressed="true"]{background:rgba(255,169,77,.14);border-color:rgba(255,169,77,.55);color:#ffa94d}
+.bd-say{background:var(--bg-1);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+  border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--fg-2);min-height:76px}
+.bd-say.bad{border-inline-start-color:#ff6b6b}
+.bd-say.both{border-inline-start-color:#ffa94d}
+.bd-say b{color:var(--fg-1)}
+
+.bd-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:0 0 16px}
+.bd-tbl{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bd-tbl h3{margin:0;padding:9px 12px;font-size:.82rem;background:var(--bg-2);border-bottom:1px solid var(--line);color:var(--fg-2)}
+.bd-tbl table{width:100%;border-collapse:collapse;font-size:.78rem}
+.bd-tbl th{background:rgba(242,200,17,.07);color:var(--pbi);font-family:var(--mono);font-size:.7rem;
+  font-weight:600;padding:6px 8px;text-align:left;border-bottom:1px solid var(--line)}
+.bd-tbl td{padding:6px 8px;border-bottom:1px solid var(--line-soft,rgba(255,255,255,.04));color:var(--fg-2)}
+.bd-tbl tr.yes td{background:rgba(74,222,128,.07);color:var(--fg-1)}
+.bd-tbl tr.no td{color:var(--fg-4);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+.bd-tbl tr.yes td:first-child::before{content:"✓ ";color:var(--ok)}
+.bd-tbl .more{padding:7px 8px;font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.bd-tbl .key{color:var(--pbi);font-family:var(--mono)}
+.bd-big{display:flex;align-items:baseline;gap:10px;justify-content:center;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 16px}
+.bd-big b{font-family:var(--mono);font-size:2rem;color:var(--acc);line-height:1}
+.bd-big span{font-size:.86rem;color:var(--fg-3)}
+.bd-big.warn b{color:#ff8f8f}
+.bd-big.gold b{color:var(--pbi)}
+.bd-two{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:0 0 16px}
+.bd-rule{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.bd-rule h3{margin:0 0 6px;font-size:.92rem}
+.bd-rule.yes{border-inline-start:3px solid var(--ok)}
+.bd-rule.yes h4{color:var(--ok)}
+.bd-rule.no{border-inline-start:3px solid #ff6b6b}
+.bd-rule.no h4{color:#ff8f8f}
+.bd-rule p{font-size:.86rem;color:var(--fg-2);margin:0}
+@media(max-width:560px){
+  .bd-map{grid-template-columns:repeat(2,1fr)}
+  .bd-chain{flex-direction:column}
+  .bd-arrow{transform:rotate(-90deg);align-self:center}
+  .bd-node{flex:1 1 auto}
+  .bd-steps button{flex:1 1 100%}
+}
+</style>
+
+<style>
+figure.shot.mid{max-width:800px}
+figure.shot.narrow{max-width:440px}
+figure.shot.narrow.tall button.shot-btn{max-width:min(var(--nw,100%),400px)}
+figure.shot img{image-rendering:-webkit-optimize-contrast}
+@media(max-width:720px){figure.shot.narrow.tall button.shot-btn{max-width:100%}}
+.bullets{margin:0 0 22px;padding-inline-start:22px}
+.bullets li{margin-bottom:10px}
+.hw{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:0 0 26px}
+.hw h3{margin:0 0 10px;font-size:1rem}
+.hw label{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:.92rem;cursor:pointer}
+.hw label.done{color:var(--fg-4);text-decoration:line-through}
+.hw input{width:18px;height:18px;accent-color:var(--pbi)}
+.hw-progress{margin:10px 0 0;font-family:var(--mono);font-size:.78rem;color:var(--acc)}
+@media(pointer:coarse){.hw label{min-height:44px}}
+</style>
+
+
+<style>
+/* ===== executive summary — first thing on the monthly page ===== */
+.exec{background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%);
+  border:1px solid var(--pbi-glow);border-radius:var(--r);padding:20px 22px;margin:0 0 26px;min-width:0}
+.exec-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.exec-h b{font-size:1.08rem;color:var(--fg-1);font-weight:800}
+.exec-tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:#111;background:var(--pbi);
+  border-radius:99px;padding:3px 9px;font-weight:700;flex:0 0 auto}
+.exec-sub{font-size:.86rem;color:var(--fg-3);margin-bottom:14px;line-height:1.6}
+.exec ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.exec li{position:relative;padding-inline-start:22px;font-size:.95rem;color:var(--fg-2);line-height:1.7;overflow-wrap:break-word}
+.exec li::before{content:"";position:absolute;inset-inline-start:0;top:.62em;width:8px;height:8px;
+  border-radius:2px;background:var(--pbi);transform:rotate(45deg)}
+.exec li b{color:var(--fg-1)}
+.exec-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.exec-foot .btn{flex:0 0 auto}
+.exec-time{font-size:.8rem;color:var(--fg-4);font-family:var(--mono)}
+/* ===== tables become stacked cards on phones — no horizontal scrolling,
+       no clipped Hebrew, every cell keeps its column label ===== */
+@media (max-width:640px){
+  .tbl-wrap.stack{overflow-x:visible;border:0;border-radius:0;background:none}
+  .tbl-wrap.stack table.cmp{min-width:0;font-size:.92rem;display:block}
+  .tbl-wrap.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tbl-wrap.stack tbody{display:block}
+  .tbl-wrap.stack tr{display:block;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg-1);margin-bottom:10px;overflow:hidden}
+  .tbl-wrap.stack td,.tbl-wrap.stack th{display:block;border-bottom:1px solid var(--line-soft);
+    padding:11px 14px;text-align:start;overflow-wrap:break-word}
+  .tbl-wrap.stack tr td:last-child,.tbl-wrap.stack tr th:last-child{border-bottom:0}
+  .tbl-wrap.stack td::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:700;
+    color:var(--fg-4);letter-spacing:.04em;margin-bottom:4px}
+  .tbl-wrap.stack td:not([data-l])::before{content:none}
+}
+@media (max-width:559px){
+  .exec{padding:17px 17px 16px}
+  .exec li{font-size:.9rem}
+  .exec-foot .btn{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<noscript>
+  <style>.page[hidden]{display:block!important}body{display:block;height:auto;overflow:visible}.scroller{overflow:visible;height:auto}.topicbar,.pager,.pg-hint{display:none}</style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">All 64 topics are shown here in sequence. The interactive components require JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="To the course homepage"><b>SQL</b> with Eliran</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="Navigation between course lessons">
+        <a class="lr lr-home" href="pbi.html" title="The home page of the platform"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Home page</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI basics"><b>1</b><span>Base</span></a>
+      <a class="lr" href="pbi-course-2.html" title="Data modeling"><b>2</b><span>Modeling</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query and ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M and DAX basics"><b>4</b><span>M and DAX</span></a>
+        <a class="lr lr-x is-on" href="pbi-updates.html" aria-current="page" title="The Monthly Power BI Updates"><b>◷</b><span>Updates</span></a><span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="To the course homepage"><b>↩</b><span>The course</span></a><a class="lr lr-x" href="pbi-quiz.html" title="The full question bank"><b>?</b><span>Question bank</span></a><a class="lr lr-x" href="dax-reference.html" title="DAX function index"><b>Fx</b><span>DAX reference</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="Opening the topic list">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">topics</span>
+    </button>
+    <button type="button" class="tb-home" id="tb-home" aria-label="Back to the first page of the lesson">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">main</span>
+    </button>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">Previous</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">next</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-quiz">
+      <span id="tb-quiz-label" class="tb-quiz-t">for the test</span><span id="tb-quiz-short" class="tb-quiz-s">for the test</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+
+<div class="all-bar" id="all-bar">
+  <span>Continuous reading mode — all 20 topics</span>
+  <button type="button" class="btn ghost" id="all-exit">Return to single-topic mode</button>
+</div>
+
+<div id="hero-block">
+<section class="hero">
+  <span class="kicker">Power BI Updates · June 2026</span>
+  <h1><em>DAX</em> Accepts functions</h1>
+  <p class="sub">The big update this month: business logic is written once, gets a signature and types, and is called from anywhere. Also — DAX Query View, report updates, and the list of known bugs with workarounds.</p>
+  <div class="stats" role="list"><div class="stat" role="listitem"><b>20</b><span>Topics in the lesson</span></div><div class="stat" role="listitem"><b>12</b><span>Quiz questions</span></div><div class="stat" role="listitem"><b>11</b><span>Bugs and workarounds</span></div><div class="stat" role="listitem"><b>1702</b><span>Required compatibility level</span></div></div>
+  <div class="hero-cta">
+    <button type="button" class="btn" data-goto="u6p2">Beginners — the first topic ←</button>
+    <button type="button" class="btn ghost" data-goto="u6p19">To the quiz</button>
+    <a class="btn ghost" href="pbi-course-4.html">Lesson 4 — M and DAX</a>
+    <a class="btn ghost" href="dax-reference.html">DAX function guide</a>
+  </div>
+</section></div>
+
+<section class="page" id="u6p1" data-chap="opening" data-title="How the lesson works" aria-label="Introduction — how the lesson works">
+  <div class="sec-num">opening</div>
+  <h2 class="sec-title">How the lesson works</h2>
+  <p class="sec-sub">The monthly updates module: what's new in Power BI, why Microsoft built it, and how to actually use it.</p>
+<div class="exec">
+  <div class="exec-h"><span class="exec-tag">June 2026</span><b>Executive Summary — What's New This Month</b></div>
+  <p class="exec-sub">Five minutes of reading that give you the full picture, before diving deeper. Version 2.155.756.0.</p>
+  <ul><li><b>User-defined functions in DAX, now generally available.</b> Business logic is written once as a function with a signature, types and optional parameters, and is called from a measure, a calculated column and a visual calculation. Requires compatibility level 1702.</li><li><b>A new type system with two passing modes.</b> The distinction between <span class='mono' dir='ltr'>val</span> to<span class='mono' dir='ltr'>expr</span> determines which contexts the function inherits — and this is the most important technical point in the update.</li><li><b>Governance warning:</b> Object-level security doesn't propagate to functions. A function that references a protected measure isn't automatically protected.</li><li><b>Sorting and filtering in the results grid of DAX Query View.</b> The grid isn't editable, and filtering only works on results that have already been returned — which may be truncated.</li><li><b>Report updates that eliminate manual maintenance:</b> A date picker for a slicer that rolls forward with each refresh, a tooltip in sentence mode without a DAX measure, and conditional column width.</li><li><b>A change that affects existing reports:</b> The selection tools in Azure Maps are now enabled by default.</li><li><b>11 known bugs and limitations</b> documented in Chapter V, with a workaround for each.</li></ul>
+  <div class="exec-foot"><button type="button" class="btn" data-goto="u6p2">Beginner ←</button><span class="exec-time">Estimated reading time · 75 minutes</span></div>
+</div>
+<div class="grid g3"><div class="card"><span class="tag">01</span><h3>Navigating between topics</h3><p>the buttons <b>Previous</b> F<b>next</b> fixed at the top of the screen. Also available via keyboard shortcut, by swiping on a phone, or by jumping to a topic from the topics list.</p></div><div class="card"><span class="tag">02</span><h3>Questions and practice</h3><p>At the end of the lesson, a short quiz with immediate feedback for each question, and application exercises with full solutions.</p></div><div class="card"><span class="tag">03</span><h3>Progress is saved</h3><p>The topic where you stopped and the topics you have read are saved only in your browser. You can close and come back, and reset from the topics list.</p></div></div>
+<nav class="lesson-toc" id="lesson-toc" aria-label="The lesson's full table of contents"></nav>
+<h3 class="p1-h">How each topic is built</h3><p class="p1-sub">Every topic opens with an explanation <b>why</b> The feature exists — the pain point in the field and the vision behind it — and moves on to the technical detail with code and examples. At the end of the lesson: a whole section of known bugs with workarounds, a short quiz, and a summary.</p><h3 class="p1-h">What the lesson covers</h3><p class="p1-sub">June 2026 update, version 2.155.756.0.</p><div class="grid g2"><div class="card"><span class="tag teal">DAX</span><h3>User-defined functions</h3><p>The big feature of the month: DAX gets functions with a signature, types, and optional parameters.</p></div><div class="card"><span class="tag teal">tools</span><h3>DAX Query View</h3><p>Sorting and filtering the results grid — and one trap you must know.</p></div><div class="card"><span class="tag teal">reports</span><h3>Report experience updates</h3><p>A date picker for the slicer, tooltip in sentence mode, conditional column width, and mobile adaptation.</p></div><div class="card"><span class="tag teal">production</span><h3>Bugs and workarounds</h3><p>What's currently broken, why, and what to do until it's fixed.</p></div></div><div class="note"><b>Threshold requirement for the lesson:</b> An introduction to measures, filter context, and row context. If CALCULATE still isn't fully clear — it's worth going back to lesson 4 before continuing.</div>
+</section>
+<section class="page" id="u6p2" data-chap="Chapter I · Why DAX got to this point" data-title="The pain that gave birth to the feature" aria-label="Chapter I · Why DAX Got to This Point — the pain that gave birth to the feature" hidden>
+  <div class="sec-num">Chapter I · Why DAX got to this point</div>
+  <h2 class="sec-title">The pain that gave birth to the feature</h2>
+  <p class="sec-sub">Before the syntax — the problem. Without it, it's hard to understand why this is the big announcement of the month.</p>
+<p>In a mature enterprise model there are hundreds of measures, and within them the same business logic repeats over and over: the definition of an active customer, the conversion rate, the revenue recognition rule, the commission formula. When the rule changes — and business rules do change — someone has to find every place it's coded into. In practice they find eighty percent of them. The remaining twenty percent turn into reports that contradict each other, and that's exactly the moment management stops trusting the BI.</p><div class="grid g3"><div class="card"><span class="tag">01</span><h3>What was missing</h3><p>DAX had one unit of reuse: the measure. But a measure isn't a function — you can't pass it parameters.</p></div><div class="card"><span class="tag">02</span><h3>The improvised solution</h3><p>Calculation groups, which pass parameters through the filter context. It works, but it's indirect, hard to debug, and expensive when the same logic is called multiple times in a query.</p></div><div class="card"><span class="tag">03</span><h3>the vision</h3><p>The semantic model as a software product: a function is a first-class object, saved as text, goes into Git, and goes through a code review.</p></div></div><div class="note">This is the same movement that also leads to PBIR, TMDL and Desktop Bridge: <b>Everything turns into code</b>. DAX functions are the part that directly concerns the analyst.</div>
+</section>
+<section class="page" id="u6p3" data-chap="Chapter I · Why DAX got to this point" data-title="What changed in general availability" aria-label="Chapter I · Why DAX reached this point — what changed in general availability" hidden>
+  <div class="sec-num">Chapter I · Why DAX got to this point</div>
+  <h2 class="sec-title">What changed in general availability</h2>
+  <p class="sec-sub">The feature moved out of preview — and with it came threshold requirements you need to know.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">what</th><th scope="col">details</th></tr></thead><tbody><tr><td>status</td><td>General availability in Power BI Desktop and the service starting with the June 2026 release</td></tr><tr><td>Compatibility level</td><td>1702 and above. A model that wasn't upgraded simply won't keep the function</td></tr><tr><td>Where do you write</td><td>DAX Query View, TMDL View, and the formula bar of Model Explorer</td></tr><tr><td>Where does it live</td><td>junction <span class="mono" dir="ltr">Functions</span> In Model Explorer, and in a PBIP project in the file <span class="mono" dir="ltr">functions.tmdl</span></td></tr><tr><td>How many parameters</td><td>From zero to 256</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>The first check when something doesn't work:</b> The function refuses to save? It is almost always a compatibility level below 1702. In TMDL View an automatic upgrade prompt is shown.</div>
+</section>
+<section class="page" id="u6p4" data-chap="Chapter II · UDF Basics" data-title="The first function" aria-label="Chapter II · UDF Fundamentals — the first function" hidden>
+  <div class="sec-num">Chapter II · UDF Basics</div>
+  <h2 class="sec-title">The first function</h2>
+  <p class="sec-sub">Three rows, and you already understand the whole structure.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// Adds VAT to the received amount</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddVat</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( amount : NUMERIC ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amount * 1.18<br><br><span class="k">EVALUATE</span><br>{ <span class="f">AddVat</span> ( 100 ) }<br><span class="c">// returns 118</span></div></div><p class="code-cap">The keyword FUNCTION · name · parameter list · arrow · function body</p><ol class="steps"><li><b>Written in DAX Query View</b><span>Under DEFINE, exactly like defining a measure in a query.</span></li><li><b>Run and check</b><span>An EVALUATE block with a function call returns the result immediately.</span></li><li><b>Saving to the model</b><span>button <span class="mono" dir="ltr">Update model with changes</span> Keeps all the functions in the query, or the row <span class="mono" dir="ltr">Update model: Add new function</span> Above a single definition.</span></li></ol><div class="note"><b>Note the three slashes:</b> Only a comment that starts with<span class="mono" dir="ltr">///</span> Enters the IntelliSense of whoever calls the function. A comment with <span class="mono" dir="ltr">//</span> or <span class="mono" dir="ltr">/* */</span> won't appear there.</div>
+</section>
+<section class="page" id="u6p5" data-chap="Chapter II · UDF Basics" data-title="Documentation and naming conventions" aria-label="Chapter II · UDF Fundamentals — documentation and naming rules" hidden>
+  <div class="sec-num">Chapter II · UDF Basics</div>
+  <h2 class="sec-title">Documentation and naming conventions</h2>
+  <p class="sec-sub">A function no one understands how to call is a function no one will use.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// Safely computes a profitability percentage, guarding against division by zero</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// @param {NUMERIC} revenue - the revenue amount</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// @param {NUMERIC} [cost] - cost, default 0</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// @returns profitability percentage as a decimal number</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">Fin.MarginPct</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( revenue : NUMERIC, cost : NUMERIC = 0 ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">DIVIDE</span> ( revenue - cost, revenue )<br><br><span class="k">EVALUATE</span><br>{ <span class="f">Fin.MarginPct</span> ( 1000, 400 ) }   <span class="c">// 0.6</span></div></div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">rule</th><th scope="col">What's allowed and what's not</th></tr></thead><tbody><tr><td>uniqueness</td><td>A unique name in the model, that doesn't clash with a built-in function or a reserved word like <span class="mono" dir="ltr">measure</span> or <span class="mono" dir="ltr">function</span></td></tr><tr><td>points</td><td>are allowed for namespaces like <span class="mono" dir="ltr">Fin.MarginPct</span> — but not at the start, not at the end, and not consecutively</td></tr><tr><td>characters</td><td>Besides periods: alphanumeric characters and underscore only. No spaces</td></tr><tr><td>Parameter names</td><td>Points are completely forbidden, and you may not use a reserved word</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>A convention that pays off:</b> Namespace by prefix — <span class="mono" dir="ltr">Fin.</span>, <span class="mono" dir="ltr">Dim.</span>, <span class="mono" dir="ltr">Stat.</span>. In IntelliSense, the whole function family appears together.</div>
+</section>
+<section class="page" id="u6p6" data-chap="Chapter II · UDF Basics" data-title="Where the function is called" aria-label="Chapter II · UDF Fundamentals — Where the Function Is Called" hidden>
+  <div class="sec-num">Chapter II · UDF Basics</div>
+  <h2 class="sec-title">Where the function is called</h2>
+  <p class="sec-sub">After saving to the model, the function behaves like any built-in DAX function.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code"><span class="c">-- measure</span><br><span class="f">Total Sales with VAT</span> = <span class="f">AddVat</span> ( [Total Sales] )<br><br><span class="c">-- a computed column (note the type conversion)</span><br><span class="f">Sales Amount with VAT</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">CONVERT</span> ( <span class="f">AddVat</span> ( Sales[Sales Amount] ), CURRENCY )<br><br><span class="c">-- visual calculation</span><br><span class="f">Sales Amount with VAT</span> = <span class="f">AddVat</span> ( [Sales Amount] )</div></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code"><span class="c">-- and a function can call another function</span><br>DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddVat</span> = ( amount : NUMERIC ) =&gt; amount * 1.18<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddVatAfterDiscount</span> =<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( amount : NUMERIC, discount : NUMERIC ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">AddVat</span> ( amount - discount )<br><br><span class="k">EVALUATE</span><br>{ <span class="f">AddVatAfterDiscount</span> ( 100, 20 ) }   <span class="c">// 94.4</span></div></div><div class="note"><b>Two usage warnings:</b> In a calculated column, make sure the function returns a scalar of a consistent type, and convert with <span class="mono" dir="ltr">CONVERT</span> when needed. In a visual calculation you can't pass in objects from the model that aren't in the visual.</div><div class="sol-check"><b>✓</b> Recursion — a function that calls itself directly or indirectly — <b>is not supported</b>. Composing different functions does.</div>
+</section>
+<section class="page" id="u6p7" data-chap="Chapter III · The Type System" data-title="Why DAX needs types" aria-label="Chapter III · The type system — why DAX needs types" hidden>
+  <div class="sec-num">Chapter III · The Type System</div>
+  <h2 class="sec-title">Why DAX needs types</h2>
+  <p class="sec-sub">The conceptual shift of the update: moving the failure from the report to write time.</p>
+<p>In classic DAX, a measure that receives unexpected input silently returns a wrong result. In a one-person model that's tolerable. In a function library a whole team consumes, unexpected input is a bug that shows up in a management report.</p><div class="grid g3"><div class="card"><span class="tag">01</span><h3>Reliable IntelliSense</h3><p>Whoever calls the function sees what it expects to receive, before running it.</p></div><div class="card"><span class="tag">02</span><h3>Preventing a type error</h3><p>You can't pass a column instead of a measure when the signature requires a measure.</p></div><div class="card"><span class="tag">03</span><h3>Controlled conversion</h3><p>Sub-typing forces a predictable conversion, instead of an incidental conversion by the engine.</p></div></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">SYNTAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code"><span class="k">FUNCTION</span> &lt;Name&gt; =<br>&nbsp;&nbsp;&nbsp;&nbsp;( &lt;Param&gt; : [&lt;Type&gt;] [&lt;Subtype&gt;] [&lt;PassingMode&gt;] [= &lt;Default&gt;], ... )<br>&nbsp;&nbsp;&nbsp;&nbsp;=&gt; &lt;Body&gt;</div></div><div class="note">You can specify everything, some, or nothing. A parameter written with no hint at all behaves as<span class="mono" dir="ltr">AnyVal val</span> — meaning the argument is evaluated immediately at call time.</div>
+</section>
+<section class="page" id="u6p8" data-chap="Chapter III · The Type System" data-title="The types and the two families" aria-label="Chapter III · The type system — the types and the two families" hidden>
+  <div class="sec-num">Chapter III · The Type System</div>
+  <h2 class="sec-title">The types and the two families</h2>
+  <p class="sec-sub">The distinction that determines all the behavior: value vs. expression.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">family</th><th scope="col">type</th><th scope="col">what receives</th><th scope="col">When it's evaluated</th></tr></thead><tbody><tr><td>Value types</td><td><span class="mono" dir="ltr">AnyVal</span></td><td>A scalar or a table. The default</td><td>Immediately, before entering the function</td></tr><tr><td>Value types</td><td><span class="mono" dir="ltr">Scalar</span></td><td>A scalar value, with an optional subtype</td><td>immediately</td></tr><tr><td>Value types</td><td><span class="mono" dir="ltr">Table</span></td><td>table</td><td>immediately</td></tr><tr><td>Expression types</td><td><span class="mono" dir="ltr">AnyRef</span></td><td>Any reference or expression</td><td>Inside the function body</td></tr><tr><td>Expression types</td><td><span class="mono" dir="ltr">ColumnRef</span></td><td>Reference to a column</td><td>Inside the function body</td></tr><tr><td>Expression types</td><td><span class="mono" dir="ltr">MeasureRef</span></td><td>Reference to the measure</td><td>Inside the function body</td></tr><tr><td>Expression types</td><td><span class="mono" dir="ltr">TableRef</span></td><td>Reference to the table</td><td>Inside the function body</td></tr><tr><td>Expression types</td><td><span class="mono" dir="ltr">CalendarRef</span></td><td>Reference to a calendar</td><td>Inside the function body</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>Two rules derived from the table:</b> Value types support automatic type conversion, expression types don't. And expression types must be <span class="mono" dir="ltr">expr</span> — score <span class="mono" dir="ltr">val</span> for which it isn't valid.</div><h3 style="margin:30px 0 10px">Subtypes for scalar</h3><div class="chiplist"><span class="chip" dir="ltr">Variant</span><span class="chip" dir="ltr">Int64</span><span class="chip" dir="ltr">Decimal</span><span class="chip" dir="ltr">Double</span><span class="chip" dir="ltr">String</span><span class="chip" dir="ltr">DateTime</span><span class="chip" dir="ltr">Boolean</span><span class="chip" dir="ltr">Numeric</span></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">CastToInt</span> = ( x : INT64 ) =&gt; x<br><br><span class="k">EVALUATE</span><br>{ <span class="f">CastToInt</span> ( 3.4 ), <span class="f">CastToInt</span> ( 3.5 ), <span class="f">CastToInt</span> ( "5" ) }<br><span class="c">// 3, 4, 5 — a non-numeric string will cause an error</span></div></div><p class="code-cap">Specifying a subtype makes the word Scalar redundant — and forces a predictable conversion</p>
+</section>
+<section class="page" id="u6p9" data-chap="Chapter III · The Type System" data-title="val vs expr" aria-label="Chapter III · The Type System — val vs. expr" hidden>
+  <div class="sec-num">Chapter III · The Type System</div>
+  <h2 class="sec-title">val vs expr</h2>
+  <p class="sec-sub">two functions with completely identical bodies, and two different results. This is the most important topic in the lesson.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// Table as value: receives a table that's already been computed</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">CountRowsNow</span>   = ( t : TABLE VAL ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">COUNTROWS</span> ( <span class="k">CALCULATETABLE</span> ( t, <span class="k">ALL</span> ( 'Date' ) ) )<br><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// Table as expression: accepts an uncalculated expression</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">CountRowsLater</span> = ( t : TABLE EXPR ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">COUNTROWS</span> ( <span class="k">CALCULATETABLE</span> ( t, <span class="k">ALL</span> ( 'Date' ) ) )<br><br><span class="k">EVALUATE</span><br>{<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">CALCULATE</span> ( <span class="f">CountRowsNow</span>   ( Sales ), 'Date'[Fiscal Year] = "FY2020" ),<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">CALCULATE</span> ( <span class="f">CountRowsLater</span> ( Sales ), 'Date'[Fiscal Year] = "FY2020" )<br>}</div></div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the function</th><th scope="col">What it returns</th><th scope="col">why</th></tr></thead><tbody><tr><td><span class="mono" dir="ltr">CountRowsNow</span></td><td>Only FY2020 rows</td><td>The table was already filtered before entering the function, so the ALL inside no longer changes anything</td></tr><tr><td><span class="mono" dir="ltr">CountRowsLater</span></td><td>all the years</td><td>The function received an uncomputed expression and evaluated it itself under ALL, meaning it removed the external filtering</td></tr></tbody></table></div><div class="note"><b>The rule worth memorizing:</b> parameter <span class="mono" dir="ltr">val</span> is evaluated at the caller and therefore inherits the row context <b>and filter context</b>. parameter <span class="mono" dir="ltr">expr</span> It's evaluated inside the function and therefore only inherits the filter context.</div><div class="sol-check"><b>✓</b> <b>Pro tip:</b> when a parameter <span class="mono" dir="ltr">expr</span> may take a measure or a formula, force context transition inside the function with <span class="mono" dir="ltr">CALCULATE</span> Explicit. This way the function also works correctly in uses you didn't anticipate.</div>
+</section>
+<section class="page" id="u6p10" data-chap="Chapter IV · Parameters and Tests" data-title="Optional parameters" aria-label="Chapter IV · Parameters and Testing — Optional parameters" hidden>
+  <div class="sec-num">Chapter IV · Parameters and Tests</div>
+  <h2 class="sec-title">Optional parameters</h2>
+  <p class="sec-sub">A default in the signature makes the parameter optional — with four rules you need to know.</p>
+<div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">AddNum</span> = ( x : NUMERIC = 1, y : NUMERIC = 2 ) =&gt; x + y<br><br><span class="k">EVALUATE</span><br>{ <span class="f">AddNum</span> (), <span class="f">AddNum</span> ( 1 ), <span class="f">AddNum</span> ( , 2 ), <span class="f">AddNum</span> ( 5, 5 ) }<br><span class="c">// 3, 3, 3, 10</span></div></div><p class="code-cap">An empty comma skips an argument and uses the default</p><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the rule</th><th scope="col">What does this mean</th></tr></thead><tbody><tr><td>location</td><td>An optional parameter can appear anywhere. But the minimum number of arguments is determined by the parameter <b>The rightmost required</b> — in a function with three parameters where only the second is optional, you still must pass three</td></tr><tr><td>the context</td><td>Inheritance of row context and filter context is determined by the passing mode of that parameter</td></tr><tr><td>Field of vision</td><td>The default expression only sees names visible in the location <b>the setting</b>, not at the call site. It also can't refer to another optional parameter</td></tr><tr><td>Type check</td><td>The type hint is enforced on the default only when it's actually used. If the caller supplied an argument, the check runs against that instead</td></tr></tbody></table></div>
+</section>
+<section class="page" id="u6p11" data-chap="Chapter IV · Parameters and Tests" data-title="Runtime type checking" aria-label="Chapter IV · Parameters and checks — runtime type checking" hidden>
+  <div class="sec-num">Chapter IV · Parameters and Tests</div>
+  <h2 class="sec-title">Runtime type checking</h2>
+  <p class="sec-sub">When the function needs to accept more than one input type — check inside the function body.</p>
+<div class="chiplist"><span class="chip" dir="ltr">ISNUMERIC</span><span class="chip" dir="ltr">ISNUMBER</span><span class="chip" dir="ltr">ISINT64</span><span class="chip" dir="ltr">ISINTEGER</span><span class="chip" dir="ltr">ISDECIMAL</span><span class="chip" dir="ltr">ISCURRENCY</span><span class="chip" dir="ltr">ISDOUBLE</span><span class="chip" dir="ltr">ISSTRING</span><span class="chip" dir="ltr">ISTEXT</span><span class="chip" dir="ltr">ISBOOLEAN</span><span class="chip" dir="ltr">ISLOGICAL</span><span class="chip" dir="ltr">ISDATETIME</span></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// returns a currency name by numeric key or by text code</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">Dim.GetCurrencyName</span> = ( currency ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">IF</span> (<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">ISINT64</span> ( currency ),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">LOOKUPVALUE</span> ( 'Currency'[Currency], 'Currency'[CurrencyKey], currency ),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">LOOKUPVALUE</span> ( 'Currency'[Currency], 'Currency'[Code], currency )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br><br><span class="k">EVALUATE</span><br>{ <span class="f">Dim.GetCurrencyName</span> ( 36 ), <span class="f">Dim.GetCurrencyName</span> ( "USD" ) }</div></div><div class="note"><b>Timing of the check:</b> in the parameter <span class="mono" dir="ltr">expr</span> The check happens when the parameter is referenced in the function body — <b>no</b> at call time. This changes when you'll see the error.</div>
+</section>
+<section class="page" id="u6p12" data-chap="Chapter IV · Parameters and Tests" data-title="TABLEOF and NAMEOF" aria-label="Chapter IV · Parameters and Testing — TABLEOF and NAMEOF" hidden>
+  <div class="sec-num">Chapter IV · Parameters and Tests</div>
+  <h2 class="sec-title">TABLEOF and NAMEOF</h2>
+  <p class="sec-sub">Two new helper functions that let you write truly generic functions.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">function</th><th scope="col">What it returns</th></tr></thead><tbody><tr><td><span class="mono" dir="ltr">TABLEOF</span></td><td>the table that a column, measure, or calendar belongs to</td></tr><tr><td><span class="mono" dir="ltr">NAMEOF</span></td><td>the name of a table, column, measure or calendar — as text</td></tr></tbody></table></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code">DEFINE<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">/// Returns the most common value of an expression over the table it belongs to</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FUNCTION</span> <span class="f">Stat.ModeX</span> = ( e : ANYREF ) =&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">VAR</span> newTable  = <span class="k">ADDCOLUMNS</span> ( <span class="k">TABLEOF</span> ( e ), "expr", e )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">VAR</span> freqTable = <span class="k">GROUPBY</span> ( newTable, [expr], "count", <span class="k">SUMX</span> ( <span class="k">CURRENTGROUP</span> (), 1 ) )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">VAR</span> maxCount  = <span class="k">MAXX</span> ( freqTable, [count] )<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">RETURN</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">SELECTCOLUMNS</span> ( <span class="k">FILTER</span> ( freqTable, [count] = maxCount ), "expr", [expr] )<br><br><span class="k">EVALUATE</span> <span class="f">Stat.ModeX</span> ( [Total Sales] )</div></div><p class="code-cap">The function doesn't hard-code a table name — TABLEOF finds it from the expression received</p><div class="sol-check"><b>✓</b> This is what turns a function from<b>Model-dependent</b> H<b>mobile</b>: you can copy it to another model without changing a thing.</div>
+</section>
+<section class="page" id="u6p13" data-chap="Chapter V · Production and governance" data-title="Governance limitations and risks" aria-label="Chapter V · Production and Governance — limits and governance risks" hidden>
+  <div class="sec-num">Chapter V · Production and governance</div>
+  <h2 class="sec-title">Governance limitations and risks</h2>
+  <p class="sec-sub">What you must check before a function enters an enterprise model.</p>
+<div class="note"><b>The most severe risk — object-level security:</b> OLS <b>does not pass</b> and to functions and vice versa. If a function refers to a protected measure, the function itself isn't automatically protected; when it runs under an identity without permission, the system behaves as if the measure doesn't exist. The official recommendation: don't expose names of protected objects in function names and descriptions.</div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">limitation</th><th scope="col">The practical implication</th></tr></thead><tbody><tr><td>Unqualified names</td><td>A name without an explicit table prefix is treated as a measure reference, so it isn't included in dependency tracking. Always <span class="mono" dir="ltr">'Sales'[Amount]</span> and never <span class="mono" dir="ltr">[Amount]</span></td></tr><tr><td>No recursion</td><td>Neither directly nor mutually</td></tr><tr><td>No overload</td><td>Two functions can't share a name with different signatures</td></tr><tr><td>There is no explicit return type</td><td>Need to ensure consistency within the function body itself</td></tr><tr><td>No view folders</td><td>and you also can't hide or expose a function</td></tr><tr><td>No combination with translations</td><td>Translated model — the functions stay out</td></tr><tr><td>No enum return</td><td>A built-in function expecting an enum won't accept a UDF</td></tr></tbody></table></div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code"><span class="c">-- to check which functions exist in the model</span><br><span class="k">EVALUATE</span> <span class="k">INFO.USERDEFINEDFUNCTIONS</span> ()   <span class="c">// Full metadata, requires write permission</span><br><br><span class="k">EVALUATE</span> <span class="k">INFO.FUNCTIONS</span> ( "ORIGIN", "2" )  <span class="c">// names only, no write permission</span></div></div>
+</section>
+<section class="page" id="u6p14" data-chap="Chapter V · Production and governance" data-title="UDF or a calculation group" aria-label="Chapter V · Production and Governance — UDF or Calculation Group" hidden>
+  <div class="sec-num">Chapter V · Production and governance</div>
+  <h2 class="sec-title">UDF or a calculation group</h2>
+  <p class="sec-sub">Two capabilities that look similar and solve completely different problems.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">when</th><th scope="col">the tool</th><th scope="col">why</th></tr></thead><tbody><tr><td>Business logic with variable parameters</td><td><b>UDF</b></td><td>Passing parameters through an explicit signature saves the overhead of passing them through the filter context, especially when the same logic is called several times in one query</td></tr><tr><td>Display variations across all the measures</td><td><b>Calculation group</b></td><td>Prior year, year-to-date cumulative, percent of total — something that needs to apply to a hundred measures without rewriting them</td></tr><tr><td>combination</td><td><b>both</b></td><td>A calculation group that internally calls a shared function — this is the pattern recommended for large models</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>The decision test in one question:</b> Does the logic need to take variable input? If so — UDF. If it only changes the context of an existing measure — a calculation group.</div>
+</section>
+<section class="page" id="u6p15" data-chap="Chapter V · Production and governance" data-title="Known Bugs and Workarounds" aria-label="Chapter V · From production and governance — known bugs and workarounds" hidden>
+  <div class="sec-num">Chapter V · Production and governance</div>
+  <h2 class="sec-title">Known Bugs and Workarounds</h2>
+  <p class="sec-sub">What is currently broken, per the bug entries in the official docs and community reports — and what to do until it is fixed.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the phenomenon</th><th scope="col">the reason</th><th scope="col">The workaround</th></tr></thead><tbody><tr><td>Red underlines and validation errors when passing a column as a parameter <span class="mono" dir="ltr">expr</span></td><td>A known inconsistency of the parser in advanced scenarios</td><td>run it and check the actual result; write full qualified references; split into a simpler helper function</td></tr><tr><td>Type hint <span class="mono" dir="ltr">ColumnRef</span> or <span class="mono" dir="ltr">MeasureRef</span> Deferred at the call site</td><td>Known bug: the specific reference types aren't accepted at every call site</td><td>to drop to<span class="mono" dir="ltr">AnyRef</span> and perform validation in the function body</td></tr><tr><td>A custom error message with <span class="mono" dir="ltr">ERROR</span> not displayed</td><td>DAX generates an internal error from incorrect parameter use before the validation code runs</td><td>Don't rely on custom messages at this stage; document the requirement in<span class="mono" dir="ltr">///</span></td></tr><tr><td>Renaming a column breaks a function</td><td>An unqualified name is treated explicitly as a reference to a measure and is therefore not included in dependency tracking</td><td>Always use the full table name inside a function</td></tr><tr><td>The function refuses to save</td><td>a compatibility level below 1702, or a model with no tables</td><td>to upgrade the compatibility level; in TMDL View an automatic prompt is shown</td></tr><tr><td>There's no IntelliSense in visual calculations, in TMDL, or in SSMS</td><td>Partial support at this stage</td><td>Write and test it in DAX Query View and then copy</td></tr><tr><td>A measure in a report with live connect can't see a function from the source model</td><td>A report-level measure can reference it but without IntelliSense; a model-level measure in a complex model cannot at all</td><td>Define the logic in the source model as a measure too, not only as a function</td></tr><tr><td>A calculated column returns an inconsistent type</td><td>A function that returns different types depending on the branch chosen</td><td>to wrap in<span class="mono" dir="ltr">CONVERT</span> or split into two functions with a uniform type</td></tr><tr><td>Saved DAX queries didn't go into Git</td><td>Setting up an initial Git integration from the workspace doesn't include them</td><td>To save critical queries as text files in the repository at the same time</td></tr><tr><td>Maps started behaving differently in an old report</td><td>The selection tools in Azure Maps are now on by default, even in existing reports</td><td>To turn off the switch <span class="mono" dir="ltr">Selection</span> In the Controls section</td></tr><tr><td>Date picker doesn't appear for a teammate</td><td>A preview feature that's enabled per device individually</td><td>to make sure everyone has enabled the preview, and not to rely on it in a production report</td></tr></tbody></table></div><div class="note"><b>Contradiction in the docs:</b> The Best Practices page in Learn still carries a preview label and lists a limitation of not being able to create functions in the service, while the official blog from June announces full in-browser editing. It's worth checking the behavior in your own environment.</div>
+</section>
+<section class="page" id="u6p16" data-chap="Chapter VI · DAX Query View" data-title="Sorting and filtering in the results grid" aria-label="Chapter VI · DAX Query View — sorting and filtering the results grid" hidden>
+  <div class="sec-num">Chapter VI · DAX Query View</div>
+  <h2 class="sec-title">Sorting and filtering in the results grid</h2>
+  <p class="sec-sub">A small interface improvement that saves run cycles — with one big trap.</p>
+<h3 style="margin:26px 0 10px">Why Microsoft introduced this</h3><p>Debugging DAX is a loop: run, look, change, run again. Until now, every small question about the result — what's the highest value, are there negative rows — required rewriting the query and running it again. Each round costs time as well as capacity resources.</p><h3 style="margin:26px 0 10px">What was actually added</h3><p>Every column header shows a sort icon to toggle between ascending and descending order on click. The three-dot menu adds clearing the sort, searching values, and filtering by value selection.</p><div class="note"><b>Precision matters:</b> the network <b>Cannot be edited</b>. Only sorting, search and filtering were added — there's no editing values and no writing back to the data. This is a common misinterpretation found in several online summaries.</div><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the limitation</th><th scope="col">the value</th><th scope="col">What does this mean in practice</th></tr></thead><tbody><tr><td>Volume per query</td><td>15MB</td><td>On an exception the current row ends and no further rows are written</td></tr><tr><td>Values for the query</td><td>1,000,000</td><td>With 20 columns you get at most 50,000 rows</td></tr><tr><td>Rows in the browser</td><td>99,999</td><td>and write permission on the semantic model is required</td></tr><tr><td>Display format</td><td>not shown</td><td>Currency and thousands separators won't appear in the grid</td></tr></tbody></table></div><div class="note"><b>The main trap:</b> Sorting and filtering work <b>Only on the results already returned</b>, and these may be truncated. If the result was truncated, what you see doesn't reflect the full result set.</div><div class="code-wrap"><div class="code-bar"><span class="code-lang" dir="ltr">DAX</span><button type="button" class="code-copy" aria-label="Copying the code to the clipboard"><svg class="cc-ic ic-copy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 15V5a2 2 0 0 1 2-2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="cc-ic ic-done" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12.5 9.5 18 20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cc-t" aria-live="polite">copying</span></button></div><div class="code"><span class="c">-- correct validation: filter in the query, not in the grid</span><br><span class="k">EVALUATE</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">FILTER</span> (<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">SUMMARIZECOLUMNS</span> (<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Product'[Category],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Date'[Month of Year],<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sales", [Total Sales]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Sales] &gt; 100000<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br><span class="k">ORDER BY</span> [Sales] <span class="k">DESC</span></div></div><div class="sol-check"><b>✓</b> <b>A rule for students:</b> The grid is a debugging tool, not a validation tool. A student who filters in the grid and reports "I checked, no anomalies" can still be wrong on a large model.</div>
+</section>
+<section class="page" id="u6p17" data-chap="Chapter VII · The report and mobile" data-title="Report experience updates" aria-label="Chapter VII · The Report and Mobile — report experience updates" hidden>
+  <div class="sec-num">Chapter VII · The report and mobile</div>
+  <h2 class="sec-title">Report experience updates</h2>
+  <p class="sec-sub">The common thread: eliminating repetitive manual work.</p>
+<h3 style="margin:26px 0 10px">Why Microsoft introduced this</h3><p>Almost every change here erases maintenance: a date slicer that needs updating every month, a text measure written only so a tooltip is readable, manually tuning axis ranges so a bar isn't cut off. At the same time, turning on the map selection tool by default teaches a second principle: a feature that exists but is hidden behind a switch that's off is a feature that doesn't exist.</p><div class="grid g3"><div class="card"><span class="tag">01</span><h3>Date picker for the slicer</h3><p>A relative selection that rolls forward with every refresh. Anchored to today, to the first date, or <b>to the last date in the data</b> — and that's what prevents a report from breaking when the ETL is delayed. In preview.</p></div><div class="card"><span class="tag">02</span><h3>Auto-expansion in the matrix</h3><p>Defined separately for rows and columns. The big value is in Personalize this visual: a field the reader adds opens up immediately.</p></div><div class="card"><span class="tag">03</span><h3>Tooltip in sentence mode</h3><p>A free-form sentence that refers to the tooltip fields — without a dedicated DAX measure. Saves unnecessary text measures in the model.</p></div><div class="card"><span class="tag">04</span><h3>Conditional column width</h3><p>Turn on Custom widths and click fx. The interesting pattern: tying the width to a What-If parameter with a slider.</p></div><div class="card"><span class="tag">05</span><h3>Azure Maps</h3><p>The selection tools are lit by default — circle, rectangle, polygon, travel time and distance. Close a polygon with the C key.</p></div><div class="card"><span class="tag">06</span><h3>Shape map</h3><p>in general availability, with uploading TopoJSON and GeoJSON, and re-downloading a map you uploaded.</p></div></div><div class="note"><b>A change that affects existing reports:</b> Enabling the selection in Azure Maps doesn't apply only to new reports. Anyone who wants the previous behavior needs to turn off the switch manually.</div>
+</section>
+<section class="page" id="u6p18" data-chap="Chapter VII · The report and mobile" data-title="Adapting the report for mobile" aria-label="Chapter VII · The Report and Mobile — adapting the report for mobile" hidden>
+  <div class="sec-num">Chapter VII · The report and mobile</div>
+  <h2 class="sec-title">Adapting the report for mobile</h2>
+  <p class="sec-sub">The mobile layout isn't a shrunken desktop — it's a different report.</p>
+<div class="note"><b>How it works:</b> A mobile-optimized view is displayed <b>only</b> in the iOS and Android apps, and only when the device is in portrait mode. In the browser the report is always shown in the regular layout. Built in<span class="mono" dir="ltr">View > Mobile layout</span> in Desktop, or via editing the report in the service.</div><ol class="steps"><li><b>Building both layouts together</b><span>Duplicating a page duplicates both layouts, so a page with a header and navigation serves as a template for the rest of the pages.</span></li><li><b>Select only what matters</b><span>Recommended minimum size: 323 points wide for a large visual, 158 for a small one. Font no smaller than nine points.</span></li><li><b>Clean up noise</b><span>Remove axis titles, gridlines and legend; arrange navigation and slicers horizontally; reduce white space.</span></li><li><b>Testing an interaction</b><span>Tooltips are disabled on the editing canvas but work in the app. Slicer selections on the canvas don't carry over to the grid layout.</span></li></ol><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">The new update</th><th scope="col">What it gives on a small screen</th></tr></thead><tbody><tr><td>Date picker</td><td>A relative selection saves typing, and is preferable to two separate slicers for a range</td></tr><tr><td>Conditional column width</td><td>The same table in two different widths for desktop and mobile, without duplicating the visual</td></tr><tr><td>Tooltip in sentence mode</td><td>One readable sentence instead of a field list that gets cut off on a narrow screen</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> Automatic responsiveness may clash with manual formatting. You can turn it off in<span class="mono" dir="ltr">General > Properties > Advanced options</span>.</div>
+</section>
+<section class="page" id="u6p19" data-chap="Chapter VIII · Self-check" data-title="Quiz — 12 questions" aria-label="Chapter VIII · Self-Check — Quiz — 12 questions" hidden>
+  <div class="sec-num">Chapter VIII · Self-check</div>
+  <h2 class="sec-title">Quiz — 12 questions</h2>
+  <p class="sec-sub">One question at a time. A correct answer is colored green, an incorrect one red, and the correct answer is always revealed along with a full technical explanation.</p>
+<div class="quiz" id="quiz-u6"><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q1">What's the passing mode of a parameter written without any type hint?</h3><div class="q-opts" role="group" aria-labelledby="u6q1"><button type="button" class="q-opt" data-key="a">Expr — lazy evaluation</button><button type="button" class="q-opt" data-key="b">Val — eager evaluation</button><button type="button" class="q-opt" data-key="c">Depends on the type of argument sent</button><button type="button" class="q-opt" data-key="d">There's no default, it must be specified</button></div><div class="q-exp" role="status"><b>explanation:</b> The default is <em>AnyVal val</em>. This means the argument is fully evaluated <b>before</b> at the entry to the function body, and the value already computed is what goes in. This is why a simple function works as expected without specifying anything — but it's also why trying to change the context inside the function has no effect, since there's no longer an expression whose context can be changed. The answer 'it depends on the argument' is wrong because the passing mode is determined by the function's signature, not by the call to it.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q2">In expr mode, which context does a parameter inherit?</h3><div class="q-opts" role="group" aria-labelledby="u6q2"><button type="button" class="q-opt" data-key="a">Row-only relationship</button><button type="button" class="q-opt" data-key="b">Row context and filter context</button><button type="button" class="q-opt" data-key="c">Filter-only relationship</button><button type="button" class="q-opt" data-key="d">No context — it's evaluated in isolation</button></div><div class="q-exp" role="status"><b>explanation:</b> parameter <em>expr</em> passed as an uncomputed expression and evaluated inside the function body, so it sees the filter context that prevails there but not the row context of the caller. A parameter <em>val</em>, by contrast, is evaluated at the caller, so it inherits both of them. This is exactly why the same function body returns different results in the two functions CountRowsNow and CountRowsLater: in one the table has already been filtered, and in the other the ALL inside can still remove the filter.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u6q3">What happens when a function refers to a measure protected by object-level security?</h3><div class="q-opts" role="group" aria-labelledby="u6q3"><button type="button" class="q-opt" data-key="a">The function isn't automatically protected, and this must be handled manually</button><button type="button" class="q-opt" data-key="b">The function inherits the measure's protection</button><button type="button" class="q-opt" data-key="c">The function fails when saving to the model</button><button type="button" class="q-opt" data-key="d">The measure is returned as BLANK for every user</button></div><div class="q-exp" role="status"><b>explanation:</b> OLS <b>does not pass</b> to functions and vice versa — this is a documented limitation, not a bug. When a function runs under an identity that lacks permission on a measure, the engine behaves as if the measure doesn't exist at all, which can silently return a wrong result instead of blocking it. The official recommendation follows from this: don't expose the names of protected objects in function names or their descriptions, and every function must be tested under every role before publishing.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q4">Why should you not rely on filtering in the DAX Query View results grid to validate data?</h3><div class="q-opts" role="group" aria-labelledby="u6q4"><button type="button" class="q-opt" data-key="a">Because the filtering changes the model</button><button type="button" class="q-opt" data-key="b">because the filter isn't saved between sessions</button><button type="button" class="q-opt" data-key="c">because it operates only on returned results, which may be truncated</button><button type="button" class="q-opt" data-key="d">because it ignores measures and only calculates columns</button></div><div class="q-exp" role="status"><b>explanation:</b> Sorting and filtering are an interface operation on what the engine has already returned, not a new query. If the result was truncated — by the 15MB limit, the million-value-per-query limit, or the 99,999-row browser limit — you are filtering part of the data and drawing conclusions about the whole. For real validation, move the logic into the query itself with FILTER and ORDER BY and rerun.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q5">The MeasureRef type hint is rejected at the call site. What's the solution?</h3><div class="q-opts" role="group" aria-labelledby="u6q5"><button type="button" class="q-opt" data-key="a">Remove the type hint and pass the measure as a value</button><button type="button" class="q-opt" data-key="b">Fall back to AnyRef and verify the type in the function body</button><button type="button" class="q-opt" data-key="c">To upgrade the compatibility level to 1702</button><button type="button" class="q-opt" data-key="d">To turn the function into a regular measure</button></div><div class="q-exp" role="status"><b>explanation:</b> This is a known, documented bug: the specific reference types — CalendarRef, ColumnRef, MeasureRef and TableRef — are not accepted at every call site, and the official workaround is to fall back to AnyRef, the general type of the family. The option to pass it as a value is wrong because a reference must be an expr; bumping the compatibility level is not relevant here, because if it were too low the function would not save at all.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q6">What's the minimum compatibility level required for user-defined functions?</h3><div class="q-opts" role="group" aria-labelledby="u6q6"><button type="button" class="q-opt" data-key="a">1550</button><button type="button" class="q-opt" data-key="b">1702</button><button type="button" class="q-opt" data-key="c">1601</button><button type="button" class="q-opt" data-key="d">1400</button></div><div class="q-exp" role="status"><b>explanation:</b> 1702 and above. The compatibility level determines which objects and properties the model can even hold, so an older model that hasn’t been upgraded will simply refuse to save the function — and that’s the first thing to check when something isn’t working. The TMDL View shows an auto-upgrade prompt that specifies exactly which object requires the upgrade.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q7">In a function with three parameters where only the second is optional — how many arguments must the caller supply?</h3><div class="q-opts" role="group" aria-labelledby="u6q7"><button type="button" class="q-opt" data-key="a">One</button><button type="button" class="q-opt" data-key="b">Two</button><button type="button" class="q-opt" data-key="c">Three</button><button type="button" class="q-opt" data-key="d">Depends on whether an empty comma is used</button></div><div class="q-exp" role="status"><b>explanation:</b> The minimum number of arguments — the function's arity — is determined by the parameter's position <b>The rightmost required</b>, not by how many optional parameters there are. Since the third parameter is required, three arguments must be passed. You can skip the second one with an empty comma in the style MyFunc(1,,3), and its default value will kick in.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u6q8">What's special about a comment that starts with three slashes?</h3><div class="q-opts" role="group" aria-labelledby="u6q8"><button type="button" class="q-opt" data-key="a">Only it enters the function's IntelliSense</button><button type="button" class="q-opt" data-key="b">It prevents saving to the model</button><button type="button" class="q-opt" data-key="c">It marks disabled code</button><button type="button" class="q-opt" data-key="d">It requires a higher compatibility level</button></div><div class="q-exp" role="status"><b>explanation:</b> the syntax <em>///</em> Saved into the model as a description property of the object, exactly as TMDL supports for measures and functions too. A regular comment with // or /* */ stays only in the query code and doesn't reach whoever calls the function. Inside the block you can also use JSDoc-style tags like @param and @returns to describe each parameter separately.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q9">What will happen if you use an unqualified reference in the style [Amount] inside a function when you mean a column?</h3><div class="q-opts" role="group" aria-labelledby="u6q9"><button type="button" class="q-opt" data-key="a">Syntax error while saving</button><button type="button" class="q-opt" data-key="b">DAX will interpret it as a measure, and dependency tracking may break</button><button type="button" class="q-opt" data-key="c">The function will work but run slowly</button><button type="button" class="q-opt" data-key="d">No difference — DAX detects it on its own</button></div><div class="q-exp" role="status"><b>explanation:</b> An explicit unqualified name is always read as a reference to a measure. This is a known limitation in formula fixing and dependency tracking: if you meant a column, the name won’t be included in the dependency graph, so a future rename won’t fix the function and it will break silently. The practical rule: inside a UDF always write 'Sales'[Amount] with the table name.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u6q10">Where is the mobile layout you built for the report displayed?</h3><div class="q-opts" role="group" aria-labelledby="u6q10"><button type="button" class="q-opt" data-key="a">Only in the mobile app, in portrait mode</button><button type="button" class="q-opt" data-key="b">In any browser narrower than 768 pixels</button><button type="button" class="q-opt" data-key="c">on any mobile device, even in the browser</button><button type="button" class="q-opt" data-key="d">Only after publishing to an organizational app</button></div><div class="q-exp" role="status"><b>explanation:</b> The mobile layout is a separate artifact saved alongside the web layout, and it's loaded only by the Power BI apps for iOS and Android when the device is held in portrait. In a browser — even on a phone — the regular layout is always shown, so you can't test the mobile layout through a browser. Tilting the device to landscape brings back the regular view in the app too.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u6q11">When do you choose a UDF instead of a calculation group?</h3><div class="q-opts" role="group" aria-labelledby="u6q11"><button type="button" class="q-opt" data-key="a">When you want to apply 'previous year' to all the measures</button><button type="button" class="q-opt" data-key="b">When the logic needs to receive a variable input as a parameter</button><button type="button" class="q-opt" data-key="c">When you want to change the context of an existing measure</button><button type="button" class="q-opt" data-key="d">When the model is small and simple</button></div><div class="q-exp" role="status"><b>explanation:</b> Explicit parameters in the signature are the clear advantage of a UDF: the input passes through directly, without going through the filter context. When the same logic is called several times in the same query, this difference also adds up in performance. A calculation group, on the other hand, is built for exactly answers A and C: applying a uniform display variation to existing measures without rewriting them.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u6q12">A function defined with ( t : TABLE ) and called inside CALCULATE with a year filter — what will it return?</h3><div class="q-opts" role="group" aria-labelledby="u6q12"><button type="button" class="q-opt" data-key="a">all the years, because the ALL inside it removes the filter</button><button type="button" class="q-opt" data-key="b">Error, because a transfer state is missing</button><button type="button" class="q-opt" data-key="c">Only the filtered year</button><button type="button" class="q-opt" data-key="d">Depends on whether the table is Import or DirectQuery</button></div><div class="q-exp" role="status"><b>explanation:</b> Without an explicit transition state, the default is val. The table is evaluated by the caller — meaning it’s already filtered to the year — and only then enters the function, so the ALL inside can no longer remove a filter from an already-evaluated table. The fix is an explicit declaration: ( t : TABLE EXPR ). This is the most common mistake when writing a first UDF.</div></article></div><div class="quiz-summary" role="status" aria-live="polite"><div class="qs-bar"><span class="qs-fill"></span></div><p class="qs-text">You haven't answered questions yet — 0 out of 12</p></div><div class="quiz-actions"><button type="button" class="btn ghost quiz-reset">Resetting the quiz</button></div>
+</section>
+<section class="page" id="u6p20" data-chap="Chapter VIII · Self-check" data-title="Summary and next steps" aria-label="Chapter VIII · Self-Check — Summary and what's next" hidden>
+  <div class="sec-num">Chapter VIII · Self-check</div>
+  <h2 class="sec-title">Summary and next steps</h2>
+  <p class="sec-sub">Ten rows that sum up the entire lesson.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">topic</th><th scope="col">what to remember</th></tr></thead><tbody><tr><td>the rationale</td><td>Business logic becomes a code-managed library, not copy-paste between measures</td></tr><tr><td>definition</td><td><span class="mono" dir="ltr">FUNCTION Name = ( p : TYPE SUBTYPE MODE = default ) => body</span> with documentation in-<span class="mono" dir="ltr">///</span></td></tr><tr><td>val vs expr</td><td>val at the caller inherits row and filter; expr inside inherits filter only</td></tr><tr><td>Reference types</td><td>ColumnRef, MeasureRef, TableRef, CalendarRef — always expr, without type conversion</td></tr><tr><td>Optional</td><td>The minimum argument count is determined by the rightmost required parameter</td></tr><tr><td>Main risk</td><td>OLS doesn't carry over to functions</td></tr><tr><td>golden rule</td><td>Always fully qualified names inside a function</td></tr><tr><td>DAX Query View</td><td>Sorting and filtering only, and only on results already returned</td></tr><tr><td>mobile</td><td>Build the mobile layout together with the desktop one, not after it</td></tr><tr><td>source of truth</td><td><span class="mono" dir="ltr">functions.tmdl</span> In a PBIP project, in a workspace connected to Git</td></tr></tbody></table></div><div class="next-cta"><h2>From here to July 2026</h2><p>After the logic became code, the next step is the model itself: TMDL in the browser, Model Options in the service, and the risks of overwriting against Desktop.</p><div class="quiz-actions" style="justify-content:center"><a class="btn" href="pbi-lesson-2026-07.html">To the July 2026 lesson ←</a><button type="button" class="btn ghost" data-goto="u6p1">To the start of the lesson</button></div></div>
+</section>
+<nav class="pager" aria-label="Navigation between lesson topics">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ Previous</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">Next ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">You can also navigate with the buttons at the top of the screen, keyboard arrows, and on phone with a swipe</p>
+<div class="lesson-jump">
+  <a class="btn ghost" href="pbi-course-4.html">To lesson 4 — M and DAX ←</a>
+  <a class="btn ghost" href="pbi-lesson-2026-07.html">To the July 2026 update ←</a>
+  <button type="button" class="btn ghost" id="open-lessons">All course lessons</button>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Power BI · Updates Module — June 2026 · <a href="index.html">SQL with Eliran</a></p>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="An enlarged view of the screenshot">
+  <div class="lb-bar">
+    <button type="button" class="lb-close" id="lb-close">Close ✕</button>
+    <button type="button" class="lb-zoom" id="lb-zoom" aria-pressed="false">Full size</button>
+    <span id="lb-cap"></span>
+  </div>
+  <div class="lb-body"><img id="lb-img" src="" alt=""></div>
+</div>
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="The lesson's topic list">
+  <div class="drawer-head">
+    <b>The lesson topics</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="Closing the topic list">✕</button>
+  </div>
+  <nav class="drawer-lessons" aria-label="Navigation between course lessons">
+    <div class="dl-head">Course lessons</div>
+    <div class="dl-list"><a class="dl-item" href="pbi-course.html"><span class="dl-n">1</span><span class="dl-t">Power BI basics</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-course-2.html"><span class="dl-n">2</span><span class="dl-t">Data modeling</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-course-3.html"><span class="dl-n">3</span><span class="dl-t">Power Query and ETL</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-course-4.html"><span class="dl-n">4</span><span class="dl-t">M and DAX basics</span><span class="dl-s">Transition ←</span></a><div class="dl-item is-current" aria-current="page"><span class="dl-n">06</span><span class="dl-t">June 2026 update</span><span class="dl-s">you are here</span></div><a class="dl-item" href="pbi-lesson-2026-07.html"><span class="dl-n">07</span><span class="dl-t">July 2026 update</span><span class="dl-s">Transition ←</span></a></div>
+    <a class="dl-home" href="pbi-updates.html">→ All Power BI updates</a>
+  </nav>
+  <div class="toc" id="toc"><div class="toc-chap">opening</div><button type="button" class="toc-item" data-go="0"><span class="toc-n">01</span><span class="toc-t">How the lesson works</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter I · Why DAX got to this point</div><button type="button" class="toc-item" data-go="1"><span class="toc-n">02</span><span class="toc-t">The pain that gave birth to the feature</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="2"><span class="toc-n">03</span><span class="toc-t">What changed in general availability</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter II · UDF Basics</div><button type="button" class="toc-item" data-go="3"><span class="toc-n">04</span><span class="toc-t">The first function</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="4"><span class="toc-n">05</span><span class="toc-t">Documentation and naming conventions</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="5"><span class="toc-n">06</span><span class="toc-t">Where the function is called</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter III · The Type System</div><button type="button" class="toc-item" data-go="6"><span class="toc-n">07</span><span class="toc-t">Why DAX needs types</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="7"><span class="toc-n">08</span><span class="toc-t">The types and the two families</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="8"><span class="toc-n">09</span><span class="toc-t">val vs expr</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter IV · Parameters and Tests</div><button type="button" class="toc-item" data-go="9"><span class="toc-n">10</span><span class="toc-t">Optional parameters</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="10"><span class="toc-n">11</span><span class="toc-t">Runtime type checking</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="11"><span class="toc-n">12</span><span class="toc-t">TABLEOF and NAMEOF</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter V · Production and governance</div><button type="button" class="toc-item" data-go="12"><span class="toc-n">13</span><span class="toc-t">Governance limitations and risks</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="13"><span class="toc-n">14</span><span class="toc-t">UDF or a calculation group</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="14"><span class="toc-n">15</span><span class="toc-t">Known Bugs and Workarounds</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter VI · DAX Query View</div><button type="button" class="toc-item" data-go="15"><span class="toc-n">16</span><span class="toc-t">Sorting and filtering in the results grid</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter VII · The report and mobile</div><button type="button" class="toc-item" data-go="16"><span class="toc-n">17</span><span class="toc-t">Report experience updates</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="17"><span class="toc-n">18</span><span class="toc-t">Adapting the report for mobile</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter VIII · Self-check</div><button type="button" class="toc-item" data-go="18"><span class="toc-n">19</span><span class="toc-t">Quiz — 12 questions</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="19"><span class="toc-n">20</span><span class="toc-t">Summary and next steps</span><span class="toc-done" aria-hidden="true">✓</span></button></div>
+  <div class="drawer-foot">
+    <button type="button" class="btn ghost" id="toc-reset">Resetting progress</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+"use strict";
+
+/* Each module is isolated: a failure in one must never break the others. */
+function mod(name,fn){ try{ fn(); }catch(err){ if(window.console)console.error('[pbi-course] '+name,err); } }
+function $(sel,root){ return (root||document).querySelector(sel); }
+function $$(sel,root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+var SCROLLER=document.getElementById('scroller');
+function scrollTop0(){ if(SCROLLER)SCROLLER.scrollTop=0; else try{ window.scrollTo(0,0); }catch(e){} }
+function lockScroll(on){ if(SCROLLER)SCROLLER.style.overflowY=on?'hidden':''; }
+
+
+/* ---------- measure the fixed header stack (header + progress + topic bar) ---------- */
+
+/* ---------- paged lesson router ---------- */
+var LESSON={pages:[],index:0,go:function(){}}; window.LESSON=LESSON;
+mod('router',function(){
+  var pages=$$('.page'); if(!pages.length)return;
+  var total=pages.length;
+  var bar=$('#pbar'), tbChap=$('#tb-chap'), tbTitle=$('#tb-title'), tbCount=$('#tb-count');
+  var prev=$('#pg-prev'), next=$('#pg-next'), prevName=$('#pg-prev-name'), nextName=$('#pg-next-name');
+  var tbPrev=$('#tb-prev'), tbNext=$('#tb-next'), tbHome=$('#tb-home');
+  var tocItems=$$('.toc-item'), hero=$('#hero-block');
+  var KEY='pbi-u06-page-v1', VKEY='pbi-u06-visited-v1';
+  var visited={};
+  try{ visited=JSON.parse(localStorage.getItem(VKEY)||'{}')||{}; }catch(e){ visited={}; }
+
+  function save(i){
+    try{
+      localStorage.setItem(KEY,String(i));
+      visited[i]=1; localStorage.setItem(VKEY,JSON.stringify(visited));
+    }catch(e){}
+  }
+  function markVisited(){
+    tocItems.forEach(function(it,k){ it.classList.toggle('visited',!!visited[k]); });
+  }
+  function show(i,push,noScroll){
+    i=Math.max(0,Math.min(total-1,i));
+    if(allOn && LESSON.setAll)document.body.classList.remove('all-topics'), allOn=false;
+    pages.forEach(function(pg,k){
+      var on=(k===i);
+      pg.hidden=!on; pg.style.display=on?'':'none';
+    });
+    LESSON.index=i;
+    var cur=pages[i];
+    if(tbChap)tbChap.textContent=cur.dataset.chap||'';
+    if(tbTitle)tbTitle.textContent=cur.dataset.title||'';
+    if(tbCount)tbCount.textContent=(i+1)+' / '+total;
+    if(bar)bar.style.width=((i+1)/total*100)+'%';
+    if(hero){ hero.hidden=(i>0); hero.style.display=(i>0)?'none':''; }
+    if(prev){
+      prev.disabled=(i===0);
+      if(prevName)prevName.textContent=i>0?pages[i-1].dataset.title:'';
+    }
+    if(next){
+      next.disabled=(i===total-1);
+      if(nextName)nextName.textContent=i<total-1?pages[i+1].dataset.title:'You finished the lesson';
+    }
+    /* the top strip mirrors the pager, and names its target for screen readers */
+    if(tbHome){
+      tbHome.disabled=(i===0);
+      tbHome.setAttribute('aria-label',i===0?'You\'re on the first page of the lesson':'Back to the first page of the lesson');
+    }
+    if(tbPrev){
+      tbPrev.disabled=(i===0);
+      tbPrev.setAttribute('aria-label',i>0?('The previous topic — '+pages[i-1].dataset.title):'This is the first topic');
+    }
+    if(tbNext){
+      tbNext.disabled=(i===total-1);
+      tbNext.setAttribute('aria-label',i<total-1?('The next topic — '+pages[i+1].dataset.title):'This is the last topic');
+    }
+    tocItems.forEach(function(it,k){ it.classList.toggle('on',k===i); });
+    if(typeof syncQuizBtn==='function')syncQuizBtn(i);
+    save(i); markVisited();
+    if(push){
+      try{
+        if(window.history && history.replaceState) history.replaceState(null,'','#'+cur.id);
+        else window.location.hash=cur.id;
+      }catch(e){/* sandboxed/file:// contexts forbid history writes — navigation must continue */}
+    }
+    if(!noScroll)scrollTop0();
+    if(push){                       /* land the caret inside the new topic, not back at the top of the DOM */
+      var h=cur.querySelector('.sec-title');
+      if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(e){ h.focus(); } }
+    }
+    try{ document.title=(cur.dataset.title||'')+' · Power BI basics'; }catch(e){}
+  }
+  LESSON.pages=pages; LESSON.go=function(i){show(i,true);};
+
+  if(prev)prev.addEventListener('click',function(){show(LESSON.index-1,true);});
+  if(next)next.addEventListener('click',function(){show(LESSON.index+1,true);});
+  if(tbHome)tbHome.addEventListener('click',function(){ show(0,true); });   /* always one tap from the opening topic */
+  if(tbPrev)tbPrev.addEventListener('click',function(){show(LESSON.index-1,true);});
+  if(tbNext)tbNext.addEventListener('click',function(){show(LESSON.index+1,true);});
+  tocItems.forEach(function(it,k){
+    it.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+  });
+
+  /* contents list on the opening topic — the whole lesson at a glance */
+  var lt=$('#lesson-toc');
+  if(lt){
+    var html='<h3>Full lesson contents</h3><p class="lt-sub">'+total+' topics. You can jump directly to any of them, or go topic by topic with the buttons at the top of the screen.</p>';
+    var lastChap=null, open=false;
+    pages.forEach(function(pg,k){
+      if(pg.dataset.chap!==lastChap){
+        if(open)html+='</div>';
+        html+='<div class="lt-chap">'+pg.dataset.chap+'</div><div class="lt-items">';
+        lastChap=pg.dataset.chap; open=true;
+      }
+      html+='<button type="button" class="lt-item" data-go="'+k+'"><span class="n">'+
+            (k+1<10?'0':'')+(k+1)+'</span><span>'+pg.dataset.title+'</span></button>';
+    });
+    if(open)html+='</div>';
+    html+='<div class="lt-actions"><button type="button" class="btn ghost" id="lt-all">Show the whole lesson in one sequence</button></div>';
+    lt.innerHTML=html;
+    $$('.lt-item',lt).forEach(function(b){
+      b.addEventListener('click',function(){ show(+b.dataset.go,true); });
+    });
+  }
+
+  /* continuous mode — every topic in one scroll, for review or for teaching from the page */
+  var allBar=$('#all-bar'), allOn=false;
+  function setAll(on){
+    allOn=on;
+    document.body.classList.toggle('all-topics',on);
+    pages.forEach(function(pg,k){
+      if(on){ pg.hidden=false; pg.style.display=''; }
+      else { var vis=(k===LESSON.index); pg.hidden=!vis; pg.style.display=vis?'':'none'; }
+    });
+    var hero=$('#hero-block');
+    if(hero && on){ hero.hidden=false; hero.style.display=''; }
+    if(tbTitle)tbTitle.textContent=on?'The whole lesson in sequence':pages[LESSON.index].dataset.title;
+    if(tbCount)tbCount.textContent=on?(total+' / '+total):((LESSON.index+1)+' / '+total);
+    scrollTop0();
+  }
+  var ltAll=$('#lt-all');
+  if(ltAll)ltAll.addEventListener('click',function(){ setAll(true); closeDrawer(); });
+  var allExit=$('#all-exit');
+  if(allExit)allExit.addEventListener('click',function(){ setAll(false); show(LESSON.index,true); });
+  LESSON.setAll=setAll;
+
+  /* the questions block: self-check quiz → homework → multiple-choice quiz.
+     One button in the strip owns it, and it always leads back to the first questions page. */
+  var Q_IDS=['u6p19'];
+  var qIdx=[];
+  Q_IDS.forEach(function(id){ pages.forEach(function(pg,k){ if(pg.id===id)qIdx.push(k); }); });
+  qIdx.sort(function(a,b){return a-b;});
+  var qFirst=qIdx.length?qIdx[0]:-1;
+  var quizBtn=$('#tb-quiz'), quizLabel=$('#tb-quiz-label'), quizShort=$('#tb-quiz-short'), returnTo=null;
+  if(quizBtn && qFirst<0) quizBtn.hidden=true;
+  function syncQuizBtn(i){
+    if(!quizBtn||qFirst<0)return;
+    var atFirst=(i===qFirst), inBlock=(qIdx.indexOf(i)>-1);
+    quizBtn.classList.toggle('on-quiz',atFirst);
+    var label=atFirst?'Back to the lesson':(inBlock?'To the start of the quiz':'for the test');
+    var short=atFirst?'return':(inBlock?'to the beginning':'for the test');
+    if(quizLabel) quizLabel.textContent=label;
+    if(quizShort) quizShort.textContent=short;
+    quizBtn.setAttribute('aria-label',atFirst
+      ? 'Back to the topic you came from'
+      : (inBlock?'Back to the quiz page':'for the test — 12 questions on this update'));
+    /* the strip inside the questions pages marks where you are */
+    $$('.qnav-b').forEach(function(b){
+      var on=(b.getAttribute('data-goto')===pages[i].id);
+      b.classList.toggle('is-on',on);
+      if(on)b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
+  }
+  var practiceIdx=-1;
+  pages.forEach(function(pg,k){ if(pg.querySelector('.tasks')) practiceIdx=k; });
+  var goPractice=$('#go-practice');
+  if(goPractice)goPractice.addEventListener('click',function(){ if(practiceIdx>=0)show(practiceIdx,true); });
+
+  /* any control with data-goto="<page id>" jumps to that topic */
+  $$('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=b.getAttribute('data-goto');
+      for(var k=0;k<pages.length;k++){ if(pages[k].id===id){ show(k,true); break; } }
+    });
+  });
+
+  if(quizBtn)quizBtn.addEventListener('click',function(){
+    if(qFirst<0)return;
+    if(LESSON.index===qFirst){
+      show(returnTo!==null?returnTo:0,true);          /* back to the topic you came from */
+    }else{
+      if(qIdx.indexOf(LESSON.index)<0) returnTo=LESSON.index;   /* remember only lesson topics */
+      show(qFirst,true);
+    }
+  });
+
+  /* drawer */
+  var drawer=$('#drawer'), back=$('#drawer-back'), menu=$('#tb-menu'), x=$('#drawer-x');
+  var lastFocus=null;
+  function focusables(){
+    return $$('button:not([disabled])',drawer);
+  }
+  function trap(e){
+    if(e.key!=='Tab'||!drawer||drawer.hidden)return;
+    var f=focusables(); if(!f.length)return;
+    var first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  function openDrawer(){
+    if(!drawer)return;
+    lastFocus=document.activeElement;
+    drawer.hidden=false; if(back)back.hidden=false;
+    if(menu)menu.setAttribute('aria-expanded','true');
+    lockScroll(true);
+    document.addEventListener('keydown',trap,true);
+    var on=$('.toc-item.on'); if(on){on.focus();on.scrollIntoView({block:'center'});}
+  }
+  function closeDrawer(){
+    if(!drawer||drawer.hidden)return;
+    drawer.hidden=true; if(back)back.hidden=true;
+    if(menu)menu.setAttribute('aria-expanded','false');
+    lockScroll(false);
+    document.removeEventListener('keydown',trap,true);
+    var restorable=lastFocus&&document.contains(lastFocus)&&
+      (lastFocus.matches?lastFocus.matches('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'):false);
+    var target=restorable?lastFocus:menu;
+    if(target&&target.focus)target.focus();
+  }
+  if(menu)menu.addEventListener('click',function(){ drawer && drawer.hidden?openDrawer():closeDrawer(); });
+  if(x)x.addEventListener('click',closeDrawer);
+  if(back)back.addEventListener('click',closeDrawer);
+
+  var drawerAll=document.createElement('button');
+  drawerAll.type='button'; drawerAll.className='btn ghost'; drawerAll.id='drawer-all';
+  drawerAll.textContent='The whole lesson in sequence';
+  drawerAll.style.marginBottom='8px';
+  drawerAll.addEventListener('click',function(){ setAll(true); closeDrawer(); });
+  var foot=$('.drawer-foot'); if(foot)foot.insertBefore(drawerAll,foot.firstChild);
+
+  var resetBtn=$('#toc-reset');
+  if(resetBtn)resetBtn.addEventListener('click',function(){
+    visited={};
+    try{localStorage.removeItem(VKEY);localStorage.removeItem(KEY);}catch(e){}
+    markVisited(); show(0,true); closeDrawer();
+  });
+
+  /* touch: swipe across the page moves between topics, like flipping a slide.
+     Ignored inside anything that scrolls sideways on its own, and while an overlay is open. */
+  var tx=0, ty=0, tracking=false;
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){ tracking=false; return; }
+    var t=e.target;
+    if(t&&t.closest&&t.closest('.tbl-wrap,.drawer,.lightbox,figure.shot,input[type="range"],.topicbar')){ tracking=false; return; }
+    if(document.body.classList.contains('all-topics')){ tracking=false; return; }
+    var d=$('#drawer'), lb=$('#lightbox');
+    if((d&&!d.hidden)||(lb&&!lb.hidden)){ tracking=false; return; }
+    tx=e.touches[0].clientX; ty=e.touches[0].clientY; tracking=true;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!tracking)return; tracking=false;
+    var t=e.changedTouches&&e.changedTouches[0]; if(!t)return;
+    var dx=t.clientX-tx, dy=t.clientY-ty;
+    if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.6)return;   /* horizontal, and clearly deliberate */
+    show(LESSON.index+(dx<0?1:-1),true);                        /* RTL: swipe left = next topic */
+  },{passive:true});
+
+  /* keyboard: arrows move between topics, Esc closes drawer */
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ closeDrawer(); return; }
+    var t=e.target, tag=t&&t.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable))return;
+    if(t&&t.closest&&t.closest('[role="tablist"],[role="tab"]'))return;   /* tabs own the arrows */
+    if(drawer&&!drawer.hidden)return;
+    if(e.key==='ArrowLeft'){ e.preventDefault(); show(LESSON.index+1,true); }   /* RTL: left = forward */
+    else if(e.key==='ArrowRight'){ e.preventDefault(); show(LESSON.index-1,true); }
+  });
+
+  window.addEventListener('hashchange',function(){
+    var id=''; try{ id=location.hash.slice(1); }catch(e){ return; }
+    var k=pages.findIndex?pages.findIndex(function(pg){return pg.id===id;}):-1;
+    if(k>=0 && k!==LESSON.index) show(k,false);
+  });
+
+  /* opening position: hash wins, then last saved page */
+  var startIdx=0, hashId='';
+  try{ hashId=location.hash.slice(1); }catch(e){}
+  var byHash=-1;
+  pages.forEach(function(pg,k){ if(pg.id===hashId) byHash=k; });
+  if(byHash>=0) startIdx=byHash;
+  else{ try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved)) startIdx=saved; }catch(e){} }
+  show(startIdx,false,true);
+});
+
+/* ---------- DIKW pyramid ---------- */
+mod('dikw',function(){
+  $$('#dikw button').forEach(function(btn){
+    var panel=document.getElementById(btn.getAttribute('aria-controls'));
+    if(!panel)return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      panel.classList.toggle('open',!open);
+    });
+  });
+});
+
+/* ---------- analyst time bars ---------- */
+mod('bars',function(){
+  var bars=$('#bars'); if(!bars)return;
+  var fills=$$('.bar-fill',bars);
+  function fill(){ fills.forEach(function(f){ f.style.width=(f.dataset.w||0)+'%'; }); }
+  var page=bars.closest('.page');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting) fill(); });
+    },{threshold:.25});
+    io.observe(bars);
+  }
+  /* pages are display:none until opened, so also fill whenever this topic becomes visible */
+  if(page && 'MutationObserver' in window){
+    new MutationObserver(function(){ if(!page.hidden) setTimeout(fill,60); })
+      .observe(page,{attributes:true,attributeFilter:['hidden']});
+  }
+  if(!page || !page.hidden) fill();
+  setTimeout(function(){ if(!page||!page.hidden) fill(); },1200);
+});
+
+/* ---------- before / after toggle ---------- */
+mod('beforeAfter',function(){
+  var bBefore=$('#ba-before'), bAfter=$('#ba-after');
+  var lBefore=$('#ba-list-before'), lAfter=$('#ba-list-after');
+  if(!bBefore||!bAfter||!lBefore||!lAfter)return;
+  function set(after){
+    bBefore.setAttribute('aria-pressed',String(!after));
+    bAfter.setAttribute('aria-pressed',String(after));
+    lBefore.hidden=after;  lBefore.style.display=after?'none':'';
+    lAfter.hidden=!after;  lAfter.style.display=after?'':'none';
+  }
+  bBefore.addEventListener('click',function(){set(false);});
+  bAfter.addEventListener('click',function(){set(true);});
+  set(false);
+});
+
+/* ---------- 8 reasons accordion ---------- */
+mod('reasons',function(){
+  $$('.reason>button').forEach(function(btn){
+    var body=btn.parentElement.querySelector('.body'); if(!body)return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.classList.toggle('open',!open);
+    });
+  });
+});
+
+/* ---------- tabs (scoped per tablist) ---------- */
+mod('tabs',function(){
+  $$('[role="tablist"]').forEach(function(list){
+    var tabs=$$('[role="tab"]',list); if(!tabs.length)return;
+    function select(tab,focus){
+      tabs.forEach(function(t){
+        var sel=(t===tab);
+        t.setAttribute('aria-selected',String(sel));
+        t.tabIndex=sel?0:-1;
+        var pnl=document.getElementById(t.getAttribute('aria-controls'));
+        if(pnl){ pnl.hidden=!sel; pnl.classList.toggle('open',sel); pnl.style.display=sel?'':'none'; }
+      });
+      if(focus)tab.focus();
+    }
+    tabs.forEach(function(t,i){
+      t.addEventListener('click',function(){select(t,false);});
+      t.addEventListener('keydown',function(e){
+        var dir=0;
+        if(e.key==='ArrowLeft')dir=1;          /* RTL: left arrow = next tab */
+        else if(e.key==='ArrowRight')dir=-1;
+        else if(e.key==='Home'){e.preventDefault();select(tabs[0],true);return;}
+        else if(e.key==='End'){e.preventDefault();select(tabs[tabs.length-1],true);return;}
+        if(dir){e.preventDefault();select(tabs[(i+dir+tabs.length)%tabs.length],true);}
+      });
+    });
+    var initial=tabs.filter(function(t){return t.getAttribute('aria-selected')==='true';})[0]||tabs[0];
+    select(initial,false);
+  });
+});
+
+/* ---------- matrix demo ---------- */
+mod('matrix',function(){
+  var table=$('#mx'), hint=$('#mx-hint'); if(!table)return;
+  var head=table.tHead?table.tHead.rows[0]:null;
+  $$('#mx tbody td').forEach(function(td){
+    function on(){
+      $$('#mx td.hot').forEach(function(x){x.classList.remove('hot');});
+      td.classList.add('hot');
+      if(!hint)return;
+      var rowTh=td.parentElement.querySelector('th');
+      var colTh=head?head.cells[td.cellIndex]:null;
+      hint.textContent='The currently highlighted value: '+(rowTh?rowTh.textContent:'')+' · '+(colTh?colTh.textContent:'')+' — '+td.textContent+' thousand ₪';
+    }
+    td.addEventListener('mouseenter',on);
+    td.addEventListener('focus',on);
+    td.addEventListener('click',on);
+  });
+});
+
+/* ---------- self-check quiz ----------
+   Data lives in the HTML (data-correct on each .q-item, data-key on each .q-opt);
+   this module holds logic only, so questions can be edited without touching JS. */
+mod('quiz',function(){
+  $$('.quiz').forEach(setupQuiz);   /* every .quiz block on the page runs on its own score */
+});
+function setupQuiz(quiz){
+  if(!quiz)return;
+  var scope=(quiz.closest?quiz.closest('.page'):null)||document;
+  var items=$$('.q-item',quiz);
+  var fill=$('.qs-fill',scope), text=$('.qs-text',scope), reset=$('.quiz-reset',scope);
+  var total=items.length, answered=0, right=0;
+
+  function updateSummary(){
+    if(fill)fill.style.width=(total?answered/total*100:0)+'%';
+    if(!text)return;
+    if(!answered){ text.textContent='You haven\'t answered any questions yet — 0 out of '+total; return; }
+    var msg=answered<total
+      ? 'you answered '+answered+' out of '+total+' — correct so far: '+right
+      : 'you finished! '+right+' Correct answers out of '+total+
+        (right===total?' — perfect'
+          :right>=total*0.8?' — nice control over the material'
+          :right>=total*0.6?' — it\'s worth reviewing the topics that were missed'
+          :' — it\'s worth going over the lesson again');
+    text.textContent=msg;
+  }
+
+  function answer(item,btn){
+    if(item.classList.contains('answered'))return;          /* one attempt per question */
+    var correctKey=item.dataset.correct;
+    var isRight=btn.dataset.key===correctKey;
+
+    $$('.q-opt',item).forEach(function(opt){
+      opt.setAttribute('aria-disabled','true');   /* stays focusable & readable, unlike [disabled] */
+      if(opt.dataset.key===correctKey) opt.classList.add('correct');   /* always reveal the right answer */
+    });
+    if(!isRight) btn.classList.add('incorrect');
+
+    item.classList.add('answered', isRight?'is-correct':'is-incorrect');
+    var exp=$('.q-exp',item);
+    if(exp && !$('.q-verdict',exp)){
+      var verdict=document.createElement('span');
+      verdict.className='q-verdict visually-hidden';
+      verdict.textContent=isRight?'Correct answer. ':'Incorrect answer. ';
+      exp.insertBefore(verdict,exp.firstChild);
+    }
+
+    answered++; if(isRight)right++;
+    updateSummary();
+  }
+
+  items.forEach(function(item){
+    $$('.q-opt',item).forEach(function(btn){
+      btn.addEventListener('click',function(){ answer(item,btn); });
+    });
+  });
+
+  if(reset)reset.addEventListener('click',function(){
+    items.forEach(function(item){
+      item.classList.remove('answered','is-correct','is-incorrect');
+      var v=$('.q-verdict',item); if(v)v.parentNode.removeChild(v);
+      $$('.q-opt',item).forEach(function(opt){
+        opt.removeAttribute('aria-disabled');
+        opt.classList.remove('correct','incorrect');
+      });
+    });
+    answered=0; right=0; updateSummary();
+    var first=$('.q-item',quiz); if(first)first.scrollIntoView({block:'center',behavior:'smooth'});
+  });
+
+  updateSummary();
+}
+
+/* ---------- practice: per-task solution toggles ---------- */
+mod('solutions',function(){
+  $$('.sol-toggle').forEach(function(btn){
+    var body=btn.nextElementSibling;
+    if(!body||!body.classList.contains('sol-body'))return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.classList.toggle('open',!open);
+      btn.textContent=open?'Showing the solution':'Hiding the solution';
+    });
+  });
+});
+
+/* ---------- screenshot lightbox ---------- */
+mod('lightbox',function(){
+  var box=$('#lightbox'), img=$('#lb-img'), cap=$('#lb-cap'), close=$('#lb-close'), zoom=$('#lb-zoom');
+  if(!box)return;
+  var opener=null;
+  var touch = !!(window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+  function setZoom(on){
+    on=!!on;
+    box.classList.toggle('zoomed',on);
+    if(zoom){
+      zoom.setAttribute('aria-pressed',String(on));
+      zoom.textContent = on ? 'Fit to screen' : 'full size';
+    }
+  }
+  function open(src,alt,caption,natW){
+    opener=document.activeElement;
+    img.src=src; img.alt=alt||'';
+    if(cap)cap.textContent=caption||'';
+    box.hidden=false; lockScroll(true);
+    /* a screenshot wider than the screen opens at natural size — that is the readable state.
+       one that already fits opens fitted, so nothing is needlessly enlarged. */
+    var wider=!natW||natW>(window.innerWidth||0);
+    setZoom(touch&&wider);
+    var body=$('.lb-body',box);
+    if(body)setTimeout(function(){                    /* start in the middle: panning works both ways */
+      try{ body.scrollLeft=Math.max(0,(body.scrollWidth-body.clientWidth)/2); }catch(e){}
+    },0);
+    close.focus();
+  }
+  function shut(){
+    box.hidden=true; img.src=''; lockScroll(false);
+    if(opener&&opener.focus)opener.focus();
+  }
+  $$('.shot-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var im=$('img',btn), fig=btn.closest('figure');
+      var cp=fig?$('figcaption',fig):null;
+      open(im.getAttribute('src'), im.getAttribute('alt'), cp?cp.textContent.trim():'', +im.getAttribute('width')||0);
+    });
+  });
+  if(zoom)zoom.addEventListener('click',function(){ setZoom(!box.classList.contains('zoomed')); });
+  if(close)close.addEventListener('click',shut);
+  box.addEventListener('click',function(e){ if(e.target===box||e.target.className==='lb-body')shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!box.hidden)shut(); });
+});
+
+/* ---------- layers demo (Bring to front / Send to back) ---------- */
+mod('layersDemo',function(){
+  var shape=$('#lshape'), status=$('#lstatus'); if(!shape)return;
+  $$('#layers-demo [data-layer]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var back=btn.dataset.layer==='back';
+      shape.classList.toggle('back',back);
+      if(status)status.textContent=back
+        ? 'Currently: the shape is in the background — the chart is exposed and fully readable'
+        : 'Currently: the shape is above the chart and covers it completely';
+    });
+  });
+});
+
+/* ---------- selection pane demo (reorder + show/hide) ---------- */
+mod('selectionDemo',function(){
+  var list=$('#sel-list'), canvas=$('#sc'), status=$('#sstatus');
+  if(!list||!canvas)return;
+  var objs=[{key:'shape',name:'Shape',on:true},{key:'chart',name:'Count of Product_ID',on:true}];
+
+  function render(){
+    list.innerHTML='';
+    objs.forEach(function(o,i){
+      var li=document.createElement('li');
+      li.className='sel-item'+(o.on?'':' off');
+      li.innerHTML='<button type="button" class="sel-btn" data-act="up" '+(i===0?'disabled':'')+
+          ' aria-label="Uploading '+o.name+' one layer">▲</button>'+
+        '<button type="button" class="sel-btn" data-act="down" '+(i===objs.length-1?'disabled':'')+
+          ' aria-label="Downloading '+o.name+' one layer">▼</button>'+
+        '<span class="nm">'+o.name+'</span>'+
+        '<button type="button" class="sel-btn" data-act="eye" aria-pressed="'+(!o.on)+'"'+
+          ' aria-label="'+(o.on?'Hide ':'Show ')+o.name+'">'+(o.on?'👁':'🚫')+'</button>';
+      li.querySelectorAll('.sel-btn').forEach(function(b){
+        b.addEventListener('click',function(){
+          var act=b.dataset.act;
+          if(act==='up'&&i>0){ objs.splice(i-1,0,objs.splice(i,1)[0]); }
+          else if(act==='down'&&i<objs.length-1){ objs.splice(i+1,0,objs.splice(i,1)[0]); }
+          else if(act==='eye'){ o.on=!o.on; }
+          render();
+        });
+      });
+      list.appendChild(li);
+    });
+    objs.forEach(function(o,i){
+      var el=canvas.querySelector('[data-obj="'+o.key+'"]');
+      if(!el)return;
+      el.style.zIndex=String(objs.length-i);      /* first in the list is drawn on top */
+      el.classList.toggle('hidden',!o.on);
+    });
+    if(status)status.textContent='Current order: '+objs.map(function(o){
+      return o.name+(o.on?'':' (hidden)');
+    }).join(' ← ')+'  |  The first item is drawn above the rest';
+  }
+  render();
+});
+
+/* ---------- conditional formatting preview (Gradient vs Rules) ---------- */
+mod('cfDemo',function(){
+  var wrap=$('#cf-cells'), caption=$('#cf-caption'), legend=$('#cf-legend');
+  if(!wrap)return;
+  var values=[18,42,55,63,78,94], min=18, max=94;
+  function paint(style){
+    wrap.innerHTML='';
+    values.forEach(function(v){
+      var cell=document.createElement('div');
+      cell.className='cf-cell';
+      cell.textContent=v;
+      if(style==='gradient'){
+        var t=(v-min)/(max-min);                       /* light blue -> deep blue */
+        cell.style.background='rgb('+Math.round(214-150*t)+','+Math.round(233-120*t)+','+Math.round(250-70*t)+')';
+        cell.style.color=t>0.55?'#fff':'#04120f';
+      }else{
+        var c = v<50 ? '#f87171' : (v<70 ? '#f2c811' : '#4ade80');
+        cell.style.background=c; cell.style.color='#111';
+      }
+      wrap.appendChild(cell);
+    });
+    if(caption)caption.textContent='Preview — style '+(style==='gradient'?'Gradient':'Rules');
+    if(legend)legend.textContent=style==='gradient'
+      ? 'The color moves in sequence: ' + min + ' In light blue up to ' + max + ' in dark blue — no thresholds, just a ratio.'
+      : 'Three rules: below 50 red · 50 to 70 yellow · 70 and above green.';
+  }
+  paint('gradient');
+  var tabs=$$('#cf-demo [role="tab"]');
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){ paint(t.id.indexOf('rules')>-1?'rules':'gradient'); });
+    t.addEventListener('keyup',function(e){
+      if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='Home'||e.key==='End'){
+        var sel=tabs.filter(function(x){return x.getAttribute('aria-selected')==='true';})[0];
+        if(sel)paint(sel.id.indexOf('rules')>-1?'rules':'gradient');
+      }
+    });
+  });
+});
+
+/* ---------- what-if parameter (Numeric range) ---------- */
+mod('paramNumeric',function(){
+  var slider=$('#disc'), val=$('#disc-val'), rev=$('#disc-rev'), delta=$('#disc-delta');
+  if(!slider)return;
+  var base=5019000;
+  function money(n){
+    return n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+Math.round(n/1000)+'K';
+  }
+  function update(){
+    var pct=+slider.value;
+    var after=base*(1-pct/100);
+    if(val)val.textContent=pct+'%';
+    if(rev)rev.textContent=money(after);
+    if(delta)delta.textContent=pct===0?'$0':'−'+money(base-after);
+    slider.setAttribute('aria-valuetext',pct+' Discount percentage, revenue '+money(after));
+  }
+  slider.addEventListener('input',update);
+  update();
+});
+
+/* ---------- field parameter (switch the displayed measure) ---------- */
+mod('paramFields',function(){
+  var chart=$('#fs-chart'), desc=$('#fs-desc'); if(!chart)return;
+  var data={
+    sales:{label:'sales',unit:'$',rows:[['Clothing',1310000],['Furniture',1260000],['Electronics',1240000],['Food',1200000]]},
+    qty:{label:'quantity',unit:'',rows:[['Clothing',268],['Furniture',260],['Electronics',246],['Food',226]]},
+    profit:{label:'profit',unit:'$',rows:[['Clothing',315000],['Furniture',214000],['Electronics',372000],['Food',180000]]}
+  };
+  function fmt(n,unit){
+    if(unit!=='$')return String(n);
+    return n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+Math.round(n/1000)+'K';
+  }
+  function draw(key){
+    var d=data[key]; if(!d)return;
+    var max=Math.max.apply(null,d.rows.map(function(r){return r[1];}));
+    chart.innerHTML=d.rows.map(function(r){
+      return '<div class="mc-row"><span class="lbl">'+r[0]+'</span>'+
+             '<span class="track"><span class="fill" style="width:'+(r[1]/max*100).toFixed(1)+'%"></span></span>'+
+             '<span class="val">'+fmt(r[1],d.unit)+'</span></div>';
+    }).join('');
+    chart.setAttribute('aria-label',d.label+' By category');
+    if(desc)desc.textContent='Currently showing: '+d.label+' by category — the slicer replaced the field, not the visual';
+  }
+  $$('.fs-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      $$('.fs-btn').forEach(function(b){
+        b.classList.toggle('on',b===btn);
+        b.setAttribute('aria-pressed',String(b===btn));
+      });
+      draw(btn.dataset.measure);
+    });
+  });
+  draw('sales');
+});
+
+/* ---------- homework checklist ---------- */
+
+/* ---------- copy button on every code block ---------- */
+mod('codeCopy',function(){
+  function codeText(el){
+    var clone=el.cloneNode(true), brs=clone.getElementsByTagName('br');
+    while(brs.length){ var br=brs[0]; br.parentNode.replaceChild(document.createTextNode('\n'),br); }
+    var t=clone.textContent||'';
+    return t.replace(/\u00a0/g,' ').replace(/[ \t]+(\n)/g,'$1').replace(/\n{3,}/g,'\n\n').replace(/[ \t]+$/,'').trim();
+  }
+  function legacyCopy(text){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.top='0'; ta.style.left='-9999px'; ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.select(); try{ ta.setSelectionRange(0,ta.value.length); }catch(e){}
+      var ok=document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    }catch(e){ return false; }
+  }
+  function copyText(text,done){
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(function(){ done(true); },function(){ done(legacyCopy(text)); });
+    } else { done(legacyCopy(text)); }
+  }
+  function flash(btn,ok){
+    var t=$('.cc-t',btn);
+    btn.classList.remove('is-done','is-fail');
+    btn.classList.add(ok?'is-done':'is-fail');
+    if(t)t.textContent=ok?'copied':'failed';
+    if(btn._ccT)clearTimeout(btn._ccT);
+    btn._ccT=setTimeout(function(){
+      btn.classList.remove('is-done','is-fail');
+      if(t)t.textContent='copying';
+    },1900);
+  }
+  $$('.code-wrap').forEach(function(wrap){
+    var btn=$('.code-copy',wrap), block=$('.code',wrap);
+    if(!btn||!block)return;
+    btn.addEventListener('click',function(){
+      copyText(codeText(block),function(ok){ flash(btn,ok); });
+    });
+  });
+});
+
+/* ---------- "All course lessons" opens the drawer from any topic ---------- */
+mod('lessonJump',function(){
+  var b=$('#open-lessons'), menu=$('#tb-menu');
+  if(!b||!menu)return;
+  b.addEventListener('click',function(){ menu.click(); });
+});
+
+/* ---------- the active lesson pill scrolls itself into view ---------- */
+mod('lessonRail',function(){
+  var rail=$('#lesson-rail'); if(!rail)return;
+  var on=$('.lr.is-on',rail); if(!on)return;
+  var target = on.offsetLeft - (rail.clientWidth - on.offsetWidth)/2;
+  try{ rail.scrollTo({left:target, behavior:'auto'}); }catch(e){ rail.scrollLeft=target; }
+});
+
+mod('homework',function(){
+  [['#hw-dax','#hw-dax-progress','pbi-l4-hw']].forEach(function(cfg){
+    buildChecklist(cfg[0],cfg[1],cfg[2]);
+  });
+});
+function buildChecklist(sel,outSel,KEY){
+  var hw=$(sel), out=$(outSel); if(!hw)return;
+  var boxes=$$('input',hw);
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(boxes.map(function(b){return b.checked;}))); }catch(e){} }
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY); if(!raw)return;
+      var arr=JSON.parse(raw);
+      if(Object.prototype.toString.call(arr)==='[object Array]')
+        arr.forEach(function(v,i){ if(boxes[i])boxes[i].checked=!!v; });
+    }catch(e){}
+  }
+  function update(){
+    boxes.forEach(function(b){
+      var lab=b.closest('label'); if(lab)lab.classList.toggle('done',b.checked);
+    });
+    if(!out)return;
+    var n=boxes.filter(function(b){return b.checked;}).length;
+    out.textContent=n+' out of '+boxes.length+' Tasks completed'+(n===boxes.length?' — great job!':'');
+  }
+  boxes.forEach(function(b){ b.addEventListener('change',function(){save();update();}); });
+  load(); update();
+}
+
+})();
+</script>
+<script>
+// nav-scale.js — injected before </body> by build.py
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+  if(!window.LESSON||!LESSON.pages)return;
+  var pages=LESSON.pages;
+
+  function shortTitle(t){
+    return String(t||'').split(' \u2014 ')[0].split(' \u00b7 ')[0].replace(/^\u05d1\u05e0\u05e7 /,'').trim();
+  }
+
+  /* exercise pages = anything holding a question bank or the task list */
+  var exercises=[];
+  pages.forEach(function(p,i){
+    if(p.querySelector('.quiz')||p.querySelector('.tasks')){
+      var n=p.querySelectorAll('.q-item').length||p.querySelectorAll('.task').length;
+      exercises.push({i:i,label:shortTitle(p.dataset.title),n:n});
+    }
+  });
+
+  function buildJump(cls){
+    var box=document.createElement('div');
+    box.className='qjump '+cls;
+    var t=document.createElement('span');
+    t.className='qjump-t';
+    t.textContent='\u05de\u05e2\u05d1\u05e8 \u05de\u05d4\u05d9\u05e8 \u05dc\u05ea\u05e8\u05d2\u05d9\u05dc\u05d9\u05dd';
+    box.appendChild(t);
+    exercises.forEach(function(e){
+      var b=document.createElement('button');
+      b.type='button';
+      b.setAttribute('data-jump',e.i);
+      b.textContent=e.label+' \u00b7 '+e.n;
+      box.appendChild(b);
+    });
+    box.addEventListener('click',function(ev){
+      var b=ev.target.closest?ev.target.closest('button[data-jump]'):null;
+      if(!b)return;
+      LESSON.go(+b.getAttribute('data-jump'));
+      var d=$('#drawer'), x=$('#drawer-x');
+      if(d && x && !d.hidden) x.click();
+    });
+    return box;
+  }
+
+  function syncJump(){
+    var cur=pages[LESSON.index]?pages[LESSON.index].id:null;
+    $$('.qjump button[data-jump]').forEach(function(b){
+      b.classList.toggle('is-on',pages[+b.getAttribute('data-jump')].id===cur);
+    });
+  }
+
+  function toggle(h,g){
+    var shut=!h.classList.contains('is-shut');
+    h.classList.toggle('is-shut',shut);
+    g.hidden=shut;
+    h.setAttribute('aria-expanded',String(!shut));
+  }
+
+  function wire(h,g){
+    var c=document.createElement('span');
+    c.className='cnt';
+    c.textContent=g.children.length;
+    h.appendChild(c);
+    h.setAttribute('role','button');
+    h.setAttribute('tabindex','0');
+    h.addEventListener('click',function(){ toggle(h,g); });
+    h.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(h,g); }
+    });
+  }
+
+  /* ---- drawer: shortcut strip, then fold every chapter ---- */
+  var toc=$('.toc');
+  if(toc){
+    if(exercises.length) toc.parentNode.insertBefore(buildJump('qjump-drawer'),toc);
+    $$('.toc-chap',toc).forEach(function(h){
+      var g=document.createElement('div');
+      g.className='toc-group';
+      var n=h.nextSibling;
+      while(n && !(n.nodeType===1 && n.classList.contains('toc-chap'))){
+        var nx=n.nextSibling;
+        if(n.nodeType===1) g.appendChild(n); else n.parentNode.removeChild(n);
+        n=nx;
+      }
+      h.parentNode.insertBefore(g,h.nextSibling);
+      wire(h,g);
+    });
+  }
+
+  /* ---- opening topic: same treatment for the full contents list ---- */
+  var lt=$('#lesson-toc');
+  if(lt){
+    if(exercises.length){
+      var sub=lt.querySelector('.lt-sub');
+      var jb=buildJump('lt-jump');
+      if(sub && sub.nextSibling) lt.insertBefore(jb,sub.nextSibling); else lt.appendChild(jb);
+    }
+    $$('.lt-chap',lt).forEach(function(h){
+      var g=h.nextElementSibling;
+      if(g && g.classList.contains('lt-items')) wire(h,g);
+    });
+  }
+
+  function label(h){
+    return h.childNodes[0]?String(h.childNodes[0].textContent).trim():'';
+  }
+
+  function openCurrentOnly(){
+    var cur=pages[LESSON.index]?pages[LESSON.index].dataset.chap:null;
+    $$('.toc-chap').concat($$('.lt-chap')).forEach(function(h){
+      var g=h.nextElementSibling;
+      if(!g)return;
+      var open=(label(h)===cur);
+      h.classList.toggle('is-shut',!open);
+      g.hidden=!open;
+      h.setAttribute('aria-expanded',String(open));
+    });
+  }
+
+  openCurrentOnly();
+  syncJump();
+
+  /* keep the strip and the open chapter in step as the reader moves */
+  var seen=LESSON.index;
+  setInterval(function(){
+    if(LESSON.index===seen)return;
+    seen=LESSON.index;
+    syncJump();
+    var cur=pages[LESSON.index].dataset.chap;
+    $$('.toc-chap').forEach(function(h){
+      var g=h.nextElementSibling;
+      if(!g)return;
+      if(label(h)===cur){
+        h.classList.remove('is-shut');
+        g.hidden=false;
+        h.setAttribute('aria-expanded','true');
+      }
+    });
+  },240);
+})();
+
+/* ---- copy button on code snippets inside questions (delegated, so it also
+        covers questions that are rendered later) ---- */
+(function(){
+  function text(el){
+    var c = el.cloneNode(true), brs = c.getElementsByTagName('br');
+    while (brs.length){ var b = brs[0]; b.parentNode.replaceChild(document.createTextNode('\n'), b); }
+    return (c.textContent || '').replace(/\u00a0/g, ' ').replace(/[ \t]+(\n)/g, '$1').trim();
+  }
+  function legacy(t){
+    try{
+      var a = document.createElement('textarea');
+      a.value = t; a.setAttribute('readonly','');
+      a.style.position='fixed'; a.style.left='-9999px';
+      document.body.appendChild(a); a.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(a); return ok;
+    }catch(e){ return false; }
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.qc-copy') : null;
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    var wrap = btn.closest('.q-code-wrap');
+    var code = wrap && wrap.querySelector('.q-code');
+    if (!code) return;
+    var t = text(code);
+    var done = function(ok){
+      btn.classList.toggle('is-done', ok);
+      var lbl = btn.querySelector('.qc-t');
+      if (lbl) lbl.textContent = ok ? 'copied' : 'failed';
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function(){
+        btn.classList.remove('is-done');
+        if (lbl) lbl.textContent = 'copying';
+      }, 1700);
+    };
+    if (navigator.clipboard && window.isSecureContext)
+      navigator.clipboard.writeText(t).then(function(){ done(true); }, function(){ done(legacy(t)); });
+    else done(legacy(t));
+  }, true);
+})();
+</script>
+<style>
+/* --- QA fix: finger-sized hit areas on touch devices (WCAG 2.5.5).
+   Placed last in the document so it wins over the in-body stylesheet. --- */
+@media (pointer:coarse), (max-width:900px){
+  .lesson-rail .lr{min-height:44px}
+  .qjump button,.lt-jump button,.qnav-b,.tb-nav,.tb-menu,.tb-home,.tb-quiz,
+  .btn,.sol-toggle,.shot-btn,.toc-item,.lt-item{min-height:44px}
+  .lt-chap{min-height:44px;display:flex;align-items:center}
+  .ln-home a,.foot a,footer a{display:inline-flex;align-items:center;min-height:44px}
+}
+</style>
+
+<style>
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+</style>
+
+<script>
+/* The toolbar meta labels are single-line with ellipsis. Mirror their text into
+   a title attribute so the full string stays reachable when it is truncated. */
+(function(){
+  var t=document.querySelector('.tb-title'), c=document.querySelector('.tb-chap');
+  if(!t&&!c) return;
+  function sync(el){ if(el){ var v=(el.textContent||'').trim(); if(v) el.setAttribute('title',v); } }
+  [t,c].forEach(function(el){
+    if(!el) return;
+    sync(el);
+    try{ new MutationObserver(function(){ sync(el); })
+           .observe(el,{childList:true,characterData:true,subtree:true}); }catch(e){}
+  });
+})();
+</script>
+
+<style>
+/* --- mobile QA: the topic label clipped from 390px down. Instead of hiding it,
+   let it take its own full-width row so nothing is cut and nothing is lost. --- */
+@media(max-width:900px){
+  .topicbar-inner{flex-wrap:wrap}
+  .tb-now{order:9;flex:1 0 100%;min-width:0;text-align:center;padding-top:3px}
+  .tb-title{display:block;white-space:normal;overflow:visible;text-overflow:clip;
+    font-size:.8rem;line-height:1.35}
+  .tb-chap{white-space:normal;overflow:visible;text-overflow:clip}
+}
+/* above the mobile breakpoint keep the single row, but let a long topic name
+   wrap inside its own box instead of being cut by an ellipsis */
+@media(min-width:901px){
+  .tb-title,.tb-chap{white-space:normal;overflow:visible;text-overflow:clip}
+  .tb-now{padding-block:2px}
+}
+</style>
+
+<style>
+/* return path to the main course site, reachable on mobile too */
+.lr-site b{font-family:var(--mono);font-size:.8rem;color:var(--acc)}
+.lr-site:hover b{color:var(--pbi)}
+</style>
+</body>
+</html>

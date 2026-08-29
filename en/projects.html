@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Guided Projects | Data Code - Eliran Grossman</title>
-<meta name="description" content="5 real guided projects - telecom, real estate, COVID, sales, and football analysis. Step by step with real practice.">
+<title>Guided Projects | Data Course - Eliran Grossman</title>
+<meta name="description" content="5 real guided projects - telecom analysis, real est\"n, COVID, sales and football. Step by step with real practice.">
 <link rel="canonical" href="https://egrosman1.github.io/sql-course/en/projects.html">
 <meta name="theme-color" content="#00d4c8">
 
@@ -14,7 +14,7 @@
 
 <!-- Projects data -->
 <script src="../assets/projects-data.js"></script>
-<script>window.PYTHON_PRELUDE = "# =============================================================\n# MINI-PANDAS v2 - Extended DataFrame API for Skulpt\n# Auto-injected into Playground + pandas course\n# =============================================================\n\nclass DataFrame:\n    \"\"\"Minimal DataFrame implementation with ~95% of pandas common ops.\"\"\"\n    \n    def __init__(self, data):\n        if isinstance(data, list):\n            if len(data) == 0:\n                self._data = {}\n                self._columns = []\n            else:\n                self._columns = list(data[0].keys())\n                self._data = {}\n                for col in self._columns:\n                    self._data[col] = [row.get(col) for row in data]\n        else:\n            self._data = dict(data)\n            self._columns = list(self._data.keys())\n        if self._data:\n            first_col = self._columns[0]\n            self._nrows = len(self._data[first_col])\n        else:\n            self._nrows = 0\n    \n    @property\n    def shape(self):\n        return (self._nrows, len(self._columns))\n    \n    @property\n    def columns(self):\n        return list(self._columns)\n    \n    @property\n    def values(self):\n        \"\"\"Return list of rows (each row is a list of values).\"\"\"\n        result = []\n        for i in range(self._nrows):\n            row = []\n            for c in self._columns:\n                row.append(self._data[c][i])\n            result.append(row)\n        return result\n    \n    def head(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][:n]\n        return DataFrame(new_data)\n    \n    def tail(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][-n:]\n        return DataFrame(new_data)\n    \n    def __len__(self):\n        return self._nrows\n    \n    def __getitem__(self, key):\n        if isinstance(key, str):\n            return Series(self._data[key], name=key)\n        if isinstance(key, list):\n            # Boolean mask?\n            if len(key) == self._nrows and len(key) > 0 and isinstance(key[0], bool):\n                new_data = {}\n                for c in self._columns:\n                    new_data[c] = []\n                    for i in range(self._nrows):\n                        if key[i]:\n                            new_data[c].append(self._data[c][i])\n                return DataFrame(new_data)\n            # Column selection\n            new_data = {}\n            for c in key:\n                if c in self._data:\n                    new_data[c] = self._data[c]\n            return DataFrame(new_data)\n        raise TypeError(\"Invalid key type\")\n    \n    def __setitem__(self, key, value):\n        if isinstance(value, Series):\n            value = value._data\n        if isinstance(value, list):\n            if len(value) != self._nrows:\n                raise ValueError(\"Length mismatch\")\n            self._data[key] = list(value)\n        else:\n            self._data[key] = [value] * self._nrows\n        if key not in self._columns:\n            self._columns.append(key)\n    \n    def sort_values(self, by, ascending=True):\n        col_data = self._data[by]\n        indices = list(range(self._nrows))\n        # Handle None values - put at end\n        def sort_key(i):\n            v = col_data[i]\n            if v is None:\n                return (1, 0) if ascending else (0, 0)\n            return (0, v)\n        indices.sort(key=sort_key, reverse=not ascending)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in indices]\n        return DataFrame(new_data)\n    \n    def filter(self, col, op, value):\n        \"\"\"SQL-like filter: df.filter('age', '>', 18)\"\"\"\n        mask = []\n        col_data = self._data[col]\n        for v in col_data:\n            if v is None:\n                mask.append(False); continue\n            if op == \">\": mask.append(v > value)\n            elif op == \"<\": mask.append(v < value)\n            elif op == \">=\": mask.append(v >= value)\n            elif op == \"<=\": mask.append(v <= value)\n            elif op == \"==\": mask.append(v == value)\n            elif op == \"!=\": mask.append(v != value)\n            elif op == \"in\":\n                if isinstance(value, list): mask.append(v in value)\n                else: mask.append(False)\n            else:\n                raise ValueError(\"Unknown operator: \" + op)\n        return self[mask]\n    \n    def where(self, fn):\n        \"\"\"Filter rows: df.where(lambda row: row['age'] > 18)\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = []\n        for i in range(self._nrows):\n            row = {}\n            for c in self._columns:\n                row[c] = self._data[c][i]\n            if fn(row):\n                for c in self._columns:\n                    new_data[c].append(self._data[c][i])\n        return DataFrame(new_data)\n    \n    def apply(self, fn, axis=0):\n        \"\"\"Apply function. axis=0: per column. axis=1: per row.\"\"\"\n        if axis == 1:\n            # Per row - returns Series\n            result = []\n            for i in range(self._nrows):\n                row = {}\n                for c in self._columns:\n                    row[c] = self._data[c][i]\n                result.append(fn(row))\n            return Series(result)\n        # Per column\n        result = {}\n        for c in self._columns:\n            result[c] = fn(self._data[c])\n        return result\n    \n    def mean(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals) / len(vals)\n        return result\n    \n    def sum(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals)\n        return result\n    \n    def min(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = min(vals)\n        return result\n    \n    def max(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = max(vals)\n        return result\n    \n    def count(self):\n        \"\"\"Count non-null per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            cnt = 0\n            for v in self._data[c]:\n                if v is not None:\n                    cnt += 1\n            result[c] = cnt\n        return result\n    \n    def describe(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = {\n                    \"count\": len(vals),\n                    \"mean\": round(sum(vals)/len(vals), 2),\n                    \"min\": min(vals),\n                    \"max\": max(vals)\n                }\n        return result\n    \n    def to_dict(self):\n        return dict(self._data)\n    \n    # ===== Data cleaning =====\n    \n    def drop(self, columns=None, index=None):\n        \"\"\"Drop columns or rows.\"\"\"\n        if columns is not None:\n            cols_to_drop = columns if isinstance(columns, list) else [columns]\n            new_data = {}\n            new_cols = []\n            for c in self._columns:\n                if c not in cols_to_drop:\n                    new_data[c] = self._data[c]\n                    new_cols.append(c)\n            result = DataFrame(new_data)\n            result._columns = new_cols\n            return result\n        if index is not None:\n            indices = index if isinstance(index, list) else [index]\n            new_data = {}\n            for c in self._columns:\n                new_data[c] = []\n                for i in range(self._nrows):\n                    if i not in indices:\n                        new_data[c].append(self._data[c][i])\n            return DataFrame(new_data)\n        return DataFrame(self._data)\n    \n    def drop_duplicates(self):\n        \"\"\"Remove duplicate rows.\"\"\"\n        seen = []\n        keep_indices = []\n        for i in range(self._nrows):\n            row_tuple = tuple(self._data[c][i] for c in self._columns)\n            if row_tuple not in seen:\n                seen.append(row_tuple)\n                keep_indices.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep_indices]\n        return DataFrame(new_data)\n    \n    def isna(self):\n        \"\"\"Return df of booleans where values are None.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [v is None for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def fillna(self, value):\n        \"\"\"Replace None values.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [value if v is None else v for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def dropna(self):\n        \"\"\"Drop rows with any None.\"\"\"\n        keep = []\n        for i in range(self._nrows):\n            has_none = False\n            for c in self._columns:\n                if self._data[c][i] is None:\n                    has_none = True; break\n            if not has_none:\n                keep.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep]\n        return DataFrame(new_data)\n    \n    def rename(self, columns):\n        \"\"\"Rename columns: df.rename({'old':'new'})\"\"\"\n        new_data = {}\n        new_cols = []\n        for c in self._columns:\n            new_name = columns.get(c, c)\n            new_data[new_name] = self._data[c]\n            new_cols.append(new_name)\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def astype(self, col, dtype):\n        \"\"\"Convert column to type. dtype: int, float, str.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None)\n            elif dtype == int or dtype == \"int\":\n                new_vals.append(int(v))\n            elif dtype == float or dtype == \"float\":\n                new_vals.append(float(v))\n            elif dtype == str or dtype == \"str\":\n                new_vals.append(str(v))\n            else:\n                new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def clip(self, col, lower=None, upper=None):\n        \"\"\"Clip values in column to range.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None); continue\n            if lower is not None and v < lower: v = lower\n            if upper is not None and v > upper: v = upper\n            new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def nunique(self):\n        \"\"\"Count unique values per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            seen = []\n            for v in self._data[c]:\n                if v not in seen:\n                    seen.append(v)\n            result[c] = len(seen)\n        return result\n    \n    # ===== Grouping / aggregation =====\n    \n    def groupby(self, by):\n        \"\"\"Group by column.\"\"\"\n        return GroupBy(self, by)\n    \n    # ===== Merging =====\n    \n    def merge(self, other, on, how=\"inner\"):\n        \"\"\"Merge two DataFrames on a key column. how: 'inner' or 'left'.\"\"\"\n        # Build index for other df\n        other_index = {}\n        for i in range(other._nrows):\n            k = other._data[on][i]\n            if k not in other_index:\n                other_index[k] = []\n            other_index[k].append(i)\n        \n        # New columns: my cols + other cols (without duplicate 'on')\n        my_cols = list(self._columns)\n        other_cols = [c for c in other._columns if c != on]\n        new_data = {}\n        for c in my_cols:\n            new_data[c] = []\n        for c in other_cols:\n            new_data[c] = []\n        \n        for i in range(self._nrows):\n            key = self._data[on][i]\n            if key in other_index:\n                for j in other_index[key]:\n                    for c in my_cols:\n                        new_data[c].append(self._data[c][i])\n                    for c in other_cols:\n                        new_data[c].append(other._data[c][j])\n            elif how == \"left\":\n                for c in my_cols:\n                    new_data[c].append(self._data[c][i])\n                for c in other_cols:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    # ===== Concat =====\n    \n    @staticmethod\n    def concat(dfs):\n        \"\"\"Concatenate list of DataFrames vertically.\"\"\"\n        if not dfs: return DataFrame({})\n        new_data = {}\n        cols = dfs[0]._columns\n        for c in cols:\n            new_data[c] = []\n        for df in dfs:\n            for c in cols:\n                if c in df._data:\n                    new_data[c].extend(df._data[c])\n                else:\n                    new_data[c].extend([None] * df._nrows)\n        return DataFrame(new_data)\n    \n    # ===== Set/reset index =====\n    \n    def set_index(self, col):\n        \"\"\"Make a column the row index (for display only - we don't really track indices).\"\"\"\n        # Just move that column to first position\n        if col not in self._columns:\n            raise ValueError(\"Column not found: \" + col)\n        new_cols = [col] + [c for c in self._columns if c != col]\n        new_data = {}\n        for c in new_cols:\n            new_data[c] = self._data[c]\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def reset_index(self):\n        \"\"\"Add an index column.\"\"\"\n        new_data = {\"index\": list(range(self._nrows))}\n        for c in self._columns:\n            new_data[c] = self._data[c]\n        return DataFrame(new_data)\n    \n    # ===== Info =====\n    \n    def info(self):\n        \"\"\"Print summary.\"\"\"\n        print(\"DataFrame: \" + str(self._nrows) + \" rows x \" + str(len(self._columns)) + \" columns\")\n        print(\"Columns:\")\n        for c in self._columns:\n            non_null = 0\n            for v in self._data[c]:\n                if v is not None: non_null += 1\n            sample = self._data[c][0] if self._nrows > 0 else None\n            type_name = type(sample).__name__ if sample is not None else \"unknown\"\n            print(\"  \" + c + \" (\" + type_name + \"): \" + str(non_null) + \" non-null\")\n    \n    def __str__(self):\n        return self._render_text()\n    \n    def __repr__(self):\n        return self._render_text()\n    \n    def _render_text(self):\n        if not self._columns:\n            return \"Empty DataFrame\"\n        lines = []\n        header = \"__DATAFRAME__|\" + \"|\".join([str(c) for c in self._columns])\n        lines.append(header)\n        for i in range(self._nrows):\n            row_vals = []\n            for c in self._columns:\n                row_vals.append(str(self._data[c][i]))\n            lines.append(\"__DATAROW__|\" + \"|\".join(row_vals))\n        lines.append(\"__DATAFRAME_END__\")\n        return \"\\n\".join(lines)\n\n\nclass GroupBy:\n    \"\"\"Result of df.groupby(col). Supports .mean(), .sum(), .count(), .agg().\"\"\"\n    def __init__(self, df, by):\n        self._df = df\n        self._by = by\n        # Build groups\n        self._groups = {}\n        col_data = df._data[by]\n        for i in range(df._nrows):\n            key = col_data[i]\n            if key not in self._groups:\n                self._groups[key] = []\n            self._groups[key].append(i)\n    \n    def _agg(self, fn):\n        \"\"\"Apply agg function per group, return DataFrame.\"\"\"\n        other_cols = [c for c in self._df._columns if c != self._by]\n        new_data = {self._by: []}\n        for c in other_cols:\n            new_data[c] = []\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            for c in other_cols:\n                vals = []\n                for i in indices:\n                    v = self._df._data[c][i]\n                    if isinstance(v, (int, float)) and not isinstance(v, bool):\n                        vals.append(v)\n                if vals:\n                    new_data[c].append(fn(vals))\n                else:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    def mean(self):\n        return self._agg(lambda v: round(sum(v)/len(v), 2))\n    \n    def sum(self):\n        return self._agg(sum)\n    \n    def max(self):\n        return self._agg(max)\n    \n    def min(self):\n        return self._agg(min)\n    \n    def count(self):\n        \"\"\"Count rows per group.\"\"\"\n        new_data = {self._by: [], \"count\": []}\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            new_data[\"count\"].append(len(indices))\n        return DataFrame(new_data)\n    \n    def size(self):\n        \"\"\"Same as count - rows per group.\"\"\"\n        return self.count()\n\n\nclass Series:\n    \"\"\"A column from a DataFrame.\"\"\"\n    def __init__(self, data, name=None):\n        self._data = list(data)\n        self.name = name\n    \n    def __len__(self):\n        return len(self._data)\n    \n    def __getitem__(self, i):\n        return self._data[i]\n    \n    def __iter__(self):\n        return iter(self._data)\n    \n    def gt(self, other): return [v > other for v in self._data if v is not None] if False else [v > other if v is not None else False for v in self._data]\n    def lt(self, other): return [v < other if v is not None else False for v in self._data]\n    def ge(self, other): return [v >= other if v is not None else False for v in self._data]\n    def le(self, other): return [v <= other if v is not None else False for v in self._data]\n    def eq(self, other): return [v == other for v in self._data]\n    \n    def mean(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        if nums: return sum(nums) / len(nums)\n        return 0\n    \n    def sum(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        return sum(nums)\n    \n    def max(self):\n        vals = [v for v in self._data if v is not None]\n        return max(vals) if vals else None\n    \n    def min(self):\n        vals = [v for v in self._data if v is not None]\n        return min(vals) if vals else None\n    \n    def unique(self):\n        seen = []\n        for v in self._data:\n            if v not in seen:\n                seen.append(v)\n        return seen\n    \n    def nunique(self):\n        return len(self.unique())\n    \n    def count(self):\n        cnt = 0\n        for v in self._data:\n            if v is not None: cnt += 1\n        return cnt\n    \n    def value_counts(self):\n        counts = {}\n        for v in self._data:\n            if v in counts: counts[v] += 1\n            else: counts[v] = 1\n        # Sort by count descending\n        items = list(counts.items())\n        items.sort(key=lambda x: -x[1])\n        result = {}\n        for k, v in items:\n            result[k] = v\n        return result\n    \n    def isna(self):\n        return [v is None for v in self._data]\n    \n    def fillna(self, value):\n        return Series([value if v is None else v for v in self._data], name=self.name)\n    \n    def apply(self, fn):\n        return Series([fn(v) for v in self._data], name=self.name)\n    \n    def map(self, mapping):\n        \"\"\"Map values via dict or function.\"\"\"\n        if isinstance(mapping, dict):\n            return Series([mapping.get(v, v) for v in self._data], name=self.name)\n        return Series([mapping(v) for v in self._data], name=self.name)\n    \n    def round(self, n=0):\n        return Series([round(v, n) if isinstance(v, (int, float)) else v for v in self._data], name=self.name)\n    \n    def cumsum(self):\n        result = []\n        total = 0\n        for v in self._data:\n            if isinstance(v, (int, float)):\n                total += v\n            result.append(total)\n        return Series(result, name=self.name)\n    \n    def pct_change(self):\n        result = [None]\n        for i in range(1, len(self._data)):\n            prev = self._data[i-1]\n            curr = self._data[i]\n            if prev and isinstance(prev, (int, float)) and isinstance(curr, (int, float)):\n                result.append((curr - prev) / prev)\n            else:\n                result.append(None)\n        return Series(result, name=self.name)\n    \n    def __str__(self):\n        return str(self._data)\n    \n    def __repr__(self):\n        return \"Series(\" + str(self._data) + \")\"\n\n\n# =============================================================\n# DATASETS - Israeli context for learning\n# =============================================================\n\n_DATASETS = {\n    \"cities-weather\": {\n        \"name\": \"מזג אוויר בערים בישראל\",\n        \"desc\": \"טמפרטורות ולחות\",\n        \"data\": {\n            \"city\": [\"תל אביב\", \"ירושלים\", \"חיפה\", \"באר שבע\", \"אילת\", \"צפת\"],\n            \"temp\": [24, 19, 23, 27, 31, 17],\n            \"humidity\": [68, 50, 72, 40, 55, 45],\n            \"rain_mm\": [0, 2, 0, 0, 0, 5]\n        }\n    },\n    \"real-estate\": {\n        \"name\": \"מחירי דירות בתל אביב\",\n        \"desc\": \"8 דירות\",\n        \"data\": {\n            \"neighborhood\": [\"פלורנטין\", \"רוטשילד\", \"נווה צדק\", \"יפו\", \"רמת אביב\", \"בבלי\", \"קרית שלום\", \"הצפון הישן\"],\n            \"rooms\": [3, 4, 4, 3, 5, 4, 3, 4],\n            \"sqm\": [75, 95, 110, 70, 130, 100, 65, 90],\n            \"price_m\": [3.2, 5.1, 6.8, 2.9, 4.5, 4.1, 1.9, 4.7]\n        }\n    },\n    \"football\": {\n        \"name\": \"ליגת העל - 5 קבוצות\",\n        \"desc\": \"סטטיסטיקה\",\n        \"data\": {\n            \"team\": [\"מכבי תל אביב\", \"הפועל ב-ש\", \"מכבי חיפה\", \"הפועל ת-א\", \"ביתר\"],\n            \"points\": [55, 52, 48, 42, 38],\n            \"wins\": [17, 16, 14, 12, 10],\n            \"draws\": [4, 4, 6, 6, 8],\n            \"losses\": [3, 4, 4, 6, 6],\n            \"goals_for\": [54, 49, 41, 38, 32],\n            \"goals_against\": [21, 22, 25, 30, 33]\n        }\n    },\n    \"students\": {\n        \"name\": \"ציוני סטודנטים\",\n        \"desc\": \"ציונים ב-3 מקצועות\",\n        \"data\": {\n            \"name\": [\"גל\", \"תומר\", \"יעל\", \"נועה\", \"אביב\", \"מאיה\", \"דניאל\", \"שירה\", \"איתי\", \"רוני\"],\n            \"math\": [88, 76, 92, 84, 70, 95, 81, 89, 73, 86],\n            \"english\": [78, 85, 88, 90, 72, 84, 79, 91, 68, 82],\n            \"history\": [85, 80, 90, 86, 76, 88, 84, 92, 70, 87]\n        }\n    },\n    \"sales\": {\n        \"name\": \"מכירות חודשיות\",\n        \"desc\": \"מחזור בחנות\",\n        \"data\": {\n            \"month\": [\"ינואר\", \"פברואר\", \"מרץ\", \"אפריל\", \"מאי\", \"יוני\", \"יולי\", \"אוגוסט\", \"ספטמבר\", \"אוקטובר\", \"נובמבר\", \"דצמבר\"],\n            \"revenue\": [45000, 38000, 52000, 49000, 61000, 72000, 68000, 71000, 58000, 53000, 64000, 89000],\n            \"units\": [120, 95, 140, 130, 165, 195, 180, 192, 155, 140, 170, 240]\n        }\n    },\n    \"covid-israel\": {\n        \"name\": \"נתוני קורונה ישראל\",\n        \"desc\": \"מקרים בחודש\",\n        \"data\": {\n            \"date\": [\"01/01\", \"08/01\", \"15/01\", \"22/01\", \"29/01\", \"05/02\", \"12/02\", \"19/02\"],\n            \"positive\": [3200, 4500, 6100, 8200, 7800, 5300, 3900, 2400],\n            \"tested\": [45000, 52000, 60000, 67000, 65000, 50000, 41000, 35000],\n            \"hospitalized\": [180, 230, 320, 410, 380, 290, 220, 160]\n        }\n    },\n    \"eurovision\": {\n        \"name\": \"אירוויזיון - ישראל\",\n        \"desc\": \"תוצאות\",\n        \"data\": {\n            \"year\": [2018, 2019, 2021, 2022, 2023, 2024],\n            \"place\": [1, 23, 17, 13, 3, 5],\n            \"points\": [529, 35, 93, 61, 362, 375],\n            \"song\": [\"Toy\", \"Home\", \"Set Me Free\", \"I.M\", \"Unicorn\", \"Hurricane\"]\n        }\n    },\n    \"telecom-churn\": {\n        \"name\": \"נטישת לקוחות טלקום\",\n        \"desc\": \"15 לקוחות עם נתוני נטישה\",\n        \"data\": {\n            \"customer_id\": [101,102,103,104,105,106,107,108,109,110,111,112,113,114,115],\n            \"age\": [25, 45, 32, 58, 29, 41, 36, 52, 27, 48, 33, 60, 30, 44, 38],\n            \"monthly_bill\": [45.5, 120.0, 80.3, 150.0, 35.0, 95.0, 70.5, 130.0, 50.0, 110.0, 65.0, 140.0, 55.0, 100.0, 75.0],\n            \"tenure_months\": [12, 60, 24, 84, 6, 36, 18, 72, 8, 48, 30, 96, 14, 42, 22],\n            \"churn\": [0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0],\n            \"plan\": [\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\"]\n        }\n    },\n    \"salaries\": {\n        \"name\": \"משכורות לפי מחלקה\",\n        \"desc\": \"12 עובדים\",\n        \"data\": {\n            \"name\": [\"אבי\",\"בני\",\"גלית\",\"דנה\",\"הילה\",\"ויקטור\",\"זוהר\",\"חני\",\"טל\",\"יוסי\",\"כרמל\",\"ליאת\"],\n            \"department\": [\"Sales\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"R&D\",\"Marketing\",\"Sales\"],\n            \"salary\": [15000, 22000, 18000, 13000, 25000, 16000, 14000, 28000, 17000, 23000, 12000, 19000],\n            \"years\": [2, 5, 3, 1, 7, 4, 2, 8, 3, 6, 1, 4]\n        }\n    }\n}\n\n\nclass _Datasets:\n    \"\"\"Pre-loaded datasets. Usage: df = data.load('cities-weather')\"\"\"\n    \n    def list(self):\n        \"\"\"List all available datasets.\"\"\"\n        for key in _DATASETS:\n            info = _DATASETS[key]\n            print(\"  \" + key + \": \" + info[\"name\"] + \" - \" + info[\"desc\"])\n    \n    def load(self, name):\n        \"\"\"Load a dataset as a DataFrame.\"\"\"\n        if name not in _DATASETS:\n            keys = list(_DATASETS.keys())\n            raise ValueError(\"Dataset not found: \" + name)\n        return DataFrame(_DATASETS[name][\"data\"])\n    \n    def info(self, name):\n        \"\"\"Show info about a dataset.\"\"\"\n        if name not in _DATASETS:\n            print(\"Dataset not found: \" + name)\n            return\n        info = _DATASETS[name]\n        print(\"DATASET: \" + info[\"name\"])\n        print(\"  \" + info[\"desc\"])\n        df = DataFrame(info[\"data\"])\n        print(\"  shape: \" + str(df.shape[0]) + \" rows x \" + str(df.shape[1]) + \" cols\")\n\n\ndata = _Datasets()\n";</script>
+<script>window.PYTHON_PRELUDE = "# =============================================================\n# MINI-PANDAS v2 - Extended DataFrame API for Skulpt\n# Auto-injected into Playground + pandas course\n# =============================================================\n\nclass DataFrame:\n    \"\"\"Minimal DataFrame implementation with ~95% of pandas common ops.\"\"\"\n    \n    def __init__(self, data):\n        if isinstance(data, list):\n            if len(data) == 0:\n                self._data = {}\n                self._columns = []\n            else:\n                self._columns = list(data[0].keys())\n                self._data = {}\n                for col in self._columns:\n                    self._data[col] = [row.get(col) for row in data]\n        else:\n            self._data = dict(data)\n            self._columns = list(self._data.keys())\n        if self._data:\n            first_col = self._columns[0]\n            self._nrows = len(self._data[first_col])\n        else:\n            self._nrows = 0\n    \n    @property\n    def shape(self):\n        return (self._nrows, len(self._columns))\n    \n    @property\n    def columns(self):\n        return list(self._columns)\n    \n    @property\n    def values(self):\n        \"\"\"Return list of rows (each row is a list of values).\"\"\"\n        result = []\n        for i in range(self._nrows):\n            row = []\n            for c in self._columns:\n                row.append(self._data[c][i])\n            result.append(row)\n        return result\n    \n    def head(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][:n]\n        return DataFrame(new_data)\n    \n    def tail(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][-n:]\n        return DataFrame(new_data)\n    \n    def __len__(self):\n        return self._nrows\n    \n    def __getitem__(self, key):\n        if isinstance(key, str):\n            return Series(self._data[key], name=key)\n        if isinstance(key, list):\n            # Boolean mask?\n            if len(key) == self._nrows and len(key) > 0 and isinstance(key[0], bool):\n                new_data = {}\n                for c in self._columns:\n                    new_data[c] = []\n                    for i in range(self._nrows):\n                        if key[i]:\n                            new_data[c].append(self._data[c][i])\n                return DataFrame(new_data)\n            # Column selection\n            new_data = {}\n            for c in key:\n                if c in self._data:\n                    new_data[c] = self._data[c]\n            return DataFrame(new_data)\n        raise TypeError(\"Invalid key type\")\n    \n    def __setitem__(self, key, value):\n        if isinstance(value, Series):\n            value = value._data\n        if isinstance(value, list):\n            if len(value) != self._nrows:\n                raise ValueError(\"Length mismatch\")\n            self._data[key] = list(value)\n        else:\n            self._data[key] = [value] * self._nrows\n        if key not in self._columns:\n            self._columns.append(key)\n    \n    def sort_values(self, by, ascending=True):\n        col_data = self._data[by]\n        indices = list(range(self._nrows))\n        # Handle None values - put at end\n        def sort_key(i):\n            v = col_data[i]\n            if v is None:\n                return (1, 0) if ascending else (0, 0)\n            return (0, v)\n        indices.sort(key=sort_key, reverse=not ascending)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in indices]\n        return DataFrame(new_data)\n    \n    def filter(self, col, op, value):\n        \"\"\"SQL-like filter: df.filter('age', '>', 18)\"\"\"\n        mask = []\n        col_data = self._data[col]\n        for v in col_data:\n            if v is None:\n                mask.append(False); continue\n            if op == \">\": mask.append(v > value)\n            elif op == \"<\": mask.append(v < value)\n            elif op == \">=\": mask.append(v >= value)\n            elif op == \"<=\": mask.append(v <= value)\n            elif op == \"==\": mask.append(v == value)\n            elif op == \"!=\": mask.append(v != value)\n            elif op == \"in\":\n                if isinstance(value, list): mask.append(v in value)\n                else: mask.append(False)\n            else:\n                raise ValueError(\"Unknown operator: \" + op)\n        return self[mask]\n    \n    def where(self, fn):\n        \"\"\"Filter rows: df.where(lambda row: row['age'] > 18)\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = []\n        for i in range(self._nrows):\n            row = {}\n            for c in self._columns:\n                row[c] = self._data[c][i]\n            if fn(row):\n                for c in self._columns:\n                    new_data[c].append(self._data[c][i])\n        return DataFrame(new_data)\n    \n    def apply(self, fn, axis=0):\n        \"\"\"Apply function. axis=0: per column. axis=1: per row.\"\"\"\n        if axis == 1:\n            # Per row - returns Series\n            result = []\n            for i in range(self._nrows):\n                row = {}\n                for c in self._columns:\n                    row[c] = self._data[c][i]\n                result.append(fn(row))\n            return Series(result)\n        # Per column\n        result = {}\n        for c in self._columns:\n            result[c] = fn(self._data[c])\n        return result\n    \n    def mean(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals) / len(vals)\n        return result\n    \n    def sum(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals)\n        return result\n    \n    def min(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = min(vals)\n        return result\n    \n    def max(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = max(vals)\n        return result\n    \n    def count(self):\n        \"\"\"Count non-null per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            cnt = 0\n            for v in self._data[c]:\n                if v is not None:\n                    cnt += 1\n            result[c] = cnt\n        return result\n    \n    def describe(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = {\n                    \"count\": len(vals),\n                    \"mean\": round(sum(vals)/len(vals), 2),\n                    \"min\": min(vals),\n                    \"max\": max(vals)\n                }\n        return result\n    \n    def to_dict(self):\n        return dict(self._data)\n    \n    # ===== Data cleaning =====\n    \n    def drop(self, columns=None, index=None):\n        \"\"\"Drop columns or rows.\"\"\"\n        if columns is not None:\n            cols_to_drop = columns if isinstance(columns, list) else [columns]\n            new_data = {}\n            new_cols = []\n            for c in self._columns:\n                if c not in cols_to_drop:\n                    new_data[c] = self._data[c]\n                    new_cols.append(c)\n            result = DataFrame(new_data)\n            result._columns = new_cols\n            return result\n        if index is not None:\n            indices = index if isinstance(index, list) else [index]\n            new_data = {}\n            for c in self._columns:\n                new_data[c] = []\n                for i in range(self._nrows):\n                    if i not in indices:\n                        new_data[c].append(self._data[c][i])\n            return DataFrame(new_data)\n        return DataFrame(self._data)\n    \n    def drop_duplicates(self):\n        \"\"\"Remove duplicate rows.\"\"\"\n        seen = []\n        keep_indices = []\n        for i in range(self._nrows):\n            row_tuple = tuple(self._data[c][i] for c in self._columns)\n            if row_tuple not in seen:\n                seen.append(row_tuple)\n                keep_indices.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep_indices]\n        return DataFrame(new_data)\n    \n    def isna(self):\n        \"\"\"Return df of booleans where values are None.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [v is None for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def fillna(self, value):\n        \"\"\"Replace None values.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [value if v is None else v for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def dropna(self):\n        \"\"\"Drop rows with any None.\"\"\"\n        keep = []\n        for i in range(self._nrows):\n            has_none = False\n            for c in self._columns:\n                if self._data[c][i] is None:\n                    has_none = True; break\n            if not has_none:\n                keep.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep]\n        return DataFrame(new_data)\n    \n    def rename(self, columns):\n        \"\"\"Rename columns: df.rename({'old':'new'})\"\"\"\n        new_data = {}\n        new_cols = []\n        for c in self._columns:\n            new_name = columns.get(c, c)\n            new_data[new_name] = self._data[c]\n            new_cols.append(new_name)\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def astype(self, col, dtype):\n        \"\"\"Convert column to type. dtype: int, float, str.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None)\n            elif dtype == int or dtype == \"int\":\n                new_vals.append(int(v))\n            elif dtype == float or dtype == \"float\":\n                new_vals.append(float(v))\n            elif dtype == str or dtype == \"str\":\n                new_vals.append(str(v))\n            else:\n                new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def clip(self, col, lower=None, upper=None):\n        \"\"\"Clip values in column to range.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None); continue\n            if lower is not None and v < lower: v = lower\n            if upper is not None and v > upper: v = upper\n            new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def nunique(self):\n        \"\"\"Count unique values per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            seen = []\n            for v in self._data[c]:\n                if v not in seen:\n                    seen.append(v)\n            result[c] = len(seen)\n        return result\n    \n    # ===== Grouping / aggregation =====\n    \n    def groupby(self, by):\n        \"\"\"Group by column.\"\"\"\n        return GroupBy(self, by)\n    \n    # ===== Merging =====\n    \n    def merge(self, other, on, how=\"inner\"):\n        \"\"\"Merge two DataFrames on a key column. how: 'inner' or 'left'.\"\"\"\n        # Build index for other df\n        other_index = {}\n        for i in range(other._nrows):\n            k = other._data[on][i]\n            if k not in other_index:\n                other_index[k] = []\n            other_index[k].append(i)\n        \n        # New columns: my cols + other cols (without duplicate 'on')\n        my_cols = list(self._columns)\n        other_cols = [c for c in other._columns if c != on]\n        new_data = {}\n        for c in my_cols:\n            new_data[c] = []\n        for c in other_cols:\n            new_data[c] = []\n        \n        for i in range(self._nrows):\n            key = self._data[on][i]\n            if key in other_index:\n                for j in other_index[key]:\n                    for c in my_cols:\n                        new_data[c].append(self._data[c][i])\n                    for c in other_cols:\n                        new_data[c].append(other._data[c][j])\n            elif how == \"left\":\n                for c in my_cols:\n                    new_data[c].append(self._data[c][i])\n                for c in other_cols:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    # ===== Concat =====\n    \n    @staticmethod\n    def concat(dfs):\n        \"\"\"Concatenate list of DataFrames vertically.\"\"\"\n        if not dfs: return DataFrame({})\n        new_data = {}\n        cols = dfs[0]._columns\n        for c in cols:\n            new_data[c] = []\n        for df in dfs:\n            for c in cols:\n                if c in df._data:\n                    new_data[c].extend(df._data[c])\n                else:\n                    new_data[c].extend([None] * df._nrows)\n        return DataFrame(new_data)\n    \n    # ===== Set/reset index =====\n    \n    def set_index(self, col):\n        \"\"\"Make a column the row index (for display only - we don't really track indices).\"\"\"\n        # Just move that column to first position\n        if col not in self._columns:\n            raise ValueError(\"Column not found: \" + col)\n        new_cols = [col] + [c for c in self._columns if c != col]\n        new_data = {}\n        for c in new_cols:\n            new_data[c] = self._data[c]\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def reset_index(self):\n        \"\"\"Add an index column.\"\"\"\n        new_data = {\"index\": list(range(self._nrows))}\n        for c in self._columns:\n            new_data[c] = self._data[c]\n        return DataFrame(new_data)\n    \n    # ===== Info =====\n    \n    def info(self):\n        \"\"\"Print summary.\"\"\"\n        print(\"DataFrame: \" + str(self._nrows) + \" rows x \" + str(len(self._columns)) + \" columns\")\n        print(\"Columns:\")\n        for c in self._columns:\n            non_null = 0\n            for v in self._data[c]:\n                if v is not None: non_null += 1\n            sample = self._data[c][0] if self._nrows > 0 else None\n            type_name = type(sample).__name__ if sample is not None else \"unknown\"\n            print(\"  \" + c + \" (\" + type_name + \"): \" + str(non_null) + \" non-null\")\n    \n    def __str__(self):\n        return self._render_text()\n    \n    def __repr__(self):\n        return self._render_text()\n    \n    def _render_text(self):\n        if not self._columns:\n            return \"Empty DataFrame\"\n        lines = []\n        header = \"__DATAFRAME__|\" + \"|\".join([str(c) for c in self._columns])\n        lines.append(header)\n        for i in range(self._nrows):\n            row_vals = []\n            for c in self._columns:\n                row_vals.append(str(self._data[c][i]))\n            lines.append(\"__DATAROW__|\" + \"|\".join(row_vals))\n        lines.append(\"__DATAFRAME_END__\")\n        return \"\\n\".join(lines)\n\n\nclass GroupBy:\n    \"\"\"Result of df.groupby(col). Supports .mean(), .sum(), .count(), .agg().\"\"\"\n    def __init__(self, df, by):\n        self._df = df\n        self._by = by\n        # Build groups\n        self._groups = {}\n        col_data = df._data[by]\n        for i in range(df._nrows):\n            key = col_data[i]\n            if key not in self._groups:\n                self._groups[key] = []\n            self._groups[key].append(i)\n    \n    def _agg(self, fn):\n        \"\"\"Apply agg function per group, return DataFrame.\"\"\"\n        other_cols = [c for c in self._df._columns if c != self._by]\n        new_data = {self._by: []}\n        for c in other_cols:\n            new_data[c] = []\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            for c in other_cols:\n                vals = []\n                for i in indices:\n                    v = self._df._data[c][i]\n                    if isinstance(v, (int, float)) and not isinstance(v, bool):\n                        vals.append(v)\n                if vals:\n                    new_data[c].append(fn(vals))\n                else:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    def mean(self):\n        return self._agg(lambda v: round(sum(v)/len(v), 2))\n    \n    def sum(self):\n        return self._agg(sum)\n    \n    def max(self):\n        return self._agg(max)\n    \n    def min(self):\n        return self._agg(min)\n    \n    def count(self):\n        \"\"\"Count rows per group.\"\"\"\n        new_data = {self._by: [], \"count\": []}\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            new_data[\"count\"].append(len(indices))\n        return DataFrame(new_data)\n    \n    def size(self):\n        \"\"\"Same as count - rows per group.\"\"\"\n        return self.count()\n\n\nclass Series:\n    \"\"\"A column from a DataFrame.\"\"\"\n    def __init__(self, data, name=None):\n        self._data = list(data)\n        self.name = name\n    \n    def __len__(self):\n        return len(self._data)\n    \n    def __getitem__(self, i):\n        return self._data[i]\n    \n    def __iter__(self):\n        return iter(self._data)\n    \n    def gt(self, other): return [v > other for v in self._data if v is not None] if False else [v > other if v is not None else False for v in self._data]\n    def lt(self, other): return [v < other if v is not None else False for v in self._data]\n    def ge(self, other): return [v >= other if v is not None else False for v in self._data]\n    def le(self, other): return [v <= other if v is not None else False for v in self._data]\n    def eq(self, other): return [v == other for v in self._data]\n    \n    def mean(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        if nums: return sum(nums) / len(nums)\n        return 0\n    \n    def sum(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        return sum(nums)\n    \n    def max(self):\n        vals = [v for v in self._data if v is not None]\n        return max(vals) if vals else None\n    \n    def min(self):\n        vals = [v for v in self._data if v is not None]\n        return min(vals) if vals else None\n    \n    def unique(self):\n        seen = []\n        for v in self._data:\n            if v not in seen:\n                seen.append(v)\n        return seen\n    \n    def nunique(self):\n        return len(self.unique())\n    \n    def count(self):\n        cnt = 0\n        for v in self._data:\n            if v is not None: cnt += 1\n        return cnt\n    \n    def value_counts(self):\n        counts = {}\n        for v in self._data:\n            if v in counts: counts[v] += 1\n            else: counts[v] = 1\n        # Sort by count descending\n        items = list(counts.items())\n        items.sort(key=lambda x: -x[1])\n        result = {}\n        for k, v in items:\n            result[k] = v\n        return result\n    \n    def isna(self):\n        return [v is None for v in self._data]\n    \n    def fillna(self, value):\n        return Series([value if v is None else v for v in self._data], name=self.name)\n    \n    def apply(self, fn):\n        return Series([fn(v) for v in self._data], name=self.name)\n    \n    def map(self, mapping):\n        \"\"\"Map values via dict or function.\"\"\"\n        if isinstance(mapping, dict):\n            return Series([mapping.get(v, v) for v in self._data], name=self.name)\n        return Series([mapping(v) for v in self._data], name=self.name)\n    \n    def round(self, n=0):\n        return Series([round(v, n) if isinstance(v, (int, float)) else v for v in self._data], name=self.name)\n    \n    def cumsum(self):\n        result = []\n        total = 0\n        for v in self._data:\n            if isinstance(v, (int, float)):\n                total += v\n            result.append(total)\n        return Series(result, name=self.name)\n    \n    def pct_change(self):\n        result = [None]\n        for i in range(1, len(self._data)):\n            prev = self._data[i-1]\n            curr = self._data[i]\n            if prev and isinstance(prev, (int, float)) and isinstance(curr, (int, float)):\n                result.append((curr - prev) / prev)\n            else:\n                result.append(None)\n        return Series(result, name=self.name)\n    \n    def __str__(self):\n        return str(self._data)\n    \n    def __repr__(self):\n        return \"Series(\" + str(self._data) + \")\"\n\n\n# =============================================================\n# DATASETS - Israeli context for learning\n# =============================================================\n\n_DATASETS = {\n    \"cities-weather\": {\n        \"name\": \"Weather in Israeli cities\",\n        \"desc\": \"temperatures and humidity\",\n        \"data\": {\n            \"city\": [\"Tel Aviv\", \"Jerusalem\", \"Haifa\", \"Beer Sheva\", \"Eilat\", \"Safed\"],\n            \"temp\": [24, 19, 23, 27, 31, 17],\n            \"humidity\": [68, 50, 72, 40, 55, 45],\n            \"rain_mm\": [0, 2, 0, 0, 0, 5]\n        }\n    },\n    \"real-estate\": {\n        \"name\": \"Apartment prices in Tel Aviv\",\n        \"desc\": \"8 apartments\",\n        \"data\": {\n            \"neighborhood\": [\"Florentin\", \"Rothschild\", \"Neve Tzedek\", \"Jaffa\", \"Ramat Aviv\", \"Bavli\", \"Kiryat Shalom\", \"Old North\"],\n            \"rooms\": [3, 4, 4, 3, 5, 4, 3, 4],\n            \"sqm\": [75, 95, 110, 70, 130, 100, 65, 90],\n            \"price_m\": [3.2, 5.1, 6.8, 2.9, 4.5, 4.1, 1.9, 4.7]\n        }\n    },\n    \"football\": {\n        \"name\": \"Premier League - 5 teams\",\n        \"desc\": \"Statistics\",\n        \"data\": {\n            \"team\": [\"Maccabi Tel Aviv\", \"Hapoel Beer Sheva\", \"Maccabi Haifa\", \"Hapoel Tel Aviv\", \"Beitar\"],\n            \"points\": [55, 52, 48, 42, 38],\n            \"wins\": [17, 16, 14, 12, 10],\n            \"draws\": [4, 4, 6, 6, 8],\n            \"losses\": [3, 4, 4, 6, 6],\n            \"goals_for\": [54, 49, 41, 38, 32],\n            \"goals_against\": [21, 22, 25, 30, 33]\n        }\n    },\n    \"students\": {\n        \"name\": \"student grades\",\n        \"desc\": \"Grades in 3 subjects\",\n        \"data\": {\n            \"name\": [\"Gal\", \"Tomer\", \"Yael\", \"Noa\", \"Aviv\", \"Maya\", \"Daniel\", \"Shira\", \"Itay\", \"Roni\"],\n            \"math\": [88, 76, 92, 84, 70, 95, 81, 89, 73, 86],\n            \"english\": [78, 85, 88, 90, 72, 84, 79, 91, 68, 82],\n            \"history\": [85, 80, 90, 86, 76, 88, 84, 92, 70, 87]\n        }\n    },\n    \"sales\": {\n        \"name\": \"monthly sales\",\n        \"desc\": \"Store turnover\",\n        \"data\": {\n            \"month\": [\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"],\n            \"revenue\": [45000, 38000, 52000, 49000, 61000, 72000, 68000, 71000, 58000, 53000, 64000, 89000],\n            \"units\": [120, 95, 140, 130, 165, 195, 180, 192, 155, 140, 170, 240]\n        }\n    },\n    \"covid-israel\": {\n        \"name\": \"Israel COVID data\",\n        \"desc\": \"Cases per month\",\n        \"data\": {\n            \"date\": [\"01/01\", \"08/01\", \"15/01\", \"22/01\", \"29/01\", \"05/02\", \"12/02\", \"19/02\"],\n            \"positive\": [3200, 4500, 6100, 8200, 7800, 5300, 3900, 2400],\n            \"tested\": [45000, 52000, 60000, 67000, 65000, 50000, 41000, 35000],\n            \"hospitalized\": [180, 230, 320, 410, 380, 290, 220, 160]\n        }\n    },\n    \"eurovision\": {\n        \"name\": \"Eurovision - Israel\",\n        \"desc\": \"results\",\n        \"data\": {\n            \"year\": [2018, 2019, 2021, 2022, 2023, 2024],\n            \"place\": [1, 23, 17, 13, 3, 5],\n            \"points\": [529, 35, 93, 61, 362, 375],\n            \"song\": [\"Toy\", \"Home\", \"Set Me Free\", \"I.M\", \"Unicorn\", \"Hurricane\"]\n        }\n    },\n    \"telecom-churn\": {\n        \"name\": \"Telecom customer churn\",\n        \"desc\": \"15 customers with churn data\",\n        \"data\": {\n            \"customer_id\": [101,102,103,104,105,106,107,108,109,110,111,112,113,114,115],\n            \"age\": [25, 45, 32, 58, 29, 41, 36, 52, 27, 48, 33, 60, 30, 44, 38],\n            \"monthly_bill\": [45.5, 120.0, 80.3, 150.0, 35.0, 95.0, 70.5, 130.0, 50.0, 110.0, 65.0, 140.0, 55.0, 100.0, 75.0],\n            \"tenure_months\": [12, 60, 24, 84, 6, 36, 18, 72, 8, 48, 30, 96, 14, 42, 22],\n            \"churn\": [0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0],\n            \"plan\": [\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\"]\n        }\n    },\n    \"salaries\": {\n        \"name\": \"Salaries by department\",\n        \"desc\": \"12 employees\",\n        \"data\": {\n            \"name\": [\"Avi\",\"Beni\",\"Galit\",\"Dana\",\"Hila\",\"Victor\",\"Zohar\",\"Chani\",\"Tal\",\"Yossi\",\"Carmel\",\"Liat\"],\n            \"department\": [\"Sales\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"R&D\",\"Marketing\",\"Sales\"],\n            \"salary\": [15000, 22000, 18000, 13000, 25000, 16000, 14000, 28000, 17000, 23000, 12000, 19000],\n            \"years\": [2, 5, 3, 1, 7, 4, 2, 8, 3, 6, 1, 4]\n        }\n    }\n}\n\n\nclass _Datasets:\n    \"\"\"Pre-loaded datasets. Usage: df = data.load('cities-weather')\"\"\"\n    \n    def list(self):\n        \"\"\"List all available datasets.\"\"\"\n        for key in _DATASETS:\n            info = _DATASETS[key]\n            print(\"  \" + key + \": \" + info[\"name\"] + \" - \" + info[\"desc\"])\n    \n    def load(self, name):\n        \"\"\"Load a dataset as a DataFrame.\"\"\"\n        if name not in _DATASETS:\n            keys = list(_DATASETS.keys())\n            raise ValueError(\"Dataset not found: \" + name)\n        return DataFrame(_DATASETS[name][\"data\"])\n    \n    def info(self, name):\n        \"\"\"Show info about a dataset.\"\"\"\n        if name not in _DATASETS:\n            print(\"Dataset not found: \" + name)\n            return\n        info = _DATASETS[name]\n        print(\"DATASET: \" + info[\"name\"])\n        print(\"  \" + info[\"desc\"])\n        df = DataFrame(info[\"data\"])\n        print(\"  shape: \" + str(df.shape[0]) + \" rows x \" + str(df.shape[1]) + \" cols\")\n\n\ndata = _Datasets()\n";</script>
 
 <style>
   :root {
@@ -42,7 +42,7 @@
     font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
-    direction: ltr;
+    direction:ltr;
     line-height: 1.5;
   padding-bottom: 80px; /* leave space for HUD */
   }
@@ -445,12 +445,12 @@
 
 <div class="topbar">
   <a href="index.html" class="home-btn">🏠 Home</a>
-  <a href="../projects.html" class="back-btn">עברית ←</a>
+  <a href="../projects.html" class="back-btn">עברית →</a>
 </div>
 
 <div class="hero">
-  <h1>🚀 Guided Projects</h1>
-  <p>5 realistic projects from Partner to the Ministry of Health. Each project = 5-7 steps that take you from initial analysis to business insight.</p>
+  <h1>🚀 Guided projects</h1>
+  <p>5 realistic projects, from Partner to the Ministry of Health. Each project = 5-7 stages that walk you from the start of the analysis to the business insight.</p>
 </div>
 
 <div class="container">
@@ -464,7 +464,7 @@
 
   <!-- Project detail (hidden by default) -->
   <div id="project-detail" class="project-detail">
-    <button class="project-back" id="back-btn">← Back to list</button>
+    <button class="project-back" id="back-btn">← Back to the list</button>
     
     <div id="project-detail-content">
       <!-- Detail rendered by JS -->
@@ -479,28 +479,28 @@
 
   const IS_RTL = document.documentElement.dir === 'rtl';
   const T = IS_RTL ? {
-    difficulty: 'רמה',
-    duration: 'משך',
-    completed: '✅ הושלם',
-    inProgress: '⏳ בתהליך',
-    dataset: 'דאטהסט',
-    step: 'שלב',
-    of: 'מתוך',
-    run: '▶ הרץ',
-    showSolution: '💡 הצג פתרון',
-    hideSolution: 'הסתר פתרון',
-    hint: '💡 רמז',
-    copy: '📋 העתק',
-    copied: '✅ הועתק!',
-    correct: '✅ מעולה! עבור לשלב הבא',
-    wrong: '🤔 הפלט לא תואם. נסה שוב.',
-    next: 'הבא ←',
-    prev: '→ הקודם',
-    restart: '🔄 התחל מחדש',
-    notStarted: 'עוד לא התחלת',
-    backToList: '← Back to list',
-    running: 'מריץ...',
-    skulptLoading: 'טוען Python...',
+    difficulty: 'level',
+    duration: 'duration',
+    completed: '✅ completed',
+    inProgress: '⏳ in progress',
+    dataset: 'dataset',
+    step: 'step',
+    of: 'out of',
+    run: '▶ Run',
+    showSolution: '💡 Show solution',
+    hideSolution: 'Hide solution',
+    hint: '💡 hint',
+    copy: '📋 copy',
+    copied: '✅ copied!',
+    correct: '✅ Great! Move to the next step',
+    wrong: '🤔 The output doesn\'t match. Try again.',
+    next: 'Next ←',
+    prev: '→ Previous',
+    restart: '🔄 Start over',
+    notStarted: 'You haven\'t started yet',
+    backToList: '← back to the list',
+    running: 'running...',
+    skulptLoading: 'Loading Python...',
   } : {
     difficulty: 'Level',
     duration: 'Time',
@@ -548,7 +548,7 @@
     
     // Award XP via gam system
     if (window.gam && window.gam.addXP) {
-      window.gam.addXP(15, IS_RTL ? 'שלב הושלם!' : 'Step completed!');
+      window.gam.addXP(15, IS_RTL ? 'Step completed!' : 'Step completed!');
     }
   }
   function getProjectStatus(projectId, totalSteps) {
@@ -665,11 +665,7 @@
     
     if (allDone) {
       html += `
-        <div class="conclusion-card">
-          <h2>🏆 ${IS_RTL ? 'סיימת את הפרויקט!' : 'You finished the project!'}</h2>
-          <p>${currentProject.conclusion}</p>
-          <button class="btn btn-primary" id="restart-btn">${T.restart}</button>
-        </div>
+        <div class="conclusion-card">\n          <h2>🏆 ${IS_RTL ? 'You finished the project!' : 'You finished the project!'}</h2>\n          <p>${currentProject.conclusion}</p>\n          <button class="btn btn-primary" id="restart-btn">${T.restart}</button>\n        </div>
       `;
     }
     
@@ -678,30 +674,7 @@
     const isDone = isStepDone(currentProject.id, currentStepIdx);
     
     html += `
-      <div class="step-card" id="current-step-card">
-        <h3>${T.step} ${currentStepIdx + 1}/${totalSteps} — ${step.title.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}]\s*/u, '')} ${isDone ? '✅' : ''}</h3>
-        <div class="step-narrative">${step.narrative}</div>
-        <div class="step-question">${step.q}</div>
-        <textarea class="code-editor" id="code-input" rows="8" spellcheck="false">${step.starter || ''}</textarea>
-        <div class="step-actions">
-          <button class="btn btn-primary" id="run-btn">${T.run}</button>
-          <button class="btn btn-secondary" id="show-sol-btn">${T.showSolution}</button>
-          <button class="btn btn-hint" id="hint-btn">${T.hint}</button>
-        </div>
-        <div class="output-box" id="output-box"></div>
-        <div class="verdict" id="verdict"></div>
-        <div class="solution-panel" id="solution-panel">
-          <div class="solution-header">
-            <span>💡 ${IS_RTL ? 'פתרון רשמי' : 'Official Solution'}</span>
-            <button class="copy-sol" id="copy-sol-btn">${T.copy}</button>
-          </div>
-          <pre id="solution-code"></pre>
-        </div>
-        <div class="step-nav">
-          <button class="btn btn-secondary" id="prev-btn" ${currentStepIdx === 0 ? 'style="opacity:0.4;pointer-events:none;"' : ''}>${T.prev}</button>
-          <button class="btn btn-primary" id="next-btn" ${currentStepIdx === totalSteps - 1 ? 'style="opacity:0.4;pointer-events:none;"' : ''}>${T.next}</button>
-        </div>
-      </div>
+      <div class="step-card" id="current-step-card">\n        <h3>${T.step} ${currentStepIdx + 1}/${totalSteps} — ${step.title.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}]\s*/u, '')} ${isDone ? '✅' : ''}</h3>\n        <div class="step-narrative">${step.narrative}</div>\n        <div class="step-question">${step.q}</div>\n        <textarea class="code-editor" id="code-input" rows="8" spellcheck="false">${step.starter || ''}</textarea>\n        <div class="step-actions">\n          <button class="btn btn-primary" id="run-btn">${T.run}</button>\n          <button class="btn btn-secondary" id="show-sol-btn">${T.showSolution}</button>\n          <button class="btn btn-hint" id="hint-btn">${T.hint}</button>\n        </div>\n        <div class="output-box" id="output-box"></div>\n        <div class="verdict" id="verdict"></div>\n        <div class="solution-panel" id="solution-panel">\n          <div class="solution-header">\n            <span>💡 ${IS_RTL ? 'Official Solution' : 'Official Solution'}</span>\n            <button class="copy-sol" id="copy-sol-btn">${T.copy}</button>\n          </div>\n          <pre id="solution-code"></pre>\n        </div>\n        <div class="step-nav">\n          <button class="btn btn-secondary" id="prev-btn" ${currentStepIdx === 0 ? 'style="opacity:0.4;pointer-events:none;"' : ''}>${T.prev}</button>\n          <button class="btn btn-primary" id="next-btn" ${currentStepIdx === totalSteps - 1 ? 'style="opacity:0.4;pointer-events:none;"' : ''}>${T.next}</button>\n        </div>\n      </div>
     `;
     
     document.getElementById('project-detail-content').innerHTML = html;
@@ -750,7 +723,7 @@
     });
     
     document.getElementById('hint-btn').addEventListener('click', () => {
-      alert('💡 ' + (step.hint || (IS_RTL ? 'נסה לקרוא את הסיפור שוב' : 'Try reading the narrative again')));
+      alert('💡 ' + (step.hint || (IS_RTL ? 'Try to read the story again' : 'Try reading the narrative again')));
     });
     
     document.getElementById('copy-sol-btn').addEventListener('click', () => {
@@ -811,7 +784,7 @@
     Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, fullCode, true))
       .then(() => {
         runBtn.disabled = false;
-        outBox.textContent = buffer || (IS_RTL ? '(אין פלט)' : '(no output)');
+        outBox.textContent = buffer || (IS_RTL ? '(no output)' : '(no output)');
         outBox.classList.remove('error');
         
         // Check answer
@@ -853,7 +826,7 @@
   // ---- Init ----
   function init() {
     if (!projects || projects.length === 0) {
-      document.getElementById('project-grid').innerHTML = '<p style="text-align:center;color:#888;padding:20px;">' + (IS_RTL ? 'אין פרויקטים זמינים' : 'No projects available') + '</p>';
+      document.getElementById('project-grid').innerHTML = '<p style="text-align:center;color:#888;padding:20px;">' + (IS_RTL ? 'No projects available' : 'No projects available') + '</p>';
       return;
     }
     renderProjectList();
@@ -874,12 +847,14 @@
    ============================================================ */
 
 /* ---- HUD (top fixed corner) ---- */
-#gam-hud { position: fixed; bottom: 12px;
+#gam-hud {
+  position: fixed;
+  bottom: 12px;
   z-index: 9998;
   pointer-events: none;
 }
 [dir="ltr"] #gam-hud { right: 12px; }
-[dir="rtl"] #gam-hud { left: 12px; }
+[dir="ltr"] #gam-hud { left: 12px; }
 
 #gam-hud-btn {
   pointer-events: auto;
@@ -933,7 +908,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 [dir="ltr"] .gam-toast { right: 15px; }
-[dir="rtl"] .gam-toast { left: 15px; }
+[dir="ltr"] .gam-toast { left: 15px; }
 .gam-toast.show { opacity: 1; transform: translateY(0); }
 .gam-toast-icon { font-size: 18px; margin-inline-end: 4px; }
 .gam-toast-xp { background: linear-gradient(135deg, #ffaa00 0%, #ff8800 100%); box-shadow: 0 8px 24px rgba(255,170,0,0.45); }
@@ -1075,7 +1050,7 @@
   line-height: 1;
 }
 [dir="ltr"] .gam-panel-close { right: 10px; }
-[dir="rtl"] .gam-panel-close { left: 10px; }
+[dir="ltr"] .gam-panel-close { left: 10px; }
 .gam-panel-close:hover, .gam-panel-close:active { color: #fff; background: rgba(255,255,255,0.1); }
 
 .gam-panel-title {
@@ -1216,12 +1191,12 @@
 @media (max-width: 480px) {
   #gam-hud { bottom: 8px; }
   [dir="ltr"] #gam-hud { right: 8px; }
-  [dir="rtl"] #gam-hud { left: 8px; }
+  [dir="ltr"] #gam-hud { left: 8px; }
   #gam-hud-btn { padding: 6px 10px; font-size: 12px; }
   
   .gam-toast { font-size: 13px; padding: 10px 14px; top: 56px; }
   [dir="ltr"] .gam-toast { right: 10px; left: 10px; max-width: none; }
-  [dir="rtl"] .gam-toast { left: 10px; right: 10px; max-width: none; }
+  [dir="ltr"] .gam-toast { left: 10px; right: 10px; max-width: none; }
   
   .gam-celebration-inner { padding: 22px 18px; max-width: 100%; }
   .gam-celebration h2 { font-size: 20px; }
@@ -1263,30 +1238,30 @@
   // ---- Detect language ----
   const IS_RTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'he';
   const T = IS_RTL ? {
-    xp: 'נקודות',
-    streak: 'רצף ימים',
-    streakDays: (n) => n === 1 ? 'יום' : 'ימים',
-    level: 'רמה',
-    newBadge: 'מדליה חדשה!',
-    levelUp: 'עלית רמה!',
-    today: 'היום',
-    yesterday: 'אתמול',
-    daysAgo: (n) => `לפני ${n} ימים`,
-    streakStart: 'התחלת רצף — חזור מחר!',
-    streakBroken: 'הרצף נשבר 💔',
-    streakAlive: (n) => `🔥 ${n} ימים ברצף!`,
-    streakFirst: '🎯 יום ראשון בקורס!',
-    achievements: 'הישגים',
-    progressTitle: 'ההתקדמות שלך',
-    close: 'סגור',
-    keepGoing: 'תמשיך ככה!',
-    perfectDay: 'יום מושלם!',
-    earned: 'הרווחת',
-    nextLevel: 'לרמה הבאה',
-    weeklyGoal: 'יעד שבועי',
-    daysLeft: (n) => `עוד ${n} ימים`,
-    streakInfo: 'פתח את האתר היום כדי לשמור על הרצף!',
-    xpToNext: (n) => `עוד ${n} XP לרמה הבאה`,
+    xp: 'points',
+    streak: 'streak of days',
+    streakDays: (n) => n === 1 ? 'day' : 'days',
+    level: 'level',
+    newBadge: 'New medal!',
+    levelUp: 'You leveled up!',
+    today: 'today',
+    yesterday: 'yesterday',
+    daysAgo: (n) => `${n} days ago`,
+    streakStart: 'Streak started — come back tomorrow!',
+    streakBroken: 'The streak broke 💔',
+    streakAlive: (n) => `🔥 ${n}-day streak!`,
+    streakFirst: '🎯 Day one of the course!',
+    achievements: 'achievements',
+    progressTitle: 'Your progress',
+    close: 'close',
+    keepGoing: 'Keep it up!',
+    perfectDay: 'Perfect day!',
+    earned: 'earned',
+    nextLevel: 'To the next level',
+    weeklyGoal: 'Weekly target',
+    daysLeft: (n) => `${n} more days`,
+    streakInfo: 'Open the site today to keep your streak!',
+    xpToNext: (n) => `${n} more XP to the next level`,
   } : {
     xp: 'XP',
     streak: 'Day Streak',
@@ -1391,7 +1366,7 @@
       localStorage.setItem(STORAGE.PASSED_EXERCISES, JSON.stringify(passed));
       
       const xp = usedSolution ? XP_REWARDS.EXERCISE_PASS : XP_REWARDS.EXERCISE_PASS_NO_HINT;
-      addXP(xp, IS_RTL ? 'תרגיל הושלם!' : 'Exercise complete!');
+      addXP(xp, IS_RTL ? 'Exercise completed!' : 'Exercise complete!');
       return true;
     }
     return false;
@@ -1437,7 +1412,7 @@
       }
       setStreak(1);
       localStorage.setItem(STORAGE.LAST_DATE, today);
-      addXP(XP_REWARDS.FIRST_RUN_OF_DAY, IS_RTL ? 'התחלת רצף חדש' : 'New streak started');
+      addXP(XP_REWARDS.FIRST_RUN_OF_DAY, IS_RTL ? 'Starting a new sequence' : 'New streak started');
     }
     
     // Track usage day
@@ -1474,21 +1449,21 @@
   
   // ---- Badge definitions ----
   const BADGE_DEFS = [
-    { id: 'first_day',  icon: '🎯', name_he: 'יום ראשון',    name_en: 'First Day',    desc_he: 'התחלת ללמוד!',                   desc_en: 'Started learning!' },
-    { id: 'first_ex',   icon: '🐣', name_he: 'תרגיל ראשון',  name_en: 'First Exercise',desc_he: 'פתרת תרגיל ראשון',              desc_en: 'Solved your first exercise' },
-    { id: 'streak_3',   icon: '🔥', name_he: '3 ימים ברצף', name_en: '3-Day Streak', desc_he: 'התמדה!',                          desc_en: 'Consistency!' },
-    { id: 'streak_7',   icon: '⚡', name_he: 'שבוע ברצף',   name_en: '7-Day Streak', desc_he: 'אלוף של שבוע',                    desc_en: 'A week champion' },
-    { id: 'streak_30',  icon: '🏆', name_he: 'חודש ברצף',   name_en: '30-Day Streak',desc_he: 'אגדה',                            desc_en: 'Legend' },
-    { id: 'ex_10',      icon: '⭐', name_he: '10 תרגילים',   name_en: '10 Exercises', desc_he: '10 תרגילים נפתרו',                desc_en: '10 exercises solved' },
-    { id: 'ex_50',      icon: '🌟', name_he: '50 תרגילים',   name_en: '50 Exercises', desc_he: '50 תרגילים נפתרו',                desc_en: '50 exercises solved' },
-    { id: 'ex_100',     icon: '💯', name_he: '100 תרגילים',  name_en: '100 Exercises',desc_he: '100 תרגילים — מקצוען!',           desc_en: '100 exercises — pro!' },
-    { id: 'ex_200',     icon: '👑', name_he: '200 תרגילים',  name_en: '200 Exercises',desc_he: 'אלוף האלופים',                    desc_en: 'Champion of champions' },
-    { id: 'python_pro', icon: '🐍', name_he: 'Python Pro',  name_en: 'Python Pro',   desc_he: 'סיימת את קורס Python',           desc_en: 'Completed Python course' },
-    { id: 'pandas_pro', icon: '🐼', name_he: 'Pandas Pro',  name_en: 'Pandas Pro',   desc_he: 'סיימת את קורס Pandas',           desc_en: 'Completed Pandas course' },
-    { id: 'quiz_pro',   icon: '🎓', name_he: 'מומחה חידון',  name_en: 'Quiz Master',  desc_he: 'סיימת 100 שאלות חידון',           desc_en: 'Aced 100 quiz questions' },
-    { id: 'level_5',    icon: '🎖️', name_he: 'רמה 5',       name_en: 'Level 5',      desc_he: 'הגעת לרמה 5',                    desc_en: 'Reached Level 5' },
-    { id: 'level_10',   icon: '🏅', name_he: 'רמה 10',      name_en: 'Level 10',     desc_he: 'הגעת לרמה 10',                   desc_en: 'Reached Level 10' },
-    { id: 'no_hints',   icon: '🧠', name_he: '10 בלי רמזים', name_en: 'No Hints',    desc_he: '10 תרגילים בלי לראות פתרון',     desc_en: '10 exercises without solution' },
+    { id: 'first_day',  icon: '🎯', name_he: 'Sunday',    name_en: 'First Day',    desc_he: 'You\'ve started learning!',                   desc_en: 'Started learning!' },
+    { id: 'first_ex',   icon: '🐣', name_he: 'First exercise',  name_en: 'First Exercise',desc_he: 'You solved your first exercise',              desc_en: 'Solved your first exercise' },
+    { id: 'streak_3',   icon: '🔥', name_he: '3 days in a row', name_en: '3-Day Streak', desc_he: 'persistence!',                          desc_en: 'Consistency!' },
+    { id: 'streak_7',   icon: '⚡', name_he: 'Week in a row',   name_en: '7-Day Streak', desc_he: 'Champion of the week',                    desc_en: 'A week champion' },
+    { id: 'streak_30',  icon: '🏆', name_he: 'Month in a row',   name_en: '30-Day Streak',desc_he: 'legend',                            desc_en: 'Legend' },
+    { id: 'ex_10',      icon: '⭐', name_he: '10 exercises',   name_en: '10 Exercises', desc_he: '10 exercises solved',                desc_en: '10 exercises solved' },
+    { id: 'ex_50',      icon: '🌟', name_he: '50 exercises',   name_en: '50 Exercises', desc_he: '50 exercises solved',                desc_en: '50 exercises solved' },
+    { id: 'ex_100',     icon: '💯', name_he: '100 exercises',  name_en: '100 Exercises',desc_he: '100 exercises — Pro!',           desc_en: '100 exercises — pro!' },
+    { id: 'ex_200',     icon: '👑', name_he: '200 exercises',  name_en: '200 Exercises',desc_he: 'Champion of champions',                    desc_en: 'Champion of champions' },
+    { id: 'python_pro', icon: '🐍', name_he: 'Python Pro',  name_en: 'Python Pro',   desc_he: 'You finished the Python course',           desc_en: 'Completed Python course' },
+    { id: 'pandas_pro', icon: '🐼', name_he: 'Pandas Pro',  name_en: 'Pandas Pro',   desc_he: 'You finished the Pandas course',           desc_en: 'Completed Pandas course' },
+    { id: 'quiz_pro',   icon: '🎓', name_he: 'Quiz expert',  name_en: 'Quiz Master',  desc_he: 'You finished 100 quiz questions',           desc_en: 'Aced 100 quiz questions' },
+    { id: 'level_5',    icon: '🎖️', name_he: 'level 5',       name_en: 'Level 5',      desc_he: 'You reached level 5',                    desc_en: 'Reached Level 5' },
+    { id: 'level_10',   icon: '🏅', name_he: 'level 10',      name_en: 'Level 10',     desc_he: 'You\'ve reached level 10',                   desc_en: 'Reached Level 10' },
+    { id: 'no_hints',   icon: '🧠', name_he: '10 without hints', name_en: 'No Hints',    desc_he: '10 exercises without seeing the solution',     desc_en: '10 exercises without solution' },
   ];
   
   function checkBadges() {
@@ -1662,50 +1637,7 @@
     const panel = document.createElement('div');
     panel.id = 'gam-panel';
     panel.innerHTML = `
-      <div class="gam-panel-inner" role="dialog">
-        <button class="gam-panel-close" aria-label="${T.close}">&times;</button>
-        <h2 class="gam-panel-title">${T.progressTitle}</h2>
-        
-        <div class="gam-stats">
-          <div class="gam-stat">
-            <div class="gam-stat-icon">⭐</div>
-            <div class="gam-stat-val">${xp.toLocaleString()}</div>
-            <div class="gam-stat-label">${T.xp}</div>
-          </div>
-          <div class="gam-stat">
-            <div class="gam-stat-icon">🔥</div>
-            <div class="gam-stat-val">${streak}</div>
-            <div class="gam-stat-label">${T.streak}</div>
-          </div>
-          <div class="gam-stat">
-            <div class="gam-stat-icon">🎖️</div>
-            <div class="gam-stat-val">${level}</div>
-            <div class="gam-stat-label">${T.level}</div>
-          </div>
-        </div>
-        
-        <div class="gam-progress-box">
-          <div class="gam-progress-header">
-            <span>${T.level} ${level}</span>
-            <span>${T.level} ${level + 1}</span>
-          </div>
-          <div class="gam-progress-bar">
-            <div class="gam-progress-fill" style="width: ${Math.max(0, Math.min(100, progressPct))}%"></div>
-          </div>
-          <div class="gam-progress-text">${T.xpToNext(xpToNext)}</div>
-        </div>
-        
-        <div class="gam-section-title">${IS_RTL ? '📈 פעילות שבועית' : '📈 Weekly Activity'}</div>
-        <div class="gam-chart">${chartHTML}</div>
-        
-        <div class="gam-section-title">${T.achievements} (${earnedBadges.length}/${BADGE_DEFS.length})</div>
-        <div class="gam-badges">${badgesHTML}</div>
-        
-        <div class="gam-footer">
-          <div>${IS_RTL ? 'תרגילים נפתרו' : 'Exercises solved'}: <strong>${totalPassed}</strong></div>
-          <div>${IS_RTL ? 'הרצף הכי ארוך שלך' : 'Longest streak'}: <strong>${longest}</strong> ${T.streakDays(longest)}</div>
-        </div>
-      </div>
+      <div class="gam-panel-inner" role="dialog">\n        <button class="gam-panel-close" aria-label="${T.close}">&Times;</button>\n        <h2 class="gam-panel-title">${T.progressTitle}</h2>\n        \n        <div class="gam-stats">\n          <div class="gam-stat">\n            <div class="gam-stat-icon">⭐</div>\n            <div class="gam-stat-val">${xp.toLocaleString()}</div>\n            <div class="gam-stat-label">${T.xp}</div>\n          </div>\n          <div class="gam-stat">\n            <div class="gam-stat-icon">🔥</div>\n            <div class="gam-stat-val">${streak}</div>\n            <div class="gam-stat-label">${T.streak}</div>\n          </div>\n          <div class="gam-stat">\n            <div class="gam-stat-icon">🎖️</div>\n            <div class="gam-stat-val">${level}</div>\n            <div class="gam-stat-label">${T.level}</div>\n          </div>\n        </div>\n        \n        <div class="gam-progress-box">\n          <div class="gam-progress-header">\n            <span>${T.level} ${level}</span>\n            <span>${T.level} ${level + 1}</span>\n          </div>\n          <div class="gam-progress-bar">\n            <div class="gam-progress-fill" style="width: ${Math.max(0, Math.min(100, progressPct))}%"></div>\n          </div>\n          <div class="gam-progress-text">${T.xpToNext(xpToNext)}</div>\n        </div>\n        \n        <div class="gam-section-title">${IS_RTL ? '📈 Weekly Activity' : '📈 Weekly Activity'}</div>\n        <div class="gam-chart">${chartHTML}</div>\n        \n        <div class="gam-section-title">${T.achievements} (${earnedBadges.length}/${BADGE_DEFS.length})</div>\n        <div class="gam-badges">${badgesHTML}</div>\n        \n        <div class="gam-footer">\n          <div>${IS_RTL ? 'Exercises solved' : 'Exercises solved'}: <strong>${totalPassed}</strong></div>\n          <div>${IS_RTL ? 'Your longest streak' : 'Longest streak'}: <strong>${longest}</strong> ${T.streakDays(longest)}</div>\n        </div>\n      </div>
     `;
     document.body.appendChild(panel);
     setTimeout(() => panel.classList.add('show'), 10);
@@ -1725,7 +1657,7 @@
     addXP: addXP,
     markExercisePassed: markExercisePassed,
     completeModule: function(moduleName) {
-      addXP(XP_REWARDS.MODULE_COMPLETE, IS_RTL ? `מודול הושלם: ${moduleName}` : `Module complete: ${moduleName}`);
+      addXP(XP_REWARDS.MODULE_COMPLETE, IS_RTL ? `Module completed: ${moduleName}` : `Module complete: ${moduleName}`);
     },
     open: openPanel,
     getXP: getXP,

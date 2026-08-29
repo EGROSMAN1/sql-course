@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SQL Lesson Guide — Structured Lessons | SQL.course</title>
+<title>SQL Lesson Guide — Organized Video Lessons | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -94,7 +94,7 @@ pre{padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:13px;line-hei
 
 /* COMPARISON TABLE */
 .compare-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
-.compare-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.6rem 1rem;text-align:right;border:1px solid var(--border)}
+.compare-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.6rem 1rem;text-align:left;border:1px solid var(--border)}
 .compare-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top}
 .compare-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 .compare-table .good{color:var(--green)}
@@ -186,7 +186,7 @@ pre{font-size:11px}
   .question-card{padding:1rem!important;border-radius:10px}
   .q-text,.question-text{font-size:14px!important;line-height:1.6}
   .options,.answers{gap:.5rem!important}
-  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:left;border-radius:8px}
   .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
   .hero-title,.quiz-title{font-size:1.5rem!important}
   .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
@@ -242,31 +242,31 @@ pre{font-size:11px}
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="An SQL lesson guide: a structured learning path from the basics to job interviews, with progress tracking and interactive practice. Completely free.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/lessons.html">
+<meta name="description" content="SQL lessons guide: a structured learning track with video lessons from the basics to job interviews, progress tracking and interactive practice. Completely free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/lessons.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/lessons.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/lessons.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
 <meta property="og:title" content="Lesson Guide — SQL Course">
-<meta property="og:description" content="An SQL lesson guide: a structured learning path from the basics to job interviews, with progress tracking and interactive practice. Completely free.">
+<meta property="og:description" content="SQL lessons guide: a structured learning track with video lessons from the basics to job interviews, progress tracking and interactive practice. Completely free.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Lesson Guide — SQL Course">
-<meta name="twitter:description" content="An SQL lesson guide: a structured learning path from the basics to job interviews, with progress tracking and interactive practice. Completely free.">
+<meta name="twitter:description" content="SQL lessons guide: a structured learning track with video lessons from the basics to job interviews, progress tracking and interactive practice. Completely free.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
@@ -279,13 +279,13 @@ pre{font-size:11px}
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "Lesson Guide",
+        "name": "Lessons guide",
         "item": "https://egrosman1.github.io/sql-course/lessons.html"
       }
     ]
@@ -293,8 +293,8 @@ pre{font-size:11px}
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "SQL Lesson Guide — Structured Lessons | SQL.course",
-    "description": "An SQL lesson guide: a structured learning path from the basics to job interviews, with progress tracking and interactive practice. Completely free.",
+    "name": "SQL Lesson Guide — Organized Video Lessons | SQL.course",
+    "description": "SQL lessons guide: a structured learning track with video lessons from the basics to job interviews, progress tracking and interactive practice. Completely free.",
     "url": "https://egrosman1.github.io/sql-course/lessons.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -309,7 +309,7 @@ pre{font-size:11px}
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -321,32 +321,31 @@ pre{font-size:11px}
 </script>
 </head>
 <body>
-<h1 class="sr-only">SQL Lesson Guide</h1>
+<h1 class="sr-only">SQL lessons guide</h1>
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">📖 Lesson Guide</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">📖 Lessons guide</div>
   <div class="topnav-links">
-    <a href="course.html" class="topnav-link">📚 Learn</a>
-    <a href="../lessons.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="lessons.html" class="topnav-link" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/lessons.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="practice.html" class="topnav-link">✏️ Practice</a>
-    <a href="quiz.html" class="topnav-link">🧠 Quiz</a>
+    <a href="course.html" class="topnav-link">📚 Study material</a><a href="../lessons.html" class="topnav-link" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="lessons.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/lessons.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="practice.html" class="topnav-link">✏️ Exercises</a>
+    <a href="quiz.html" class="topnav-link">🧠 quiz</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
 </div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html">🏠 Home</a>
-  <a href="tirgul-makif.html">🎯 Full Practice</a>
-  <a href="course.html">📚 Learning Material</a>
-  <a href="practice.html">✏️ Practice</a>
-  <a href="quiz.html">🧠 Quiz</a>
+  <a href="tirgul-makif.html">🎯 Comprehensive practice</a>
+  <a href="course.html">📚 Study material</a>
+  <a href="practice.html">✏️ Exercises</a>
+  <a href="quiz.html">🧠 quiz</a>
 </div>
 
 <!-- TABS -->
 <div class="lesson-tabs">
-  <button class="lesson-tab active" onclick="showLesson(0)">📗 Lesson 1 — Intro to SQL</button>
+  <button class="lesson-tab active" onclick="showLesson(0)">📗 Lesson 1 — Introduction to SQL</button>
   <button class="lesson-tab" onclick="showLesson(1)">📘 Lesson 2 — String Functions</button>
   <button class="lesson-tab" onclick="showLesson(2)">📙 Lesson 3 — WHERE</button>
   <button class="lesson-tab" onclick="showLesson(3)">📕 Lesson 4 — GROUP BY</button>
@@ -354,12 +353,12 @@ pre{font-size:11px}
 
 <div class="main">
 
-<!-- ===================== Lesson 1 ===================== -->
+<!-- ===================== lesson 1 ===================== -->
 <div class="lesson-pane active" id="pane-0">
   <div class="lesson-header">
     <div class="lesson-num">Lesson 1 / 4</div>
-    <div class="lesson-title">🗄️ Intro to SQL and Databases</div>
-    <div class="lesson-desc">What SQL is, why it matters, what a database looks like, and the difference between SQL and Excel.</div>
+    <div class="lesson-title">🗄️ Introduction to SQL and Databases</div>
+    <div class="lesson-desc">What SQL is, why it's needed, what a database looks like, and the difference between SQL and Excel.</div>
     <div class="lesson-tags">
       <span class="lesson-tag">SQL</span>
       <span class="lesson-tag">Database</span>
@@ -372,39 +371,39 @@ pre{font-size:11px}
   <div class="section">
     <div class="section-title">🔍 What is SQL?</div>
     <div class="concept-box">
-      <div class="concept-label">Definition</div>
+      <div class="concept-label">definition</div>
       <div class="concept-text">
-        <strong>SQL = Structured Query Language</strong> — a structured query language.<br><br>
-        Unlike languages such as Python or Java, which are "general-purpose languages," SQL is a <strong>domain-specific language</strong> created exclusively for working with data.<br><br>
-        SQL's syntax resembles <strong>plain English</strong> — commands like <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code> make the code readable and clear.
+        <strong>SQL = Structured Query Language</strong> — a built-in query language.<br><br>
+        Unlike languages like Python or Java that are "general-purpose languages", SQL is <strong>A domain-specific language (Domain-Specific)</strong> which was created solely for working with data.<br><br>
+        SQL's syntax resembles <strong>Simple English</strong> — commands like <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code> make the code readable and understandable.
       </div>
     </div>
     <div class="highlight-box info">
       <div class="hb-icon">📜</div>
-      <div class="hb-text"><strong>History:</strong> SQL was developed in the 1970s at IBM's labs and was originally called SEQUEL. It has remained the leading language in the world of data ever since — over 50 years!</div>
+      <div class="hb-text"><strong>History:</strong> SQL was developed in the 1970s at IBM labs and was originally called SEQUEL. Since then it has remained the leading language in the data world — for over 50 years!</div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">❓ Why SQL at all, and not Excel?</div>
+    <div class="section-title">❓ Why SQL at all instead of Excel?</div>
     <div class="concept-box">
-      <div class="concept-label">3 main reasons</div>
+      <div class="concept-label">3 key reasons</div>
       <div class="concept-text">
-        <strong>1. Big Data — huge volumes of information</strong><br>
-        When Excel starts to "stutter" (around a million rows) — SQL is only just warming up. SQL processes billions of rows in mere seconds.<br><br>
-        <strong>2. The "single source of truth" — a central database</strong><br>
-        Unlike files that float around in emails and keep changing, SQL maintains one central database, prevents errors, and keeps logical relationships intact.<br><br>
-        <strong>3. Surgical retrieval</strong><br>
-        Excel loads the entire file into memory. SQL retrieves <strong>only</strong> the specific data you need — saving memory and shortening run times.
+        <strong>1. Big Data — massive data volumes</strong><br>
+        When Excel starts to "stutter" (around a million rows) — SQL is just getting warmed up. SQL processes billions of rows in a few seconds.<br><br>
+        <strong>2. "The single source of truth" — a central database</strong><br>
+        Unlike files that circulate over email and get changed, SQL maintains a single central database, prevents mistakes and preserves valid logical relationships.<br><br>
+        <strong>3. Surgical extraction</strong><br>
+        Excel loads the entire file into memory. SQL retrieves <strong>only</strong> the specific data you need — saves memory and shortens run times.
       </div>
     </div>
     <table class="compare-table">
-      <tr><th>Criterion</th><th>Excel</th><th>SQL</th></tr>
-      <tr><td>Row count</td><td class="bad">up to ~1M rows</td><td class="good">billions of rows</td></tr>
-      <tr><td>Speed</td><td class="bad">slow with large files</td><td class="good">very fast</td></tr>
-      <tr><td>Data sharing</td><td class="bad">files passed around</td><td class="good">one central database</td></tr>
-      <tr><td>Security</td><td class="bad">anyone can edit</td><td class="good">permissions and control</td></tr>
-      <tr><td>Performing calculations</td><td class="good">convenient for the average user</td><td class="good">powerful and precise</td></tr>
+      <tr><th>criterion</th><th>Excel</th><th>SQL</th></tr>
+      <tr><td>Number of rows</td><td class="bad">Up to ~1M rows</td><td class="good">Billions of rows</td></tr>
+      <tr><td>speed</td><td class="bad">Slow with large files</td><td class="good">Very fast</td></tr>
+      <tr><td>Data sharing</td><td class="bad">Files floating around</td><td class="good">One central database</td></tr>
+      <tr><td>security</td><td class="bad">Anyone can edit</td><td class="good">Permissions and control</td></tr>
+      <tr><td>Performing calculations</td><td class="good">Convenient for a regular user</td><td class="good">Powerful and precise</td></tr>
     </table>
   </div>
 
@@ -413,64 +412,64 @@ pre{font-size:11px}
     <div class="concept-box">
       <div class="concept-label">Database structure</div>
       <div class="concept-text">
-        A database is made up of <strong>tables</strong>. Each table contains <strong>columns</strong> and <strong>rows</strong>.<br><br>
-        Picture several Excel sheets linked to one another — that's what a database looks like.
+        A database is made up of<strong>Tables (Tables)</strong>. Each table contains <strong>Columns (Columns)</strong> F<strong>Rows (Rows)</strong>.<br><br>
+        Imagine a bunch of Excel sheets linked to each other — that's what a database looks like.
       </div>
     </div>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Database</strong> — the overall database (e.g., Northwind)</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Tables</strong> — tables within the database (e.g., customers, orders, products)</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Columns</strong> — columns in a table (e.g., id, first_name, city)</div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Rows</strong> — rows of data (e.g., the details of a specific customer)</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Database</strong> — the overall database (e.g. Northwind)</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Tables</strong> — tables inside the database (for example: customers, orders, products)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Columns</strong> — columns in a table (for example: id, first_name, city)</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Rows</strong> — data rows (for example: a specific customer's details)</div></div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">🔑 Keys and Relationships</div>
+    <div class="section-title">🔑 Keys and relationships</div>
     <div class="concept-box">
-      <div class="concept-label">Primary Key</div>
+      <div class="concept-label">Primary Key — primary key</div>
       <div class="concept-text">
-        A column that <strong>uniquely</strong> identifies each row. No two values can be identical. It cannot be NULL.<br>
-        <strong>Example:</strong> the <code>id</code> column in a customers table — every customer has their own unique number.
+        A column that identifies each row <strong>unique</strong>. There can't be two identical values. There can't be a NULL.<br>
+        <strong>example:</strong> column <code>id</code> In the customers table — every customer has their own unique number.
       </div>
     </div>
     <div class="concept-box">
-      <div class="concept-label">Foreign Key</div>
+      <div class="concept-label">Foreign Key — foreign key</div>
       <div class="concept-text">
-        A column in one table that points to a <strong>Primary Key in another table</strong>. It creates the relationship between the tables.<br>
-        <strong>Example:</strong> the <code>customer_id</code> column in the orders table points to <code>id</code> in the customers table.
+        A column in one table that points to<strong>Primary Key in another table</strong>. Creates the relationship between the tables.<br>
+        <strong>example:</strong> column <code>customer_id</code> in the orders table points to<code>id</code> In the customers table.
       </div>
     </div>
     <div class="highlight-box tip">
       <div class="hb-icon">💡</div>
-      <div class="hb-text"><strong>Tip:</strong> the relationship between a primary key and a foreign key is the basis for the JOIN command — that's how you combine information from different tables.</div>
+      <div class="hb-text"><strong>tip:</strong> The relationship between a primary key and a foreign key is the foundation of the JOIN command — it is how you connect information from different tables.</div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">🏪 The Course Database — Northwind</div>
+    <div class="section-title">🏪 The course database — Northwind</div>
     <div class="concept-box">
       <div class="concept-label">What is Northwind?</div>
       <div class="concept-text">
-        A classic database that simulates a <strong>trading company</strong>. It includes customers, orders, products, suppliers, and employees. Widely used to teach SQL for decades.
+        A classic database that simulates <strong>Trading company</strong>. Includes customers, orders, products, suppliers and employees. Widely used for learning SQL for decades.
       </div>
     </div>
     <div class="concept-box">
-      <div class="concept-label">The Main Tables</div>
+      <div class="concept-label">The main tables</div>
       <div class="concept-text">
-        <code>customers</code> — customers | <code>orders</code> — orders | <code>order_details</code> — order line items<br>
-        <code>products</code> — products | <code>employees</code> — employees | <code>suppliers</code> — suppliers | <code>shippers</code> — shipping companies
+        <code>customers</code> — Customers | <code>orders</code> — Orders | <code>order_details</code> — order details<br>
+        <code>products</code> — Products | <code>employees</code> — Employees | <code>suppliers</code> — Suppliers | <code>shippers</code> — shipping companies
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===================== Lesson 2 ===================== -->
+<!-- ===================== lesson 2 ===================== -->
 <div class="lesson-pane" id="pane-1">
   <div class="lesson-header">
     <div class="lesson-num">Lesson 2 / 4</div>
-    <div class="lesson-title">📝 String Functions</div>
-    <div class="lesson-desc">Cleaning, extracting, formatting, and standardizing text data. 4 main categories of operations.</div>
+    <div class="lesson-title">📝 String functions (String Functions)</div>
+    <div class="lesson-desc">Cleaning, extraction, formatting and validation of text data. 4 main action categories.</div>
     <div class="lesson-tags">
       <span class="lesson-tag">UPPER / LOWER</span>
       <span class="lesson-tag">LEFT / RIGHT</span>
@@ -482,18 +481,18 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">🧹 Category 1: Cleaning Data</div>
+    <div class="section-title">🧹 Category 1: data cleaning (Cleaning)</div>
     <div class="concept-box">
       <div class="concept-label">TRIM / LTRIM / RTRIM</div>
       <div class="concept-text">
         Removes extra spaces from the string.<br>
-        <code>TRIM</code> — both sides | <code>LTRIM</code> — left only | <code>RTRIM</code> — right only
+        <code>TRIM</code> — from both sides | <code>LTRIM</code> — left side only | <code>RTRIM</code> — right side only
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="kw">SELECT</span> <span class="fn">TRIM</span>(<span class="str">'   hello world   '</span>) <span class="kw">AS</span> <span class="str">clean_text</span>;
-<span class="cmt">-- result: 'hello world'</span>
+      <pre><span class="kw">SELECT</span> <span class="fn">TRIM</span>(<span class="str">'   Hello World   '</span>) <span class="kw">AS</span> <span class="str">clean_text</span>;
+<span class="cmt">-- result: 'Hello world'</span>
 
 <span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">TRIM</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">clean_company</span>
 <span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
@@ -507,18 +506,18 @@ pre{font-size:11px}
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- remove dashes from phone numbers</span>
+      <pre><span class="cmt">-- Removing dashes from phone numbers</span>
 <span class="kw">SELECT</span> <span class="fn">REPLACE</span>(<span class="col">business_phone</span>, <span class="str">'-'</span>, <span class="str">''</span>) <span class="kw">AS</span> <span class="str">clean_phone</span>
 <span class="kw">FROM</span> <span class="tbl">customers</span>;
 
-<span class="cmt">-- replace UK with United Kingdom</span>
+<span class="cmt">-- replacing UK with United Kingdom</span>
 <span class="kw">SELECT</span> <span class="fn">REPLACE</span>(<span class="col">country_region</span>, <span class="str">'UK'</span>, <span class="str">'United Kingdom'</span>)
 <span class="kw">FROM</span> <span class="tbl">customers</span>;</pre>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">✂️ Category 2: Extracting Data</div>
+    <div class="section-title">✂️ Category 2: Data Extraction</div>
     <div class="concept-box">
       <div class="concept-label">LEFT / RIGHT</div>
       <div class="concept-text">
@@ -539,20 +538,20 @@ pre{font-size:11px}
     <div class="concept-box">
       <div class="concept-label">SUBSTRING</div>
       <div class="concept-text">
-        <code>SUBSTRING(column, start, length)</code> — extraction from a specific position.<br>
-        <strong>Important:</strong> the position starts at 1 (not 0!).
+        <code>SUBSTRING(column, start, length)</code> — extracting from a specific position.<br>
+        <strong>important:</strong> The position starts at 1 (not 0!).
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- 5 characters starting from the 2nd</span>
+      <pre><span class="cmt">-- 5 characters starting from character 2</span>
 <span class="kw">SELECT</span> <span class="fn">SUBSTRING</span>(<span class="col">product_name</span>, <span class="num">2</span>, <span class="num">5</span>) <span class="kw">AS</span> <span class="str">middle_text</span>
 <span class="kw">FROM</span> <span class="tbl">products</span>;</pre>
     </div>
     <div class="concept-box">
       <div class="concept-label">LENGTH and INSTR</div>
       <div class="concept-text">
-        <code>LENGTH(column)</code> — returns the length of the string in characters<br>
+        <code>LENGTH(column)</code> — returns the string's length in number of characters<br>
         <code>INSTR(column, 'char')</code> — returns the position of a substring
       </div>
     </div>
@@ -566,12 +565,12 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">🎨 Category 3: Reformatting</div>
+    <div class="section-title">🎨 Category 3: reformatting (Formatting)</div>
     <div class="concept-box">
       <div class="concept-label">CONCAT and CONCAT_WS</div>
       <div class="concept-text">
-        <code>CONCAT(a, b, c)</code> — concatenates strings. If any value is NULL — the result is NULL.<br>
-        <code>CONCAT_WS(separator, a, b, c)</code> — concatenates with a fixed separator <strong>and automatically skips NULL</strong>.
+        <code>CONCAT(a, b, c)</code> — concatenates strings. If one of the values is NULL — the result is NULL.<br>
+        <code>CONCAT_WS(separator, a, b, c)</code> — joins with a fixed delimiter <strong>and skips NULL automatically</strong>.
       </div>
     </div>
     <div class="code-block">
@@ -587,12 +586,12 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">✅ Category 4: Standardization & Consistency</div>
+    <div class="section-title">✅ Category 4: Validity and consistency (Standardization)</div>
     <div class="concept-box">
       <div class="concept-label">UPPER / LOWER</div>
       <div class="concept-text">
-        <code>UPPER(column)</code> — converts all text to uppercase<br>
-        <code>LOWER(column)</code> — converts all text to lowercase<br><br>
+        <code>UPPER(column)</code> — turns all the text into uppercase letters<br>
+        <code>LOWER(column)</code> — turns all the text into lowercase letters<br><br>
         Useful for normalizing data before comparison.
       </div>
     </div>
@@ -606,17 +605,17 @@ pre{font-size:11px}
     </div>
     <div class="highlight-box warn">
       <div class="hb-icon">⚠️</div>
-      <div class="hb-text"><strong>Note:</strong> UPPER/LOWER change <strong>the display only</strong> — they don't save the change to the table. For a permanent change you need UPDATE.</div>
+      <div class="hb-text"><strong>note:</strong> UPPER/LOWER change the <strong>Display only</strong> — they don't save the change to the table. For a permanent change you need UPDATE.</div>
     </div>
   </div>
 </div>
 
-<!-- ===================== Lesson 3 ===================== -->
+<!-- ===================== lesson 3 ===================== -->
 <div class="lesson-pane" id="pane-2">
   <div class="lesson-header">
     <div class="lesson-num">Lesson 3 / 4</div>
-    <div class="lesson-title">🔎 WHERE — Filtering Data</div>
-    <div class="lesson-desc">Filtering rows by conditions. The most essential tool for real queries — including AND/OR, IN, BETWEEN, LIKE, and IS NULL.</div>
+    <div class="lesson-title">🔎 WHERE — filtering data</div>
+    <div class="lesson-desc">Filtering rows by conditions. The most essential tool for real queries — includes AND/OR, IN, BETWEEN, LIKE, and IS NULL.</div>
     <div class="lesson-tags">
       <span class="lesson-tag">WHERE</span>
       <span class="lesson-tag">AND / OR</span>
@@ -628,22 +627,22 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">📍 Basic WHERE</div>
+    <div class="section-title">📍 WHERE basics</div>
     <div class="concept-box">
-      <div class="concept-label">Syntax</div>
+      <div class="concept-label">syntax</div>
       <div class="concept-text">
-        <code>WHERE</code> comes <strong>after FROM</strong> and filters rows by a condition.<br>
+        <code>WHERE</code> arrives <strong>After FROM</strong> and filters rows by a condition.<br>
         Comparison operators: <code>=</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code>
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- products priced over 50</span>
+      <pre><span class="cmt">-- products priced above 50</span>
 <span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>
 <span class="kw">FROM</span> <span class="tbl">products</span>
 <span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;
 
-<span class="cmt">-- employees who are not Sales Representatives</span>
+<span class="cmt">-- Employees who are not Sales Representative</span>
 <span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">job_title</span>
 <span class="kw">FROM</span> <span class="tbl">employees</span>
 <span class="kw">WHERE</span> <span class="col">job_title</span> != <span class="str">'Sales Representative'</span>;</pre>
@@ -653,16 +652,16 @@ pre{font-size:11px}
   <div class="section">
     <div class="section-title">🔗 AND / OR — Multiple Conditions</div>
     <div class="concept-box">
-      <div class="concept-label">The Difference</div>
+      <div class="concept-label">the difference</div>
       <div class="concept-text">
-        <code>AND</code> — <strong>both</strong> conditions must hold<br>
-        <code>OR</code> — <strong>at least one</strong> of the conditions must hold<br><br>
+        <code>AND</code> — <strong>second</strong> The conditions must be met<br>
+        <code>OR</code> — <strong>At least one</strong> Of the conditions must hold<br><br>
         Parentheses set precedence: <code>WHERE (a OR b) AND c</code>
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- AND: customers from the USA and New York</span>
+      <pre><span class="cmt">-- AND: customers from USA and New York</span>
 <span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>
 <span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>
   <span class="kw">AND</span> <span class="col">city</span> = <span class="str">'New York'</span>;
@@ -675,17 +674,17 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">📋 IN — A List of Values</div>
+    <div class="section-title">📋 IN — list of values</div>
     <div class="concept-box">
       <div class="concept-label">What is IN?</div>
       <div class="concept-text">
-        <code>IN</code> is a convenient shorthand for multiple ORs. More readable and shorter.<br>
+        <code>IN</code> It's a convenient shorthand for multiple OR conditions. More readable and shorter.<br>
         <code>WHERE city IN ('Tel Aviv', 'Jerusalem', 'Haifa')</code>
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- suppliers from 3 cities (shorthand for OR)</span>
+      <pre><span class="cmt">-- Suppliers from 3 cities (shorthand for OR)</span>
 <span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>
 <span class="kw">FROM</span> <span class="tbl">suppliers</span>
 <span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'Tokyo'</span>, <span class="str">'London'</span>, <span class="str">'New York'</span>);
@@ -697,17 +696,17 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">📏 BETWEEN — A Range of Values</div>
+    <div class="section-title">📏 BETWEEN — a range of values</div>
     <div class="concept-box">
-      <div class="concept-label">Good to Know</div>
+      <div class="concept-label">Important to know</div>
       <div class="concept-text">
         <code>BETWEEN x AND y</code> — includes both endpoints (x and y themselves).<br>
-        Equivalent to: <code>WHERE col >= x AND col <= y</code>
+        equivalent to: <code>WHERE col >= x AND col <= y</code>
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- orders with a shipping fee between 20 and 50</span>
+      <pre><span class="cmt">-- Orders with shipping fees between 20 and 50</span>
 <span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">shipping_fee</span>
 <span class="kw">FROM</span> <span class="tbl">orders</span>
 <span class="kw">WHERE</span> <span class="col">shipping_fee</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span>;</pre>
@@ -715,11 +714,11 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">🔍 LIKE — Pattern Search</div>
+    <div class="section-title">🔍 LIKE — pattern search</div>
     <div class="concept-box">
-      <div class="concept-label">Wildcard Characters</div>
+      <div class="concept-label">Wildcard characters</div>
       <div class="concept-text">
-        <code>%</code> — any number of characters (including zero)<br>
+        <code>%</code> — any number of characters (even zero)<br>
         <code>_</code> — exactly one character<br><br>
         <code>'%gmail%'</code> — contains gmail | <code>'j%'</code> — starts with j | <code>'%@gmail.com'</code> — ends with @gmail.com
       </div>
@@ -730,7 +729,7 @@ pre{font-size:11px}
 <span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">employees</span>
 <span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders.com'</span>;
 
-<span class="cmt">-- names starting with A</span>
+<span class="cmt">-- names that start with A</span>
 <span class="kw">SELECT</span> <span class="col">first_name</span> <span class="kw">FROM</span> <span class="tbl">employees</span>
 <span class="kw">WHERE</span> <span class="col">first_name</span> <span class="kw">LIKE</span> <span class="str">'A%'</span>;</pre>
     </div>
@@ -739,10 +738,10 @@ pre{font-size:11px}
   <div class="section">
     <div class="section-title">🚫 IS NULL / IS NOT NULL</div>
     <div class="concept-box">
-      <div class="concept-label">NULL — A Missing Value</div>
+      <div class="concept-label">NULL — a missing value</div>
       <div class="concept-text">
-        NULL is a <strong>missing / unknown</strong> value — not zero, not empty!<br>
-        You can't use <code>= NULL</code> — you must use <code>IS NULL</code>.
+        NULL is a value <strong>Missing / unknown</strong> — not zero, not empty!<br>
+        Cannot use<code>= NULL</code> — must <code>IS NULL</code>.
       </div>
     </div>
     <div class="code-block">
@@ -752,24 +751,24 @@ pre{font-size:11px}
 <span class="kw">FROM</span> <span class="tbl">orders</span>
 <span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;
 
-<span class="cmt">-- customers with a website</span>
+<span class="cmt">-- Customers with a website</span>
 <span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">web_page</span>
 <span class="kw">FROM</span> <span class="tbl">customers</span>
 <span class="kw">WHERE</span> <span class="col">web_page</span> <span class="kw">IS NOT NULL</span>;</pre>
     </div>
     <div class="highlight-box danger">
       <div class="hb-icon">❌</div>
-      <div class="hb-text"><strong>Common mistake!</strong> <code>WHERE shipped_date = NULL</code> — this <strong>doesn't work</strong> in SQL! Always use <code>IS NULL</code>.</div>
+      <div class="hb-text"><strong>Common error!</strong> <code>WHERE shipped_date = NULL</code> — this <strong>doesn't work</strong> in SQL! Always use<code>IS NULL</code>.</div>
     </div>
   </div>
 </div>
 
-<!-- ===================== Lesson 4 ===================== -->
+<!-- ===================== lesson 4 ===================== -->
 <div class="lesson-pane" id="pane-3">
   <div class="lesson-header">
     <div class="lesson-num">Lesson 4 / 4</div>
-    <div class="lesson-title">📦 GROUP BY and Aggregation</div>
-    <div class="lesson-desc">Grouping rows and computing statistics — COUNT, SUM, AVG, MIN, MAX. Includes HAVING, ROLLUP, and UNION.</div>
+    <div class="lesson-title">📦 GROUP BY and aggregation</div>
+    <div class="lesson-desc">Grouping rows and computing statistics — COUNT, SUM, AVG, MIN, MAX. Includes HAVING, ROLLUP and UNION.</div>
     <div class="lesson-tags">
       <span class="lesson-tag">GROUP BY</span>
       <span class="lesson-tag">COUNT</span>
@@ -782,13 +781,13 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">📊 Aggregate Functions</div>
+    <div class="section-title">📊 Aggregate functions</div>
     <div class="concept-box">
-      <div class="concept-label">The Main Functions</div>
+      <div class="concept-label">The main functions</div>
       <div class="concept-text">
         <code>COUNT(*)</code> — counts rows | <code>COUNT(column)</code> — counts non-NULL values<br>
-        <code>SUM(column)</code> — computes the sum<br>
-        <code>AVG(column)</code> — computes the average<br>
+        <code>SUM(column)</code> — computes a sum<br>
+        <code>AVG(column)</code> — computes an average<br>
         <code>MIN(column)</code> — the lowest value<br>
         <code>MAX(column)</code> — the highest value
       </div>
@@ -806,11 +805,11 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">🗂️ GROUP BY — Grouping into Groups</div>
+    <div class="section-title">🗂️ GROUP BY — grouping into groups</div>
     <div class="concept-box">
-      <div class="concept-label">The Important Rule</div>
+      <div class="concept-label">The important rule</div>
       <div class="concept-text">
-        Every column in SELECT that isn't an aggregate function <strong>must</strong> appear in GROUP BY.<br>
+        Every column in SELECT that isn't an aggregate function <strong>must</strong> to be in the GROUP BY.<br>
         GROUP BY splits the table into groups and computes an aggregate for each group.
       </div>
     </div>
@@ -832,16 +831,16 @@ pre{font-size:11px}
   <div class="section">
     <div class="section-title">🔍 HAVING — Filtering After Grouping</div>
     <div class="concept-box">
-      <div class="concept-label">WHERE vs HAVING</div>
+      <div class="concept-label">WHERE vs. HAVING</div>
       <div class="concept-text">
-        <code>WHERE</code> — filters rows <strong>before</strong> grouping<br>
-        <code>HAVING</code> — filters groups <strong>after</strong> grouping<br><br>
-        <strong>Rule:</strong> you can't use aggregate functions (COUNT, SUM…) in WHERE — that's why HAVING is needed.
+        <code>WHERE</code> — filters rows <strong>before</strong> the grouping<br>
+        <code>HAVING</code> — filters groups <strong>after</strong> the grouping<br><br>
+        <strong>rule:</strong> You can't use aggregate functions (COUNT, SUM…) in WHERE. That's why you need HAVING.
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- categories with more than 5 products</span>
+      <pre><span class="cmt">-- Categories with more than 5 products</span>
 <span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>
 <span class="kw">FROM</span> <span class="tbl">products</span>
 <span class="kw">GROUP BY</span> <span class="col">category</span>
@@ -856,24 +855,24 @@ pre{font-size:11px}
     </div>
     <div class="highlight-box tip">
       <div class="hb-icon">💡</div>
-      <div class="hb-text"><strong>A trick to remember:</strong> WHERE → before GROUP BY (on rows). HAVING → after GROUP BY (on groups).</div>
+      <div class="hb-text"><strong>Trick to remember:</strong> WHERE → before GROUP BY (on rows). HAVING → after GROUP BY (on groups).</div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">📈 ROLLUP — Grand Total</div>
+    <div class="section-title">📈 ROLLUP — grand summary</div>
     <div class="concept-box">
       <div class="concept-label">What is ROLLUP?</div>
       <div class="concept-text">
-        <code>GROUP BY column WITH ROLLUP</code> — adds a grand-total summary row at the end of the results.<br>
-        The last row contains NULL in the grouping column and an overall total.
+        <code>GROUP BY column WITH ROLLUP</code> — adds a grand total row at the end of the results.<br>
+        The last row will contain NULL in the grouping column and a grand total.
       </div>
     </div>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">SQL</span><button class="copy-btn" onclick="copyThis(this)">📋 Copy</button></div>
-      <pre><span class="cmt">-- count by category + TOTAL</span>
+      <pre><span class="cmt">-- count by category + total</span>
 <span class="kw">SELECT</span>
-  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- TOTAL ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,
+  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- Total ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,
   <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>
 <span class="kw">FROM</span> <span class="tbl">products</span>
 <span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;</pre>
@@ -881,13 +880,13 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">🔀 UNION — Combining Results</div>
+    <div class="section-title">🔀 UNION — combining results</div>
     <div class="concept-box">
       <div class="concept-label">UNION vs UNION ALL</div>
       <div class="concept-text">
         <code>UNION</code> — combines the results of two queries and removes duplicates<br>
-        <code>UNION ALL</code> — combines and keeps duplicates (faster)<br><br>
-        <strong>Requirement:</strong> both queries must return the same number of columns with compatible data types.
+        <code>UNION ALL</code> — merges and keeps duplicates (faster)<br><br>
+        <strong>condition:</strong> Both queries must return the same number of columns with compatible data types.
       </div>
     </div>
     <div class="code-block">
@@ -901,9 +900,9 @@ pre{font-size:11px}
   </div>
 
   <div class="section">
-    <div class="section-title">📋 SQL Order of Execution — Important to Know!</div>
+    <div class="section-title">📋 SQL execution order — important to know!</div>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>FROM</strong> — which table to read from</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>FROM</strong> — which table to pull from</div></div>
       <div class="step"><div class="step-num">2</div><div class="step-text"><strong>WHERE</strong> — filtering rows</div></div>
       <div class="step"><div class="step-num">3</div><div class="step-text"><strong>GROUP BY</strong> — grouping into groups</div></div>
       <div class="step"><div class="step-num">4</div><div class="step-text"><strong>HAVING</strong> — filtering groups</div></div>
@@ -913,7 +912,7 @@ pre{font-size:11px}
     </div>
     <div class="highlight-box info">
       <div class="hb-icon">💡</div>
-      <div class="hb-text">The order in which we <strong>write</strong> SQL differs from the order the DB <strong>executes</strong> it. That's why you can't use a SELECT alias inside WHERE.</div>
+      <div class="hb-text">The order that we <strong>we write</strong> SQL differs from the order the DB <strong>promotion</strong> it. This is why you can't use an Alias from SELECT inside WHERE.</div>
     </div>
   </div>
 </div>
@@ -929,8 +928,8 @@ function showLesson(idx){
 function copyThis(btn){
   const pre = btn.closest('.code-block').querySelector('pre');
   navigator.clipboard.writeText(pre.innerText).then(()=>{
-    btn.textContent='✅ Copied';
-    setTimeout(()=>btn.textContent='📋 Copy',2000);
+    btn.textContent='✅ copied';
+    setTimeout(()=>btn.textContent='📋 copy',2000);
   });
 }
 function toggleMenu(){

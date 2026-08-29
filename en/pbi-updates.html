@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Power BI updates — choose a month | Power BI course</title>
+<meta name="description" content="Monthly Power BI updates. Pick a month and get a full lesson: why Microsoft introduced each feature, the technical detail, known bugs and workarounds, and a self-quiz.">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#070a0c">
+<meta name="color-scheme" content="dark">
+<meta name="author" content="Eliran Grossman">
+<meta property="og:title" content="Power BI Updates — Choose a Month">
+<meta property="og:description" content="A full lesson for every Power BI monthly update: the rationale, the technical details, the bugs, and the quiz.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Heebo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo','Segoe UI','Arial Hebrew',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --header-h:56px; --r:14px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;
+  -webkit-font-smoothing:antialiased;overflow-wrap:break-word;word-break:break-word;
+  -webkit-tap-highlight-color:rgba(242,200,17,.18);min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--acc);text-decoration:none}
+h1,h2,h3{line-height:1.25;overflow-wrap:break-word}
+svg{display:block}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:6px}
+::selection{background:var(--pbi-soft);color:var(--fg-1)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{
+  animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;
+  padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+
+/* ---------- shared platform chrome ---------- */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.hd .brand{flex:0 0 auto;font-size:.9rem;font-weight:700;color:var(--fg-2);white-space:nowrap}
+.hd .brand b{color:var(--pbi)}
+.hd .brand:hover{color:var(--fg-1)}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home.is-on{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:900px){.hd .brand{display:none}.hd{gap:10px;padding:0 12px}}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+@media (pointer:coarse),(max-width:900px){.lesson-rail .lr{min-height:44px}}
+
+/* ---------- page ---------- */
+main{flex:1 1 auto;max-width:1080px;width:100%;margin:0 auto;
+  padding:0 max(20px,env(safe-area-inset-right)) 70px max(20px,env(safe-area-inset-left))}
+
+.hero{padding:56px 0 12px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;
+  letter-spacing:.14em;color:var(--acc);background:var(--acc-soft);border:1px solid var(--line-strong);
+  border-radius:99px;padding:5px 13px;margin-bottom:18px}
+.hero h1{font-size:clamp(1.9rem,5.4vw,3rem);letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p{color:var(--fg-2);font-size:1.05rem;max-width:62ch}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.stat{background:var(--bg-1);border:1px solid var(--line);border-radius:99px;
+  padding:7px 15px;font-size:.82rem;color:var(--fg-3)}
+.stat b{font-family:var(--mono);color:var(--fg-1);font-weight:600}
+
+h2.sec{display:flex;align-items:center;gap:12px;font-size:.78rem;font-weight:700;color:var(--acc);
+  letter-spacing:.08em;margin:46px 0 16px}
+h2.sec::after{content:"";flex:1 1 auto;height:1px;background:var(--line-soft)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{display:flex;flex-direction:column;gap:9px;background:var(--bg-1);border:1px solid var(--line);
+  border-radius:var(--r);padding:20px;min-width:0;
+  transition:border-color .15s,background .15s,transform .15s}
+.card:hover{border-color:var(--pbi-glow);background:var(--bg-2);transform:translateY(-2px)}
+.card-top{display:flex;align-items:center;gap:11px;min-width:0}
+.card-n{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--pbi-soft);
+  color:var(--pbi);font-family:var(--mono);font-weight:700;font-size:.9rem;
+  display:flex;align-items:center;justify-content:center}
+.card h3{font-size:1.05rem;color:var(--fg-1);min-width:0;font-weight:700}
+.card p{color:var(--fg-3);font-size:.9rem;line-height:1.65;flex:1 1 auto}
+.meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.chip{font-family:var(--mono);font-size:.68rem;color:var(--fg-4);background:var(--bg-2);
+  border:1px solid var(--line);border-radius:99px;padding:3px 10px;white-space:nowrap}
+.go{display:inline-flex;align-items:center;gap:6px;color:var(--acc);font-size:.85rem;
+  font-weight:600;margin-top:4px}
+.card:hover .go{color:var(--pbi)}
+
+.card.tool .card-n{background:var(--acc-soft);color:var(--acc)}
+
+/* primary call to action: get a student practising in one tap */
+.back-site{display:inline-flex;align-items:center;gap:8px;color:var(--fg-3);font-size:.86rem;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;
+  padding:8px 15px;min-height:40px;margin-bottom:22px;transition:border-color .15s,color .15s}
+.back-site span{font-family:var(--mono);color:var(--acc)}
+.back-site:hover{border-color:var(--line-strong);color:var(--fg-1)}
+.lr-site b{font-family:var(--mono);font-size:.8rem;color:var(--acc)}
+.lr-site:hover b{color:var(--pbi)}
+@media (pointer:coarse),(max-width:900px){.back-site{min-height:44px}}
+
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.cta-main{display:inline-flex;align-items:center;gap:12px;background:var(--pbi);color:#0b0f12;
+  border:1px solid var(--pbi);border-radius:var(--r);padding:14px 22px;min-height:56px;
+  font-weight:800;font-size:1.02rem;box-shadow:0 8px 24px rgba(242,200,17,.16);
+  transition:transform .15s,box-shadow .15s,filter .15s}
+.cta-main:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(242,200,17,.24);filter:brightness(1.05)}
+.cta-main:active{transform:translateY(0)}
+.cta-ic{width:24px;height:24px;flex:0 0 auto}
+.cta-alt{background:var(--acc);border-color:var(--acc);color:#04120f}
+.cta-alt:hover{box-shadow:0 12px 30px rgba(0,212,200,.24)}
+[id="practice"]{scroll-margin-top:calc(var(--header-h) + 14px)}
+.cta-t{display:flex;flex-direction:column;line-height:1.25}
+.cta-t b{font-weight:600;font-size:.76rem;opacity:.72}
+
+.card-wrap{display:flex;flex-direction:column;min-width:0}
+.card-wrap .card{flex:1 1 auto;border-end-start-radius:0;border-end-end-radius:0;border-bottom:0}
+.quiz-link{display:flex;align-items:center;justify-content:center;gap:7px;
+  background:var(--bg-2);border:1px solid var(--line);border-top:0;
+  border-end-start-radius:var(--r);border-end-end-radius:var(--r);
+  padding:11px 14px;min-height:46px;color:var(--fg-3);font-size:.84rem;font-weight:600;
+  transition:color .15s,background .15s,border-color .15s}
+.quiz-link span{font-family:var(--mono);color:var(--pbi)}
+.quiz-link:hover{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(max-width:600px){.cta-main{width:100%;justify-content:center}}
+.card.tool:hover{border-color:var(--line-glow)}
+
+.note{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+  border-radius:var(--r);padding:16px 18px;margin-top:16px;color:var(--fg-2);font-size:.92rem}
+.note b{color:var(--fg-1)}
+
+footer.site{border-top:1px solid var(--line);margin-top:auto;padding:30px 20px;
+  text-align:center;color:var(--fg-3);font-size:.85rem}
+footer.site a{color:var(--fg-2)}
+footer.site a:hover{color:var(--acc)}
+
+@media(max-width:600px){
+  .hero{padding:34px 0 8px}
+  .grid{grid-template-columns:1fr}
+  .card{padding:17px}
+}
+@media (pointer:coarse),(max-width:900px){
+  .card,.go{min-height:44px}
+  footer.site a{display:inline-flex;align-items:center;min-height:44px}
+}
+</style>
+
+<style>
+/* ===== Updates strip — the main entry point to the monthly updates module ===== */
+.upd-band{display:flex;flex-direction:column;gap:14px;align-items:stretch;min-width:0;
+  background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 64%);
+  border:1px solid var(--pbi-glow);border-radius:16px;padding:20px;margin:6px 0 34px}
+.upd-band:hover{border-color:var(--pbi)}
+.upd-band-txt{display:flex;flex-direction:column;gap:7px;min-width:0}
+.upd-band-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+.upd-band-tag{flex:0 0 auto;font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;
+  color:#111;background:var(--pbi);border-radius:99px;padding:3px 10px;font-weight:700}
+.upd-band-h{min-width:0;font-size:clamp(1.05rem,3.4vw,1.28rem);font-weight:800;
+  color:var(--fg-1);line-height:1.35;overflow-wrap:break-word}
+.upd-band p{margin:0;font-size:.9rem;color:var(--fg-3);line-height:1.65;overflow-wrap:break-word}
+.upd-band-cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.upd-band-btn{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;background:var(--pbi);color:#111;border-radius:12px;padding:0 20px;
+  font-weight:800;font-size:.95rem;transition:filter .15s ease}
+.upd-band:hover .upd-band-btn{filter:brightness(1.08)}
+.upd-band-alt{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:12px;padding:0 18px;color:var(--fg-2);font-weight:600;font-size:.9rem}
+@media (min-width:760px){
+  .upd-band{flex-direction:row;align-items:center;gap:22px;padding:22px 24px}
+  .upd-band-txt{flex:1 1 auto}
+  .upd-band-cta,.upd-band-btn,.upd-band-alt{flex:0 0 auto}
+}
+@media (prefers-reduced-motion:reduce){.upd-band-btn{transition:none}}
+
+/* ===== The month selector on the updates page ===== */
+.yr{display:flex;align-items:center;gap:14px;margin:30px 0 16px}
+.yr-n{flex:0 0 auto;font-family:var(--mono);font-size:clamp(1.5rem,5vw,2rem);font-weight:600;
+  color:var(--pbi);letter-spacing:.06em;line-height:1}
+.yr-line{flex:1 1 auto;height:1px;background:var(--line);min-width:0}
+.yr-count{flex:0 0 auto;font-family:var(--mono);font-size:.78rem;color:var(--fg-4)}
+.m-grid{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:560px){.m-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+@media (min-width:900px){.m-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.m-btn{position:relative;display:flex;flex-direction:column;gap:10px;min-width:0;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:16px;padding:20px 20px 16px;
+  color:var(--fg-1);transition:border-color .16s ease,background .16s ease,transform .16s ease}
+.m-btn:hover{border-color:var(--pbi-glow);background:var(--bg-2);transform:translateY(-2px)}
+.m-btn.is-new{border-color:var(--pbi-glow);background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%)}
+.m-new{position:absolute;top:14px;inset-inline-end:16px;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;color:#111;background:var(--pbi);border-radius:99px;padding:3px 9px;font-weight:700}
+.m-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
+.m-name{font-size:clamp(1.25rem,4.4vw,1.5rem);font-weight:800;line-height:1.2}
+.m-yr{font-family:var(--mono);font-size:.85rem;color:var(--fg-4);letter-spacing:.04em}
+.m-note{font-size:.9rem;color:var(--fg-3);line-height:1.6;overflow-wrap:break-word}
+.m-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.m-chips{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
+.m-chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--fg-4);
+  border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.m-go{flex:0 0 auto;font-size:.85rem;font-weight:700;color:var(--fg-2);display:inline-flex;align-items:center;gap:6px}
+.m-btn:hover .m-go{color:var(--pbi)}
+.m-soon{display:flex;flex-direction:column;gap:8px;justify-content:center;min-width:0;
+  background:transparent;border:1px dashed var(--line);border-radius:16px;padding:20px}
+.m-soon b{font-size:1rem;color:var(--fg-3)}
+.m-soon span{font-size:.86rem;color:var(--fg-4);line-height:1.6}
+@media (max-width:559px){.m-btn{padding:17px 17px 14px}.m-foot{padding-top:10px}}
+@media (pointer:coarse){.m-btn{min-height:44px}}
+@media (prefers-reduced-motion:reduce){.m-btn{transition:none}.m-btn:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="To the course homepage"><b>SQL</b> with Eliran</a>
+    <nav class="lesson-rail" aria-label="Navigating between parts of the platform">
+      <a class="lr lr-site" href="index.html" title="Back to the site's home page"><b>↩</b><span>The site's homepage</span></a>
+      <span class="lr-sep" aria-hidden="true"></span>
+      <a class="lr lr-home" href="pbi.html" title="Power BI center"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Power BI</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI basics"><b>1</b><span>Base</span></a>
+      <a class="lr" href="pbi-course-2.html" title="Data modeling"><b>2</b><span>Modeling</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query and ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M and DAX basics"><b>4</b><span>M and DAX</span></a>
+      <a class="lr lr-x is-on" href="pbi-updates.html" aria-current="page" title="The Monthly Power BI Updates"><b>◷</b><span>Updates</span></a><a class="lr lr-x" href="pbi-quiz.html" title="The full question bank"><b>?</b><span>Question bank</span></a>
+      <a class="lr lr-x" href="dax-reference.html" title="DAX function index"><b>Fx</b><span>DAX reference</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <section class="hero">
+    <span class="eyebrow">POWER BI · Monthly Updates</span>
+    <h1>update <em>Power BI</em></h1>
+    <p>Microsoft releases a new version every month. Pick a month and get a full lesson: why the feature was built,
+       how it actually works, what bugs are known, and what the workaround is.</p>
+    <div class="stats">
+      <span class="stat"><b>3</b> updates</span>
+      <span class="stat"><b>55</b> topics</span>
+      <span class="stat"><b>36</b> Quiz questions</span>
+      <span class="stat"><b>41</b> Bugs and workarounds</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="yr-2026">
+    <div class="yr">
+      <span class="yr-n" id="yr-2026">2026</span>
+      <span class="yr-line" aria-hidden="true"></span>
+      <span class="yr-count">3 updates</span>
+    </div>
+    <div class="m-grid">
+    <a class="m-btn is-new" href="pbi-lesson-2026-08.html" aria-label="August 2026 update — for the full lesson"><span class="m-new">new</span>
+      <span class="m-top"><span class="m-name">August</span><span class="m-yr">2026</span></span>
+      <span class="m-note">Themes move out of preview and become the default, refresh splits into three operations, and images now come from OneLake.</span>
+      <span class="m-foot"><span class="m-chips"><span class="m-chip">13 topics</span><span class="m-chip">14 bugs</span></span><span class="m-go">to the lesson <span aria-hidden="true">←</span></span></span>
+    </a>
+    <a class="m-btn" href="pbi-lesson-2026-07.html" aria-label="July 2026 update — to the full lesson">
+      <span class="m-top"><span class="m-name">July</span><span class="m-yr">2026</span></span>
+      <span class="m-note">The browser becomes a modeling surface: TMDL and Model Options in the service, overwrite risks versus Desktop, and enterprise apps with audiences.</span>
+      <span class="m-foot"><span class="m-chips"><span class="m-chip">22 topics</span><span class="m-chip">16 bugs</span></span><span class="m-go">to the lesson <span aria-hidden="true">←</span></span></span>
+    </a>
+    <a class="m-btn" href="pbi-lesson-2026-06.html" aria-label="June 2026 update — to the full lesson">
+      <span class="m-top"><span class="m-name">June</span><span class="m-yr">2026</span></span>
+      <span class="m-note">DAX gets functions: signature, types and optional parameters. Also DAX Query View and report-experience UX updates.</span>
+      <span class="m-foot"><span class="m-chips"><span class="m-chip">20 topics</span><span class="m-chip">11 bugs</span></span><span class="m-go">to the lesson <span aria-hidden="true">←</span></span></span>
+    </a>
+
+      <div class="m-soon">
+        <b>September 2026</b>
+        <span>Will be added here when the update is released. Previous lessons always remain available.</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">
+    <span aria-hidden="true">↺</span>
+    <div><b>Every update lesson is built like the course lessons.</b> Navigate between topics with buttons or keyboard arrows,
+    automatic position saving in the browser, and a quiz button available at any moment with a full explanation for every answer.</div>
+  </div>
+</main>
+
+<footer class="site">
+  Built by <a href="index.html">Eliran Grossman</a> · Power BI Course, free to use
+</footer>
+
+
+<!-- ===== A back-to-home button — fixed, accessible from anywhere on the page ===== -->
+<style>
+.gh-home{position:fixed;z-index:9500;inset-block-end:max(16px,env(safe-area-inset-bottom));
+ inset-inline-start:max(16px,env(safe-area-inset-left));display:inline-flex;align-items:center;gap:8px;
+ min-height:44px;padding:0 16px;border-radius:99px;text-decoration:none;white-space:nowrap;
+ font-family:"Heebo","Segoe UI",Arial,sans-serif;font-size:13.5px;font-weight:600;
+ background:rgba(18,22,29,.94);color:#e6edf3;border:1px solid rgba(255,255,255,.16);
+ box-shadow:0 6px 22px rgba(0,0,0,.45);backdrop-filter:blur(8px);
+ transition:transform .15s,border-color .15s,background .15s}
+.gh-home:hover{background:rgba(28,34,45,.97);border-color:#00d4c8;transform:translateY(-2px);color:#fff}
+.gh-home:focus-visible{outline:2px solid #00d4c8;outline-offset:3px}
+.gh-home .gh-ico{font-size:15px;line-height:1}
+@media(max-width:430px){.gh-home{padding:0 13px;font-size:13px}}
+@media print{.gh-home{display:none}}
+</style>
+<a class="gh-home" href="index.html" aria-label="Back to the site's home page">
+  <span class="gh-ico" aria-hidden="true">&#127968;</span><span>home page</span>
+</a>
+
+</body>
+</html>

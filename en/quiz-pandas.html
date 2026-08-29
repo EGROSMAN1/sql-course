@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Multiple-Choice Questions in Pandas — Free Quiz | SQL.course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d0f;--bg2:#0c1518;--bg3:#111e21;
+  --border:rgba(0,212,200,.08);--border2:rgba(0,212,200,.18);
+  --text:#e8f4f5;--text2:#6b9098;--text3:#2a4048;
+  --aq:#00d4c8;--aq2:rgba(0,212,200,.12);
+  --green:#00e676;--red:#ff4757;--orange:#FFB020;
+  --font:'Heebo',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+
+/* TOPNAV */
+.topnav{background:rgba(7,13,15,.97);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.back-btn{color:var(--aq);text-decoration:none;font-size:12px;font-weight:700;font-family:var(--mono)}
+.topnav-title{font-size:13px;font-weight:700;color:var(--text2)}
+.topnav-right{display:flex;align-items:center;gap:.5rem;margin-right:auto}
+.score-badge{background:var(--bg3);border:1px solid var(--border2);color:var(--aq);font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;font-family:var(--mono)}
+.level-tabs{display:flex;gap:.35rem;margin-right:.5rem}
+.ltab{font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;text-decoration:none;border:1px solid var(--border2);color:var(--text2);transition:all .12s;font-family:var(--mono)}
+.ltab:hover{color:var(--text);border-color:var(--border2)}
+.ltab.active{background:var(--aq2);border-color:var(--aq);color:var(--aq)}
+
+/* FIREBASE BAR */
+.fb-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;position:sticky;top:48px;z-index:90}
+.fb-login-btn{display:flex;align-items:center;gap:6px;background:#4285f4;color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)}
+.fb-logout-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-user-info{display:none;align-items:center;gap:.5rem}
+.fb-user-photo{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--aq)}
+.fb-user-name{font-size:12.5px;font-weight:700;color:var(--text)}
+.fb-saved-score{display:none;font-size:11px;color:var(--aq);font-family:var(--mono);background:rgba(0,212,200,.08);padding:3px 9px;border-radius:4px}
+.fb-save-btn{display:none;align-items:center;gap:5px;background:var(--aq);color:var(--bg);border:none;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);margin-right:auto}
+.fb-history-btn{display:none;align-items:center;gap:5px;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.fb-history-btn:hover{color:var(--text);border-color:var(--aq)}
+.fb-history-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:none}
+.hstats-row{display:flex;gap:1.5rem;margin-bottom:1rem;justify-content:center}
+.hstat-mini{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:900;font-family:var(--mono)}
+.hstat-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.hchart{display:flex;align-items:flex-end;gap:.4rem;height:130px;padding:.5rem 0;overflow-x:auto}
+.hbar-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:32px;flex-shrink:0}
+.hbar{width:24px;border-radius:4px 4px 0 0;transition:all .3s;min-height:8px}
+.hbar-val{font-size:9.5px;color:var(--text2);font-family:var(--mono)}
+.hbar-lbl{font-size:9px;color:var(--text3)}
+#fb-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--aq);color:var(--bg);padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:999;pointer-events:none}
+#fb-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* HERO */
+.hero{padding:2rem 1.5rem 1.5rem;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,212,200,.06),transparent 70%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,200,.1);border:1px solid var(--border2);color:var(--aq);font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;font-family:var(--mono);letter-spacing:1px;margin-bottom:.75rem}
+.hero-title{font-size:2rem;font-weight:900;color:var(--text);margin-bottom:.3rem}
+.hero-title em{color:var(--aq);font-style:normal}
+.hero-desc{color:var(--text2);font-size:.9rem;margin-bottom:1.25rem}
+.hero-stats{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-n{font-size:1.6rem;font-weight:900;font-family:var(--mono);color:var(--aq)}
+.hs-l{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+
+/* PROGRESS */
+.prog-bar-wrap{padding:.75rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;position:sticky;top:96px;z-index:80}
+.prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--aq);border-radius:2px;transition:width .3s}
+.prog-txt{font-size:11px;color:var(--text2);font-family:var(--mono);white-space:nowrap}
+.score-display{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--aq);white-space:nowrap}
+
+/* MAIN */
+.main{max-width:800px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+/* SECTION LABEL */
+.sec-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--aq);font-family:var(--mono);padding:.75rem 0 .5rem;margin-top:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+
+/* QUESTION CARD */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:.75rem;transition:border-color .2s}
+.q-card.correct{border-color:rgba(0,230,118,.3)}
+.q-card.wrong{border-color:rgba(255,71,87,.3)}
+.q-header{margin-bottom:.85rem}
+.q-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.q-num{font-size:10px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:4px;font-weight:700}
+.q-section-tag{font-size:10px;color:var(--text3);font-weight:600}
+.q-text{font-size:14px;font-weight:700;color:var(--text);line-height:1.55}
+.options{display:flex;flex-direction:column;gap:.4rem}
+.option{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .8rem;background:var(--bg3);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;user-select:none}
+.option:hover:not(.disabled){border-color:var(--border2);background:rgba(0,212,200,.05)}
+.option.disabled{cursor:default}
+.option.correct-ans{border-color:rgba(0,230,118,.5);background:rgba(0,230,118,.07)}
+.option.wrong-ans{border-color:rgba(255,71,87,.4);background:rgba(255,71,87,.07)}
+.opt-letter{width:20px;height:20px;border-radius:4px;background:var(--bg);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;font-family:var(--mono)}
+.option.correct-ans .opt-letter{background:rgba(0,230,118,.2);border-color:rgba(0,230,118,.5);color:var(--green)}
+.option.wrong-ans .opt-letter{background:rgba(255,71,87,.2);border-color:rgba(255,71,87,.5);color:var(--red)}
+.opt-text{font-size:13px;color:var(--text2);line-height:1.5}
+.option.correct-ans .opt-text{color:var(--text)}
+.explanation{background:var(--bg3);border-right:2px solid var(--aq);border-radius:0 6px 6px 0;padding:.6rem .85rem;margin-top:.6rem;display:none}
+.explanation.show{display:block}
+.exp-label{font-size:10px;font-weight:700;color:var(--aq);font-family:var(--mono);margin-bottom:.25rem}
+.exp-text{font-size:12.5px;color:var(--text2);line-height:1.6}
+
+/* FINISH */
+.finish-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2.5rem;text-align:center;margin-top:2rem;display:none}
+.finish-card.show{display:block}
+.finish-emoji{font-size:3rem;margin-bottom:.75rem}
+.finish-title{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
+.finish-score{font-size:2.5rem;font-weight:900;font-family:var(--mono);color:var(--aq);margin-bottom:.5rem}
+.finish-grade{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.finish-sub{font-size:.9rem;color:var(--text2);margin-bottom:1.5rem}
+.retry-btn{background:var(--aq);color:var(--bg);border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:var(--font);margin-left:.5rem}
+.level-link{display:inline-block;background:transparent;color:var(--text2);border:1px solid var(--border2);padding:10px 20px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;margin-top:.5rem;transition:all .15s}
+.level-link:hover{border-color:var(--aq);color:var(--aq)}
+
+/* MOBILE */
+/* ===== MOBILE — comprehensive responsive layout ===== */
+@media(max-width:900px){
+  .level-tabs{flex-wrap:wrap;gap:4px;justify-content:flex-end}
+  .level-tabs .ltab:not([title]){font-size:11px;padding:3px 7px}
+}
+@media(max-width:768px){
+  .topnav{padding:.45rem .7rem;gap:.4rem;flex-wrap:wrap}
+  .topnav-title{font-size:12px;flex:1;min-width:0;text-align:center}
+  .back-btn{font-size:11.5px;padding:4px 9px}
+  /* Hide the SQL-quiz tabs on mobile but KEEP language flags visible */
+  .level-tabs .ltab:not([title="Hebrew"]):not([title="English"]):not([title="中文"]){display:none}
+  .level-tabs{flex-wrap:nowrap;gap:3px}
+  .score-badge{font-size:11.5px;padding:3px 8px}
+  .hero{padding:1.2rem .8rem .9rem}
+  .hero-title{font-size:1.4rem;line-height:1.25}
+  .hero-subtitle{font-size:12.5px}
+  .hero-stats{gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem}
+  .hs{min-width:60px;padding:.4rem .55rem}
+  .hs-n{font-size:1.1rem}
+  .hs-l{font-size:10.5px}
+  .prog-bar-wrap{padding:.6rem .8rem;gap:.5rem;flex-wrap:wrap}
+  .prog-bar{height:8px}
+  .prog-txt,.score-display{font-size:12px}
+  .main{padding:.9rem .65rem 3rem}
+  .q-card{padding:.85rem;border-radius:10px;margin-bottom:.9rem}
+  .q-num{font-size:11px}
+  .q-section{font-size:11px;padding:2px 8px}
+  .q-text{font-size:13.5px;line-height:1.55}
+  .options{gap:.4rem}
+  .option{padding:.6rem .7rem;min-height:42px;font-size:13px}
+  .opt-letter{width:22px;height:22px;font-size:11.5px;flex-shrink:0}
+  .opt-text{font-size:12.5px;line-height:1.45}
+  .explanation{font-size:12.5px;padding:.7rem .8rem;line-height:1.55}
+  .explanation b{font-size:12.5px}
+  .finish-card{padding:1.4rem .9rem;margin:1.5rem .3rem}
+  .finish-title{font-size:1.3rem}
+  .finish-score{font-size:1.8rem}
+  .finish-msg{font-size:13px}
+  .finish-actions{flex-direction:column;gap:.5rem}
+  .finish-actions button,.finish-actions a{width:100%;padding:.7rem 1rem;font-size:13.5px;justify-content:center}
+  .fb-bar{padding:.4rem .7rem;font-size:11.5px;flex-wrap:wrap;gap:.4rem}
+  .fb-login-btn,.fb-logout-btn{font-size:11px;padding:4px 10px}
+}
+@media(max-width:480px){
+  .topnav{padding:.4rem .55rem}
+  .topnav-title{font-size:11px}
+  .back-btn{font-size:11px;padding:3px 7px}
+  .hero{padding:1rem .65rem .8rem}
+  .hero-title{font-size:1.2rem}
+  .hero-subtitle{font-size:11.5px}
+  .hero-stats{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.2rem}
+  .hero-stats::-webkit-scrollbar{display:none}
+  .hs{flex-shrink:0;min-width:55px}
+  .main{padding:.7rem .5rem 2.5rem}
+  .q-card{padding:.75rem}
+  .q-text{font-size:13px}
+  .option{padding:.55rem .6rem;min-height:40px}
+  .opt-text{font-size:12px}
+  .opt-letter{width:20px;height:20px;font-size:11px}
+  .prog-bar-wrap{padding:.5rem .65rem}
+}
+@media(max-width:380px){
+  .topnav{padding:.35rem .45rem}
+  .topnav-title{font-size:10.5px}
+  .hero-title{font-size:1.1rem}
+  .hs{min-width:48px;padding:.35rem .4rem}
+  .hs-n{font-size:1rem}
+  .hs-l{font-size:9.5px}
+  .q-card{padding:.65rem}
+  .q-text{font-size:12.5px}
+  .option{padding:.5rem .55rem}
+  .opt-text{font-size:11.5px}
+  .opt-letter{width:18px;height:18px;font-size:10px}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+</style>
+
+<meta name="description" content="A 100-question multiple-choice quiz on the Pandas library in Python — getting to know the table, filtering, missing values, window functions, pivot tables, dates, and 13 more categories. With an explanation for every answer. Completely free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/quiz-pandas.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/quiz-pandas.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="100 Multiple-Choice Questions in Pandas — Quiz | SQL.course">
+<meta property="og:description" content="100 multiple-choice questions on Pandas — filtering, window functions, pivot tables, dates and more. With an explanation for every answer.">
+<meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="100 Multiple-Choice Questions in Pandas — Quiz | SQL.course">
+<meta name="twitter:description" content="100 multiple-choice questions on Pandas — filtering, window functions, pivot tables, dates and more. With an explanation for every answer.">
+<meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "home page",
+        "item": "https://egrosman1.github.io/sql-course/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Pandas Quiz — 100 Questions",
+        "item": "https://egrosman1.github.io/sql-course/quiz-pandas.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    "name": "Medium-Level SQL Questions — Free Quiz | SQL.course",
+    "description": "An intermediate-level SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING and subqueries. Excellent practice to prepare for a data analyst job interview.",
+    "url": "https://egrosman1.github.io/sql-course/quiz-pandas.html",
+    "inLanguage": "he",
+    "isAccessibleForFree": true,
+    "learningResourceType": "Quiz",
+    "teaches": "SQL",
+    "educationalLevel": "beginner to advanced",
+    "provider": {
+      "@type": "Organization",
+      "name": "SQL.course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Eliran Grossman",
+      "jobTitle": "SQL instructor and analytics manager, Partner"
+    },
+    "isPartOf": {
+      "@type": "Course",
+      "name": "Free SQL Course",
+      "url": "https://egrosman1.github.io/sql-course/"
+    }
+  }
+]
+</script>
+</head>
+<body data-quiz-id="pandas">
+
+<div class="topnav">
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">🐼 100 multiple-choice questions in Pandas</div>
+  <div class="topnav-right">
+    <div class="level-tabs">
+      <a href="quiz-beginner.html" class="ltab">🌱 SQL for beginners</a>
+      <a href="quiz-medium.html" class="ltab">📗 SQL Medium</a>
+      <a href="quiz.html" class="ltab">🧠 Advanced SQL</a>
+      <a href="quiz-pandas.html" class="ltab active">🐼 Pandas</a><a href="../quiz-pandas.html" class="ltab" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="index.html" class="ltab" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/index.html" class="ltab" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    </div>
+    <div class="score-badge" id="scoreText">✅ 0 / 0</div>
+  </div>
+</div>
+
+<!-- FIREBASE BAR -->
+<div class="fb-bar" id="fbBar">
+  <button class="fb-login-btn" id="fb-login-btn" onclick="fbLogin()">
+    <svg width="14" height="14" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Sign in with Google
+  </button>
+  <div class="fb-user-info" id="fb-user-info">
+    <img class="fb-user-photo" id="fb-user-photo" src="" alt="">
+    <span class="fb-user-name" id="fb-user-name"></span>
+  </div>
+  <span class="fb-saved-score" id="fb-saved-score"></span>
+  <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 Save progress</button>
+  <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 History</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">Exit</button>
+</div>
+<div id="fb-history-wrap" style="display:none">
+  <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">📗 LEVEL 2 · INTERMEDIATE</div>
+  <h1 class="hero-title">Multiple-choice questions — <em>Medium level</em></h1>
+  <p class="hero-desc">String Functions · Aggregation · Advanced JOINs — 80 Questions</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">answered</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">correctness</div></div>
+    <div class="hs"><div class="hs-n">100</div><div class="hs-l">questions</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">grade</div></div>
+  </div>
+</div>
+
+<div class="prog-bar-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="scoreFill" style="width:0%"></div></div>
+  <div class="prog-txt" id="progTxt">0 / 100</div>
+  <div class="score-display" id="scoreDisplay">0%</div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+const questions = [
+  {n:1,s:"Part A — Basic introduction to the table",t:"Which command is used to display the first 5 rows of a table?",o:["df.first(5)","df.head()","df.top()","df.show(5)"],c:1,e:"head() shows the first 5 rows by default for an initial peek at the data."},
+  {n:2,s:"Part A — Basic introduction to the table",t:"How can you see the exact number of rows and columns in a table?",o:["df.size()","df.info","df.shape","df.count()"],c:2,e:"shape is an attribute (not a function) that returns a tuple of (rows, columns) — that's why it's written without parentheses."},
+  {n:3,s:"Part A — Basic introduction to the table",t:"What does the df.describe() command do?",o:["Shows the column names","produces automatic descriptive statistics (mean, min, max) for numeric columns","Describes the data types","Checks for duplicate values"],c:1,e:"describe provides key statistical measures — mean, standard deviation, percentiles — in one shot."},
+  {n:4,s:"Part A — Basic introduction to the table",t:"Why is it important to use df_new = df.copy() instead of df_new = df?",o:["The table will take up less memory","To prevent a situation where changes to the copy accidentally affect the original too","To concatenate the table with itself","copy is used only for exporting files"],c:1,e:"A regular assignment only creates a reference to the same object. copy() guarantees a completely independent copy."},
+  {n:5,s:"Part A — Basic introduction to the table",t:"Which command reverses the order of rows in a table (the last becomes first)?",o:["df.reverse()","df.iloc[::-1]","df.sort_values(ascending=False)","df.flip_rows()"],c:1,e:"[::-1] inside iloc is a Python slicing trick — steps of minus 1 along the rows."},
+  {n:6,s:"Part A — Basic introduction to the table",t:"How can we pull about 10% of the rows randomly?",o:["df.sample(n=10)","df.sample(percent=10)","df.sample(frac=0.1)","df.sample(ratio=0.1)"],c:2,e:"frac (Fraction) takes a fraction between 0 and 1 and represents the portion of rows to sample. Note: the result is rounded to a whole row — on 107 rows, frac=0.1 will return 11 rows. To add reproducibility, pass random_state=42."},
+  {n:7,s:"Part A — Basic introduction to the table",t:"How do we check how much memory (in bytes) each column in a table uses?",o:["df.info()","df.memory_usage(deep=True)","df.size","df.bytes()"],c:1,e:"memory_usage(deep=True) also analyzes object (text) columns in depth and returns accurate memory consumption."},
+  {n:8,s:"Part A — Basic introduction to the table",t:"Which command forces pandas to always show all the columns without truncation?",o:["df.show_all_columns()","pd.set_option('display.max_columns', None)","pd.display_settings(columns='all')","df.columns.expand()"],c:1,e:"set_option controls the global display settings. None removes the limit."},
+  {n:9,s:"Part A — Basic introduction to the table",t:"How do we find out how many rows are in a table without using len()?",o:["df.size()","df.shape[0]","df.rows()","df.count_rows()"],c:1,e:"shape returns (rows, columns). Position [0] is the number of rows."},
+  {n:10,s:"Part A — Basic introduction to the table",t:"What does the df.columns command return?",o:["Number of columns","An object with a list of all the column names","Sorts columns alphabetically","Deletes empty columns"],c:1,e:"A property (not a function) that returns the column names — useful for display or updates."},
+  {n:11,s:"Part 2 — Filtering, retrieval, and sorting",t:"What's the correct way to filter by two conditions: age > 30 and city = Tel Aviv?",o:["df[df['age']>30 and df['city']=='Tel Aviv']","df[(df['age']>30) & (df['city']=='Tel Aviv')]","df[df['age']>30 & df['city']=='Tel Aviv']","df.filter(age>30, city='Tel Aviv')"],c:1,e:"You must use & for 'and' (or | for 'or'), and you must wrap each condition in parentheses."},
+  {n:12,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we fetch the 5 rows with the highest values in a column?",o:["df.sort_values(desc=True).head(5)","df.max(5,'column')","df.top(5,'column')","df.nlargest(5,'column')"],c:3,e:"nlargest is more efficient than a full sort — equivalent to ORDER BY DESC LIMIT 5."},
+  {n:13,s:"Part 2 — Filtering, retrieval, and sorting",t:"Which command filters in SQL style within a text string?",o:["df.filter_text(\"age>30\")","df.query(\"age>30\")","df.search(\"age>30\")","df.sql(\"SELECT * WHERE age>30\")"],c:1,e:"query takes a condition as a string — sometimes more readable than a boolean condition in brackets."},
+  {n:14,s:"Part 2 — Filtering, retrieval, and sorting",t:"What's the difference between df.loc and df.iloc?",o:["loc retrieves columns, iloc retrieves rows","loc for numbers, iloc for text","loc by names (labels), iloc by numeric position","No difference"],c:2,e:"The i in iloc = Integer location. We use it when we know the position, not the name."},
+  {n:15,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we efficiently filter customers in the cities 'Tel Aviv' or 'Haifa'?",o:["df[df['city']=='Tel Aviv' and df['city']=='Haifa']","df[(df['city']=='Tel Aviv') & (df['city']=='Haifa')]","df[df['city'].isin(['Tel Aviv','Haifa'])]","df.filter(city='Tel Aviv','Haifa')"],c:2,e:"isin saves long OR conditions and lets you check against a list in one command."},
+  {n:16,s:"Part 2 — Filtering, retrieval, and sorting",t:"Which symbol replaces OR in a filter condition in pandas?",o:["||","or","|","&"],c:2,e:"| (Pipe) acts as a boolean OR between conditions, and each condition is wrapped in parentheses."},
+  {n:17,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we sort the table by 'price' from most to least expensive?",o:["df.sort_values('price', ascending=False)","df.sort('price', desc=True)","df.order_by('price','DESC')","df.sort_values('price')"],c:0,e:"ascending=False sorts in descending order (largest to smallest)."},
+  {n:18,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we create a new column 'total' = 'price' + 'tax'?",o:["df.add_column('total','price'+'tax')","df['total']=df['price']+df['tax']","df.new('total')=df['price']+df['tax']","pd.concat(df['price'],df['tax'],name='total')"],c:1,e:"Defining a name in square brackets and assigning a computed expression — the standard form in pandas."},
+  {n:19,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we show the 3 customers with the lowest revenue from 'revenue'?",o:["df.nsmallest(3,'revenue')","df.min(3,'revenue')","df.bottom(3,'revenue')","df.tail(3,'revenue')"],c:0,e:"nsmallest is the equivalent of ORDER BY ASC LIMIT 3 — faster than a full sort."},
+  {n:20,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we retrieve by position: row 0, column 1?",o:["df.loc[0,1]","df.iloc[0,1]","df.get(0,1)","df.select(0,1)"],c:1,e:"iloc always works with integer numeric indexes."},
+  {n:21,s:"Part 2 — Filtering, retrieval, and sorting",t:"At what value of the method parameter will df['column'].rank(ascending=False) behave exactly like RANK in SQL?",o:["method='average' (the default)","method='min'","method='first'","method='dense'"],c:1,e:"The default of rank is method='average', which assigns an average rank to tied values (e.g. 2.5 and 2.5) — a behavior with no direct equivalent in SQL. The exact mapping is: method='min' = RANK (skips after a tie), method='dense' = DENSE_RANK (no skipping), method='first' = ROW_NUMBER (breaks ties by order of appearance)."},
+  {n:22,s:"Part 2 — Filtering, retrieval, and sorting",t:"How do we check if the customer's age is between 18 and 25 (inclusive)?",o:["df['age'].between(18,25)","df['age'].in_range(18,25)","df['age'].middle(18,25)","df['age']==range(18,25)"],c:0,e:"between is equivalent to BETWEEN in SQL and returns True/False."},
+  {n:23,s:"Part 3 — Missing Values",t:"Which command counts exactly how many blank values are in each column?",o:["df.count_nulls()","df.isnull()","df.isna().sum()","df.empty().count()"],c:2,e:"isna() marks True/False for each cell, sum() adds up the True values in each column."},
+  {n:24,s:"Part 3 — Missing Values",t:"Which command deletes every row that has at least one empty cell?",o:["df.dropna()","df.remove_nulls()","df.fillna(0)","df.drop_empty()"],c:0,e:"dropna() by default deletes rows with NaN. Use with caution — it can delete a lot of data."},
+  {n:25,s:"Part 3 — Missing Values",t:"df.ffill() is meant to:",o:["Filling with 0","Filling missing values by 'pulling' the valid value from the previous row","Filtering by the first column","Finding duplicate values"],c:1,e:"Forward Fill — very useful for header values that need to apply to the rows below them."},
+  {n:26,s:"Part 3 — Missing Values",t:"What's the difference between df.dropna() and df.dropna(thresh=3)?",o:["thresh=3 deletes only 3 rows","thresh=3 keeps rows with at least 3 valid values","thresh removes only columns","No difference"],c:1,e:"thresh (Threshold) sets a minimum number of valid values in a row so that it is not dropped."},
+  {n:27,s:"Part 3 — Missing Values",t:"Which command is the opposite of isna() and returns True only for filled cells?",o:["df.is_full()","df.has_data()","df.notna()","df.valid()"],c:2,e:"notna marks True only for cells that have a value — useful for filtering."},
+  {n:28,s:"Part 3 — Missing Values",t:"How can we quickly find out which columns have at least one empty cell?",o:["df.isna().any()","df.isna().all()","df.check_nulls()","df.has_empty()"],c:0,e:"any() after isna() returns True for every column that has at least one missing value, and False for a full column. Note the difference: any() asks 'at least one', while all() asks 'all' and will return True only for a column that's entirely empty."},
+  {n:29,s:"Part 3 — Missing Values",t:"Which command fills in missing values by computing the relative value between the preceding and following neighbor?",o:["df.fill_between()","df.ffill()","df.interpolate()","df.bfill()"],c:2,e:"interpolate 'draws a line' between the values — essential for time series and financial sequences."},
+  {n:30,s:"Part 3 — Missing Values",t:"How do we fill missing values in 'age' with that column's average?",o:["df['age'].fillna(mean)","df['age'].fill_mean()","df['age'].fillna(df['age'].mean())","df['age'].replace_na('mean')"],c:2,e:"fillna takes a value — here we'll pass the calculated average as the argument."},
+  {n:31,s:"Part 3 — Missing Values",t:"What does df.bfill() do?",o:["Fills empties with 0","Backward Fill — takes a value from the next row","Forward Fill","Performs Undo"],c:1,e:"bfill takes data from the next row and 'raises' it upward to fill empty cells."},
+  {n:32,s:"Part D — Unique values and duplicates",t:"Which command returns an array of the unique values in a column, in their original order of appearance?",o:["df['column'].distinct()","df['column'].unique()","df['column'].nunique()","df['column'].duplicated()"],c:1,e:"unique() returns an array (ndarray) of the distinct values in the order they first appeared. nunique() returns only their count as a number, and duplicated() returns a boolean Series marking which rows are repeats. Note: drop_duplicates() also removes duplicates, but returns a Series with the original index rather than an array."},
+  {n:33,s:"Part D — Unique values and duplicates",t:"df['column'].value_counts() is used for:",o:["Counting empty cells","Sum calculation","Counting how many times each unique value appears","Deleting duplicates"],c:2,e:"Great for checking distributions — for example, the number of customers per subscription type."},
+  {n:34,s:"Part D — Unique values and duplicates",t:"df['city'].nunique() will return:",o:["City names without duplicates","A number representing how many different, unique cities there are","Will delete duplicate cities","Counts empty cells"],c:1,e:"The n stands for Number — a numeric count of the unique values."},
+  {n:35,s:"Part D — Unique values and duplicates",t:"Which command will flag exact duplicate rows in a table?",o:["df.find_duplicates()","df.duplicates()","df.duplicated()","df.is_dup()"],c:2,e:"duplicated returns a boolean Series — True for a row that is a copy of another one that already appeared."},
+  {n:36,s:"Part D — Unique values and duplicates",t:"What's important to know about df.drop_duplicates() by default?",o:["Deletes all occurrences of the duplicates","Keeps the first occurrence and deletes the rest of the duplicates","Keeps only the last one","Asks the user which one to delete"],c:1,e:"The default is keep='first' — keeping the first occurrence."},
+  {n:37,s:"Part 5 — Joining and merging tables",t:"Which command joins two tables by a shared column (like JOIN in SQL)?",o:["pd.concat([df1,df2])","pd.join(df1,df2)","pd.merge(df1,df2,on='id')","df1.append(df2)"],c:2,e:"merge is the classic equivalent of JOIN by key. concat, on the other hand, is UNION."},
+  {n:38,s:"Part 5 — Joining and merging tables",t:"How do we add a new column exactly at the start of the table?",o:["df.add_first('col',values)","df.insert(0,'col',values)","df.push('col',values,position=1)","df['col']=values"],c:1,e:"insert gives full control over the position. 0 = the first column."},
+  {n:39,s:"Part 5 — Joining and merging tables",t:"How do we add a new row ['v1','v2'] to the bottom of the table?",o:["df.add_row(['v1','v2'])","df.loc[len(df)]=['v1','v2']","df.append_bottom(['v1','v2'])","df.insert_row(['v1','v2'])"],c:1,e:"len(df) is the number of rows, so df.loc[len(df)] creates a new row label at the bottom. The trick is only safe when the index is a plain RangeIndex (0,1,2...); if the index is different or not contiguous, you risk creating a strange label or even overwriting an existing row. The general, safer way to add rows is pd.concat, since df.append was removed from pandas in version 2.0."},
+  {n:40,s:"Part 5 — Joining and merging tables",t:"pd.concat([df1,df2]) with identical columns will do:",o:["Horizontal join","Vertical stacking, one under the other (UNION ALL)","Deleting shared rows","Average between the values"],c:1,e:"concat's default is to concatenate along axis=0 (rows) — equivalent to UNION ALL, because duplicates are kept and not removed. To get UNION behavior you need to add .drop_duplicates() after the concatenation. The ignore_index=True parameter will renumber the rows."},
+  {n:41,s:"Part 5 — Joining and merging tables",t:"pd.merge(df1, df2, on='id', how='left') performs:",o:["Vertical union","LEFT JOIN by 'id'","Joining strings","Calculation between tables"],c:1,e:"how='left' keeps all rows of df1 and attaches data from df2 wherever there's a match."},
+  {n:42,s:"Part 5 — Joining and merging tables",t:"How do we pull a column out of the table and save it to a variable while deleting it from the source?",o:["df.extract('col')","df.cut('col')","df.pop('col')","df.pull('col')"],c:2,e:"pop works like in lists/dicts — it cuts and returns the column."},
+  {n:43,s:"Part 5 — Joining and merging tables",t:"How do we completely remove a column from the table?",o:["df.delete_column('col')","df.remove('col')","df.drop(columns=['col'])","df.clear('col')"],c:2,e:"drop is used to remove rows or columns from a table. Columns are removed via the columns parameter (a list of several at once is allowed), and rows via the index parameter. drop returns a new table and doesn't change the original, unless you add inplace=True."},
+  {n:44,s:"Part F — Window functions",t:"Which command computes a running total across the rows?",o:["df['column'].rolling_sum()","df['column'].sum()","df['column'].cumsum()","df['column'].agg('sum')"],c:2,e:"cumsum (Cumulative Sum) sums row after row. Useful for tracking cumulative revenue."},
+  {n:45,s:"Part F — Window functions",t:"df['column'].shift(1) is used mainly for:",o:["Moving the column to the first position","Deleting the first row","'Pushing' the data one row down (like LAG)","Adding 1 to each cell"],c:2,e:"A classic window function — for comparing a current value against a previous value (like yesterday's stock price)."},
+  {n:46,s:"Part F — Window functions",t:"How do we calculate a 7-day moving average?",o:["df['column'].mean(7)","df['column'].rolling(7).mean()","df['column'].moving_average(7)","df['column'].window(7).avg()"],c:1,e:"rolling defines a 'rolling' window on which you can run aggregations — critical for trends."},
+  {n:47,s:"Part F — Window functions",t:"Which command calculates the percent change between a row and the previous one?",o:["df['column'].diff_percent()","df['column'].pct_change()","df['column'].shift_pct()","df['column'].growth()"],c:1,e:"pct_change directly computes the relative rate of change — classic for growth percentages."},
+  {n:48,s:"Part F — Window functions",t:"df['column'].diff() calculates:",o:["Difference between columns","Difference from the average","Numeric difference between the current row and the previous one","Number of different rows"],c:2,e:"diff is excellent for calculating daily change in price, growth, or decline."},
+  {n:49,s:"Part F — Window functions",t:"What's the difference between df['col'].sum() and df.cumsum(axis=1)?",o:["No difference","The first is a sum of a column, the second is a horizontal running total across columns","The first one for integers","The second deletes columns"],c:1,e:"axis=1 shifts the direction of the operation sideways — across the columns, for each row separately."},
+  {n:50,s:"Part F — Window functions",t:"df.cumsum() without axis will perform a running total:",o:["To the column width","Along the rows (vertically)","Only on the first column","will return an error"],c:1,e:"The default axis=0 = vertical operation (along the rows), like most pandas operations."},
+  {n:51,s:"Part 7 — Dates and times",t:"What will df['date_column'].dt.year do?",o:["Change the format","will extract only the year from the date column","Will add one year","Filter to the current year"],c:1,e:"The dt attribute gives access to date and time components. year extracts the year."},
+  {n:52,s:"Part 7 — Dates and times",t:"Which command converts a text column to a smart date format?",o:["df['date'].to_time()","df['date'].format_date()","pd.to_datetime(df['date'])","df['date'].astype(date)"],c:2,e:"to_datetime turns strings into a Datetime object and unlocks all the dt operations."},
+  {n:53,s:"Part 7 — Dates and times",t:"Which command returns the day of the week name (Sunday/Monday) from a date?",o:["df['date'].dt.day()","df['date'].dt.weekday_text()","df['date'].dt.day_name()","df['date'].dt.name_of_day()"],c:2,e:"day_name returns the literal name of the day of the week."},
+  {n:54,s:"Part 7 — Dates and times",t:"How do you tell pandas to convert a date column already while reading the CSV?",o:["pd.read_csv('f.csv', parse_dates=['date'])","pd.read_csv('f.csv', format_dates=True)","impossible","pd.read_csv('f.csv', dates=True)"],c:0,e:"parse_dates in read_csv saves a separate conversion later — right after loading."},
+  {n:55,s:"Part 7 — Dates and times",t:"df['date'].dt.is_month_end returns:",o:["End-of-month date","True/False per row — whether this is the last day of the month","Number of days remaining","Error in February"],c:1,e:"A Boolean property that identifies the last day of the month, every month."},
+  {n:56,s:"Part 7 — Dates and times",t:"How do we extract only the month number (1-12) from a date column?",o:["df['date'].dt.month","df['date'].month()","df['date'].get_month()","pd.month(df['date'])"],c:0,e:"dt.month returns the month number — convenient for monthly grouping."},
+  {n:57,s:"Part 7 — Dates and times",t:"Which command retrieves the quarter (1-4) each date belongs to?",o:["df['date'].dt.quarter","df['date'].dt.q()","df['date'].quarter","pd.quarter(df['date'])"],c:0,e:"dt.quarter is a property that returns the quarter number (1 to 4) for each date — especially useful for quarterly reports. Like all dt components it's a property, not a function, so it's written without parentheses, and is only available after converting to datetime with pd.to_datetime."},
+  {n:58,s:"Part 8 — Pivot Tables and Grouping",t:"With which function do we create a pivot table that sums sales by city and year?",o:["pd.crosstab()","df.groupby()","pd.pivot_table()","df.melt()"],c:2,e:"pivot_table is designed to create pivot tables with rows, columns and aggregation values — just like in Excel."},
+  {n:59,s:"Part 8 — Pivot Tables and Grouping",t:"What does df.groupby('department')['salary'].mean() calculate?",o:["Average of the entire table","Groups by department and calculates a separate average salary for each department","Finds the average department","Deletes departments"],c:1,e:"The equivalent operation to GROUP BY department + AVG(salary) in SQL. Note the brackets ['salary'] after groupby: from pandas 2.0 onward, df.groupby('department').mean() without selecting a column raises a TypeError if the table has text columns, because pandas no longer silently skips them. If you want the average across all numeric columns together, you need to explicitly write mean(numeric_only=True)."},
+  {n:60,s:"Part 8 — Pivot Tables and Grouping",t:"What's the advantage of df.groupby('col').agg({'col1':'sum','col2':'mean'})?",o:["Performs the same aggregation on everything","Allows different aggregations in parallel on different columns","Automatically removes missing values","Renames columns"],c:1,e:"A dictionary inside agg determines which calculation to perform on which column — sum for one, average for another."},
+  {n:61,s:"Part 8 — Pivot Tables and Grouping",t:"If a cell contains a list [book, notebook, pen], which command will produce a row for each item?",o:["df.split_rows()","df.explode('column_name')","df.melt()","df.expand()"],c:1,e:"explode blows up a list — every item gets its own row, and the rest of the data is duplicated."},
+  {n:62,s:"Part 8 — Pivot Tables and Grouping",t:"What does df.melt() do?",o:["Merges duplicate rows","Turns a wide table into a long one (Unpivot)","Converts numeric columns to text","Removes negative values"],c:1,e:"The opposite of Pivot — great for rearranging data that didn't arrive in a normalized structure."},
+  {n:63,s:"Part 8 — Pivot Tables and Grouping",t:"What does df.set_index('customer_id') do?",o:["Moves to the end of the table","Turns 'customer_id' into the index (row labels) of the table","Deletes the column","Resets row numbers"],c:1,e:"set_index turns an existing column into row labels, and allows direct retrieval with df.loc['C123']. Note: unlike a primary key in SQL, pandas doesn't enforce uniqueness — you can create an index with duplicate values with no error at all, and the lookup speedup mainly happens when the index is unique or sorted. To undo the operation, use reset_index."},
+  {n:64,s:"Part 8 — Pivot Tables and Grouping",t:"Which command turns the index back into a regular column and resets it to numbers?",o:["df.clear_index()","df.revert_index()","df.reset_index()","df.drop_index()"],c:2,e:"reset_index is the opposite of set_index — returns to a flat tabular structure."},
+  {n:65,s:"Part 8 — Pivot Tables and Grouping",t:"pd.crosstab(df['col1'], df['col2']) is used to:",o:["Reversed column order","Creating a frequency table between two categorical columns","Calculating correlation","Joining tables"],c:1,e:"A quick tool for checking joint distributions between two variables — for example gender vs. subscription type."},
+  {n:66,s:"Part 8 — Pivot Tables and Grouping",t:"What does the as_index=False parameter do in df.groupby('city', as_index=False)['sales'].sum()?",o:["Sorts the result","leaves 'city' as a regular column instead of turning it into an index","Ignores rows with missing values","Returns the result as a dictionary"],c:1,e:"By default groupby moves the grouping column into the result's index, and then you need reset_index to turn it back into a column. as_index=False does this immediately, returning a flat table with the columns city and sales — convenient when you go on to merge or export."},
+  {n:67,s:"Part 9 — Text and strings",t:"What does df['column'].str.contains('test') do?",o:["Replaces test with another word","Returns True/False based on whether the text contains 'test'","Splits by the word","Deletes the word"],c:1,e:"str.contains returns True/False for each cell based on whether the string contains the pattern — equivalent to LIKE '%test%' in SQL, and used directly for filtering. Notice: the default is regex=True, meaning characters like . or | are interpreted as regular expressions. For literal text search only, add regex=False."},
+  {n:68,s:"Part 9 — Text and strings",t:"Which command strips spaces from the start and end of the text (like TRIM)?",o:["df['column'].str.clean()","df['column'].str.strip()","df['column'].str.clear()","df['column'].str.replace(' ','')"],c:1,e:"strip removes spaces at the edges — an essential tool for cleaning data before comparisons."},
+  {n:69,s:"Part 9 — Text and strings",t:"How do we split a full-name column (with a comma) into two columns?",o:["df['column'].str.split(',', expand=True)","df['column'].str.divide(',')","df.separate('column', by=',')","pd.concat('column', split=',')"],c:0,e:"expand=True spreads the results into new columns instead of leaving a list in the cell."},
+  {n:70,s:"Part 9 — Text and strings",t:"How do we replace all spaces with underscores in column names?",o:["df.rename(spaces='_')","df.columns = df.columns.str.replace(' ', '_')","df.replace_column_names(' ', '_')","pd.clean_columns(df)"],c:1,e:"access the df.columns array directly and apply str.replace — updates all the headers at once."},
+  {n:71,s:"Part 9 — Text and strings",t:"How do we count how many characters are in each cell of a text column?",o:["df['column'].count_chars()","df['column'].length()","df['column'].str.len()","df['column'].size()"],c:2,e:"str.len calculates the string length in each cell — useful for validity checks."},
+  {n:72,s:"Part 9 — Text and strings",t:"How do we turn all the text in the 'city' column into lowercase?",o:["df['city'].lower()","df['city'].str.lower()","df['city'].lowercase()","str.lower(df['city'])"],c:1,e:"You must go through the .str accessor to access text operations at the column level in pandas."},
+  {n:73,s:"Part 9 — Text and strings",t:"df['column'].str.replace('A','B') does:",o:["Renames a column","Replaces every occurrence of 'A' with 'B' inside text","Replaces rows","deletes A"],c:1,e:"str.replace replaces every occurrence of the string within each cell. Note a confusing difference: in str.replace the default is regex=False (literal replacement), while in str.contains the default is regex=True. If you want a regex pattern in a replacement you must specify regex=True explicitly."},
+  {n:74,s:"Part 10 — Indexes and statistics",t:"Which command finds the index label of the row where the maximum value is found?",o:["df['column'].max()","df['column'].argmax()","df['column'].idxmax()","df['column'].top_index()"],c:2,e:"max returns the value itself, while idxmax returns the index label of the row where that value sits — convenient for immediate retrieval with df.loc. Note the difference from argmax, which returns the numeric position (0,1,2...) rather than the label; when the index is a plain 0,1,2, both return the same thing, but after filtering or set_index they diverge."},
+  {n:75,s:"Part 10 — Indexes and statistics",t:"What does df.corr(numeric_only=True) return?",o:["Spelling errors","A correlation matrix between the numeric columns","Number of correct rows","Deletes columns with a relationship"],c:1,e:"corr returns a matrix of Pearson correlation coefficients between every pair of numeric columns, with values between -1 and 1 — a key tool for spotting variables that move together. Important: from pandas 2.0 onward, df.corr() without numeric_only=True raises a ValueError if the table has a text column, so on a real table we'll almost always write numeric_only=True. Correlation is not causation."},
+  {n:76,s:"Part 10 — Indexes and statistics",t:"How do we find the most common value in a column?",o:["df['column'].mean()","df['column'].median()","df['column'].mode()","df['column'].frequent()"],c:2,e:"mean = average, median = median, and mode = the mode, i.e. the value that appears most often. Note: mode returns a Series, not a single number, and if several values appear with the same maximum frequency, all of them are returned. To get a single value it is common to write df['column'].mode()[0]."},
+  {n:77,s:"Part 10 — Indexes and statistics",t:"Which function returns the index label of the row where the smallest value is found?",o:["df['column'].min()","df['column'].argmin()","df['column'].idxmin()","df['column'].lowest_index()"],c:2,e:"idxmin works like idxmax but for the minimum: it returns the index label of the row where the smallest value is found, not the value itself. Note the difference from argmin, which returns the numeric row position, not the label."},
+  {n:78,s:"Part 10 — Indexes and statistics",t:"What does df['salary'].std() calculate?",o:["variance","Standard Deviation","average","Number of cells"],c:1,e:"std is Standard Deviation — it measures how spread out the data is around the mean, in the same units as the data itself. Note: pandas computes sample standard deviation by default (ddof=1), while numpy.std computes population standard deviation (ddof=0) — so the exact same data can give two different numbers in the two libraries."},
+  {n:79,s:"Part 10 — Indexes and statistics",t:"and what about df['salary'].var()?",o:["Variance (Variance)","Average value","median","Standard deviation"],c:0,e:"var represents Variance — the standard deviation squared. Another measure of data spread."},
+  {n:80,s:"Part 10 — Indexes and statistics",t:"What's the difference between df.where(cond, other=0) and df.mask(cond, 0)?",o:["where for numbers, mask for text","where keeps the values that satisfy the condition, mask replaces them","where only in SQL","Identical operations"],c:1,e:"Complementary operations — both work with a boolean condition, but in opposite directions."},
+  {n:81,s:"Part 11 — Logic and smart conversions",t:"How do we clip values in a column so that below 0 becomes 0 and above 100 becomes 100?",o:["df['col'].limit(0,100)","df['col'].clip(lower=0, upper=100)","df['col'].cut(0,100)","df['col'].where(0,100)"],c:1,e:"clip trims extreme values (Outliers) according to defined bounds."},
+  {n:82,s:"Part 11 — Logic and smart conversions",t:"How do we split an age column into three buckets — up to 18, 18-35, and over 35 — without losing a single row?",o:["pd.cut(df['age'], bins=[0,18,35,100])","pd.cut(df['age'], bins=[-np.inf,18,35,np.inf], labels=['0-18','18-35','35+'])","df['age'].split_groups(3)","df['age'].astype('category')"],c:1,e:"pd.cut converts continuous numbers into categories based on boundaries we set. Note two pitfalls: the buckets are closed on the right and open on the left (right=True), so bins=[0,18,35,100] will mark age 0 as NaN unless we add include_lowest=True; and any value outside the upper bound (say 120) will also come out as NaN. Using np.inf at the edges ensures every row is assigned to a bucket, and labels gives readable names instead of a notation like (18.0, 35.0]."},
+  {n:83,s:"Part 11 — Logic and smart conversions",t:"What's the advantage of df.eval('profit = revenue - expenses')?",o:["Rounds automatically","Enables calculations via a string and usually runs faster on large data","sends to SQL","Ignores empty cells"],c:1,e:"eval lets you write a calculation as a string, including creating a new column within the expression. When the NumExpr library is installed and it's a very large table, pandas routes the calculation to it and saves creating intermediate arrays — on small tables there's no performance difference, and if NumExpr isn't installed pandas simply computes with the regular engine. Important: eval returns a new table and does not modify the source, unless you add inplace=True."},
+  {n:84,s:"Part 11 — Logic and smart conversions",t:"df.mask(df['age']<18, 0) performs:",o:["Hides the values smaller than 18","Zeroes out all the cells in rows where age is less than 18","Deletes the age column","Keeps only the values smaller than 18"],c:1,e:"mask replaces values where the condition holds (and where does the opposite). An important trap: when you run mask on the entire table with a condition based on one column, pandas extends the condition across the whole row — so other columns too (name, city) get replaced with 0. If you want to affect only the age column, you need to write df['age'] = df['age'].mask(df['age']<18, 0)."},
+  {n:85,s:"Part 11 — Logic and smart conversions",t:"df['column'].map({'Yes':1, 'No':0}) is used to:",o:["Language translation","Converting categories to numeric values, usually as prep for models","Deleting Yes/No","Adding new columns"],c:1,e:"map works with a dictionary and converts each value according to the mapping — especially useful for preparing data for models. Note: a value that doesn't appear in the dictionary silently becomes NaN, with no error at all, so it's worth checking after mapping with isna().sum(). To keep values that weren't mapped, you can use replace instead, or add .fillna() afterward."},
+  {n:86,s:"Part 11 — Logic and smart conversions",t:"What is the purpose of df['column'].apply(function)?",o:["Saving a file","Applying a custom function to every cell","Confirming changes","Display definition"],c:1,e:"apply gives full flexibility — you can apply any logic that has no built-in command."},
+  {n:87,s:"Part 12 — Data types",t:"For converting a text column with few repeated values (gender/status), which type saves the most memory?",o:["df['col'].astype(int)","df['col'].astype('category')","df['col'].astype(str)","df['col'].astype('object')"],c:1,e:"category encodes text as numbers behind the scenes — saves memory and speeds up filtering/sorting."},
+  {n:88,s:"Part 12 — Data types",t:"How do we retrieve all columns whose name contains 'date'?",o:["df.select_columns('date')","df.get(contains='date')","df.filter(like='date')","df.columns.find('date')"],c:2,e:"filter with like pulls columns by a substring in the name — saves manual work."},
+  {n:89,s:"Part 12 — Data types",t:"How do we remove all text columns and keep only numbers/dates?",o:["df.remove_text()","df.filter_types(keep='numbers')","df.select_dtypes(exclude=['object'])","df.drop_strings()"],c:2,e:"select_dtypes filters columns by their data type, and exclude removes the specified types. Note the change in pandas 3.0: text columns now get the new str dtype instead of object as before. exclude=['object'] still works for backward compatibility, but the recommended notation going forward is exclude=['str'] — and both return the same result."},
+  {n:90,s:"Part 12 — Data types",t:"What's the purpose of df['column'].astype(float)?",o:["to convert to decimal numbers","To convert to integers","to round numbers","Remove decimals"],c:0,e:"astype changes the Data Type, and float = a decimal number."},
+  {n:91,s:"Part 12 — Data types",t:"How do we change the data types of several columns at once?",o:["df.astype({'c1':'int','c2':'float'})","df.change_type(c1='int', c2='float')","df.convert_dtypes()","df.set_types({'c1':'int'})"],c:0,e:"astype is flexible — it accepts a dict mapping column → data type."},
+  {n:92,s:"Part 12 — Data types",t:"How do we retrieve only the text (object) columns?",o:["df.select_dtypes(include=['str'])","df.get_text_columns()","df.filter(type='object')","df.loc[:,'object']"],c:0,e:"select_dtypes(include=[...]) filters columns by type. In pandas 3.0, text columns get the new str dtype, so include=['str'] is the correct way to write it. include=['object'] still returns them for backward compatibility, but produces a deprecation warning and will stop working in the next version; for code that needs to run on both pandas 2 and 3, you can write include=['object','str']."},
+  {n:93,s:"Part 13 — Reading and saving",t:"For a huge file where you want to save memory, what's the right approach when loading it?",o:["pd.read_csv(...).head(100)","pd.read_csv(..., usecols=['c1','c2'])","Reading the whole file and then drop","Loading in text format"],c:1,e:"usecols ensures that unnecessary columns never enter memory in the first place."},
+  {n:94,s:"Part 13 — Reading and saving",t:"How do we save to Excel with a sheet name of 'Data'?",o:["df.save_excel('f.xlsx', sheet='Data')","df.to_excel('f.xlsx', sheet_name='Data')","df.export_excel('f.xlsx', tab='Data')","pd.write_excel(df,'f.xlsx','Data')"],c:1,e:"to_excel + sheet_name = control over the sheet name inside the file."},
+  {n:95,s:"Part 13 — Reading and saving",t:"Which command exports the table to JSON format, especially suited for moving data to the Web and to an API?",o:["df.to_csv('data.csv')","df.to_sql('data.sql')","df.to_json('data.json')","df.to_html('data.html')"],c:2,e:"to_json converts the table to a JSON string or file — the natural format for JavaScript and APIs. Two parameters worth knowing: orient determines the output structure (the default is 'columns', and we often prefer orient='records', which produces a list of objects, one row per record), and date_format='iso' exports dates as a readable string instead of a millisecond number — the old default is already marked for deprecation in pandas 3.0. For comparison: to_sql requires an active database connection (con), not just a file name."},
+  {n:96,s:"Part 13 — Reading and saving",t:"How do we rename a single column in pandas?",o:["df.change_columns('old'='new')","df.columns['old']='new'","df.rename(columns={'old':'new'})","df.replace_name('old','new')"],c:2,e:"rename uses a dictionary for an exact mapping between the old name and the new one."},
+  {n:97,s:"Part 13 — Reading and saving",t:"We read a CSV file and want to delete specific rows from it by their number. Which parameter of drop should we use?",o:["df.drop(rows=[0,1])","df.drop(index=[0,1])","df.drop(columns=[0,1])","df.drop_rows([0,1])"],c:1,e:"drop is used for deleting both rows and columns, and the difference is in the parameter name: index for deleting rows by label, columns for deleting columns by name. There's no parameter called rows and no drop_rows method. Like most pandas operations, drop returns a new table and doesn't change the original unless you add inplace=True."},
+  {n:98,s:"Part 13 — Reading and saving",t:"How do we save a CSV without the index column being included in the file?",o:["df.to_csv('f.csv', drop_index=True)","df.to_csv('f.csv', index=False)","df.to_csv('f.csv', no_index=True)","df.to_csv('f.csv', ignore_index=True)"],c:1,e:"index=False = no export of row numbers. The file stays clean of unnecessary additions."},
+  {n:99,s:"Part 13 — Reading and saving",t:"pd.read_csv with usecols=['c1','c2'] saves:",o:["Space on the computer","Unnecessary loading of columns into RAM","Write time","security"],c:1,e:"The critical difference — data that isn't specified won't be loaded into memory at all."},
+  {n:100,s:"Part 13 — Reading and saving",t:"What happens when you use df.rename(columns={'A':'B'}) without inplace=True?",o:["The column name changes at the source","A new table is returned with the new name, and the original table remains unchanged","error","The CSV file changes"],c:1,e:"Most pandas operations return a new object and don't touch the original, so you must save the result: df = df.rename(columns={'A':'B'}). Note that this is a new table, not a 'view' — it doesn't share data with the original. The inplace=True alternative exists but isn't recommended: it doesn't actually save memory, and it prevents chaining commands."},
+];
+
+const letters = ['A','B','C','D'];
+let answers = {};
+let correct = 0;
+let currentSection = null;
+
+function updateScore(){
+  const total = Object.keys(answers).length;
+  const pct = total > 0 ? Math.round(correct/total*100) : 0;
+  document.getElementById('scoreText').textContent = '✅ ' + correct + ' / ' + total;
+  document.getElementById('scoreFill').style.width = (Math.round(correct/questions.length*100)) + '%';
+  document.getElementById('progTxt').textContent = total + ' / ' + questions.length;
+  document.getElementById('scoreDisplay').textContent = pct + '%';
+  document.getElementById('heroAnswered').textContent = total;
+  document.getElementById('heroCorrect').textContent = correct;
+  document.getElementById('heroPct').textContent = pct + '%';
+  if(total === questions.length) showFinish();
+}
+
+function selectOption(qIdx, optIdx){
+  if(answers[qIdx] !== undefined) return;
+  const q = questions[qIdx];
+  const isCorrect = optIdx === q.c;
+  answers[qIdx] = optIdx;
+  if(isCorrect) correct++;
+  const card = document.getElementById('qcard-'+qIdx);
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+  card.querySelectorAll('.option').forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i === q.c) o.classList.add('correct-ans');
+    if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
+  });
+  const exp = document.getElementById('exp-'+qIdx);
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ correct! ' : '❌ You got it wrong — the correct answer is marked in green. ') + q.e;
+  exp.classList.add('show');
+  updateScore();
+}
+
+function buildQuiz(){
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = '';
+  currentSection = null;
+  questions.forEach((q,i)=>{
+    if(q.s !== currentSection){
+      currentSection = q.s;
+      mc.innerHTML += `<div class="sec-label">${q.s}</div>`;
+    }
+    const opts = q.o.map((o,oi)=>`
+      <div class="option" onclick="selectOption(${i},${oi})">
+        <div class="opt-letter">${letters[oi]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+    mc.innerHTML += `
+    <div class="q-card" id="qcard-${i}">\n      <div class="q-header">\n        <div class="q-meta">\n          <div class="q-num">Question ${q.n}</div>\n          <div class="q-section-tag">${q.s.split('—')[1]?.trim()||q.s}</div>\n        </div>\n        <div class="q-text">${q.t}</div>\n      </div>\n      <div class="options">${opts}</div>\n      <div class="explanation" id="exp-${i}">\n        <div class="exp-label">💡 Explanation</div>\n        <div class="exp-text"></div>\n      </div>\n    </div>`;
+  });
+  mc.innerHTML += `
+  <div class="finish-card" id="finishCard">\n    <div class="finish-emoji">🎉</div>\n    <div class="finish-title">You finished the medium quiz!</div>\n    <div class="finish-score" id="finishScore">0/80</div>\n    <div class="finish-grade" id="finishGrade"></div>\n    <div class="finish-sub" id="finishSub"></div>\n    <br>\n    <button class="retry-btn" onclick="resetQuiz()">🔄 Try Again</button>\n    <a href="quiz.html" class="level-link">🧠 Ready for the advanced level? ←</a>\n  </div>`;
+}
+
+function showFinish(){
+  const card = document.getElementById('finishCard');
+  if(window.fbAutoSave && window.currentUser) window.fbAutoSave(correct, questions.length);
+  const pct = Math.round(correct/questions.length*100);
+  document.getElementById('finishScore').textContent = correct + ' / ' + questions.length;
+  let grade, sub;
+  if(pct>=90){grade='⭐ excellent!';sub='Impressive mastery at the intermediate level!';}
+  else if(pct>=75){grade='👍 Very good';sub='A little more practice and you\'ll reach perfection!';}
+  else if(pct>=60){grade='📚 good';sub='It\'s worth reviewing the weaker material.';}
+  else{grade='💪 Keep practicing';sub='Go over the chapters and try again!';}
+  document.getElementById('finishGrade').textContent = grade;
+  document.getElementById('finishSub').textContent = sub;
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function resetQuiz(){
+  answers = {}; correct = 0;
+  document.getElementById('finishCard').classList.remove('show');
+  updateScore();
+  buildQuiz();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildQuiz();
+updateScore();
+</script>
+
+<!-- Firebase SDK -->
+<script>
+function fbLogin(){if(window._fbLogin)window._fbLogin();else{var b=document.getElementById('fb-login-btn');if(b)b.setAttribute('data-pending','1');}}
+function fbLogout(){if(window._fbLogout)window._fbLogout();}
+function fbToggleHistory(){if(window._fbToggleHistory)window._fbToggleHistory();}
+function triggerSave(){if(window._triggerSave)window._triggerSave();}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA04LDMDGohAs1uRnUVwWVTs5coVMrEO64",
+  authDomain: "sql-course-507b5.firebaseapp.com",
+  projectId: "sql-course-507b5",
+  storageBucket: "sql-course-507b5.firebasestorage.app",
+  messagingSenderId: "999664091380",
+  appId: "1:999664091380:web:349959985ae11ce8c51ea1"
+});
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let currentUser = null;
+window.currentUser = null;
+const QUIZ_ID = 'pandas';
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user; window.currentUser = user;
+  const loginBtn = document.getElementById('fb-login-btn');
+  const logoutBtn = document.getElementById('fb-logout-btn');
+  const userInfo = document.getElementById('fb-user-info');
+  const histBtn = document.getElementById('fb-history-btn');
+  const saveBtn = document.getElementById('fb-save-btn');
+  if(user){
+    document.getElementById('fb-user-name').textContent = user.displayName;
+    document.getElementById('fb-user-photo').src = user.photoURL;
+    document.getElementById('fb-user-photo').style.display = 'block';
+    loginBtn.style.display='none'; logoutBtn.style.display='flex';
+    userInfo.style.display='flex'; histBtn.style.display='flex'; saveBtn.style.display='flex';
+    await loadProgress(); await loadHistory();
+  } else {
+    loginBtn.style.display='flex'; logoutBtn.style.display='none';
+    userInfo.style.display='none'; histBtn.style.display='none'; saveBtn.style.display='none';
+  }
+});
+
+window.fbLogin = async () => { try { await signInWithPopup(auth, provider); } catch(e){console.error(e);} };
+window.fbLogout = async () => { await signOut(auth); };
+window.fbToggleHistory = () => {
+  const w = document.getElementById('fb-history-wrap');
+  w.style.display = w.style.display==='none' ? 'block' : 'none';
+};
+window.triggerSave = async () => {
+  if(!currentUser){ window.fbLogin(); return; }
+  const scoreEl = document.getElementById('scoreText');
+  const txt = scoreEl ? scoreEl.textContent.replace('✅ ','') : '0 / 0';
+  const parts = txt.split('/');
+  const sc = parseInt(parts[0])||0; const tot = parseInt(parts[1])||0;
+  if(tot===0){ showToast('⚠️ Answer at least one question first!'); return; }
+  await saveProgress(sc, tot);
+};
+
+async function saveProgress(score, total){
+  if(!currentUser) return;
+  const pct = Math.round(score/total*100);
+  await setDoc(doc(db,'users',currentUser.uid,'quizzes',QUIZ_ID),{score,total,pct,lastUpdate:new Date().toISOString()},{merge:true});
+  await addDoc(collection(db,'users',currentUser.uid,'history'),{quizId:QUIZ_ID,score,total,pct,date:new Date().toISOString()});
+  showToast('✅ Progress saved to the cloud!');
+  await loadHistory();
+}
+window.fbAutoSave = saveProgress;
+
+async function loadProgress(){
+  if(!currentUser) return;
+  const snap = await getDoc(doc(db,'users',currentUser.uid,'quizzes',QUIZ_ID));
+  if(snap.exists()){
+    const d = snap.data();
+    const el = document.getElementById('fb-saved-score');
+    el.textContent = `Last attempt: ${d.score}/${d.total} (${d.pct}%)`;
+    el.style.display = 'block';
+  }
+}
+
+async function loadHistory(){
+  if(!currentUser) return;
+  const q = query(collection(db,'users',currentUser.uid,'history'),orderBy('date','desc'),limit(10));
+  const snap = await getDocs(q);
+  const hist = [];
+  snap.forEach(d=>hist.push(d.data()));
+  renderChart(hist.filter(h=>h.quizId===QUIZ_ID));
+}
+
+function renderChart(history){
+  const panel = document.getElementById('fb-history-panel');
+  if(!history.length){ panel.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:1rem">No history yet — answer questions and save!</p>'; return; }
+  const rev = [...history].reverse();
+  const best = Math.max(...history.map(h=>h.pct));
+  const avg = Math.round(history.reduce((a,h)=>a+h.pct,0)/history.length);
+  const bars = rev.map(h=>{
+    const d = new Date(h.date);
+    const lbl = `${d.getDate()}/${d.getMonth()+1}`;
+    const color = h.pct>=80?'var(--aq)':h.pct>=50?'#FFB020':'#FF4060';
+    return `<div class="hbar-wrap"><div class="hbar-val">${h.pct}%</div><div class="hbar" style="height:${Math.max(h.pct*1.1,8)}px;background:${color}"></div><div class="hbar-lbl">${lbl}</div></div>`;
+  }).join('');
+  panel.innerHTML = `<div class="hstats-row"><div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">Personal best</div></div><div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">Average</div></div><div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">Attempts</div></div></div><div class="hchart">${bars}</div>`;
+}
+
+function showToast(msg){
+  let t=document.getElementById('fb-toast');
+  if(!t){t=document.createElement('div');t.id='fb-toast';document.body.appendChild(t);}
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>

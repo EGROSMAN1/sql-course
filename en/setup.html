@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Installing MySQL & Northwind — Step-by-Step Guide | SQL.course</title>
+<title>Installing MySQL and Northwind — Step-by-Step Guide | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -197,7 +197,7 @@ pre{font-size:11px;line-height:1.5}
   .question-card{padding:1rem!important;border-radius:10px}
   .q-text,.question-text{font-size:14px!important;line-height:1.6}
   .options,.answers{gap:.5rem!important}
-  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:left;border-radius:8px}
   .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
   .hero-title,.quiz-title{font-size:1.5rem!important}
   .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
@@ -253,31 +253,31 @@ pre{font-size:11px;line-height:1.5}
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/setup.html">
+<meta name="description" content="A step-by-step installation guide: installing MySQL and MySQL Workbench and loading the Northwind database, so you can start practicing SQL on your own computer for free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/setup.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/setup.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="Setup Guide — MySQL Northwind">
-<meta property="og:description" content="A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/setup.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="Installation guide — MySQL Northwind">
+<meta property="og:description" content="A step-by-step installation guide: installing MySQL and MySQL Workbench and loading the Northwind database, so you can start practicing SQL on your own computer for free.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Setup Guide — MySQL Northwind">
-<meta name="twitter:description" content="A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.">
+<meta name="twitter:title" content="Installation guide — MySQL Northwind">
+<meta name="twitter:description" content="A step-by-step installation guide: installing MySQL and MySQL Workbench and loading the Northwind database, so you can start practicing SQL on your own computer for free.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <script type="application/ld+json">
 [
@@ -288,13 +288,13 @@ pre{font-size:11px;line-height:1.5}
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "MySQL Setup Guide",
+        "name": "MySQL installation guide",
         "item": "https://egrosman1.github.io/sql-course/setup.html"
       }
     ]
@@ -302,8 +302,8 @@ pre{font-size:11px;line-height:1.5}
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "Installing MySQL & Northwind — Step-by-Step Guide | SQL.course",
-    "description": "A step-by-step installation guide: install MySQL and MySQL Workbench and load the Northwind database, so you can start practicing SQL on your own computer for free.",
+    "name": "Installing MySQL and Northwind — Step-by-Step Guide | SQL.course",
+    "description": "A step-by-step installation guide: installing MySQL and MySQL Workbench and loading the Northwind database, so you can start practicing SQL on your own computer for free.",
     "url": "https://egrosman1.github.io/sql-course/setup.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -318,7 +318,7 @@ pre{font-size:11px;line-height:1.5}
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -338,7 +338,7 @@ pre{font-size:11px;line-height:1.5}
    "name": "Is MySQL free to use?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Yes. MySQL Community Edition is completely free, open-source software, and so is MySQL Workbench for managing and editing queries. No paid license is required to learn and practice SQL."
+    "text": "Yes. MySQL Community Edition is completely free open-source software, and so is MySQL Workbench for managing and editing queries. You don't need a paid license to learn and practice SQL."
    }
   },
   {
@@ -346,15 +346,15 @@ pre{font-size:11px;line-height:1.5}
    "name": "What is the Northwind database?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Northwind is a sample database for a fictional trading company, with tables for customers, orders, products, suppliers, and employees. It is widely used for learning SQL because it is realistic and lets you practice JOINs, GROUP BY, and complex queries."
+    "text": "Northwind is a sample database of a fictional trading company, including tables for customers, orders, products, suppliers, and employees. It's very common in learning SQL because it's realistic and lets you practice JOIN, GROUP BY, and complex queries."
    }
   },
   {
    "@type": "Question",
-   "name": "How do I load Northwind into MySQL?",
+   "name": "How do you load Northwind into MySQL?",
    "acceptedAnswer": {
     "@type": "Answer",
-    "text": "Download the Northwind SQL file, open it in MySQL Workbench via File \u2192 Open SQL Script, and run it. This guide walks you through every step with screenshots, from installation to your first query."
+    "text": "Download the Northwind SQL file, open it in MySQL Workbench via File → Open SQL Script, and run it. The guide here explains every step with screenshots, from installation to the first query."
    }
   }
  ]
@@ -364,45 +364,44 @@ pre{font-size:11px;line-height:1.5}
 <body>
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">🛠️ Setup Guide — MySQL Northwind</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">🛠️ Installation guide — MySQL Northwind</div>
   <div class="topnav-links">
-    <a href="course.html" class="topnav-link">📚 Learn</a>
-    <a href="../setup.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="setup.html" class="topnav-link" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/setup.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="practice.html" class="topnav-link">✏️ Practice</a>
+    <a href="course.html" class="topnav-link">📚 Study material</a><a href="../setup.html" class="topnav-link" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="setup.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/setup.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="practice.html" class="topnav-link">✏️ Exercises</a>
   </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">🎬 Includes video tutorials</div>
-  <h1 class="hero-title">Building Your Work Environment</h1>
-  <p class="hero-sub">A technical guide to installing MySQL Workbench and setting up the Northwind database — from download to your first query</p>
+  <div class="hero-badge">🎬 Includes tutorial videos</div>
+  <h1 class="hero-title">Building the workspace</h1>
+  <p class="hero-sub">A technical guide to installing MySQL Workbench and setting up the Northwind database — from download to first query</p>
   <div class="video-btns">
-    <a href="course.html" class="video-btn video-btn-secondary">📚 Learning Material</a>
-    <a href="practice.html" class="video-btn video-btn-secondary">✏️ Practice</a>
+    <a href="course.html" class="video-btn video-btn-secondary">📚 To the study material</a>
+    <a href="practice.html" class="video-btn video-btn-secondary">✏️ To the exercises</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
 </div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html">🏠 Home</a>
-  <a href="tirgul-makif.html">🎯 Full Practice</a>
-  <a href="setup.html">🛠️ Setup</a>
-  <a href="../videos.html">🎬 Video Tutorials</a>
-  <a href="course.html">📚 Learning Material</a>
-  <a href="practice.html">✏️ Practice</a>
+  <a href="tirgul-makif.html">🎯 Comprehensive practice</a>
+  <a href="setup.html">🛠️ installation</a>
+  <a href="videos.html">🎬 Video tutorial</a>
+  <a href="course.html">📚 Study material</a>
+  <a href="practice.html">✏️ Exercises</a>
 </div>
 
 <div class="main">
 
   <!-- PROGRESS NAV -->
   <div class="progress-nav">
-    <div class="prog-step" onclick="scrollToStep('step0')"><span>📦</span>Step 0</div>
-    <div class="prog-step" onclick="scrollToStep('step1')"><span>🏗️</span>Step 1</div>
-    <div class="prog-step" onclick="scrollToStep('step2')"><span>💾</span>Step 2</div>
-    <div class="prog-step" onclick="scrollToStep('step3')"><span>✅</span>Verify</div>
+    <div class="prog-step" onclick="scrollToStep('step0')"><span>📦</span>step 0</div>
+    <div class="prog-step" onclick="scrollToStep('step1')"><span>🏗️</span>step 1</div>
+    <div class="prog-step" onclick="scrollToStep('step2')"><span>💾</span>step 2</div>
+    <div class="prog-step" onclick="scrollToStep('step3')"><span>✅</span>check</div>
   </div>
 
   <!-- STEP 0 -->
@@ -410,31 +409,31 @@ pre{font-size:11px;line-height:1.5}
     <div class="step-header">
       <div class="step-num green">0</div>
       <div>
-        <div class="step-title">📦 Step 0 — Prepare the Source Files</div>
-        <div class="step-subtitle">Download two SQL files from Google Drive</div>
+        <div class="step-title">📦 Step 0 — Preparing the Raw Materials</div>
+        <div class="step-subtitle">Downloading two SQL files from Google Drive</div>
       </div>
     </div>
     <div class="step-body">
-      <p>Before you open anything, make sure the following two files have been downloaded from <strong>Google Drive</strong> and are saved on your computer:</p>
+      <p>Before opening the system, make sure the following two files were downloaded from<strong>Google Drive</strong> and are on your computer:</p>
       <div class="file-grid">
         <div class="file-box">
           <div class="file-icon">📄</div>
           <div>
             <div class="file-name">NORTHWIND(4).sql</div>
-            <div class="file-desc">The structure file — builds the empty tables</div>
+            <div class="file-desc">The infrastructure file — builds the empty tables</div>
           </div>
         </div>
         <div class="file-box required">
           <div class="file-icon">📊</div>
           <div>
             <div class="file-name">northwind-data.sql</div>
-            <div class="file-desc">The data file — inserts the actual data</div>
-            <div class="required-badge">⚠️ Required file</div>
+            <div class="file-desc">The content file — inserts the data itself</div>
+            <div class="required-badge">⚠️ File required</div>
           </div>
         </div>
       </div>
       <div class="warning-box">
-        <p><strong>Note:</strong> the <strong>northwind-data.sql</strong> file is the most important one. Make sure you pick it and not a similarly named file.</p>
+        <p><strong>note:</strong> the file <strong>northwind-data.sql</strong> It's the most important file. Make sure you selected it and not a similarly-named file.</p>
       </div>
     </div>
   </div>
@@ -444,34 +443,34 @@ pre{font-size:11px;line-height:1.5}
     <div class="step-header">
       <div class="step-num">1</div>
       <div>
-        <div class="step-title">🏗️ Step 1 — Lay the Foundation (Structure)</div>
-        <div class="step-subtitle">Open the structure file in MySQL Workbench</div>
+        <div class="step-title">🏗️ Step 1 — laying the foundations (Structure)</div>
+        <div class="step-subtitle">Opening the infrastructure file in MySQL Workbench</div>
       </div>
     </div>
     <div class="step-body">
-      <p>Open <strong>MySQL Workbench</strong>.</p>
+      <p>Open the <strong>MySQL Workbench</strong>.</p>
 
       <div class="action-row">
         <div class="action-icon">📂</div>
-        <div class="action-text">In the top menu, click <strong>File</strong> and then choose: <span class="action-kbd">Open SQL Script...</span></div>
+        <div class="action-text">In the top menu on the left side, click <strong>File</strong> And then choose: <span class="action-kbd">Open SQL Script...</span></div>
       </div>
 
       <div class="action-row">
         <div class="action-icon">🖱️</div>
-        <div class="action-text">In the dialog that opens, navigate to the folder where you saved the files. Select the first file: <span class="action-kbd">NORTHWIND(4).sql</span></div>
+        <div class="action-text">In the window that opens, navigate to the folder where you saved the files. Select the first file: <span class="action-kbd">NORTHWIND(4).sql</span></div>
       </div>
 
       <div class="action-row">
         <div class="action-icon">⚡</div>
-        <div class="action-text">Once you select the file, the code appears on screen. Click the <strong>lightning-bolt icon</strong> in the top toolbar to run the script and build the tables.</div>
+        <div class="action-text">After choosing the file, the code will appear on the screen. Click <strong>The lightning icon</strong> in the top toolbar to run the script and build the tables.</div>
       </div>
 
       <div class="warning-box">
-        <p><strong>* Note:</strong> this file builds the empty tables. It is the skeleton of the database.</p>
+        <p><strong>* Note:</strong> This file builds the empty tables. This is the skeleton of the database.</p>
       </div>
 
       <div class="success-box">
-        <p><strong>✓ Step 1 complete:</strong> the tables were created successfully. The structure now exists but is empty. The next step brings in the data.</p>
+        <p><strong>✓ Step 1 complete:</strong> The tables were created successfully. The structure now exists but is empty of content. The next step will bring in the data.</p>
       </div>
     </div>
   </div>
@@ -481,28 +480,28 @@ pre{font-size:11px;line-height:1.5}
     <div class="step-header">
       <div class="step-num orange">2</div>
       <div>
-        <div class="step-title">💾 Step 2 — Import the Data</div>
-        <div class="step-subtitle">Load the data file into the tables</div>
+        <div class="step-title">💾 Step 2 — Importing the Data</div>
+        <div class="step-subtitle">Loading the data file into the tables</div>
       </div>
     </div>
     <div class="step-body">
       <div class="action-row">
         <div class="action-icon">📂</div>
-        <div class="action-text">Repeat the same process: <strong>File</strong> → <span class="action-kbd">Open SQL Script...</span></div>
+        <div class="action-text">Repeat the same process: <strong>File</strong> ← <span class="action-kbd">Open SQL Script...</span></div>
       </div>
 
       <div class="action-row">
         <div class="action-icon">🖱️</div>
-        <div class="action-text">This time select the second file: <span class="action-kbd">northwind-data.sql</span> — <strong>not the schema file from before</strong></div>
+        <div class="action-text">This time choose the second file: <span class="action-kbd">northwind-data.sql</span> — <strong>Unlike the previous agreement file</strong></div>
       </div>
 
       <div class="action-row">
         <div class="action-icon">⚡</div>
-        <div class="action-text">The new code appears on screen (replacing the previous code). Click the <strong>lightning-bolt icon</strong> again to insert the data into the tables you created.</div>
+        <div class="action-text">The new code will appear on the screen (instead of the previous code). Click again on <strong>The lightning icon</strong> in order to inject the data into the tables we created.</div>
       </div>
 
       <div class="warning-box">
-        <p><strong>Note:</strong> this step may take a few seconds — the script inserts thousands of rows. Wait until you see a success message.</p>
+        <p><strong>note:</strong> This step can take a few seconds — the script inserts thousands of data rows. Wait until you see a success message.</p>
       </div>
     </div>
   </div>
@@ -512,42 +511,42 @@ pre{font-size:11px;line-height:1.5}
     <div class="step-header">
       <div class="step-num cyan">✓</div>
       <div>
-        <div class="step-title">✅ Quality Check — Verify the Result</div>
+        <div class="step-title">✅ Quality check — verifying the result</div>
         <div class="step-subtitle">Make sure Northwind appears in the Schemas list</div>
       </div>
     </div>
     <div class="step-body">
-      <p>Once the process is complete, here is how you know everything worked:</p>
+      <p>Once the process is complete, here's how you'll know it all worked:</p>
 
       <div class="action-row">
         <div class="action-icon">👈</div>
-        <div class="action-text">Go to the <strong>Schemas</strong> panel on the left and click the <strong>Refresh</strong> button.</div>
+        <div class="action-text">Go to the pane <strong>Schemas</strong> on the left side and click the button <strong>Refresh</strong> (the refresh button).</div>
       </div>
 
       <div class="action-row">
         <div class="action-icon">🔍</div>
-        <div class="action-text">You will now see <span class="action-kbd">Northwind</span> in the list, shown in bold. That means the database is ready!</div>
+        <div class="action-text">Now you'll see in the list: <span class="action-kbd">Northwind</span> — appears in bold. This means the database is ready!</div>
       </div>
 
       <div class="success-box">
-        <p><strong>🎉 Congratulations!</strong> Your environment is ready. You can now start writing SQL queries on the Northwind database.</p>
-        <p style="margin-top:.5rem">Click <strong>Northwind</strong> in the list to set it as the active database, and you are good to go.</p>
+        <p><strong>🎉 congrats!</strong> The environment is ready to work. You can now start writing SQL queries against the Northwind database.</p>
+        <p style="margin-top:.5rem">click on <strong>Northwind</strong> in the list to select it as the active database, and then you can start.</p>
       </div>
 
       <div class="warning-box" style="margin-top:1rem">
-        <p><strong>Common issue:</strong> if Northwind does not appear — make sure you clicked Refresh and that you ran <strong>both</strong> files (NORTHWIND(4).sql and northwind-data.sql).</p>
+        <p><strong>Common problem:</strong> If Northwind doesn't appear — make sure you clicked Refresh, and that you ran the <strong>second</strong> the files (both NORTHWIND(4).sql and northwind-data.sql).</p>
       </div>
     </div>
   </div>
 
   <!-- QUICK TEST -->
-  <div class="section-title">Quick Test — Your First Query</div>
+  <div class="section-title">Quick check — first query</div>
   <div class="step-card">
     <div class="step-header">
       <div class="step-num green">🚀</div>
       <div>
-        <div class="step-title">Check it works — run your first query</div>
-        <div class="step-subtitle">If you get results — you did it!</div>
+        <div class="step-title">Check that everything works — running the first query</div>
+        <div class="step-subtitle">If you get results — you succeeded!</div>
       </div>
     </div>
     <div class="step-body">
@@ -556,7 +555,7 @@ pre{font-size:11px;line-height:1.5}
         <span style="color:#ff7b72">USE</span> <span style="color:#7ee787">Northwind</span>;<br>
         <span style="color:#ff7b72">SELECT</span> * <span style="color:#ff7b72">FROM</span> <span style="color:#7ee787">customers</span> <span style="color:#ff7b72">LIMIT</span> <span style="color:#79c0ff">5</span>;
       </div>
-      <p>If you get a table with 5 customers — the database is working perfectly! 🎉</p>
+      <p>If you get a table with 5 customers — the database is working great! 🎉</p>
     </div>
   </div>
 
@@ -570,11 +569,11 @@ function scrollToStep(id){
 // Video button placeholders - replace href with actual YouTube/Drive links
 document.getElementById('btn-video1').addEventListener('click', function(e){
   e.preventDefault();
-  alert('Add a link to video 1 (software installation)\nEdit the file and change the href of btn-video1');
+  alert('A link to video 1 (installing the software) needs to be added\nEdit the file and change the href of btn-video1');
 });
 document.getElementById('btn-video2').addEventListener('click', function(e){
   e.preventDefault();
-  alert('Add a link to video 2 (database installation)\nEdit the file and change the href of btn-video2');
+  alert('Need to add a link to video 2 (installing the database)\nEdit the file and change the href of btn-video2');
 });
 </script>
 <script>

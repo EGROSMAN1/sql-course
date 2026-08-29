@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SQL Interview Questions — Online Quiz | SQL.course</title>
+<title>SQL Job Interview Questions — Online Quiz | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -84,7 +84,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 
 /* OPTIONS */
 .options{display:flex;flex-direction:column;gap:.6rem}
-.option{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.75rem;text-align:right}
+.option{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:.75rem;text-align:left}
 .option:hover:not(.disabled){background:var(--bg4);border-color:var(--border2)}
 .option.selected{border-color:var(--blue);background:rgba(74,158,255,.06)}
 .option.correct-ans{border-color:var(--green2)!important;background:rgba(0,168,84,.08)!important}
@@ -139,7 +139,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 .question-card{padding:1rem}
 .q-text{font-size:14px}
 .options{gap:.5rem}
-.option-btn{font-size:13px;padding:.7rem .85rem;text-align:right}
+.option-btn{font-size:13px;padding:.7rem .85rem;text-align:left}
 .explain-box{font-size:13px;padding:.65rem .85rem}
 .nav-links,.nav-cta{display:none}
 .finish-card{padding:2rem 1rem}
@@ -209,7 +209,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .question-card{padding:1rem!important;border-radius:10px}
   .q-text,.question-text{font-size:14px!important;line-height:1.6}
   .options,.answers{gap:.5rem!important}
-  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:left;border-radius:8px}
   .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
   .hero-title,.quiz-title{font-size:1.5rem!important}
   .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
@@ -292,31 +292,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="An SQL quiz for job-interview prep: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY, and Window Functions. Free.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz.html">
+<meta name="description" content="An SQL quiz to prepare for job interviews: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY and Window Functions. Free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/quiz.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="Test Yourself — SQL Quiz">
-<meta property="og:description" content="An SQL quiz for job-interview prep: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY, and Window Functions. Free.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/quiz.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="Test yourself — SQL Quiz">
+<meta property="og:description" content="An SQL quiz to prepare for job interviews: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY and Window Functions. Free.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Test Yourself — SQL Quiz">
-<meta name="twitter:description" content="An SQL quiz for job-interview prep: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY, and Window Functions. Free.">
+<meta name="twitter:title" content="Test yourself — SQL Quiz">
+<meta name="twitter:description" content="An SQL quiz to prepare for job interviews: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY and Window Functions. Free.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <script type="application/ld+json">
 [
@@ -327,13 +327,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "SQL Interview Quiz",
+        "name": "SQL Quiz for Interviews",
         "item": "https://egrosman1.github.io/sql-course/quiz.html"
       }
     ]
@@ -341,8 +341,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "SQL Interview Questions — Online Quiz | SQL.course",
-    "description": "An SQL quiz for job-interview prep: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY, and Window Functions. Free.",
+    "name": "SQL Job Interview Questions — Online Quiz | SQL.course",
+    "description": "An SQL quiz to prepare for job interviews: multiple-choice questions at every level with explanations, from basic SELECT to JOIN, GROUP BY and Window Functions. Free.",
     "url": "https://egrosman1.github.io/sql-course/quiz.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -357,7 +357,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -371,7 +371,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <body data-quiz-id="advanced">
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
+  <a href="index.html" class="back-btn">← Home page</a>
   <div class="topnav-title">🧠 Test Yourself — SQL Quiz</div>
 
 <!-- FIREBASE AUTH BAR -->
@@ -392,7 +392,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     📊 History
   </button>
   <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">
-    Sign out
+    Exit
   </button>
 </div>
 <div id="fb-history-wrap" style="display:none">
@@ -400,40 +400,39 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 </div>
 
   <div class="topnav-links">
-    <a href="quiz-beginner.html" class="topnav-link">🌱 Beginner Quiz</a>
-    <a href="../quiz.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="quiz.html" class="topnav-link" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/quiz.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="course.html" class="topnav-link">📚 Learn</a>
-    <a href="practice.html" class="topnav-link">✏️ Practice</a>
+    <a href="quiz-beginner.html" class="topnav-link">🌱 Beginner quiz</a><a href="../quiz.html" class="topnav-link" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="quiz.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/quiz.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="course.html" class="topnav-link">📚 Study material</a>
+    <a href="practice.html" class="topnav-link">✏️ Exercises</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
 </div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html">🏠 Home</a>
-  <a href="tirgul-makif.html">🎯 Full Practice</a>
-  <a href="course.html">📚 Learning Material</a>
-  <a href="practice.html">✏️ Practice</a>
+  <a href="tirgul-makif.html">🎯 Comprehensive practice</a>
+  <a href="course.html">📚 Study material</a>
+  <a href="practice.html">✏️ Exercises</a>
 </div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-badge">🧠 Sakila + SQL Server · 33 questions</div>
-  <h1 class="hero-title">Test Yourself — SQL Quiz</h1>
+  <h1 class="hero-title">Test yourself — SQL Quiz</h1>
   <p class="hero-sub">Multiple-choice questions on CASE WHEN, Subqueries, JOIN, and Window Functions</p>
   <div class="hero-stats">
     <div class="hero-stat"><div class="hero-stat-num">33</div><div class="hero-stat-label">questions</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">difficulty levels</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">Difficulty levels</div></div>
     <div class="hero-stat"><div class="hero-stat-num" id="heroAnswered">0</div><div class="hero-stat-label">answered</div></div>
   </div>
 </div>
 
 <!-- SCORE BAR -->
 <div class="score-bar">
-  <div class="score-info">Score: <strong id="scoreText">0 / 0</strong></div>
+  <div class="score-info">scoring: <strong id="scoreText">0 / 0</strong></div>
   <div class="score-track"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
   <div class="score-pct" id="scorePct">0%</div>
-  <button class="reset-btn" onclick="resetQuiz()">🔄 Restart</button>
+  <button class="reset-btn" onclick="resetQuiz()">🔄 Start over</button>
 </div>
 
 <div class="main" id="mainContent"></div>
@@ -442,7 +441,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 const questions = [
   {
     num:1, diff:'easy', topic:'CASE WHEN + JOIN',
-    text:'Which query shows the film title, the full language name, and a length classification (Long/Medium/Short)?',
+    text:'Which query will display the film\'s title, the full name of the language, and a length classification (Long/Medium/Short)?',
     options:[
       "SELECT f.title, l.name, CASE WHEN f.length > 120 THEN 'Long' WHEN f.length > 60 THEN 'Medium' ELSE 'Short' END FROM film f JOIN language l ON f.language_id = l.language_id",
       "SELECT f.title, l.name, CASE f.length WHEN 120 THEN 'Long' WHEN 60 THEN 'Medium' ELSE 'Short' END FROM film f JOIN language l ON f.language_id = l.language_id",
@@ -450,11 +449,11 @@ const questions = [
       "SELECT f.title, l.name FROM film f JOIN language l ON f.language_id = l.language_id WHERE f.length > 120"
     ],
     correct:0,
-    explain:'Correct use of <strong>CASE WHEN</strong> for ranges (> 120, > 60) and joining to the language table via language_id.'
+    explain:'Correct use of <strong>CASE WHEN</strong> for ranges (> 120, > 60) and joining the languages table via language_id.'
   },
   {
     num:2, diff:'easy', topic:'CASE WHEN',
-    text:"How do we show the customer name and the branch name ('Downtown' for branch 1, 'Uptown' for branch 2)?",
+    text:"How do we show the customer's name and the branch name ('Downtown' for branch 1, 'Uptown' for branch 2)?",
     options:[
       "SELECT first_name, store_id, CASE WHEN store_id = 1 THEN 'Downtown' ELSE 'Uptown' END FROM customer",
       "SELECT first_name, store_id, DECODE(store_id, 1, 'Downtown', 2, 'Uptown') FROM customer",
@@ -462,11 +461,11 @@ const questions = [
       "SELECT first_name, store_id, SWITCH store_id CASE 1: 'Downtown' FROM customer"
     ],
     correct:0,
-    explain:'A valid <strong>CASE WHEN</strong> structure in MySQL. DECODE belongs to Oracle, and IF/SWITCH are not valid syntax in this form.'
+    explain:'The <strong>CASE WHEN</strong> structure is standard in MySQL. DECODE belongs to Oracle, and IF/SWITCH aren\'t valid syntax in this form.'
   },
   {
     num:3, diff:'easy', topic:'IS NULL',
-    text:'How do we identify films that have not been returned yet (where return_date is empty)?',
+    text:'How do we identify movies that haven\'t been returned yet (where return_date is null)?',
     options:[
       "SELECT rental_id, CASE WHEN return_date = 0 THEN 'Still Out' ELSE 'Returned' END FROM rental",
       "SELECT rental_id, CASE WHEN return_date IS NULL THEN 'Still Out' ELSE 'Returned' END FROM rental",
@@ -474,11 +473,11 @@ const questions = [
       "SELECT rental_id, IFNULL(return_date, 'Still Out') FROM rental"
     ],
     correct:1,
-    explain:'Checking <strong>NULL</strong> values correctly is always done with <strong>IS NULL</strong>, never with = 0 or = a space.'
+    explain:'Correctly checking <strong>NULL</strong> values is always done with <strong>IS NULL</strong>, not with = 0 or = space.'
   },
   {
     num:4, diff:'easy', topic:'CASE WHEN',
-    text:"Which query classifies a price under 2 as 'Budget' and over 4 as 'Premium'?",
+    text:"Which query classifies a price below 2 as 'Budget' and above 4 as 'Premium'?",
     options:[
       "SELECT title, CASE WHEN rental_rate < 2 THEN 'Budget' WHEN rental_rate > 4 THEN 'Premium' ELSE 'Standard' END FROM film",
       "SELECT title, CASE rental_rate WHEN 0.99 THEN 'Budget' WHEN 4.99 THEN 'Premium' END FROM film",
@@ -486,7 +485,7 @@ const questions = [
       "SELECT title, rental_rate WHERE rental_rate < 2 AS Budget FROM film"
     ],
     correct:0,
-    explain:'Correct use of comparison operators (< >) and quoted strings inside the CASE. In option 3, the quotes around Budget/Premium are missing.'
+    explain:'Correct use of comparison operators (< >) and quoted strings inside the CASE. In answer 3, quotes are missing around Budget/Premium.'
   },
   {
     num:5, diff:'easy', topic:'Triple JOIN',
@@ -498,11 +497,11 @@ const questions = [
       "SELECT c.first_name, ci.city FROM customer c, city ci WHERE c.active = 1"
     ],
     correct:0,
-    explain:'Requires a <strong>triple JOIN</strong>: customer → address → city. There is no direct link between customer and city.'
+    explain:'Requires a <strong>triple JOIN</strong>: customer → address → city. There\'s no direct relationship between customer and city.'
   },
   {
     num:6, diff:'medium', topic:'GROUP BY + CASE',
-    text:"Which query shows an employee name, total revenue, and a 'Top Performer' classification above 35,000?",
+    text:"Which query will show the employee name, total revenue, and a 'Top Performer' classification above 35,000?",
     options:[
       "SELECT s.first_name, SUM(p.amount), CASE WHEN SUM(p.amount) > 35000 THEN 'Top Performer' ELSE 'Standard' END FROM staff s JOIN payment p ON s.staff_id = p.staff_id GROUP BY s.staff_id",
       "SELECT s.first_name, p.amount, CASE WHEN p.amount > 35000 THEN 'Top Performer' END FROM staff s JOIN payment p ON s.staff_id = p.staff_id",
@@ -510,11 +509,11 @@ const questions = [
       "SELECT s.first_name, SUM(p.amount) AS total FROM staff s JOIN payment p ON s.staff_id = p.staff_id WHERE total > 35000 GROUP BY s.first_name"
     ],
     correct:0,
-    explain:'You must use <strong>GROUP BY</strong> so the SUM is computed per employee. In option 4, you cannot use an alias inside WHERE.'
+    explain:'You must use <strong>GROUP BY</strong> so SUM is calculated separately for each employee. In answer 4, you can\'t use an Alias inside WHERE.'
   },
   {
     num:7, diff:'medium', topic:'COUNT + CASE',
-    text:"How do we classify categories with more than 70 films as 'Popular'?",
+    text:"How do we classify categories with more than 70 movies as 'Popular'?",
     options:[
       "SELECT c.name, COUNT(fc.film_id), CASE WHEN COUNT(fc.film_id) > 70 THEN 'Popular' ELSE 'Niche' END FROM category c JOIN film_category fc ON c.category_id = fc.category_id GROUP BY c.name",
       "SELECT c.name, COUNT(fc.film_id) FROM category c JOIN film_category fc ON c.category_id = fc.category_id WHERE COUNT(fc.film_id) > 70",
@@ -522,11 +521,11 @@ const questions = [
       "SELECT c.name, COUNT(fc.film_id) AS total FROM category c JOIN film_category fc ON c.category_id = fc.category_id GROUP BY c.name HAVING total > 70"
     ],
     correct:0,
-    explain:'Using <strong>COUNT inside CASE</strong> with GROUP BY. In option 2, you cannot use COUNT inside WHERE.'
+    explain:'Using <strong>COUNT inside CASE</strong> with GROUP BY. In answer 2 you cannot use COUNT inside WHERE.'
   },
   {
     num:8, diff:'medium', topic:'LEFT JOIN',
-    text:"Which query shows 'Out of Stock' if there are no copies of a film at a given branch?",
+    text:"Which query will show 'Out of Stock' if there are no copies of a movie at a given branch?",
     options:[
       "SELECT f.title, i.store_id, CASE WHEN COUNT(i.inventory_id) = 0 THEN 'Out of Stock' ELSE 'In Stock' END FROM film f LEFT JOIN inventory i ON f.film_id = i.film_id GROUP BY f.title, i.store_id",
       "SELECT f.title, i.store_id, CASE WHEN i.inventory_id IS NULL THEN 'Out of Stock' END FROM film f JOIN inventory i ON f.film_id = i.film_id",
@@ -534,11 +533,11 @@ const questions = [
       "SELECT f.title, IF(COUNT(inventory_id) > 0, 'In Stock', 'Out of Stock') FROM film f INNER JOIN inventory i ON f.film_id = i.film_id"
     ],
     correct:0,
-    explain:'A <strong>LEFT JOIN</strong> is critical to see films with 0 copies. With an INNER JOIN, films with no stock would not appear at all.'
+    explain:'<strong>LEFT JOIN</strong> is critical to see films with 0 copies. With INNER JOIN, films with no inventory won\'t appear at all.'
   },
   {
-    num:9, diff:'medium', topic:'CASE — fixed values',
-    text:"How do we convert the code 'R' into the word 'Restricted'?",
+    num:9, diff:'medium', topic:'CASE fixed values',
+    text:"How do we convert the code 'R' to the word 'Restricted'?",
     options:[
       "SELECT title, CASE rating WHEN 'R' THEN 'Restricted' WHEN 'G' THEN 'General' ELSE 'Other' END FROM film",
       "SELECT title, IF(rating = 'R', 'Restricted', 'Other') FROM film",
@@ -546,10 +545,10 @@ const questions = [
       "SELECT title, REPLACE(rating, 'R', 'Restricted') FROM film"
     ],
     correct:0,
-    explain:'This is the simple form of <strong>CASE</strong> for swapping fixed values — CASE column WHEN value THEN result.'
+    explain:'This is the simple form of <strong>CASE</strong> for replacing fixed values — CASE column WHEN value THEN result.'
   },
   {
-    num:10, diff:'medium', topic:'Four-Table JOIN',
+    num:10, diff:'medium', topic:'JOIN four tables',
     text:"Which query classifies customers from the USA and Canada as 'North America'?",
     options:[
       "SELECT c.first_name, co.country, CASE WHEN co.country IN ('United States', 'Canada') THEN 'North America' ELSE 'Other' END FROM customer c JOIN address a ON c.address_id = a.address_id JOIN city ci ON a.city_id = ci.city_id JOIN country co ON ci.country_id = co.country_id",
@@ -558,11 +557,11 @@ const questions = [
       "SELECT first_name, CASE WHEN country = 'USA' THEN 'North America' END FROM customer"
     ],
     correct:0,
-    explain:'Requires the full chain of JOINs: customer → address → city → country. <strong>IN</strong> is used to test multiple values.'
+    explain:'requires the whole chain of JOINs: customer → address → city → country. <strong>IN</strong> is used to check several values.'
   },
   {
     num:11, diff:'hard', topic:'DATEDIFF + JOIN',
-    text:'Which query checks whether the actual rental length (DATEDIFF) is greater than what was defined for the film (rental_duration)?',
+    text:'Which query checks whether the actual rental duration (DATEDIFF) is greater than what\'s defined for the movie (rental_duration)?',
     options:[
       "SELECT f.title, CASE WHEN DATEDIFF(r.return_date, r.rental_date) > f.rental_duration THEN 'Late' ELSE 'On Time' END FROM rental r JOIN inventory i ON r.inventory_id = i.inventory_id JOIN film f ON i.film_id = f.film_id",
       "SELECT f.title, CASE WHEN return_date - rental_date > rental_duration THEN 'Late' END FROM film",
@@ -570,11 +569,11 @@ const questions = [
       "SELECT f.title FROM film f WHERE rental_duration < (SELECT COUNT(*) FROM rental)"
     ],
     correct:0,
-    explain:'Correct use of <strong>DATEDIFF(return_date, rental_date)</strong> and comparison to rental_duration from the film table via a two-step JOIN.'
+    explain:'Correct use of <strong>DATEDIFF(return_date, rental_date)</strong> and comparison to rental_duration from the film table via a two-stage JOIN.'
   },
   {
     num:12, diff:'hard', topic:'Subquery inside CASE',
-    text:"Which query classifies a customer as 'High Spender' if their total payments are higher than the average across all customers?",
+    text:"Which query classifies a customer as 'High Spender' if their total payments are above the average of all customers?",
     options:[
       "SELECT first_name, SUM(amount), CASE WHEN SUM(amount) > (SELECT AVG(total) FROM (SELECT SUM(amount) AS total FROM payment GROUP BY customer_id) AS sub) THEN 'High Spender' ELSE 'Regular' END FROM customer JOIN payment USING (customer_id) GROUP BY customer_id",
       "SELECT first_name, SUM(amount) FROM payment GROUP BY customer_id HAVING SUM(amount) > AVG(amount)",
@@ -582,11 +581,11 @@ const questions = [
       "SELECT first_name, SUM(amount) AS total FROM payment WHERE total > AVG(total) GROUP BY customer_id"
     ],
     correct:0,
-    explain:'A combination of a <strong>subquery inside CASE</strong> — the overall average is computed separately inside the parentheses, then compared to each customer total.'
+    explain:'A combination of <strong>a subquery inside CASE</strong> — the overall average is calculated separately inside the parentheses, and then compared to each customer\'s total.'
   },
   {
     num:13, diff:'hard', topic:'COUNT + GROUP BY',
-    text:"How do we classify an actor with more than 30 films as 'Superstar'?",
+    text:"How do we classify a player with over 30 movies as a 'Superstar'?",
     options:[
       "SELECT a.first_name, COUNT(fa.film_id), CASE WHEN COUNT(fa.film_id) > 30 THEN 'Superstar' ELSE 'Veteran' END FROM actor a JOIN film_actor fa ON a.actor_id = fa.actor_id GROUP BY a.actor_id",
       "SELECT a.first_name, COUNT(fa.film_id) AS movies FROM actor a JOIN film_actor fa ON a.actor_id = fa.actor_id WHERE movies > 30",
@@ -594,7 +593,7 @@ const questions = [
       "SELECT first_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor HAVING COUNT(*) > 30)"
     ],
     correct:0,
-    explain:'Counting and classifying inside an aggregate query. <strong>GROUP BY a.actor_id</strong> lets you count films per actor.'
+    explain:'Counting and classifying inside an aggregate query. <strong>GROUP BY a.actor_id</strong> lets you count movies per actor.'
   },
   {
     num:14, diff:'hard', topic:'Window Function LAG',
@@ -606,11 +605,11 @@ const questions = [
       "SELECT month, IF(SUM(amount) > (SELECT SUM(amount) FROM payment), 'Growth', 'Decline') FROM payment"
     ],
     correct:0,
-    explain:'Using the <strong>window function LAG()</strong> to access the previous row, inside a CTE/subquery that computes monthly revenue.'
+    explain:'Using <strong>Window Function LAG()</strong> to access the previous row, inside a CTE/subquery that calculates monthly revenue.'
   },
   {
     num:15, diff:'hard', topic:'Calculation inside CASE',
-    text:'Which query raises the rental price by 20% for films rented more than 30 times?',
+    text:'Which query will raise the rental price by 20% for movies rented more than 30 times?',
     options:[
       "SELECT f.title, COUNT(r.rental_id), CASE WHEN COUNT(r.rental_id) > 30 THEN f.rental_rate * 1.2 ELSE f.rental_rate END AS New_Price FROM film f JOIN inventory i ON f.film_id = i.film_id JOIN rental r ON i.inventory_id = r.inventory_id GROUP BY f.film_id",
       "SELECT title, rental_rate * 1.2 FROM film WHERE (SELECT COUNT(*) FROM rental) > 30",
@@ -618,13 +617,13 @@ const questions = [
       "SELECT f.title, IF(COUNT(r.rental_id) > 30, 'Increase', 'Keep') FROM film f JOIN rental r ON f.film_id = r.film_id"
     ],
     correct:0,
-    explain:'A mathematical calculation (<strong>rental_rate * 1.2</strong>) inside the CASE, based on aggregate data from a triple JOIN via inventory.'
+    explain:'Math (<strong>rental_rate * 1.2</strong>) inside the CASE, based on aggregated data from a triple JOIN through inventory.'
   },
 
-  // ===== Part 4: Sakila Subqueries =====
+  // ===== Part 4: Subqueries — Sakila =====
   {
     num:16, diff:'easy', topic:'Subquery · Sakila',
-    text:'Which query shows the names of films whose length is greater than the average?',
+    text:'Which query shows the names of films whose length is greater than average?',
     options:[
       "SELECT title FROM film WHERE length > AVG(length);",
       "SELECT title FROM film WHERE length > (SELECT AVG(length) FROM film);",
@@ -632,11 +631,11 @@ const questions = [
       "SELECT title FROM film WHERE length > (AVG(length) FROM film);"
     ],
     correct:1,
-    explain:'You cannot use <strong>AVG()</strong> directly in WHERE. You need a subquery: WHERE length > (SELECT AVG(length) FROM film).'
+    explain:'You can\'t use <strong>AVG()</strong> directly in WHERE. You need a subquery: WHERE length > (SELECT AVG(length) FROM film).'
   },
   {
     num:17, diff:'easy', topic:'IN + Subquery · Sakila',
-    text:'How do we retrieve the names of customers who appear in the payments table using a subquery?',
+    text:'How do we retrieve the names of customers that appear in the payments table using a subquery?',
     options:[
       "SELECT first_name FROM customer WHERE customer_id IN (SELECT customer_id FROM payment);",
       "SELECT first_name FROM customer WHERE EXISTS (SELECT * FROM payment);",
@@ -644,11 +643,11 @@ const questions = [
       "SELECT first_name FROM customer JOIN payment USING (customer_id);"
     ],
     correct:0,
-    explain:'<strong>IN</strong> with a subquery — returns customers whose ID appears in the payment table. Option B is wrong because EXISTS without a correlation condition always returns TRUE.'
+    explain:'<strong>IN</strong> with a subquery — returns customers whose ID appears in the payment table. Answer B is wrong because EXISTS with no correlation condition will always return TRUE.'
   },
   {
     num:18, diff:'easy', topic:'Single-Value Subquery · Sakila',
-    text:"How do we retrieve films whose language is English without using a JOIN?",
+    text:"How do we pull movies whose language is English without using JOIN?",
     options:[
       "SELECT title FROM film WHERE language_id = 'English';",
       "SELECT title FROM film WHERE language_id = (SELECT language_id FROM language WHERE name = 'English');",
@@ -656,11 +655,11 @@ const questions = [
       "SELECT title FROM film WHERE EXISTS (SELECT name FROM language WHERE name = 'English');"
     ],
     correct:1,
-    explain:'A subquery that returns a <strong>single value</strong> (language_id) — perfect for use with =. Option A is wrong because language_id is a number, not text.'
+    explain:'A subquery that returns a <strong>single value</strong> (language_id) — perfect for use with =. Answer A is wrong because language_id is a number, not text.'
   },
   {
     num:19, diff:'easy', topic:'NOT IN + Subquery · Sakila',
-    text:'Which query finds films that do not appear in the inventory table?',
+    text:'Which query finds films that don\'t appear in the inventory table?',
     options:[
       "SELECT title FROM film WHERE film_id NOT IN (SELECT film_id FROM inventory);",
       "SELECT title FROM film WHERE film_id IN (SELECT film_id FROM inventory WHERE quantity = 0);",
@@ -668,11 +667,11 @@ const questions = [
       "SELECT title FROM film WHERE film_id != (SELECT film_id FROM inventory);"
     ],
     correct:0,
-    explain:'<strong>NOT IN</strong> with a subquery finds rows whose ID does not appear in the result. Option D is wrong because = with a subquery that returns multiple rows will fail.'
+    explain:'<strong>NOT IN</strong> with a subquery finds rows whose ID doesn\'t appear in the result. Answer D is wrong because = with a subquery that returns multiple rows will fail.'
   },
   {
     num:20, diff:'easy', topic:'IN + Subquery · Sakila',
-    text:'How do we show the names of the actors who appeared in the film where film_id = 1?',
+    text:'How do we display the names of players who played in the film where film_id = 1?',
     options:[
       "SELECT first_name FROM actor WHERE actor_id = (SELECT actor_id FROM film_actor WHERE film_id = 1);",
       "SELECT first_name FROM actor WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = 1);",
@@ -680,13 +679,13 @@ const questions = [
       "SELECT first_name FROM actor WHERE film_id = 1;"
     ],
     correct:1,
-    explain:'<strong>IN</strong> is required here because the subquery returns <strong>multiple actors</strong>. = would fail when there is more than one row.'
+    explain:'<strong>IN</strong> is necessary here because the subquery returns <strong>multiple players</strong>. = will fail when there\'s more than one row.'
   },
 
-  // ===== Part 5: SQL Server Subqueries =====
+  // ===== Part 5: Subqueries in SQL Server =====
   {
     num:21, diff:'medium', topic:'Subquery · SQL Server',
-    text:'Which query shows the product name and its price if its price is higher than the overall average?',
+    text:'Which query will display the product name and its price, if its price is higher than the overall average?',
     options:[
       "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > (SELECT AVG(UnitPrice) FROM Warehouse.StockItems);",
       "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > AVG(UnitPrice);",
@@ -694,11 +693,11 @@ const questions = [
       "SELECT StockItemName, UnitPrice FROM Warehouse.StockItems WHERE UnitPrice > (SELECT SUM(UnitPrice)/COUNT(*) FROM Warehouse.StockItems);"
     ],
     correct:0,
-    explain:'<strong>AVG() does not work directly in WHERE</strong> — you need a subquery. Option D is also technically correct but less readable.'
+    explain:'<strong>AVG() doesn\'t work directly in WHERE</strong> — you need a subquery. Answer D is also technically correct but less readable.'
   },
   {
     num:22, diff:'medium', topic:'Correlated Subquery · SQL Server',
-    text:'How do we show the customer name and their most recent order date using a correlated subquery?',
+    text:'How do we show the customer\'s name and the date of their last order using a correlated subquery?',
     options:[
       "SELECT c.CustomerName, MAX(o.OrderDate) FROM Sales.Customers c JOIN Sales.Orders o ON c.CustomerID = o.CustomerID;",
       "SELECT c.CustomerName, (SELECT MAX(OrderDate) FROM Sales.Orders o WHERE o.CustomerID = c.CustomerID) AS LastOrderDate FROM Sales.Customers c;",
@@ -706,11 +705,11 @@ const questions = [
       "SELECT c.CustomerName, o.OrderDate FROM Sales.Customers c WHERE o.OrderDate = (SELECT MAX(OrderDate) FROM Sales.Orders);"
     ],
     correct:1,
-    explain:'<strong>Correlated subquery</strong> — the subquery references c.CustomerID from the outer query. It is recomputed for each customer.'
+    explain:'<strong>Correlated Subquery</strong> — the subquery refers to c.CustomerID from the outer query. Recalculated for each customer.'
   },
   {
     num:23, diff:'medium', topic:'Derived Table · SQL Server',
-    text:'How do we compute the average of order totals (pre-computed in a subquery)?',
+    text:'How do we calculate the average of order totals (pre-computed in a subquery)?',
     options:[
       "SELECT AVG(SUM(Quantity * UnitPrice)) FROM Sales.OrderLines;",
       "SELECT AVG(Total) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS Total FROM Sales.OrderLines GROUP BY OrderID) AS Sub;",
@@ -718,11 +717,11 @@ const questions = [
       "SELECT AVG(Total) FROM (SELECT SUM(Quantity * UnitPrice) FROM Sales.OrderLines) AS Sub;"
     ],
     correct:1,
-    explain:'<strong>Derived Table</strong> — a subquery in FROM that computes a total per order, then AVG over the results.'
+    explain:'<strong>Derived Table</strong> — a subquery in FROM that computes a sum for each order, then AVG over the results.'
   },
   {
     num:24, diff:'medium', topic:'TOP + Subquery · SQL Server',
-    text:'Which query finds the name of the employee with the highest number of orders?',
+    text:'Which query will find the name of the employee with the highest number of orders?',
     options:[
       "SELECT FullName FROM Application.People WHERE PersonID = (SELECT TOP 1 SalespersonPersonID FROM Sales.Orders GROUP BY SalespersonPersonID ORDER BY COUNT(*) DESC);",
       "SELECT FullName FROM Application.People WHERE PersonID IN (SELECT COUNT(OrderID) FROM Sales.Orders);",
@@ -734,7 +733,7 @@ const questions = [
   },
   {
     num:25, diff:'medium', topic:'NOT IN + JOIN · SQL Server',
-    text:'How do we find products that were not ordered in 2016?',
+    text:'How do we find products that weren\'t ordered in 2016?',
     options:[
       "SELECT StockItemName FROM Warehouse.StockItems WHERE StockItemID NOT IN (SELECT StockItemID FROM Sales.OrderLines ol JOIN Sales.Orders o ON ol.OrderID = o.OrderID WHERE YEAR(o.OrderDate) = 2016);",
       "SELECT StockItemName FROM Warehouse.StockItems WHERE YEAR(OrderDate) != 2016;",
@@ -742,7 +741,7 @@ const questions = [
       "SELECT StockItemName FROM Warehouse.StockItems WHERE NOT EXISTS (SELECT * FROM Sales.Orders WHERE YEAR(OrderDate) = 2016);"
     ],
     correct:0,
-    explain:'<strong>NOT IN</strong> with a subquery that filters orders from 2016 only. Option C finds products that were never ordered at all, not just in 2016.'
+    explain:'<strong>NOT IN</strong> with a subquery that filters orders from 2016 only. Answer C finds products that were never ordered at all, not just not in 2016.'
   },
 
   // ===== Part 6: JOIN + SQL Server =====
@@ -756,7 +755,7 @@ const questions = [
       "SELECT si.StockItemName, s.SupplierName FROM Warehouse.StockItems si JOIN Purchasing.Suppliers s ON si.StockItemName = s.SupplierName;"
     ],
     correct:0,
-    explain:'<strong>JOIN on SupplierID</strong> — the correct key for the join. Option B creates a Cartesian product, and option C joins the wrong fields.'
+    explain:'<strong>JOIN on SupplierID</strong> — the correct key to join on. Answer B creates a Cartesian Product, answer C joins the wrong fields.'
   },
   {
     num:27, diff:'medium', topic:'LEFT JOIN · SQL Server',
@@ -768,11 +767,11 @@ const questions = [
       "SELECT c.CustomerName, o.OrderID FROM Sales.Customers c FULL JOIN Sales.Orders o ON c.CustomerID = o.CustomerID WHERE o.OrderID IS NULL;"
     ],
     correct:1,
-    explain:'<strong>LEFT JOIN</strong> from the Customers table — keeps all customers. Customers with no orders get NULL in the Orders columns.'
+    explain:'<strong>LEFT JOIN</strong> from the Customers table — keeps all customers. Customers with no orders will get NULL in the Orders columns.'
   },
   {
-    num:28, diff:'hard', topic:'Five-Table JOIN · SQL Server',
-    text:'To show an order, customer, employee, product, and quantity — what is the correct join order?',
+    num:28, diff:'hard', topic:'JOIN five tables · SQL Server',
+    text:'To display order, customer, employee, product and quantity — what\'s the correct join order?',
     options:[
       "Orders → Customers → People (Salesperson) → OrderLines → StockItems",
       "Orders → Customers → StockItems → OrderLines",
@@ -784,7 +783,7 @@ const questions = [
   },
   {
     num:29, diff:'hard', topic:'Self JOIN · SQL Server',
-    text:'The customers table has a BillToCustomerID column. How do we show a customer name alongside the name of the customer who pays for them?',
+    text:'The customers table has a BillToCustomerID column. How do we show the customer\'s name alongside the name of the customer who\'s paying for them?',
     options:[
       "SELECT c.CustomerName, b.CustomerName FROM Sales.Customers c JOIN Sales.Customers b ON c.BillToCustomerID = b.CustomerID;",
       "SELECT c.CustomerName, c.BillToCustomerID FROM Sales.Customers c;",
@@ -796,7 +795,7 @@ const questions = [
   },
   {
     num:30, diff:'hard', topic:'LEFT JOIN + IS NULL · SQL Server',
-    text:'How do we find a product that does not appear in the order-lines table (OrderLines)?',
+    text:'How do we find a product that doesn\'t appear in the order lines table (OrderLines)?',
     options:[
       "SELECT si.StockItemName FROM Warehouse.StockItems si JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID;",
       "SELECT si.StockItemName FROM Warehouse.StockItems si LEFT JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID WHERE ol.OrderLineID IS NULL;",
@@ -804,11 +803,11 @@ const questions = [
       "SELECT si.StockItemName FROM Warehouse.StockItems si RIGHT JOIN Sales.OrderLines ol ON si.StockItemID = ol.StockItemID WHERE si.StockItemID IS NULL;"
     ],
     correct:1,
-    explain:'<strong>LEFT JOIN + WHERE IS NULL</strong> — the classic trick: join, then keep only rows that found no match (NULL).'
+    explain:'<strong>LEFT JOIN + WHERE IS NULL</strong> — the classic trick: join, then filter only rows that found no match (NULL).'
   },
   {
     num:31, diff:'hard', topic:'CASE + DATEDIFF · Sakila',
-    text:'How do we check whether a film was returned late?',
+    text:'How do we check if a movie was returned late?',
     options:[
       "CASE WHEN DATEDIFF(return_date, rental_date) > rental_duration THEN 'Late' ELSE 'On Time' END",
       "CASE WHEN return_date > rental_duration THEN 'Late' ELSE 'On Time' END",
@@ -816,11 +815,11 @@ const questions = [
       "IF(return_date > rental_date, 'Late', 'On Time')"
     ],
     correct:0,
-    explain:'<strong>DATEDIFF(return_date, rental_date)</strong> computes the actual number of days and compares it to rental_duration. Option B compares a date to a number of days — wrong.'
+    explain:'<strong>DATEDIFF(return_date, rental_date)</strong> calculates the actual number of days and compares it to rental_duration. Answer B compares a date to a number of days — wrong.'
   },
   {
     num:32, diff:'hard', topic:'CASE + Subquery · Sakila',
-    text:"How do we classify a customer as 'High Spender' if they are above the overall average?",
+    text:"How do we classify a customer as 'High Spender' if they're above the overall average?",
     options:[
       "CASE WHEN SUM(amount) > (SELECT AVG(total) FROM (SELECT SUM(amount) AS total FROM payment GROUP BY customer_id) AS sub) THEN 'High Spender' ELSE 'Regular' END",
       "CASE WHEN amount > AVG(amount) THEN 'High Spender' END",
@@ -828,11 +827,11 @@ const questions = [
       "SELECT first_name FROM payment HAVING SUM(amount) > AVG(amount)"
     ],
     correct:0,
-    explain:'<strong>Subquery inside CASE</strong> — the average of the totals is computed separately (an average of totals, not of individual payments).'
+    explain:'<strong>Subquery inside CASE</strong> — the average of the amounts is computed separately (average of sums, not of individual payments).'
   },
   {
-    num:33, diff:'hard', topic:'CASE — dynamic calculation · Sakila',
-    text:'How do we raise the price by 20% only for films rented more than 30 times?',
+    num:33, diff:'hard', topic:'CASE Dynamic Calculation · Sakila',
+    text:'How do we raise the price by 20% only for movies rented more than 30 times?',
     options:[
       "CASE WHEN COUNT(rental_id) > 30 THEN rental_rate * 1.2 ELSE rental_rate END",
       "CASE WHEN rental_count > 30 THEN rental_rate + 20% END",
@@ -840,14 +839,14 @@ const questions = [
       "SELECT title, rental_rate * 1.2 AS New_Price FROM film"
     ],
     correct:0,
-    explain:'<strong>A mathematical calculation inside CASE</strong> — rental_rate * 1.2 raises it by 20%. Option B is wrong because + 20% is not valid syntax.'
+    explain:'<strong>Math inside a CASE</strong> — rental_rate * 1.2 raises it by 20%. Answer B is wrong because + 20% isn\'t valid syntax.'
   }
 ];
 
-const diffLabel = {easy:'Easy',medium:'Medium',hard:'Hard'};
+const diffLabel = {easy:'easy',medium:'medium',hard:'hard'};
 const diffClass = {easy:'diff-easy',medium:'diff-medium',hard:'diff-hard'};
 const sectionClass = {easy:'easy',medium:'medium',hard:'hard'};
-const sectionTitle = {easy:'🟢 Part A — CASE WHEN (Sakila)',medium:'🟠 Part B — Subqueries + JOIN',hard:'🔴 Part C — Very Hard'};
+const sectionTitle = {easy:'🟢 Part 1 — CASE WHEN (Sakila)',medium:'🟠 Part 2 — Subqueries + JOIN',hard:'🔴 Part 3 — Very hard level'};
 
 let answers = {};
 let correct = 0;
@@ -904,34 +903,11 @@ function buildQuiz(){
       </div>`).join('');
 
     mc.innerHTML += `
-    <div class="q-card" id="qcard-${i}">
-      <div class="q-header">
-        <div class="q-meta">
-          <div class="q-num">Question ${q.num}</div>
-          <div class="q-diff ${diffClass[q.diff]}">${diffLabel[q.diff]}</div>
-          <div class="q-topic">${q.topic}</div>
-        </div>
-        <div class="q-text">${q.text}</div>
-      </div>
-      <div class="q-body">
-        <div class="options">${optsHtml}</div>
-        <div class="explanation" id="exp-${i}">
-          <p>${q.correct === answers[i] ? '✅' : '❌'} <strong>${q.correct === answers[i] ? 'Correct!' : 'Wrong — the correct answer is marked in green.'}</strong> ${q.explain}</p>
-        </div>
-      </div>
-    </div>`;
+    <div class="q-card" id="qcard-${i}">\n      <div class="q-header">\n        <div class="q-meta">\n          <div class="q-num">Question ${q.num}</div>\n          <div class="q-diff ${diffClass[q.diff]}">${diffLabel[q.diff]}</div>\n          <div class="q-topic">${q.topic}</div>\n        </div>\n        <div class="q-text">${q.text}</div>\n      </div>\n      <div class="q-body">\n        <div class="options">${optsHtml}</div>\n        <div class="explanation" id="exp-${i}">\n          <p>${q.correct === answers[i] ? '✅' : '❌'} <strong>${q.correct === answers[i] ? 'Correct!' : "You got it wrong — the correct answer is marked in green."}</strong> ${q.explain}</p>\n        </div>\n      </div>\n    </div>`;
   });
 
   mc.innerHTML += `
-  <div class="finish-card" id="finishCard">
-    <div class="finish-emoji">🎉</div>
-    <div class="finish-title">You finished the quiz!</div>
-    <div class="finish-score" id="finishScore">0/15</div>
-    <div id="finishGrade"></div>
-    <div class="finish-sub" id="finishSub"></div>
-    <br>
-    <button class="retry-btn" onclick="resetQuiz()">🔄 Try again</button>
-  </div>`;
+  <div class="finish-card" id="finishCard">\n    <div class="finish-emoji">🎉</div>\n    <div class="finish-title">You finished the quiz!</div>\n    <div class="finish-score" id="finishScore">0/15</div>\n    <div id="finishGrade"></div>\n    <div class="finish-sub" id="finishSub"></div>\n    <br>\n    <button class="retry-btn" onclick="resetQuiz()">🔄 Try again</button>\n  </div>`;
 }
 
 function showFinish(){
@@ -942,10 +918,10 @@ function showFinish(){
   document.getElementById('finishScore').textContent = correct+'/'+questions.length;
   const pct = Math.round(correct/questions.length*100);
   let grade, sub;
-  if(pct>=90){grade='<span class="finish-grade grade-a">⭐ Excellent! A</span>';sub='Outstanding performance — you have a strong command of SQL!';}
-  else if(pct>=75){grade='<span class="finish-grade grade-b">👍 Very good! B</span>';sub='Good work! Worth reviewing the topics you missed.';}
-  else if(pct>=60){grade='<span class="finish-grade grade-c">📚 Pass! C</span>';sub='A good base, but there is room to improve. Review the material.';}
-  else{grade='<span class="finish-grade grade-d">💪 Keep practicing! D</span>';sub='Do not give up — go back to the study material and try again!';}
+  if(pct>=90){grade='<span class="finish-grade grade-a">⭐ Excellent! A</span>';sub='Outstanding performance — you have a high level of SQL mastery!';}
+  else if(pct>=75){grade='<span class="finish-grade grade-b">👍 Very good! B</span>';sub='Good work! It\'s worth reviewing the topics you missed.';}
+  else if(pct>=60){grade='<span class="finish-grade grade-c">📚 Passing! C</span>';sub='A good base, but there\'s room for improvement. Review the material.';}
+  else{grade='<span class="finish-grade grade-d">💪 Keep practicing! D</span>';sub='Don\'t give up — go back to the material and try again!';}
   document.getElementById('finishGrade').innerHTML = grade;
   document.getElementById('finishSub').textContent = sub;
 }
@@ -1101,12 +1077,7 @@ function renderChart(history) {
     </div>`;
   }).join('');
   panel.innerHTML = `
-    <div class="hstats-row">
-      <div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">Personal best</div></div>
-      <div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">Average</div></div>
-      <div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">Attempts</div></div>
-    </div>
-    <div class="hchart">${bars}</div>`;
+    <div class="hstats-row">\n      <div class="hstat-mini"><div class="hstat-n" style="color:var(--aq)">${best}%</div><div class="hstat-l">Personal best</div></div>\n      <div class="hstat-mini"><div class="hstat-n" style="color:#FFB020">${avg}%</div><div class="hstat-l">Average</div></div>\n      <div class="hstat-mini"><div class="hstat-n" style="color:var(--text2)">${history.length}</div><div class="hstat-l">Attempts</div></div>\n    </div>\n    <div class="hchart">${bars}</div>`;
 }
 
 function showToast(msg) {

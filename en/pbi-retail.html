@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070a0c">
+<meta name="color-scheme" content="dark">
+<title>Retail Sales Summary Task — Star Schema in Power BI | Eliran Grossman</title>
+<meta name="description" content="A Power BI capstone assignment on a retail sales model: 27 exercises with full solutions — 14 DAX measures including window functions, two dashboard pages, and dual conditional formatting.">
+<meta property="og:title" content="Retail sales capstone assignment">
+<meta property="og:description" content="27 exercises with full solutions: 14 DAX measures including RANK, INDEX and WINDOW, two dashboard pages, and dual conditional formatting.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+/* overflow guard: a wide child (code line, table, long token) must never widen the column */
+.wrap,.page,.tasks,.task,.sol-body,.practice-box,.kpi{min-width:0}
+.tasks{grid-template-columns:minmax(0,1fr)}
+.page>*,.task>*,.sol-body>*{max-width:100%}
+.mono,.steps code,code{max-width:100%;overflow-wrap:anywhere}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:100%;width:min(1080px,100%);margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;min-width:0;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-home{text-decoration:none}
+
+.tb-menu:disabled,.tb-home:disabled,.tb-quiz:disabled{opacity:.42;cursor:default;border-color:var(--line);color:var(--fg-3);transform:none}
+.tb-home:disabled:hover,.tb-quiz:disabled:hover{border-color:var(--line);color:var(--fg-3)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 1 auto;min-width:0;overflow:hidden;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:left;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:left}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+button.sec-num{background:none;border:0;padding:6px 0;text-align:left;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px;font-size:clamp(.94rem,2.9vw,1.05rem);overflow-wrap:break-word}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (Collect→Organize→Analyze→Present / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+
+/* PHONES: the table stops being a table. Every row becomes a card, every cell a
+   label/value pair (label comes from data-label). No min-width, so nothing can
+   ever force the page wider than the screen — the root cause of the clipping. */
+@media(max-width:620px){
+  .tbl-wrap{overflow-x:visible;border:0;border-radius:0;background:none}
+  table.cmp{display:block;min-width:0;width:100%;font-size:.9rem;border-collapse:separate}
+  table.cmp caption{padding:0 2px 10px;background:none;font-size:.8rem;line-height:1.55}
+  table.cmp thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  table.cmp tbody{display:grid;gap:10px}
+  table.cmp tbody tr{display:block;background:var(--bg-1);border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px}
+  table.cmp tbody tr>th[scope="row"]{display:block;background:none;border:0;padding:0 0 9px;
+    margin-bottom:7px;border-bottom:1px solid var(--line);color:var(--fg-1);font-size:.95rem;font-weight:700}
+  table.cmp tbody td{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+    gap:2px 14px;padding:5px 0;border:0;min-width:0}
+  table.cmp tbody td+td{border-top:1px dashed var(--line-soft)}
+  table.cmp tbody td::before{content:attr(data-label);flex:0 0 auto;color:var(--fg-3);
+    font-size:.76rem;font-weight:600;letter-spacing:.01em}
+  table.cmp tbody td:not([data-label])::before{display:none}
+  /* long free-text cells get the label on its own line and the full card width */
+  table.cmp tbody td[data-long]{display:block}
+  table.cmp tbody td[data-long]::before{display:block;margin-bottom:3px}
+  table.cmp tbody td.pbi,table.cmp tbody td.xl{color:var(--fg-1);font-weight:600}
+}
+table.cmp caption{text-align:left;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:left;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:clamp(1.25rem,5vw,1.6rem);color:var(--pbi);overflow-wrap:break-word}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;max-width:100%;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap;min-width:0;max-width:100%}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;min-width:0;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:clamp(.92rem,2.8vw,1rem);color:var(--fg-2);margin-bottom:12px;overflow-wrap:break-word}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+.dax{font-family:var(--mono);font-size:clamp(.74rem,2.9vw,.82rem);line-height:1.6;background:var(--bg-2);border:1px solid var(--line-soft);
+  border-radius:10px;padding:12px 14px;color:var(--acc);direction:ltr;text-align:left;overflow-x:auto;max-width:100%;
+  white-space:pre;margin-bottom:14px;unicode-bidi:isolate;-webkit-overflow-scrolling:touch}
+@media(max-width:760px){
+  .dax,.code{white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:hidden;font-size:.8rem;padding:12px}
+  .dax{line-height:1.8;padding-inline-start:2.4em;text-indent:-2.2em}
+}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:left;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:left;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4;
+  max-width:100%;overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:420px){.btn{padding:11px 16px;font-size:.9rem;width:100%}}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:left;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* On phone the header shrinks to just the lessons bar — still always available */
+  :root{--header-h:44px}
+  /* one short row: ☰ · Previous · Title · Next · Questions — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+
+/* ---- assignment-specific ---- */
+button.sec-num{background:none;border:0;padding:6px 0;text-align:left;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;line-height:1.4;cursor:pointer}
+button.sec-num:hover .crumb-back,button.sec-num:focus-visible .crumb-back{color:var(--acc);border-color:var(--line-glow)}
+.crumb-back{font-family:var(--font);letter-spacing:0;font-size:.78rem;color:var(--fg-3);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+@media(pointer:coarse){button.sec-num{min-height:44px}}
+.ask{display:flex;gap:9px;align-items:flex-start;background:var(--acc-soft);border:1px solid var(--line-strong);
+  border-radius:10px;padding:11px 13px;margin:14px 0 4px;font-size:.9rem;color:var(--fg-2);min-width:0}
+.ask b{color:var(--acc);flex:0 0 auto}
+.hd .brand{white-space:nowrap}
+.aw-back{margin-inline-start:auto;font-size:.82rem;color:var(--fg-3);border:1px solid var(--line);
+  border-radius:999px;padding:6px 12px;white-space:nowrap}
+.aw-back:hover{color:var(--pbi);border-color:var(--pbi-glow)}
+
+/* ============================================================
+   v3 — TRUNCATION POLICY: no label in this document is ever cut.
+   Every rule that used to clip text now wraps it instead; the only
+   exceptions left are the two horizontal rails, which are scrollers.
+   ============================================================ */
+.qnav-b span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.35}
+.qnav-b{padding:11px 12px}
+.dl-t,.mc-row .lbl,.sel-item .nm{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.toc-t{overflow-wrap:anywhere}
+.toc{min-height:0}                     /* flex-column child must be allowed to shrink, or it never scrolls */
+.ask span{min-width:0}
+@media(max-width:620px){
+  /* the topic name gets two full lines instead of an ellipsis */
+  .tb-title{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;line-height:1.25;font-size:.8rem}
+  .tb-chap{display:none}               /* the chapter is already the first line of every topic */
+  .tb-meta{gap:0}
+  .tb-meta .tb-count::before{content:none;margin:0}
+}
+/* numbers, currency and Latin identifiers keep their own direction inside RTL prose */
+[dir="ltr"]{unicode-bidi:isolate}
+/* inner scrollers never hand their momentum back to the page */
+.tbl-wrap,.dax,.code{overscroll-behavior-x:contain}
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+
+
+/* --- header rail: on desktop it wraps instead of being clipped by a hidden scroller,
+       on phones it stays a scroller but with a visible fade affordance --- */
+@media(min-width:701px){
+  header.site{height:auto;min-height:var(--header-h)}
+  header.site .hd{flex-wrap:wrap;height:auto;min-height:var(--header-h);padding-block:7px;row-gap:7px}
+  .lesson-rail{flex-wrap:wrap;overflow:visible;row-gap:6px}
+}
+@media(max-width:700px){
+  .lesson-rail{position:relative;
+    -webkit-mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent);
+            mask-image:linear-gradient(to left,#000 calc(100% - 22px),transparent)}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<noscript>
+  <style>
+    .page[hidden]{display:block!important}
+    body{display:block;height:auto;overflow:visible}
+    .scroller{overflow:visible;height:auto}
+    .topicbar,.pager,.pg-hint{display:none}
+  </style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">All 29 assignment pages are shown here in sequence. Opening the solutions requires JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="To the course homepage"><b>SQL</b> with Eliran</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="Navigation between course lessons">
+        <a class="lr lr-home is-on" href="pbi.html" aria-current="page" title="The home page of the platform"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Home page</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI basics"><b>1</b><span>Base</span></a>
+      <a class="lr" href="pbi-course-2.html" title="Data modeling"><b>2</b><span>Modeling</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query and ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M and DAX basics"><b>4</b><span>M and DAX</span></a>
+        <span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="To the course homepage"><b>↩</b><span>The course</span></a><a class="lr lr-x" href="pbi-updates.html" title="The Monthly Power BI Updates"><b>◷</b><span>Updates</span></a><a class="lr lr-x" href="pbi-quiz.html" title="The full question bank"><b>?</b><span>Question bank</span></a><a class="lr lr-x" href="dax-reference.html" title="DAX function index"><b>Fx</b><span>DAX reference</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="Opening the exercise list">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">exercises</span>
+    </button>
+    <a class="tb-home" id="tb-home" href="pbi.html" aria-label="Back to the home page of the Power BI platform" title="home page">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">main</span>
+    </a>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">Previous</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">next</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-sum">
+      <span class="tb-quiz-t">to summarize</span><span class="tb-quiz-s">summary</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+
+<section class="page" id="ret-intro" data-chap="Summary assignment · Retail sales" data-title="Retail sales — assignment prep and structure"
+ aria-label="Capstone assignment · Retail sales — preparation and assignment structure" hidden>
+  <div class="sec-num">Summary assignment · Retail sales</div>
+  <h2 class="sec-title">Retail sales model — preparation and assignment structure</h2>
+  <p class="sec-sub">A sales dashboard where every number comes from a measure you write from scratch, with automatic color indication
+  for sales reps. Working on <span class="mono" dir="ltr">Retail_StarSchema_PowerBI.xlsx</span> — a star schema with 11 tables,
+  36,607 rows and two Snowflake branches. 27 exercises, each on a separate page and with a full solution. Note: the download
+  and the practice are <b>On the computer only</b> — Power BI Desktop doesn't exist on phone.</p>
+
+  <div class="practice-cta">
+    <a class="btn" href="../assets/Retail_StarSchema_PowerBI.xlsx" download>Download the dataset — Retail_StarSchema_PowerBI.xlsx</a>
+    <span class="pc-note">11 tables · 36,607 rows · 11 relationships · 3.2MB · <b style="color:var(--pbi)">For download on computer only</b></span>
+  </div>
+
+  <div class="kpis" style="margin:22px 0">
+    <div class="kpi"><b><span dir="ltr">€62,929,759</span></b><span>Net sales — the anchor</span></div>
+    <div class="kpi"><b><span dir="ltr">30,000</span></b><span>Order rows</span></div>
+    <div class="kpi"><b><span dir="ltr">13,892</span></b><span>orders</span></div>
+    <div class="kpi"><b><span dir="ltr">14</span></b><span>Measures to write</span></div>
+  </div>
+
+  <p class="note"><b>The data is synthetic.</b> The country and city names are real, but every customer, product, rep
+  and order in the file were artificially generated.</p>
+
+  <p class="note"><b>the model.</b> The central fact table <span class="mono" dir="ltr">Fact_Sales</span> at the core of a product row
+  in the order, and next to it <span class="mono" dir="ltr">Fact_Returns</span> and<span class="mono" dir="ltr">Fact_SalesTargets</span>. Eight dimensions, two of them
+  branches <b>Snowflake</b> Deliberately: <span class="mono" dir="ltr">Dim_Geography → Dim_Customer</span> and
+  <span class="mono" dir="ltr">Dim_ProductCategory → Dim_Product</span>. 11 relationships, all one-to-many in direction
+  <span class="mono" dir="ltr">Single</span> from the dimension to the fact. Mark the <span class="mono" dir="ltr">Dim_Date</span> As a date table with
+  <span class="mono" dir="ltr">Full_Date</span>.</p>
+
+  <p class="note"><b>Three points that will save you time.</b> (1) <span class="mono" dir="ltr">Dim_Promotion</span> including an item with the key
+  0 named <span class="mono" dir="ltr">No Promotion</span>, so there won't be blank keys in the fact table. (2)
+  <span class="mono" dir="ltr">Fact_SalesTargets</span> in a monthly grain while sales are daily — a join through
+  <span class="mono" dir="ltr">Month_Start_Date_ID</span>. (3) <span class="mono" dir="ltr">Ship_Date</span> It's a regular date column and not a key, so as not
+  to create a second relationship to<span class="mono" dir="ltr">Dim_Date</span>; anyone who wants to practice a role-playing dimension can add an inactive relationship
+  and activate it with <span class="mono" dir="ltr">USERELATIONSHIP</span>.</p>
+
+  <h3 style="margin:34px 0 14px">Assignment structure</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">Part 1</span><h3>14 DAX measures</h3><p>Ten basic measures — SUM, DISTINCTCOUNT, DIVIDE, two CALCULATE, ALL, IF and two SWITCH — and three window functions: RANK, INDEX and WINDOW.</p></div>
+    <div class="card"><span class="tag">Part 2</span><h3>Two dashboard pages</h3><p>Four cards on a tray, a bar chart, a line chart, a year slicer, a reps table, Top 10 products, a Matrix, and a combo chart.</p></div>
+    <div class="card"><span class="tag">Part 3</span><h3>Double conditional formatting</h3><p>The same three-tier split in two techniques: Rules inside a single visual, and a SWITCH measure that feeds the color to every visual.</p></div>
+  </div>
+
+  <div class="practice-cta" style="margin-top:26px">
+    <button type="button" class="btn" data-goto="ret-1-1">for the first exercise — 1.1 Total Sales ←</button>
+    <span class="pc-note">All the numbers were verified in pandas against the file</span>
+  </div>
+</section>
+
+<section class="page" id="ret-1-1" data-chap="Chapter I · Base measures · Exercise 1.1" data-title="1.1 · Total Sales — the base measure"
+ aria-label="Chapter I · Basic Measures · Exercise 1.1 — 1.1 · Total Sales — the base measure" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.1</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.1 · Total Sales — the base measure</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Total Sales</b> that summarizes the <span class="mono" dir="ltr">Fact_Sales[Net_Amount]</span>. Format as currency with a thousands separator.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Total Sales = SUM ( Fact_Sales[Net_Amount] )</pre><ol class='steps'><li><b>creation</b><span>Right-click on <code>Fact_Sales</code> ← <code>New measure</code></span></li><li><b>design</b><span><code>Format</code> ← <code>Currency</code> ← 0 digits after the decimal point</span></li></ol>
+      <p class="task-q"><b>Why Net and not Gross:</b> <span class="mono" dir="ltr">Gross_Amount</span> it's before discount
+          (€67,937,751), <span class="mono" dir="ltr">Net_Amount</span> after (€62,929,759). The difference —
+          €5,007,992 — is the discount given in promotions. Both numbers are correct, they answer two different
+          questions, so you must define the measure before arguing about a number.</p>
+          <p class="task-q"><b>and what about returns:</b> €2,364,425 were refunded to customers
+          (3.76% of sales), and they sit in<span class="mono" dir="ltr">Fact_Returns</span> — are not deducted from this measure.
+          The net-net sales are €60,565,334. This is an excellent bonus exercise.</p><p class="sol-check">result: <b>€62,929,759</b> — the anchor number for the whole assignment.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-2" data-chap="Chapter I · Base measures · Exercise 1.2" data-title="1.2 · Total Orders — how many orders, really"
+ aria-label="Chapter I · Base Metrics · Exercise 1.2 — 1.2 · Total Orders — how many orders, really" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.2</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.2 · Total Orders — how many orders, really</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Total Orders</b> that counts orders <b>uniqueness</b> based on <span class="mono" dir="ltr">Fact_Sales[Order_Number]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Total Orders = DISTINCTCOUNT ( Fact_Sales[Order_Number] )</pre>
+      <p class="task-q"><b>Note the column:</b> <span class="mono" dir="ltr">Order_Number</span> and not
+          <span class="mono" dir="ltr">Sales_Line_ID</span>. An order with multiple items appears in multiple rows, so
+          <span class="mono" dir="ltr">COUNT</span> It would return 30,000 — rows, not orders. The average is
+          2.16 rows per order.</p><p class="sol-check">result: <b>13,892</b> orders out of 30,000 sales rows.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-3" data-chap="Chapter I · Base measures · Exercise 1.3" data-title="1.3 · Avg Order Value — the Lego principle"
+ aria-label="Chapter I · Basic Measures · Exercise 1.3 — 1.3 · Avg Order Value — The Lego Principle" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.3</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.3 · Avg Order Value — the Lego principle</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Avg Order Value</b> — strictly from the two existing measures, without the division sign / and without AVERAGE. Format to two decimal places.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Avg Order Value = DIVIDE ( [Total Sales], [Total Orders] )</pre>
+      <p class="task-q"><b>The average of what:</b> <span class="mono" dir="ltr">AVERAGE(Fact_Sales[Net_Amount])</span> would
+          return the average per order line, not per order. When the measure is built from two existing measures, the denominator is defined
+          explicitly. <span class="mono" dir="ltr">DIVIDE</span> Preferable to / because it returns blank instead of an error when the denominator is zero.</p>
+          <p class="task-q"><b>The measure rolls automatically:</b> Drag it onto the reps table and it will return
+          the average basket of each rep — see the insight in exercise 2.4.</p><p class="sol-check">result: <b>€4,530</b> to the order.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-4" data-chap="Chapter I · Base measures · Exercise 1.4" data-title="1.4 · Total Profit — the second measure"
+ aria-label="Chapter I · Base Measures · Exercise 1.4 — 1.4 · Total Profit — the second measure" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.4</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.4 · Total Profit — the second measure</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Total Profit</b> that summarizes the <span class="mono" dir="ltr">Fact_Sales[Gross_Profit]</span>. Bonus: measure <span class="mono" dir="ltr">Profit Margin %</span> — DIVIDE of profit by sales, as a percentage.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Total Profit = SUM ( Fact_Sales[Gross_Profit] )
+
+Profit Margin % = DIVIDE ( [Total Profit], [Total Sales] )</pre>
+      <p class="task-q"><b>The column is derived, not random:</b> <span class="mono" dir="ltr">Gross_Profit</span> =
+          <span class="mono" dir="ltr">Net_Amount</span> less <span class="mono" dir="ltr">COGS</span>, in each of the 30,000 rows.
+          You can verify this in Power Query before starting.</p>
+          <p class="task-q"><b>255 rows with negative margin</b> (0.85%) —
+          a 25% promotion that dropped below cost. This happens in real data, and it’s a good analysis question: which promotion ate
+          into the profit.</p><p class="sol-check">result: <b>€25,282,189</b> · margin 40.18%.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-5" data-chap="Chapter I · Base measures · Exercise 1.5" data-title="1.5 · Digital Sales — first CALCULATE"
+ aria-label="Chapter I · Base Metrics · Exercise 1.5 — 1.5 · Digital Sales — your first CALCULATE" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.5</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.5 · Digital Sales — first CALCULATE</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Digital Sales</b> that returns sales in digital channels only, with CALCULATE and a condition on <span class="mono" dir="ltr">Dim_Channel[Is_Digital]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Digital Sales =
+CALCULATE ( [Total Sales], Dim_Channel[Is_Digital] = &quot;Yes&quot; )</pre>
+      <p class="task-q"><b>What happens here:</b> CALCULATE adds the condition to the filter bubble and only then
+          runs the <span class="mono" dir="ltr">[Total Sales]</span>. The filter sits on a text column in the dimension table and flows through the relationship
+          to the 30,000 fact rows — without any JOIN.</p>
+          <p class="task-q"><b>The breakdown by channel:</b> Mobile App €13,038,227 · Retail Branch €12,512,458 · Web Store €12,493,313 · Telesales €12,491,849 · Partner Reseller €12,393,913</p><p class="sol-check">result: <b>€25,531,540</b> — 40.57% of sales.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-6" data-chap="Chapter I · Base measures · Exercise 1.6" data-title="1.6 · Promotion Sales — CALCULATE on the promotions dimension"
+ aria-label="Chapter I · Base Measures · Exercise 1.6 — 1.6 · Promotion Sales — CALCULATE on the promotions dimension" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.6</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.6 · Promotion Sales — CALCULATE on the promotions dimension</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Promotion Sales</b> that returns the sales made on promotion. The trick: the dimension includes a member named <span class="mono" dir="ltr">Standard Price</span> that represents a sale without a promotion — filter it out.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Promotion Sales =
+CALCULATE ( [Total Sales], Dim_Promotion[Promotion_Type] &lt;&gt; &quot;Standard Price&quot; )</pre>
+      <p class="task-q"><b>Why there is a "no promotion" member:</b> Without it there would be
+          15,990 rows with an empty key, and every visual would show
+          <span class="mono" dir="ltr">(Blank)</span>. A default row with key 0 is the standard solution — and that's why in this file
+          there are 0 empty keys.</p>
+          <p class="task-q"><b>The discount given in promotions:</b> €5,007,992 — almost the entire discount
+          in the file. Worth building a measure <span class="mono" dir="ltr">Discount Rate %</span> and see which channel exploits it.</p><p class="sol-check">result: <b>€26,793,724</b> — 42.58% of sales, in 14,010 rows.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-7" data-chap="Chapter I · Base measures · Exercise 1.7" data-title="1.7 · % of All Sales — ALL releases the filter"
+ aria-label="Chapter I · Basic Measures · Exercise 1.7 — 1.7 · % of All Sales — ALL releases the filter" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.7</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.7 · % of All Sales — ALL releases the filter</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">% of All Sales</b>: Divide the <span class="mono" dir="ltr">[Total Sales]</span> in total — a CALCULATE that removes the filter from<span class="mono" dir="ltr">Dim_SalesRep</span> using ALL. Format as a percentage, two digits.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">% of All Sales =
+DIVIDE (
+    [Total Sales],
+    CALCULATE ( [Total Sales], ALL ( Dim_SalesRep ) )
+)</pre>
+      <p class="task-q"><b>What ALL does:</b> The numerator lives in the row's bubble (one rep), and the denominator
+          is released from filtering and therefore always holds the entire company. In the Total row the numerator equals the denominator — and that's the check
+          that the measure was written correctly.</p><p class="sol-check">Result: the top representative holds <b>3.01%</b> · The Total row shows 100.00%.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-8" data-chap="Chapter I · Base measures · Exercise 1.8" data-title="1.8 · Rep Status — IF vs. the average"
+ aria-label="Chapter I · Base Measures · Exercise 1.8 — 1.8 · Rep Status — IF against the average" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.8</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.8 · Rep Status — IF vs. the average</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Rep Status</b> that returns text: "Above average" if the rep exceeded 1,570,000 euros, and otherwise "Below average".</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Rep Status =
+IF ( [Total Sales] &gt;= 1570000, &quot;Above average&quot;, &quot;Below average&quot; )</pre>
+      <p class="task-q"><b>Where does 1,570,000 come from:</b> €62,929,759 ÷ 40 reps =
+          €1,573,244, rounded. The measure returns text, so it fits a table, not a numeric card.</p><p class="sol-check">result: <b>20</b> Reps "above average" · <b>20</b> "below" — an almost perfect split in two.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-9" data-chap="Chapter I · Base measures · Exercise 1.9" data-title="1.9 · Rep Tier — SWITCH for three tiers"
+ aria-label="Chapter I · Basic Measures · Exercise 1.9 — 1.9 · Rep Tier — SWITCH for Three Tiers" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.9</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.9 · Rep Tier — SWITCH for three tiers</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Rep Tier</b>: "Top" from 1,700,000 and up, "Middle" from 1,470,000 and up, otherwise "Bottom". Use the template <span class="mono" dir="ltr">SWITCH ( TRUE (), … )</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Rep Tier =
+SWITCH (
+    TRUE (),
+    [Total Sales] &gt;= 1700000, &quot;Top&quot;,
+    [Total Sales] &gt;= 1470000, &quot;Middle&quot;,
+    &quot;Bottom&quot;
+)</pre>
+      <p class="task-q"><b>Order determines:</b> SWITCH stops at the first condition that holds. If the lower condition
+          is written first, the entire top tier will be classified as "middle", and the top tier will remain empty.</p><p class="sol-check">result: <b>9</b> "top" · <b>21</b> "middle" · <b>10</b> "bottom".</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-10" data-chap="Chapter I · Base measures · Exercise 1.10" data-title="1.10 · Tier Color — a SWITCH that returns a color"
+ aria-label="Chapter I · Base Metrics · Exercise 1.10 — 1.10 · Tier Color — a SWITCH that returns a color" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter I · Base measures · Exercise 1.10</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.10 · Tier Color — a SWITCH that returns a color</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Tier Color</b> That returns HEX based on <span class="mono" dir="ltr">[Rep Tier]</span>: top <span class="mono" dir="ltr">#132449</span>, middle <span class="mono" dir="ltr">#F5C518</span>, default <span class="mono" dir="ltr">#A9B4CC</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Tier Color =
+SWITCH (
+    [Rep Tier],
+    &quot;Top&quot;, &quot;#132449&quot;,
+    &quot;Middle&quot;, &quot;#F5C518&quot;,
+    &quot;#A9B4CC&quot;
+)</pre>
+      <p class="task-q"><b>The two forms of SWITCH:</b> In the previous exercise TRUE() because the conditions are
+          range comparisons; here the expression is a text measure and the values are an exact match.</p>
+          <p class="task-q"><b>the pitfall:</b> SWITCH compares strings with an exact match. A single trailing space
+          in a string will fail silently and all rows will get the default. Copy the strings from the previous measure.</p><p class="sol-check">The measure isn't shown in any visual — it's used only for the conditional formatting in exercise 3.2.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-11" data-chap="Chapter Ib · Window functions · Exercise 1.11" data-title="1.11 · Rep Rank — RANK"
+ aria-label="Chapter Ib · Window Functions · Exercise 1.11 — 1.11 · Rep Rank — RANK" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter Ib · Window functions · Exercise 1.11</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.11 · Rep Rank — RANK</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Rep Rank</b> that ranks the 40 reps by <span class="mono" dir="ltr">[Total Sales]</span> Using RANK on <span class="mono" dir="ltr">ALL ( Dim_SalesRep[SalesRep_Name] )</span>, with ORDERBY descending.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Rep Rank =
+RANK ( ALL ( Dim_SalesRep[SalesRep_Name] ), ORDERBY ( [Total Sales], DESC ) )</pre>
+      <p class="task-q"><b>What ALL does:</b> removes the row filter and returns all 40 reps
+          to the list of candidates.</p>
+          <p class="task-q"><b>What's different from RANKX:</b> The default of ORDERBY is <span class="mono" dir="ltr">ASC</span>, and therefore
+          without <span class="mono" dir="ltr">DESC</span> The weak rep will get place 1. In the Total row the function returns blank.</p><p class="sol-check">result: <b>Kenji Smith</b> = 1 · <b>Piotr Levi</b> = 40.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-12" data-chap="Chapter Ib · Window functions · Exercise 1.12" data-title="1.12 · Leader Sales and % of Leader — INDEX"
+ aria-label="Chapter Ib · Window Functions · Exercise 1.12 — 1.12 · Leader Sales and % of Leader — INDEX" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter Ib · Window functions · Exercise 1.12</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.12 · Leader Sales and % of Leader — INDEX</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Leader Sales</b> that returns, in every row, the sales of the first rep — CALCULATE with <span class="mono" dir="ltr">INDEX ( 1, … )</span>. <b>bonus:</b> <span class="mono" dir="ltr">% of Leader</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Leader Sales =
+CALCULATE (
+    [Total Sales],
+    INDEX ( 1, ALL ( Dim_SalesRep[SalesRep_Name] ), ORDERBY ( [Total Sales], DESC ) )
+)
+
+% of Leader = DIVIDE ( [Total Sales], [Leader Sales] )</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>A fixed money column — the leader's value repeats on every row</caption><thead><tr><th scope="col">representative</th><th scope="col">Total Sales</th><th scope="col">Leader Sales</th><th scope="col">% of Leader</th></tr></thead><tbody><tr><th scope='row'>Kenji Smith</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="Leader Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of Leader"><span dir="ltr">100.0%</span></td></tr><tr><th scope='row'>Jan Ferrari</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,817,937</span></td><td class="pbi" data-label="Leader Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of Leader"><span dir="ltr">95.8%</span></td></tr><tr><th scope='row'>Anna Bernard</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,814,008</span></td><td class="pbi" data-label="Leader Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of Leader"><span dir="ltr">95.6%</span></td></tr><tr><th scope='row'>Sofia Muller</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,777,435</span></td><td class="pbi" data-label="Leader Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of Leader"><span dir="ltr">93.7%</span></td></tr><tr><th scope='row'>Piotr Levi</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,241,220</span></td><td class="pbi" data-label="Leader Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of Leader"><span dir="ltr">65.4%</span></td></tr></tbody></table></div><p class="task-q"><b>How to explain:</b> RANK answers "where am I"; INDEX answers "show me who
+          is in position 1". Wrapping it in CALCULATE is what makes the measure take into account <i>name</i> instead <i>here</i>.</p><p class="sol-check">result: <b>€1,896,727</b> in every row · the last one stands at 65.4% of it.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-13" data-chap="Chapter Ib · Window functions · Exercise 1.13" data-title="1.13 · Running Sales — WINDOW"
+ aria-label="Chapter Ib · Window Functions · Exercise 1.13 — 1.13 · Running Sales — WINDOW" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter Ib · Window functions · Exercise 1.13</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.13 · Running Sales — WINDOW</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Running Sales</b> — a running total, using <span class="mono" dir="ltr">WINDOW ( 1, ABS, 0, REL, … )</span> With the same ALL and the same ORDERBY.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Running Sales =
+CALCULATE (
+    [Total Sales],
+    WINDOW ( 1, ABS, 0, REL,
+        ALL ( Dim_SalesRep[SalesRep_Name] ),
+        ORDERBY ( [Total Sales], DESC )
+    )
+)</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>The window grows row by row up to the total</caption><thead><tr><th scope="col">representative</th><th scope="col">Total Sales</th><th scope="col">Running Sales</th></tr></thead><tbody><tr><th scope='row'>Kenji Smith</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="Running Sales"><span dir="ltr">€1,896,727</span></td></tr><tr><th scope='row'>Jan Ferrari</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,817,937</span></td><td class="pbi" data-label="Running Sales"><span dir="ltr">€3,714,664</span></td></tr><tr><th scope='row'>Anna Bernard</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,814,008</span></td><td class="pbi" data-label="Running Sales"><span dir="ltr">€5,528,672</span></td></tr><tr><th scope='row'>Elena Mizrahi</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,328,517</span></td><td class="pbi" data-label="Running Sales"><span dir="ltr">€60,378,376</span></td></tr><tr><th scope='row'>Olivia Tanaka</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,310,164</span></td><td class="pbi" data-label="Running Sales"><span dir="ltr">€61,688,539</span></td></tr><tr><th scope='row'>Piotr Levi</th><td class="pbi" data-label="Total Sales"><span dir="ltr">€1,241,220</span></td><td class="pbi" data-label="Running Sales"><span dir="ltr">€62,929,759</span></td></tr></tbody></table></div><p class="task-q"><b>The logic of the four numbers:</b> <span class="mono" dir="ltr">1, ABS</span> = head of the list ·
+          <span class="mono" dir="ltr">0, REL</span> = they stop at me. If you replace with<span class="mono" dir="ltr">1, ABS ← 3, ABS</span> You'll get a fixed column
+          with the sum of the top three — one word turns a moving window into a fixed window.</p><p class="sol-check">A built-in sanity check: the last row must be exactly <b>€62,929,759</b>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-1-14" data-chap="Chapter Ib · Window functions · Exercise 1.14" data-title="1.14 · Target Attainment — the third fact table"
+ aria-label="Chapter Ib · Window Functions · Exercise 1.14 — 1.14 · Target Attainment — a third fact table" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter Ib · Window functions · Exercise 1.14</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">1.14 · Target Attainment — the third fact table</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Create a measure named <b dir="ltr">Total Target</b> that summarizes the <span class="mono" dir="ltr">Fact_SalesTargets[Target_Amount]</span>, then <span class="mono" dir="ltr">Target Attainment %</span> — sales divided by target.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Total Target = SUM ( Fact_SalesTargets[Target_Amount] )
+
+Target Attainment % = DIVIDE ( [Total Sales], [Total Target] )</pre>
+      <p class="task-q"><b>Core differences — the main takeaway here:</b> Daily sales and monthly
+          targets. Both tables are connected to<span class="mono" dir="ltr">Dim_Date</span> in different columns
+          (<span class="mono" dir="ltr">Date_ID</span> against <span class="mono" dir="ltr">Month_Start_Date_ID</span>), so filtering a single day will show
+          sales without a target. Filter by month or year, not by day.</p>
+          <p class="task-q"><b>A third measure for a bonus:</b> <span class="mono" dir="ltr">Total Refunds</span> =
+          <span class="mono" dir="ltr">SUM ( Fact_Returns[Refund_Amount] )</span> — €2,364,425, which is
+          3.76% of sales. Three fact tables under the same slicers.</p><p class="sol-check">Result: target €63,014,903 · meeting the target <b>99.86%</b>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-1" data-chap="Chapter II · Building the Dashboard · Exercise 2.1" data-title="2.1 · Background, title, and KPI tray"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.1 — 2.1 · Background, Title and KPI Tray" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.1</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.1 · Background, title, and KPI tray</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+    <p class="task-q">Page 1 of the dashboard — background, title, and a tray the cards will sit on.</p>
+    <button type="button" class="sol-toggle" aria-expanded="false">Showing the full instructions</button>
+    <div class="sol-body"><ol class='steps'><li><b>shades</b><span>Only three: navy <code>#132449</code>, gold <code>#F5C518</code> and neutral gray</span></li><li><b>background</b><span>Click on an empty canvas ← <code>Format your report page</code> ← <code>Canvas background</code> ← a lighter version of the naive ← <code>Transparency = 0%</code></span></li><li><b>title</b><span><code>Insert</code> ← <code>Text box</code> ← "the state of sales room"</span></li><li><b>tray</b><span><code>Insert ← Shapes ← Rectangle</code> ← horizontal strip ← <code>Rounded corners</code> ← <code>Send to back</code></span></li></ol><p class="sol-check">The shape must sit <b>below</b> to the cards.</p></div>
+  </article></div>
+</section>
+
+<section class="page" id="ret-2-2" data-chap="Chapter II · Building the Dashboard · Exercise 2.2" data-title="2.2 · Images — search and add"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.2 — 2.2 · Images — Search and Add" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.2</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.2 · Images — search and add</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+    <p class="task-q">Two image files will turn the report from an assignment into one that looks professional.</p>
+    <button type="button" class="sol-toggle" aria-expanded="false">Showing the full instructions</button>
+    <div class="sol-body"><ol class='steps'><li><b>search</b><span>Shopping cart or store on a transparent background — add <code>transparent PNG</code> and filter by<code>Tools ← Color ← Transparent</code></span></li><li><b>size</b><span>Width at least 300px</span></li><li><b>addition</b><span><code>Insert ← Image</code> ← the corner of the title, about 60 pixels tall</span></li><li><b>ratio</b><span><code>Format image ← Scaling = Fit</code>, dragging from the corner only</span></li></ol><p class="sol-check">Don't use the logo of a real retail chain — the data is fictional. A generic image from Unsplash or Pexels.</p></div>
+  </article></div>
+</section>
+
+<section class="page" id="ret-2-3" data-chap="Chapter II · Building the Dashboard · Exercise 2.3" data-title="2.3 · The four cards"
+ aria-label="Chapter II · Building the dashboard · Exercise 2.3 — 2.3 · The four cards" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.3</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.3 · The four cards</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Build 4 cards above the tray. Style one fully, then duplicate it ×3 and swap the field.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Total Sales · Total Orders · Avg Order Value · Total Profit</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>The four cards and the verified values</caption><thead><tr><th scope="col">card</th><th scope="col">the measure</th><th scope="col">The value to display</th></tr></thead><tbody><tr><th scope='row'>sales</th><td class="pbi" data-label="the measure"><span dir="ltr">Total Sales</span></td><td class="pbi" data-label="The value to display"><span dir="ltr">€62,929,759</span></td></tr><tr><th scope='row'>orders</th><td class="pbi" data-label="the measure"><span dir="ltr">Total Orders</span></td><td class="pbi" data-label="The value to display"><span dir="ltr">13,892</span></td></tr><tr><th scope='row'>average basket</th><td class="pbi" data-label="the measure"><span dir="ltr">Avg Order Value</span></td><td class="pbi" data-label="The value to display"><span dir="ltr">€4,530</span></td></tr><tr><th scope='row'>profit</th><td class="pbi" data-label="the measure"><span dir="ltr">Total Profit</span></td><td class="pbi" data-label="The value to display"><span dir="ltr">€25,282,189</span></td></tr></tbody></table></div><p class="task-q"><b>A display trap:</b> <code>Total Orders</code> must
+          <code>Display units = None</code>, otherwise \"13.9K\" will be displayed. On the money cards, set
+          <code>Currency</code> with 0 digits so the four look uniform.</p><p class="sol-check">align: <code>Ctrl+Click</code> ← <code>Group</code> ← <code>Distribute horizontally</code> ← <code>Align top</code>.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-4" data-chap="Chapter II · Building the Dashboard · Exercise 2.4" data-title="2.4 · Bar chart — sales by rep"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.4 — 2.4 · Column Chart — Sales by Rep" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.4</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.4 · Bar chart — sales by rep</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">built <span class="mono" dir="ltr">Clustered column chart</span> with <span class="mono" dir="ltr">Dim_SalesRep[SalesRep_Name]</span> on the X axis and<span class="mono" dir="ltr">[Total Sales]</span> On the Y axis. Descending sort, <span class="mono" dir="ltr">Data labels = On</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">X-axis = Dim_SalesRep[SalesRep_Name]
+Y-axis = [Total Sales]     ← the measure, not the column</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>Six leaders and three trailing</caption><thead><tr><th scope="col">#</th><th scope="col">representative</th><th scope="col">sales</th><th scope="col">% of the total</th></tr></thead><tbody><tr><th scope='row'>1</th><td class="pbi" data-label="representative"><span dir="ltr">Kenji Smith</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">3.01%</span></td></tr><tr><th scope='row'>2</th><td class="pbi" data-label="representative"><span dir="ltr">Jan Ferrari</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,817,937</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.89%</span></td></tr><tr><th scope='row'>3</th><td class="pbi" data-label="representative"><span dir="ltr">Anna Bernard</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,814,008</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.88%</span></td></tr><tr><th scope='row'>4</th><td class="pbi" data-label="representative"><span dir="ltr">Sofia Muller</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,777,435</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.82%</span></td></tr><tr><th scope='row'>5</th><td class="pbi" data-label="representative"><span dir="ltr">Carlos Avraham</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,771,693</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.82%</span></td></tr><tr><th scope='row'>6</th><td class="pbi" data-label="representative"><span dir="ltr">Carlos Peretz</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,746,970</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.78%</span></td></tr><tr><th scope='row'>38</th><td class="pbi" data-label="representative"><span dir="ltr">Elena Mizrahi</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,328,517</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.11%</span></td></tr><tr><th scope='row'>39</th><td class="pbi" data-label="representative"><span dir="ltr">Olivia Tanaka</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,310,164</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.08%</span></td></tr><tr><th scope='row'>40</th><td class="pbi" data-label="representative"><span dir="ltr">Piotr Levi</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,241,220</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">1.97%</span></td></tr></tbody></table></div><p class="task-q"><b>Notice how tight the league is:</b> Kenji Smith leads with
+          €1,896,727 and Piotr Levi closes out with €1,241,220 — a gap of
+          only 53% between first and last out of 40.
+          In a real dashboard this means ranking alone isn't enough to decide anything.</p>
+          <p class="task-q"><b>Now add the <span class="mono" dir="ltr">[Avg Order Value]</span>:</b> The leader stands at
+          €4,991 per order and the last one at €4,310. The difference in amount stems mainly from the number
+          of orders (380 vs. 288), not from basket size — the difference between a cumulative metric
+          and a ratio metric.</p><p class="sol-check">the leader: <b>Kenji Smith</b> — €1,896,727 (3.01%).</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-5" data-chap="Chapter II · Building the Dashboard · Exercise 2.5" data-title="2.5 · Line Chart — Sales Trend"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.5 — 2.5 · Line chart — sales trend" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.5</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.5 · Line Chart — Sales Trend</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">built <span class="mono" dir="ltr">Line chart</span> with <span class="mono" dir="ltr">Dim_Date[Full_Date]</span> on the X axis and<span class="mono" dir="ltr">[Total Sales]</span> on the Y axis. Expand down to the Month level.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">X-axis = Dim_Date[Full_Date]
+Y-axis = [Total Sales]</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>Sales by year</caption><thead><tr><th scope="col">year</th><th scope="col">sales</th></tr></thead><tbody><tr><th scope='row'>2023</th><td class="pbi" data-label="sales"><span dir="ltr">€20,976,764</span></td></tr><tr><th scope='row'>2024</th><td class="pbi" data-label="sales"><span dir="ltr">€21,119,256</span></td></tr><tr><th scope='row'>2025</th><td class="pbi" data-label="sales"><span dir="ltr">€20,833,740</span></td></tr></tbody></table></div><p class="task-q"><b>What we see:</b> Three years almost completely flat — the gap between the
+          strongest and weakest year is less than 2%. The strongest month is 2025-07 with
+          €2,114,749, and the weakest is 2024-01 with €1,478,273.</p>
+          <p class="task-q"><b>Question for the class:</b> Is the monthly volatility real seasonality or noise?
+          With only 36 months and this kind of spread — the answer is noise, and that's exactly what a student
+          needs to know how to say instead of inventing a story.</p><p class="sol-check">Record: 2025-07 — €2,114,749.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-6" data-chap="Chapter II · Building the Dashboard · Exercise 2.6" data-title="2.6 · Page 2 and the year slicer"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.6 — 2.6 · Page 2 and the Year Slicer" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.6</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.6 · Page 2 and the year slicer</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+    <p class="task-q">Open a second page named "Rep and Product Spotlight" with the same background.</p>
+    <button type="button" class="sol-toggle" aria-expanded="false">Showing the full instructions</button>
+    <div class="sol-body"><ol class='steps'><li><b>page</b><span>＋ at the bottom ← Name: Reps & Products Spotlight ← same canvas background</span></li><li><b>slicer</b><span><code>Slicer</code> ← <code>Dim_Date[Year]</code> ← <code>Style = Tile</code></span></li><li><b>design</b><span>Stretch across below the title · selected = dark, unselected = light</span></li></ol><p class="sol-check">Check that the slicer affects all the visuals, including those built on <span class="mono" dir="ltr">Fact_Returns</span> and<span class="mono" dir="ltr">Fact_SalesTargets</span>.</p></div>
+  </article></div>
+</section>
+
+<section class="page" id="ret-2-7" data-chap="Chapter II · Building the Dashboard · Exercise 2.7" data-title="2.7 · Representatives Table — Where IF and SWITCH Live"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.7 — 2.7 · The Reps Table — this is where IF and SWITCH live" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.7</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.7 · Representatives Table — Where IF and SWITCH Live</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">built <span class="mono" dir="ltr">Table</span> with <span class="mono" dir="ltr">Dim_SalesRep[SalesRep_Name]</span> and the seven measures: Rep Rank, Total Sales, % of All Sales, % of Leader, Running Sales, Rep Status and Rep Tier. Descending sort, <span class="mono" dir="ltr">Totals = Off</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Dim_SalesRep[SalesRep_Name] · [Rep Rank] · [Total Sales]
+[% of All Sales] · [% of Leader] · [Running Sales]
+[Rep Status] · [Rep Tier]</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>Four leaders and two last</caption><thead><tr><th scope="col">rating</th><th scope="col">representative</th><th scope="col">sales</th><th scope="col">% of the total</th><th scope="col">Status</th><th scope="col">Tier</th></tr></thead><tbody><tr><th scope='row'>1</th><td class="pbi" data-label="representative"><span dir="ltr">Kenji Smith</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,896,727</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">3.01%</span></td><td class="pbi" data-label="Status">Above average</td><td class="pbi" data-label="Tier">top</td></tr><tr><th scope='row'>2</th><td class="pbi" data-label="representative"><span dir="ltr">Jan Ferrari</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,817,937</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.89%</span></td><td class="pbi" data-label="Status">Above average</td><td class="pbi" data-label="Tier">top</td></tr><tr><th scope='row'>3</th><td class="pbi" data-label="representative"><span dir="ltr">Anna Bernard</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,814,008</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.88%</span></td><td class="pbi" data-label="Status">Above average</td><td class="pbi" data-label="Tier">top</td></tr><tr><th scope='row'>4</th><td class="pbi" data-label="representative"><span dir="ltr">Sofia Muller</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,777,435</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.82%</span></td><td class="pbi" data-label="Status">Above average</td><td class="pbi" data-label="Tier">top</td></tr><tr><th scope='row'>39</th><td class="pbi" data-label="representative"><span dir="ltr">Olivia Tanaka</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,310,164</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">2.08%</span></td><td class="pbi" data-label="Status">Below average</td><td class="pbi" data-label="Tier">bottom</td></tr><tr><th scope='row'>40</th><td class="pbi" data-label="representative"><span dir="ltr">Piotr Levi</span></td><td class="pbi" data-label="sales"><span dir="ltr">€1,241,220</span></td><td class="pbi" data-label="% of the total"><span dir="ltr">1.97%</span></td><td class="pbi" data-label="Status">Below average</td><td class="pbi" data-label="Tier">bottom</td></tr></tbody></table></div><p class="task-q"><b>The difference between the two measures:</b> <span class="mono" dir="ltr">Rep Status</span> Compares to the average
+          computed from the data (€1,573,244), and<span class="mono" dir="ltr">Rep Tier</span> compares against fixed thresholds. A rep can
+          be "below average" and still be in the "middle" tier.</p>
+          <p class="task-q"><b>Why Totals = Off:</b> Window functions return blank in the summary row.</p><p class="sol-check">20 \"above average\" · tiers: 9 / 21 / 10.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-8" data-chap="Chapter II · Building the Dashboard · Exercise 2.8" data-title="2.8 · Top 10 products — Bar with Top N"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.8 — 2.8 · Top 10 Products — Bar with Top N" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.8</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.8 · Top 10 products — Bar with Top N</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">built <span class="mono" dir="ltr">Clustered bar chart</span> with <span class="mono" dir="ltr">Dim_Product[Product_Name]</span> on the Y axis and<span class="mono" dir="ltr">[Total Sales]</span> On the X axis, and filter <span class="mono" dir="ltr">Top N = 10</span> By the measure.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Y-axis = Dim_Product[Product_Name]
+X-axis = [Total Sales]
+Filter = Top N, 10, by [Total Sales]</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>The top ten products</caption><thead><tr><th scope="col">#</th><th scope="col">product</th><th scope="col">Subcategory</th><th scope="col">sales</th></tr></thead><tbody><tr><th scope='row'>1</th><td class="pbi" data-label="product"><span dir="ltr">Ardex Audio 1228</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Audio</span></td><td class="pbi" data-label="sales"><span dir="ltr">€583,483</span></td></tr><tr><th scope='row'>2</th><td class="pbi" data-label="product"><span dir="ltr">Oryx Paper 1062</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Paper</span></td><td class="pbi" data-label="sales"><span dir="ltr">€527,442</span></td></tr><tr><th scope='row'>3</th><td class="pbi" data-label="product"><span dir="ltr">Fernway Binder 1197</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Binders</span></td><td class="pbi" data-label="sales"><span dir="ltr">€514,267</span></td></tr><tr><th scope='row'>4</th><td class="pbi" data-label="product"><span dir="ltr">Fernway Audio 1120</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Audio</span></td><td class="pbi" data-label="sales"><span dir="ltr">€502,029</span></td></tr><tr><th scope='row'>5</th><td class="pbi" data-label="product"><span dir="ltr">Brightline Audio 1071</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Audio</span></td><td class="pbi" data-label="sales"><span dir="ltr">€501,447</span></td></tr><tr><th scope='row'>6</th><td class="pbi" data-label="product"><span dir="ltr">Oryx Binder 1112</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Binders</span></td><td class="pbi" data-label="sales"><span dir="ltr">€477,644</span></td></tr><tr><th scope='row'>7</th><td class="pbi" data-label="product"><span dir="ltr">Oryx Lighting 1026</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Lighting</span></td><td class="pbi" data-label="sales"><span dir="ltr">€471,020</span></td></tr><tr><th scope='row'>8</th><td class="pbi" data-label="product"><span dir="ltr">Nexora Writing Tool 1098</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Writing Tools</span></td><td class="pbi" data-label="sales"><span dir="ltr">€470,305</span></td></tr><tr><th scope='row'>9</th><td class="pbi" data-label="product"><span dir="ltr">Oryx Storage Unit 1269</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Storage Units</span></td><td class="pbi" data-label="sales"><span dir="ltr">€467,742</span></td></tr><tr><th scope='row'>10</th><td class="pbi" data-label="product"><span dir="ltr">Volterra Laptop 1126</span></td><td class="pbi" data-label="Subcategory"><span dir="ltr">Laptops</span></td><td class="pbi" data-label="sales"><span dir="ltr">€464,999</span></td></tr></tbody></table></div><p class="task-q"><b>Note the long tail:</b> 300 products in the catalog,
+          and the leader holds €583,483 — less than a percent of total sales. This is a spread-out catalog, not a catalog
+          that leans on a single hit. Drag the <span class="mono" dir="ltr">Dim_ProductCategory[Category_Group]</span> to see where
+          the money is actually concentrated.</p><p class="sol-check">the leader: <b>Ardex Audio 1228</b> — €583,483.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-9" data-chap="Chapter II · Building the Dashboard · Exercise 2.9" data-title="2.9 · Matrix — customer segment × channel"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.9 — 2.9 · Matrix — customer segment × channel" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the Dashboard · Exercise 2.9</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.9 · Matrix — customer segment × channel</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">built <span class="mono" dir="ltr">Matrix</span> with <span class="mono" dir="ltr">Dim_Customer[Segment]</span> in rows, <span class="mono" dir="ltr">Dim_Channel[Channel_Name]</span> in columns and<span class="mono" dir="ltr">[Total Sales]</span> in values. <span class="mono" dir="ltr">Data bars = On</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Rows    = Dim_Customer[Segment]
+Columns = Dim_Channel[Channel_Name]
+Values  = [Total Sales]</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>Five segments × five channels</caption><thead><tr><th scope="col">segment</th><th scope="col">Mobile App</th><th scope="col">Partner Reseller</th><th scope="col">Retail Branch</th><th scope="col">Telesales</th><th scope="col">Web Store</th><th scope="col">total</th></tr></thead><tbody><tr><th scope='row'>Corporate</th><td class="pbi" data-label="Mobile App"><span dir="ltr">€2,697,346</span></td><td class="pbi" data-label="Partner Reseller"><span dir="ltr">€2,501,864</span></td><td class="pbi" data-label="Retail Branch"><span dir="ltr">€2,797,392</span></td><td class="pbi" data-label="Telesales"><span dir="ltr">€2,538,389</span></td><td class="pbi" data-label="Web Store"><span dir="ltr">€2,586,920</span></td><td class="pbi" data-label="total"G"><span dir="ltr">€13,121,912</span></td></tr><tr><th scope='row'>Enterprise</th><td class="pbi" data-label="Mobile App"><span dir="ltr">€2,863,359</span></td><td class="pbi" data-label="Partner Reseller"><span dir="ltr">€2,409,060</span></td><td class="pbi" data-label="Retail Branch"><span dir="ltr">€2,402,401</span></td><td class="pbi" data-label="Telesales"><span dir="ltr">€2,509,826</span></td><td class="pbi" data-label="Web Store"><span dir="ltr">€2,570,438</span></td><td class="pbi" data-label="total"G"><span dir="ltr">€12,755,083</span></td></tr><tr><th scope='row'>Small Business</th><td class="pbi" data-label="Mobile App"><span dir="ltr">€2,586,589</span></td><td class="pbi" data-label="Partner Reseller"><span dir="ltr">€2,590,734</span></td><td class="pbi" data-label="Retail Branch"><span dir="ltr">€2,566,162</span></td><td class="pbi" data-label="Telesales"><span dir="ltr">€2,524,991</span></td><td class="pbi" data-label="Web Store"><span dir="ltr">€2,406,306</span></td><td class="pbi" data-label="total"G"><span dir="ltr">€12,674,782</span></td></tr><tr><th scope='row'>Consumer</th><td class="pbi" data-label="Mobile App"><span dir="ltr">€2,383,776</span></td><td class="pbi" data-label="Partner Reseller"><span dir="ltr">€2,535,578</span></td><td class="pbi" data-label="Retail Branch"><span dir="ltr">€2,561,562</span></td><td class="pbi" data-label="Telesales"><span dir="ltr">€2,461,565</span></td><td class="pbi" data-label="Web Store"><span dir="ltr">€2,481,780</span></td><td class="pbi" data-label="total"G"><span dir="ltr">€12,424,260</span></td></tr><tr><th scope='row'>Public Sector</th><td class="pbi" data-label="Mobile App"><span dir="ltr">€2,507,158</span></td><td class="pbi" data-label="Partner Reseller"><span dir="ltr">€2,356,677</span></td><td class="pbi" data-label="Retail Branch"><span dir="ltr">€2,184,940</span></td><td class="pbi" data-label="Telesales"><span dir="ltr">€2,457,079</span></td><td class="pbi" data-label="Web Store"><span dir="ltr">€2,447,869</span></td><td class="pbi" data-label="total"G"><span dir="ltr">€11,953,723</span></td></tr></tbody></table></div><p class="task-q"><b>Note the filter path:</b> The segment comes from<code>Dim_Customer</code>
+          and the channel from<code>Dim_Channel</code> — two separate dimensions that intersect on the same fact table.
+          That's exactly what a star schema gives you for free.</p><p class="sol-check">Sum of all cells: €62,929,759 — identical to the base measure.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-10" data-chap="Chapter II · Building the dashboard · Exercise 2.10" data-title="2.10 · Combo chart — sales vs. profit margins"
+ aria-label="Chapter II · Building the Dashboard · Exercise 2.10 — 2.10 · Combo Chart — Sales vs. Profit Margins" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the dashboard · Exercise 2.10</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.10 · Combo chart — sales vs. profit margins</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">built <span class="mono" dir="ltr">Line and clustered column chart</span> with <span class="mono" dir="ltr">Dim_ProductCategory[Category_Group]</span> on the X axis, <span class="mono" dir="ltr">[Total Sales]</span> in columns and<span class="mono" dir="ltr">[Profit Margin %]</span> on the line.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">X-axis        = Dim_ProductCategory[Category_Group]
+Column y-axis = [Total Sales]
+Line y-axis   = [Profit Margin %]</pre>
+      <div class="tbl-wrap"><table class="cmp"><caption>Volume vs. profitability — two units of measure</caption><thead><tr><th scope="col">The category group</th><th scope="col">sales</th><th scope="col">% of sales</th><th scope="col">profit</th><th scope="col">Profit margin</th></tr></thead><tbody><tr><th scope='row'>Technology</th><td class="pbi" data-label="sales"><span dir="ltr">€27,463,243</span></td><td class="pbi" data-label="% of sales"><span dir="ltr">43.6%</span></td><td class="pbi" data-label="profit"><span dir="ltr">€11,022,861</span></td><td class="pbi" data-label="Profit margin"><span dir="ltr">40.1%</span></td></tr><tr><th scope='row'>Furniture</th><td class="pbi" data-label="sales"><span dir="ltr">€23,014,847</span></td><td class="pbi" data-label="% of sales"><span dir="ltr">36.6%</span></td><td class="pbi" data-label="profit"><span dir="ltr">€9,085,718</span></td><td class="pbi" data-label="Profit margin"><span dir="ltr">39.5%</span></td></tr><tr><th scope='row'>Office Supplies</th><td class="pbi" data-label="sales"><span dir="ltr">€12,451,669</span></td><td class="pbi" data-label="% of sales"><span dir="ltr">19.8%</span></td><td class="pbi" data-label="profit"><span dir="ltr">€5,173,610</span></td><td class="pbi" data-label="Profit margin"><span dir="ltr">41.5%</span></td></tr></tbody></table></div><p class="task-q"><b>This is the insight of the whole dashboard:</b> Technology sells the most
+          (43.6% of sales) but it's actually Office Supplies, the smallest of them
+          (19.8%), that is the most profitable — 41.5% profit margin versus
+          40.1%. Bars and volume tell one story, the line tells another.</p>
+          <p class="task-q"><b>Why two axes:</b> Percent and euro don't share a scale. In a regular chart the percent line
+          would be squashed to zero — this is exactly the case where the rule "don't use two axes" doesn't apply.</p><p class="sol-check">The most profitable: <b>Office Supplies</b> — 41.5% profit margin.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-2-11" data-chap="Chapter II · Building the dashboard · Exercise 2.11" data-title="2.11 · Navigation and polish"
+ aria-label="Chapter II · Building the dashboard · Exercise 2.11 — 2.11 · Navigation and polish" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter II · Building the dashboard · Exercise 2.11</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">2.11 · Navigation and polish</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+    <p class="task-q">Add navigation buttons between the two pages and finish the polish.</p>
+    <button type="button" class="sol-toggle" aria-expanded="false">Showing the full instructions</button>
+    <div class="sol-body"><ol class='steps'><li><b>navigation</b><span><code>Insert ← Buttons ← Navigator ← Page navigator</code> ← bottom center</span></li><li><b>consistency</b><span>them <code>Rounded corners</code>, same intervals, <code>Align</code> for each row</span></li><li><b>check</b><span>Zoom 100%: no text is cut off and no visual touches the edge of the canvas</span></li></ol><p class="sol-check">Final check: hide the title — it should still be clear that this is a sales report.</p></div>
+  </article></div>
+</section>
+
+<section class="page" id="ret-3-1" data-chap="Chapter III · Conditional formatting · Exercise 3.1" data-title="3.1 · Rules on the Bar Chart"
+ aria-label="Chapter III · Conditional Formatting · Exercise 3.1 — 3.1 · Rules on the Bar Chart" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter III · Conditional formatting · Exercise 3.1</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">3.1 · Rules on the Bar Chart</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Color the reps chart (exercise 2.4) with three rules based on <span class="mono" dir="ltr">[Total Sales]</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Rule 1:  &gt;= 0        and &lt;  1,470,000   -&gt;  #A9B4CC
+Rule 2:  &gt;= 1,470,000 and &lt;  1,700,000   -&gt;  #F5C518
+Rule 3:  &gt;= 1,700,000                    -&gt;  #132449</pre>
+      <ol class="steps">
+          <li><b>opening</b><span>Choose the chart ← <code>Format visual ← Columns ← Colors</code> ← <code>fx</code></span></li>
+          <li><b>definition</b><span><code>Format style = Rules</code> · <code>What field = [Total Sales]</code></span></li>
+          <li><b>rules</b><span>Three rules with <code>New rule</code></span></li>
+          <li><b>critical</b><span>Value type = <code>Number</code>, not <code>Percent</code></span></li></ol><p class="sol-check">The result: 9 reps in dark navy, 21 in gold, 10 in light navy.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-3-2" data-chap="Chapter III · Conditional formatting · Exercise 3.2" data-title="3.2 · Field value — the SWITCH measure feeds the color"
+ aria-label="Chapter III · Conditional Formatting · Exercise 3.2 — 3.2 · Field value — the SWITCH measure feeds the color" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Chapter III · Conditional formatting · Exercise 3.2</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">3.2 · Field value — the SWITCH measure feeds the color</h2>
+  <div class="tasks" style="margin-top:18px"><article class="task">
+      <p class="task-q">Color the reps table (exercise 2.7) without writing a single rule — the color comes from<span class="mono" dir="ltr">Tier Color</span>.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><pre class="dax">Format visual &lt;- Cell elements
+  Series: Rep Tier
+  Background color = On &lt;- fx
+  Format style = Field value
+  What field should we base this on? = [Tier Color]</pre>
+      <p class="task-q"><b>Why this is stronger than Rules:</b> The rules in exercise 3.1 live inside one
+          visual. The measure <span class="mono" dir="ltr">Tier Color</span> It's a single source of truth — one change in SWITCH updates everywhere.</p><p class="sol-check">Both techniques produce exactly the same split: 9 / 21 / 10.</p></div>
+    </article></div>
+</section>
+
+<section class="page" id="ret-results" data-chap="Summary assignment · Retail sales" data-title="Summary — all the results in one place"
+ aria-label="Capstone assignment · Retail sales — summary" hidden>
+  <button type="button" class="sec-num" data-goto="ret-intro" aria-label="Back to the assignment's opening page"><span>Summary assignment · Retail sales</span><span class="crumb-back">Back to the assignment ←</span></button>
+  <h2 class="sec-title">Summary — all the results in one place</h2>
+  <div class="tasks" style="margin-top:18px">
+    <article class="task">
+      <p class="task-q">A centralized verification table for all measures and every visual. Open it only after you've finished.</p>
+      <button type="button" class="sol-toggle" aria-expanded="false">Showing the solution</button>
+      <div class="sol-body"><div class="tbl-wrap"><table class="cmp"><caption>All verified results in one place</caption><thead><tr><th scope="col">Measure / component</th><th scope="col">Verified result</th></tr></thead><tbody><tr><th scope='row'>Total Sales</th><td class="pbi" data-label="Verified result"><span dir="ltr">€62,929,759</span></td></tr><tr><th scope='row'>Gross before discount</th><td class="pbi" data-label="Verified result">€67,937,751 — discount €5,007,992</td></tr><tr><th scope='row'>Total Orders</th><td class="pbi" data-label="Verified result">13,892 (COUNT would return 30,000)</td></tr><tr><th scope='row'>Avg Order Value</th><td class="pbi" data-label="Verified result"><span dir="ltr">€4,530</span></td></tr><tr><th scope='row'>Total Profit / Margin</th><td class="pbi" data-label="Verified result"><span dir="ltr">€25,282,189 · 40.18%</span></td></tr><tr><th scope='row'>Digital Sales</th><td class="pbi" data-label="Verified result"><span dir="ltr">€25,531,540 (40.57%)</span></td></tr><tr><th scope='row'>Promotion Sales</th><td class="pbi" data-label="Verified result"><span dir="ltr">€26,793,724 (42.58%)</span></td></tr><tr><th scope='row'>% of All Sales</th><td class="pbi" data-label="Verified result">Leader 3.01% · Total 100.00%</td></tr><tr><th scope='row'>Rep Status (IF)</th><td class="pbi" data-label="Verified result">20 above · 20 below · average €1,573,244</td></tr><tr><th scope='row'>Rep Tier (SWITCH)</th><td class="pbi" data-label="Verified result">9 top · 21 middle · 10 bottom</td></tr><tr><th scope='row'>Rep Rank (RANK)</th><td class="pbi" data-label="Verified result"><span dir="ltr">Kenji Smith = 1 · Piotr Levi = 40</span></td></tr><tr><th scope='row'>Leader Sales (INDEX)</th><td class="pbi" data-label="Verified result">€1,896,727 · last one 65.4%</td></tr><tr><th scope='row'>Running Sales (WINDOW)</th><td class="pbi" data-label="Verified result">Last row = €62,929,759</td></tr><tr><th scope='row'>Target Attainment %</th><td class="pbi" data-label="Verified result">99.86% (target €63,014,903)</td></tr><tr><th scope='row'>Total Refunds</th><td class="pbi" data-label="Verified result">€2,364,425 (3.76%) in 1,649 rows</td></tr><tr><th scope='row'>The leading product</th><td class="pbi" data-label="Verified result"><span dir="ltr">Ardex Audio 1228 — €583,483</span></td></tr><tr><th scope='row'>The profitable category</th><td class="pbi" data-label="Verified result">Office Supplies — 41.5% profit margin</td></tr><tr><th scope='row'>Peak month</th><td class="pbi" data-label="Verified result"><span dir="ltr">2025-07 — €2,114,749</span></td></tr></tbody></table></div>
+      <p class="sol-check">All results were verified in pandas against <span class="mono" dir="ltr">Retail_StarSchema_PowerBI.xlsx</span>
+      (30,000 sales rows). 11 relationships were checked programmatically — 0 orphan keys, 0 blank keys,
+      0 circular dependencies and 0 duplicate filter paths.</p></div>
+    </article>
+  </div>
+</section>
+
+<nav class="pager" aria-label="Navigation between assignment exercises">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ Previous</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">Next ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">You can also navigate with the buttons at the top of the screen, keyboard arrows, and on phone with a swipe</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    Retail Sales Capstone Assignment · Eliran Grossman · <a href="pbi.html">Back to the Power BI platform</a>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="The assignment's exercise list">
+  <div class="drawer-head">
+    <b>Assignment exercises</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="Closing the list">✕</button>
+  </div>
+  <div class="toc" id="toc-list"></div>
+</aside>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s);},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+var pages=$$('.page'), N=pages.length;
+if(!N)return;
+var KEY='ret-page-v1', VKEY='ret-visited-v1';
+var visited={}; try{visited=JSON.parse(localStorage.getItem(VKEY)||'{}');}catch(e){}
+
+var scroller=$('#scroller'), bar=$('#pbar'),
+    tTitle=$('#tb-title'), tChap=$('#tb-chap'), tCount=$('#tb-count'),
+    prevBtn=$('#tb-prev'), nextBtn=$('#tb-next'),
+    pgPrev=$('#pg-prev'), pgNext=$('#pg-next'),
+    pgPrevName=$('#pg-prev-name'), pgNextName=$('#pg-next-name'),
+    tocList=$('#toc-list'), idx=0;
+
+/* ---------- table of contents ---------- */
+var items=[];
+(function buildToc(){
+  var lastChap=null;
+  pages.forEach(function(pg,k){
+    var chap=pg.getAttribute('data-chap')||'';
+    if(chap!==lastChap){
+      var h=document.createElement('div'); h.className='toc-chap'; h.textContent=chap;
+      tocList.appendChild(h); lastChap=chap;
+    }
+    var b=document.createElement('button');
+    b.type='button'; b.className='toc-item';
+    b.innerHTML='<span class="toc-n">'+(k+1)+'</span><span class="toc-t"></span>'+
+                '<span class="toc-done" aria-hidden="true">\u2713</span>';
+    b.querySelector('.toc-t').textContent=pg.getAttribute('data-title')||'';
+    b.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+    tocList.appendChild(b); items.push(b);
+  });
+})();
+
+/* ---------- router ---------- */
+function show(i,scrollTop){
+  i=Math.max(0,Math.min(N-1,i));
+  pages.forEach(function(p,k){ p.hidden=(k!==i); });
+  idx=i;
+  var pg=pages[i];
+  tTitle.textContent=pg.getAttribute('data-title')||'';
+  tChap.textContent=pg.getAttribute('data-chap')||'';
+  tCount.textContent=(i+1)+' / '+N;
+  bar.style.width=((i+1)/N*100)+'%';
+  prevBtn.disabled=(i===0); nextBtn.disabled=(i===N-1);
+  /* 'main' is a real link to the site home, always active.
+     'to summarize' is in-page navigation, so it is disabled on the summary page
+     itself, exactly like prev/next at the ends. */
+  var sb=$('#tb-sum');
+  if(sb)sb.disabled=(i===N-1);
+  pgPrev.hidden=(i===0); pgNext.hidden=(i===N-1);
+  if(i>0)pgPrevName.textContent=pages[i-1].getAttribute('data-title');
+  if(i<N-1)pgNextName.textContent=pages[i+1].getAttribute('data-title');
+  visited[pg.id]=1;
+  try{localStorage.setItem(KEY,String(i));localStorage.setItem(VKEY,JSON.stringify(visited));}catch(e){}
+  items.forEach(function(b,k){
+    b.classList.toggle('on',k===i);
+    b.classList.toggle('visited',!!visited[pages[k].id]);
+  });
+  if(scrollTop!==false&&scroller)scroller.scrollTop=0;
+  syncRegions();
+}
+function step(d){ show(idx+d,true); }
+
+prevBtn.addEventListener('click',function(){step(-1);});
+nextBtn.addEventListener('click',function(){step(1);});
+pgPrev.addEventListener('click',function(){step(-1);});
+pgNext.addEventListener('click',function(){step(1);});
+$('#tb-sum').addEventListener('click',function(){show(N-1,true);});
+$$('[data-goto]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var id=b.getAttribute('data-goto');
+    for(var k=0;k<N;k++){ if(pages[k].id===id){ show(k,true); return; } }
+  });
+});
+
+/* ---------- drawer ---------- */
+var drawer=$('#drawer'), back=$('#drawer-back'), menuBtn=$('#tb-menu');
+function openDrawer(){ drawer.hidden=false; back.hidden=false; menuBtn.setAttribute('aria-expanded','true');
+  var on=tocList.querySelector('.on'); if(on)on.scrollIntoView({block:'center'}); }
+function closeDrawer(){ drawer.hidden=true; back.hidden=true; menuBtn.setAttribute('aria-expanded','false'); }
+menuBtn.addEventListener('click',function(){ drawer.hidden?openDrawer():closeDrawer(); });
+back.addEventListener('click',closeDrawer);
+$('#drawer-x').addEventListener('click',closeDrawer);
+
+/* ---------- solutions ---------- */
+$$('.sol-toggle').forEach(function(btn){
+  var body=btn.nextElementSibling;
+  if(!body||!body.classList.contains('sol-body'))return;
+  btn.addEventListener('click',function(){
+    var open=btn.getAttribute('aria-expanded')==='true';
+    btn.setAttribute('aria-expanded',String(!open));
+    body.classList.toggle('open',!open);
+    btn.textContent=open?'Showing the solution':'Hiding the solution';
+    setTimeout(syncRegions,0);
+  });
+});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',function(e){
+  if(e.target.closest&&e.target.closest('input,textarea,select'))return;
+  if(e.key==='Escape'&&!drawer.hidden){ closeDrawer(); return; }
+  if(e.key==='ArrowLeft')step(1);
+  else if(e.key==='ArrowRight')step(-1);
+});
+
+/* ---------- swipe (never inside a horizontal scroll area) ---------- */
+var sx=0,sy=0,track=false;
+document.addEventListener('touchstart',function(e){
+  var t=e.target;
+  if(t.closest&&t.closest('.tbl-wrap,.dax,.code,pre,.drawer,.hd,input,textarea'))return;
+  if(e.touches.length!==1)return;
+  sx=e.touches[0].clientX; sy=e.touches[0].clientY; track=true;
+},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(!track)return; track=false;
+  var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<60||Math.abs(dy)>50)return;
+  step(dx>0?-1:1);   /* RTL: swipe right = previous */
+},{passive:true});
+
+/* ---------- horizontal scroll areas reachable by keyboard ---------- */
+function syncRegions(){
+  $$('.tbl-wrap,.dax').forEach(function(el){
+    var scrolls=el.scrollWidth>el.clientWidth+1;
+    if(scrolls){
+      if(!el.hasAttribute('tabindex')){
+        el.setAttribute('tabindex','0'); el.setAttribute('role','region');
+        el.setAttribute('aria-label','Horizontally scrollable area');
+      }
+    }else if(el.getAttribute('role')==='region'){
+      el.removeAttribute('tabindex'); el.removeAttribute('role'); el.removeAttribute('aria-label');
+    }
+  });
+}
+var rt; window.addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(syncRegions,150); },{passive:true});
+
+/* ---------- ?qa=1 overflow inspector ---------- */
+(function(){
+  if(!/(\?|&|#)qa=1/.test(location.search+location.hash))return;
+  var css=document.createElement('style');
+  css.textContent='.qa-bad{outline:2px dashed #f87171!important;outline-offset:-2px}'+
+   '#qa-badge{position:fixed;inset-block-end:10px;inset-inline-start:10px;z-index:9999;background:#111;color:#fff;'+
+   'font:12px/1.5 monospace;padding:8px 10px;border-radius:8px;max-width:80vw;max-height:40vh;overflow:auto;'+
+   'border:1px solid #f87171;direction:ltr;text-align:left;white-space:pre-wrap}';
+  document.head.appendChild(css);
+  var badge=document.createElement('div'); badge.id='qa-badge'; document.body.appendChild(badge);
+  function scan(){
+    var vw=document.documentElement.clientWidth, bad=[];
+    $$('.qa-bad').forEach(function(e){e.classList.remove('qa-bad');});
+    $$('.page:not([hidden]) *, .topicbar *').forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(!r.width&&!r.height)return;
+      if(r.right>vw+1||r.left<-1){
+        el.classList.add('qa-bad');
+        bad.push(el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className?'.'+el.className.trim().split(/\s+/).slice(0,2).join('.'):'')+' w='+Math.round(r.width));
+      }
+    });
+    badge.textContent='viewport '+vw+' · scrollW '+document.documentElement.scrollWidth+' · offenders '+bad.length+
+      (bad.length?('\n'+bad.slice(0,10).join('\n')):' — clean');
+  }
+  scan(); window.addEventListener('resize',scan,{passive:true});
+  document.addEventListener('click',function(){setTimeout(scan,80);});
+})();
+
+/* ---------- start ---------- */
+var start=0;
+try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved))start=saved; }catch(e){}
+if(location.hash){
+  var h=location.hash.slice(1);
+  for(var k=0;k<N;k++){ if(pages[k].id===h){ start=k; break; } }
+}
+show(start,true);
+})();
+</script>
+</body>
+</html>

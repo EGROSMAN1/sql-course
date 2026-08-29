@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Search exercises by topic | Data Course - Eliran Grossman</title>
+<meta name="description" content="Search among 80+ exercises by topic, difficulty level, and course. A smart filter for finding exactly the right exercise.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/tags.html">
+<meta name="theme-color" content="#00d4c8">
+
+<script>
+/* ============================================================
+   REAL EXERCISES CATALOG - 64 individual exercises
+   Each links directly to the exercise via ?topic=<id>
+   ============================================================ */
+
+window.TAGS_DATA = {
+
+  tagGroups: {
+    'Python basics': ['Print', 'Variables', 'Strings', 'Numbers', 'Input', 'Booleans'],
+    'Flow control': ['If/Else', 'Loops', 'While', 'Break/Continue'],
+    'Data structures': ['Lists', 'Tuples', 'Dicts', 'Sets'],
+    'functions': ['Functions', 'Lambda', 'Args'],
+    'advanced': ['Files', 'Errors', 'Modules'],
+    'Pandas': ['Load Data', 'Filter', 'Sort', 'GroupBy', 'Merge', 'Pivot', 'Aggregations', 'New Columns', 'Statistics'],
+  },
+  
+  exercises: [
+  {
+    "id": "hello-world",
+    "title": "Hello World — the first run",
+    "icon": "🌍",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M1: First look — let's meet Python",
+    "module_icon": "👋",
+    "difficulty": "easy",
+    "tags": [
+      "Print"
+    ],
+    "url": "python-lesson.html?topic=hello-world"
+  },
+  {
+    "id": "comments",
+    "title": "Comments in code — Comments",
+    "icon": "💬",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M1: First look — let's meet Python",
+    "module_icon": "👋",
+    "difficulty": "easy",
+    "tags": [
+      "Variables"
+    ],
+    "url": "python-lesson.html?topic=comments"
+  },
+  {
+    "id": "errors-intro",
+    "title": "Common errors — don't panic",
+    "icon": "⚠️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M1: First look — let's meet Python",
+    "module_icon": "👋",
+    "difficulty": "easy",
+    "tags": [
+      "Errors"
+    ],
+    "url": "python-lesson.html?topic=errors-intro"
+  },
+  {
+    "id": "variables",
+    "title": "Variables — Python's boxes",
+    "icon": "📥",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M2: Variables and data types",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Variables"
+    ],
+    "url": "python-lesson.html?topic=variables"
+  },
+  {
+    "id": "data-types",
+    "title": "Basic data types",
+    "icon": "🔢",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M2: Variables and data types",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Variables"
+    ],
+    "url": "python-lesson.html?topic=data-types"
+  },
+  {
+    "id": "type-casting",
+    "title": "Data type conversion (Type Casting)",
+    "icon": "🔄",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M2: Variables and data types",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Variables"
+    ],
+    "url": "python-lesson.html?topic=type-casting"
+  },
+  {
+    "id": "math-operators",
+    "title": "Mathematical operators",
+    "icon": "➕",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M2: Variables and data types",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Numbers"
+    ],
+    "url": "python-lesson.html?topic=math-operators"
+  },
+  {
+    "id": "input",
+    "title": "Getting input from the user — input()",
+    "icon": "📝",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M3: User input and working with text",
+    "module_icon": "⌨️",
+    "difficulty": "easy",
+    "tags": [
+      "Input"
+    ],
+    "url": "python-lesson.html?topic=input"
+  },
+  {
+    "id": "f-strings",
+    "title": "String concatenation and f-strings",
+    "icon": "🔗",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M3: User input and working with text",
+    "module_icon": "⌨️",
+    "difficulty": "easy",
+    "tags": [
+      "Strings"
+    ],
+    "url": "python-lesson.html?topic=f-strings"
+  },
+  {
+    "id": "string-methods",
+    "title": "Functions for working with text",
+    "icon": "🔤",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M3: User input and working with text",
+    "module_icon": "⌨️",
+    "difficulty": "medium",
+    "tags": [
+      "Functions",
+      "Strings"
+    ],
+    "url": "python-lesson.html?topic=string-methods"
+  },
+  {
+    "id": "comparison",
+    "title": "Comparison operators",
+    "icon": "⚖️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M4: Conditions, logic, and decision-making",
+    "module_icon": "🔀",
+    "difficulty": "easy",
+    "tags": [
+      "Booleans",
+      "Numbers"
+    ],
+    "url": "python-lesson.html?topic=comparison"
+  },
+  {
+    "id": "logical-ops",
+    "title": "Logical operators — and, or, not",
+    "icon": "🧠",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M4: Conditions, logic, and decision-making",
+    "module_icon": "🔀",
+    "difficulty": "easy",
+    "tags": [
+      "Booleans",
+      "Numbers"
+    ],
+    "url": "python-lesson.html?topic=logical-ops"
+  },
+  {
+    "id": "if-else",
+    "title": "if, elif, else — a complete conditional structure",
+    "icon": "🚦",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M4: Conditions, logic, and decision-making",
+    "module_icon": "🔀",
+    "difficulty": "easy",
+    "tags": [
+      "If/Else"
+    ],
+    "url": "python-lesson.html?topic=if-else"
+  },
+  {
+    "id": "for-range",
+    "title": "The for loop and the range function",
+    "icon": "🔂",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M5: Loops and repetitive processes",
+    "module_icon": "🔁",
+    "difficulty": "medium",
+    "tags": [
+      "Functions",
+      "Loops"
+    ],
+    "url": "python-lesson.html?topic=for-range"
+  },
+  {
+    "id": "while",
+    "title": "A while loop — while",
+    "icon": "⏳",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M5: Loops and repetitive processes",
+    "module_icon": "🔁",
+    "difficulty": "medium",
+    "tags": [
+      "Loops",
+      "While"
+    ],
+    "url": "python-lesson.html?topic=while"
+  },
+  {
+    "id": "break-continue",
+    "title": "break and continue",
+    "icon": "⏭️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M5: Loops and repetitive processes",
+    "module_icon": "🔁",
+    "difficulty": "medium",
+    "tags": [
+      "Break/Continue",
+      "Loops"
+    ],
+    "url": "python-lesson.html?topic=break-continue"
+  },
+  {
+    "id": "lists-basics",
+    "title": "Creating lists and accessing by index",
+    "icon": "📜",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M6: Lists and tuples",
+    "module_icon": "📋",
+    "difficulty": "medium",
+    "tags": [
+      "Lists"
+    ],
+    "url": "python-lesson.html?topic=lists-basics"
+  },
+  {
+    "id": "list-methods",
+    "title": "Functions for managing lists",
+    "icon": "🛠️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M6: Lists and tuples",
+    "module_icon": "📋",
+    "difficulty": "medium",
+    "tags": [
+      "Functions",
+      "Lists"
+    ],
+    "url": "python-lesson.html?topic=list-methods"
+  },
+  {
+    "id": "tuples",
+    "title": "Tuples — fixed and unchangeable",
+    "icon": "🔒",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M6: Lists and tuples",
+    "module_icon": "📋",
+    "difficulty": "medium",
+    "tags": [
+      "Tuples"
+    ],
+    "url": "python-lesson.html?topic=tuples"
+  },
+  {
+    "id": "dict-basics",
+    "title": "Dictionaries — creation and access",
+    "icon": "🗝️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M7: Dictionaries and sets",
+    "module_icon": "📖",
+    "difficulty": "medium",
+    "tags": [
+      "Dicts"
+    ],
+    "url": "python-lesson.html?topic=dict-basics"
+  },
+  {
+    "id": "dict-operations",
+    "title": "Dictionary operations — update, delete and loops",
+    "icon": "⚙️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M7: Dictionaries and sets",
+    "module_icon": "📖",
+    "difficulty": "medium",
+    "tags": [
+      "Dicts",
+      "Loops"
+    ],
+    "url": "python-lesson.html?topic=dict-operations"
+  },
+  {
+    "id": "sets",
+    "title": "Sets — collections without duplicates",
+    "icon": "🎯",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M7: Dictionaries and sets",
+    "module_icon": "📖",
+    "difficulty": "medium",
+    "tags": [
+      "Sets"
+    ],
+    "url": "python-lesson.html?topic=sets"
+  },
+  {
+    "id": "func-define",
+    "title": "Defining and calling functions",
+    "icon": "🎁",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M8: Functions and writing efficient code",
+    "module_icon": "🔧",
+    "difficulty": "medium",
+    "tags": [
+      "Functions"
+    ],
+    "url": "python-lesson.html?topic=func-define"
+  },
+  {
+    "id": "func-return",
+    "title": "Return values and scope",
+    "icon": "↩️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M8: Functions and writing efficient code",
+    "module_icon": "🔧",
+    "difficulty": "medium",
+    "tags": [
+      "Functions"
+    ],
+    "url": "python-lesson.html?topic=func-return"
+  },
+  {
+    "id": "func-defaults",
+    "title": "Default values and the DRY principle",
+    "icon": "⚡",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M8: Functions and writing efficient code",
+    "module_icon": "🔧",
+    "difficulty": "medium",
+    "tags": [
+      "Args",
+      "Functions"
+    ],
+    "url": "python-lesson.html?topic=func-defaults"
+  },
+  {
+    "id": "files-rw",
+    "title": "Reading and writing text files",
+    "icon": "📄",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M9: Files and Error Handling",
+    "module_icon": "📂",
+    "difficulty": "hard",
+    "tags": [
+      "Files",
+      "Strings"
+    ],
+    "url": "python-lesson.html?topic=files-rw"
+  },
+  {
+    "id": "try-except",
+    "title": "try & except — error handling",
+    "icon": "🛡️",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M9: Files and Error Handling",
+    "module_icon": "📂",
+    "difficulty": "hard",
+    "tags": [
+      "Errors"
+    ],
+    "url": "python-lesson.html?topic=try-except"
+  },
+  {
+    "id": "specific-errors",
+    "title": "Specific error types",
+    "icon": "🎯",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M9: Files and Error Handling",
+    "module_icon": "📂",
+    "difficulty": "hard",
+    "tags": [
+      "Errors",
+      "If/Else"
+    ],
+    "url": "python-lesson.html?topic=specific-errors"
+  },
+  {
+    "id": "builtin-modules",
+    "title": "Built-in modules — math, random, datetime",
+    "icon": "🧰",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M10: Libraries, modules, and intro to data",
+    "module_icon": "📚",
+    "difficulty": "hard",
+    "tags": [
+      "Modules"
+    ],
+    "url": "python-lesson.html?topic=builtin-modules"
+  },
+  {
+    "id": "pip-packages",
+    "title": "External packages and pip",
+    "icon": "📦",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M10: Libraries, modules, and intro to data",
+    "module_icon": "📚",
+    "difficulty": "hard",
+    "tags": [
+      "Modules"
+    ],
+    "url": "python-lesson.html?topic=pip-packages"
+  },
+  {
+    "id": "pandas-intro",
+    "title": "Introduction to Pandas and DataFrame",
+    "icon": "🐼",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M10: Libraries, modules, and intro to data",
+    "module_icon": "📚",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "python-lesson.html?topic=pandas-intro"
+  },
+  {
+    "id": "project-planning",
+    "title": "Project planning and breaking into functions",
+    "icon": "📐",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M11: Final capstone project",
+    "module_icon": "🏆",
+    "difficulty": "hard",
+    "tags": [
+      "Functions",
+      "Loops"
+    ],
+    "url": "python-lesson.html?topic=project-planning"
+  },
+  {
+    "id": "project-persistence",
+    "title": "Saving state — files and project",
+    "icon": "💾",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M11: Final capstone project",
+    "module_icon": "🏆",
+    "difficulty": "hard",
+    "tags": [
+      "Functions",
+      "Loops"
+    ],
+    "url": "python-lesson.html?topic=project-persistence"
+  },
+  {
+    "id": "main-loop",
+    "title": "The project's main loop",
+    "icon": "🎮",
+    "course": "python",
+    "course_label": "Python basics",
+    "module": "M11: Final capstone project",
+    "module_icon": "🏆",
+    "difficulty": "hard",
+    "tags": [
+      "Functions",
+      "Loops"
+    ],
+    "url": "python-lesson.html?topic=main-loop"
+  },
+  {
+    "id": "pd-create-df",
+    "title": "Creating a DataFrame",
+    "icon": "🎯",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M1: Getting to know DataFrame",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-create-df"
+  },
+  {
+    "id": "pd-load-data",
+    "title": "Loading datasets",
+    "icon": "📥",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M1: Getting to know DataFrame",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-load-data"
+  },
+  {
+    "id": "pd-head-info",
+    "title": "head, tail, info, describe",
+    "icon": "👀",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M1: Getting to know DataFrame",
+    "module_icon": "📦",
+    "difficulty": "easy",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-head-info"
+  },
+  {
+    "id": "pd-select-cols",
+    "title": "Choosing columns",
+    "icon": "📋",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M2: Slicing and filtering",
+    "module_icon": "🔍",
+    "difficulty": "easy",
+    "tags": [
+      "Load Data",
+      "New Columns"
+    ],
+    "url": "pandas-lesson.html?topic=pd-select-cols"
+  },
+  {
+    "id": "pd-filter-rows",
+    "title": "Filtering rows by condition",
+    "icon": "🎯",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M2: Slicing and filtering",
+    "module_icon": "🔍",
+    "difficulty": "easy",
+    "tags": [
+      "Filter"
+    ],
+    "url": "pandas-lesson.html?topic=pd-filter-rows"
+  },
+  {
+    "id": "pd-where-lambda",
+    "title": "Complex filtering with where + lambda",
+    "icon": "🧩",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M2: Slicing and filtering",
+    "module_icon": "🔍",
+    "difficulty": "hard",
+    "tags": [
+      "Filter",
+      "Lambda"
+    ],
+    "url": "pandas-lesson.html?topic=pd-where-lambda"
+  },
+  {
+    "id": "pd-new-cols",
+    "title": "Creating new columns",
+    "icon": "➕",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M3: Operations on columns",
+    "module_icon": "⚙️",
+    "difficulty": "easy",
+    "tags": [
+      "Load Data",
+      "New Columns"
+    ],
+    "url": "pandas-lesson.html?topic=pd-new-cols"
+  },
+  {
+    "id": "pd-apply",
+    "title": "apply and map",
+    "icon": "🔧",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M3: Operations on columns",
+    "module_icon": "⚙️",
+    "difficulty": "medium",
+    "tags": [
+      "New Columns"
+    ],
+    "url": "pandas-lesson.html?topic=pd-apply"
+  },
+  {
+    "id": "pd-series-ops",
+    "title": "Operations on a Series",
+    "icon": "🧮",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M3: Operations on columns",
+    "module_icon": "⚙️",
+    "difficulty": "easy",
+    "tags": [
+      "New Columns"
+    ],
+    "url": "pandas-lesson.html?topic=pd-series-ops"
+  },
+  {
+    "id": "pd-groupby-basic",
+    "title": "Basic GroupBy",
+    "icon": "📊",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M4: GroupBy and aggregations",
+    "module_icon": "🎯",
+    "difficulty": "medium",
+    "tags": [
+      "GroupBy"
+    ],
+    "url": "pandas-lesson.html?topic=pd-groupby-basic"
+  },
+  {
+    "id": "pd-groupby-deep",
+    "title": "Advanced GroupBy",
+    "icon": "🔬",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M4: GroupBy and aggregations",
+    "module_icon": "🎯",
+    "difficulty": "medium",
+    "tags": [
+      "GroupBy"
+    ],
+    "url": "pandas-lesson.html?topic=pd-groupby-deep"
+  },
+  {
+    "id": "pd-pivot-like",
+    "title": "pivot-like analyses",
+    "icon": "🔀",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M4: GroupBy and aggregations",
+    "module_icon": "🎯",
+    "difficulty": "medium",
+    "tags": [
+      "Pivot"
+    ],
+    "url": "pandas-lesson.html?topic=pd-pivot-like"
+  },
+  {
+    "id": "pd-sort",
+    "title": "sort_values",
+    "icon": "🔢",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M5: Sorting and order",
+    "module_icon": "🔄",
+    "difficulty": "medium",
+    "tags": [
+      "Sort"
+    ],
+    "url": "pandas-lesson.html?topic=pd-sort"
+  },
+  {
+    "id": "pd-set-index",
+    "title": "set_index, reset_index",
+    "icon": "🗝️",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M5: Sorting and order",
+    "module_icon": "🔄",
+    "difficulty": "medium",
+    "tags": [
+      "Sort"
+    ],
+    "url": "pandas-lesson.html?topic=pd-set-index"
+  },
+  {
+    "id": "pd-top-n",
+    "title": "Top-N (sort + head)",
+    "icon": "🏆",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M5: Sorting and order",
+    "module_icon": "🔄",
+    "difficulty": "medium",
+    "tags": [
+      "Sort"
+    ],
+    "url": "pandas-lesson.html?topic=pd-top-n"
+  },
+  {
+    "id": "pd-describe",
+    "title": "describe and more",
+    "icon": "📐",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M6: Descriptive statistics",
+    "module_icon": "📊",
+    "difficulty": "medium",
+    "tags": [
+      "Aggregations",
+      "Statistics"
+    ],
+    "url": "pandas-lesson.html?topic=pd-describe"
+  },
+  {
+    "id": "pd-value-counts",
+    "title": "value_counts, unique, nunique",
+    "icon": "📈",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M6: Descriptive statistics",
+    "module_icon": "📊",
+    "difficulty": "medium",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-value-counts"
+  },
+  {
+    "id": "pd-cumulative",
+    "title": "cumsum, pct_change",
+    "icon": "📈",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M6: Descriptive statistics",
+    "module_icon": "📊",
+    "difficulty": "medium",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-cumulative"
+  },
+  {
+    "id": "pd-missing",
+    "title": "Missing values (None / NaN)",
+    "icon": "❓",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M7: Data cleaning",
+    "module_icon": "🧹",
+    "difficulty": "medium",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-missing"
+  },
+  {
+    "id": "pd-rename-drop",
+    "title": "rename, drop, drop_duplicates",
+    "icon": "✏️",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M7: Data cleaning",
+    "module_icon": "🧹",
+    "difficulty": "medium",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-rename-drop"
+  },
+  {
+    "id": "pd-astype-clip",
+    "title": "astype, clip",
+    "icon": "🔧",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M7: Data cleaning",
+    "module_icon": "🧹",
+    "difficulty": "medium",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-astype-clip"
+  },
+  {
+    "id": "pd-merge-inner",
+    "title": "merge - inner j",
+    "icon": "🔀",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M8: Combining tables",
+    "module_icon": "🔗",
+    "difficulty": "medium",
+    "tags": [
+      "Merge"
+    ],
+    "url": "pandas-lesson.html?topic=pd-merge-inner"
+  },
+  {
+    "id": "pd-merge-left",
+    "title": "merge - LEFT JOIN",
+    "icon": "⬅️",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M8: Combining tables",
+    "module_icon": "🔗",
+    "difficulty": "medium",
+    "tags": [
+      "Merge"
+    ],
+    "url": "pandas-lesson.html?topic=pd-merge-left"
+  },
+  {
+    "id": "pd-concat",
+    "title": "concat - UNION",
+    "icon": "🧱",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M8: Combining tables",
+    "module_icon": "🔗",
+    "difficulty": "medium",
+    "tags": [
+      "Merge"
+    ],
+    "url": "pandas-lesson.html?topic=pd-concat"
+  },
+  {
+    "id": "pd-pipeline",
+    "title": "Multi-stage pipelines",
+    "icon": "🚰",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M9: Advanced operations",
+    "module_icon": "🔢",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-pipeline"
+  },
+  {
+    "id": "pd-multistep",
+    "title": "Multi-stage analyses",
+    "icon": "🎬",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M9: Advanced operations",
+    "module_icon": "🔢",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-multistep"
+  },
+  {
+    "id": "pd-complex-conditions",
+    "title": "Complex conditions",
+    "icon": "🧠",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M9: Advanced operations",
+    "module_icon": "🔢",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-complex-conditions"
+  },
+  {
+    "id": "pd-project-churn",
+    "title": "Case Study: Churn analysis",
+    "icon": "📞",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M10: Capstone projects",
+    "module_icon": "🏆",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-project-churn"
+  },
+  {
+    "id": "pd-project-salary",
+    "title": "Case Study: Salary gaps",
+    "icon": "💰",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M10: Capstone projects",
+    "module_icon": "🏆",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-project-salary"
+  },
+  {
+    "id": "pd-project-sales",
+    "title": "Case Study: Sales Analysis",
+    "icon": "📊",
+    "course": "pandas",
+    "course_label": "Pandas",
+    "module": "M10: Capstone projects",
+    "module_icon": "🏆",
+    "difficulty": "hard",
+    "tags": [
+      "Load Data"
+    ],
+    "url": "pandas-lesson.html?topic=pd-project-sales"
+  }
+],
+  
+  courses: {
+    python: { name: 'Python basics', icon: '🐍', color: '#3776ab' },
+    pandas: { name: 'Pandas', icon: '🐼', color: '#150458' },
+  },
+  
+  difficulties: {
+    easy: { name: 'easy', color: '#10b981', emoji: '🟢' },
+    medium: { name: 'medium', color: '#f59e0b', emoji: '🟡' },
+    hard: { name: 'hard', color: '#ef4444', emoji: '🔴' },
+  }
+};
+
+</script>
+
+<style>
+  :root {
+    --bg: #0a0d1f;
+    --bg2: #121530;
+    --bg3: #1a1f3a;
+    --bg4: #252a52;
+    --border: #2a2f5c;
+    --border2: #353a6b;
+    --text: #f8fafc;
+    --text2: #aab;
+    --text3: #888fa6;
+    --cyan: #00d4c8;
+    --green: #00e5a0;
+    --gold: #ffd700;
+    --orange: #ff8800;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --easy: #10b981;
+    --medium: #f59e0b;
+    --hard: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+  -webkit-tap-highlight-color: rgba(0,212,200,0.2);
+  -webkit-text-size-adjust: 100%;
+    font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    direction:ltr;
+    line-height: 1.5;
+  }
+
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .home-btn {
+    background: linear-gradient(135deg, var(--cyan), var(--green));
+    color: #000;
+    padding: 7px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 22px 20px 14px;
+    background: linear-gradient(135deg, rgba(0,212,200,0.08), rgba(139,92,246,0.04));
+    border-bottom: 1px solid var(--border);
+  }
+  .hero h1 { margin: 0 0 4px; font-size: 22px; color: var(--cyan); }
+  .hero p { margin: 0; color: var(--text2); font-size: 13px; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  /* Search bar */
+  .search-bar {
+    margin-bottom: 14px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg3);
+    border: 1.5px solid var(--border2);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+  }
+  .search-input:focus { outline: none; border-color: var(--cyan); }
+  .search-input::placeholder { color: var(--text3); }
+
+  /* Filter pills */
+  .filter-section {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .filter-row {
+    margin-bottom: 12px;
+  }
+  .filter-row:last-child { margin-bottom: 0; }
+  .filter-label {
+    font-size: 11.5px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .pills {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    padding: 5px 11px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    color: var(--text2);
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+    user-select: none;
+  }
+  .pill:hover { color: var(--text); border-color: var(--cyan); }
+  .pill.active {
+    background: var(--cyan);
+    color: #000;
+    border-color: var(--cyan);
+    font-weight: 700;
+  }
+  .pill.diff-easy.active { background: var(--easy); border-color: var(--easy); }
+  .pill.diff-medium.active { background: var(--medium); border-color: var(--medium); color: #000; }
+  .pill.diff-hard.active { background: var(--hard); border-color: var(--hard); color: #fff; }
+
+  /* Tag groups */
+  .tag-group {
+    margin-bottom: 8px;
+  }
+  .tag-group-title {
+    font-size: 10.5px;
+    color: var(--text3);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  /* Results */
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 4px;
+  }
+  .results-count {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .clear-btn {
+    background: rgba(239,68,68,0.1);
+    color: var(--hard);
+    border: 1px solid rgba(239,68,68,0.3);
+    padding: 5px 11px;
+    border-radius: 8px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .results-grid {
+    display: grid;
+    gap: 10px;
+  }
+  .result-card {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: transform .15s, border-color .15s;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+  }
+  .result-card:hover {
+    transform: translateY(-1px);
+    border-color: var(--cyan);
+  }
+  .result-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .result-icon { font-size: 22px; line-height: 1; }
+  .result-title {
+    font-size: 14px;
+    font-weight: 700;
+    flex: 1;
+    min-width: 0;
+  }
+  .result-difficulty-emoji { font-size: 16px; }
+  .result-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 11.5px;
+    color: var(--text3);
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .result-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .result-tag {
+    background: rgba(0,212,200,0.12);
+    color: var(--cyan);
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text2);
+  }
+  .empty-state-icon {
+    font-size: 48px;
+    opacity: 0.4;
+    margin-bottom: 8px;
+  }
+
+  /* Quick stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .stat-mini {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 9px 4px;
+    text-align: center;
+  }
+  .stat-mini-val { font-size: 18px; font-weight: 800; color: var(--cyan); line-height: 1.1; }
+  .stat-mini-label { font-size: 10px; color: var(--text3); text-transform: uppercase; }
+
+  @media (max-width: 480px) {
+    .hero { padding: 18px 14px 12px; }
+    .hero h1 { font-size: 19px; }
+    .hero p { font-size: 12px; }
+    .container { padding: 16px 12px 30px; }
+    .stats-row { gap: 4px; }
+    .stat-mini { padding: 7px 3px; }
+    .stat-mini-val { font-size: 16px; }
+    .stat-mini-label { font-size: 11px; }
+    .filter-section { padding: 12px; }
+    .pill { padding: 4px 9px; font-size: 11px; }
+    .result-card { padding: 10px; }
+    .result-icon { font-size: 20px; }
+    .result-title { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="home-btn">🏠 Home</a>
+</div>
+
+<div class="hero">
+  <h1>🔍 Search exercise</h1>
+  <p>Filter from 80+ exercises by topic, difficulty, and course</p>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="stats-row" id="stats-row">
+    <div class="stat-mini">
+      <div class="stat-mini-val" id="stat-total">0</div>
+      <div class="stat-mini-label">total</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-val" style="color:var(--easy);" id="stat-easy">0</div>
+      <div class="stat-mini-label">easy</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-val" style="color:var(--medium);" id="stat-medium">0</div>
+      <div class="stat-mini-label">medium</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-val" style="color:var(--hard);" id="stat-hard">0</div>
+      <div class="stat-mini-label">hard</div>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="search-bar">
+    <input type="search" id="search-input" class="search-input" placeholder="🔍 Search by title... (for example: 'groupby', 'lambda', 'merge')" autocomplete="off">
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-section">
+    <div class="filter-row">
+      <div class="filter-label">📚 course</div>
+      <div class="pills" id="course-pills"></div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-label">📊 Difficulty level</div>
+      <div class="pills" id="difficulty-pills"></div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-label">🏷️ Topic tags</div>
+      <div id="tag-groups-container"></div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-header">
+    <div class="results-count" id="results-count">loading...</div>
+    <button class="clear-btn" id="clear-btn">✕ Clear all</button>
+  </div>
+
+  <div class="results-grid" id="results-grid">
+    <!-- Results rendered by JS -->
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const DATA = window.TAGS_DATA;
+  
+  // ===== State =====
+  let activeFilters = {
+    search: '',
+    course: null,
+    difficulty: null,
+    tags: new Set(),
+  };
+
+  // ===== Render initial stats =====
+  function renderStats() {
+    const all = DATA.exercises;
+    document.getElementById('stat-total').textContent = all.length;
+    document.getElementById('stat-easy').textContent = all.filter(e => e.difficulty === 'easy').length;
+    document.getElementById('stat-medium').textContent = all.filter(e => e.difficulty === 'medium').length;
+    document.getElementById('stat-hard').textContent = all.filter(e => e.difficulty === 'hard').length;
+  }
+
+  // ===== Render course pills =====
+  function renderCoursePills() {
+    const container = document.getElementById('course-pills');
+    let html = `<button class="pill ${activeFilters.course === null ? 'active' : ''}" data-course="">All</button>`;
+    Object.entries(DATA.courses).forEach(([key, info]) => {
+      const count = DATA.exercises.filter(e => e.course === key).length;
+      html += `<button class="pill ${activeFilters.course === key ? 'active' : ''}" data-course="${key}">${info.icon} ${info.name} (${count})</button>`;
+    });
+    container.innerHTML = html;
+    container.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.dataset.course;
+        activeFilters.course = v === '' ? null : v;
+        renderAll();
+      });
+    });
+  }
+
+  // ===== Render difficulty pills =====
+  function renderDifficultyPills() {
+    const container = document.getElementById('difficulty-pills');
+    let html = `<button class="pill ${activeFilters.difficulty === null ? 'active' : ''}" data-diff="">All</button>`;
+    Object.entries(DATA.difficulties).forEach(([key, info]) => {
+      const count = DATA.exercises.filter(e => e.difficulty === key).length;
+      html += `<button class="pill diff-${key} ${activeFilters.difficulty === key ? 'active' : ''}" data-diff="${key}">${info.emoji} ${info.name} (${count})</button>`;
+    });
+    container.innerHTML = html;
+    container.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.dataset.diff;
+        activeFilters.difficulty = v === '' ? null : v;
+        renderAll();
+      });
+    });
+  }
+
+  // ===== Render tag groups =====
+  function renderTagGroups() {
+    const container = document.getElementById('tag-groups-container');
+    let html = '';
+    Object.entries(DATA.tagGroups).forEach(([group, tags]) => {
+      // Only show tags that have at least 1 exercise
+      const visibleTags = tags.filter(t => DATA.exercises.some(e => e.tags.includes(t)));
+      if (visibleTags.length === 0) return;
+      
+      html += `<div class="tag-group">`;
+      html += `<div class="tag-group-title">${group}</div>`;
+      html += `<div class="pills">`;
+      visibleTags.forEach(tag => {
+        const count = DATA.exercises.filter(e => e.tags.includes(tag)).length;
+        const isActive = activeFilters.tags.has(tag);
+        html += `<button class="pill ${isActive ? 'active' : ''}" data-tag="${tag}">${tag} (${count})</button>`;
+      });
+      html += `</div></div>`;
+    });
+    container.innerHTML = html;
+    container.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (activeFilters.tags.has(tag)) activeFilters.tags.delete(tag);
+        else activeFilters.tags.add(tag);
+        renderAll();
+      });
+    });
+  }
+
+  // ===== Filter exercises =====
+  function filterExercises() {
+    let results = DATA.exercises;
+    
+    // Search
+    if (activeFilters.search) {
+      const q = activeFilters.search.toLowerCase();
+      results = results.filter(e => 
+        e.title.toLowerCase().includes(q) || 
+        e.module.toLowerCase().includes(q) ||
+        e.tags.some(t => t.toLowerCase().includes(q))
+      );
+    }
+    
+    // Course
+    if (activeFilters.course) {
+      results = results.filter(e => e.course === activeFilters.course);
+    }
+    
+    // Difficulty
+    if (activeFilters.difficulty) {
+      results = results.filter(e => e.difficulty === activeFilters.difficulty);
+    }
+    
+    // Tags (OR logic - any selected tag matches)
+    if (activeFilters.tags.size > 0) {
+      results = results.filter(e => 
+        e.tags.some(t => activeFilters.tags.has(t))
+      );
+    }
+    
+    return results;
+  }
+
+  // ===== Render results =====
+  function renderResults() {
+    const results = filterExercises();
+    const grid = document.getElementById('results-grid');
+    const countEl = document.getElementById('results-count');
+    
+    countEl.textContent = results.length === 0 ? 'No exercises found' : `${results.length} exercises found`;
+    
+    if (results.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">\n          <div class="empty-state-icon">🔍</div>\n          <p>Try changing the filter</p>\n        </div>
+      `;
+      return;
+    }
+    
+    let html = '';
+    results.forEach(ex => {
+      const courseInfo = DATA.courses[ex.course] || { icon: '📚', name: ex.course };
+      const diffInfo = DATA.difficulties[ex.difficulty] || { emoji: '⚪', name: ex.difficulty };
+      const tagsHTML = ex.tags.map(t => `<span class="result-tag">${t}</span>`).join('');
+      
+      html += `
+        <a href="${ex.url}" class="result-card">
+          <div class="result-card-header">
+            <div class="result-icon">${ex.icon}</div>
+            <div class="result-title">${ex.title}</div>
+            <div class="result-difficulty-emoji">${diffInfo.emoji}</div>
+          </div>
+          <div class="result-meta">
+            <span>${courseInfo.icon} ${courseInfo.name}</span>
+            <span>📂 ${ex.module}</span>
+          </div>
+          <div class="result-tags">${tagsHTML}</div>
+        </a>
+      `;
+    });
+    grid.innerHTML = html;
+  }
+
+  // ===== Render all =====
+  function renderAll() {
+    renderCoursePills();
+    renderDifficultyPills();
+    renderTagGroups();
+    renderResults();
+  }
+
+  // ===== Wire up =====
+  function init() {
+    if (!DATA || !DATA.exercises) {
+      document.getElementById('results-grid').innerHTML = '<p style="text-align:center;color:#888;">No data loaded</p>';
+      return;
+    }
+    
+    renderStats();
+    renderAll();
+    
+    // Search input
+    let searchTimeout;
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        activeFilters.search = e.target.value.trim();
+        renderResults();
+      }, 200);
+    });
+    
+    // Clear filters
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      activeFilters = { search: '', course: null, difficulty: null, tags: new Set() };
+      document.getElementById('search-input').value = '';
+      renderAll();
+    });
+    
+    // URL params - support deep linking
+    const params = new URLSearchParams(location.search);
+    if (params.has('course')) {
+      activeFilters.course = params.get('course');
+    }
+    if (params.has('diff')) {
+      activeFilters.difficulty = params.get('diff');
+    }
+    if (params.has('tag')) {
+      activeFilters.tags.add(params.get('tag'));
+    }
+    if (params.has('q')) {
+      activeFilters.search = params.get('q');
+      document.getElementById('search-input').value = activeFilters.search;
+    }
+    if (params.toString()) renderAll();
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>

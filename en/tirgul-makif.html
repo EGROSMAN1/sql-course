@@ -4,27 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Comprehensive SQL Practice — 135 Interactive Questions | SQL Course</title>
-<meta name="description" content="Free comprehensive SQL practice — 135 interactive questions (SELECT, JOIN, GROUP BY, window functions), an SQL editor that runs in the browser with no installation, full solutions, and data analyst interview prep.">
-<meta name="keywords" content="SQL practice, SQL course, SQL simulator, SQL queries, learn SQL, SELECT, JOIN, GROUP BY, data analyst interview, MySQL, SQLite, data analyst, Data Analyst">
+<meta name="description" content="Comprehensive free SQL practice — 135 interactive questions (SELECT, JOIN, GROUP BY, window functions), a SQL editor that runs in the browser with no installation required, full solutions, and data analyst interview prep.">
+<meta name="keywords" content="SQL practice, SQL simulator, SQL queries, learn SQL, SELECT, JOIN, GROUP BY, data analyst interview, MySQL, SQLite, data analyst, Data Analyst">
 <meta name="author" content="Eliran Grossman">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="theme-color" content="#0b0f17">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/tirgul-makif.html">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html">
 <!-- ====== Open Graph ====== -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Free SQL Course — Eliran Grossman">
-<meta property="og:locale" content="he_IL">
-<meta property="og:title" content="Comprehensive SQL Practice — 135 Interactive Questions">
-<meta property="og:description" content="135 interactive SQL questions, a browser-based editor with no installation, full solutions, and data analyst interview prep.">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/tirgul-makif.html">
+<meta property="og:site_name" content="SQL Course — Eliran Grossman">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Comprehensive SQL practice — 135 interactive questions">
+<meta property="og:description" content="135 interactive SQL questions, an editor that runs in the browser with no installation, full solutions, and prep for a data analyst job interview.">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/tirgul-makif.html">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-tirgul-makif.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Comprehensive SQL Practice">
+<meta property="og:image:alt" content="Comprehensive SQL practice">
 <!-- ====== Twitter ====== -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Comprehensive SQL Practice — 135 Interactive Questions">
-<meta name="twitter:description" content="135 interactive SQL questions, a browser-based editor, full solutions, and data analyst interview prep.">
+<meta name="twitter:title" content="Comprehensive SQL practice — 135 interactive questions">
+<meta name="twitter:description" content="135 interactive SQL questions, an editor that runs in the browser, full solutions and data analyst interview prep.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/og-tirgul-makif.png">
 <!-- ====== Favicon (inline SVG) ====== -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f17'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='34' font-weight='700' fill='%232dd4bf' text-anchor='middle'%3ESQL%3C/text%3E%3C/svg%3E">
@@ -71,7 +71,7 @@ body{
 .intro p{color:var(--muted);font-size:1.02rem;max-width:520px;margin:0 auto}
 
 .mode-row{display:flex;gap:10px;justify-content:center;margin:26px 0 30px;flex-wrap:wrap}
-.mode-card{flex:1;min-width:220px;max-width:300px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;text-align:right;transition:all .16s;color:inherit;font-family:inherit}
+.mode-card{flex:1;min-width:220px;max-width:300px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;text-align:left;transition:all .16s;color:inherit;font-family:inherit}
 .mode-card:hover{border-color:var(--teal);transform:translateY(-2px)}
 .mode-card h3{font-size:1.05rem;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:9px}
 .mode-card .ic{width:30px;height:30px;border-radius:9px;background:var(--bg2);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;color:var(--teal);font-family:var(--mono);font-size:.95rem}
@@ -79,7 +79,7 @@ body{
 
 .sec-label{font-size:.82rem;color:var(--dim);font-weight:600;letter-spacing:.04em;margin:0 4px 14px;text-transform:uppercase}
 .topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px}
-.topic{position:relative;text-align:right;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;transition:all .15s;font-family:inherit;color:inherit;width:100%}
+.topic{position:relative;text-align:left;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px;transition:all .15s;font-family:inherit;color:inherit;width:100%}
 .topic:hover{border-color:var(--teal-d);transform:translateY(-2px);background:var(--panel2)}
 .topic h3{font-size:.98rem;font-weight:700;margin-bottom:3px}
 .topic .td{font-size:.8rem;color:var(--muted);line-height:1.45;margin-bottom:9px;min-height:34px}
@@ -131,7 +131,7 @@ body{
 /* editor */
 .editor-shell{border:1px solid var(--line2);border-radius:12px;overflow:hidden;direction:ltr;max-width:100%}
 .CodeMirror,.CodeMirror-scroll,.CodeMirror-sizer{max-width:100%!important}
-.CodeMirror-placeholder{color:var(--dim)!important;direction:rtl;text-align:right;font-family:var(--font)!important;opacity:.8}
+.CodeMirror-placeholder{color:var(--dim)!important;direction:ltr;text-align:left;font-family:var(--font)!important;opacity:.8}
 .CodeMirror-sizer{min-width:0!important}
 .CodeMirror{height:auto;min-height:120px;font-family:var(--mono)!important;font-size:.92rem;background:#0c1119!important}
 .CodeMirror-gutters{background:#0a0f17!important;border-right:1px solid var(--line)!important}
@@ -202,11 +202,11 @@ table.res tr:last-child td{border-bottom:none}
 .fld-name{color:var(--cyan);font-weight:700;font-size:.92rem}
 .fld-type{color:var(--dim);font-size:.76rem;white-space:nowrap}
 .dp-table table.res td{padding:5px 10px}
-.tbl-note{font-size:.76rem;color:var(--dim);padding:7px 4px 2px;text-align:right}
+.tbl-note{font-size:.76rem;color:var(--dim);padding:7px 4px 2px;text-align:left}
 
 /* mcq */
 .opts{display:flex;flex-direction:column;gap:10px}
-.opt{text-align:right;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:14px 17px;font-family:inherit;font-size:1rem;color:var(--txt);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:12px;width:100%}
+.opt{text-align:left;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:14px 17px;font-family:inherit;font-size:1rem;color:var(--txt);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:12px;width:100%}
 .opt:hover:not(.locked){border-color:var(--teal);background:var(--panel2)}
 .opt .mark{flex-shrink:0;width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line2);font-family:var(--mono);font-size:.82rem;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
 .opt.correct{border-color:var(--green);background:rgba(74,222,128,.12)}
@@ -365,7 +365,7 @@ table.res tr:last-child td{border-bottom:none}
   table.res tbody{display:block}
   table.res tr{display:block;border:1px solid var(--line2);border-radius:10px;margin-bottom:8px;background:var(--bg2);overflow:hidden}
   table.res tr:last-child{margin-bottom:0}
-  table.res td{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:6px 12px;border-bottom:1px solid var(--line);white-space:normal;overflow-wrap:anywhere;font-size:.88rem;direction:ltr;text-align:right}
+  table.res td{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:6px 12px;border-bottom:1px solid var(--line);white-space:normal;overflow-wrap:anywhere;font-size:.88rem;direction:ltr;text-align:left}
   table.res tr td:last-child{border-bottom:none}
   table.res td::before{content:attr(data-label);color:var(--teal);font-weight:700;font-family:var(--mono);font-size:.8rem;flex-shrink:0;text-align:left}
 
@@ -404,13 +404,13 @@ table.res tr:last-child td{border-bottom:none}
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 <script type="application/ld+json">
@@ -420,44 +420,44 @@ table.res tr:last-child td{border-bottom:none}
     {
       "@type": "WebApplication",
       "@id": "https://egrosman1.github.io/sql-course/tirgul-makif.html#app",
-      "name": "Comprehensive Practice — Interactive SQL Practice",
+      "name": "Comprehensive practice — interactive SQL practice",
       "url": "https://egrosman1.github.io/sql-course/tirgul-makif.html",
-      "description": "Free comprehensive SQL practice with 135 interactive questions, a browser-based SQL editor with no installation, and full solutions.",
+      "description": "Comprehensive, free SQL practice with 135 interactive questions, a SQL editor that runs in the browser with no installation, and full solutions.",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web (any browser)",
       "inLanguage": "he",
       "isAccessibleForFree": true,
-      "educationalUse": "practice, job interview prep",
-      "teaches": ["SQL", "SELECT", "WHERE", "JOIN", "GROUP BY", "subqueries", "window functions"],
+      "educationalUse": "Practice, job interview prep",
+      "teaches": ["SQL", "SELECT", "WHERE", "JOIN", "GROUP BY", "Subqueries", "Window functions"],
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "ILS" },
       "author": {
         "@type": "Person",
         "name": "Eliran Grossman",
-        "jobTitle": "Data Analyst & SQL Instructor"
+        "jobTitle": "Data Analyst and SQL Instructor"
       }
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
         { "@type": "Question", "name": "Is the practice free?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. It is completely free to use, with no registration and no payment." } },
-        { "@type": "Question", "name": "Do I need to install software or a database?",
-          "acceptedAnswer": { "@type": "Answer", "text": "No. The SQLite engine runs directly in the browser (sql.js), so you can write and run real queries with no installation at all." } },
-        { "@type": "Question", "name": "Which SQL topics are covered in the practice?",
-          "acceptedAnswer": { "@type": "Answer", "text": "SELECT, filtering with WHERE, sorting and limiting, GROUP BY and aggregations, JOIN types, subqueries, window functions such as ROW_NUMBER and RANK, and text and date functions." } },
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Use is completely free, with no sign-up and no payment." } },
+        { "@type": "Question", "name": "Do you need to install software or a database?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The SQLite engine runs directly in the browser (sql.js), — so you can write and run real queries with no installation at all." } },
+        { "@type": "Question", "name": "Which SQL topics are included in the practice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "SELECT, filtering with WHERE, sorting and limiting, GROUP BY and aggregations, JOIN types, subqueries, window functions like ROW_NUMBER and RANK, and text and date functions." } },
         { "@type": "Question", "name": "Is the practice suitable for preparing for a data analyst job interview?",
           "acceptedAnswer": { "@type": "Answer", "text": "Yes. There are dedicated categories of common SQL interview questions, organized by difficulty level." } },
         { "@type": "Question", "name": "How many questions are in the practice?",
-          "acceptedAnswer": { "@type": "Answer", "text": "135 questions, of which 76 are queries you run in the SQL editor, organized from easy to hard." } },
-        { "@type": "Question", "name": "Which database do you practice on?",
-          "acceptedAnswer": { "@type": "Answer", "text": "A database with 14 linked tables (employees, departments, orders, products, customers, and more) holding up to 30,000 records." } }
+          "acceptedAnswer": { "@type": "Answer", "text": "135 questions, 76 of them queries you run in the SQL editor, arranged from easy to hard." } },
+        { "@type": "Question", "name": "Which database are we practicing on?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A database with 14 linked tables (employees, departments, orders, products, customers, and more) with up to 30,000 records." } }
       ]
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Free SQL Course", "item": "https://egrosman1.github.io/sql-course/" },
-        { "@type": "ListItem", "position": 2, "name": "Comprehensive Practice", "item": "https://egrosman1.github.io/sql-course/tirgul-makif.html" }
+        { "@type": "ListItem", "position": 1, "name": "SQL Course", "item": "https://egrosman1.github.io/sql-course/" },
+        { "@type": "ListItem", "position": 2, "name": "Comprehensive practice", "item": "https://egrosman1.github.io/sql-course/tirgul-makif.html" }
       ]
     }
   ]
@@ -471,65 +471,65 @@ table.res tr:last-child td{border-bottom:none}
 
 <!-- ============ SCREEN 1: SELECT ============ -->
 <main id="screen-select" class="wrap" role="main">
-  <a class="site-back" href="index.html">← Back to the course home</a> <a href="../tirgul-makif.html" title="עברית" style="text-decoration:none;font-size:1.15rem"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="tirgul-makif.html" title="English" style="text-decoration:none;font-size:1.15rem" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/tirgul-makif.html" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+  <a class="site-back" href="index.html">← To the course homepage</a><a href="../tirgul-makif.html"  style="text-decoration:none;font-size:1.15rem"title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="tirgul-makif.html"  style="text-decoration:none;font-size:1.15rem"title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/tirgul-makif.html" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
   <header class="intro">
-    <span class="tag">// Comprehensive practice</span>
-    <h1>Comprehensive SQL Practice — 135 Interactive Questions</h1>
-    <p>Pick a topic and start practicing: one question at a time — you write a query and actually run it on a real database in the browser, or answer a multiple-choice question with a full explanation. 135 questions from easy to hard, free and with no installation.</p>
+    <span class="tag">// comprehensive practice</span>
+    <h1>Comprehensive SQL practice — 135 interactive questions</h1>
+    <p>Choose a topic and start practicing: one question at a time — write a query and actually run it on a real database in the browser, or answer a multiple-choice quiz with a full explanation. 135 questions from easy to hard, free and with no installation required.</p>
   </header>
 
-  <div class="sec-label">Quick mode</div>
+  <div class="sec-label">fast mode</div>
   <div class="mode-row">
     <button class="mode-card" id="mode-all">
       <h3><span class="ic">↗</span> Graded track</h3>
-      <p>All <span id="cntAll">—</span> questions in ascending order — from easy to hard. The recommended way to learn.</p>
+      <p>all <span id="cntAll">—</span> The questions in ascending order — from easy to hard. The recommended way to learn.</p>
     </button>
     <button class="mode-card" id="mode-queries">
       <h3><span class="ic">▶</span> Queries only</h3>
-      <p><span id="cntQ">—</span> questions you run in the SQL editor, also from easy to hard.</p>
+      <p><span id="cntQ">—</span> Questions you run in the SQL editor, also ordered from easy to hard.</p>
     </button>
   </div>
 
-  <div class="sec-label">Or pick a specific topic</div>
+  <div class="sec-label">or choose a specific topic</div>
   <div class="topics" id="topics"></div>
 
   <div style="text-align:center;margin-top:28px">
-    <button class="schema-link" id="schemaBtn1">📋 View the tables</button>
+    <button class="schema-link" id="schemaBtn1">📋 To view tables</button>
   </div>
 
-  <section class="seo" aria-label="About the comprehensive practice">
+  <section class="seo" aria-label="Info about the comprehensive practice">
     <h2>What you will find in the comprehensive practice</h2>
-    <p>The comprehensive practice lets you practice <strong>SQL queries</strong> directly in the browser — without installing a database. Every query runs on a real <strong>SQLite</strong> engine, gets a score, and comes with a sample solution and an explanation.</p>
+    <p>The comprehensive practice lets you practice <strong>SQL queries</strong> Directly in the browser — without installing a database. Every query runs on an engine <strong>SQLite</strong> real, gets a score, and comes with a sample solution and explanation.</p>
     <ul class="seo-list">
-      <li><strong>SELECT and filtering:</strong> selecting columns, WHERE, DISTINCT, LIKE, IN, BETWEEN.</li>
+      <li><strong>SELECT and filtering:</strong> Selecting columns, WHERE, DISTINCT, LIKE, IN, BETWEEN.</li>
       <li><strong>Sorting and limiting:</strong> ORDER BY, LIMIT, OFFSET.</li>
       <li><strong>Grouping and aggregation:</strong> GROUP BY, HAVING, COUNT, SUM, AVG, MIN, MAX.</li>
       <li><strong>JOIN:</strong> INNER and LEFT JOIN, anti-join, and tricky joins.</li>
-      <li><strong>Advanced:</strong> subqueries, CASE, window functions (ROW_NUMBER, RANK, DENSE_RANK).</li>
+      <li><strong>advanced:</strong> Subqueries, CASE, window functions (ROW_NUMBER, RANK, DENSE_RANK).</li>
       <li><strong>Text and date:</strong> UPPER/LOWER, TRIM, REPLACE, strftime, and more.</li>
-      <li><strong>Interview prep:</strong> common SQL questions in data analyst interviews, by difficulty level.</li>
+      <li><strong>Interview prep:</strong> Common SQL questions in data analyst job interviews, by difficulty level.</li>
     </ul>
 
-    <h2>Who the practice is for</h2>
-    <p>For anyone learning <strong>SQL from scratch</strong>, for students, and for job seekers preparing for a <strong>data analyst interview (Data Analyst)</strong>. The questions are organized from easy to hard, so you can progress gradually.</p>
+    <h2>Who the practice is suited for</h2>
+    <p>For everyone learning <strong>SQL from scratch</strong>, for students, and for job seekers preparing for<strong>Data analyst interview (Data Analyst)</strong>. The questions are arranged from easy to hard, so you can progress gradually.</p>
 
     <h2>The practice database</h2>
-    <p>The practice runs on a database with <strong>14 linked tables</strong> — employees, departments, attendance, orders, order items, products, suppliers, categories, customers, and payments — holding up to <strong>30,000 records</strong>. You can view the full structure and the relationship diagram (ERD) from within the practice.</p>
+    <p>The practice is done on a database with <strong>14 linked tables</strong> — employees, departments, attendance, orders, order items, products, suppliers, categories, customers and payments — and it has up to <strong>30,000 records</strong>. You can view the full structure and the relationship diagram (ERD) from within the exercise.</p>
 
-    <h2>Frequently asked questions</h2>
+    <h2>Frequently Asked Questions</h2>
     <div class="faq">
-      <details><summary>Is the practice free?</summary><p>Yes. It is completely free to use, with no registration and no payment.</p></details>
-      <details><summary>Do I need to install software or a database?</summary><p>No. The SQLite engine runs directly in the browser (sql.js), so you can write and run real queries with no installation at all.</p></details>
-      <details><summary>Which SQL topics are covered in the practice?</summary><p>SELECT, filtering with WHERE, sorting and limiting, GROUP BY and aggregations, JOIN types, subqueries, window functions such as ROW_NUMBER and RANK, and text and date functions.</p></details>
+      <details><summary>Is the practice free?</summary><p>Yes. Use is completely free, with no sign-up and no payment.</p></details>
+      <details><summary>Do you need to install software or a database?</summary><p>No. The SQLite engine runs directly in the browser (sql.js), — so you can write and run real queries with no installation at all.</p></details>
+      <details><summary>Which SQL topics are included in the practice?</summary><p>SELECT, filtering with WHERE, sorting and limiting, GROUP BY and aggregations, JOIN types, subqueries, window functions like ROW_NUMBER and RANK, and text and date functions.</p></details>
       <details><summary>Is the practice suitable for preparing for a data analyst job interview?</summary><p>Yes. There are dedicated categories of common SQL interview questions, organized by difficulty level.</p></details>
-      <details><summary>How many questions are in the practice?</summary><p>135 questions, of which 76 are queries you run in the SQL editor, organized from easy to hard.</p></details>
-      <details><summary>Which database do you practice on?</summary><p>A database with 14 linked tables (employees, departments, orders, products, customers, and more) holding up to 30,000 records.</p></details>
+      <details><summary>How many questions are in the practice?</summary><p>135 questions, 76 of them queries you run in the SQL editor, arranged from easy to hard.</p></details>
+      <details><summary>Which database are we practicing on?</summary><p>A database with 14 linked tables (employees, departments, orders, products, customers, and more) with up to 30,000 records.</p></details>
     </div>
   </section>
 
   <footer class="site-footer">
-    <p>Built by <strong>Eliran Grossman</strong> · part of <a href="index.html">the SQL course — home</a></p>
-    <p class="muted-fine">Free SQL practice · SELECT · JOIN · GROUP BY · window functions · data analyst interview prep</p>
+    <p>Built by <strong>Eliran Grossman</strong> · part of<a href="index.html">The SQL Course — to the home page</a></p>
+    <p class="muted-fine">Free SQL Practice · SELECT · JOIN · GROUP BY · window functions · data analyst interview prep</p>
   </footer>
 </main>
 
@@ -542,7 +542,7 @@ table.res tr:last-child td{border-bottom:none}
         <button class="hnav" id="hPrev" aria-label="Previous question">Previous</button>
         <button class="hnav primary" id="hNext" aria-label="Next question">Next ←</button>
       </div>
-      <div class="ptitle" id="pTitle">Topic</div>
+      <div class="ptitle" id="pTitle">topic</div>
       <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="pFill"></div></div></div>
       <div class="pcount" id="pCount">0 / 0</div>
       <div class="pscore" id="pScore" title="Current score">✓ 0</div>
@@ -553,26 +553,26 @@ table.res tr:last-child td{border-bottom:none}
 
 <div class="drawer-bg" id="drawerBg"></div>
 <aside class="drawer" id="drawer" aria-label="Table structure">
-  <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
+  <button class="drawer-close" id="drawerClose" aria-label="close">×</button>
   <h3>Database tables</h3>
-  <p>All the tables available for practice. Click the + next to a table to see its fields.</p>
+  <p>All the tables available for practice. Click + next to a table to see its fields.</p>
   <div id="schemaContent"></div>
 </aside>
 
 <!-- ============ FLOATING ERD BUTTON (visible everywhere) ============ -->
-<button class="erd-fab" id="erdFab" aria-label="Open relationship map">🗺️ ERD</button>
+<button class="erd-fab" id="erdFab" aria-label="Open the relationship map">🗺️ ERD</button>
 
 <!-- ============ ERD OVERLAY ============ -->
-<div class="erd-overlay" id="erdOverlay" aria-label="Relationship map between the tables">
+<div class="erd-overlay" id="erdOverlay" aria-label="A relationship map between the tables">
   <div class="erd-bar">
     <div class="erd-title">🗺️ Relationship map (ERD)</div>
-    <button class="erd-icon" id="erdZoomOut" title="Zoom out" aria-label="Zoom out">−</button>
-    <button class="erd-icon" id="erdZoomIn" title="Zoom in" aria-label="Zoom in">+</button>
+    <button class="erd-icon" id="erdZoomOut" title="decrease" aria-label="decrease">−</button>
+    <button class="erd-icon" id="erdZoomIn" title="increase" aria-label="increase">+</button>
     <button class="erd-icon" id="erdFitBtn" title="Fit to screen" aria-label="Fit to screen">⤢</button>
-    <button class="erd-icon" id="erdReset" title="Re-arrange" aria-label="Re-arrange">⟲</button>
-    <button class="erd-icon" id="erdClose" title="Close" aria-label="Close">×</button>
+    <button class="erd-icon" id="erdReset" title="reorder" aria-label="reorder">⟲</button>
+    <button class="erd-icon" id="erdClose" title="close" aria-label="close">×</button>
   </div>
-  <div class="erd-hint" id="erdHint">Drag tables · +/− buttons to zoom · 🔑 primary key · 🔗 foreign key</div>
+  <div class="erd-hint" id="erdHint">Drag tables · +/− buttons to zoom · 🔑 Primary key · 🔗 Foreign key</div>
   <div class="erd-canvas" id="erdCanvas">
     <div class="erd-viewport" id="erdViewport"><div class="erd-stage" id="erdStage"></div></div>
   </div>
@@ -585,9 +585,9 @@ table.res tr:last-child td{border-bottom:none}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/display/placeholder.min.js"></script>
 <script>
 // 800+ SQL — simulator data
-// type "query": a practice question you actually run (SQLite). solution = sample solution.
-// type "mcq":   multiple choice. options[], correct (index), explain.
-// execution dialect: SQLite (sql.js). The solutions were converted from MS SQL Server to SQLite.
+// type "query": a practice question you actually run (SQLite). solution = A sample solution.
+// type "mcq":   Multiple-choice quiz. options[], correct (index), explain.
+// Runtime dialect: SQLite (sql.js). The solutions were converted from MS SQL Server to SQLite.
 
 const CATEGORIES = [
   {
@@ -595,23 +595,23 @@ const CATEGORIES = [
     desc: "SELECT, WHERE, LIKE, basic string functions",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Return all the employee details from the EmployeeDetail table.", hint:"An asterisk returns all the columns.", solution:"SELECT * FROM EmployeeDetail" },
+      { type:"query", q:"Return all employee details from the EmployeeDetail table.", hint:"An asterisk returns all the columns.", solution:"SELECT * FROM EmployeeDetail" },
       { type:"query", q:"Return only the FirstName column from the EmployeeDetail table.", hint:"Specify the column name instead of an asterisk.", solution:"SELECT FirstName FROM EmployeeDetail" },
-      { type:"query", q:"Return FirstName in uppercase under the alias \"First Name\".", hint:"UPPER() to convert to uppercase, AS for the alias.", solution:"SELECT UPPER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
+      { type:"query", q:"Return FirstName in uppercase under the alias \"First Name\".", hint:"UPPER() to convert to uppercase, AS for an alias.", solution:"SELECT UPPER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
       { type:"query", q:"Return FirstName in lowercase under the alias \"First Name\".", hint:"LOWER() to convert to lowercase.", solution:"SELECT LOWER(FirstName) AS \"First Name\" FROM EmployeeDetail" },
-      { type:"query", q:"Combine FirstName and LastName and show them under \"Name\" (with a space between).", hint:"In SQLite you concatenate strings with ||", solution:"SELECT FirstName || ' ' || LastName AS \"Name\" FROM EmployeeDetail" },
+      { type:"query", q:"Combine FirstName and LastName and display them under \"Name\" (with a space between them).", hint:"In SQLite you concatenate strings with ||", solution:"SELECT FirstName || ' ' || LastName AS \"Name\" FROM EmployeeDetail" },
       { type:"query", q:"Return the details of the employee named \"Vikas\".", hint:"WHERE with an equality comparison.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName = 'Vikas'" },
-      { type:"query", q:"Return employees whose FirstName starts with the letter 'a' (case-insensitive).", hint:"LIKE with % at the end. In SQLite LIKE is case-insensitive by default.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE 'a%'" },
-      { type:"query", q:"Return employees whose FirstName contains the letter 'k'.", hint:"% on both sides.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%k%'" },
+      { type:"query", q:"Return employees whose FirstName starts with the letter 'a' (case-insensitive).", hint:"LIKE with % at the end. In SQLite, LIKE is not case-sensitive by default.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE 'a%'" },
+      { type:"query", q:"Return employees whose FirstName contains the letter 'k'.", hint:"% from both sides.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%k%'" },
       { type:"query", q:"Return employees whose FirstName ends with the letter 'h'.", hint:"% before the character.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName LIKE '%h'" },
       { type:"query", q:"Return employees whose FirstName starts with a single character in the lowercase range 'a-p'.", hint:"In SQLite you use GLOB with brackets: '[a-p]*' (GLOB is case-sensitive).", solution:"SELECT * FROM EmployeeDetail WHERE FirstName GLOB '[a-p]*'" },
       { type:"query", q:"Return employees whose Gender ends with 'le' and is 4 characters long.", hint:"In LIKE the _ character represents a single character. Two underscores + le.", solution:"SELECT * FROM EmployeeDetail WHERE Gender LIKE '__le'" },
-      { type:"query", q:"Return the list of distinct departments.", hint:"DISTINCT removes duplicates.", solution:"SELECT DISTINCT Department FROM EmployeeDetail" },
-      { type:"query", q:"Return the highest salary.", hint:"The MAX aggregate function.", solution:"SELECT MAX(Salary) FROM EmployeeDetail" },
-      { type:"query", q:"Return the lowest salary.", hint:"The MIN aggregate function.", solution:"SELECT MIN(Salary) FROM EmployeeDetail" },
+      { type:"query", q:"Return the list of unique departments.", hint:"DISTINCT removes duplicates.", solution:"SELECT DISTINCT Department FROM EmployeeDetail" },
+      { type:"query", q:"Return the highest salary.", hint:"The aggregate function MAX.", solution:"SELECT MAX(Salary) FROM EmployeeDetail" },
+      { type:"query", q:"Return the lowest salary.", hint:"The aggregate function MIN.", solution:"SELECT MIN(Salary) FROM EmployeeDetail" },
       { type:"mcq", q:"Which character in LIKE represents any sequence of characters (zero or more)?",
         options:["_ (underscore)","% (percent)","* (asterisk)","? (question mark)"], correct:1,
-        explain:"In LIKE the % character represents a sequence of zero or more characters, and the _ character represents a single character. The asterisk * is used in GLOB, not in LIKE." }
+        explain:"In LIKE, the % character represents a sequence of zero or more characters, and the _ character represents exactly one character. The asterisk * is used in GLOB, not in LIKE." }
     ]
   },
   {
@@ -619,14 +619,14 @@ const CATEGORIES = [
     desc: "strftime, julianday — working with dates in SQLite",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Show JoiningDate in the format \"yyyy/mm/dd\".", hint:"strftime with a format pattern.", solution:"SELECT strftime('%Y/%m/%d', JoiningDate) FROM EmployeeDetail" },
-      { type:"query", q:"Show only the time part (HH:MM:SS) of JoiningDate.", hint:"strftime with %H:%M:%S", solution:"SELECT strftime('%H:%M:%S', JoiningDate) FROM EmployeeDetail" },
-      { type:"query", q:"Return only the year part of JoiningDate.", hint:"strftime('%Y', ...)", solution:"SELECT strftime('%Y', JoiningDate) FROM EmployeeDetail" },
-      { type:"query", q:"Return only the month part of JoiningDate.", hint:"strftime('%m', ...)", solution:"SELECT strftime('%m', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Display JoiningDate in the format \"yyyy/mm/dd\".", hint:"strftime with a format pattern.", solution:"SELECT strftime('%Y/%m/%d', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Show only the time portion (HH:MM:SS) of JoiningDate.", hint:"strftime with %H:%M:%S", solution:"SELECT strftime('%H:%M:%S', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Return only the year part from JoiningDate.", hint:"strftime('%Y', ...)", solution:"SELECT strftime('%Y', JoiningDate) FROM EmployeeDetail" },
+      { type:"query", q:"Return only the month part from JoiningDate.", hint:"strftime('%m', ...)", solution:"SELECT strftime('%m', JoiningDate) FROM EmployeeDetail" },
       { type:"query", q:"Return the current date.", hint:"date('now') in SQLite.", solution:"SELECT date('now')" },
       { type:"query", q:"Return employees whose joining year is 2013.", hint:"Filter by strftime('%Y', ...).", solution:"SELECT * FROM EmployeeDetail WHERE strftime('%Y', JoiningDate) = '2013'" },
       { type:"query", q:"Return employees whose joining month is January (01).", hint:"strftime('%m', ...) = '01'", solution:"SELECT * FROM EmployeeDetail WHERE strftime('%m', JoiningDate) = '01'" },
-      { type:"query", q:"Return employees whose joining date is between 2013-01-01 and 2013-12-01.", hint:"BETWEEN for a date range.", solution:"SELECT * FROM EmployeeDetail WHERE JoiningDate BETWEEN '2013-01-01' AND '2013-12-01'" },
+      { type:"query", q:"Return employees whose join date is between 2013-01-01 and 2013-12-01.", hint:"BETWEEN for a date range.", solution:"SELECT * FROM EmployeeDetail WHERE JoiningDate BETWEEN '2013-01-01' AND '2013-12-01'" },
       { type:"query", q:"How many employees joined in 2014?", hint:"Filter by strftime('%Y', JoiningDate) = '2014' and count with COUNT(*).", solution:"SELECT COUNT(*) FROM EmployeeDetail WHERE strftime('%Y', JoiningDate) = '2014'" },
       { type:"mcq", q:"Which function in SQLite returns the current date and time?",
         options:["GETDATE()","NOW()","datetime('now')","SYSDATE"], correct:2,
@@ -638,16 +638,16 @@ const CATEGORIES = [
     desc: "IN / NOT IN, BETWEEN, CASE, LIMIT/OFFSET — and the second-highest value",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Return only one row (the first).", hint:"In SQLite you use LIMIT, not TOP.", solution:"SELECT * FROM EmployeeDetail LIMIT 1" },
-      { type:"query", q:"Return employees named \"Vikas\", \"Ashish\", or \"Nikhil\".", hint:"IN with a list of values.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName IN ('Vikas','Ashish','Nikhil')" },
-      { type:"query", q:"Return employees whose name is *not* \"Vikas\", \"Ashish\", or \"Nikhil\".", hint:"NOT IN.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName NOT IN ('Vikas','Ashish','Nikhil')" },
-      { type:"query", q:"Return FirstName after trimming spaces from the right.", hint:"RTRIM() removes spaces from the right.", solution:"SELECT RTRIM(FirstName) AS FirstName FROM EmployeeDetail" },
+      { type:"query", q:"Return only one row (the first).", hint:"In SQLite, you use LIMIT, not TOP.", solution:"SELECT * FROM EmployeeDetail LIMIT 1" },
+      { type:"query", q:"Return employees whose name is \"Vikas\", \"Ashish\", or \"Nikhil\".", hint:"IN with a list of values.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName IN ('Vikas','Ashish','Nikhil')" },
+      { type:"query", q:"Return employees whose name *is not* \"Vikas\", \"Ashish\" or \"Nikhil\".", hint:"NOT IN.", solution:"SELECT * FROM EmployeeDetail WHERE FirstName NOT IN ('Vikas','Ashish','Nikhil')" },
+      { type:"query", q:"Return FirstName after removing trailing spaces.", hint:"RTRIM() removes spaces from the right.", solution:"SELECT RTRIM(FirstName) AS FirstName FROM EmployeeDetail" },
       { type:"query", q:"Show name and gender as M/F (male=M, female=F).", hint:"CASE WHEN ... THEN ... END.", solution:"SELECT FirstName, CASE WHEN Gender='Male' THEN 'M' WHEN Gender='Female' THEN 'F' END AS Gender FROM EmployeeDetail" },
-      { type:"query", q:"Show FirstName with the prefix \"Hello \".", hint:"Concatenation with ||", solution:"SELECT 'Hello ' || FirstName FROM EmployeeDetail" },
-      { type:"query", q:"Return employees whose salary is greater than 600000.", hint:"The > operator", solution:"SELECT * FROM EmployeeDetail WHERE Salary > 600000" },
+      { type:"query", q:"Display FirstName with the prefix \"Hello \".", hint:"Concatenation with ||", solution:"SELECT 'Hello ' || FirstName FROM EmployeeDetail" },
+      { type:"query", q:"Return employees whose salary is above 600000.", hint:"Operator >", solution:"SELECT * FROM EmployeeDetail WHERE Salary > 600000" },
       { type:"query", q:"Return employees whose salary is between 500000 and 600000.", hint:"BETWEEN.", solution:"SELECT * FROM EmployeeDetail WHERE Salary BETWEEN 500000 AND 600000" },
-      { type:"query", q:"Return the second-highest salary.", hint:"In SQLite: LIMIT 1 OFFSET 1 on a descending sorted list.", solution:"SELECT Salary FROM EmployeeDetail ORDER BY Salary DESC LIMIT 1 OFFSET 1" },
-      { type:"mcq", q:"How do you limit the number of rows returned in SQLite (instead of SQL Server's TOP)?",
+      { type:"query", q:"Return the second-highest salary.", hint:"In SQLite: LIMIT 1 OFFSET 1 on a list sorted descending.", solution:"SELECT Salary FROM EmployeeDetail ORDER BY Salary DESC LIMIT 1 OFFSET 1" },
+      { type:"mcq", q:"How do you limit the number of rows returned in SQLite (instead of SQL Server TOP)?",
         options:["TOP n","LIMIT n","ROWNUM <= n","FETCH FIRST n"], correct:1,
         explain:"In SQLite (and MySQL) you use LIMIT n. TOP belongs to SQL Server, ROWNUM to Oracle, and FETCH FIRST is the ANSI standard." }
     ]
@@ -657,15 +657,15 @@ const CATEGORIES = [
     desc: "Aggregate functions: MIN/MAX/SUM/AVG/COUNT, GROUP BY and HAVING",
     tables: ["EmployeeDetail","ProjectDetail"],
     questions: [
-      { type:"query", q:"Return the department and the total salaries in each department.", hint:"GROUP BY + SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
-      { type:"query", q:"Return the department and total salaries, sorted ascending by the total.", hint:"ORDER BY on SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY SUM(Salary) ASC" },
+      { type:"query", q:"Return department and total salaries in each department.", hint:"GROUP BY + SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"Return department and total salaries, sorted ascending by the sum.", hint:"ORDER BY on SUM.", solution:"SELECT Department, SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY SUM(Salary) ASC" },
       { type:"query", q:"Return the department, the number of employees in it, and the total salaries.", hint:"COUNT(*) and SUM in the same GROUP BY.", solution:"SELECT Department, COUNT(*) AS \"Dept Counts\", SUM(Salary) AS \"Total Salary\" FROM EmployeeDetail GROUP BY Department" },
-      { type:"query", q:"Return the average salary per department, sorted ascending.", hint:"AVG.", solution:"SELECT Department, AVG(Salary) AS \"Average Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY AVG(Salary) ASC" },
-      { type:"query", q:"Return the maximum salary per department.", hint:"MAX in each group.", solution:"SELECT Department, MAX(Salary) AS \"Max Salary\" FROM EmployeeDetail GROUP BY Department" },
-      { type:"query", q:"Return the names of projects assigned to more than one employee.", hint:"GROUP BY + HAVING COUNT(*) > 1.", solution:"SELECT ProjectName, COUNT(*) AS NoofEmp FROM ProjectDetail GROUP BY ProjectName HAVING COUNT(*) > 1" },
-      { type:"mcq", q:"What is the main difference between WHERE and HAVING?",
+      { type:"query", q:"Return the average salary for each department, sorted ascending.", hint:"AVG.", solution:"SELECT Department, AVG(Salary) AS \"Average Salary\" FROM EmployeeDetail GROUP BY Department ORDER BY AVG(Salary) ASC" },
+      { type:"query", q:"Return the maximum salary for each department.", hint:"MAX in every group.", solution:"SELECT Department, MAX(Salary) AS \"Max Salary\" FROM EmployeeDetail GROUP BY Department" },
+      { type:"query", q:"Return the names of projects associated with more than one employee.", hint:"GROUP BY + HAVING COUNT(*) > 1.", solution:"SELECT ProjectName, COUNT(*) AS NoofEmp FROM ProjectDetail GROUP BY ProjectName HAVING COUNT(*) > 1" },
+      { type:"mcq", q:"What's the central difference between WHERE and HAVING?",
         options:["No difference, they are interchangeable","WHERE filters rows before grouping, HAVING filters groups after grouping","HAVING is always faster","WHERE works only on numbers"], correct:1,
-        explain:"WHERE filters individual rows before GROUP BY and cannot use aggregate functions. HAVING filters the groups after grouping and can use SUM, COUNT, etc." }
+        explain:"WHERE filters individual rows before GROUP BY and can't use aggregate functions. HAVING filters the groups after grouping and can use SUM, COUNT, etc." }
     ]
   },
   {
@@ -674,29 +674,29 @@ const CATEGORIES = [
     tables: ["EmployeeDetail","ProjectDetail"],
     questions: [
       { type:"query", q:"Return the employee name and project name only for employees assigned to a project, sorted by name.", hint:"INNER JOIN on EmployeeID = EmployeeDetailID.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A INNER JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
-      { type:"query", q:"Return the employee name and project name for all employees, including those without a project.", hint:"LEFT JOIN keeps the entire left table.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
-      { type:"query", q:"Same as before, but if there is no project show '-No Project Assigned'.", hint:"In SQLite you use IFNULL (not ISNULL).", solution:"SELECT FirstName, IFNULL(ProjectName,'-No Project Assigned') FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"Return the employee name and project name for all employees, including those with no project.", hint:"LEFT JOIN keeps the entire left table.", solution:"SELECT FirstName, ProjectName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
+      { type:"query", q:"Like before, but if there's no project show '-No Project Assigned'.", hint:"In SQLite you use IFNULL (not ISNULL).", solution:"SELECT FirstName, IFNULL(ProjectName,'-No Project Assigned') FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID ORDER BY FirstName" },
       { type:"query", q:"Find employees not assigned to any project.", hint:"LEFT JOIN + WHERE ProjectName IS NULL.", solution:"SELECT FirstName FROM EmployeeDetail A LEFT JOIN ProjectDetail B ON A.EmployeeID = B.EmployeeDetailID WHERE ProjectName IS NULL" },
-      { type:"query", q:"Return employees assigned to more than one project.", hint:"A subquery with GROUP BY ... HAVING COUNT(*) > 1.", solution:"SELECT EmployeeID, FirstName, ProjectName FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID WHERE EmployeeID IN (SELECT EmployeeDetailID FROM ProjectDetail GROUP BY EmployeeDetailID HAVING COUNT(*) > 1)" },
-      { type:"mcq", q:"Which JOIN returns all the rows from the left table, even if there is no match in the right table?",
+      { type:"query", q:"Return employees who are assigned to more than one project.", hint:"A subquery with GROUP BY ... HAVING COUNT(*) > 1.", solution:"SELECT EmployeeID, FirstName, ProjectName FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID WHERE EmployeeID IN (SELECT EmployeeDetailID FROM ProjectDetail GROUP BY EmployeeDetailID HAVING COUNT(*) > 1)" },
+      { type:"mcq", q:"Which JOIN returns all rows from the left table, even if there's no match in the right table?",
         options:["INNER JOIN","LEFT JOIN","CROSS JOIN","Self JOIN"], correct:1,
-        explain:"LEFT JOIN keeps all the rows of the left table; where there is no match, the right table's columns get NULL." }
+        explain:"LEFT JOIN keeps all the rows of the left table; where there's no match, the right table's columns get NULL." }
     ]
   },
   {
     id: "tricky-joins", title: "Tricky JOINs",
-    desc: "Members2023 vs Members2024 — who renewed, who left, the behavior of conditions and NULL",
+    desc: "Members2023 vs Members2024 — who renewed, who left, condition and NULL behavior",
     tables: ["Members2023","Members2024"],
     questions: [
       { type:"query", q:"Find the members who appear in both Members2023 and Members2024 (renewed membership) by ID. Show 4 columns (INNER JOIN).", hint:"INNER JOIN ON A.ID = B.ID.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID" },
-      { type:"query", q:"Find the members who were in Members2023 but did not renew in Members2024 (left) — by ID.", hint:"LEFT JOIN + WHERE B.ID IS NULL.", solution:"SELECT A.ID, A.Name FROM Members2023 A LEFT JOIN Members2024 B ON A.ID = B.ID WHERE B.ID IS NULL" },
-      { type:"query", q:"INNER JOIN with a double condition: match on both ID and Name (exactly the same person in both years).", hint:"ON A.ID = B.ID AND A.Name = B.Name.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID AND A.Name = B.Name" },
+      { type:"query", q:"Find the members who were in Members2023 but didn't renew in Members2024 (left) — by ID.", hint:"LEFT JOIN + WHERE B.ID IS NULL.", solution:"SELECT A.ID, A.Name FROM Members2023 A LEFT JOIN Members2024 B ON A.ID = B.ID WHERE B.ID IS NULL" },
+      { type:"query", q:"INNER JOIN with a double condition: a match on both ID and Name (the exact same person in both years).", hint:"ON A.ID = B.ID AND A.Name = B.Name.", solution:"SELECT A.ID, A.Name, B.ID, B.Name FROM Members2023 A INNER JOIN Members2024 B ON A.ID = B.ID AND A.Name = B.Name" },
       { type:"mcq", q:"Given an INNER JOIN with the condition ON A.ID = B.ID OR A.Name = B.Name — how does the result change compared to AND?",
-        options:["The result narrows","The result grows — it is enough that one condition holds","No change","Throws an error"], correct:1,
-        explain:"OR broadens the matches: a row is included if at least one condition holds. AND narrows it because both conditions must hold together." },
+        options:["The result shrinks","The result grows — it's enough that one condition holds","No change","throws an error"], correct:1,
+        explain:"OR widens the matches: a row is included if at least one condition holds. AND narrows because both conditions must hold together." },
       { type:"mcq", q:"What is the correct pattern for finding rows that exist in Members2023 but not in Members2024 (anti-join)?",
         options:["INNER JOIN only","LEFT JOIN + WHERE B.ID IS NULL","CROSS JOIN","RIGHT JOIN only"], correct:1,
-        explain:"LEFT JOIN keeps all the rows of A; where there is no match in B the columns get NULL, so WHERE B.ID IS NULL isolates exactly those rows." }
+        explain:"LEFT JOIN keeps all rows of A; where there’s no match in B the columns get NULL, so WHERE B.ID IS NULL isolates exactly those rows." }
     ]
   },
   {
@@ -704,64 +704,64 @@ const CATEGORIES = [
     desc: "CREATE TABLE, PRIMARY KEY, FOREIGN KEY, AUTOINCREMENT",
     tables: [],
     questions: [
-      { type:"query", q:"Create a table called NewEmp with an auto-increment id column (primary key) and a text name column. (Run it — if there's no error, you succeeded)", hint:"In SQLite: INTEGER PRIMARY KEY AUTOINCREMENT.", solution:"CREATE TABLE NewEmp (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)", noResult:true },
-      { type:"mcq", q:"How do you define an auto-increment column in SQLite?",
+      { type:"query", q:"Create a table named NewEmp with an auto-increment id column (primary key) and a text name column. (Run it — if there's no error, you succeeded)", hint:"In SQLite: INTEGER PRIMARY KEY AUTOINCREMENT.", solution:"CREATE TABLE NewEmp (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)", noResult:true },
+      { type:"mcq", q:"How do you define an auto-increment ID column in SQLite?",
         options:["INT IDENTITY(1,1)","AUTO_INCREMENT","INTEGER PRIMARY KEY AUTOINCREMENT","SEQUENCE"], correct:2,
         explain:"In SQLite: INTEGER PRIMARY KEY AUTOINCREMENT. IDENTITY(1,1) belongs to SQL Server, AUTO_INCREMENT to MySQL, and SEQUENCE to Oracle/PostgreSQL." },
       { type:"mcq", q:"What is the purpose of a FOREIGN KEY constraint?",
         options:["To speed up queries","To reference a key column in another table and enforce referential integrity","To prevent NULL values","To encrypt data"], correct:1,
-        explain:"A FOREIGN KEY points to a PRIMARY KEY in another table and prevents operations that would break the relationships — enforcing referential integrity." }
+        explain:"FOREIGN KEY points to a PRIMARY KEY in another table and prevents actions that would break the relationships — enforcing referential integrity." }
     ]
   },
   {
-    id: "tricky", title: "Short, tricky questions",
-    desc: "The behavior of SELECT, NULL, aggregation — a comprehension test",
+    id: "tricky", title: "Short and tricky questions",
+    desc: "SELECT behavior, NULL, aggregation — comprehension test",
     tables: [],
     questions: [
       { type:"query", q:"Run: SELECT 15", hint:"SELECT without FROM returns the expression as a constant.", solution:"SELECT 15" },
       { type:"query", q:"Run a query that returns 'VIKAS1' by concatenating 'VIKAS' and '1'.", hint:"Concatenation with ||", solution:"SELECT 'VIKAS' || '1'" },
-      { type:"query", q:"Run: SELECT COUNT(*) without FROM. How many will be returned?", hint:"The single 'empty row' is counted.", solution:"SELECT COUNT(*)" },
-      { type:"mcq", q:"What is the output of: SELECT NULL + 5",
-        options:["5","0","NULL","Error"], correct:2,
-        explain:"Any arithmetic operation with NULL returns NULL. NULL represents 'unknown', so 'unknown' + 5 = 'unknown'." },
+      { type:"query", q:"Run: SELECT COUNT(*) without FROM. What will be returned?", hint:"The single 'blank row' is counted.", solution:"SELECT COUNT(*)" },
+      { type:"mcq", q:"What's the output of: SELECT NULL + 5",
+        options:["5","0","NULL","error"], correct:2,
+        explain:"Every arithmetic operation with NULL returns NULL. NULL represents 'unknown', so 'unknown' + 5 = 'unknown'." },
       { type:"mcq", q:"What is the output of: SELECT 1 WHERE NULL = NULL",
-        options:["1","NULL","0 rows (nothing)","Error"], correct:2,
-        explain:"NULL = NULL is not TRUE but UNKNOWN — NULL is not even equal to itself. To check for NULL you use IS NULL." },
-      { type:"mcq", q:"What is the output of: SELECT SUM(NULL)",
-        options:["0","NULL","Error","1"], correct:1,
-        explain:"When there are no non-NULL values to aggregate, SUM returns NULL. If there is at least one valid value, SUM ignores the NULLs and aggregates the rest." },
+        options:["1","NULL","0 rows (nothing)","error"], correct:2,
+        explain:"NULL = NULL is not TRUE but UNKNOWN — NULL — NULL isn't even equal to itself. To check for NULL you use-IS NULL." },
+      { type:"mcq", q:"What's the output of: SELECT SUM(NULL)",
+        options:["0","NULL","error","1"], correct:1,
+        explain:"When there are no non-NULL values to aggregate, SUM returns NULL. If there's at least one valid value, SUM ignores the NULLs and aggregates the rest." },
       { type:"mcq", q:"What is the output of integer division: SELECT 0/9 (in SQLite)",
-        options:["0","NULL","Division-by-zero error","0.0"], correct:0,
+        options:["0","NULL","Division by zero error","0.0"], correct:0,
         explain:"0 divided by 9 in integer division is 0. In contrast, 9/0 in SQLite returns NULL (unlike SQL Server, which throws an error)." }
     ]
   },
   {
     id: "advanced", title: "Advanced queries",
-    desc: "group_concat, sequence analysis, CTE and window functions (ROW_NUMBER/DENSE_RANK)",
+    desc: "group_concat, gaps-and-islands analysis, CTEs and window functions (ROW_NUMBER/DENSE_RANK)",
     tables: ["EmployeeDetail","ProjectDetail","FuelDetail"],
     questions: [
-      { type:"query", q:"Show all the employee names in a single cell, separated by commas.", hint:"In SQLite you use group_concat (instead of STUFF/FOR XML).", solution:"SELECT group_concat(FirstName, ', ') AS \"All Emp Name\" FROM EmployeeDetail" },
-      { type:"query", q:"For each project, show the names of the employees working on it, separated by commas.", hint:"JOIN + GROUP BY ProjectName + group_concat.", solution:"SELECT P.ProjectName, group_concat(E.FirstName, ', ') AS \"Employee Name\" FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID GROUP BY P.ProjectName" },
-      { type:"query", q:"In the FuelDetail table, find the moments when the fuel amount rose compared to the previous measurement (refueling). Show ID, Fuel, Date.", hint:"A self join by adjacent ID. Filter where Fuel increased.", solution:"SELECT FD.ID, FD.Fuel, FD.Date FROM FuelDetail FD INNER JOIN FuelDetail FD1 ON FD1.ID = FD.ID - 1 WHERE FD.Fuel > FD1.Fuel" },
-      { type:"query", q:"Using a recursive CTE, produce the numbers 1 to 10.", hint:"WITH RECURSIVE cte(n) AS (SELECT 1 ... UNION ALL ... WHERE n<10).", solution:"WITH RECURSIVE cte(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM cte WHERE n < 10) SELECT n FROM cte" },
+      { type:"query", q:"Display all employee names in one cell, separated by commas.", hint:"In SQLite you use group_concat (instead of STUFF/FOR XML).", solution:"SELECT group_concat(FirstName, ', ') AS \"All Emp Name\" FROM EmployeeDetail" },
+      { type:"query", q:"For each project, show the names of the employees working on it, comma-separated.", hint:"JOIN + GROUP BY ProjectName + group_concat.", solution:"SELECT P.ProjectName, group_concat(E.FirstName, ', ') AS \"Employee Name\" FROM EmployeeDetail E INNER JOIN ProjectDetail P ON E.EmployeeID = P.EmployeeDetailID GROUP BY P.ProjectName" },
+      { type:"query", q:"In the FuelDetail table, find the moments when the fuel amount increased compared to the previous reading (refueling). Show ID, Fuel, Date.", hint:"Self JOIN by adjacent ID. Filter where Fuel increased.", solution:"SELECT FD.ID, FD.Fuel, FD.Date FROM FuelDetail FD INNER JOIN FuelDetail FD1 ON FD1.ID = FD.ID - 1 WHERE FD.Fuel > FD1.Fuel" },
+      { type:"query", q:"Using a recursive CTE, produce the numbers 1 through 10.", hint:"WITH RECURSIVE cte(n) AS (SELECT 1 ... UNION ALL ... WHERE n<10).", solution:"WITH RECURSIVE cte(n) AS (SELECT 1 UNION ALL SELECT n+1 FROM cte WHERE n < 10) SELECT n FROM cte" },
       { type:"mcq", q:"Which function in SQLite concatenates values from multiple rows into a single string (like STUFF/FOR XML in SQL Server)?",
         options:["CONCAT_WS","group_concat","STRING_AGG","STUFF"], correct:1,
-        explain:"In SQLite: group_concat(col, sep). Modern SQL Server has STRING_AGG. CONCAT_WS concatenates columns in the same row, not rows." }
+        explain:"In SQLite: group_concat(col, sep). In modern SQL Server there's STRING_AGG. CONCAT_WS concatenates columns in the same row, not rows." }
     ]
   },
   {
     id: "tcs", title: "Tricky questions (TCS)",
-    desc: "swapping values, counting characters, CAST, Cartesian product",
+    desc: "swap values, counting characters, CAST, Cartesian product",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Select a random record from the EmployeeDetail table.", hint:"ORDER BY RANDOM() LIMIT 1 (in SQLite RANDOM(), not NEWID()).", solution:"SELECT * FROM EmployeeDetail ORDER BY RANDOM() LIMIT 1" },
-      { type:"query", q:"Count how many times the (uppercase) letter 'A' appears in the string 'VIKASAAA'.", hint:"Trick: original length minus the length after removing the character.", solution:"SELECT LENGTH('VIKASAAA') - LENGTH(REPLACE('VIKASAAA','A',''))" },
-      { type:"query", q:"For 5/2, get the result 2.5 (and not integer division).", hint:"Cast to REAL before the division.", solution:"SELECT CAST(5 AS REAL) / 2" },
-      { type:"mcq", q:"How do you select a random row in SQLite (instead of SQL Server's ORDER BY NEWID())?",
+      { type:"query", q:"Select a random record from the EmployeeDetail table.", hint:"ORDER BY RANDOM() LIMIT 1 (in SQLite it's RANDOM(), not NEWID()).", solution:"SELECT * FROM EmployeeDetail ORDER BY RANDOM() LIMIT 1" },
+      { type:"query", q:"Count how many times the letter 'A' (uppercase) appears in the string 'VIKASAAA'.", hint:"Trick: original length minus the length after removing the character.", solution:"SELECT LENGTH('VIKASAAA') - LENGTH(REPLACE('VIKASAAA','A',''))" },
+      { type:"query", q:"For 5/2 you get a result of 2.5 (not integer division).", hint:"Convert to REAL before dividing.", solution:"SELECT CAST(5 AS REAL) / 2" },
+      { type:"mcq", q:"How do you choose a random row in SQLite (instead of SQL Server ORDER BY NEWID())?",
         options:["ORDER BY RAND() LIMIT 1","ORDER BY RANDOM() LIMIT 1","SELECT TOP 1 ... ORDER BY NEWID()","SAMPLE 1"], correct:1,
         explain:"In SQLite: ORDER BY RANDOM() LIMIT 1. In MySQL it's RAND(), and in SQL Server it's NEWID() with TOP 1." },
-      { type:"mcq", q:"How many rows will a Cartesian product of a table with 100 rows and a table with 0 rows return?",
-        options:["100","0","Error","Infinity"], correct:1,
+      { type:"mcq", q:"How many rows will a cartesian product of a table with 100 rows and a table with 0 rows return?",
+        options:["100","0","error","infinity"], correct:1,
         explain:"A Cartesian product = 100 × 0 = 0 rows. Any JOIN against an empty table returns an empty result." }
     ]
   },
@@ -773,75 +773,75 @@ const CATEGORIES = [
       { type:"mcq", q:"What are the two main character data types that SQL Server supports?",
         options:["Short and Long","Regular and Unicode","Fixed and Float","ASCII and Binary"], correct:1,
         explain:"Regular (CHAR, VARCHAR) and Unicode (NCHAR, NVARCHAR). Unicode types prefix the literal with N, e.g. N'text', and take 2 bytes per character." },
-      { type:"mcq", q:"What is the difference between DATETIME and TIMESTAMP in SQL Server?",
-        options:["They are identical","DATETIME is a regular date-time type; TIMESTAMP (ROWVERSION) is a binary number that updates on every change to the row","TIMESTAMP is more precise","DATETIME does not store time"], correct:1,
-        explain:"DATETIME stores a date and time. TIMESTAMP (renamed ROWVERSION) is a unique number that auto-updates on every change to the row — for version control, not for time. Its size is 8 bytes." },
+      { type:"mcq", q:"What's the difference between DATETIME and TIMESTAMP in SQL Server?",
+        options:["they are identical","DATETIME is a regular date-time type; TIMESTAMP (ROWVERSION) is a binary number that updates on every change to the row","TIMESTAMP is more precise","DATETIME does not keep the time"], correct:1,
+        explain:"DATETIME stores date and time. TIMESTAMP (whose name was changed to ROWVERSION) is a unique number that updates automatically on every row change - for version control, not time. Its size is 8 bytes." },
       { type:"mcq", q:"What is the maximum size of varchar(max) in SQL Server?",
-        options:["8000 bytes","2GB (about 2 billion characters)","4000 characters","No limit"], correct:1,
-        explain:"varchar(max) stores up to 2GB (2^31-1 characters). Up to 8000 bytes the data is in the row; beyond that it is stored as a LOB with a pointer." },
-      { type:"mcq", q:"When working only with a time in a DATETIME type (without a date), what date does SQL Server fill in?",
+        options:["8000 bytes","2GB (about 2 billion characters)","4000 characters","Without limit"], correct:1,
+        explain:"varchar(max) stores up to 2GB (2^31-1 characters). Up to 8000 bytes the data stays in the row; beyond that it is stored as a LOB with a pointer." },
+      { type:"mcq", q:"When working only with a time in the DATETIME type (without a date), what date does SQL Server fill in?",
         options:["The current date","January 1, 1900","January 1, 1970","NULL"], correct:1,
-        explain:"SQL Server fills the date part as January 1, 1900 when you provide only a time." },
-      { type:"mcq", q:"How do you express a string literal in a Unicode (NVARCHAR) column in SQL Server?",
-        options:["With single quotes only","With the prefix N before the string: N'text'","With U'text'","With double quotes"], correct:1,
-        explain:"You prefix the string with N, e.g. N'hello'. In a regular column 'text' with single quotes is enough." }
+        explain:"SQL Server fills in the date part as January 1, 1900 when only a time is supplied." },
+      { type:"mcq", q:"How do you express a literal string in a Unicode column (NVARCHAR) in SQL Server?",
+        options:["with single quotes only","with the N prefix before the string: N'text'","With U'text'","With double quotes"], correct:1,
+        explain:"Prefix the string with N, e.g. N'Hello'. A regular column just needs 'text' with plain quotes." }
     ]
   },
   {
-    id: "views", title: "Views",
-    desc: "definition, goals, SCHEMABINDING, encryption",
+    id: "views", title: "Views (Views)",
+    desc: "Definition, purposes, SCHEMABINDING, encryption",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Create a View called vIT that shows the name and salary only for IT department employees, then select from it.", hint:"CREATE VIEW ... AS SELECT ...; SELECT * FROM vIT", solution:"CREATE VIEW vIT AS SELECT FirstName, Salary FROM EmployeeDetail WHERE Department='IT'; SELECT * FROM vIT" },
+      { type:"query", q:"Create a View named vIT that shows name and salary only for IT department employees, then select from it.", hint:"CREATE VIEW ... AS SELECT ...; SELECT * FROM vIT", solution:"CREATE VIEW vIT AS SELECT FirstName, Salary FROM EmployeeDetail WHERE Department='IT'; SELECT * FROM vIT" },
       { type:"mcq", q:"What is a View in SQL?",
-        options:["An additional physical table","A virtual table whose content is defined by a saved SELECT query","A backup copy of a table","A special index"], correct:1,
-        explain:"A View is a virtual table — essentially a saved SELECT statement that behaves like a table. It usually has no physical storage of its own." },
+        options:["An additional physical table","A virtual table whose content is defined by a stored SELECT query","A backup copy of a table","A special index"], correct:1,
+        explain:"View is a virtual table — essentially a saved SELECT statement that behaves like a table. It usually has no physical storage of its own." },
       { type:"mcq", q:"What are the main purposes of creating a View?",
-        options:["Only for speed","Security, simplifying complex queries, and quick response","Only for backup","To replace procedures"], correct:1,
-        explain:"A View is used for security (restricting access), simplifying complex queries, and quick responses. A View does not take parameters — unlike a procedure." },
-      { type:"mcq", q:"How do you encrypt a View in SQL Server so its code cannot be seen?",
+        options:["only for acceleration","Security, simplifying complex queries, and fast response","For backup only","To replace procedures"], correct:1,
+        explain:"A View is used for security (restricting access), simplifying complex queries, and fast response. A View doesn't accept parameters — unlike a stored procedure." },
+      { type:"mcq", q:"How do you encrypt a View in SQL Server so its code can't be seen?",
         options:["WITH PASSWORD","WITH ENCRYPTION","SET HIDDEN","ENCRYPT VIEW"], correct:1,
-        explain:"You use WITH ENCRYPTION when creating the View. Under SCHEMABINDING, by the way, you may not use SELECT* — you must specify column names." }
+        explain:"Use WITH ENCRYPTION when creating the View. Under SCHEMABINDING, by the way, you can't use SELECT* — you must specify column names." }
     ]
   },
   {
-    id: "indexes", title: "Indexes",
+    id: "indexes", title: "Indexes (Indexes)",
     desc: "Clustered vs Non-Clustered, B-Tree, Fill Factor",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Create an index called idx_dept on the Department column of the EmployeeDetail table.", hint:"CREATE INDEX name ON table(column).", solution:"CREATE INDEX idx_dept ON EmployeeDetail(Department)", noResult:true },
-      { type:"query", q:"Create a unique index called idx_uid on the EmployeeID column.", hint:"CREATE UNIQUE INDEX.", solution:"CREATE UNIQUE INDEX idx_uid ON EmployeeDetail(EmployeeID)", noResult:true },
-      { type:"mcq", q:"How many clustered indexes can there be in a single table?",
-        options:["Only one","Up to 249","No limit","Two"], correct:0,
-        explain:"Only one. The clustered index determines the physical order of the rows on disk, so there cannot be more than one. Non-clustered indexes can be many (up to 999)." },
-      { type:"mcq", q:"What is the main difference between a Clustered and a Non-Clustered Index?",
-        options:["No difference","Clustered determines the physical order of the rows; Non-Clustered defines a logical order with pointers to the data","Non-Clustered is always faster","Clustered takes less space"], correct:1,
-        explain:"Clustered sorts and stores the rows physically by the key (hence only one). Non-Clustered holds a key value + a pointer to the data, and defines a logical order that does not necessarily match the physical order." },
+      { type:"query", q:"Create an index named idx_dept on the Department column in the EmployeeDetail table.", hint:"CREATE INDEX name ON table(column).", solution:"CREATE INDEX idx_dept ON EmployeeDetail(Department)", noResult:true },
+      { type:"query", q:"Create a unique index named idx_uid on the EmployeeID column.", hint:"CREATE UNIQUE INDEX.", solution:"CREATE UNIQUE INDEX idx_uid ON EmployeeDetail(EmployeeID)", noResult:true },
+      { type:"mcq", q:"How many clustered indexes can there be on one table?",
+        options:["Only one","up to 249","Without limit","two"], correct:0,
+        explain:"Only one. The clustered index determines the physical order of rows on disk, so there can't be more than one. Non-clustered indexes can be numerous (up to 999)." },
+      { type:"mcq", q:"What's the key difference between a Clustered and a Non-Clustered Index?",
+        options:["No difference","Clustered determines the physical order of the rows; Non-Clustered defines a logical order with pointers to the data","Non-Clustered is always fast","Clustered takes up less space"], correct:1,
+        explain:"Clustered sorts and physically stores the rows by the key (which is why there can only be one). Non-Clustered contains a key value + a pointer to the data, and defines a logical order that doesn't necessarily match the physical order." },
       { type:"mcq", q:"What is the Fill Factor of an index?",
-        options:["The number of columns in the index","The percentage of space in each leaf page to be filled with data","The index size in MB","The number of rows in a page"], correct:1,
-        explain:"Fill Factor sets the fill percentage of each leaf page. The default of 100 fills the maximum rows. A lower value leaves room for updates and reduces page splits." }
+        options:["Number of columns in the index","Percent of space on each page that will be filled with data","The index size in MB","The number of rows on the page"], correct:1,
+        explain:"Fill Factor sets the fill percentage of each leaf page. The default of 100 fills the maximum number of rows. A lower value leaves room for updates and reduces page splits." }
     ]
   },
   {
     id: "sp", title: "Stored procedures (SP)",
-    desc: "definition, advantages, recursion, TRY-CATCH, SP vs View",
+    desc: "Definition, advantages, recursion, TRY-CATCH, SP vs View",
     tables: [],
     questions: [
-      { type:"mcq", q:"What is a Stored Procedure?",
-        options:["A virtual table","A named group of SQL statements, saved on the server in advance and accepting parameters","An index","A kind of View"], correct:1,
-        explain:"An SP is a named group of SQL statements stored on the server. It takes parameters, reduces network traffic, and improves performance (reuse of execution plans)." },
-      { type:"mcq", q:"What is a significant advantage of a stored procedure in terms of security?",
+      { type:"mcq", q:"What is a stored procedure?",
+        options:["Virtual table","A named group of SQL statements, pre-saved on the server and accepting parameters","index","A type of View"], correct:1,
+        explain:"An SP is a named group of SQL statements stored on the server. It accepts parameters, reduces network traffic, and improves performance (reusing execution plans)." },
+      { type:"mcq", q:"What's a significant advantage of a stored procedure from a security standpoint?",
         options:["It encrypts all the data","It can prevent SQL Injection attacks","It hides the database","It has no security advantage"], correct:1,
-        explain:"Using procedures with parameters prevents SQL Injection, because the input is handled as a parameter and not as code. In addition, the DBA controls who is allowed to run it." },
-      { type:"mcq", q:"How many levels can stored procedures be nested (including recursion)?",
-        options:["8","16","32","No limit"], correct:2,
+        explain:"Using stored procedures with parameters prevents SQL Injection, because the input is treated as a parameter, not as code. In addition, the DBA controls who is authorized to execute." },
+      { type:"mcq", q:"How many levels deep can stored procedures be nested (including recursion)?",
+        options:["8","16","32","Without limit"], correct:2,
         explain:"Up to 32 levels. T-SQL supports recursion, so a procedure can call itself." },
-      { type:"mcq", q:"Where can you use TRY-CATCH?",
-        options:["In a procedure and a function (UDF)","Only in a stored procedure, not in a function","Only in a function","In neither of them"], correct:1,
+      { type:"mcq", q:"Where can TRY-CATCH be used?",
+        options:["In a procedure and in a function (UDF)","Only in a stored procedure, not in a function","Only in the function","in none of them"], correct:1,
         explain:"TRY-CATCH is supported in procedures but not in user-defined functions (UDFs) — one of the limitations of functions." },
-      { type:"mcq", q:"What is the main difference between a Stored Procedure and a View?",
-        options:["No difference","An SP takes parameters and can contain logic and changes; a View takes no parameters and is a SELECT only","A View is always faster","An SP cannot return data"], correct:1,
-        explain:"A View is a saved SELECT with no parameters. An SP takes parameters, contains logic (IF/loops), and can modify tables. You can use a View inside an SP, but not the other way around." }
+      { type:"mcq", q:"What's the main difference between a Stored Procedure and a View?",
+        options:["No difference","An SP accepts parameters and can contain logic and changes; a View doesn't accept parameters and is just a SELECT","View is always fast","An SP cannot return data"], correct:1,
+        explain:"A View is a saved SELECT with no parameters. An SP takes parameters, contains logic (IF/loops), and can modify tables. You can have a View inside an SP, but not the other way around." }
     ]
   },
   {
@@ -851,16 +851,16 @@ const CATEGORIES = [
     questions: [
       { type:"mcq", q:"What are the two types of temporary tables in SQL Server?",
         options:["Fast and Slow","Local (#) and Global (##)","Public and Private","Memory and Disk"], correct:1,
-        explain:"A local one is marked with a single # and is visible only to the session that created it. A global one is marked with ## and is visible to all connections. Both are dropped when the session closes." },
+        explain:"A local one is marked with a single # and is visible only to the session that created it. A global one is marked with ## and is visible to all connections. Both are deleted when the session closes." },
       { type:"mcq", q:"In which database are temporary tables created?",
         options:["master","tempdb","model","msdb"], correct:1,
         explain:"All temporary tables are created in the tempdb database." },
-      { type:"mcq", q:"What is a unique feature of a Table Variable compared to a Temp Table?",
-        options:["It is always in memory only","ROLLBACK does not affect it and it does not participate in transactions/locks","It is always fast","It has detailed statistics"], correct:1,
-        explain:"A Table Variable is not affected by ROLLBACK, does not participate in transactions/locks, DML operations on it are not logged, and it has no statistics." },
-      { type:"mcq", q:"Can you create a FOREIGN KEY on a temporary table?",
-        options:["Yes, always","No","Only on Global","Only on Local"], correct:1,
-        explain:"You cannot create FOREIGN KEY constraints on temporary tables." }
+      { type:"mcq", q:"What's a unique feature of Table Variable versus a Temp Table?",
+        options:["It is always in memory only","ROLLBACK doesn't affect it and it doesn't participate in transactions/locks","It's always fast","It has detailed statistics"], correct:1,
+        explain:"A Table Variable is not affected by ROLLBACK, doesn't participate in transactions/locks, DML operations on it aren't logged, and it has no statistics." },
+      { type:"mcq", q:"Can a FOREIGN KEY be created on a temporary table?",
+        options:["yes, always","no","Only on Global","Only on Local"], correct:1,
+        explain:"You can't create FOREIGN KEY constraints on temporary tables." }
     ]
   },
   {
@@ -868,15 +868,15 @@ const CATEGORIES = [
     desc: "PRIMARY/FOREIGN KEY, UNIQUE, CHECK, DEFAULT",
     tables: [],
     questions: [
-      { type:"mcq", q:"How many Primary Keys can exist in a table?",
-        options:["Only one","Up to two","No limit","Depends on the table"], correct:0,
-        explain:"Only one primary key (but it can be composed of several columns). In contrast, you can have several UNIQUE constraints." },
+      { type:"mcq", q:"How many primary keys can exist in a table?",
+        options:["Only one","up to two","Without limit","Depends on the table"], correct:0,
+        explain:"Only one primary key (though it can be made up of several columns). In contrast, you can have multiple UNIQUE constraints." },
       { type:"mcq", q:"What is the difference between a Primary Key and a Unique Key?",
-        options:["No difference","A Unique allows one NULL value and you can have several per table; a Primary Key does not allow NULL and there is only one","A Primary Key allows NULL","A Unique allows duplicates"], correct:1,
-        explain:"A Unique allows one NULL value, and you can have several Unique constraints. A Primary Key = NOT NULL + UNIQUE, and there is only one per table." },
+        options:["No difference","Unique allows one NULL value and several are possible in the table; Primary Key doesn't allow NULL and there's only one","Primary Key allows NULL","Unique allows duplicates"], correct:1,
+        explain:"Unique allows one NULL value, and you can have several Unique constraints. Primary Key = NOT NULL + UNIQUE, and there's only one per table." },
       { type:"mcq", q:"When you create a Primary Key, which index is created automatically by default (in SQL Server)?",
         options:["Non-Clustered","Clustered","No index","Unique only"], correct:1,
-        explain:"A Primary Key creates a Clustered index by default. A Unique Key creates a Non-Clustered index by default." },
+        explain:"Primary Key creates a Clustered index by default. Unique Key creates a Non-Clustered index by default." },
       { type:"mcq", q:"What are the three types of data integrity?",
         options:["High/Medium/Low","Domain, Entity, Referential","Read/Write/Execute","Primary/Secondary/Tertiary"], correct:1,
         explain:"Domain Integrity (type, CHECK), Entity Integrity (Primary Key, Unique), and Referential Integrity (Foreign Key)." }
@@ -884,41 +884,41 @@ const CATEGORIES = [
   },
   {
     id: "storage", title: "Storage and sizes",
-    desc: "Page 8K, limits, LENGTH vs length in bytes",
+    desc: "Page 8K, limits, LENGTH vs. length in bytes",
     tables: ["EmployeeDetail"],
     questions: [
-      { type:"query", q:"Return the length of the string 'A value' (the number of characters).", hint:"In SQLite LENGTH() returns the number of characters.", solution:"SELECT LENGTH('A value')" },
+      { type:"query", q:"Return the length of the string 'A value' (the number of characters).", hint:"In SQLite, LENGTH() returns the number of characters.", solution:"SELECT LENGTH('A value')" },
       { type:"mcq", q:"What is the basic storage unit in SQL Server data files, and its size?",
-        options:["A 4K Block","An 8K Page","A 512B Sector","A 64K Extent"], correct:1,
-        explain:"The basic unit is a Page of 8K. Eight consecutive pages make up an Extent (64K)." },
-      { type:"mcq", q:"What is the difference between LEN() and DATALENGTH() in SQL Server?",
-        options:["They are identical","LEN returns characters without trailing spaces; DATALENGTH returns bytes including trailing spaces","DATALENGTH is faster","LEN works only on numbers"], correct:1,
-        explain:"LEN returns the length in characters without trailing spaces. DATALENGTH returns the length in bytes including trailing spaces. For Unicode each character = 2 bytes." },
-      { type:"mcq", q:"How much space does a NULL value take in a variable-width field?",
-        options:["Like a full value","Takes no space","Always 1 byte","Always 8 bytes"], correct:1,
-        explain:"In a variable-width field NULL takes no space. In a fixed-width field NULL takes the same space as any other value." }
+        options:["Block of size 4K","Page size of 8K","Sector of size 512B","Extent of size 64K"], correct:1,
+        explain:"The basic unit is a Page, 8K in size. Eight consecutive pages make up an Extent (64K)." },
+      { type:"mcq", q:"What's the difference between LEN() and DATALENGTH() in SQL Server?",
+        options:["they are identical","LEN returns characters without trailing spaces; DATALENGTH returns bytes including trailing spaces","DATALENGTH is faster","LEN works only on numbers"], correct:1,
+        explain:"LEN returns the length in characters without trailing spaces. DATALENGTH returns the length in bytes including trailing spaces. For Unicode, each character = 2 bytes." },
+      { type:"mcq", q:"How much space does a NULL value take up in a variable-width field?",
+        options:["like a full value","Doesn't take up space","Always 1 byte","Always 8 bytes"], correct:1,
+        explain:"In a variable-width field, NULL takes up no space. In a fixed-width field, NULL takes up the same space as any other value." }
     ]
   },
   {
-    id: "concepts", title: "Fundamental concepts",
-    desc: "locks, backups, DELETE/TRUNCATE, UNION, normalization",
+    id: "concepts", title: "Basic concepts",
+    desc: "Locks, backups, DELETE/TRUNCATE, UNION, normalization",
     tables: [],
     questions: [
-      { type:"mcq", q:"What is the difference between DELETE and TRUNCATE?",
-        options:["They are identical","DELETE allows WHERE and is logged row by row; TRUNCATE removes everything unconditionally and is faster","TRUNCATE allows WHERE","DELETE is faster"], correct:1,
-        explain:"DELETE removes rows selectively (with WHERE) and is logged row by row. TRUNCATE removes everything unconditionally, is faster, and is minimally logged. TRUNCATE is DDL and DELETE is DML." },
-      { type:"mcq", q:"What is the difference between UNION and UNION ALL?",
-        options:["They are identical","UNION removes duplicates (slower); UNION ALL does not (faster)","UNION ALL removes duplicates","UNION works only on two tables"], correct:1,
+      { type:"mcq", q:"What's the difference between DELETE and TRUNCATE?",
+        options:["they are identical","DELETE allows WHERE and logs row by row; TRUNCATE removes everything unconditionally and is faster","TRUNCATE allows WHERE","DELETE is faster"], correct:1,
+        explain:"DELETE removes rows selectively (with WHERE) and is logged row by row. TRUNCATE removes everything unconditionally, is faster, and is logged minimally. TRUNCATE is DDL and DELETE is DML." },
+      { type:"mcq", q:"What's the difference between UNION and UNION ALL?",
+        options:["they are identical","UNION removes duplicates (slower); UNION ALL doesn't remove them (faster)","UNION ALL removes duplicates","UNION only works on two tables"], correct:1,
         explain:"UNION removes duplicate rows (requires sorting, slower). UNION ALL returns everything including duplicates, so it is faster." },
       { type:"mcq", q:"What is the difference between a DDL Trigger and a DML Trigger?",
-        options:["No difference","DDL fires on structure changes (CREATE/ALTER/DROP); DML on data changes (INSERT/UPDATE/DELETE)","DML is fired manually","DDL works only on Views"], correct:1,
-        explain:"A DDL Trigger responds to structure changes. A DML Trigger responds to data changes." },
+        options:["No difference","DDL is invoked on structural changes (CREATE/ALTER/DROP); DML on data changes (INSERT/UPDATE/DELETE)","DML triggered manually","DDL works only on Views"], correct:1,
+        explain:"A DDL Trigger responds to structural changes. A DML Trigger responds to data changes." },
       { type:"mcq", q:"What are the four transaction isolation levels?",
         options:["Low/Medium/High/Max","Read Committed, Read Uncommitted, Repeatable Read, Serializable","Fast/Slow/Safe/Risky","A/C/I/D"], correct:1,
-        explain:"Read Uncommitted, Read Committed, Repeatable Read, and Serializable — from the weakest isolation to the strongest." },
+        explain:"Read Uncommitted, Read Committed, Repeatable Read, and Serializable — from weakest to strongest isolation." },
       { type:"mcq", q:"What are the main purposes of normalization?",
         options:["To speed up reads","To reduce data redundancy and prevent INSERT/UPDATE/DELETE anomalies","To add redundancy","To encrypt data"], correct:1,
-        explain:"Normalization reduces redundancy, prevents anomalies during changes, and splits large tables into stable subsets. Denormalization is the opposite." }
+        explain:"Normalization reduces redundancy, prevents update anomalies, and splits large tables into stable subsets. Denormalization is the opposite." }
     ]
   },
   {
@@ -926,18 +926,18 @@ const CATEGORIES = [
     desc: "JSON, Temporal, RLS, Adaptive Query, TRANSLATE",
     tables: [],
     questions: [
-      { type:"mcq", q:"What is the new type/support introduced in SQL Server 2016 as an alternative to XML?",
+      { type:"mcq", q:"What new type/support was introduced in SQL Server 2016 as an alternative to XML?",
         options:["YAML","JSON","CSV","Protobuf"], correct:1,
-        explain:"JSON. It is more lightweight than XML and does not require a dedicated parser — it can be parsed with a standard JavaScript function, so it is faster and simpler." },
-      { type:"mcq", q:"What is Row-Level Security (RLS) introduced in SQL Server 2016?",
-        options:["Row encryption","Controlling access to rows by the execution context (e.g. the user identity)","Row backup","Fast row deletion"], correct:1,
-        explain:"RLS lets you restrict access to rows by the execution context — for example, showing a user only the rows belonging to their department, even if everyone runs SELECT * from the same table." },
+        explain:"JSON. It's more lightweight than XML and doesn't require a dedicated parser — it can be parsed with a standard JavaScript function, making it faster and simpler." },
+      { type:"mcq", q:"What is Row-Level Security (RLS) that was introduced in SQL Server 2016?",
+        options:["Row encryption","Controlling row access based on the execution context (e.g., the user's identity)","Row backup","Fast row deletion"], correct:1,
+        explain:"RLS lets you restrict row access based on the execution context — for example, showing a user only the rows belonging to their department, even if everyone runs SELECT * on the same table." },
       { type:"mcq", q:"What is the TRANSLATE function introduced in SQL Server 2017?",
-        options:["Language translation","Replacing several characters with several corresponding characters (saving nested REPLACE)","Type conversion","Code translation"], correct:1,
-        explain:"TRANSLATE replaces each character in the source list with the corresponding character in the target. For example TRANSLATE('[3+4]','[]','()') ⇒ '(3+4)'. It returns an error if the lists are different lengths." },
+        options:["Language translation","Replacing a number of characters with a matching number of characters (saves nested REPLACE)","Type conversion","Code translation"], correct:1,
+        explain:"TRANSLATE replaces each character in the source list with the corresponding character in the target. For example TRANSLATE('[3+4]','[]','()') ⇒ '(3+4)'. It returns an error if the lists have different lengths." },
       { type:"mcq", q:"What is the Temporal Tables feature in SQL Server 2016?",
-        options:["Temporary tables","Built-in support for the state of data at any point in the past","Fast tables","Encrypted tables"], correct:1,
-        explain:"Temporal Tables keep a change history and let you query the state of the data at any point in the past. Introduced in ANSI SQL 2011." }
+        options:["Temporary tables","Built-in support for information about data at any past point in time","Fast tables","Encrypted tables"], correct:1,
+        explain:"Temporal Tables keep a history of changes and let you query the state of the data at any point in the past. Introduced in ANSI SQL 2011." }
     ]
   },
   {
@@ -946,61 +946,61 @@ const CATEGORIES = [
     tables: ["EmployeeDetail"],
     questions: [
       { type:"mcq", q:"What is an RDBMS?",
-        options:["A programming language","A relational database management system — data in tables linked by keys","A kind of index","A network protocol"], correct:1,
-        explain:"Relational Database Management System — a system where the data is stored in tables (relations) linked by keys. Examples: SQL Server, MySQL, Oracle, SQLite." },
+        options:["Programming language","A system for managing relational databases — data in tables linked by keys","A type of index","Network protocol"], correct:1,
+        explain:"Relational Database Management System — a system where data is stored in tables (relations) connected by keys. Examples: SQL Server, MySQL, Oracle, SQLite." },
       { type:"mcq", q:"What does the ACID property guarantee?",
-        options:["Speed","Transaction reliability: Atomicity, Consistency, Isolation, Durability","Security","Compression"], correct:1,
-        explain:"ACID: Atomicity (all or nothing), Consistency, Isolation, and Durability (permanence after commit)." },
+        options:["speed","Transaction reliability: Atomicity, Consistency, Isolation, Durability","security","compression"], correct:1,
+        explain:"ACID: Atomicity (all or nothing), Consistency, Isolation, and Durability (persistence after commit)." },
       { type:"query", q:"Find the second-highest salary using DENSE_RANK.", hint:"DENSE_RANK() OVER (ORDER BY Salary DESC) in a subquery, then filter to rank 2.", solution:"SELECT Salary FROM (SELECT Salary, DENSE_RANK() OVER (ORDER BY Salary DESC) AS rnk FROM EmployeeDetail) WHERE rnk = 2" },
-      { type:"query", q:"Add a running row number (ROW_NUMBER) to each employee by descending salary. Show FirstName, Salary, and the number.", hint:"ROW_NUMBER() OVER (ORDER BY Salary DESC).", solution:"SELECT FirstName, Salary, ROW_NUMBER() OVER (ORDER BY Salary DESC) AS rn FROM EmployeeDetail" },
-      { type:"mcq", q:"What is the difference between ROW_NUMBER, RANK, and DENSE_RANK on ties?",
-        options:["They are identical","ROW_NUMBER is always unique; RANK skips after a tie (1,2,2,4); DENSE_RANK does not skip (1,2,2,3)","RANK is always unique","DENSE_RANK skips"], correct:1,
-        explain:"ROW_NUMBER gives a unique running number. RANK gives a ranking with skips on ties (1,2,2,4). DENSE_RANK gives a continuous ranking with no skips (1,2,2,3)." },
-      { type:"mcq", q:"What is the difference between ISNULL and COALESCE?",
-        options:["They are completely identical","ISNULL takes 2 arguments; COALESCE (the ANSI standard) takes several arguments and returns the first non-NULL one","COALESCE takes only 2","ISNULL is more flexible"], correct:1,
-        explain:"ISNULL(a,b) returns a if it is not NULL, otherwise b. COALESCE(a,b,c,...) is the ANSI standard that takes several arguments and returns the first non-NULL one — more flexible and portable." },
-      { type:"mcq", q:"What is a CTE (Common Table Expression) and what is one of its main advantages?",
-        options:["A physical table","A named temporary intermediate result (WITH) that improves readability and supports recursion","An index","A kind of JOIN"], correct:1,
-        explain:"A CTE is a temporary intermediate result defined in WITH and used in the query that follows it. Advantages: readability, reuse, and support for recursion (tree/hierarchy structures)." }
+      { type:"query", q:"Add each employee a running row number (ROW_NUMBER) by descending salary. Show FirstName, Salary and the number.", hint:"ROW_NUMBER() OVER (ORDER BY Salary DESC).", solution:"SELECT FirstName, Salary, ROW_NUMBER() OVER (ORDER BY Salary DESC) AS rn FROM EmployeeDetail" },
+      { type:"mcq", q:"What's the difference between ROW_NUMBER, RANK and DENSE_RANK in case of a tie?",
+        options:["they are identical","ROW_NUMBER is always unique; RANK skips after a tie (1,2,2,4); DENSE_RANK doesn't skip (1,2,2,3)","RANK is always unique","DENSE_RANK skips"], correct:1,
+        explain:"ROW_NUMBER gives a unique running number. RANK gives a ranking with gaps on ties (1,2,2,4). DENSE_RANK gives a continuous ranking with no gaps (1,2,2,3)." },
+      { type:"mcq", q:"What's the difference between ISNULL and COALESCE?",
+        options:["They are completely identical","ISNULL takes 2 arguments; COALESCE (ANSI standard) takes any number of arguments and returns the first one that isn't NULL","COALESCE accepts only 2","ISNULL is more flexible"], correct:1,
+        explain:"ISNULL(a,b) returns a if it's not NULL, otherwise b. COALESCE(a,b,c,...) is the ANSI standard that accepts multiple arguments and returns the first one that isn't NULL — more flexible and more portable." },
+      { type:"mcq", q:"What is a CTE (Common Table Expression) and what's a key advantage of it?",
+        options:["Physical table","A named temporary intermediate result (WITH) that improves readability and supports recursion","index","JOIN type"], correct:1,
+        explain:"A CTE is a temporary intermediate result defined with WITH and used in the query that follows. Benefits: readability, reusability, and support for recursion (tree/hierarchy structures)." }
     ]
   },
   {
     id: "sales", title: "Sales — JOINs and aggregation",
-    desc: "Customers, Orders, OrderItems, Products — joins, grouping, and top-N",
+    desc: "Customers, Orders, OrderItems, Products — joins, grouping and top-N",
     tables: ["Customers","Orders","OrderItems","Products"],
     questions: [
-      { type:"query", q:"Return all the customers from the Customers table.", hint:"SELECT * from the table.", solution:"SELECT * FROM Customers" },
+      { type:"query", q:"Return all customers from the Customers table.", hint:"SELECT * from the table.", solution:"SELECT * FROM Customers" },
       { type:"query", q:"Return the customers from Israel (Country = 'Israel').", hint:"WHERE on the Country column, a string in single quotes.", solution:"SELECT * FROM Customers WHERE Country = 'Israel'" },
       { type:"query", q:"Return the name and stock of products whose stock is less than 20.", hint:"WHERE Stock < 20.", solution:"SELECT ProductName, Stock FROM Products WHERE Stock < 20" },
-      { type:"query", q:"How many orders are there in each status? Show status and count.", hint:"GROUP BY Status with COUNT(*).", solution:"SELECT Status, COUNT(*) AS cnt FROM Orders GROUP BY Status" },
-      { type:"query", q:"For each customer, show their name and their number of orders (INNER JOIN).", hint:"Customers joined to Orders on CustomerID, then GROUP BY.", solution:"SELECT C.CustomerName, COUNT(*) AS Orders FROM Customers C INNER JOIN Orders O ON C.CustomerID = O.CustomerID GROUP BY C.CustomerID" },
-      { type:"query", q:"Compute the revenue for each order (the sum of quantity × unit price) from the OrderItems table.", hint:"SUM(Quantity * UnitPrice) with GROUP BY OrderID.", solution:"SELECT OrderID, SUM(Quantity * UnitPrice) AS Revenue FROM OrderItems GROUP BY OrderID" },
+      { type:"query", q:"How many orders are there per status? Show the status and the count.", hint:"GROUP BY Status with COUNT(*).", solution:"SELECT Status, COUNT(*) AS cnt FROM Orders GROUP BY Status" },
+      { type:"query", q:"For each customer, show their name and their number of orders (INNER JOIN).", hint:"Customers is joined to Orders on CustomerID, then GROUP BY.", solution:"SELECT C.CustomerName, COUNT(*) AS Orders FROM Customers C INNER JOIN Orders O ON C.CustomerID = O.CustomerID GROUP BY C.CustomerID" },
+      { type:"query", q:"Calculate the revenue for each order (sum of quantity × unit price) from the OrderItems table.", hint:"SUM(Quantity * UnitPrice) with GROUP BY OrderID.", solution:"SELECT OrderID, SUM(Quantity * UnitPrice) AS Revenue FROM OrderItems GROUP BY OrderID" },
       { type:"query", q:"What are the 5 products sold in the largest quantity? Show name and total quantity.", hint:"JOIN to OrderItems, SUM(Quantity), GROUP BY, ORDER BY descending, LIMIT 5.", solution:"SELECT P.ProductName, SUM(OI.Quantity) AS Qty FROM Products P INNER JOIN OrderItems OI ON P.ProductID = OI.ProductID GROUP BY P.ProductID ORDER BY Qty DESC LIMIT 5" },
-      { type:"mcq", q:"To compute the revenue per order from the OrderItems table, what is correct?",
+      { type:"mcq", q:"To calculate the revenue per order from the OrderItems table, what's correct?",
         options:["SUM(Quantity) only","SUM(Quantity * UnitPrice) with GROUP BY OrderID","COUNT(*) with GROUP BY OrderID","AVG(UnitPrice)"], correct:1,
-        explain:"The revenue per item = quantity × unit price. You sum the product with SUM and group by OrderID to get the revenue per order." }
+        explain:"Revenue per item = quantity × unit price. Sum the product with SUM and group by OrderID to get the revenue per order." }
     ]
   },
   {
     id: "analytics", title: "Business analysis",
-    desc: "subqueries, HAVING, time-based slicing, revenue by category",
+    desc: "Subqueries, HAVING, time slicing, revenue by category",
     tables: ["Orders","OrderItems","Products","Categories"],
     questions: [
       { type:"query", q:"How many orders are there in total in the Orders table?", hint:"COUNT(*).", solution:"SELECT COUNT(*) FROM Orders" },
-      { type:"query", q:"Find customers (CustomerID) with more than 10 orders. Show the ID and count.", hint:"GROUP BY CustomerID with HAVING COUNT(*) > 10.", solution:"SELECT CustomerID, COUNT(*) AS c FROM Orders GROUP BY CustomerID HAVING COUNT(*) > 10" },
-      { type:"query", q:"What is the average revenue per order? (Compute revenue per order and then the average).", hint:"A subquery: sum per order, then AVG on the result.", solution:"SELECT AVG(rev) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS rev FROM OrderItems GROUP BY OrderID)" },
-      { type:"query", q:"How many orders were placed in each month of 2023? Show month and count, sorted by month.", hint:"Filter to the year with strftime('%Y',...) = '2023', and group by strftime('%m',...).", solution:"SELECT strftime('%m', OrderDate) AS Month, COUNT(*) AS Orders FROM Orders WHERE strftime('%Y', OrderDate) = '2023' GROUP BY Month ORDER BY Month" },
-      { type:"query", q:"Which employee handled the most orders? Show name and number of orders (the top employee).", hint:"JOIN between EmployeeDetail and Orders on EmployeeID, GROUP BY, ORDER BY descending, LIMIT 1.", solution:"SELECT E.FirstName, COUNT(*) AS Handled FROM EmployeeDetail E INNER JOIN Orders O ON E.EmployeeID = O.EmployeeID GROUP BY O.EmployeeID ORDER BY Handled DESC LIMIT 1" },
-      { type:"query", q:"Compute the total revenue for each product category, sorted from highest to lowest.", hint:"Three joins: Categories with Products with OrderItems, then SUM(Quantity*UnitPrice) by category.", solution:"SELECT Cat.CategoryName, SUM(OI.Quantity * OI.UnitPrice) AS Revenue FROM Categories Cat INNER JOIN Products P ON P.CategoryID = Cat.CategoryID INNER JOIN OrderItems OI ON OI.ProductID = P.ProductID GROUP BY Cat.CategoryID ORDER BY Revenue DESC" },
-      { type:"mcq", q:"You want only customers with more than 10 orders. Where do you place the COUNT(*) > 10 condition?",
-        options:["In WHERE","In HAVING after GROUP BY","In SELECT","In ORDER BY"], correct:1,
-        explain:"A condition on the result of an aggregate function (like COUNT) must come in HAVING, after GROUP BY. WHERE acts on individual rows before grouping and cannot use COUNT." }
+      { type:"query", q:"Find customers (CustomerID) with more than 10 orders. Show the ID and the count.", hint:"GROUP BY CustomerID with HAVING COUNT(*) > 10.", solution:"SELECT CustomerID, COUNT(*) AS c FROM Orders GROUP BY CustomerID HAVING COUNT(*) > 10" },
+      { type:"query", q:"What is the average revenue per order? (Calculate revenue per order, then average).", hint:"Subquery: sum for each order, then AVG on the result.", solution:"SELECT AVG(rev) FROM (SELECT OrderID, SUM(Quantity * UnitPrice) AS rev FROM OrderItems GROUP BY OrderID)" },
+      { type:"query", q:"How many orders were placed each month in 2023? Show month and count, sorted by month.", hint:"Filter for the year with strftime('%Y',...) = '2023', and group by strftime('%m',...).", solution:"SELECT strftime('%m', OrderDate) AS Month, COUNT(*) AS Orders FROM Orders WHERE strftime('%Y', OrderDate) = '2023' GROUP BY Month ORDER BY Month" },
+      { type:"query", q:"Which employee handled the most orders? Show the name and order count (the top employee).", hint:"JOIN between EmployeeDetail and Orders on EmployeeID, GROUP BY, ORDER BY descending, LIMIT 1.", solution:"SELECT E.FirstName, COUNT(*) AS Handled FROM EmployeeDetail E INNER JOIN Orders O ON E.EmployeeID = O.EmployeeID GROUP BY O.EmployeeID ORDER BY Handled DESC LIMIT 1" },
+      { type:"query", q:"Calculate the total revenue for each product category, sorted from highest to lowest.", hint:"Three joins: Categories with Products with OrderItems, then SUM(Quantity*UnitPrice) by category.", solution:"SELECT Cat.CategoryName, SUM(OI.Quantity * OI.UnitPrice) AS Revenue FROM Categories Cat INNER JOIN Products P ON P.CategoryID = Cat.CategoryID INNER JOIN OrderItems OI ON OI.ProductID = P.ProductID GROUP BY Cat.CategoryID ORDER BY Revenue DESC" },
+      { type:"mcq", q:"We want only customers with more than 10 orders. Where do you place the condition COUNT(*) > 10?",
+        options:["in WHERE","in HAVING after GROUP BY","in SELECT","In ORDER BY"], correct:1,
+        explain:"A condition on the result of an aggregate function (like COUNT) must go in HAVING, after GROUP BY. WHERE operates on individual rows before grouping and can't use COUNT." }
     ]
   }
 ];
 
-// ===== Difficulty levels (1=easiest, 5=hardest) — mapped by the original order of each category =====
-// Enables sorting "easy to hard" within each topic and in the graded track, without changing the questions themselves.
+// ===== Difficulty levels (1=The easiest, 5=the hardest) — mapped by the original order of each category =====
+// allows sorting "From easy to hard" within each topic and in the graded track, without changing the questions themselves.
 const DIFF = {
   basic:[1,1,3,3,3,2,3,3,3,4,4,2,2,2,3],
   datetime:[3,2,2,2,1,3,3,3,1,2],
@@ -1027,15 +1027,15 @@ const DIFF = {
 };
 CATEGORIES.forEach(c=>{const d=DIFF[c.id]||[];c.questions.forEach((q,i)=>{q.diff=d[i]||q.diff||3;});});
 
-// ===== Topic reassignment: moving questions to the right home by the construct they teach =====
-// (done after assigning difficulty levels, so each question carries its level with it)
+// ===== Fixing topic assignment: moving questions to the right home according to the construct they teach =====
+// (Happens after assigning difficulty levels, so each question carries its level with it)
 const TOPIC_REMAP = {
   'basic#12':'groupby',     // MAX(Salary)        → aggregation
   'basic#13':'groupby',     // MIN(Salary)        → aggregation
-  'salary#3':'basic',       // RTRIM(...)         → basic string function
-  'salary#5':"basic",       // 'Hello ' || ...    → basic string function
-  'interview#2':'advanced', // DENSE_RANK (query) → advanced queries
-  'interview#3':'advanced'  // ROW_NUMBER (query) → advanced queries
+  'salary#3':'basic',       // RTRIM(...)         → a basic string function
+  'salary#5':"basic",       // 'Hello ' || ...    → a basic string function
+  'interview#2':'advanced', // DENSE_RANK (query) → Advanced queries
+  'interview#3':'advanced'  // ROW_NUMBER (query) → Advanced queries
 };
 (function applyTopicRemap(){
   const byId={}; CATEGORIES.forEach(c=>byId[c.id]=c);
@@ -1100,7 +1100,7 @@ INSERT INTO FuelDetail VALUES
  (10,10,'2014-04-25 19:00:00'),(11,9,'2014-04-25 20:00:00'),(12,8,'2014-04-25 21:00:00'),
  (13,7,'2014-04-25 22:00:00'),(14,15,'2014-04-25 23:00:00');
 
--- ===== 9 new tables (sales + HR schema) — the data is generated at runtime =====
+-- ===== 9 new tables (Sales aggregation + HR) — the data is generated at runtime =====
 CREATE TABLE Departments (DeptID INTEGER PRIMARY KEY, DeptName TEXT, Location TEXT, Budget INTEGER);
 CREATE TABLE Categories  (CategoryID INTEGER PRIMARY KEY, CategoryName TEXT);
 CREATE TABLE Suppliers   (SupplierID INTEGER PRIMARY KEY, SupplierName TEXT, Country TEXT);
@@ -1223,7 +1223,7 @@ function renderTopics(){
     return '<button class="topic" data-cat="'+c.id+'">'+
       '<span class="go" aria-hidden="true">‹</span>'+
       '<h3>'+esc(c.title)+'</h3><div class="td">'+esc(c.desc)+'</div>'+
-      '<div class="meta">'+(nq?'<span class="pill q">'+nq+' queries</span>':'')+(nm?'<span class="pill m">'+nm+' multiple choice</span>':'')+'</div>'+
+      '<div class="meta">'+(nq?'<span class="pill q">'+nq+' queries</span>':'')+(nm?'<span class="pill m">'+nm+' Multiple-choice</span>':'')+'</div>'+
       '</button>';
   }).join('');
   document.querySelectorAll('.topic').forEach(t=>t.addEventListener('click',()=>startCategory(t.dataset.cat)));
@@ -1272,7 +1272,7 @@ function updateProgress(){
   if(ps) ps.textContent='✓ '+s+' ('+(n?Math.round(s/n*100):0)+'%)';
   const hp=document.getElementById('hPrev'), hn=document.getElementById('hNext');
   if(hp) hp.disabled = session.idx===0;
-  if(hn) hn.textContent = (session.idx>=n-1) ? 'Finish' : 'Next ←';
+  if(hn) hn.textContent = (session.idx>=n-1) ? 'end' : 'Next ←';
 }
 function saveCode(){
   const it=session.items[session.idx];
@@ -1302,14 +1302,14 @@ function navButtons(){
   const last=session.idx>=session.items.length-1;
   return '<div class="pnav">'+
     '<button class="nav-btn" id="prevBtn"'+(session.idx===0?' disabled':'')+'>Previous</button>'+
-    '<button class="nav-btn primary" id="nextBtn">'+(last?'Finish':'Next ←')+'</button>'+
+    '<button class="nav-btn primary" id="nextBtn">'+(last?'end':'Next ←')+'</button>'+
     '</div>';
 }
 function itemKey(){ const {q,cat}=session.items[session.idx]; return cat.id+'::'+cat.questions.indexOf(q); }
 function diffBadge(q){
-  const d=q.diff||3, lbl=['','Very easy','Easy','Medium','Hard','Very hard'][d];
+  const d=q.diff||3, lbl=['','very easy','easy','medium','hard','very hard'][d];
   let dots=''; for(let i=1;i<=5;i++)dots+='<span class="dot'+(i<=d?' on':'')+'"></span>';
-  return '<span class="qdiff l'+d+'" title="Difficulty: '+lbl+' ('+d+'/5)" aria-label="Difficulty '+d+' of 5">'+dots+'<span class="qdiff-lbl">'+lbl+'</span></span>';
+  return '<span class="qdiff l'+d+'" title="Difficulty level: '+lbl+' ('+d+'/5)" aria-label="Difficulty level '+d+' out of 5">'+dots+'<span class="qdiff-lbl">'+lbl+'</span></span>';
 }
 
 function queryCard(q,cat){
@@ -1317,14 +1317,14 @@ function queryCard(q,cat){
   return '<div class="qcard'+solvedCls+'" id="qcard">'+
     '<div class="qhead"><span class="qbadge query">SQL</span><span style="color:var(--dim);font-size:.8rem;font-family:var(--mono)">'+esc(cat.title)+'</span>'+diffBadge(q)+'<span class="qsolvedmark">✓ Solved</span></div>'+
     '<div class="qtext">'+esc(q.q)+'</div>'+
-    '<div class="pre-editor"><button class="schema-link tbl-view-btn" id="schemaBtn2">📋 View the tables</button></div>'+
+    '<div class="pre-editor"><button class="schema-link tbl-view-btn" id="schemaBtn2">📋 View tables</button></div>'+
     '<div class="editor-shell"><textarea id="cmEditor"></textarea></div>'+
     '<div class="actions">'+
-      '<button class="btn btn-run" id="runBtn">Run query ▶</button>'+
-      '<button class="btn btn-ghost" id="acBtn">💡 Autocomplete</button>'+
+      '<button class="btn btn-run" id="runBtn">Run Query ▶</button>'+
+      '<button class="btn btn-ghost" id="acBtn">💡 Complete</button>'+
       '<button class="btn btn-ghost" id="hintBtn">Hint</button>'+
       '<button class="btn btn-ghost" id="clearBtn">Clear</button>'+
-      '<span class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> run · <kbd>Ctrl</kbd>+<kbd>Space</kbd> autocomplete</span>'+
+      '<span class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> run · <kbd>Ctrl</kbd>+<kbd>Space</kbd> complete</span>'+
     '</div>'+
     '<div class="hintline" id="hintLine">'+esc(q.hint||'')+'</div>'+
     '<div class="result" id="result"></div>'+
@@ -1340,13 +1340,13 @@ function mcqCard(q,cat){
     '<div class="qtext">'+esc(q.q)+'</div>'+
     '<div class="opts" id="opts">'+opts+'</div>'+
     '<div class="explain" id="explain"><b>Explanation:</b> '+esc(q.explain)+'</div>'+
-    '<div style="text-align:center;margin-top:18px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">📋 View the tables</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
+    '<div style="text-align:center;margin-top:18px;display:flex;gap:16px;justify-content:center"><button class="schema-link" id="schemaBtn2">📋 View tables</button><button class="schema-link" id="erdBtnCard">🗺️ ERD</button></div>';
 }
 function gradeBand(pct){
-  if(pct>=90)return {t:'Excellent! 🏆',c:'var(--green)'};
+  if(pct>=90)return {t:'excellent! 🏆',c:'var(--green)'};
   if(pct>=75)return {t:'Very good 👏',c:'var(--green)'};
-  if(pct>=60)return {t:'Good 👍',c:'var(--amber)'};
-  if(pct>=40)return {t:'A basic level — worth reviewing 📚',c:'var(--amber)'};
+  if(pct>=60)return {t:'good 👍',c:'var(--amber)'};
+  if(pct>=40)return {t:'There is a gap — worth reviewing 📚',c:'var(--amber)'};
   return {t:'Needs more practice 💪',c:'var(--red)'};
 }
 function renderDone(){
@@ -1364,10 +1364,10 @@ function renderDone(){
         '<div class="score-inner"><div class="score-pct" style="color:'+g.c+'">'+pct+'%</div><div class="score-sub">Score</div></div>'+
       '</div>'+
       '<div class="grade-label" style="color:'+g.c+'">'+g.t+'</div>'+
-      '<div class="score-detail">You answered '+s+' of '+n+' questions correctly</div>'+
+      '<div class="score-detail">You solved correctly '+s+' out of '+n+' questions</div>'+
       '<div class="pnav" style="max-width:380px;margin:0 auto">'+
-        '<button class="nav-btn" id="restartBtn">Start over</button>'+
-        '<button class="nav-btn primary" id="toTopicsBtn">Another topic</button>'+
+        '<button class="nav-btn" id="restartBtn">Start Over</button>'+
+        '<button class="nav-btn primary" id="toTopicsBtn">Another Topic</button>'+
       '</div>'+
     '</div>';
   document.getElementById('restartBtn').onclick=()=>{session.idx=0;session.solved=new Set();session.answers={};session.code={};renderCurrent();};
@@ -1493,7 +1493,7 @@ function resultTable(res,cap){
   let h='<div class="tbl-scroll" dir="ltr"><table class="res"><thead><tr>';
   res.columns.forEach(c=>h+='<th>'+esc(c)+'</th>'); h+='</tr></thead><tbody>';
   show.forEach(r=>{h+='<tr>';r.forEach((v,ci)=>h+='<td data-label="'+esc(res.columns[ci])+'">'+esc(v)+'</td>');h+='</tr>';}); h+='</tbody></table></div>';
-  if(rows.length>lim)h+='<div class="tbl-note">Showing '+lim+' of '+rows.length.toLocaleString('en-US')+' rows returned</div>';
+  if(rows.length>lim)h+='<div class="tbl-note">Showing '+lim+' out of '+rows.length.toLocaleString('en-US')+' rows returned</div>';
   return h;
 }
 function tableDataHtml(tableName){
@@ -1523,14 +1523,14 @@ function dataPreview(cat){
       '<span class="tbl-acc-plus" aria-hidden="true">+</span></summary>'+
       '<div class="tbl-acc-body" data-table="'+esc(t)+'"></div></details>';
   }).join('');
-  return '<div class="dp-list"><div class="dp-list-title">📋 All the tables in the database — click + to view fields <span class="dp-rel-note">(● = relevant to the question)</span></div>'+items+'</div>';
+  return '<div class="dp-list"><div class="dp-list-title">📋 All the tables in the database — click + to view the fields <span class="dp-rel-note">(● = relevant to the question)</span></div>'+items+'</div>';
 }
 function friendlyErr(msg){
   const m=String(msg);
-  if(/no such table/i.test(m))return 'There is no table with that name. Check the exact spelling — click "Table structure" to see the names (e.g. EmployeeDetail, ProjectDetail).';
-  if(/no such column/i.test(m))return 'There is no column with that name. Check the column names in "Table structure". Remember that SQLite distinguishes a column name from a string (wrap a string in single quotes).';
-  if(/no such function/i.test(m))return 'This function does not exist in SQLite. Note the differences from SQL Server (e.g. IFNULL instead of ISNULL, RANDOM instead of NEWID).';
-  if(/syntax error/i.test(m))return 'Syntax error. Check commas, quotes, and the keyword order: SELECT … FROM … WHERE …';
+  if(/no such table/i.test(m))return 'There\'s no table with this name. Check the exact spelling — click "Table structure" to see the names (e.g. EmployeeDetail, ProjectDetail).';
+  if(/no such column/i.test(m))return 'There\'s no column by that name. Check the column names in "Table structure". Remember that SQLite distinguishes between a column name and a string (a string is wrapped in single quotes).';
+  if(/no such function/i.test(m))return 'This function doesn\'t exist in SQLite. Note the differences from SQL Server (e.g. IFNULL instead of ISNULL, RANDOM instead of NEWID).';
+  if(/syntax error/i.test(m))return 'Syntax error. Check commas, quotes, and the order of keywords: SELECT … FROM … WHERE …';
   if(/ambiguous/i.test(m))return 'A column name appears in two tables — prefix it with the table name/alias (e.g. A.ID).';
   return null;
 }
@@ -1558,14 +1558,14 @@ function runQuery(){
   if(!q.noResult&&expRes){
     const nondet=/random\s*\(\)/i.test(q.solution);
     if(nondet){
-      if(uvHasRows){html='<div class="status ok">✓ Ran and returned a row. (random result — cannot be compared exactly)</div>'+html;markSolved();}
+      if(uvHasRows){html='<div class="status ok">✓ Ran and returned a row. (Random result — not exactly comparable)</div>'+html;markSolved();}
       resEl.innerHTML=html;return;
     }
     const ordered=/\border\s+by\b/i.test(q.solution);
     const uv=userRes&&userRes.values;
     if(tablesEqual(uv,expRes.values,ordered)){html='<div class="status ok">✓ Correct! The result matches the solution.</div>'+html;markSolved();}
     else if(ordered && tablesEqual(uv,expRes.values,false)){
-      html='<div class="status neutral">↻ The values are correct — but the order differs. In this question order matters, check the ORDER BY.</div>'+html;
+      html='<div class="status neutral">↻ The values are correct — but the order is different. In this question order matters, check the ORDER BY.</div>'+html;
     }
     else html='<div class="status neutral">↻ The query ran, but the result differs from the solution. Compare with the table below or show the solution.</div>'+html;
   }
@@ -1587,7 +1587,7 @@ document.getElementById('qhost').addEventListener('click',e=>{
   if(e.target.closest('#hintBtn'))return document.getElementById('hintLine').classList.toggle('show');
   if(e.target.closest('#clearBtn')){session.editor.setValue('');session.editor.focus();const r=document.getElementById('result');r.classList.remove('show');r.innerHTML='';return;}
   const st=e.target.closest('#solToggle');
-  if(st){const el=document.getElementById('solCode');el.classList.toggle('show');st.textContent=el.classList.contains('show')?'Hide solution':'Show sample solution';return;}
+  if(st){const el=document.getElementById('solCode');el.classList.toggle('show');st.textContent=el.classList.contains('show')?'Hide solution':'Show a sample solution';return;}
   if(e.target.closest('#prevBtn')){ goPrev(); return; }
   if(e.target.closest('#nextBtn')){ goNext(); return; }
   if(e.target.closest('#schemaBtn2'))return openDrawer();
@@ -1624,7 +1624,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();close
 document.addEventListener('click',function(e){var sm=e.target.closest('summary');if(sm&&sm.parentElement&&sm.parentElement.classList.contains('tbl-acc')){var ac=sm.parentElement;setTimeout(function(){var b=ac.querySelector('.tbl-acc-body');if(b&&!b.dataset.loaded&&ac.open){b.innerHTML=tableDataHtml(b.dataset.table);b.dataset.loaded='1';}},0);}});
 
 /* ---- ERD (entity-relationship diagram) ---- */
-// Logical relationships (foreign keys). The 'soft' flag = a conceptual relationship (not a real FK).
+// logical relationships (Foreign keys). the flag 'soft' = Conceptual relationship (Not a real FK).
 const ERD_RELS=[
   ['ProjectDetail','EmployeeDetailID','EmployeeDetail','EmployeeID'],
   ['Orders','CustomerID','Customers','CustomerID'],
@@ -1647,7 +1647,7 @@ let erdBuilt=false;
 let erdZoom=1, erdW=1180, erdH=1180;
 function erdBuild(){
   const stage=document.getElementById('erdStage');
-  if(!viewerDb){stage.innerHTML='<div style="padding:24px;color:var(--muted)">The engine is still loading… open again in a moment.</div>';return;}
+  if(!viewerDb){stage.innerHTML='<div style="padding:24px;color:var(--muted)">The engine is still loading… try again in a moment.</div>';return;}
   const fkset={}; ERD_RELS.forEach(r=>fkset[r[0]+'.'+r[1]]=true);
   let html='<svg id="erdSvg" class="erd-svg"></svg>';
   ALL_TABLES.forEach(t=>{

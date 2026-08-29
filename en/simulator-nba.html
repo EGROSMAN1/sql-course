@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NBA SQL Simulator — Practice on Real NBA Data | SQL.course</title>
+<title>SQL Simulator — practice on real NBA data | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -302,31 +302,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in your browser with no installation, with 110 exercises. Completely free.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/simulator-nba.html">
+<meta name="description" content="A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in the browser with no installation, with 110 exercises. Completely free.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/simulator-nba.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/simulator-nba.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
 <meta property="og:title" content="SQL Simulator — NBA 🏀">
-<meta property="og:description" content="A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in your browser with no installation, with 110 exercises. Completely free.">
+<meta property="og:description" content="A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in the browser with no installation, with 110 exercises. Completely free.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SQL Simulator — NBA 🏀">
-<meta name="twitter:description" content="A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in your browser with no installation, with 110 exercises. Completely free.">
+<meta name="twitter:description" content="A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in the browser with no installation, with 110 exercises. Completely free.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
@@ -339,7 +339,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
@@ -353,8 +353,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "NBA SQL Simulator — Practice on Real NBA Data | SQL.course",
-    "description": "A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in your browser with no installation, with 110 exercises. Completely free.",
+    "name": "SQL Simulator — practice on real NBA data | SQL.course",
+    "description": "A live SQL simulator on 305,000 rows of real NBA data. Write and run queries in the browser with no installation, with 110 exercises. Completely free.",
     "url": "https://egrosman1.github.io/sql-course/simulator-nba.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -369,7 +369,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -383,13 +383,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
 <body>
 <h1 class="sr-only">SQL Simulator — NBA</h1>
 <div class="nav">
-  <a href="index.html" class="back">← Home</a>
+  <a href="index.html" class="back">← Home page</a>
   <a href="pbi-simulator.html" class="back" style="background:rgba(242,200,17,.15);border:1px solid rgba(242,200,17,.4);color:#f2c811;border-radius:5px;padding:4px 10px;font-size:12px;font-weight:700;text-decoration:none;">📊 Power BI</a>
   <div class="nav-t">🏀 SQL Simulator — NBA</div>
   <div class="nav-links">
-    <a href="practice.html" class="nav-l">✏️ Practice</a>
-    <a href="../simulator-nba.html" class="nav-l" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="simulator-nba.html" class="nav-l" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/simulator-nba.html" class="nav-l" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="course.html" class="nav-l">📚 Learn</a>
+    <a href="practice.html" class="nav-l">✏️ Exercises</a><a href="../simulator-nba.html" class="nav-l" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="simulator-nba.html" class="nav-l" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/simulator-nba.html" class="nav-l" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="course.html" class="nav-l">📚 Study material</a>
   </div>
   <div class="dbst">
     <div class="dot load" id="dot"></div>
@@ -397,8 +396,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
   </div>
 </div>
 <div class="main-tabs">
-  <button class="mtab active" onclick="swT('editor')">⌨️ SQL Editor</button>
-  <button class="mtab" onclick="swT('erd')">🗺️ ERD — Relationship Diagram</button>
+  <button class="mtab active" onclick="swT('editor')">⌨️ SQL editor</button>
+  <button class="mtab" onclick="swT('erd')">🗺️ ERD — relationship diagram</button>
 </div>
 <div class="app">
   <div class="sb">
@@ -407,7 +406,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
     <div class="sb-body" id="sbBody"></div>
     <div class="sb-resize" id="sbResize"></div>
     <div class="sb-q">
-      <div class="qt">⚡ Quick queries</div>
+      <div class="qt">⚡ Fast queries</div>
       <div class="qi" onclick="qQ('SELECT * FROM game_info LIMIT 20;')"><span class="qa">→</span>game_info</div>
       <div class="qi" onclick="qQ('SELECT player, team, PTS, AST, TRB FROM player_stats ORDER BY PTS DESC LIMIT 20;')"><span class="qa">→</span>top scorers</div>
       <div class="qi" onclick="qQ('SELECT * FROM team_stats LIMIT 20;')"><span class="qa">→</span>team_stats</div>
@@ -420,7 +419,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
       <div class="ex-r1">
         <span class="exl">110 exercises</span>
         <div class="lvts">
-          <button class="lt b on" onclick="setLvl('b')">🌱 Beginner (30)</button>
+          <button class="lt b on" onclick="setLvl('b')">🌱 Beginners (30)</button>
           <button class="lt m" onclick="setLvl('m')">🟠 Intermediate (40)</button>
           <button class="lt a" onclick="setLvl('a')">🔴 Advanced (40)</button>
         </div>
@@ -431,17 +430,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
       <button class="rb" id="runBtn" onclick="runQ()" disabled>▶ Run</button>
       <button class="xb c" onclick="clr()">🗑 Clear</button>
       <button class="xb h" id="hBtn" onclick="togH()" style="display:none">💡 Hint</button>
-      <span class="kb">Ctrl+Enter · double-click a table to open</span>
+      <span class="kb">Ctrl+Enter · double-click a table to open it</span>
     </div>
     <div class="inf hi" id="hBox"></div>
     <div class="ew">
       <div class="lns" id="lns">1</div>
-      <textarea id="sqle" placeholder="-- Write an SQL query&#10;-- Ctrl+Enter to run&#10;&#10;SELECT * FROM game_info LIMIT 10;" spellcheck="false"></textarea>
+      <textarea id="sqle" placeholder="-- write your SQL query&#10;-- Ctrl+Enter to run&#10;&#10;SELECT * FROM game_info LIMIT 10;" spellcheck="false"></textarea>
     </div>
     <div id="acMenu"></div>
     <div class="resize-handle" id="resizeHandle"></div>
     <div class="res">
-      <div class="rh"><span id="rSt" class="rc">Ready</span><span id="rTm"></span><span id="rCl" style="color:var(--text3)"></span></div>
+      <div class="rh"><span id="rSt" class="rc">ready</span><span id="rTm"></span><span id="rCl" style="color:var(--text3)"></span></div>
       <div class="rs" id="rSc"><div class="emp"><div class="ico">⚡</div><div>Run a query to see results</div></div></div>
     </div>
   </div>
@@ -451,8 +450,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
         <button class="eb" onclick="ez(1.15)">＋</button>
         <button class="eb" onclick="ez(0.87)">－</button>
         <button class="eb" onclick="eRst()">↺ Reset</button>
-        <button class="eb" onclick="collapseAll()" title="Collapse all tables">⊟ Collapse all</button>
-        <button class="eb" onclick="expandAll()" title="Expand all tables">⊞ Expand all</button>
+        <button class="eb" onclick="collapseAll()" title="Collapse all the tables">⊟ Collapse all</button>
+        <button class="eb" onclick="expandAll()" title="Spread out all the tables">⊞ Expand all</button>
       </div>
       <div class="sp" id="spStats">
         <div class="sp-t">📊 DB Statistics</div>
@@ -460,7 +459,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
       </div>
       <canvas id="erd"></canvas>
       <div class="leg">
-        <div class="lg-t">Legend</div>
+        <div class="lg-t">legend</div>
         <div class="li"><div class="lpk"></div>Primary Key</div>
         <div class="li"><div class="lfk"></div>Foreign Key</div>
         <div class="li"><div class="lln"></div>Relationship (FK → PK)</div>
@@ -479,9 +478,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
       </div>
       <button class="sol-close" onclick="closeSol()">✕</button>
     </div>
-    <div class="sol-hint"><span style="color:var(--yellow);font-weight:700">💡 Hint:</span> <span id="solHintTxt" style="color:var(--text2)"></span></div>
+    <div class="sol-hint"><span style="color:var(--yellow);font-weight:700">💡 hint:</span> <span id="solHintTxt" style="color:var(--text2)"></span></div>
     <div class="sol-body">
-      <div class="sol-label">SQL Solution</div>
+      <div class="sol-label">SQL solution</div>
       <div class="sol-code">
         <div class="sol-code-hdr">
           <span class="sol-code-lang">SQL · NBA Boxscore DB 🏀</span>
@@ -508,9 +507,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);height:100vh
       <button class="sol-close" onclick="closeExModal()">✕</button>
     </div>
     <div class="sol-body" style="padding:1.2rem 1.1rem">
-      <div class="sol-label">Task</div>
+      <div class="sol-label">task</div>
       <div id="exModalDesc" style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1.2rem"></div>
-      <div class="sol-label">Hint</div>
+      <div class="sol-label">hint</div>
       <div id="exModalHint" style="background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-right:3px solid var(--yellow);border-radius:8px;padding:.7rem 1rem;font-family:var(--mono);font-size:12.5px;color:var(--text2)"></div>
     </div>
     <div class="sol-footer">
@@ -636,22 +635,22 @@ const SCH={
 const RCT={};
 const EX={b:[
 {n:1,
-t:"Show all the games — away team name, home team name, date, and score",
+t:"Show all the games — the away team name, the home team name, date and score",
 h:"Select specific columns from game_info",
 s:"SELECT date, away_team, away_score, home_team, home_score FROM game_info LIMIT 20;"},
 
 {n:2,
-t:"How many games are recorded in total in the database?",
-h:"COUNT(*) over the whole table",
+t:"How many games were recorded in total in the database?",
+h:"COUNT(*) on the entire table",
 s:"SELECT COUNT(*) AS total_games FROM game_info;"},
 
 {n:3,
-t:"Show the 10 players with the highest score — name, team, and points",
+t:"Show the 10 players with the highest score — name, team and points",
 h:"ORDER BY PTS DESC LIMIT 10",
 s:"SELECT player, team, PTS FROM player_stats ORDER BY PTS DESC LIMIT 10;"},
 
 {n:4,
-t:"What are the highest and lowest scores a home team has ever achieved?",
+t:"What's the highest and lowest score a home team has ever achieved?",
 h:"MAX() and MIN() on home_score",
 s:"SELECT MAX(home_score) AS highest, MIN(home_score) AS lowest FROM game_info;"},
 
@@ -666,12 +665,12 @@ h:"COUNT(DISTINCT home_team)",
 s:"SELECT COUNT(DISTINCT home_team) AS unique_teams FROM game_info;"},
 
 {n:7,
-t:"Show all the Lakers home games (LAL), sorted by date",
+t:"Show all the games of the Lakers as the home team (LAL), sorted by date",
 h:"WHERE home_team = 'LAL' ORDER BY date",
 s:"SELECT date, away_team, away_score, home_score FROM game_info WHERE home_team='LAL' ORDER BY date;"},
 
 {n:8,
-t:"What is the average points (PTS) each player scores per appearance?",
+t:"What are the average points each player scores (PTS) per appearance?",
 h:"AVG(PTS) on player_stats",
 s:"SELECT ROUND(AVG(PTS),2) AS avg_points_per_game FROM player_stats;"},
 
@@ -681,17 +680,17 @@ h:"WHERE PTS>=10 AND TRB>=10 AND AST>=10",
 s:"SELECT player, team, PTS, TRB, AST FROM player_stats WHERE PTS>=10 AND TRB>=10 AND AST>=10 ORDER BY PTS DESC;"},
 
 {n:10,
-t:"How many home wins are there per season?",
+t:"How many home wins does each season have?",
 h:"WHERE result=1 GROUP BY season",
 s:"SELECT season, COUNT(*) AS home_wins FROM game_info WHERE result=1 GROUP BY season ORDER BY season;"},
 
 {n:11,
-t:"What is the average points each team scores? Sort high to low",
+t:"What's the average points each team scores? Sort from highest to lowest",
 h:"AVG(PTS) GROUP BY team ORDER BY avg_pts DESC",
 s:"SELECT team, ROUND(AVG(PTS),1) AS avg_pts FROM player_stats GROUP BY team ORDER BY avg_pts DESC;"},
 
 {n:12,
-t:"Show all the games played between January 1, 2020 and December 31, 2020",
+t:"Show all the games that took place between January 1, 2020 and December 31, 2020",
 h:"WHERE date BETWEEN '2020-01-01' AND '2020-12-31'",
 s:"SELECT date, away_team, away_score, home_team, home_score FROM game_info WHERE date BETWEEN '2020-01-01' AND '2020-12-31' LIMIT 20;"},
 
@@ -712,17 +711,17 @@ s:"SELECT date, away_team, away_score, home_team, home_score, away_score+home_sc
 
 ],m:[
 {n:16,
-t:"How many games are there per season? Also show the number of home wins and the home win percentage",
+t:"How many games does each season have? Also show the number of home wins and the home win percentage",
 h:"GROUP BY season + SUM(CASE WHEN result=1...)",
 s:"SELECT season, COUNT(*) AS games, SUM(result) AS home_wins, ROUND(AVG(result)*100,1) AS home_win_pct FROM game_info GROUP BY season ORDER BY season;"},
 
 {n:17,
-t:"Find teams whose average points in team_stats is above 110",
+t:"Find teams whose average points in team_stats is higher than 110",
 h:"AVG(PTS) GROUP BY team HAVING AVG(PTS) > 110",
 s:"SELECT team, ROUND(AVG(PTS),1) AS avg_pts FROM team_stats GROUP BY team HAVING AVG(PTS)>110 ORDER BY avg_pts DESC;"},
 
 {n:18,
-t:"Show the 5 NBA players with the highest personal score (one record per player only)",
+t:"Show the 5 NBA players with the highest individual score (one record only per player)",
 h:"MAX(PTS) GROUP BY player ORDER BY MAX(PTS) DESC LIMIT 5",
 s:"SELECT player, team, MAX(PTS) AS career_best FROM player_stats GROUP BY player ORDER BY career_best DESC LIMIT 5;"},
 
@@ -732,7 +731,7 @@ h:"JOIN ON game_id + WHERE PTS > 50",
 s:"SELECT g.date, p.player, p.team, p.PTS, p.AST, p.TRB FROM player_stats p JOIN game_info g ON p.game_id=g.game_id WHERE p.PTS>50 ORDER BY p.PTS DESC;"},
 
 {n:20,
-t:"How many Three-Pointers (3P) did each team make in total? Sort high to low",
+t:"How many Three-Pointers (3P) did each team score in total? Sort from highest to lowest",
 h:'SUM("3P") GROUP BY team ORDER BY total DESC',
 s:'SELECT team, SUM("3P") AS total_3p, ROUND(AVG("3P"),1) AS avg_3p FROM team_stats GROUP BY team ORDER BY total_3p DESC;'},
 
@@ -742,12 +741,12 @@ h:"ABS(home_score - away_score) <= 3",
 s:"SELECT date, away_team, away_score, home_team, home_score, ABS(home_score-away_score) AS diff FROM game_info WHERE ABS(home_score-away_score)<=3 ORDER BY date DESC LIMIT 20;"},
 
 {n:22,
-t:"Show per season: average player points, the personal best, and the number of player records",
+t:"Show for each season: average player points, personal best, and number of player records",
 h:"JOIN game_info + GROUP BY season + AVG, MAX, COUNT",
 s:"SELECT g.season, ROUND(AVG(p.PTS),1) AS avg_pts, MAX(p.PTS) AS max_pts, COUNT(*) AS records FROM player_stats p JOIN game_info g ON p.game_id=g.game_id GROUP BY g.season ORDER BY g.season;"},
 
 {n:23,
-t:"Show players whose average FG% (FGp) is above 50% — sort high to low",
+t:"Show players whose average FG% (FGp) is above 50% — sort from highest to lowest",
 h:"AVG(FGp) GROUP BY player HAVING AVG(FGp) > 0.5",
 s:"SELECT player, team, ROUND(AVG(FGp)*100,1) AS avg_fgp FROM player_stats GROUP BY player HAVING AVG(FGp)>0.5 ORDER BY avg_fgp DESC LIMIT 20;"},
 
@@ -757,12 +756,12 @@ h:"WHERE TRB>=10 AND AST>=10 GROUP BY team",
 s:"SELECT team, COUNT(*) AS double_doubles FROM player_stats WHERE TRB>=10 AND AST>=10 GROUP BY team ORDER BY double_doubles DESC;"},
 
 {n:25,
-t:"Show a summary of the average FG%, 3P%, and FT% of each team in team_stats",
+t:"Show a summary of the average FG%, 3P%, and FT% for every team in team_stats",
 h:"AVG(FGp), AVG(3Pp), AVG(FTp) GROUP BY team",
 s:'SELECT team, ROUND(AVG(FGp)*100,1) AS fgp, ROUND(AVG("3Pp")*100,1) AS "3pp", ROUND(AVG(FTp)*100,1) AS ftp FROM team_stats GROUP BY team ORDER BY fgp DESC;'},
 
 {n:26,
-t:"Find players who scored over 30 points with fewer than 3 turnovers (TOV<3) — high efficiency",
+t:"Find players who scored over 30 points, with fewer than 3 turnovers (TOV<3) — high efficiency",
 h:"WHERE PTS>30 AND TOV<3 ORDER BY PTS DESC",
 s:"SELECT player, team, PTS, TOV, AST FROM player_stats WHERE PTS>30 AND TOV<3 ORDER BY PTS DESC LIMIT 20;"},
 
@@ -772,22 +771,22 @@ h:"home_team || ' vs ' || away_team || ' - ' || date",
 s:"SELECT home_team||' vs '||away_team||' - '||date AS matchup FROM game_info LIMIT 20;"},
 
 {n:28,
-t:"Show the 3 teams with the highest average score as the home team",
+t:"Show the 3 teams with the highest average score as a home team",
 h:"JOIN team_stats + game_info WHERE team=home_team GROUP BY team LIMIT 3",
 s:"SELECT t.team, ROUND(AVG(t.PTS),1) AS avg_home_pts FROM team_stats t JOIN game_info g ON t.game_id=g.game_id AND t.team=g.home_team GROUP BY t.team ORDER BY avg_home_pts DESC LIMIT 3;"},
 
 {n:29,
-t:"How many times did each player score over 40 points in a game? Sort high to low",
+t:"How many times did each player score over 40 points in a game? Sort from highest to lowest",
 h:"WHERE PTS>40 GROUP BY player COUNT(*)",
 s:"SELECT player, team, COUNT(*) AS games_40_plus FROM player_stats WHERE PTS>40 GROUP BY player ORDER BY games_40_plus DESC;"},
 
 {n:30,
-t:"Find games where a specific player scored over 40 points — show date, teams, player, and points",
+t:"Find games in which a specific player scored more than 40 points — show date, teams, player and points",
 h:"JOIN game_info ON game_id WHERE PTS>40",
 s:"SELECT g.date, g.away_team, g.home_team, p.player, p.team, p.PTS FROM player_stats p JOIN game_info g ON p.game_id=g.game_id WHERE p.PTS>40 ORDER BY p.PTS DESC LIMIT 20;"},
 
 {n:31,
-t:"Show how many players each team has in the player_stats table (including duplicates — every appearance)",
+t:"Show how many players every team has in the player_stats table (including duplicates — every appearance)",
 h:"COUNT(*) GROUP BY team",
 s:"SELECT team, COUNT(*) AS total_records, COUNT(DISTINCT player) AS unique_players FROM player_stats GROUP BY team ORDER BY total_records DESC;"},
 
@@ -798,68 +797,68 @@ s:"SELECT player, team, COUNT(*) AS games_20_plus, ROUND(AVG(PTS),1) AS avg_pts 
 
 ],a:[
 {n:33,
-t:"Rank the players in each team by points — show name, team, points, and rank within the team",
+t:"Rank the players in every team by points — show name, team, points, and rank within the team",
 h:"ROW_NUMBER() OVER(PARTITION BY team ORDER BY PTS DESC)",
 s:"SELECT player, team, PTS, ROW_NUMBER() OVER(PARTITION BY team ORDER BY PTS DESC) AS rank_in_team FROM player_stats LIMIT 40;"},
 
 {n:34,
-t:"Compute cumulative home wins (Running Total) across all the games by date",
+t:"Calculate cumulative home wins (Running Total) across all games by date",
 h:"SUM(result) OVER(ORDER BY date)",
 s:"SELECT date, home_team, result, SUM(result) OVER(ORDER BY date) AS cumulative_wins FROM game_info LIMIT 30;"},
 
 {n:35,
-t:"Compare the average points of each season to the previous season (LAG)",
+t:"Compare each season's average points to the previous season (LAG)",
 h:"WITH SA AS (...) SELECT season, avg, LAG(avg) OVER(ORDER BY season)",
 s:"WITH SA AS (SELECT g.season, ROUND(AVG(p.PTS),2) AS avg FROM player_stats p JOIN game_info g ON p.game_id=g.game_id GROUP BY g.season) SELECT season, avg, LAG(avg) OVER(ORDER BY season) AS prev_avg, ROUND(avg-LAG(avg) OVER(ORDER BY season),2) AS change FROM SA ORDER BY season;"},
 
 {n:36,
-t:"Find players whose points are higher than the average points on their team (Correlated Subquery)",
+t:"Find players whose points are higher than their team's average points (Correlated Subquery)",
 h:"WHERE PTS > (SELECT AVG(PTS) FROM player_stats WHERE team = e.team)",
 s:"SELECT player, team, PTS FROM player_stats e WHERE PTS>(SELECT AVG(PTS) FROM player_stats WHERE team=e.team) ORDER BY team, PTS DESC LIMIT 30;"},
 
 {n:37,
-t:"Split players into 4 quartiles (Q1-Q4) by points with NTILE. Also show the average of each quartile",
+t:"Split players into 4 quartiles (Q1-Q4) by points with NTILE. Also show the average of every quartile",
 h:"NTILE(4) OVER(ORDER BY PTS DESC) + AVG per quartile",
 s:"SELECT quartile, ROUND(AVG(PTS),1) AS avg_pts, COUNT(*) AS players FROM (SELECT player, PTS, NTILE(4) OVER(ORDER BY PTS DESC) AS quartile FROM player_stats) GROUP BY quartile ORDER BY quartile;"},
 
 {n:38,
-t:"Find the Top 3 players by points in each team",
-h:"ROW_NUMBER() OVER(PARTITION BY team ORDER BY PTS DESC) then WHERE rn<=3",
+t:"Find the top 3 players by points in each team",
+h:"ROW_NUMBER() OVER(PARTITION BY team ORDER BY PTS DESC) and then WHERE rn<=3",
 s:"SELECT player, team, PTS FROM (SELECT player, team, PTS, ROW_NUMBER() OVER(PARTITION BY team ORDER BY PTS DESC) AS rn FROM player_stats) WHERE rn<=3 ORDER BY team, PTS DESC;"},
 
 {n:39,
-t:"Build a comprehensive seasonal report: season, average PTS, peak PTS, % home wins",
+t:"Build a comprehensive seasonal report: season, average PTS, PTS record, % home wins",
 h:"WITH Stats AS (...), WinRate AS (...) SELECT ... JOIN ...",
 s:"WITH Stats AS (SELECT g.season, ROUND(AVG(p.PTS),2) AS avg_pts, MAX(p.PTS) AS max_pts FROM player_stats p JOIN game_info g ON p.game_id=g.game_id GROUP BY g.season), WR AS (SELECT season, ROUND(AVG(result)*100,1) AS win_pct FROM game_info GROUP BY season) SELECT s.season, s.avg_pts, s.max_pts, w.win_pct FROM Stats s JOIN WR w ON s.season=w.season ORDER BY s.season;"},
 
 {n:40,
-t:"Show the gap between each player's points and the star player on their team (MAX OVER PARTITION BY)",
+t:"Show the gap between each player's points and the star player's points in their team (MAX OVER PARTITION BY)",
 h:"MAX(PTS) OVER(PARTITION BY team) AS team_max",
 s:"SELECT player, team, PTS, MAX(PTS) OVER(PARTITION BY team) AS team_max, ROUND(MAX(PTS) OVER(PARTITION BY team)-PTS,1) AS gap_from_star FROM player_stats ORDER BY team, PTS DESC LIMIT 40;"},
 
 {n:41,
-t:"Classify games: 'High' if total points above 220, 'Medium' if 180-220, 'Low' below 180. How many games in each category?",
+t:"Classify games: 'High' if total points over 220, 'Medium' if 180-220, 'Low' under 180. How many games in each category?",
 h:"CASE WHEN ... THEN ... GROUP BY scoring_type",
 s:"SELECT CASE WHEN away_score+home_score>220 THEN 'High' WHEN away_score+home_score>=180 THEN 'Medium' ELSE 'Low' END AS scoring_type, COUNT(*) AS games FROM game_info GROUP BY scoring_type ORDER BY games DESC;"},
 
 {n:42,
-t:"Compute a 3-game moving average of the home score",
+t:"Calculate a 3-game moving average for the home score",
 h:"AVG(home_score) OVER(ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)",
 s:"SELECT date, home_team, home_score, ROUND(AVG(home_score) OVER(ORDER BY date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),1) AS moving_avg FROM game_info LIMIT 20;"},
 
 {n:43,
-t:"Find games where at least one player scored over 50 points (EXISTS)",
+t:"Find games in which at least one player scored over 50 points (EXISTS)",
 h:"WHERE EXISTS (SELECT 1 FROM player_stats WHERE game_id=g.game_id AND PTS>50)",
 s:"SELECT g.date, g.away_team, g.home_team FROM game_info g WHERE EXISTS (SELECT 1 FROM player_stats p WHERE p.game_id=g.game_id AND p.PTS>50) ORDER BY g.date;"},
 
 {n:44,
-t:"Show how many home wins and home losses in each season — in a single row with Conditional Aggregation",
+t:"Show how many home wins and how many home losses in each season — in a single row with Conditional Aggregation",
 h:"SUM(CASE WHEN result=1 THEN 1 ELSE 0 END) AS wins",
 s:"SELECT season, SUM(CASE WHEN result=1 THEN 1 ELSE 0 END) AS home_wins, SUM(CASE WHEN result=0 THEN 1 ELSE 0 END) AS home_losses, ROUND(AVG(result)*100,1) AS win_pct FROM game_info GROUP BY season ORDER BY season;"},
 
 {n:45,
-t:"Compute each player's percentile (PERCENT_RANK) by points — who is in the Top 10%?",
-h:"PERCENT_RANK() OVER(ORDER BY PTS) then WHERE pct>=0.9",
+t:"Compute the percentile (PERCENT_RANK) of each player by points — who's in the Top 10%?",
+h:"PERCENT_RANK() OVER(ORDER BY PTS) and then WHERE pct>=0.9",
 s:"SELECT player, team, PTS, ROUND(PERCENT_RANK() OVER(ORDER BY PTS)*100,1) AS percentile FROM player_stats ORDER BY PTS DESC LIMIT 20;"},
 
 {n:46,
@@ -868,7 +867,7 @@ h:"AVG(max_pts) from a subquery of MAX GROUP BY player",
 s:"SELECT ROUND(AVG(max_pts),2) AS avg_of_career_bests FROM (SELECT player, MAX(PTS) AS max_pts FROM player_stats GROUP BY player);"},
 
 {n:47,
-t:"Show per player: points, BPM, and BPM rank within their team — only the Top 5 per team",
+t:"Show for each player: points, BPM and BPM rank within their team — only Top 5 per team",
 h:"ROW_NUMBER() OVER(PARTITION BY team ORDER BY BPM DESC) WHERE rn<=5",
 s:"SELECT player, team, PTS, BPM FROM (SELECT player, team, PTS, BPM, ROW_NUMBER() OVER(PARTITION BY team ORDER BY BPM DESC) AS rn FROM player_stats WHERE BPM IS NOT NULL) WHERE rn<=5 ORDER BY team, BPM DESC;"},
 
@@ -878,12 +877,12 @@ h:'AVG("3Pp") GROUP BY team HAVING AVG("3Pp")>0.36',
 s:'SELECT team, ROUND(AVG("3Pp")*100,1) AS avg_3pp, SUM("3P") AS total_3p FROM team_stats GROUP BY team HAVING AVG("3Pp")>0.36 ORDER BY avg_3pp DESC;'},
 
 {n:49,
-t:"Build a comparison report: per team — average score when hosting versus average score when visiting",
+t:"Build a comparative report: for each team — average score when hosting versus average score when visiting",
 h:"JOIN + CASE WHEN home_team=team THEN... GROUP BY team",
 s:"SELECT t.team, ROUND(AVG(CASE WHEN g.home_team=t.team THEN t.PTS END),1) AS home_avg, ROUND(AVG(CASE WHEN g.away_team=t.team THEN t.PTS END),1) AS away_avg FROM team_stats t JOIN game_info g ON t.game_id=g.game_id GROUP BY t.team ORDER BY home_avg DESC;"},
 
 {n:50,
-t:"Final management report: per season — average points, peak, % home wins, number of Triple-Doubles",
+t:"Final executive report: for each season — average points, high score, % home wins, number of Triple-Doubles",
 h:"3 CTEs + JOIN: Stats, WinRate, TDCount",
 s:"WITH Stats AS (SELECT g.season, ROUND(AVG(p.PTS),2) AS avg_pts, MAX(p.PTS) AS max_pts FROM player_stats p JOIN game_info g ON p.game_id=g.game_id GROUP BY g.season), WR AS (SELECT season, ROUND(AVG(result)*100,1) AS win_pct FROM game_info GROUP BY season), TD AS (SELECT g.season, COUNT(*) AS triple_doubles FROM player_stats p JOIN game_info g ON p.game_id=g.game_id WHERE p.PTS>=10 AND p.TRB>=10 AND p.AST>=10 GROUP BY g.season) SELECT s.season, s.avg_pts, s.max_pts, w.win_pct, COALESCE(t.triple_doubles,0) AS triple_doubles FROM Stats s JOIN WR w ON s.season=w.season LEFT JOIN TD t ON t.season=s.season ORDER BY s.season;"}
 ]}
@@ -914,8 +913,8 @@ function openExModal(i,e){
   if(e)e.stopPropagation();
   exModalIdx=i; curEx=i; renderEx();
   const ex=EX[curL][i];
-  const lvlLabel={b:'🌱 Beginner',m:'🟠 Intermediate',a:'🔴 Advanced'};
-  document.getElementById('exModalNum').textContent=lvlLabel[curL]+' · Exercise '+ex.n;
+  const lvlLabel={b:'🌱 Beginner',m:'🟠 medium',a:'🔴 advanced'};
+  document.getElementById('exModalNum').textContent=lvlLabel[curL]+' · exercise '+ex.n;
   document.getElementById('exModalTitle').textContent=ex.t;
   document.getElementById('exModalDesc').textContent=ex.t;
   document.getElementById('exModalHint').textContent=ex.h;
@@ -939,7 +938,7 @@ function showSolFromModal(){
   closeExModal();
   setTimeout(()=>openSol(exModalIdx,null),100);
 }
-function togH(){const b=document.getElementById('hBox');if(curEx===null)return;b.textContent='💡 Hint: '+EX[curL][curEx].h;b.classList.toggle('sh');}
+function togH(){const b=document.getElementById('hBox');if(curEx===null)return;b.textContent='💡 hint: '+EX[curL][curEx].h;b.classList.toggle('sh');}
 function hideInf(){document.getElementById('hBox').classList.remove('sh');}
 
 // Solution Modal
@@ -948,8 +947,8 @@ function openSol(i,e){
   if(e){e.stopPropagation();}
   solIdx=i; solLvl=curL;
   const ex=EX[curL][i];
-  const lvlLabel={b:'🌱 Beginner',m:'🟠 Intermediate',a:'🔴 Advanced'};
-  document.getElementById('solNum').textContent=lvlLabel[curL]+' · Exercise '+ex.n;
+  const lvlLabel={b:'🌱 Beginner',m:'🟠 medium',a:'🔴 advanced'};
+  document.getElementById('solNum').textContent=lvlLabel[curL]+' · exercise '+ex.n;
   document.getElementById('solTitleTxt').textContent=ex.t;
   document.getElementById('solHintTxt').textContent=ex.h;
   // Format SQL nicely
@@ -968,7 +967,7 @@ function openSol(i,e){
     .replace(/\n{3,}/g,'\n\n')
     .trim();
   document.getElementById('solCodeTxt').textContent=formatted;
-  document.getElementById('solCopyBtn').textContent='📋 Copy';
+  document.getElementById('solCopyBtn').textContent='📋 copy';
   document.getElementById('solOverlay').classList.add('open');
 }
 function closeSol(){document.getElementById('solOverlay').classList.remove('open');}
@@ -976,8 +975,8 @@ function copySol(){
   if(solIdx===null)return;
   navigator.clipboard.writeText(EX[solLvl][solIdx].s).then(()=>{
     const btn=document.getElementById('solCopyBtn');
-    btn.textContent='✅ Copied!';btn.classList.add('ok');
-    setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('ok');},2000);
+    btn.textContent='✅ copied!';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='📋 copy';btn.classList.remove('ok');},2000);
   });
 }
 function useSol(){
@@ -992,9 +991,9 @@ function runSolAndClose(){
   setTimeout(runQ,100);
 }
 function runQ(){const sql=document.getElementById('sqle').value.trim();if(!sql||!db)return;const t0=Date.now();try{showRes(db.exec(sql),Date.now()-t0);}catch(e){showErr(e.message);}}
-function showRes(res,ms){document.getElementById('rTm').textContent=ms+'ms';const sc=document.getElementById('rSc');if(!res||!res.length){document.getElementById('rSt').textContent='✓ Done';document.getElementById('rCl').textContent='';sc.innerHTML='<div class="emp"><div class="ico">✅</div><div>Completed successfully</div></div>';return;}const{columns,values}=res[0];document.getElementById('rSt').textContent=`✓ ${values.length.toLocaleString()} rows`;document.getElementById('rCl').textContent=`${columns.length} columns`;let h=`<table class="rt"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;values.forEach(r=>{h+='<tr>'+r.map(v=>{if(v===null)return'<td class="nv">NULL</td>';return`<td class="${typeof v==='number'?'nrv':''}" title="${String(v)}">${String(v)}</td>`;}).join('')+'</tr>';});sc.innerHTML=h+'</tbody></table>';}
-function showErr(m){document.getElementById('rSt').textContent='✗ Error';document.getElementById('rTm').textContent='';document.getElementById('rCl').textContent='';document.getElementById('rSc').innerHTML=`<div class="ev">❌ ${m}</div>`;}
-function clr(){document.getElementById('sqle').value='';document.getElementById('rSc').innerHTML='<div class="emp"><div class="ico">⚡</div><div>Run a query to see results</div></div>';document.getElementById('rSt').textContent='Ready';document.getElementById('rTm').textContent='';document.getElementById('rCl').textContent='';hideInf();updLN();}
+function showRes(res,ms){document.getElementById('rTm').textContent=ms+'ms';const sc=document.getElementById('rSc');if(!res||!res.length){document.getElementById('rSt').textContent='✓ done';document.getElementById('rCl').textContent='';sc.innerHTML='<div class="emp"><div class="ico">✅</div><div>Completed successfully</div></div>';return;}const{columns,values}=res[0];document.getElementById('rSt').textContent=`✓ ${values.length.toLocaleString()} rows`;document.getElementById('rCl').textContent=`${columns.length} columns`;let h=`<table class="rt"><thead><tr>${columns.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;values.forEach(r=>{h+='<tr>'+r.map(v=>{if(v===null)return'<td class="nv">NULL</td>';return`<td class="${typeof v==='number'?'nrv':''}" title="${String(v)}">${String(v)}</td>`;}).join('')+'</tr>';});sc.innerHTML=h+'</tbody></table>';}
+function showErr(m){document.getElementById('rSt').textContent='✗ error';document.getElementById('rTm').textContent='';document.getElementById('rCl').textContent='';document.getElementById('rSc').innerHTML=`<div class="ev">❌ ${m}</div>`;}
+function clr(){document.getElementById('sqle').value='';document.getElementById('rSc').innerHTML='<div class="emp"><div class="ico">⚡</div><div>Run a query to see results</div></div>';document.getElementById('rSt').textContent='ready';document.getElementById('rTm').textContent='';document.getElementById('rCl').textContent='';hideInf();updLN();}
 function qQ(q){document.getElementById('sqle').value=q;updLN();runQ();swT('editor');}
 function updLN(){const n=document.getElementById('sqle').value.split('\n').length;document.getElementById('lns').innerHTML=Array.from({length:Math.max(n,1)},(_,i)=>i+1).join('<br>');}
 // ERD
@@ -1120,7 +1119,7 @@ async function initDB(){
     const tot=Object.values(RCT).reduce((a,b)=>a+b,0);
     document.getElementById('dst').textContent=`Ready ✓ | ${tot.toLocaleString()} rows in ${Object.keys(SCH).length} tables`;
     document.getElementById('runBtn').disabled=false;
-  }catch(e){document.getElementById('dst').textContent='Error: '+e.message;console.error(e);}
+  }catch(e){document.getElementById('dst').textContent='error: '+e.message;console.error(e);}
 }function createTbls(){
   db.run('CREATE TABLE IF NOT EXISTS game_info (game_id INTEGER PRIMARY KEY,season INTEGER,date TEXT,away_team TEXT,away_score INTEGER,home_team TEXT,home_score INTEGER,result INTEGER)');
   db.run('CREATE TABLE IF NOT EXISTS player_stats (game_id INTEGER,player TEXT,team TEXT,MP TEXT,FG REAL,FGA REAL,FGp REAL,"3P" REAL,"3PA" REAL,FT REAL,FTA REAL,TRB REAL,AST REAL,STL REAL,BLK REAL,TOV REAL,PF REAL,PTS REAL,PM REAL,ORtg REAL,DRtg REAL,BPM REAL)');

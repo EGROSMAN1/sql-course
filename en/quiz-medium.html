@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Intermediate SQL Questions — Free Quiz | SQL.course</title>
+<title>Medium-Level SQL Questions — Free Quiz | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -143,31 +143,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="An intermediate SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING, and subqueries. Excellent practice for a data analyst job interview.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-medium.html">
+<meta name="description" content="An intermediate-level SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING and subqueries. Excellent practice to prepare for a data analyst job interview.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-medium.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="Multiple-Choice Questions — Intermediate | SQL">
-<meta property="og:description" content="An intermediate SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING, and subqueries. Excellent practice for a data analyst job interview.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/quiz-medium.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="Multiple-choice questions — medium level | SQL">
+<meta property="og:description" content="An intermediate-level SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING and subqueries. Excellent practice to prepare for a data analyst job interview.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Multiple-Choice Questions — Intermediate | SQL">
-<meta name="twitter:description" content="An intermediate SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING, and subqueries. Excellent practice for a data analyst job interview.">
+<meta name="twitter:title" content="Multiple-choice questions — medium level | SQL">
+<meta name="twitter:description" content="An intermediate-level SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING and subqueries. Excellent practice to prepare for a data analyst job interview.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <script type="application/ld+json">
 [
@@ -178,13 +178,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "SQL Intermediate Quiz",
+        "name": "Intermediate SQL quiz",
         "item": "https://egrosman1.github.io/sql-course/quiz-medium.html"
       }
     ]
@@ -192,8 +192,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "Intermediate SQL Questions — Free Quiz | SQL.course",
-    "description": "An intermediate SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING, and subqueries. Excellent practice for a data analyst job interview.",
+    "name": "Medium-Level SQL Questions — Free Quiz | SQL.course",
+    "description": "An intermediate-level SQL quiz: multiple-choice questions with explanations on JOIN, GROUP BY, HAVING and subqueries. Excellent practice to prepare for a data analyst job interview.",
     "url": "https://egrosman1.github.io/sql-course/quiz-medium.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -208,7 +208,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -222,14 +222,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 <body data-quiz-id="medium">
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">📗 Multiple-Choice Questions — Intermediate</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">📗 Multiple-choice questions — Medium level</div>
   <div class="topnav-right">
     <div class="level-tabs">
       <a href="quiz-beginner.html" class="ltab">🌱 Beginner</a>
-      <a href="quiz-medium.html" class="ltab active">📗 Intermediate</a>
-      <a href="quiz.html" class="ltab">🧠 Advanced</a>
-      <a href="../quiz-medium.html" class="ltab" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="quiz-medium.html" class="ltab" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/quiz-medium.html" class="ltab" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+      <a href="quiz-medium.html" class="ltab active">📗 medium</a>
+      <a href="quiz.html" class="ltab">🧠 advanced</a><a href="../quiz-medium.html" class="ltab" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="quiz-medium.html" class="ltab" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/quiz-medium.html" class="ltab" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
     </div>
     <div class="score-badge" id="scoreText">✅ 0 / 0</div>
   </div>
@@ -248,7 +247,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   <span class="fb-saved-score" id="fb-saved-score"></span>
   <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 Save progress</button>
   <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 History</button>
-  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">Sign out</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">Exit</button>
 </div>
 <div id="fb-history-wrap" style="display:none">
   <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
@@ -256,13 +255,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 
 <div class="hero">
   <div class="hero-badge">📗 LEVEL 2 · INTERMEDIATE</div>
-  <h1 class="hero-title">Multiple-Choice Questions — <em>Intermediate</em></h1>
-  <p class="hero-desc">String Functions · Aggregation · Advanced JOINs — 80 questions</p>
+  <h1 class="hero-title">Multiple-choice questions — <em>Medium level</em></h1>
+  <p class="hero-desc">String Functions · Aggregation · Advanced JOINs — 80 Questions</p>
   <div class="hero-stats">
     <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">answered</div></div>
-    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">correct</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">correctness</div></div>
     <div class="hs"><div class="hs-n">80</div><div class="hs-l">questions</div></div>
-    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">score</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">grade</div></div>
   </div>
 </div>
 
@@ -276,89 +275,89 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 
 <script>
 const questions = [
-  // ── Part 1: String Functions ──
-  {n:1,s:"Part A — String Functions",t:"Which function returns the number of characters in a string?",o:["SIZE()","LEN() / LENGTH() (depending on the database)","COUNT()","CHARS()"],c:1,e:"LENGTH (in PostgreSQL/Oracle) or LEN (in SQL Server) are used to measure the length of a string."},
-  {n:2,s:"Part A — String Functions",t:"What is the result of UPPER('sql')?",o:["sql","SQL","Sql","S-Q-L"],c:1,e:"The UPPER function turns all the letters into capital letters."},
-  {n:3,s:"Part A — String Functions",t:"Which function is used to join two or more strings?",o:["MERGE()","ADD()","CONCAT()","JOIN()"],c:2,e:"CONCAT joins strings together into a single unit."},
-  {n:4,s:"Part A — String Functions",t:"What does the function TRIM('  hello  ') do?",o:["Turns the letters lowercase.","Removes spaces from the start and end of the string.","Deletes all the spaces in the string (including in the middle).","Returns only the word 'hello'."],c:1,e:"TRIM cleans extra spaces from the edges only."},
-  {n:5,s:"Part A — String Functions",t:"Which function returns a specific part of a string?",o:["PART()","SPLIT()","SUBSTRING()","SECTION()"],c:2,e:"SUBSTRING lets you cut a section out of a string by start position and length."},
-  {n:6,s:"Part A — String Functions",t:"What is the result of LOWER('Apple')?",o:["apple","APPLE","Apple","aPPLE"],c:0,e:"LOWER turns all the characters into lowercase letters."},
+  // ── Part 1: string functions ──
+  {n:1,s:"Part A — String Functions",t:"Which function returns the number of characters in a string?",o:["SIZE()","LEN() / LENGTH() (depends on the database)","COUNT()","CHARS()"],c:1,e:"LENGTH (in PostgreSQL/Oracle) or LEN (in SQL Server) are used to measure the length of the string."},
+  {n:2,s:"Part A — String Functions",t:"What will the result of UPPER('sql') be?",o:["sql","SQL","Sql","S-Q-L"],c:1,e:"The UPPER function turns all the letters into uppercase (capital letters)."},
+  {n:3,s:"Part A — String Functions",t:"Which function is used to concatenate two or more strings?",o:["MERGE()","ADD()","CONCAT()","JOIN()"],c:2,e:"CONCAT joins strings together into a single unit."},
+  {n:4,s:"Part A — String Functions",t:"What does the function TRIM('  hello  ') do?",o:["Converts the letters to lowercase.","Removes spaces from the start and end of the string.","Removes all spaces in the string (including in the middle).","Returns only the word 'hello'."],c:1,e:"TRIM strips extra spaces only from the edges."},
+  {n:5,s:"Part A — String Functions",t:"Which function returns a specific part of a string?",o:["PART()","SPLIT()","SUBSTRING()","SECTION()"],c:2,e:"SUBSTRING lets you cut a segment from a string by start position and length."},
+  {n:6,s:"Part A — String Functions",t:"What will the result of LOWER('Apple') be?",o:["apple","APPLE","Apple","aPPLE"],c:0,e:"LOWER turns all characters into lowercase letters."},
   {n:7,s:"Part A — String Functions",t:"How can you find the position of the character 'a' within the string 'Data'?",o:["CHARINDEX() / POSITION() / INSTR()","FIND()","LOCATE_A()","WHERE()"],c:0,e:"These functions return the numeric index of a character within a string."},
-  {n:8,s:"Part A — String Functions",t:"What does the function REPLACE('Hello World', 'World', 'SQL') do?",o:["Adds the word SQL to the end.","Replaces the word 'World' with the word 'SQL'.","Deletes 'World'.","Checks whether 'World' exists in the string."],c:1,e:"REPLACE finds a substring and replaces it with a new value."},
-  {n:9,s:"Part A — String Functions",t:"Which function returns the 3 rightmost characters in a string?",o:["LAST(3)","BACK(3)","RIGHT(string, 3)","END(3)"],c:2,e:"RIGHT pulls a set number of characters from the right side of the string."},
-  {n:10,s:"Part A — String Functions",t:"What does the function LEFT('Database', 4) return?",o:["base","Data","abas","D"],c:1,e:"LEFT pulls the requested number of characters from the start of the string (the left side)."},
-  {n:11,s:"Part A — String Functions",t:"Which function is used to capitalize only the first letter (in supported systems)?",o:["FIRST_UP()","INITCAP()","START_UP()","TOP()"],c:1,e:"INITCAP capitalizes the first letter of each word and lowercases the rest."},
-  {n:12,s:"Part A — String Functions",t:"What happens if we run CONCAT('A', NULL, 'B')?",o:["AB","NULL (in most systems)","A B","An error"],c:1,e:"In standard SQL, concatenation with NULL returns NULL, but CONCAT in MySQL/SQL Server usually ignores the NULL and returns AB."},
-  {n:13,s:"Part A — String Functions",t:"How do we check whether a string starts with 'A'?",o:["WHERE col = 'A%'","WHERE col LIKE 'A%'","WHERE col STARTS WITH 'A'","WHERE col = 'A'"],c:1,e:"The LIKE operator with the % sign is used for pattern matching."},
-  {n:14,s:"Part A — String Functions",t:"What does \"_\" (underscore) mean when used with LIKE?",o:["Any number of characters.","Any single character.","A space.","The end of the string."],c:1,e:"\"_\" represents exactly one character at the position where it appears."},
-  {n:15,s:"Part A — String Functions",t:"Which function returns the ASCII value of a character?",o:["ASCII()","CODE()","VAL()","CHAR()"],c:0,e:"ASCII() returns the numeric value of the character according to the ASCII table."},
-  {n:16,s:"Part A — String Functions",t:"What does the function REVERSE('abc') do?",o:["ABC","cba","abc","acb"],c:1,e:"REVERSE flips the order of the characters in the string."},
-  {n:17,s:"Part A — String Functions",t:"How do we remove spaces from the right side only?",o:["TRIM_RIGHT()","RTRIM()","LTRIM()","CUT()"],c:1,e:"RTRIM (right trim) removes spaces from the end only."},
-  {n:18,s:"Part A — String Functions",t:"What does the STRLEN function return in SQL Server?",o:["The length of the string.","Nothing, the correct name is LEN().","The number of words.","The size in bytes."],c:1,e:"In SQL Server you use LEN, and in PostgreSQL/MySQL you use LENGTH."},
-  {n:19,s:"Part A — String Functions",t:"What is the concatenation operator in Oracle/PostgreSQL?",o:["+","&","||","&&"],c:2,e:"The double pipe || is used to join strings in these systems."},
-  {n:20,s:"Part A — String Functions",t:"Which function repeats a string several times?",o:["AGAIN()","REPLICATE() / REPEAT()","COPY()","MULTIPLY()"],c:1,e:"REPLICATE duplicates a string by the requested amount."},
-  // ── Part 2: Aggregation & GROUP BY ──
-  {n:21,s:"Part B — Aggregation & GROUP BY",t:"What does the function COUNT(*) return?",o:["The sum of the values in the column.","The number of rows, including duplicates and NULL values.","Only rows with unique values.","The maximum value."],c:1,e:"COUNT(*) counts all the records in the table regardless of content."},
-  {n:22,s:"Part B — Aggregation & GROUP BY",t:"Which function returns the highest value in a column?",o:["HIGH()","TOP()","MAX()","LARGE()"],c:2,e:"MAX finds the maximum value in a group."},
-  {n:23,s:"Part B — Aggregation & GROUP BY",t:"What does the SUM() function do?",o:["Counts how many rows there are.","Returns the average.","Computes the total sum of numeric values.","Returns the minimum value."],c:2,e:"SUM adds up all the values in a numeric column."},
-  {n:24,s:"Part B — Aggregation & GROUP BY",t:"What is the difference between COUNT(column) and COUNT(*)?",o:["There is no difference.","COUNT(column) ignores NULL values in that specific column.","COUNT(*) ignores NULL.","COUNT(column) counts only unique values."],c:1,e:"When you specify a column, SQL counts only rows that have a non-NULL value."},
-  {n:25,s:"Part B — Aggregation & GROUP BY",t:"What is GROUP BY used for?",o:["To sort the results.","To filter individual rows.","To group rows with identical values in order to perform an aggregate calculation.","To join two tables."],c:2,e:"GROUP BY divides the table into groups (e.g. by department) in order to compute SUM/AVG for each group."},
-  {n:26,s:"Part B — Aggregation & GROUP BY",t:"Where does GROUP BY appear in a query?",o:["Before the WHERE.","After the WHERE and before the ORDER BY.","At the start of the query.","After the HAVING."],c:1,e:"The clause order: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY."},
-  {n:27,s:"Part B — Aggregation & GROUP BY",t:"How can you filter the results of an aggregate function (like SUM > 100)?",o:["WHERE","HAVING","GROUP BY","LIMIT"],c:1,e:"WHERE filters rows before grouping, HAVING filters groups after grouping."},
-  {n:28,s:"Part B — Aggregation & GROUP BY",t:"What does the MIN() function return?",o:["The average of the values.","The lowest value.","The number of values.","The first value in the table."],c:1,e:"MIN finds the minimum value."},
-  {n:29,s:"Part B — Aggregation & GROUP BY",t:"Which function computes an average?",o:["AVERAGE()","AVG()","MEAN()","SUM() / COUNT()"],c:1,e:"AVG() is the built-in function for computing an arithmetic mean."},
-  {n:30,s:"Part B — Aggregation & GROUP BY",t:"What happens to NULL values in the AVG(price) calculation?",o:["They are counted as 0.","The query returns an error.","They are omitted from the calculation (both the numerator and the denominator).","They become NULL in the final result."],c:2,e:"Aggregate functions (except COUNT) completely ignore NULL."},
-  {n:31,s:"Part B — Aggregation & GROUP BY",t:"Can you use GROUP BY without an aggregate function?",o:["No, it is required.","Yes, it works similarly to DISTINCT.","Only if there is a JOIN.","Only in SQL Server."],c:1,e:"Grouping without a calculation simply shows the unique values of the column."},
-  {n:32,s:"Part B — Aggregation & GROUP BY",t:"What does SELECT COUNT(DISTINCT city) FROM customers return?",o:["The number of customers in the city.","The number of distinct (unique) cities that exist in the table.","The list of city names.","The total number of customers."],c:1,e:"DISTINCT makes COUNT count each value only once."},
-  {n:33,s:"Part B — Aggregation & GROUP BY",t:"What is the most common mistake when using GROUP BY?",o:["Using SUM instead of COUNT.","Selecting a column in SELECT that is neither in GROUP BY nor aggregated.","Writing the GROUP BY before the FROM.","Using more than 3 columns in the grouping."],c:1,e:"Every column in SELECT must be part of the grouping or inside a function (like SUM)."},
-  {n:34,s:"Part B — Aggregation & GROUP BY",t:"What does the function COUNT(1) do?",o:["Counts only the first row.","Always returns 1.","Identical to COUNT(*) - counts all the rows.","Counts only rows where the value is 1."],c:2,e:"In most databases this is a shortcut for counting all the rows."},
-  {n:35,s:"Part B — Aggregation & GROUP BY",t:"How do we compute total sales for each salesperson separately?",o:["SELECT SUM(sales) FROM data","SELECT seller, SUM(sales) FROM data GROUP BY seller","SELECT seller, SUM(sales) FROM data WHERE seller = 'all'","SELECT seller FROM data ORDER BY SUM(sales)"],c:1,e:"GROUP BY creates a 'bucket' for each seller and computes the sum within it."},
-  {n:36,s:"Part B — Aggregation & GROUP BY",t:"Is it allowed to use an alias inside the HAVING?",o:["Always.","It depends on the database (in MySQL yes, in SQL Server usually no).","Never.","Only if it is a number."],c:1,e:"SQL Server processes the HAVING before the SELECT, so it does not recognize the alias."},
-  {n:37,s:"Part B — Aggregation & GROUP BY",t:"What is the result of MIN(name) when the column is text?",o:["An error, you cannot run it on text.","The first name in alphabetical order.","The shortest name.","The number of characters in the shortest name."],c:1,e:"MIN and MAX also work on strings, by alphabetical order."},
-  {n:38,s:"Part B — Aggregation & GROUP BY",t:"What is the difference between WHERE amount > 100 and HAVING amount > 100?",o:["There is no difference.","HAVING is faster.","WHERE filters individual transactions, HAVING filters groups.","WHERE is used only for text."],c:2,e:"Filtering before grouping versus filtering after grouping."},
-  {n:39,s:"Part B — Aggregation & GROUP BY",t:"Can you group by more than one column? (e.g. city and gender)",o:["No.","Yes, you simply separate with a comma: GROUP BY city, gender.","Only if you use UNION.","Only in Oracle."],c:1,e:"You can create as detailed a set of sub-groups as you like."},
-  {n:40,s:"Part B — Aggregation & GROUP BY",t:"Which function does not exist in SQL as a standard function?",o:["SUM()","AVG()","MEDIAN()","COUNT()"],c:2,e:"Computing a median in SQL requires window functions or subqueries."},
+  {n:8,s:"Part A — String Functions",t:"What does the function REPLACE('Hello World', 'World', 'SQL') do?",o:["Adds the word SQL to the end.","Replaces the word 'World' with the word 'SQL'.","Deletes 'World'.","Checks whether 'World' exists in the string."],c:1,e:"REPLACE searches for a substring and replaces it with a new value."},
+  {n:9,s:"Part A — String Functions",t:"Which function returns the 3 rightmost characters in a string?",o:["LAST(3)","BACK(3)","RIGHT(string, 3)","END(3)"],c:2,e:"RIGHT extracts a defined number of characters from the right side of the string."},
+  {n:10,s:"Part A — String Functions",t:"What does the function LEFT('Database', 4) return?",o:["base","Data","abas","D"],c:1,e:"LEFT pulls the requested number of characters from the start of the string (left side)."},
+  {n:11,s:"Part A — String Functions",t:"Which function is used to change only the first letter to uppercase (in supporting systems)?",o:["FIRST_UP()","INITCAP()","START_UP()","TOP()"],c:1,e:"INITCAP capitalizes the first letter of each word and lowercases the rest."},
+  {n:12,s:"Part A — String Functions",t:"What will happen if we run CONCAT('A', NULL, 'B')?",o:["AB","NULL (in most systems)","A B","error"],c:1,e:"In standard SQL, concatenation with NULL returns NULL, but CONCAT in MySQL/SQL Server usually ignores the NULL and returns AB."},
+  {n:13,s:"Part A — String Functions",t:"How do we check if a string starts with 'A'?",o:["WHERE col = 'A%'","WHERE col LIKE 'A%'","WHERE col STARTS WITH 'A'","WHERE col = 'A'"],c:1,e:"The LIKE operator with the % sign is used for pattern matching."},
+  {n:14,s:"Part A — String Functions",t:"What does \"_\" (underscore) mean when used with LIKE?",o:["Any number of characters.","Any single character.","profit.","The end of the string."],c:1,e:"\"_\" represents exactly one character wherever it appears."},
+  {n:15,s:"Part A — String Functions",t:"Which function returns the ASCII value of a character?",o:["ASCII()","CODE()","VAL()","CHAR()"],c:0,e:"ASCII() returns the numeric value of the character per the ASCII table."},
+  {n:16,s:"Part A — String Functions",t:"What does the function REVERSE('abc') do?",o:["ABC","cba","abc","acb"],c:1,e:"REVERSE reverses the order of characters in a string."},
+  {n:17,s:"Part A — String Functions",t:"How do we remove only spaces from the right side?",o:["TRIM_RIGHT()","RTRIM()","LTRIM()","CUT()"],c:1,e:"RTRIM (Right Trim) removes spaces from the end only."},
+  {n:18,s:"Part A — String Functions",t:"What does the STRLEN function return in SQL Server?",o:["The length of the string.","Nothing, the correct name is LEN().","Word count.","Size in bytes."],c:1,e:"In SQL Server you use LEN, and in PostgreSQL/MySQL, LENGTH."},
+  {n:19,s:"Part A — String Functions",t:"What is the concatenation operator in Oracle/PostgreSQL?",o:["+","&","||","&&"],c:2,e:"The parallel lines || are used to concatenate strings in these systems."},
+  {n:20,s:"Part A — String Functions",t:"Which function repeats a string a number of times?",o:["AGAIN()","REPLICATE() / REPEAT()","COPY()","MULTIPLY()"],c:1,e:"REPLICATE duplicates a string by the requested count."},
+  // ── Part 2: Aggregation and GROUP BY ──
+  {n:21,s:"Part 2 — Aggregation and GROUP BY",t:"What does the COUNT(*) function return?",o:["The sum of the values in the column.","The number of rows including duplicates and NULL values.","Only rows with unique values.","the maximum value."],c:1,e:"COUNT(*) counts every record in the table regardless of content."},
+  {n:22,s:"Part 2 — Aggregation and GROUP BY",t:"Which function returns the highest value in a column?",o:["HIGH()","TOP()","MAX()","LARGE()"],c:2,e:"MAX finds the maximum value in the group."},
+  {n:23,s:"Part 2 — Aggregation and GROUP BY",t:"What does the SUM() function do?",o:["Counts how many rows there are.","Returns the average.","Calculates the total sum of numeric values.","Returns the minimum value."],c:2,e:"SUM adds up all the values in a numeric column."},
+  {n:24,s:"Part 2 — Aggregation and GROUP BY",t:"What's the difference between COUNT(column) and COUNT(*)?",o:["No difference.","COUNT(column) ignores NULL values in that specific column.","COUNT(*) ignores NULL.","COUNT(column) counts only unique values."],c:1,e:"When you specify a column, SQL only counts rows that have a non-NULL value."},
+  {n:25,s:"Part 2 — Aggregation and GROUP BY",t:"What purpose does GROUP BY serve?",o:["To sort the results.","To filter individual rows.","For grouping rows with identical values in order to perform an aggregate calculation.","To join two tables."],c:2,e:"GROUP BY splits the table into groups (for example by department) in order to compute SUM/AVG for each group."},
+  {n:26,s:"Part 2 — Aggregation and GROUP BY",t:"Where will the GROUP BY appear in the query?",o:["Before the WHERE.","After the WHERE and before the ORDER BY.","At the start of the query.","After the HAVING."],c:1,e:"Order of clauses: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY."},
+  {n:27,s:"Part 2 — Aggregation and GROUP BY",t:"How can you filter the results of an aggregate function (like SUM > 100)?",o:["WHERE","HAVING","GROUP BY","LIMIT"],c:1,e:"WHERE filters rows before grouping, HAVING filters groups after grouping."},
+  {n:28,s:"Part 2 — Aggregation and GROUP BY",t:"What does the MIN() function return?",o:["The average of the values.","The lowest value.","The number of values.","The first value in the table."],c:1,e:"MIN finds the minimum value."},
+  {n:29,s:"Part 2 — Aggregation and GROUP BY",t:"Which function calculates an average?",o:["AVERAGE()","AVG()","MEAN()","SUM() / COUNT()"],c:1,e:"AVG() is the built-in function for calculating an arithmetic average."},
+  {n:30,s:"Part 2 — Aggregation and GROUP BY",t:"What happens to NULL values in the AVG(price) calculation?",o:["They're counted as 0.","The query returns an error.","they're omitted from the calculation (both from the numerator and the denominator).","they become NULL in the final result."],c:2,e:"Aggregate functions (except COUNT) ignore NULL completely."},
+  {n:31,s:"Part 2 — Aggregation and GROUP BY",t:"Can GROUP BY be used without an aggregate function?",o:["No, it's required.","Yes, it will work similarly to DISTINCT.","Only if there's a JOIN.","Only in SQL Server."],c:1,e:"Grouping without a calculation will simply show the unique values of the column."},
+  {n:32,s:"Part 2 — Aggregation and GROUP BY",t:"What does this return: SELECT COUNT(DISTINCT city) FROM customers?",o:["The number of customers in the city.","the number of distinct (unique) cities that exist in the table.","The list of city names.","The total number of customers."],c:1,e:"DISTINCT makes COUNT count each value only once."},
+  {n:33,s:"Part 2 — Aggregation and GROUP BY",t:"What's the most common mistake when using GROUP BY?",o:["Using SUM instead of COUNT.","Selecting a column in SELECT that isn't in GROUP BY and isn't aggregated.","Writing the GROUP BY before the FROM.","Using more than 3 columns in grouping."],c:1,e:"Every column in SELECT must be part of the grouping or inside a function (like SUM)."},
+  {n:34,s:"Part 2 — Aggregation and GROUP BY",t:"What does the COUNT(1) function do?",o:["Counts only the first row.","Always returns 1.","identical to COUNT(*) - counts all rows.","Counts only rows where the value is 1."],c:2,e:"In most databases this is a shortcut for counting all rows."},
+  {n:35,s:"Part 2 — Aggregation and GROUP BY",t:"How do we calculate the sales total for each salesperson separately?",o:["SELECT SUM(sales) FROM data","SELECT seller, SUM(sales) FROM data GROUP BY seller","SELECT seller, SUM(sales) FROM data WHERE seller = 'all'","SELECT seller FROM data ORDER BY SUM(sales)"],c:1,e:"The GROUP BY creates a 'bucket' for each seller and calculates the sum inside it."},
+  {n:36,s:"Part 2 — Aggregation and GROUP BY",t:"Is it allowed to use an alias inside the HAVING?",o:["always.","Depends on the database (in MySQL yes, in SQL Server usually not).","never.","Only if it's a number."],c:1,e:"SQL Server processes the HAVING before the SELECT, so it doesn't recognize the alias."},
+  {n:37,s:"Part 2 — Aggregation and GROUP BY",t:"What is the result of MIN(name) when the column is text?",o:["Error, can't perform on text.","The first name in ABC order.","The shortest name.","The number of characters in the shortest name."],c:1,e:"MIN and MAX also work on strings, in alphabetical order."},
+  {n:38,s:"Part 2 — Aggregation and GROUP BY",t:"What's the difference between WHERE amount > 100 and HAVING amount > 100?",o:["No difference.","HAVING is faster.","WHERE filters individual transactions, HAVING filters groups.","WHERE is used only for text."],c:2,e:"Filtering before grouping versus filtering after grouping."},
+  {n:39,s:"Part 2 — Aggregation and GROUP BY",t:"Can you group by more than one column? (for example, city and gender)",o:["no.","Yes, simply separate with a comma: GROUP BY city, gender.","Only if UNION is used.","Only in Oracle."],c:1,e:"You can create detailed subgroups as needed."},
+  {n:40,s:"Part 2 — Aggregation and GROUP BY",t:"Which function doesn't exist in SQL as a standard function?",o:["SUM()","AVG()","MEDIAN()","COUNT()"],c:2,e:"Calculating a median in SQL requires window functions or subqueries."},
   // ── Part 3: JOINs ──
-  {n:41,s:"Part C — Table Relationships (JOINs)",t:"What is the main role of a JOIN?",o:["To delete duplicates.","To combine data from two tables based on a shared column.","To sort data.","To create a new table."],c:1,e:"A JOIN lets you combine information from several related tables in a single query."},
-  {n:42,s:"Part C — Table Relationships (JOINs)",t:"What is an INNER JOIN?",o:["Returns all the rows from both tables.","Returns only rows that have a match in both tables.","Returns only the left table.","Returns rows that have no match."],c:1,e:"An INNER JOIN returns only rows that have a matching value in both tables."},
-  {n:43,s:"Part C — Table Relationships (JOINs)",t:"What does a LEFT JOIN return?",o:["Only rows from the right table.","All the rows from the left table, and matching rows from the right (if there is no match, NULL appears).","Only rows that appear only on the left side.","The intersection of the two tables."],c:1,e:"A LEFT JOIN keeps all the rows of the left table even when there is no match."},
-  {n:44,s:"Part C — Table Relationships (JOINs)",t:"What happens in a RIGHT JOIN if there is no match in the left table?",o:["The row is dropped.","An error is shown.","The right table data is shown with NULL values in the left table columns.","The left table is filled with zeros."],c:2,e:"A RIGHT JOIN keeps all the rows of the right table. Gaps on the left appear as NULL."},
-  {n:45,s:"Part C — Table Relationships (JOINs)",t:"What is a FULL OUTER JOIN?",o:["Returns only what is shared.","Returns all the rows from both tables, with NULL where there is no match.","Returns only the non-matching rows.","Joins tables with no condition."],c:1,e:"A FULL OUTER JOIN returns everything from both tables with NULL in the gaps."},
-  {n:46,s:"Part C — Table Relationships (JOINs)",t:"What is a CROSS JOIN?",o:["A join by primary key.","A Cartesian product - every row in table A is combined with every row in table B.","A join of a table with itself.","A join based on greater/less than."],c:1,e:"A CROSS JOIN creates all the possible combinations between two tables."},
-  {n:47,s:"Part C — Table Relationships (JOINs)",t:"If table A has 5 rows and table B has 3 rows, how many rows does a CROSS JOIN return?",o:["8","5","15","2"],c:2,e:"5 times 3 = 15. A Cartesian product."},
-  {n:48,s:"Part C — Table Relationships (JOINs)",t:"What is a SELF JOIN?",o:["A join of two tables with identical data.","A join of a table with itself (e.g. to find the relationship between an employee and a manager).","A query without a JOIN.","Using DISTINCT on a table."],c:1,e:"A SELF JOIN lets you compare rows within the same table (e.g. hierarchies)."},
-  {n:49,s:"Part C — Table Relationships (JOINs)",t:"Which keyword is used to define the join condition?",o:["WHERE","ON","AT","USING"],c:1,e:"The syntax is JOIN table ON condition."},
-  {n:50,s:"Part C — Table Relationships (JOINs)",t:"What is the difference between JOIN and UNION?",o:["There is no difference.","JOIN combines columns (side by side), UNION combines rows (one below another).","UNION requires ON.","JOIN requires the number of columns to be identical."],c:1,e:"JOIN = a horizontal join. UNION = a vertical join."},
-  {n:51,s:"Part C — Table Relationships (JOINs)",t:"What is a Natural Join?",o:["A join based on a foreign key only.","An automatic join based on all the columns with identical names in both tables.","A join of natural tables.","A join without reserved words."],c:1,e:"A NATURAL JOIN joins automatically by columns with identical names."},
-  {n:52,s:"Part C — Table Relationships (JOINs)",t:"Can you JOIN more than 2 tables?",o:["No.","Yes, you can chain several JOINs one after another.","Only up to 3 tables.","Only if you use a subquery."],c:1,e:"You can chain many JOINs in a single query."},
-  {n:53,s:"Part C — Table Relationships (JOINs)",t:"What does an INNER JOIN return if the two tables have no matching value at all?",o:["The entire first table.","An empty table.","Rows with NULL.","A system error."],c:1,e:"An INNER JOIN with no matches returns an empty table."},
-  {n:54,s:"Part C — Table Relationships (JOINs)",t:"In which case do we use a LEFT JOIN?",o:["When you want only data that exists on both sides.","When you want a full list of customers, including those who did not place an order.","When we have only one table.","To improve performance."],c:1,e:"A LEFT JOIN is ideal for keeping all the records from the primary table."},
-  {n:55,s:"Part C — Table Relationships (JOINs)",t:"What does the USING(column_name) clause do?",o:["Replaces the FROM.","A substitute for ON when the joining column has the same name in both tables.","Used to filter rows.","Defines which index to use."],c:1,e:"USING is shorthand for ON when the column has the same name in both tables."},
-  {n:56,s:"Part C — Table Relationships (JOINs)",t:"What is an Anti-Join (conceptually)?",o:["A join of everything that matches.","Retrieving rows from one table that have no match at all in the other table.","Deleting shared data.","A join in reverse order."],c:1,e:"An Anti-Join finds rows that have no match in the other table."},
-  {n:57,s:"Part C — Table Relationships (JOINs)",t:"How do you perform an Anti-Join using a LEFT JOIN?",o:["Add LIMIT 1.","Check in the WHERE where the right table column is NULL.","Use an INNER JOIN.","Use GROUP BY."],c:1,e:"LEFT JOIN + WHERE right.col IS NULL = Anti-Join."},
-  {n:58,s:"Part C — Table Relationships (JOINs)",t:"What is a Non-Equi Join?",o:["A join with no equality signs.","A JOIN whose condition uses operators like <, >, or BETWEEN.","A join of tables of unequal size.","A syntax error."],c:1,e:"A Non-Equi Join uses operators other than equality."},
-  {n:59,s:"Part C — Table Relationships (JOINs)",t:"What is an alias and why is it important in a JOIN?",o:["It is used to encrypt data.","It lets you shorten table names and avoid ambiguity when column names are identical.","It is required in an INNER JOIN.","It replaces the SELECT."],c:1,e:"An alias is essential in a JOIN to distinguish between columns with identical names."},
-  {n:60,s:"Part C — Table Relationships (JOINs)",t:"What happens if we forget to write the ON condition in a JOIN?",o:["The query works and guesses the relationship.","You get a syntax error (or a CROSS JOIN in some versions).","Only the first row is shown.","The data is deleted."],c:1,e:"Without ON you get an error or a CROSS JOIN, depending on the database."},
-  {n:61,s:"Part C — Table Relationships (JOINs)",t:"Which JOIN is the default if you write just the word JOIN?",o:["LEFT JOIN","INNER JOIN","CROSS JOIN","FULL JOIN"],c:1,e:"JOIN on its own = INNER JOIN."},
-  {n:62,s:"Part C — Table Relationships (JOINs)",t:"An employees table has a manager_id column pointing to employee_id in the same table. Which JOIN is needed?",o:["OUTER JOIN","SELF JOIN","NATURAL JOIN","CROSS JOIN"],c:1,e:"A SELF JOIN joins a table to itself — excellent for hierarchies."},
-  {n:63,s:"Part C — Table Relationships (JOINs)",t:"Is JOIN performance affected by indexes?",o:["No, JOIN is unrelated to indexing.","Yes, an index on the ON columns significantly speeds up the query.","Only in a LEFT JOIN.","Only on small tables."],c:1,e:"An index on the ON columns is critical for JOIN performance."},
-  {n:64,s:"Part C — Table Relationships (JOINs)",t:"What is the advantage of a FULL OUTER JOIN over a UNION?",o:["It is faster.","It keeps the column structure of both tables side by side.","It does not require keys.","It always returns fewer rows."],c:1,e:"A FULL OUTER JOIN combines horizontally — UNION combines vertically."},
-  {n:65,s:"Part C — Table Relationships (JOINs)",t:"What happens in a JOIN if both joining columns have NULL values?",o:["They are treated as a match.","NULL never equals NULL in a JOIN, so there is no match.","An error is shown.","The system ignores these rows."],c:1,e:"NULL = NULL is not true in SQL. NULL does not match NULL in a JOIN."},
-  {n:66,s:"Part C — Table Relationships (JOINs)",t:"How can you join 3 tables: customers, orders, and products?",o:["One long JOIN.","Two JOINs: customers to orders, then orders to products.","You cannot, only 2 are allowed.","Using UNION."],c:1,e:"You can chain JOINs: A JOIN B JOIN C."},
-  {n:67,s:"Part C — Table Relationships (JOINs)",t:"What is the difference between LEFT JOIN and LEFT OUTER JOIN?",o:["OUTER returns more data.","There is no difference, it is the same command.","LEFT JOIN is only for MySQL.","OUTER JOIN requires a WHERE."],c:1,e:"LEFT JOIN and LEFT OUTER JOIN are completely identical."},
-  {n:68,s:"Part C — Table Relationships (JOINs)",t:"When would we intentionally use a CROSS JOIN?",o:["To find matches between prices.","To create all the possible combinations (like all colors × all sizes).","When we have a strong primary key.","To delete duplicates."],c:1,e:"A CROSS JOIN is useful for generating product combinations, schedules, and so on."},
-  {n:69,s:"Part C — Table Relationships (JOINs)",t:"Does the order of the tables matter in an INNER JOIN?",o:["Yes, it changes the result.","No, the logical result is the same.","Only if there are more than 1000 rows.","Only in Oracle."],c:1,e:"In an INNER JOIN the table order does not change the logical result."},
-  {n:70,s:"Part C — Table Relationships (JOINs)",t:"Does the order of the tables matter in a LEFT JOIN?",o:["No.","Yes, the table written first (on the left) is the one whose rows are all kept.","Only if you use ON.","Only in SQL Server."],c:1,e:"In a LEFT JOIN the order is critical — the first table always appears in full."},
-  {n:71,s:"Part C — Table Relationships (JOINs)",t:'What is a "Cartesian Product"?',o:["The result of an INNER JOIN.","The result of a CROSS JOIN (a Cartesian product).","A math function in SQL.","A mistake in computing an average."],c:1,e:"Cartesian Product = CROSS JOIN = every row × every row."},
-  {n:72,s:"Part C — Table Relationships (JOINs)",t:"How can you prevent duplicates in a JOIN result?",o:["Use ORDER BY.","Use DISTINCT.","Use a LEFT JOIN.","Use SUM."],c:1,e:"DISTINCT removes duplicate rows from the result."},
-  {n:73,s:"Part C — Table Relationships (JOINs)",t:"When do we write the table name before the column name (e.g. Orders.ID)?",o:["Always, it is required.","When the column name exists in more than one table in the query.","Only in the WHERE.","Only in the GROUP BY."],c:1,e:"Specifying the table name is needed to avoid ambiguity."},
-  {n:74,s:"Part C — Table Relationships (JOINs)",t:"What does A RIGHT JOIN B return?",o:["All of A.","All of B and whatever matches from A.","Only what is shared.","The rows that exist only in A."],c:1,e:"A RIGHT JOIN keeps all the rows of the right table (B)."},
-  {n:75,s:"Part C — Table Relationships (JOINs)",t:"Can you use a subquery inside a JOIN?",o:["No.","Yes, you can treat a query result as a table (a Derived Table).","Only in an INNER JOIN.","Only if there is a GROUP BY."],c:1,e:"A Derived Table (a subquery inside FROM) can be joined like a regular table."},
-  {n:76,s:"Part C — Table Relationships (JOINs)",t:"Which JOIN is the least common in everyday use?",o:["INNER JOIN","LEFT JOIN","CROSS JOIN","SELF JOIN"],c:2,e:"A CROSS JOIN is rare because a Cartesian product rarely makes sense."},
-  {n:77,s:"Part C — Table Relationships (JOINs)",t:"What is the role of ON in a JOIN query?",o:["To define the table name.","To define the logic by which the rows are joined.","To filter the final result.","To run the server."],c:1,e:"ON defines the matching condition between the tables."},
-  {n:78,s:"Part C — Table Relationships (JOINs)",t:"What does SELECT * FROM T1, T2 mean?",o:["An error.","INNER JOIN.","CROSS JOIN (old-style syntax).","UNION."],c:2,e:"A comma between tables in FROM is old-style syntax for a CROSS JOIN."},
-  {n:79,s:"Part C — Table Relationships (JOINs)",t:"What is a Multiple Join?",o:["A JOIN that returns many rows.","Joining more than two tables in the same query.","Using GROUP BY after a JOIN.","A join done several times a day."],c:1,e:"A Multiple Join = a chain of JOINs in a single query."},
-  {n:80,s:"Part C — Table Relationships (JOINs)",t:"What is the most important rule when working with JOINs?",o:["Always use a LEFT JOIN.","Know the relationships between the tables (primary key and foreign key).","Write everything in uppercase.","Do not use more than 2 columns in the ON."],c:1,e:"Understanding the PK/FK relationships between tables is the basis of every correct JOIN."}
+  {n:41,s:"Part C — Relationships between tables (JOINs)",t:"What is the main role of JOIN?",o:["To delete duplicates.","To combine data from two tables based on a shared column.","To sort data.","To create a new table."],c:1,e:"JOIN lets you combine data from multiple related tables in a single query."},
+  {n:42,s:"Part C — Relationships between tables (JOINs)",t:"What is the INNER JOIN?",o:["Returns all the rows from both tables.","Returns only rows that have a match in both tables.","Returns only the left table.","Returns rows that have no match."],c:1,e:"INNER JOIN returns only rows that have a matching value in both tables."},
+  {n:43,s:"Part C — Relationships between tables (JOINs)",t:"What does LEFT JOIN return?",o:["Only rows from the right table.","All rows from the left table, and matching rows from the right (if there's no match, NULL appears).","Only rows that appear only on the left side.","the intersection of the two tables."],c:1,e:"LEFT JOIN keeps all rows of the left table even if there's no match."},
+  {n:44,s:"Part C — Relationships between tables (JOINs)",t:"What happens in a RIGHT JOIN if there's no match in the left table?",o:["The row will be dropped.","An error will be shown.","The right table's data will be shown, and NULL values in the left table's columns.","The left table will fill with zeros."],c:2,e:"RIGHT JOIN keeps all rows of the right table. Missing values on the left appear as NULL."},
+  {n:45,s:"Part C — Relationships between tables (JOINs)",t:"What is a FULL OUTER JOIN?",o:["Returns only what is shared.","Returns all rows from both tables, with NULL where there's no match.","Returns only the non-matching rows.","Joins tables without a condition."],c:1,e:"FULL OUTER JOIN returns everything from both tables with NULL in the gaps."},
+  {n:46,s:"Part C — Relationships between tables (JOINs)",t:"What is CROSS JOIN?",o:["Join by primary key.","Cartesian product - every row in table A combined with every row in table B.","A join of a table with itself.","A join based on greater-than/less-than."],c:1,e:"CROSS JOIN creates every possible combination between the two tables."},
+  {n:47,s:"Part C — Relationships between tables (JOINs)",t:"If table A has 5 rows and table B has 3 rows, how many rows will CROSS JOIN return?",o:["8","5","15","2"],c:2,e:"5 times 3 = 15. A Cartesian product."},
+  {n:48,s:"Part C — Relationships between tables (JOINs)",t:"What is a SELF JOIN?",o:["A union of two tables identical in their data.","Joining a table to itself (for example, to find the relationship between an employee and a manager).","A query without a JOIN.","Using DISTINCT on a table."],c:1,e:"SELF JOIN lets you compare rows within the same table (for example, hierarchies)."},
+  {n:49,s:"Part C — Relationships between tables (JOINs)",t:"Which keyword is used to define the join condition?",o:["WHERE","ON","AT","USING"],c:1,e:"The syntax is JOIN table ON condition."},
+  {n:50,s:"Part C — Relationships between tables (JOINs)",t:"What's the difference between JOIN and UNION?",o:["No difference.","JOIN combines columns (side by side), UNION combines rows (one below the other).","UNION requires ON.","JOIN requires the number of columns to be identical."],c:1,e:"JOIN = horizontal combination. UNION = vertical combination."},
+  {n:51,s:"Part C — Relationships between tables (JOINs)",t:"What is a Natural Join?",o:["A connection based only on a foreign key.","An automatic join based on all columns with an identical name in both tables.","A natural join of tables.","A join without reserved words."],c:1,e:"NATURAL JOIN joins automatically by columns with identical names."},
+  {n:52,s:"Part C — Relationships between tables (JOINs)",t:"Can you perform a JOIN across more than 2 tables?",o:["no.","Yes, you can chain several JOINs one after another.","Only up to 3 tables.","Only if you use a Subquery."],c:1,e:"You can chain many JOINs in a single query."},
+  {n:53,s:"Part C — Relationships between tables (JOINs)",t:"What will INNER JOIN return if neither table has any matching value?",o:["The entire first table.","Empty table.","Rows with NULL.","System error."],c:1,e:"An INNER JOIN with no matches returns an empty table."},
+  {n:54,s:"Part C — Relationships between tables (JOINs)",t:"In which case would we use LEFT JOIN?",o:["when you want only data that exists on both sides.","when you want a full list of customers, including those who haven't placed an order.","When we have only one table.","To improve performance."],c:1,e:"LEFT JOIN is ideal for keeping all the records from the main table."},
+  {n:55,s:"Part C — Relationships between tables (JOINs)",t:"What does the command USING(column_name) do?",o:["Replaces the FROM.","A substitute for ON when the joining column's name is the same in both tables.","used to filter rows.","Defines which index to activate."],c:1,e:"USING is a shorthand for ON when the column has the same name in both tables."},
+  {n:56,s:"Part C — Relationships between tables (JOINs)",t:"What is an Anti-Join (conceptually)?",o:["A join of everything that matches.","Fetching rows from one table that have no match in the other table.","Deleting shared data.","Addition in reverse order."],c:1,e:"An Anti-Join finds rows that have no match in the second table."},
+  {n:57,s:"Part C — Relationships between tables (JOINs)",t:"How do you perform an Anti-Join using LEFT JOIN?",o:["Add LIMIT 1.","Check in WHERE where the column from the right table is NULL.","Use INNER JOIN.","use GROUP BY."],c:1,e:"LEFT JOIN + WHERE right.col IS NULL = Anti-Join."},
+  {n:58,s:"Part C — Relationships between tables (JOINs)",t:"What is a Non-Equi Join?",o:["A join without equality signs.","A JOIN where the join condition uses operators like <, > or BETWEEN.","A union of tables that aren't equal in size.","A syntax error."],c:1,e:"Non-Equi Join uses operators other than equality."},
+  {n:59,s:"Part C — Relationships between tables (JOINs)",t:"What is an Alias and why is it important in a JOIN?",o:["It is used to encrypt data.","It lets you shorten table names and avoid ambiguity when column names are identical.","It is required in INNER JOIN.","It replaces the SELECT."],c:1,e:"An alias is essential in a JOIN to distinguish between columns with the same name."},
+  {n:60,s:"Part C — Relationships between tables (JOINs)",t:"What will happen if we forget to write the ON condition in a JOIN?",o:["The query will work and guess the relationship.","You'll get a syntax error (or a CROSS JOIN in some versions).","Only the first row will be shown.","The data will be deleted."],c:1,e:"Without ON you'll get an error or a CROSS JOIN, depending on the database."},
+  {n:61,s:"Part C — Relationships between tables (JOINs)",t:"Which JOIN is the default if you just write the word JOIN?",o:["LEFT JOIN","INNER JOIN","CROSS JOIN","FULL JOIN"],c:1,e:"JOIN alone = INNER JOIN."},
+  {n:62,s:"Part C — Relationships between tables (JOINs)",t:"The employees table has a manager_id column pointing to employee_id in the same table. Which JOIN is needed?",o:["OUTER JOIN","SELF JOIN","NATURAL JOIN","CROSS JOIN"],c:1,e:"SELF JOIN joins a table to itself — excellent for hierarchies."},
+  {n:63,s:"Part C — Relationships between tables (JOINs)",t:"Is JOIN's performance affected by indexes?",o:["No, JOIN is not related to an index.","Yes, an index on the ON columns significantly speeds up the query.","Only in LEFT JOIN.","Only in small tables."],c:1,e:"An index on the ON columns is critical for JOIN performance."},
+  {n:64,s:"Part C — Relationships between tables (JOINs)",t:"What's the advantage of FULL OUTER JOIN over UNION?",o:["It's faster.","It preserves the column structure from both tables side by side.","It doesn't require keys.","It always returns fewer rows."],c:1,e:"FULL OUTER JOIN joins sideways — UNION joins lengthwise."},
+  {n:65,s:"Part C — Relationships between tables (JOINs)",t:"What happens in a JOIN if there are NULL values in both joining columns?",o:["They will count as a match.","NULL is never equal to NULL in a JOIN, so there won't be a match.","An error will be shown.","The system will ignore these rows."],c:1,e:"NULL = NULL is not true in SQL. NULL doesn't match NULL in a JOIN."},
+  {n:66,s:"Part C — Relationships between tables (JOINs)",t:"How can we join 3 tables: customers, orders, and products?",o:["One long JOIN.","Two JOINs: customers to orders, then orders to products.","Not possible, only 2 are allowed.","Using UNION."],c:1,e:"You can chain JOINs: A JOIN B JOIN C."},
+  {n:67,s:"Part C — Relationships between tables (JOINs)",t:"What's the difference between LEFT JOIN and LEFT OUTER JOIN?",o:["OUTER returns more data.","No difference, it's the same command.","LEFT JOIN is only for MySQL.","OUTER JOIN requires WHERE."],c:1,e:"LEFT JOIN and LEFT OUTER JOIN are completely identical."},
+  {n:68,s:"Part C — Relationships between tables (JOINs)",t:"When would we intentionally use CROSS JOIN?",o:["To find matches between prices.","To create all possible combinations (like all colors × all sizes).","When we have a strong primary key.","To remove duplicates."],c:1,e:"CROSS JOIN is useful for creating product combinations, schedules, etc."},
+  {n:69,s:"Part C — Relationships between tables (JOINs)",t:"Does the order of tables matter in an INNER JOIN?",o:["Yes, it changes the result.","No, the logical result will be identical.","Only if there are more than 1000 rows.","Only in Oracle."],c:1,e:"In an INNER JOIN, table order doesn't change the logical result."},
+  {n:70,s:"Part C — Relationships between tables (JOINs)",t:"Does the order of tables matter in a LEFT JOIN?",o:["no.","Yes, the table written first (on the left) is the one whose rows are all kept.","only if you use ON.","Only in SQL Server."],c:1,e:"In LEFT JOIN, order is critical — the first table always appears in full."},
+  {n:71,s:"Part C — Relationships between tables (JOINs)",t:'What is a "Cartesian Product"?',o:["The result of an INNER JOIN.","The result of a CROSS JOIN (Cartesian product).","A math function in SQL.","Error calculating the average."],c:1,e:"Cartesian Product = CROSS JOIN = every row × every row."},
+  {n:72,s:"Part C — Relationships between tables (JOINs)",t:"How can you prevent duplicates in a JOIN result?",o:["Use ORDER BY.","Use DISTINCT.","Use LEFT JOIN.","Use SUM."],c:1,e:"DISTINCT removes duplicate rows from the result."},
+  {n:73,s:"Part C — Relationships between tables (JOINs)",t:"When do we write the table name before the column name (e.g. Orders.ID)?",o:["Always, it's required.","when the column name exists in more than one table in the query.","Only in WHERE.","Only in GROUP BY."],c:1,e:"Specifying the table name is needed to avoid ambiguity."},
+  {n:74,s:"Part C — Relationships between tables (JOINs)",t:"What does A RIGHT JOIN B return?",o:["all of A.","all of B and whatever matches from A.","Only what's shared.","the rows that exist only in A."],c:1,e:"RIGHT JOIN keeps all rows of the right table (B)."},
+  {n:75,s:"Part C — Relationships between tables (JOINs)",t:"Can you use a Subquery inside a JOIN?",o:["no.","Yes, a query result can be treated as a table (Derived Table).","Only in INNER JOIN.","Only if there's a GROUP BY."],c:1,e:"A Derived Table (a subquery inside FROM) can be joined with JOIN just like a regular table."},
+  {n:76,s:"Part C — Relationships between tables (JOINs)",t:"Which JOIN is the least commonly used day to day?",o:["INNER JOIN","LEFT JOIN","CROSS JOIN","SELF JOIN"],c:2,e:"CROSS JOIN is rare because a Cartesian product is rarely logical."},
+  {n:77,s:"Part C — Relationships between tables (JOINs)",t:"What's the role of ON in a JOIN query?",o:["To define the table name.","To define the logic by which the rows will join.","to filter the final result.","To start the server."],c:1,e:"ON defines the matching condition between the tables."},
+  {n:78,s:"Part C — Relationships between tables (JOINs)",t:"What is the meaning of: SELECT * FROM T1, T2?",o:["error.","INNER JOIN.","CROSS JOIN (old-style syntax).","UNION."],c:2,e:"A comma between tables in FROM is an old way of writing CROSS JOIN."},
+  {n:79,s:"Part C — Relationships between tables (JOINs)",t:"What is a Multiple Join?",o:["JOIN that returns many rows.","Joining more than two tables in the same query.","Using GROUP BY after JOIN.","A connection made several times a day."],c:1,e:"Multiple Join = a chain of JOINs in a single query."},
+  {n:80,s:"Part C — Relationships between tables (JOINs)",t:"What is the most important rule when working with JOIN?",o:["Always use LEFT JOIN.","To get familiar with the relationships between the tables (Primary Key and Foreign Key).","To write everything in uppercase.","Not to use more than 2 columns in ON."],c:1,e:"Understanding PK/FK relationships between tables is the basis for every correct JOIN."}
 ];
 
 const letters = ['A','B','C','D'];
@@ -393,7 +392,7 @@ function selectOption(qIdx, optIdx){
     if(i === optIdx && !isCorrect) o.classList.add('wrong-ans');
   });
   const exp = document.getElementById('exp-'+qIdx);
-  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ Correct! ' : '❌ Wrong — the correct answer is marked in green. ') + q.e;
+  exp.querySelector('.exp-text').innerHTML = (isCorrect ? '✅ correct! ' : '❌ You got it wrong — the correct answer is marked in green. ') + q.e;
   exp.classList.add('show');
   updateScore();
 }
@@ -413,32 +412,10 @@ function buildQuiz(){
         <div class="opt-text">${o}</div>
       </div>`).join('');
     mc.innerHTML += `
-    <div class="q-card" id="qcard-${i}">
-      <div class="q-header">
-        <div class="q-meta">
-          <div class="q-num">Question ${q.n}</div>
-          <div class="q-section-tag">${q.s.split('—')[1]?.trim()||q.s}</div>
-        </div>
-        <div class="q-text">${q.t}</div>
-      </div>
-      <div class="options">${opts}</div>
-      <div class="explanation" id="exp-${i}">
-        <div class="exp-label">💡 Explanation</div>
-        <div class="exp-text"></div>
-      </div>
-    </div>`;
+    <div class="q-card" id="qcard-${i}">\n      <div class="q-header">\n        <div class="q-meta">\n          <div class="q-num">Question ${q.n}</div>\n          <div class="q-section-tag">${q.s.split('—')[1]?.trim()||q.s}</div>\n        </div>\n        <div class="q-text">${q.t}</div>\n      </div>\n      <div class="options">${opts}</div>\n      <div class="explanation" id="exp-${i}">\n        <div class="exp-label">💡 Explanation</div>\n        <div class="exp-text"></div>\n      </div>\n    </div>`;
   });
   mc.innerHTML += `
-  <div class="finish-card" id="finishCard">
-    <div class="finish-emoji">🎉</div>
-    <div class="finish-title">You finished the intermediate quiz!</div>
-    <div class="finish-score" id="finishScore">0/80</div>
-    <div class="finish-grade" id="finishGrade"></div>
-    <div class="finish-sub" id="finishSub"></div>
-    <br>
-    <button class="retry-btn" onclick="resetQuiz()">🔄 Try again</button>
-    <a href="quiz.html" class="level-link">🧠 Ready for the advanced level? ←</a>
-  </div>`;
+  <div class="finish-card" id="finishCard">\n    <div class="finish-emoji">🎉</div>\n    <div class="finish-title">You finished the medium quiz!</div>\n    <div class="finish-score" id="finishScore">0/80</div>\n    <div class="finish-grade" id="finishGrade"></div>\n    <div class="finish-sub" id="finishSub"></div>\n    <br>\n    <button class="retry-btn" onclick="resetQuiz()">🔄 Try Again</button>\n    <a href="quiz.html" class="level-link">🧠 Ready for the advanced level? ←</a>\n  </div>`;
 }
 
 function showFinish(){
@@ -447,10 +424,10 @@ function showFinish(){
   const pct = Math.round(correct/questions.length*100);
   document.getElementById('finishScore').textContent = correct + ' / ' + questions.length;
   let grade, sub;
-  if(pct>=90){grade='⭐ Excellent!';sub='Impressive command of the intermediate level!';}
-  else if(pct>=75){grade='👍 Very good';sub='A little more practice and you will nail it!';}
-  else if(pct>=60){grade='📚 Good';sub='Worth reviewing the weaker material.';}
-  else{grade='💪 Keep practicing';sub='Review the chapters and try again!';}
+  if(pct>=90){grade='⭐ excellent!';sub='Impressive mastery at the intermediate level!';}
+  else if(pct>=75){grade='👍 Very good';sub='A little more practice and you\'ll reach perfection!';}
+  else if(pct>=60){grade='📚 good';sub='It\'s worth reviewing the weaker material.';}
+  else{grade='💪 Keep practicing';sub='Go over the chapters and try again!';}
   document.getElementById('finishGrade').textContent = grade;
   document.getElementById('finishSub').textContent = sub;
   card.classList.add('show');

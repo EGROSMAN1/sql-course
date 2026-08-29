@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SQL Video Tutorials — MySQL Course From Scratch | SQL.course</title>
+<title>SQL Video Tutorials — MySQL Course from the Basics | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://i.ytimg.com">
@@ -73,7 +73,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .question-card{padding:1rem!important;border-radius:10px}
   .q-text,.question-text{font-size:14px!important;line-height:1.6}
   .options,.answers{gap:.5rem!important}
-  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:left;border-radius:8px}
   .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
   .hero-title,.quiz-title{font-size:1.5rem!important}
   .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
@@ -129,30 +129,30 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
-</style>Comprehensive Video Tutorials
-<meta name="description" content="A series of SQL video tutorials on MySQL: video lessons from beginner to advanced, with progress tracking and practice. Learn SQL for free at your own pace.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/videos.html">
+</style>Comprehensive video tutorials
+<meta name="description" content="A recorded SQL tutorial series on MySQL: video lessons from the basics to advanced, with progress tracking and practice. Learn SQL for free at your own pace.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/videos.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/videos.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="Comprehensive Video Tutorials">
-<meta property="og:description" content="A series of SQL video tutorials on MySQL: video lessons from beginner to advanced, with progress tracking and practice. Learn SQL for free at your own pace.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/videos.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="Comprehensive video tutorials">
+<meta property="og:description" content="A recorded SQL tutorial series on MySQL: video lessons from the basics to advanced, with progress tracking and practice. Learn SQL for free at your own pace.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Comprehensive Video Tutorials">
-<meta name="twitter:description" content="A series of SQL video tutorials on MySQL: video lessons from beginner to advanced, with progress tracking and practice. Learn SQL for free at your own pace.">
+<meta name="twitter:title" content="Comprehensive video tutorials">
+<meta name="twitter:description" content="A recorded SQL tutorial series on MySQL: video lessons from the basics to advanced, with progress tracking and practice. Learn SQL for free at your own pace.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <script type="application/ld+json">
 [
@@ -163,13 +163,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "SQL Video Tutorials (MySQL)",
+        "name": "Recorded SQL Tutorials (MySQL)",
         "item": "https://egrosman1.github.io/sql-course/videos.html"
       }
     ]
@@ -177,8 +177,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "SQL Video Tutorials — MySQL Course From Scratch | SQL.course",
-    "description": "A series of SQL video tutorials on MySQL: video lessons from beginner to advanced, with progress tracking and practice. Learn SQL for free at your own pace.",
+    "name": "SQL Video Tutorials — MySQL Course from the Basics | SQL.course",
+    "description": "A recorded SQL tutorial series on MySQL: video lessons from the basics to advanced, with progress tracking and practice. Learn SQL for free at your own pace.",
     "url": "https://egrosman1.github.io/sql-course/videos.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -193,7 +193,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -207,13 +207,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 {
  "@context": "https://schema.org",
  "@type": "ItemList",
- "name": "Video Lessons",
+ "name": "Video lessons",
  "itemListElement": [
   {
    "@type": "VideoObject",
    "position": 1,
-   "name": "Course Intro & Environment Setup",
-   "description": "Getting to know the course, installing MySQL Workbench, and preparing your environment.",
+   "name": "Introduction to the course and the workspace",
+   "description": "Getting to know the course, installing MySQL Workbench and setting up the work environment.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/Pnq2_C77LBE/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/Pnq2_C77LBE",
@@ -222,8 +222,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 2,
-   "name": "Basic SELECT, FROM & WHERE",
-   "description": "Your first data retrieval — choosing columns, basic filtering, and using Northwind.",
+   "name": "SELECT, FROM and WHERE basics",
+   "description": "The first data pull — selecting columns, basic filtering, using Northwind.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/b_FBQkNfVy4/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/b_FBQkNfVy4",
@@ -232,8 +232,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 3,
-   "name": "Text & String Functions",
-   "description": "UPPER, LOWER, LENGTH, LEFT, RIGHT, SUBSTRING, TRIM, REPLACE, and more.",
+   "name": "Text and string functions",
+   "description": "UPPER, LOWER, LENGTH, LEFT, RIGHT, SUBSTRING, TRIM, REPLACE and more.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/tK8ccMHj_Ps/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/tK8ccMHj_Ps",
@@ -242,8 +242,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 4,
-   "name": "Calculations & Math Functions",
-   "description": "Column calculations, ROUND, MOD, ABS, and computed columns.",
+   "name": "Calculations and mathematical functions",
+   "description": "Calculations on columns, ROUND, MOD, ABS, and calculated columns.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/m8M877ZSaxY/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/m8M877ZSaxY",
@@ -252,8 +252,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 5,
-   "name": "Sorting, DISTINCT & LIMIT",
-   "description": "ORDER BY, DISTINCT, LIMIT, OFFSET — taking control of your results.",
+   "name": "Sorting, DISTINCT and LIMIT",
+   "description": "ORDER BY, DISTINCT, LIMIT, OFFSET — controlling the results.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/2Ly8yZMbqn8/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/2Ly8yZMbqn8",
@@ -262,8 +262,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 6,
-   "name": "Dates & Time Functions",
-   "description": "YEAR, MONTH, DAY, DATE_FORMAT, DATEDIFF, DATE_ADD, and more.",
+   "name": "Dates and time functions",
+   "description": "YEAR, MONTH, DAY, DATE_FORMAT, DATEDIFF, DATE_ADD and more.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/waxOan9b5mU/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/waxOan9b5mU",
@@ -273,7 +273,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
    "@type": "VideoObject",
    "position": 7,
    "name": "Advanced WHERE — IN, BETWEEN, LIKE",
-   "description": "Advanced filtering with IN, BETWEEN, LIKE, IS NULL, and logical operators.",
+   "description": "Advanced filtering with IN, BETWEEN, LIKE, IS NULL and logical operators.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/kf1ap4s1wH0/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/kf1ap4s1wH0",
@@ -282,8 +282,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 8,
-   "name": "GROUP BY & Aggregate Functions",
-   "description": "COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING, ROLLUP, and UNION.",
+   "name": "GROUP BY and Aggregate Functions",
+   "description": "COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING, ROLLUP and UNION.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/jqosAwvbiVU/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/jqosAwvbiVU",
@@ -292,8 +292,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 9,
-   "name": "JOIN — Combining Tables",
-   "description": "INNER JOIN, LEFT JOIN, multi-table joins, and summary reports.",
+   "name": "JOIN — joining tables",
+   "description": "INNER JOIN, LEFT JOIN, joining multiple tables, and summary reports.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/OMwZxyzC7Vw/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/OMwZxyzC7Vw",
@@ -302,8 +302,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 10,
-   "name": "Subqueries & CASE WHEN",
-   "description": "Subqueries, EXISTS, NOT IN, and conditional logic with CASE WHEN.",
+   "name": "Subqueries and CASE WHEN",
+   "description": "Subqueries, EXISTS, NOT IN, conditional logic with CASE WHEN.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/mjspIIUySCU/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/mjspIIUySCU",
@@ -312,8 +312,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 11,
-   "name": "CTEs & Window Functions",
-   "description": "WITH, ROW_NUMBER, RANK, LAG, LEAD, cumulative SUM, and more.",
+   "name": "CTE and Window Functions",
+   "description": "WITH, ROW_NUMBER, RANK, LAG, LEAD, running SUM and more.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/UfNzoBQk04o/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/UfNzoBQk04o",
@@ -322,7 +322,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 12,
-   "name": "DML — Modifying Data",
+   "name": "DML — modifying data",
    "description": "INSERT, UPDATE, DELETE, TRANSACTION, COMMIT, ROLLBACK.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/_q9yrxz-w48/hqdefault.jpg",
@@ -332,8 +332,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
    "@type": "VideoObject",
    "position": 13,
-   "name": "Summary & Final Project",
-   "description": "A course recap, a capstone project, and tips for moving forward.",
+   "name": "Summary and final project",
+   "description": "Course summary, a capstone project, and tips for the road ahead.",
    "inLanguage": "he",
    "thumbnailUrl": "https://i.ytimg.com/vi/QPCxVBbn6jo/hqdefault.jpg",
    "embedUrl": "https://www.youtube.com/embed/QPCxVBbn6jo",
@@ -346,36 +346,35 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <body>
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">🎬 Comprehensive Video Tutorials</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">🎬 Comprehensive video tutorials</div>
   <div class="topnav-links">
-    <a href="setup.html" class="topnav-link">🛠️ Setup</a>
-    <a href="../videos.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="videos.html" class="topnav-link" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/videos.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="course.html" class="topnav-link">📚 Learn</a>
-    <a href="practice.html" class="topnav-link">✏️ Practice</a>
+    <a href="setup.html" class="topnav-link">🛠️ installation</a><a href="../videos.html" class="topnav-link" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="videos.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/videos.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="course.html" class="topnav-link">📚 Study material</a>
+    <a href="practice.html" class="topnav-link">✏️ Exercises</a>
   </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-badge">▶ YouTube · Eliran Grossman</div>
-  <h1 class="hero-title">Video Course — Learn SQL</h1>
-  <p class="hero-sub">13 videos from beginner to advanced — watch in order or jump to any topic</p>
+  <h1 class="hero-title">Video tutorial — SQL Course</h1>
+  <p class="hero-sub">13 videos from basics to advanced — watch in order or jump to any topic</p>
   <div class="hero-stats">
     <div class="hero-stat"><div class="hero-stat-num">13</div><div class="hero-stat-label">videos</div></div>
-    <div class="hero-stat"><div class="hero-stat-num" id="watchedCount">0</div><div class="hero-stat-label">watched</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="watchedCount">0</div><div class="hero-stat-label">viewed</div></div>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
 </div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html">🏠 Home</a>
-  <a href="tirgul-makif.html">🎯 Full Practice</a>
-  <a href="setup.html">🛠️ Setup</a>
-  <a href="videos.html">🎬 Video Course</a>
-  <a href="course.html">📚 Learning Material</a>
-  <a href="practice.html">✏️ Practice</a>
+  <a href="tirgul-makif.html">🎯 Comprehensive practice</a>
+  <a href="setup.html">🛠️ installation</a>
+  <a href="videos.html">🎬 Video tutorial</a>
+  <a href="course.html">📚 Study material</a>
+  <a href="practice.html">✏️ Exercises</a>
 </div>
 
 <div class="main">
@@ -383,8 +382,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   <!-- PROGRESS -->
   <div class="progress-section">
     <div class="progress-text">
-      <div class="progress-title">Your Progress</div>
-      <div class="progress-sub">Mark a video as watched after viewing</div>
+      <div class="progress-title">Your progress</div>
+      <div class="progress-sub">Mark video as watched after viewing</div>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -393,7 +392,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     <div class="progress-count" id="progressBig">0%</div>
   </div>
 
-  <div class="section-label">All Videos</div>
+  <div class="section-label">All the videos</div>
   <div class="video-grid" id="videoGrid"></div>
 
 </div>
@@ -402,34 +401,34 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal-box">
     <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Loading...</div>
+      <div class="modal-title" id="modalTitle">loading...</div>
       <button class="modal-close" onclick="closeModalBtn()">✕</button>
     </div>
     <div class="modal-player">
       <iframe id="modalIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <div class="modal-footer">
-      <a href="#" id="modalYtBtn" target="_blank" class="modal-yt-btn">▶ Open on YouTube</a>
-      <button class="modal-watch-btn" id="modalWatchBtn" onclick="toggleFromModal()">Mark as watched</button>
+      <a href="#" id="modalYtBtn" target="_blank" class="modal-yt-btn">▶ Open in YouTube</a>
+      <button class="modal-watch-btn" id="modalWatchBtn" onclick="toggleFromModal()">Mark as viewed</button>
     </div>
   </div>
 </div>
 
 <script>
 const videos = [
-  {part:1, title:"Course Intro & Environment Setup", desc:"Getting to know the course, installing MySQL Workbench, and preparing your environment.", url:"https://www.youtube.com/watch?v=Pnq2_C77LBE&t=1s", vid:"Pnq2_C77LBE"},
-  {part:2, title:"Basic SELECT, FROM & WHERE", desc:"Your first data retrieval — choosing columns, basic filtering, and using Northwind.", url:"https://www.youtube.com/watch?v=b_FBQkNfVy4&t=1s", vid:"b_FBQkNfVy4"},
-  {part:3, title:"Text & String Functions", desc:"UPPER, LOWER, LENGTH, LEFT, RIGHT, SUBSTRING, TRIM, REPLACE, and more.", url:"https://www.youtube.com/watch?v=tK8ccMHj_Ps", vid:"tK8ccMHj_Ps"},
-  {part:4, title:"Calculations & Math Functions", desc:"Column calculations, ROUND, MOD, ABS, and computed columns.", url:"https://www.youtube.com/watch?v=m8M877ZSaxY&t=1s", vid:"m8M877ZSaxY"},
-  {part:5, title:"Sorting, DISTINCT & LIMIT", desc:"ORDER BY, DISTINCT, LIMIT, OFFSET — taking control of your results.", url:"https://www.youtube.com/watch?v=2Ly8yZMbqn8&t=3s", vid:"2Ly8yZMbqn8"},
-  {part:6, title:"Dates & Time Functions", desc:"YEAR, MONTH, DAY, DATE_FORMAT, DATEDIFF, DATE_ADD, and more.", url:"https://www.youtube.com/watch?v=waxOan9b5mU&t=1s", vid:"waxOan9b5mU"},
-  {part:7, title:"Advanced WHERE — IN, BETWEEN, LIKE", desc:"Advanced filtering with IN, BETWEEN, LIKE, IS NULL, and logical operators.", url:"https://www.youtube.com/watch?v=kf1ap4s1wH0", vid:"kf1ap4s1wH0"},
-  {part:8, title:"GROUP BY & Aggregate Functions", desc:"COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING, ROLLUP, and UNION.", url:"https://www.youtube.com/watch?v=jqosAwvbiVU&t=3s", vid:"jqosAwvbiVU"},
-  {part:9, title:"JOIN — Combining Tables", desc:"INNER JOIN, LEFT JOIN, multi-table joins, and summary reports.", url:"https://www.youtube.com/watch?v=OMwZxyzC7Vw&t=1s", vid:"OMwZxyzC7Vw"},
-  {part:10, title:"Subqueries & CASE WHEN", desc:"Subqueries, EXISTS, NOT IN, and conditional logic with CASE WHEN.", url:"https://www.youtube.com/watch?v=mjspIIUySCU", vid:"mjspIIUySCU"},
-  {part:11, title:"CTEs & Window Functions", desc:"WITH, ROW_NUMBER, RANK, LAG, LEAD, cumulative SUM, and more.", url:"https://www.youtube.com/watch?v=UfNzoBQk04o&t=1s", vid:"UfNzoBQk04o"},
-  {part:12, title:"DML — Modifying Data", desc:"INSERT, UPDATE, DELETE, TRANSACTION, COMMIT, ROLLBACK.", url:"https://www.youtube.com/watch?v=_q9yrxz-w48", vid:"_q9yrxz-w48"},
-  {part:13, title:"Summary & Final Project", desc:"A course recap, a capstone project, and tips for moving forward.", url:"https://www.youtube.com/watch?v=QPCxVBbn6jo&t=1s", vid:"QPCxVBbn6jo"},
+  {part:1, title:"Introduction to the course and the workspace", desc:"Getting to know the course, installing MySQL Workbench and setting up the work environment.", url:"https://www.youtube.com/watch?v=Pnq2_C77LBE&t=1s", vid:"Pnq2_C77LBE"},
+  {part:2, title:"SELECT, FROM and WHERE basics", desc:"The first data pull — selecting columns, basic filtering, using Northwind.", url:"https://www.youtube.com/watch?v=b_FBQkNfVy4&t=1s", vid:"b_FBQkNfVy4"},
+  {part:3, title:"Text and string functions", desc:"UPPER, LOWER, LENGTH, LEFT, RIGHT, SUBSTRING, TRIM, REPLACE and more.", url:"https://www.youtube.com/watch?v=tK8ccMHj_Ps", vid:"tK8ccMHj_Ps"},
+  {part:4, title:"Calculations and mathematical functions", desc:"Calculations on columns, ROUND, MOD, ABS, and calculated columns.", url:"https://www.youtube.com/watch?v=m8M877ZSaxY&t=1s", vid:"m8M877ZSaxY"},
+  {part:5, title:"Sorting, DISTINCT and LIMIT", desc:"ORDER BY, DISTINCT, LIMIT, OFFSET — controlling the results.", url:"https://www.youtube.com/watch?v=2Ly8yZMbqn8&t=3s", vid:"2Ly8yZMbqn8"},
+  {part:6, title:"Dates and time functions", desc:"YEAR, MONTH, DAY, DATE_FORMAT, DATEDIFF, DATE_ADD and more.", url:"https://www.youtube.com/watch?v=waxOan9b5mU&t=1s", vid:"waxOan9b5mU"},
+  {part:7, title:"Advanced WHERE — IN, BETWEEN, LIKE", desc:"Advanced filtering with IN, BETWEEN, LIKE, IS NULL and logical operators.", url:"https://www.youtube.com/watch?v=kf1ap4s1wH0", vid:"kf1ap4s1wH0"},
+  {part:8, title:"GROUP BY and Aggregate Functions", desc:"COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING, ROLLUP and UNION.", url:"https://www.youtube.com/watch?v=jqosAwvbiVU&t=3s", vid:"jqosAwvbiVU"},
+  {part:9, title:"JOIN — joining tables", desc:"INNER JOIN, LEFT JOIN, joining multiple tables, and summary reports.", url:"https://www.youtube.com/watch?v=OMwZxyzC7Vw&t=1s", vid:"OMwZxyzC7Vw"},
+  {part:10, title:"Subqueries and CASE WHEN", desc:"Subqueries, EXISTS, NOT IN, conditional logic with CASE WHEN.", url:"https://www.youtube.com/watch?v=mjspIIUySCU", vid:"mjspIIUySCU"},
+  {part:11, title:"CTE and Window Functions", desc:"WITH, ROW_NUMBER, RANK, LAG, LEAD, running SUM and more.", url:"https://www.youtube.com/watch?v=UfNzoBQk04o&t=1s", vid:"UfNzoBQk04o"},
+  {part:12, title:"DML — modifying data", desc:"INSERT, UPDATE, DELETE, TRANSACTION, COMMIT, ROLLBACK.", url:"https://www.youtube.com/watch?v=_q9yrxz-w48", vid:"_q9yrxz-w48"},
+  {part:13, title:"Summary and final project", desc:"Course summary, a capstone project, and tips for the road ahead.", url:"https://www.youtube.com/watch?v=QPCxVBbn6jo&t=1s", vid:"QPCxVBbn6jo"},
 ];
 
 let watched = JSON.parse(localStorage.getItem('sql_watched') || '{}');
@@ -449,11 +448,11 @@ function updateProgress(){
 function openModal(i){
   currentIdx = i;
   const v = videos[i];
-  document.getElementById('modalTitle').textContent = 'Part '+v.part+' — '+v.title;
+  document.getElementById('modalTitle').textContent = 'part '+v.part+' — '+v.title;
   document.getElementById('modalIframe').src = 'https://www.youtube.com/embed/'+v.vid+'?autoplay=1';
   document.getElementById('modalYtBtn').href = v.url;
   const wb = document.getElementById('modalWatchBtn');
-  wb.textContent = watched[i] ? '✓ Watched' : 'Mark as watched';
+  wb.textContent = watched[i] ? '✓ viewed' : 'Mark as viewed';
   wb.classList.toggle('done', !!watched[i]);
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -475,12 +474,12 @@ function toggleFromModal(){
   watched[currentIdx] = !watched[currentIdx];
   saveWatched();
   const wb = document.getElementById('modalWatchBtn');
-  wb.textContent = watched[currentIdx] ? '✓ Watched' : 'Mark as watched';
+  wb.textContent = watched[currentIdx] ? '✓ viewed' : 'Mark as viewed';
   wb.classList.toggle('done', !!watched[currentIdx]);
   const card = document.getElementById('card-'+currentIdx);
   const btn = document.getElementById('wbtn-'+currentIdx);
   card.classList.toggle('watched', !!watched[currentIdx]);
-  btn.textContent = watched[currentIdx] ? '✓ Watched' : 'Mark as watched';
+  btn.textContent = watched[currentIdx] ? '✓ viewed' : 'Mark as viewed';
   updateProgress();
 }
 
@@ -488,7 +487,7 @@ function toggleWatched(i){
   watched[i] = !watched[i];
   saveWatched();
   document.getElementById('card-'+i).classList.toggle('watched', !!watched[i]);
-  document.getElementById('wbtn-'+i).textContent = watched[i] ? '✓ Watched' : 'Mark as watched';
+  document.getElementById('wbtn-'+i).textContent = watched[i] ? '✓ viewed' : 'Mark as viewed';
   updateProgress();
 }
 
@@ -500,20 +499,7 @@ function buildGrid(){
     const isWatched = watched[i];
     const thumbUrl = `https://img.youtube.com/vi/${v.vid}/hqdefault.jpg`;
     grid.innerHTML += `
-    <div class="video-card${isWatched?' watched':''}" id="card-${i}">
-      <div class="video-thumb" onclick="openModal(${i})">
-        <img src="${thumbUrl}" alt="Part ${v.part}" loading="lazy" onerror="this.style.display='none'">
-        <div class="play-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>
-        <div class="part-badge">Part ${v.part}</div>
-      </div>
-      <div class="video-info">
-        <div class="video-part">Part ${v.part} / ${videos.length}</div>
-        <div class="video-title">${v.title}</div>
-        <div class="video-desc">${v.desc}</div>
-        <a href="${v.url}" target="_blank" class="video-link">▶ Open on YouTube →</a>
-        <button class="watch-btn" id="wbtn-${i}" onclick="toggleWatched(${i})">${isWatched?'✓ Watched':'Mark as watched'}</button>
-      </div>
-    </div>`;
+    <div class="video-card${isWatched?' watched':''}" id="card-${i}">\n      <div class="video-thumb" onclick="openModal(${i})">\n        <img src="${thumbUrl}" alt="part ${v.part}" loading="lazy" onerror="this.style.display='none'">\n        <div class="play-overlay"><div class="play-btn"><div class="play-icon"></div></div></div>\n        <div class="part-badge">Part ${v.part}</div>\n      </div>\n      <div class="video-info">\n        <div class="video-part">Part ${v.part} / ${videos.length}</div>\n        <div class="video-title">${v.title}</div>\n        <div class="video-desc">${v.desc}</div>\n        <a href="${v.url}" target="_blank" class="video-link">▶ Open on YouTube →</a>\n        <button class="watch-btn" id="wbtn-${i}" onclick="toggleWatched(${i})">${isWatched?'✓ Watched':'Mark as watched'}</button>\n      </div>\n    </div>`;
   });
 }
 

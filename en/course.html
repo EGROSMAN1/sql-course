@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SQL Learning Material — Full Course From Basics to Interviews | SQL.course</title>
+<title>SQL Study Material — a complete course from basics to interviews | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -198,7 +198,7 @@ pre{font-size:11px;line-height:1.5}
   .question-card{padding:1rem!important;border-radius:10px}
   .q-text,.question-text{font-size:14px!important;line-height:1.6}
   .options,.answers{gap:.5rem!important}
-  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:left;border-radius:8px}
   .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
   .hero-title,.quiz-title{font-size:1.5rem!important}
   .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
@@ -254,31 +254,31 @@ pre{font-size:11px;line-height:1.5}
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="Free SQL learning material: every SQL command from the basics to Window Functions, with clear explanations, practical examples, and interactive practice for analysts.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/course.html">
+<meta name="description" content="Free SQL study material: every SQL command from the basics to Window Functions, with simple explanations, practical examples and interactive practice for analysts.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/course.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/course.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="SQL Learning Material">
-<meta property="og:description" content="Free SQL learning material: every SQL command from the basics to Window Functions, with clear explanations, practical examples, and interactive practice for analysts.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/course.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="SQL study material">
+<meta property="og:description" content="Free SQL study material: every SQL command from the basics to Window Functions, with simple explanations, practical examples and interactive practice for analysts.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SQL Learning Material">
-<meta name="twitter:description" content="Free SQL learning material: every SQL command from the basics to Window Functions, with clear explanations, practical examples, and interactive practice for analysts.">
+<meta name="twitter:title" content="SQL study material">
+<meta name="twitter:description" content="Free SQL study material: every SQL command from the basics to Window Functions, with simple explanations, practical examples and interactive practice for analysts.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}</style>
 <script type="application/ld+json">
@@ -290,13 +290,13 @@ pre{font-size:11px;line-height:1.5}
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "SQL Learning Material",
+        "name": "SQL study material",
         "item": "https://egrosman1.github.io/sql-course/course.html"
       }
     ]
@@ -304,8 +304,8 @@ pre{font-size:11px;line-height:1.5}
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "SQL Learning Material — Full Course From Basics to Interviews | SQL.course",
-    "description": "Free SQL learning material: every SQL command from the basics to Window Functions, with clear explanations, practical examples, and interactive practice for analysts.",
+    "name": "SQL Study Material — a complete course from basics to interviews | SQL.course",
+    "description": "Free SQL study material: every SQL command from the basics to Window Functions, with simple explanations, practical examples and interactive practice for analysts.",
     "url": "https://egrosman1.github.io/sql-course/course.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -320,7 +320,7 @@ pre{font-size:11px;line-height:1.5}
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -332,15 +332,14 @@ pre{font-size:11px;line-height:1.5}
 </script>
 </head>
 <body>
-<h1 class="sr-only">SQL Learning Material</h1>
+<h1 class="sr-only">SQL study material</h1>
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">📚 SQL Learning Material</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">📚 SQL study material</div>
   <div class="topnav-right">
-    <a href="practice.html" class="topnav-link">✏️ Practice</a>
-    <a href="../course.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="course.html" class="topnav-link" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/course.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="tirgul-makif.html" class="topnav-link">🎯 Full Practice</a>
+    <a href="practice.html" class="topnav-link">✏️ Exercises</a><a href="../course.html" class="topnav-link" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="course.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/course.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="tirgul-makif.html" class="topnav-link">🎯 Comprehensive practice</a>
   </div>
 </div>
 
@@ -349,189 +348,189 @@ pre{font-size:11px;line-height:1.5}
     <!-- chapters injected by JS -->
   </div>
   <div class="sidebar" id="sidebar">
-    <div class="sidebar-section">Chapters</div>
+    <div class="sidebar-section">chapters</div>
   </div>
 </div>
 
 <script>
 const chapters = [
-{num:1,icon:"📗",title:"Lesson 1 — SELECT, Strings, Calculations, ORDER BY",desc:"The complete first lesson: retrieving data, DISTINCT, text functions, math calculations, and sorting results.",
+{num:1,icon:"📗",title:"Lesson 1 — SELECT, strings, calculations, ORDER BY",desc:"The complete material of the first lesson: retrieving data, DISTINCT, text functions, mathematical calculations, and sorting results.",
 syntax:"SELECT col1, col2 FROM table;\nSELECT DISTINCT col FROM table;\nSELECT LEFT(col,3), ROUND(price*1.17,2) FROM table;\nORDER BY col DESC LIMIT 5 OFFSET 10;",
 concepts:[
 {label:"Part 1 — SELECT & FROM",text:"<strong>SELECT *</strong> = all columns. <strong>SELECT col1, col2</strong> = specific columns. <strong>AS</strong> = a display name (alias) for a column."},
-{label:"Part 2 — DISTINCT & Strings",text:"<strong>DISTINCT</strong> = removes duplicates. <strong>LEFT/RIGHT(col,N)</strong> = N characters. <strong>SUBSTRING(col,start,len)</strong> = extraction. <strong>TRIM/REPLACE/UPPER/LOWER</strong> for cleaning and formatting."},
-{label:"Part 3 — Math Calculations",text:"<strong>+ - * /</strong> on columns. <strong>ROUND(val,2)</strong> = rounding. <strong>MOD(val,12)</strong> = remainder. <strong>ABS(val)</strong> = absolute value."},
-{label:"Part 4 — ORDER BY, LIMIT, OFFSET",text:"<strong>ORDER BY col DESC</strong> = descending. <strong>LIMIT 5</strong> = 5 rows. <strong>OFFSET 10</strong> = skip 10. You can sort by functions such as <strong>CHAR_LENGTH()</strong>."},
+{label:"Part 2 — DISTINCT and Strings",text:"<strong>DISTINCT</strong> = removes duplicates. <strong>LEFT/RIGHT(col,N)</strong> = N characters. <strong>SUBSTRING(col,start,len)</strong> = extraction. <strong>TRIM/REPLACE/UPPER/LOWER</strong> for cleaning and formatting."},
+{label:"Part 3 — Mathematical calculations",text:"<strong>+ - * /</strong> on columns. <strong>ROUND(val,2)</strong> = rounding. <strong>MOD(val,12)</strong> = remainder. <strong>ABS(val)</strong> = absolute value."},
+{label:"Part 4 — ORDER BY, LIMIT, OFFSET",text:"<strong>ORDER BY col DESC</strong> = descending. <strong>LIMIT 5</strong> = 5 rows. <strong>OFFSET 10</strong> = skip 10. You can sort by functions like <strong>CHAR_LENGTH()</strong>."},
 ],
 sections:[
 {label:"📌 Part 1: SELECT & FROM",examples:[
-{title:"Example 1 — Retrieve all columns from the products table",tag:"b",
-explain:"The asterisk (*) retrieves all columns. Great for a first look — in production, prefer naming specific columns.",
+{title:"Example 1 — retrieving all columns from the products table",tag:"b",
+explain:"An asterisk (*) retrieves all the columns. Great for an initial look — in production it's better to specify specific columns.",
 code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">products</span>;`},
-{title:"Example 2 — Retrieve a single column: customer company names",tag:"b",
-explain:"Select only the company column. Less load on the server and more readable.",
+{title:"Example 2 — retrieving a single column: customer company names",tag:"b",
+explain:"Fetch only the company column. Less load on the server and more readable.",
 code:`<span class="kw">SELECT</span> <span class="col">company</span> <span class="kw">FROM</span> <span class="tbl">customers</span>;`},
-{title:"Example 3 — Multiple columns: employees' first name, last name, and job title",tag:"b",
+{title:"Example 3 — multiple columns: employee first name, last name and role",tag:"b",
 explain:"Separate columns with a comma. The order you write = the order shown in the result.",
 code:`<span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>, <span class="col">job_title</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>;`},
-{title:"Example 4 — AS (Alias): an alternative name for a column",tag:"b",
-explain:"AS gives a display name. It does not change the table! A name with spaces → in single quotes.",
+{title:"Example 4 — AS (Alias): an alternate name for a column",tag:"b",
+explain:"AS gives a display name. It doesn't change the table! A name with spaces → in single quotes.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span> <span class="kw">AS</span> <span class="str">'Product Name'</span>, <span class="col">list_price</span> <span class="kw">AS</span> <span class="str">'Price'</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
-{title:"Example 5 — Retrieve selected fields from orders",tag:"b",
-explain:"From the orders table: order ID, date, and ship city — exactly what you need.",
+{title:"Example 5 — retrieving selected fields from orders",tag:"b",
+explain:"From the orders table: order id, date, and shipping city — exactly what's needed.",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>, <span class="col">ship_city</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
 ]},
-{label:"📌 Part 2: DISTINCT & Text Functions",examples:[
+{label:"📌 Part 2: DISTINCT and text functions",examples:[
 {title:"Example 1 — DISTINCT: unique countries",tag:"b",
-explain:"DISTINCT removes duplicates. Even with 100 customers from the USA — USA appears only once.",
+explain:"DISTINCT removes duplicates. Even if there are 100 customers from USA — USA will appear once.",
 code:`<span class="kw">SELECT DISTINCT</span> <span class="col">country_region</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>;`},
-{title:"Example 2 — LEFT and RIGHT: phone prefix and suffix",tag:"b",
-explain:"LEFT(col,3) = first 3 characters. RIGHT(col,4) = last 4. Useful for short codes.",
+{title:"Example 2 — LEFT and RIGHT: area code and last digits of a phone number",tag:"b",
+explain:"LEFT(col,3) = first 3 characters. RIGHT(col,4) = last 4. Useful for shortened codes.",
 code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="fn">LEFT</span>(<span class="col">company</span>, <span class="num">3</span>) <span class="kw">AS</span> <span class="str">comp_prefix</span>,\n       <span class="col">business_phone</span>, <span class="fn">RIGHT</span>(<span class="col">business_phone</span>, <span class="num">4</span>) <span class="kw">AS</span> <span class="str">phone_suffix</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">business_phone</span> <span class="kw">IS NOT NULL</span>;`},
-{title:"Example 3 — SUBSTRING: extract from a specific position",tag:"b",
-explain:"SUBSTRING(col, 2, 5) = 5 characters starting at the 2nd. Position starts at 1.",
+{title:"Example 3 — SUBSTRING: extraction from a specific position",tag:"b",
+explain:"SUBSTRING(col, 2, 5) = 5 characters starting from character 2. Position starts at 1.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">SUBSTRING</span>(<span class="col">product_name</span>, <span class="num">2</span>, <span class="num">5</span>) <span class="kw">AS</span> <span class="str">middle_text</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
-{title:"Example 4 — TRIM, LTRIM, RTRIM: cleaning whitespace",tag:"b",
-explain:"LTRIM = leading spaces. RTRIM = trailing. TRIM = both sides. Critical for cleaning manually entered data.",
+{title:"Example 4 — TRIM, LTRIM, RTRIM: cleaning spaces",tag:"b",
+explain:"LTRIM = spaces on the left. RTRIM = right. TRIM = both sides. Critical for cleaning manually entered data.",
 code:`<span class="kw">SELECT</span>\n  <span class="fn">LTRIM</span>(<span class="str">'   LeftSpace'</span>) <span class="kw">AS</span> <span class="str">l_trimmed</span>,\n  <span class="fn">RTRIM</span>(<span class="str">'RightSpace   '</span>) <span class="kw">AS</span> <span class="str">r_trimmed</span>,\n  <span class="fn">TRIM</span>(<span class="str">'   BothSides   '</span>) <span class="kw">AS</span> <span class="str">full_trimmed</span>;`},
-{title:"Example 5 — REPLACE and UPPER: replacing and normalizing",tag:"m",
-explain:"REPLACE(col,'UK','United Kingdom') replaces text. UPPER() converts to uppercase.",
+{title:"Example 5 — REPLACE and UPPER: substitution and normalization",tag:"m",
+explain:"REPLACE(col,'UK','United Kingdom') replaces text. UPPER() converts to uppercase letters.",
 code:`<span class="kw">SELECT</span> <span class="fn">UPPER</span>(<span class="col">company</span>) <span class="kw">AS</span> <span class="str">company_caps</span>,\n       <span class="fn">REPLACE</span>(<span class="col">country_region</span>, <span class="str">'UK'</span>, <span class="str">'United Kingdom'</span>) <span class="kw">AS</span> <span class="str">country</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'UK'</span>;`},
 ]},
-{label:"📌 Part 3: Math Calculations",examples:[
-{title:"Example 1 — Profit per unit: price minus cost",tag:"b",
-explain:"SQL computes on the fly — the table is unchanged. list_price - standard_cost = gross profit.",
+{label:"📌 Part 3: Mathematical Calculations",examples:[
+{title:"Example 1 — profit per unit: price minus cost",tag:"b",
+explain:"SQL computes it in real time — the table doesn't change. list_price - standard_cost = gross profit.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>, <span class="col">standard_cost</span>,\n       (<span class="col">list_price</span> <span class="op">-</span> <span class="col">standard_cost</span>) <span class="kw">AS</span> <span class="str">unit_profit</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
-{title:"Example 2 — Total inventory value: price × target quantity",tag:"b",
-explain:"Multiplying two columns computes the total inventory value per product.",
+{title:"Example 2 — total inventory value: price × target quantity",tag:"b",
+explain:"Multiplying two columns computes the total inventory value for each product.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       (<span class="col">list_price</span> <span class="op">*</span> <span class="col">target_level</span>) <span class="kw">AS</span> <span class="str">total_stock_value</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
-{title:"Example 3 — ROUND: price with 17% tax, 2 decimals",tag:"b",
-explain:"list_price * 1.17 adds 17%. ROUND(..., 2) rounds to two decimal places.",
+{title:"Example 3 — ROUND: price with 17% tax, 2 digits",tag:"b",
+explain:"list_price * 1.17 adds 17%. ROUND(..., 2) rounds to two digits after the decimal point.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ROUND</span>(<span class="col">list_price</span> <span class="op">*</span> <span class="num">1.17</span>, <span class="num">2</span>) <span class="kw">AS</span> <span class="str">price_with_tax</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
-{title:"Example 4 — MOD: remainder when splitting into packs",tag:"m",
-explain:"MOD(target_level, 12) = how many products are left over outside a full pack of 12.",
+{title:"Example 4 — MOD: remainder when dividing into cases",tag:"m",
+explain:"MOD(target_level, 12) = how many products are left outside a full case of 12 units.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">target_level</span>,\n       <span class="fn">MOD</span>(<span class="col">target_level</span>, <span class="num">12</span>) <span class="kw">AS</span> <span class="str">loose_items</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
 {title:"Example 5 — ABS: absolute difference between stock and target",tag:"m",
-explain:"ABS always guarantees a positive result. No matter which is larger — the difference is always positive.",
+explain:"ABS always guarantees a positive result. It doesn't matter which is bigger — the difference is always positive.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>,\n       <span class="fn">ABS</span>(<span class="col">target_level</span> <span class="op">-</span> <span class="col">reorder_level</span>) <span class="kw">AS</span> <span class="str">stock_gap</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
 ]},
 {label:"📌 Part 4: ORDER BY, LIMIT, OFFSET",examples:[
 {title:"Example 1 — ORDER BY DESC: products from most to least expensive",tag:"b",
-explain:"DESC = descending order. list_price DESC = from the highest price to the lowest.",
+explain:"DESC = descending order. list_price DESC = from highest price to lowest.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>;`},
-{title:"Example 2 — Double sort: country, then city",tag:"b",
-explain:"Two columns in ORDER BY: country first, ties broken by city. ASC is the default.",
+{title:"Example 2 — double sort: country then city",tag:"b",
+explain:"Two columns in ORDER BY: country first, then city on ties. ASC is the default.",
 code:`<span class="kw">SELECT</span> <span class="col">country_region</span>, <span class="col">city</span>, <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">ORDER BY</span> <span class="col">country_region</span>, <span class="col">city</span>;`},
 {title:"Example 3 — LIMIT: the 5 most expensive products",tag:"b",
 explain:"ORDER BY DESC sorts from the most expensive. LIMIT 5 takes only the first 5.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>\n<span class="kw">LIMIT</span> <span class="num">5</span>;`},
-{title:"Example 4 — Sort by last-name length (CHAR_LENGTH)",tag:"m",
-explain:"CHAR_LENGTH returns the number of characters. You can sort by any expression — not just a column.",
+{title:"Example 4 — sort by last name length (CHAR_LENGTH)",tag:"m",
+explain:"CHAR_LENGTH returns a number of characters. You can sort by any expression — not just a column.",
 code:`<span class="kw">SELECT</span> <span class="col">last_name</span>\n<span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">ORDER BY</span> <span class="fn">CHAR_LENGTH</span>(<span class="col">last_name</span>) <span class="kw">DESC</span>;`},
 {title:"Example 5 — OFFSET: skip 10, show the next 5",tag:"m",
-explain:"LIMIT 5 OFFSET 10 = the second page of results. OFFSET sets where to start counting.",
+explain:"LIMIT 5 OFFSET 10 = the second page of results. OFFSET determines where to start counting from.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">ORDER BY</span> <span class="col">id</span>\n<span class="kw">LIMIT</span> <span class="num">5</span> <span class="kw">OFFSET</span> <span class="num">10</span>;`},
 ]},
 ],
 examples:[]},
 
-{num:5,icon:"📅",title:"Dates",desc:"Extracting parts, formatting, and computing differences — full work with dates.",
+{num:5,icon:"📅",title:"dates",desc:"Extracting parts, formatting, calculating differences — full work with dates.",
 syntax:"YEAR(date) / MONTH(date) / DAY(date)\nDATE_FORMAT(date, '%d/%m/%Y')\nDATEDIFF(date2, date1) -- number of days\nDATE_ADD(date, INTERVAL 30 DAY)",
 concepts:[
-{label:"Extracting Parts",text:"<strong>YEAR() MONTH() DAY()</strong> — extract a part of the date. Use in WHERE to filter time periods."},
+{label:"Extracting parts",text:"<strong>YEAR() MONTH() DAY()</strong> — extract part of the date. Used with WHERE to filter periods."},
 {label:"DATE_FORMAT",text:"<strong>%d</strong>=day <strong>%m</strong>=month <strong>%Y</strong>=4-digit year <strong>%M</strong>=month name <strong>%H:%i</strong>=hour:minute"},
 {label:"DATEDIFF",text:"<strong>DATEDIFF(later, earlier)</strong> = days. Order matters! Reversed → a negative number."},
 {label:"DATE_ADD / DATE_SUB",text:"<strong>DATE_ADD(date, INTERVAL 30 DAY)</strong> adds 30 days. DATE_SUB subtracts."},
 ],
 examples:[
 {title:"Example 1 — YEAR: the year each order was placed",tag:"b",
-explain:"YEAR() extracts the year from the date. Can be combined in WHERE to filter a specific year.",
+explain:"YEAR() extracts the year from the date. Can be combined with WHERE to filter a specific year.",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">YEAR</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_year</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
-{title:"Example 2 — MONTH: the month placed",tag:"b",
+{title:"Example 2 — MONTH: month of execution",tag:"b",
 explain:"MONTH() returns a number 1-12. You can filter by month across any year.",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="fn">MONTH</span>(<span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">order_month</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
-{title:"Example 3 — DATE_FORMAT: day/month/year format",tag:"b",
-explain:"'%d/%m/%Y' = DD/MM/YYYY. You can build any display format you like.",
+{title:"Example 3 — DATE_FORMAT: Israeli format",tag:"b",
+explain:"'%d/%m/%Y' = DD/MM/YYYY. You can create any display format you want.",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATE_FORMAT</span>(<span class="col">order_date</span>, <span class="str">'%d/%m/%Y'</span>) <span class="kw">AS</span> <span class="str">il_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
 {title:"Example 4 — DATEDIFF: shipping days",tag:"m",
-explain:"DATEDIFF(shipped, ordered) = the number of days from order to shipment. Important: order matters!",
+explain:"DATEDIFF(shipped, ordered) = the number of days from order to shipment. Important: the order matters!",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>,\n       <span class="fn">DATEDIFF</span>(<span class="col">shipped_date</span>, <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">shipping_days</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
-{title:"Example 5 — DATE_ADD: net + 30",tag:"m",
+{title:"Example 5 — DATE_ADD: current + 30",tag:"m",
 explain:"DATE_ADD adds an INTERVAL. You can specify DAY, MONTH, YEAR, HOUR, and more.",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>,\n       <span class="fn">DATE_ADD</span>(<span class="col">order_date</span>, <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>) <span class="kw">AS</span> <span class="str">due_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
 ]},
 
-{num:6,icon:"🔎",title:"WHERE — Filtering",desc:"Filtering rows by conditions. The most useful tool in everyday work.",
+{num:6,icon:"🔎",title:"WHERE — filtering",desc:"Filtering rows by conditions. The most useful tool in everyday work.",
 syntax:"WHERE column = 'value' AND/OR ...\nIN ('a','b','c')\nBETWEEN x AND y\nLIKE '%pattern%'\nIS NULL / IS NOT NULL",
 concepts:[
-{label:"AND / OR / NOT",text:"<strong>AND</strong> = both. <strong>OR</strong> = at least one. Use parentheses to control precedence: <strong>WHERE (a OR b) AND c</strong>"},
-{label:"IN",text:"<strong>IN ('London','Paris')</strong> = shorthand for multiple ORs. More efficient and readable."},
-{label:"BETWEEN",text:"<strong>BETWEEN 20 AND 50</strong> = inclusive of both 20 and 50! Equivalent to: >= 20 AND <= 50"},
+{label:"AND / OR / NOT",text:"<strong>AND</strong> = both. <strong>OR</strong> = at least one. Parentheses to control precedence: <strong>WHERE (a OR b) AND c</strong>"},
+{label:"IN",text:"<strong>IN ('London','Paris')</strong> = a shorthand for multiple ORs. More efficient and more readable."},
+{label:"BETWEEN",text:"<strong>BETWEEN 20 AND 50</strong> = includes 20 and 50! Equivalent to: >= 20 AND <= 50"},
 {label:"LIKE",text:"<strong>%</strong> = any number of characters. <strong>_</strong> = a single character. 'j%' starts with j. '%@gmail%' contains gmail."},
 ],
 examples:[
 {title:"Example 1 — Basic WHERE: price over 50",tag:"b",
-explain:"A simple comparison condition. You can use: > < >= <= = != (not equal).",
+explain:"A simple comparison condition. Allowed: > < >= <= = != (not equal).",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">50</span>;`},
-{title:"Example 2 — AND: country + city",tag:"b",
-explain:"AND = both conditions must hold. The customer must be from both the USA and NY.",
+{title:"Example 2 — AND: Country + City",tag:"b",
+explain:"AND = both conditions must be true. A customer must be from USA and from NY.",
 code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">WHERE</span> <span class="col">country_region</span> = <span class="str">'USA'</span>\n  <span class="kw">AND</span> <span class="col">city</span> = <span class="str">'New York'</span>;`},
 {title:"Example 3 — IN: several cities",tag:"b",
-explain:"IN = shorthand for OR. Much easier to read and maintain.",
+explain:"IN = shorthand for OR. Much more readable and maintainable.",
 code:`<span class="kw">SELECT</span> <span class="col">company</span>, <span class="col">city</span>\n<span class="kw">FROM</span> <span class="tbl">suppliers</span>\n<span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'Tokyo'</span>, <span class="str">'London'</span>, <span class="str">'New York'</span>);`},
-{title:"Example 4 — LIKE: pattern search",tag:"m",
-explain:"% = any number of characters. Here: emails ending in a specific domain.",
+{title:"Example 4 — LIKE: Pattern Search",tag:"m",
+explain:"% = any number of characters. Here: emails ending with a specific domain.",
 code:`<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">employees</span>\n<span class="kw">WHERE</span> <span class="col">email_address</span> <span class="kw">LIKE</span> <span class="str">'%northwindtraders.com'</span>;`},
 {title:"Example 5 — IS NULL: orders that weren't shipped",tag:"m",
-explain:"NULL = a missing value. You must use IS NULL, not = NULL! A classic beginner mistake.",
+explain:"NULL = missing value. You must use IS NULL, not = NULL! A classic beginner mistake.",
 code:`<span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">order_date</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">WHERE</span> <span class="col">shipped_date</span> <span class="kw">IS NULL</span>;`},
 ]},
 
-{num:7,icon:"📦",title:"GROUP BY & Aggregation",desc:"Grouping data and computing statistics. Includes HAVING, ROLLUP, and UNION.",
+{num:7,icon:"📦",title:"GROUP BY & aggregation",desc:"Grouping data and calculating statistics. Includes HAVING, ROLLUP and UNION.",
 syntax:"SELECT column, COUNT(*) / SUM() / AVG()\nFROM table\nGROUP BY column\nHAVING COUNT(*) > 5;",
 concepts:[
-{label:"Aggregate Functions",text:"<strong>COUNT(*)</strong> count | <strong>SUM()</strong> sum | <strong>AVG()</strong> average | <strong>MIN/MAX()</strong> extremes"},
-{label:"The GROUP BY Rule",text:"Every non-aggregate column in SELECT <strong>must</strong> appear in GROUP BY. Otherwise — an error."},
-{label:"WHERE vs HAVING",text:"<strong>WHERE</strong> = before grouping (on rows). <strong>HAVING</strong> = after grouping (on groups). Aggregates are not allowed in WHERE."},
-{label:"ROLLUP",text:"<strong>GROUP BY col WITH ROLLUP</strong> — adds a grand-total row (NULL in the grouping column)."},
+{label:"Aggregate functions",text:"<strong>COUNT(*)</strong> count | <strong>SUM()</strong> sum | <strong>AVG()</strong> average | <strong>MIN/MAX()</strong> extreme"},
+{label:"The GROUP BY rule",text:"Every column in the SELECT that isn't an aggregate <strong>must</strong> be in the GROUP BY. Otherwise — an error."},
+{label:"WHERE vs. HAVING",text:"<strong>WHERE</strong> = before grouping (on rows). <strong>HAVING</strong> = after grouping (on groups). You can't aggregate in WHERE."},
+{label:"ROLLUP",text:"<strong>GROUP BY col WITH ROLLUP</strong> — adds a grand-total summary row (NULL in the grouping column)."},
 ],
 examples:[
 {title:"Example 1 — COUNT: products in each category",tag:"b",
-explain:"GROUP BY groups; COUNT(*) counts every row in the group.",
+explain:"GROUP BY groups, COUNT(*) counts every row in the group.",
 code:`<span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">product_count</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span>;`},
 {title:"Example 2 — SUM: shipping fees by company",tag:"b",
 explain:"SUM totals shipping_fee for each shipper_id separately.",
 code:`<span class="kw">SELECT</span> <span class="col">shipper_id</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">AS</span> <span class="str">total_shipping</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>\n<span class="kw">GROUP BY</span> <span class="col">shipper_id</span>;`},
 {title:"Example 3 — WHERE before GROUP BY",tag:"m",
-explain:"WHERE filters first (before grouping). Here: only products over 20, then the average per supplier.",
+explain:"WHERE filters first (before grouping). Here: only products above 20, then average per supplier.",
 code:`<span class="kw">SELECT</span> <span class="col">supplier_id</span>, <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">AS</span> <span class="str">avg_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > <span class="num">20</span>\n<span class="kw">GROUP BY</span> <span class="col">supplier_id</span>;`},
 {title:"Example 4 — HAVING: filtering after grouping",tag:"m",
-explain:"HAVING acts on the grouped result. Here: only cities with more than 2 customers.",
+explain:"HAVING operates on the grouping result. Here: only cities with more than 2 customers.",
 code:`<span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span>\n<span class="kw">GROUP BY</span> <span class="col">city</span>\n<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">2</span>;`},
 {title:"Example 5 — ROLLUP: with a grand total",tag:"a",
-explain:"WITH ROLLUP adds a row with NULL and TOTAL. COALESCE replaces NULL with text.",
-code:`<span class="kw">SELECT</span>\n  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- TOTAL ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,\n  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;`},
+explain:"WITH ROLLUP adds a row with NULL and a total. COALESCE replaces NULL with text.",
+code:`<span class="kw">SELECT</span>\n  <span class="fn">COALESCE</span>(<span class="col">category</span>, <span class="str">'--- Total ---'</span>) <span class="kw">AS</span> <span class="str">category</span>,\n  <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">total</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">GROUP BY</span> <span class="col">category</span> <span class="kw">WITH ROLLUP</span>;`},
 ]},
 
-{num:8,icon:"🔗",title:"JOIN",desc:"Combining tables — the most important tool in SQL for real-world database work.",
+{num:8,icon:"🔗",title:"JOIN",desc:"Joining tables — the most important tool in SQL for real-world work with databases.",
 syntax:"FROM table1 a\nINNER JOIN table2 b ON a.id = b.fk\nLEFT JOIN table3 c ON b.id = c.fk",
 concepts:[
-{label:"INNER JOIN",text:"Returns only rows with <strong>a match in both tables</strong>. With no match — the row disappears."},
-{label:"LEFT JOIN",text:"Returns <strong>all rows from the left table</strong> + matches. With no match → NULL."},
-{label:"ON — Join Condition",text:"<strong>ON a.id = b.customer_id</strong> — links a primary key (PK) to a foreign key (FK). Required!"},
-{label:"Table Aliases",text:"<strong>FROM orders o JOIN customers c</strong> — o.id instead of orders.id. Shorter and clearer."},
+{label:"INNER JOIN",text:"returns only rows with a <strong>match in both tables</strong>. Without a match — the row disappears."},
+{label:"LEFT JOIN",text:"Returns <strong>all rows of the left table</strong> + matches. No match → NULL."},
+{label:"ON — join condition",text:"<strong>ON a.id = b.customer_id</strong> — connects a primary key (PK) to a foreign key (FK). Required!"},
+{label:"Aliases for tables",text:"<strong>FROM orders o JOIN customers c</strong> — o.id instead of orders.id. Shorter and clearer."},
 ],
 examples:[
-{title:"Example 1 — INNER JOIN: orders with the customer name",tag:"m",
+{title:"Example 1 — INNER JOIN: orders with customer name",tag:"m",
 explain:"orders contains customer_id. JOIN brings in the name from customers.",
 code:`<span class="kw">SELECT</span> <span class="col">o.id</span>, <span class="col">o.order_date</span>, <span class="col">c.company</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span> <span class="col">o</span>\n<span class="kw">INNER JOIN</span> <span class="tbl">customers</span> <span class="col">c</span> <span class="kw">ON</span> <span class="col">o.customer_id</span> = <span class="col">c.id</span>;`},
-{title:"Example 2 — JOIN: order details with the product name",tag:"m",
-explain:"order_details contains product_id. JOIN to products brings in the name.",
+{title:"Example 2 — JOIN: order details with product name",tag:"m",
+explain:"order_details contains product_id. JOIN to products brings the name.",
 code:`<span class="kw">SELECT</span> <span class="col">od.order_id</span>, <span class="col">p.product_name</span>, <span class="col">od.quantity</span>\n<span class="kw">FROM</span> <span class="tbl">order_details</span> <span class="col">od</span>\n<span class="kw">INNER JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>;`},
-{title:"Example 3 — LEFT JOIN: customers even without orders",tag:"m",
-explain:"LEFT JOIN keeps all customers. Those with no orders get NULL in the orders columns.",
+{title:"Example 3 — LEFT JOIN: customers including those without orders",tag:"m",
+explain:"LEFT JOIN keeps all the customers. Anyone without orders will get NULL in the orders columns.",
 code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="col">o.id</span> <span class="kw">AS</span> <span class="str">order_id</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>;`},
-{title:"Example 4 — 4 tables: a full sales report",tag:"a",
+{title:"Example 4 — 4 tables: full sales report",tag:"a",
 explain:"Each JOIN adds a layer of information. customers → orders → order_details → products.",
 code:`<span class="kw">SELECT</span> <span class="col">c.company</span>, <span class="col">o.order_date</span>, <span class="col">p.product_name</span>, <span class="col">od.quantity</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">JOIN</span> <span class="tbl">products</span> <span class="col">p</span> <span class="kw">ON</span> <span class="col">od.product_id</span> = <span class="col">p.id</span>;`},
 {title:"Example 5 — JOIN + GROUP BY: total sales per customer",tag:"a",
@@ -539,176 +538,176 @@ explain:"Combining JOIN and GROUP BY: join, then group by customer and sum.",
 code:`<span class="kw">SELECT</span> <span class="col">c.company</span>,\n       <span class="fn">SUM</span>(<span class="col">od.quantity</span> <span class="op">*</span> <span class="col">od.unit_price</span>) <span class="kw">AS</span> <span class="str">total_revenue</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">JOIN</span> <span class="tbl">orders</span> <span class="col">o</span> <span class="kw">ON</span> <span class="col">c.id</span> = <span class="col">o.customer_id</span>\n<span class="kw">JOIN</span> <span class="tbl">order_details</span> <span class="col">od</span> <span class="kw">ON</span> <span class="col">o.id</span> = <span class="col">od.order_id</span>\n<span class="kw">GROUP BY</span> <span class="col">c.company</span>\n<span class="kw">ORDER BY</span> <span class="str">total_revenue</span> <span class="kw">DESC</span>;`},
 ]},
 
-{num:9,icon:"🧠",title:"Subqueries, CASE, CTE",desc:"Advanced queries — complex logic in a readable form.",
+{num:9,icon:"🧠",title:"Subqueries, CASE, CTE",desc:"Advanced queries — complex logic, written readably.",
 syntax:"WHERE col > (SELECT AVG(col) FROM ...)\nCASE WHEN ... THEN ... ELSE ... END\nWITH cte AS (SELECT ...) SELECT ...",
 concepts:[
 {label:"Subquery",text:"A query inside a query. In WHERE, in FROM (a temporary table), or in SELECT (a computed column)."},
 {label:"EXISTS",text:"<strong>EXISTS (SELECT 1 FROM ... WHERE ...)</strong> = a boolean check. Faster than IN for large tables."},
-{label:"CASE WHEN",text:"<strong>CASE WHEN condition THEN value ... ELSE default END</strong> — like if-else. Can be used anywhere in a query."},
-{label:"CTE (WITH)",text:"<strong>WITH name AS (query)</strong> — a named temporary table. Makes long queries readable."},
+{label:"CASE WHEN",text:"<strong>CASE WHEN condition THEN value ... ELSE default END</strong> — like if-else. Can be used anywhere in the query."},
+{label:"CTE (WITH)",text:"<strong>WITH name AS (query)</strong> — a named temporary table. Turns long queries into readable ones."},
 ],
 examples:[
-{title:"Example 1 — Subquery: products above the average",tag:"m",
-explain:"The inner parentheses compute the average; the outer WHERE compares against it.",
+{title:"Example 1 — Subquery: products above average",tag:"m",
+explain:"The inner parentheses calculate an average, the outer WHERE compares against it.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>\n<span class="kw">WHERE</span> <span class="col">list_price</span> > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">list_price</span>) <span class="kw">FROM</span> <span class="tbl">products</span>);`},
 {title:"Example 2 — EXISTS: customers with orders",tag:"m",
-explain:"EXISTS checks whether at least one row exists. SELECT 1 = an efficient shorthand (no real value needed).",
+explain:"EXISTS checks whether there is at least one row. SELECT 1 = an efficient shortcut (no real value is needed).",
 code:`<span class="kw">SELECT</span> <span class="col">company</span>\n<span class="kw">FROM</span> <span class="tbl">customers</span> <span class="col">c</span>\n<span class="kw">WHERE</span> <span class="kw">EXISTS</span> (\n  <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> <span class="tbl">orders</span> <span class="col">o</span>\n  <span class="kw">WHERE</span> <span class="col">o.customer_id</span> = <span class="col">c.id</span>\n);`},
 {title:"Example 3 — CASE WHEN: price categories",tag:"m",
-explain:"CASE checks conditions in order. It stops at the first one that holds. ELSE = the default.",
-code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> > <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'Expensive'</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'Mid-range'</span>\n    <span class="kw">ELSE</span> <span class="str">'Cheap'</span>\n  <span class="kw">END</span> <span class="kw">AS</span> <span class="str">price_cat</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
+explain:"CASE checks conditions in order. Stops at the first condition that's true. ELSE = the default.",
+code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n  <span class="kw">CASE</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> > <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'expensive'</span>\n    <span class="kw">WHEN</span> <span class="col">list_price</span> <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">50</span> <span class="kw">THEN</span> <span class="str">'Medium'</span>\n    <span class="kw">ELSE</span> <span class="str">'cheap'</span>\n  <span class="kw">END</span> <span class="kw">AS</span> <span class="str">price_cat</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
 {title:"Example 4 — CTE: large categories",tag:"a",
-explain:"WITH defines a 'table' named CategoryStats. The main query uses it as if it were a real table.",
+explain:"WITH defines a 'table' named CategoryStats. The main query works with it as if it were a real table.",
 code:`<span class="kw">WITH</span> <span class="tbl">CategoryStats</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">category</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> <span class="str">cnt</span>\n  <span class="kw">FROM</span> <span class="tbl">products</span> <span class="kw">GROUP BY</span> <span class="col">category</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">CategoryStats</span>\n<span class="kw">WHERE</span> <span class="col">cnt</span> > <span class="num">5</span>;`},
 ]},
 
-{num:10,icon:"🪟",title:"Window Functions",desc:"Sophisticated calculations that keep all rows — ranking, running totals, LAG/LEAD.",
+{num:10,icon:"🪟",title:"Window Functions",desc:"Sophisticated calculations that keep all the rows — ranking, running total, LAG/LEAD.",
 syntax:"RANK() OVER (PARTITION BY col ORDER BY col)\nLAG(col) OVER (PARTITION BY ... ORDER BY ...)\nSUM(col) OVER (ORDER BY col ROWS BETWEEN ...)",
 concepts:[
-{label:"OVER()",text:"Wrap every Window Function in <strong>OVER(...)</strong>. With OVER = it does not collapse rows!"},
-{label:"PARTITION BY",text:"Splits into separate windows. <strong>PARTITION BY category</strong> = a separate ranking for each category."},
+{label:"OVER()",text:"Wrap every Window Function in <strong>OVER(...)</strong>. With OVER = it doesn't collapse rows!"},
+{label:"PARTITION BY",text:"Divides into separate windows. <strong>PARTITION BY category</strong> = separate ranking for each category."},
 {label:"ROW_NUMBER vs RANK",text:"<strong>ROW_NUMBER</strong> = always sequential | <strong>RANK</strong> = ties + gaps | <strong>DENSE_RANK</strong> = ties without gaps"},
-{label:"LAG / LEAD",text:"<strong>LAG(col)</strong> = the value from the previous row. <strong>LEAD(col)</strong> = the next one. For computing changes between periods."},
+{label:"LAG / LEAD",text:"<strong>LAG(col)</strong> = the value from the previous row. <strong>LEAD(col)</strong> = the next one. For calculating changes between periods."},
 ],
 examples:[
-{title:"Example 1 — ROW_NUMBER: numbering rows",tag:"m",
-explain:"ROW_NUMBER() assigns a sequential number. Always unique, even on ties.",
+{title:"Example 1 — ROW_NUMBER: row numbering",tag:"m",
+explain:"ROW_NUMBER() gives a sequential number. Always unique, even when values tie.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">list_price</span>,\n       <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">row_num</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
 {title:"Example 2 — RANK: ranking within a category",tag:"a",
-explain:"PARTITION BY category = a separate window per category. RANK ranks within it.",
+explain:"PARTITION BY category = a separate window for each category. RANK ranks within it.",
 code:`<span class="kw">SELECT</span> <span class="col">product_name</span>, <span class="col">category</span>, <span class="col">list_price</span>,\n       <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">category</span> <span class="kw">ORDER BY</span> <span class="col">list_price</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">rank_pos</span>\n<span class="kw">FROM</span> <span class="tbl">products</span>;`},
 {title:"Example 3 — LAG: a customer's previous order",tag:"a",
-explain:"PARTITION BY customer_id = a separate window per customer. LAG returns the previous order date.",
+explain:"PARTITION BY customer_id = a separate window for each customer. LAG returns the previous order date.",
 code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="col">order_date</span>,\n       <span class="fn">LAG</span>(<span class="col">order_date</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n         <span class="kw">ORDER BY</span> <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">prev_order</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
-{title:"Example 4 — SUM: a running total",tag:"a",
-explain:"SUM() OVER(ORDER BY) = a running total. Each row adds itself to the previous sum.",
+{title:"Example 4 — SUM: Running Total",tag:"a",
+explain:"SUM() OVER(ORDER BY) = running total. Each row adds itself to the previous sum.",
 code:`<span class="kw">SELECT</span> <span class="col">order_date</span>, <span class="col">shipping_fee</span>,\n       <span class="fn">SUM</span>(<span class="col">shipping_fee</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">order_date</span>) <span class="kw">AS</span> <span class="str">running_total</span>\n<span class="kw">FROM</span> <span class="tbl">orders</span>;`},
 ]},
 
-{num:11,icon:"⚙️",title:"DML, DDL, Transactions",desc:"Modifying data and structure. INSERT, UPDATE, DELETE, TRANSACTION, CREATE, ALTER.",
+{num:11,icon:"⚙️",title:"DML, DDL, transactions",desc:"Changing data and structure. INSERT, UPDATE, DELETE, TRANSACTION, CREATE, ALTER.",
 syntax:"INSERT INTO table (cols) VALUES (...);\nUPDATE table SET col=val WHERE ...;\nSTART TRANSACTION; ... COMMIT;",
 concepts:[
-{label:"DML — Modifying Data",text:"<strong>INSERT</strong> add | <strong>UPDATE</strong> update | <strong>DELETE</strong> delete. Always use WHERE with UPDATE/DELETE!"},
+{label:"DML — modifying data",text:"<strong>INSERT</strong> add | <strong>UPDATE</strong> update | <strong>DELETE</strong> delete. Always use WHERE with UPDATE/DELETE!"},
 {label:"⚠️ Warning!",text:"<strong>UPDATE/DELETE without WHERE</strong> = changing/deleting the entire table! Always SELECT first with the same WHERE."},
-{label:"TRANSACTION",text:"<strong>START TRANSACTION</strong> begins | <strong>COMMIT</strong> confirms | <strong>ROLLBACK</strong> undoes everything. All operations together."},
-{label:"DDL — Modifying Structure",text:"<strong>CREATE TABLE</strong> | <strong>ALTER TABLE ADD/DROP</strong> | <strong>DROP TABLE</strong>. DDL cannot be rolled back!"},
+{label:"TRANSACTION",text:"<strong>START TRANSACTION</strong> starts | <strong>COMMIT</strong> confirms | <strong>ROLLBACK</strong> cancels everything. All the operations together."},
+{label:"DDL — modifying structure",text:"<strong>CREATE TABLE</strong> | <strong>ALTER TABLE ADD/DROP</strong> | <strong>DROP TABLE</strong>. DDL cannot be ROLLBACK’d!"},
 ],
 examples:[
 {title:"Example 1 — INSERT: adding a customer",tag:"b",
-explain:"Name the columns, then the values in the same order. You can skip columns that have a default.",
+explain:"Specify columns and then values in the same order. You can skip columns that have a default.",
 code:`<span class="kw">INSERT INTO</span> <span class="tbl">customers</span> (<span class="col">company</span>, <span class="col">last_name</span>, <span class="col">first_name</span>, <span class="col">city</span>)\n<span class="kw">VALUES</span> (<span class="str">'Tech Ltd'</span>, <span class="str">'Cohen'</span>, <span class="str">'Yossi'</span>, <span class="str">'Tel Aviv'</span>);`},
 {title:"Example 2 — UPDATE with WHERE",tag:"b",
-explain:"WHERE is critical! Without WHERE — every price would be updated. Always SELECT first to check.",
+explain:"WHERE is critical! Without WHERE — all prices will be updated. Always SELECT first to check.",
 code:`<span class="kw">UPDATE</span> <span class="tbl">products</span>\n<span class="kw">SET</span> <span class="col">list_price</span> = <span class="num">20</span>\n<span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">1</span>;`},
-{title:"Example 3 — TRANSACTION: a safe update",tag:"m",
-explain:"Everything inside a TRANSACTION. If something fails — ROLLBACK undoes everything; COMMIT saves it.",
-code:`<span class="kw">START TRANSACTION</span>;\n<span class="kw">UPDATE</span> <span class="tbl">products</span> <span class="kw">SET</span> <span class="col">list_price</span> = <span class="col">list_price</span> <span class="op">*</span> <span class="num">1.1</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">5</span>;\n<span class="kw">INSERT INTO</span> <span class="tbl">orders</span> (<span class="col">id</span>, <span class="col">customer_id</span>) <span class="kw">VALUES</span> (<span class="num">9000</span>, <span class="num">4</span>);\n<span class="kw">COMMIT</span>; <span class="cmt">-- or ROLLBACK to undo</span>`},
+{title:"Example 3 — TRANSACTION: safe update",tag:"m",
+explain:"Everything inside a TRANSACTION. If something fails — ROLLBACK undoes everything. COMMIT saves it.",
+code:`<span class="kw">START TRANSACTION</span>;\n<span class="kw">UPDATE</span> <span class="tbl">products</span> <span class="kw">SET</span> <span class="col">list_price</span> = <span class="col">list_price</span> <span class="op">*</span> <span class="num">1.1</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="num">5</span>;\n<span class="kw">INSERT INTO</span> <span class="tbl">orders</span> (<span class="col">id</span>, <span class="col">customer_id</span>) <span class="kw">VALUES</span> (<span class="num">9000</span>, <span class="num">4</span>);\n<span class="kw">COMMIT</span>; <span class="cmt">-- or ROLLBACK to cancel</span>`},
 ]},
 
 // ==================== Lesson 5: WINDOW FUNCTIONS on Sakila ====================
-{num:5,icon:"🪟",title:"Lesson 5 — Window Functions (Sakila)",desc:"Window functions on the Sakila database — a movie-rental store database. Covers 6 topics: warm-up, ranking, aggregation, offset, value, and CTE.",
+{num:5,icon:"🪟",title:"Lesson 5 — Window Functions (Sakila)",desc:"Window functions on the Sakila database — a movie rental store database. Includes 6 topics: warm-up, ranking, aggregation, offset, value, and CTE.",
 syntax:"function() OVER (\n  PARTITION BY column  -- split into groups\n  ORDER BY column      -- order within each window\n  ROWS BETWEEN ...    -- define the range\n)",
 concepts:[
-{label:"🗄️ Sakila DB — Main Tables",text:"<strong>film</strong> — films | <strong>customer</strong> — customers | <strong>payment</strong> — payments | <strong>rental</strong> — rentals | <strong>actor</strong> — actors | <strong>staff</strong> — staff"},
-{label:"What is a Window Function?",text:"A function that operates on a <strong>'window'</strong> of rows relative to the current row — without collapsing (it does not return one row per group). Every row is kept, with a computed value."},
-{label:"PARTITION BY",text:"Splits into separate windows, much like GROUP BY — but keeps all rows. Without PARTITION = the whole table is a single window."},
-{label:"ORDER BY inside OVER",text:"Defines the <strong>order within the window</strong>. Critical for functions like ROW_NUMBER, LAG, LEAD, and running totals."},
+{label:"🗄️ Sakila database — main tables",text:"<strong>film</strong> — films | <strong>customer</strong> — customers | <strong>payment</strong> — payments | <strong>rental</strong> — rentals | <strong>actor</strong> — actors | <strong>staff</strong> — staff"},
+{label:"What is a Window Function?",text:"A function that operates on a <strong>'window'</strong> of rows relative to the current row — without collapsing (it doesn't return one row per group). Every row is kept with a calculated value."},
+{label:"PARTITION BY",text:"Splits into separate windows similar to-GROUP BY — but keeps all the rows. Without PARTITION = the whole table is one window."},
+{label:"ORDER BY inside OVER",text:"Sets the <strong>order within the window.</strong>. Critical for functions like ROW_NUMBER, LAG, LEAD and running totals."},
 ],
 sections:[
-{label:"⏩ Part 0: Warm-up — GROUP BY vs Window",examples:[
+{label:"⏩ Part 0: Warm-up — GROUP BY vs. Window",examples:[
 {title:"Example 0.1 — GROUP BY: total payments per customer",tag:"b",
-explain:"The classic GROUP BY — returns one row per customer. We don't see individual payment details.",
+explain:"The classic GROUP BY — returns one row per customer. We will not see individual payment details.",
 code:`<span class="kw">SELECT</span> <span class="col">customer_id</span>,\n       <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">AS</span> <span class="str">total_amount</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>\n<span class="kw">GROUP BY</span> <span class="col">customer_id</span>;`},
-{title:"Example 0.2 — GROUP BY: average film length by rating",tag:"b",
-explain:"Average length (AVG) for each rating separately. This is the old approach — a Window Function will let us see the average next to each film.",
+{title:"Example 0.2 — GROUP BY: average movie length by rating",tag:"b",
+explain:"Average length (AVG) for each rating separately. This is the old approach — a Window Function will let you see the average next to every film.",
 code:`<span class="kw">SELECT</span> <span class="col">rating</span>,\n       <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">AS</span> <span class="str">avg_length</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>\n<span class="kw">GROUP BY</span> <span class="col">rating</span>;`},
 ]},
-{label:"🏆 Part 1: Ranking Functions",examples:[
+{label:"🏆 Part 1: Ranking functions (Ranking)",examples:[
 {title:"1.1 — ROW_NUMBER: global numbering by name",tag:"b",
-explain:"ROW_NUMBER() numbers every row sequentially. Always unique, even on ties. ORDER BY first_name = alphabetical order.",
+explain:"ROW_NUMBER() Numbers every row sequentially. Always unique even when values tie. ORDER BY first_name = ORDER BY first_name = alphabetical order\".",
 code:`<span class="kw">SELECT</span>\n  <span class="col">first_name</span>, <span class="col">last_name</span>,\n  <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">first_name</span>) <span class="kw">AS</span> <span class="str">global_row_num</span>\n<span class="kw">FROM</span> <span class="tbl">customer</span>;`},
 {title:"1.2 — ROW_NUMBER: numbering rentals for each customer separately",tag:"m",
-explain:"PARTITION BY customer_id = a separate window per customer. ORDER BY rental_date DESC = newest to oldest. This numbers rentals for each customer separately.",
+explain:"PARTITION BY customer_id = a separate window for each customer. ORDER BY rental_date DESC = newest to oldest. This numbers the rentals for each customer separately.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span> <span class="kw">DESC</span>\n  ) <span class="kw">AS</span> <span class="str">customer_rental_order</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
-{title:"1.3 — RANK: global ranking by film length",tag:"b",
-explain:"RANK() gives the same rank on ties — then skips. Two films of equal length both get rank 1, and the next gets rank 3.",
+{title:"1.3 — RANK: global ranking by movie length",tag:"b",
+explain:"RANK() gives ties the same rank — and then skips. Two movies with the same length will both get rank 1, and the next one will get rank 3.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">length</span>,\n  <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">length</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">global_rank</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
 {title:"1.4 — RANK: ranking by length within each rating",tag:"m",
-explain:"PARTITION BY rating = each rating gets its own ranking. The longest PG film gets rank 1 within PG.",
+explain:"PARTITION BY rating = each Rating gets an independent ranking. The longest movie in PG will get rank 1 within PG.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">length</span>,\n  <span class="fn">RANK</span>() <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">length</span> <span class="kw">DESC</span>\n  ) <span class="kw">AS</span> <span class="str">rank_in_rating</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
 {title:"1.5 — DENSE_RANK: dense ranking with no gaps",tag:"b",
-explain:"DENSE_RANK() is like RANK but without jumps — after two rank-1s comes rank 2 (not 3). Useful for clean rankings.",
+explain:"DENSE_RANK() is like RANK but without gaps — after two rank-1s comes rank 2 (not 3). Useful for clean rankings.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">replacement_cost</span>,\n  <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">replacement_cost</span> <span class="kw">DESC</span>) <span class="kw">AS</span> <span class="str">cost_rank</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
-{title:"1.6 — DENSE_RANK: cost ranking by rating",tag:"m",
-explain:"Combining PARTITION + DENSE_RANK. Each rating group gets its own dense cost ranking.",
+{title:"1.6 — DENSE_RANK: cost ranking by Rating",tag:"m",
+explain:"A combination of PARTITION + DENSE_RANK. Each Rating group gets a separate, dense cost ranking.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">replacement_cost</span>,\n  <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">replacement_cost</span> <span class="kw">DESC</span>\n  ) <span class="kw">AS</span> <span class="str">cost_rank_in_rating</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
 {title:"1.7 — NTILE(4): split into quartiles by length",tag:"m",
-explain:"NTILE(N) splits all rows into N equal groups. NTILE(4) = quartiles (Q1-Q4). Useful for percentile analysis.",
+explain:"NTILE(N) divides all rows into-N equal groups. NTILE(4) = quartiles (Q1-Q4). Useful for percentile analysis.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">length</span>,\n  <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">length</span>) <span class="kw">AS</span> <span class="str">quartile</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
-{title:"1.8 — NTILE(3): tertiles by rating",tag:"m",
-explain:"Splitting into 3 groups (tertiles) within each rating separately. PARTITION BY rating + NTILE(3).",
+{title:"1.8 — NTILE(3): thirds by Rating",tag:"m",
+explain:"Split into 3 groups (tertiles) within each Rating separately. PARTITION BY rating + NTILE(3).",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">length</span>,\n  <span class="fn">NTILE</span>(<span class="num">3</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">length</span>\n  ) <span class="kw">AS</span> <span class="str">tertile_in_rating</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
 ]},
 {label:"📊 Part 2: Aggregation Functions",examples:[
 {title:"2.1 — SUM: global running total of payments",tag:"b",
-explain:"SUM() OVER(ORDER BY date) = a running total. Each row adds itself to the previous sum. Very useful for financial reports.",
+explain:"SUM() OVER(ORDER BY date) = running total. Each row adds itself to the previous sum. Very useful for financial reports.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">payment_date</span>) <span class="kw">AS</span> <span class="str">running_total</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
-{title:"2.2 — SUM: a running balance for each customer separately",tag:"m",
-explain:"PARTITION BY customer_id = a separate running total per customer. Like a bank account — how much a customer has paid up to each point in time.",
+{title:"2.2 — SUM: running balance for each customer separately",tag:"m",
+explain:"PARTITION BY customer_id = a separate running total for each customer. Like a bank account — how much a customer has paid up to each point in time.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">customer_running_total</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
-{title:"2.3 — AVG: comparing each film to the overall average",tag:"b",
-explain:"AVG() OVER() with no ORDER BY or PARTITION = the average over the whole table. Shown next to each row. diff_from_avg = the difference.",
+{title:"2.3 — AVG: comparing each movie to the overall average",tag:"b",
+explain:"AVG() OVER() without ORDER BY and PARTITION = an average over the entire table. Displayed next to every row. diff_from_avg = the difference.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">length</span>,\n  <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">OVER</span>() <span class="kw">AS</span> <span class="str">global_avg</span>,\n  <span class="col">length</span> <span class="op">-</span> <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">OVER</span>() <span class="kw">AS</span> <span class="str">diff_from_avg</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
-{title:"2.4 — AVG: each film vs the average of its rating",tag:"m",
-explain:"PARTITION BY rating = a different average per rating. Each film is compared to its group's average — not the overall one.",
+{title:"2.4 — AVG: each movie vs. its rating average",tag:"m",
+explain:"PARTITION BY rating = a different average for each Rating. Every movie is compared to its own group's average — not to the overall average.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">length</span>,\n  <span class="fn">AVG</span>(<span class="col">length</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">rating</span>) <span class="kw">AS</span> <span class="str">rating_avg</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
-{title:"2.5 — COUNT: a running count of transactions",tag:"b",
-explain:"COUNT() OVER(ORDER BY date) = how many transactions occurred so far. Grows with each row. Useful for tracking activity pace.",
+{title:"2.5 — COUNT: running count of transactions",tag:"b",
+explain:"COUNT() OVER(ORDER BY date) = how many transactions there have been so far. Grows on every row. Useful for tracking activity pace.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">payment_id</span>, <span class="col">payment_date</span>,\n  <span class="fn">COUNT</span>(<span class="col">payment_id</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">payment_date</span>) <span class="kw">AS</span> <span class="str">total_so_far</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
 {title:"2.6 — COUNT: counting rentals per employee over time",tag:"m",
-explain:"PARTITION BY staff_id = separate tracking per employee. How many rentals the employee handled up to each point in time.",
+explain:"PARTITION BY staff_id = separate tracking per employee. How many rentals the employee made up to each point in time.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">staff_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">COUNT</span>(<span class="col">rental_id</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">staff_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span>\n  ) <span class="kw">AS</span> <span class="str">staff_rentals_so_far</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
 {title:"2.7 — MAX: the highest payment in the store (global)",tag:"b",
-explain:"MAX() OVER() with no PARTITION = the maximum over the whole table. Appears next to each row — useful for comparisons.",
+explain:"MAX() OVER() without PARTITION = maximum over the entire table. Appears next to every row — useful for comparisons.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">payment_id</span>, <span class="col">amount</span>,\n  <span class="fn">MAX</span>(<span class="col">amount</span>) <span class="kw">OVER</span>() <span class="kw">AS</span> <span class="str">max_global</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
-{title:"2.8 — MAX: the highest payment of each customer",tag:"m",
-explain:"PARTITION BY customer_id = a different maximum per customer. Next to each payment — the highest amount that customer ever paid.",
+{title:"2.8 — MAX: the highest payment for each customer",tag:"m",
+explain:"PARTITION BY customer_id = a different maximum for each customer. Next to every payment — the highest amount that customer paid.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">amount</span>,\n  <span class="fn">MAX</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">customer_id</span>) <span class="kw">AS</span> <span class="str">max_per_customer</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
 ]},
-{label:"⬅️ Part 3: Offset Functions (LAG / LEAD)",examples:[
+{label:"⬅️ Part 3: shift functions (LAG / LEAD)",examples:[
 {title:"3.1 — LAG: what was the customer's previous payment?",tag:"m",
 explain:"LAG(col) returns the value from the previous row. PARTITION BY customer_id = previous within the same customer. First row → NULL.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">LAG</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">prev_amount</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
-{title:"3.2 — LAG: computing the delta from the previous payment",tag:"m",
-explain:"amount - LAG(amount) = how much the payment rose/fell. Positive = rose, negative = fell. Useful for trend analysis.",
+{title:"3.2 — LAG: calculating the Delta from the previous payment",tag:"m",
+explain:"amount - LAG(amount) = how much the payment increased/decreased. Positive value = increased, negative = decreased. Useful for trend analysis.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="col">amount</span> <span class="op">-</span> <span class="fn">LAG</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">diff_from_last</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
 {title:"3.3 — LEAD: what will the next payment be?",tag:"m",
 explain:"LEAD(col) = the value from the next row. The opposite of LAG. Last row → NULL. Useful for forecasting and analysis.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">payment_date</span>, <span class="col">amount</span>,\n  <span class="fn">LEAD</span>(<span class="col">amount</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">payment_date</span>\n  ) <span class="kw">AS</span> <span class="str">next_amount</span>\n<span class="kw">FROM</span> <span class="tbl">payment</span>;`},
-{title:"3.4 — LEAD: the next rental date with a default",tag:"a",
-explain:"LEAD(col, 1, default) — the third parameter is a default value when there is no 'next'. Here '2099-01-01' instead of NULL.",
+{title:"3.4 — LEAD: next rental date with a default",tag:"a",
+explain:"LEAD(col, 1, default) — the third parameter is a default value for when there is no 'next'. Here '2099-01-01' instead of NULL.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">LEAD</span>(<span class="col">rental_date</span>, <span class="num">1</span>, <span class="str">'2099-01-01'</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span>\n  ) <span class="kw">AS</span> <span class="str">next_rental_date</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
 ]},
-{label:"🔝 Part 4: Value Functions (FIRST_VALUE)",examples:[
+{label:"🔝 Part 4: value functions (FIRST_VALUE)",examples:[
 {title:"4.1 — FIRST_VALUE: the customer's first rental date",tag:"m",
-explain:"FIRST_VALUE(col) returns the first value in the window. With PARTITION BY customer_id = the first date per customer, shown next to every rental.",
+explain:"FIRST_VALUE(col) returns the first value in the window. With PARTITION BY customer_id = first date per customer, shown next to every rental.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n  <span class="fn">FIRST_VALUE</span>(<span class="col">rental_date</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_date</span> <span class="kw">ASC</span>\n  ) <span class="kw">AS</span> <span class="str">first_rental_date</span>\n<span class="kw">FROM</span> <span class="tbl">rental</span>;`},
-{title:"4.2 — FIRST_VALUE: the cheapest film in the category next to each film",tag:"m",
-explain:"ORDER BY rental_rate ASC = cheapest first. FIRST_VALUE takes it. This lets you compare each film to the cheapest in its category.",
+{title:"4.2 — FIRST_VALUE: The Cheapest Movie in the Category Next to Every Movie",tag:"m",
+explain:"ORDER BY rental_rate ASC = cheapest first. FIRST_VALUE takes it. This way you can compare every film to the cheapest one in its category.",
 code:`<span class="kw">SELECT</span>\n  <span class="col">title</span>, <span class="col">rating</span>, <span class="col">rental_rate</span>,\n  <span class="fn">FIRST_VALUE</span>(<span class="col">rental_rate</span>) <span class="kw">OVER</span> (\n    <span class="kw">PARTITION BY</span> <span class="col">rating</span>\n    <span class="kw">ORDER BY</span> <span class="col">rental_rate</span> <span class="kw">ASC</span>\n  ) <span class="kw">AS</span> <span class="str">cheapest_in_category</span>\n<span class="kw">FROM</span> <span class="tbl">film</span>;`},
 ]},
 {label:"🧮 Part 5: CTE — Common Table Expression",examples:[
-{title:"5.1 — Basic CTE: actors and last names",tag:"b",
-explain:"WITH name AS (query) — defines a named 'temporary table'. Then you SELECT from it. Very readable, and it cleans up complex queries.",
+{title:"5.1 — Basic CTE: players and last names",tag:"b",
+explain:"WITH name AS (query) — defines a 'temporary table' by name. Then SELECT from it. Very readable and cleans up complex queries.",
 code:`<span class="kw">WITH</span> <span class="tbl">ActorNames</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">first_name</span>, <span class="col">last_name</span>\n  <span class="kw">FROM</span> <span class="tbl">actor</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">ActorNames</span>;`},
-{title:"5.2 — CTE: early filtering for English films",tag:"b",
-explain:"The CTE filters first (language_id=1), then the main SELECT works on the filtered data. Simplifies long queries.",
+{title:"5.2 — CTE: early filtering for English-language movies",tag:"b",
+explain:"CTE filters first (language_id=1), and then the main-SELECT works on the filtered data. Simplifies long queries.",
 code:`<span class="kw">WITH</span> <span class="tbl">EnglishFilms</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">title</span>, <span class="col">language_id</span>\n  <span class="kw">FROM</span> <span class="tbl">film</span>\n  <span class="kw">WHERE</span> <span class="col">language_id</span> = <span class="num">1</span>\n)\n<span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">FROM</span> <span class="tbl">EnglishFilms</span>;`},
 {title:"5.3 — CTE with aggregation: customers who spent over $150",tag:"m",
-explain:"The CTE computes total payments per customer. The main query filters for over 150. More readable than a HAVING on a subquery.",
+explain:"The CTE computes the total payments per customer. The main query filters above 150. More readable than HAVING on a subquery.",
 code:`<span class="kw">WITH</span> <span class="tbl">CustomerTotals</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">customer_id</span>,\n         <span class="fn">SUM</span>(<span class="col">amount</span>) <span class="kw">AS</span> <span class="str">total_spent</span>\n  <span class="kw">FROM</span> <span class="tbl">payment</span>\n  <span class="kw">GROUP BY</span> <span class="col">customer_id</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">CustomerTotals</span>\n<span class="kw">WHERE</span> <span class="col">total_spent</span> > <span class="num">150</span>;`},
-{title:"5.4 — CTE + Window: the latest rental per customer",tag:"a",
-explain:"A classic trick: you can't filter on a Window Function directly in WHERE. Solution: ROW_NUMBER in a CTE, then WHERE rn=1 on the outside.",
+{title:"5.4 — CTE + Window: the most recent rental for each customer",tag:"a",
+explain:"Classic trick: you can't filter on a Window Function in WHERE directly. Solution: ROW_NUMBER in a CTE, then WHERE rn=1 outside.",
 code:`<span class="kw">WITH</span> <span class="tbl">RankedRentals</span> <span class="kw">AS</span> (\n  <span class="kw">SELECT</span> <span class="col">customer_id</span>, <span class="col">rental_date</span>,\n    <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (\n      <span class="kw">PARTITION BY</span> <span class="col">customer_id</span>\n      <span class="kw">ORDER BY</span> <span class="col">rental_date</span> <span class="kw">DESC</span>\n    ) <span class="kw">AS</span> <span class="str">rn</span>\n  <span class="kw">FROM</span> <span class="tbl">rental</span>\n)\n<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">RankedRentals</span>\n<span class="kw">WHERE</span> <span class="col">rn</span> = <span class="num">1</span>;`},
 ]},
 ],
@@ -735,7 +734,7 @@ window.scrollTo(0,0);
 
 function tagHTML(t){
 if(t==='b')return`<span class="tag tag-b">Basic</span>`;
-if(t==='m')return`<span class="tag tag-m">Intermediate</span>`;
+if(t==='m')return`<span class="tag tag-m">Medium</span>`;
 return`<span class="tag tag-a">Advanced</span>`;
 }
 
@@ -743,9 +742,7 @@ function buildChapters(){
 const mc=document.getElementById('mainContent');
 chapters.forEach((ch,ci)=>{
 let h=`<div class="chapter${ci===0?' active':''}" id="ch-${ci}">`;
-h+=`<div class="ch-header"><div class="ch-meta">Chapter ${ch.num}</div>
-<h1 class="ch-title">${ch.icon} ${ch.title}</h1>
-<p class="ch-desc">${ch.desc}</p></div>`;
+h+=`<div class="ch-header"><div class="ch-meta">Chapter ${ch.num}</div>\n<h1 class="ch-title">${ch.icon} ${ch.title}</h1>\n<p class="ch-desc">${ch.desc}</p></div>`;
 h+=`<div class="syntax-box">${ch.syntax.replace(/\n/g,'<br>')}</div>`;
 h+=`<div class="sec-label">Key Concepts</div><div class="concepts">`;
 ch.concepts.forEach(c=>{
@@ -759,17 +756,7 @@ ch.sections.forEach((sec,si)=>{
 h+=`<div class="sec-label" style="margin-top:${si>0?'2rem':'0'}">${sec.label} <span style="color:var(--text3);font-size:11px;font-weight:400">(${sec.examples.length} examples)</span></div>`;
 sec.examples.forEach((ex,ei)=>{
 const id=`${ci}-${globalIdx}`;
-h+=`<div class="example-card" id="ex-${id}">
-<div class="ex-head" onclick="toggleEx('${id}')">
-<span class="ex-num">${globalIdx+1}</span>
-<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>
-<span class="ex-toggle">▾</span></div>
-<div class="ex-body">
-<div class="ex-explain"><p>${ex.explain}</p></div>
-<div class="code-block"><div class="code-hdr">
-<span class="code-lang">SQL</span>
-<button class="copy-btn" onclick="copyCode('${id}',this)">📋 Copy</button></div>
-<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
+h+=`<div class="example-card" id="ex-${id}">\n<div class="ex-head" onclick="toggleEx('${id}')">\n<span class="ex-num">${globalIdx+1}</span>\n<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>\n<span class="ex-toggle">▾</span></div>\n<div class="ex-body">\n<div class="ex-explain"><p>${ex.explain}</p></div>\n<div class="code-block"><div class="code-hdr">\n<span class="code-lang">SQL</span>\n<button class="copy-btn" onclick="copyCode('${id}',this)">📋 Copy</button></div>\n<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
 globalIdx++;
 });
 });
@@ -778,17 +765,7 @@ const total=ch.examples.length;
 h+=`<div class="sec-label">Code Examples (${total})</div>`;
 ch.examples.forEach((ex,ei)=>{
 const id=`${ci}-${ei}`;
-h+=`<div class="example-card" id="ex-${id}">
-<div class="ex-head" onclick="toggleEx('${id}')">
-<span class="ex-num">${ei+1}</span>
-<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>
-<span class="ex-toggle">▾</span></div>
-<div class="ex-body">
-<div class="ex-explain"><p>${ex.explain}</p></div>
-<div class="code-block"><div class="code-hdr">
-<span class="code-lang">SQL</span>
-<button class="copy-btn" onclick="copyCode('${id}',this)">📋 Copy</button></div>
-<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
+h+=`<div class="example-card" id="ex-${id}">\n<div class="ex-head" onclick="toggleEx('${id}')">\n<span class="ex-num">${ei+1}</span>\n<span class="ex-q">${ex.title}${tagHTML(ex.tag)}</span>\n<span class="ex-toggle">▾</span></div>\n<div class="ex-body">\n<div class="ex-explain"><p>${ex.explain}</p></div>\n<div class="code-block"><div class="code-hdr">\n<span class="code-lang">SQL</span>\n<button class="copy-btn" onclick="copyCode('${id}',this)">📋 Copy</button></div>\n<pre id="code-${id}">${ex.code}</pre></div></div></div>`;
 });
 }
 h+='</div>';
@@ -802,8 +779,8 @@ document.getElementById(`ex-${id}`).classList.toggle('open');
 function copyCode(id,btn){
 const text=document.getElementById(`code-${id}`).innerText;
 navigator.clipboard.writeText(text).then(()=>{
-btn.textContent='✅ Copied';btn.classList.add('ok');
-setTimeout(()=>{btn.textContent='📋 Copy';btn.classList.remove('ok')},2000);
+btn.textContent='✅ copied';btn.classList.add('ok');
+setTimeout(()=>{btn.textContent='📋 copy';btn.classList.remove('ok')},2000);
 });
 }
 

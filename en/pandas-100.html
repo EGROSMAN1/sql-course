@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>100 Pandas Commands Every Analyst Must Know — A Complete Guide | SQL.course</title>
+<meta name="description" content="The 100 most essential Pandas commands — from loading files to window functions, Pivot, merging tables and advanced operations. With an explanation and a code example for every command. Completely free.">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="100 Pandas commands every analyst must know | SQL.course">
+<meta property="og:description" content="A quick guide: 100 Pandas commands in Python organized by category with examples.">
+<meta property="og:site_name" content="Free SQL Course — Eliran Grossman">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="100 Pandas commands every analyst must know | SQL.course">
+<meta name="twitter:description" content="A quick guide: 100 Pandas commands in Python organized by category with examples.">
+
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/pandas-100.html">
+<link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pandas-100.html">
+<link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pandas-100.html">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "100 Pandas commands every analyst must know",
+  "description": "A guide to 100 Pandas commands organized by category, with an explanation and an example for each.",
+  "inLanguage": "he",
+  "author": {
+    "@type": "Person",
+    "name": "Eliran Grossman",
+    "jobTitle": "SQL instructor and analytics lead, Partner"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SQL.course"
+  },
+  "url": "https://egrosman1.github.io/sql-course/pandas-100.html"
+}
+</script>
+
+<style>
+:root{
+  --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+  --text:#F1F5FF;--text2:#8896AA;--text3:#5A6478;
+  --cyan:#00E5FF;--green:#00E5A0;--orange:#FFB020;--red:#FF4060;--purple:#9B5CFF;--pink:#FF5C8A;
+  --aq:#00E5FF;--aq2:rgba(0,229,255,.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Heebo",Roboto,system-ui,Arial,sans-serif;line-height:1.55;direction:ltr}
+a{color:var(--cyan);text-decoration:none}
+a:hover{color:var(--green)}
+
+/* TOPBAR */
+.topnav{display:flex;align-items:center;gap:1rem;padding:.65rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:50;flex-wrap:wrap}
+.logo{font-weight:800;font-size:18px;color:var(--text);letter-spacing:-.3px}
+.logo em{font-style:normal;color:var(--cyan);font-weight:700}
+.top-nav{list-style:none;display:flex;gap:.4rem;align-items:center;flex:1;flex-wrap:wrap;margin:0 1rem}
+.top-nav a{color:var(--text2);font-size:13px;font-weight:600;padding:5px 9px;border-radius:6px;transition:all .12s}
+.top-nav a:hover{color:var(--text);background:var(--bg3)}
+.top-nav a.on{color:var(--orange);background:rgba(255,176,32,.08)}
+.lang-flags{display:flex;gap:5px;align-items:center}
+.lang-flags a{font-size:13px;font-weight:600;color:#fff;line-height:1;display:inline-flex;align-items:center;gap:5px;text-decoration:none;padding:4px 9px;border-radius:6px;opacity:.6;border:1px solid transparent;transition:all .12s}
+.lang-flags a:hover{opacity:1;background:var(--bg3)}
+.lang-flags a.on{opacity:1;border-color:var(--aq);background:var(--aq2)}
+
+/* HERO */
+.hero{max-width:1200px;margin:0 auto;padding:2.5rem 1.25rem 1rem;text-align:center}
+.hero h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem}
+.hero h1 .accent{background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--text2);font-size:15px;max-width:760px;margin:0 auto;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:1.25rem;margin-top:1.2rem;flex-wrap:wrap}
+.hero-stats .s{background:var(--bg2);border:1px solid var(--border);padding:.5rem .9rem;border-radius:8px;font-size:13px}
+.hero-stats .s .n{color:var(--cyan);font-weight:800;font-size:18px}
+.hero-stats .s .l{color:var(--text2);margin-right:.3rem}
+
+/* CONTROLS */
+.controls{max-width:1200px;margin:1.2rem auto 0;padding:0 1.25rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.search{flex:1;min-width:260px;position:relative}
+.search input{width:100%;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:.7rem 2.2rem .7rem .9rem;border-radius:9px;font-size:14px;font-family:inherit;transition:all .15s;direction:ltr}
+.search input:focus{outline:none;border-color:var(--cyan);background:var(--bg3)}
+.search::after{content:"🔍";position:absolute;left:.7rem;top:50%;transform:translateY(-50%);font-size:14px;opacity:.6;pointer-events:none}
+.match-count{color:var(--text2);font-size:13px;padding:.5rem .7rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;white-space:nowrap}
+.match-count b{color:var(--green)}
+
+/* CATEGORY CHIPS */
+.chips{max-width:1200px;margin:.8rem auto;padding:0 1.25rem;display:flex;gap:.4rem;flex-wrap:wrap}
+.chip{background:var(--bg2);border:1px solid var(--border2);color:var(--text2);padding:.35rem .7rem;border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:5px}
+.chip:hover{color:var(--text);border-color:var(--text3)}
+.chip.on{background:var(--aq2);border-color:var(--cyan);color:var(--cyan)}
+.chip .cnt{background:rgba(255,255,255,.08);color:var(--text2);font-size:10px;padding:1px 6px;border-radius:8px;font-weight:700}
+.chip.on .cnt{background:rgba(0,229,255,.15);color:var(--cyan)}
+
+/* MAIN GRID */
+.main{max-width:1200px;margin:1.5rem auto 4rem;padding:0 1.25rem}
+.section{margin-bottom:2.5rem;scroll-margin-top:80px}
+.section-header{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border)}
+.section-icon{font-size:1.5rem}
+.section-title{font-size:1.25rem;font-weight:800;color:var(--text)}
+.section-count{margin-right:auto;color:var(--text2);font-size:13px;font-weight:600;background:var(--bg2);padding:3px 9px;border-radius:14px;border:1px solid var(--border)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:.75rem}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.9rem;display:flex;flex-direction:column;gap:.55rem;transition:all .15s;position:relative}
+.card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-1px)}
+.card-num{position:absolute;top:.5rem;left:.6rem;color:var(--text3);font-size:11px;font-weight:700;font-family:"SF Mono",Menlo,Consolas,monospace}
+.card-code{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:.55rem .65rem;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;color:#FFD580;line-height:1.5;direction:ltr;text-align:left;overflow-x:auto;white-space:pre-wrap;word-break:break-word;position:relative}
+.card-code .copy{position:absolute;top:4px;left:4px;background:rgba(0,0,0,.4);border:1px solid var(--border2);color:var(--text2);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;cursor:pointer;opacity:0;transition:all .15s}
+.card:hover .copy{opacity:1}
+.copy:hover{color:var(--cyan);border-color:var(--cyan)}
+.copy.done{color:var(--green);border-color:var(--green)}
+.card-desc{color:var(--text2);font-size:13.5px;line-height:1.65}
+.card-desc b{color:var(--text);font-weight:700}
+
+/* TOC FLOAT */
+.toc-toggle{position:fixed;bottom:1.5rem;left:1.5rem;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:.7rem 1rem;border-radius:24px;font-size:13px;font-weight:700;cursor:pointer;z-index:40;display:none;align-items:center;gap:6px;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.toc-toggle:hover{border-color:var(--cyan);color:var(--cyan)}
+.toc-toggle.show{display:inline-flex}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:4rem 1rem;color:var(--text2)}
+.empty .ico{font-size:3rem;margin-bottom:.5rem}
+
+/* FOOTER */
+.footer{max-width:1200px;margin:0 auto;padding:2rem 1.25rem;border-top:1px solid var(--border);text-align:center;color:var(--text2);font-size:13px}
+.footer a{margin:0 .4rem}
+
+/* MOBILE */
+/* ===== MOBILE — comprehensive responsive layout ===== */
+@media(max-width:900px){
+  .top-nav{margin:0;font-size:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;scrollbar-width:none}
+  .top-nav::-webkit-scrollbar{display:none}
+  .top-nav li{flex-shrink:0}
+  .top-nav a{padding:4px 8px;font-size:12px;white-space:nowrap}
+}
+@media(max-width:768px){
+  .topnav{padding:.55rem .8rem;gap:.5rem}
+  .logo{font-size:16px}
+  .hero{padding:1.8rem .9rem .6rem}
+  .hero h1{font-size:1.6rem;line-height:1.25}
+  .hero p{font-size:13.5px;line-height:1.6}
+  .hero-stats{gap:.6rem;margin-top:1rem}
+  .hero-stats .s{padding:.4rem .7rem;font-size:12px}
+  .hero-stats .s .n{font-size:16px}
+  .controls{flex-direction:column;align-items:stretch;padding:0 .9rem;gap:.5rem;margin-top:1rem}
+  .search input{padding:.6rem 2rem .6rem .8rem;font-size:13.5px}
+  .match-count{text-align:center;font-size:12px}
+  .chips{padding:0 .9rem;gap:.35rem;margin:.7rem auto}
+  .chip{padding:.3rem .6rem;font-size:11.5px}
+  .chip .cnt{font-size:9.5px;padding:0 5px}
+  .main{padding:0 .9rem;margin-top:1rem;margin-bottom:3rem}
+  .section{margin-bottom:1.8rem}
+  .section-header{gap:.45rem;padding-bottom:.5rem;margin-bottom:.75rem;flex-wrap:wrap}
+  .section-icon{font-size:1.25rem}
+  .section-title{font-size:1.05rem;flex:1;min-width:0}
+  .section-count{font-size:11.5px;padding:2px 7px}
+  .grid{grid-template-columns:1fr;gap:.6rem}
+  .card{padding:.8rem;gap:.5rem}
+  .card-num{font-size:10px;top:.4rem;left:.5rem}
+  .card-code{font-size:12px;padding:.5rem .55rem;padding-left:3.5rem}
+  .card-code .copy{opacity:1;font-size:11px;padding:4px 9px;min-height:24px}
+  .card-desc{font-size:13px;line-height:1.6}
+  .footer{padding:1.5rem .9rem;font-size:12px}
+  .footer a{display:inline-block;margin:.2rem .25rem}
+  .toc-toggle{bottom:1rem;left:1rem;padding:.55rem .85rem;font-size:12px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:1.4rem}
+  .hero p{font-size:12.5px}
+  .hero-stats{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.2rem}
+  .hero-stats::-webkit-scrollbar{display:none}
+  .hero-stats .s{flex-shrink:0}
+  .chips{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.3rem}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex-shrink:0}
+  .card-code{font-size:11.5px}
+  .card-desc{font-size:12.5px}
+}
+@media(max-width:380px){
+  .topnav{padding:.45rem .6rem}
+  .logo{font-size:14px}
+  .hero{padding:1.4rem .7rem .5rem}
+  .hero h1{font-size:1.25rem}
+  .card{padding:.65rem}
+  .card-code{padding:.45rem .5rem;font-size:11px;padding-left:3rem}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:380px){
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+}
+
+/* trilingual flag toggle — compact on mobile (3 langs) */
+@media(max-width:560px){
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  .lang-flags{flex-wrap:wrap;gap:4px}
+}
+</style>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CKNNVS2HVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CKNNVS2HVB');
+</script>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topnav">
+  <a href="index.html" class="logo">SQL<em>.course</em></a>
+  <ul class="top-nav">
+    <li><a href="course.html">Study material</a></li>
+    <li><a href="practice.html">Practice sessions</a></li>
+    <li><a href="simulator.html">⚡ Simulator</a></li>
+    <li><a href="tirgul-makif.html">🎯 Comprehensive practice</a></li>
+    <li><a href="pbi-simulator.html">📊 Power BI</a></li>
+    <li><a href="reference.html">Function repository</a></li>
+    <li><a href="pandas-100.html" class="on">🐼 Pandas 100</a></li>
+    <li><a href="quiz-pandas.html">📝 Pandas quiz</a></li>
+    <li><a href="quiz-beginner.html">Beginner questions</a></li>
+    <li><a href="videos.html">Video tutorials</a></li>
+  </ul>
+  <div class="lang-flags"><a href="../pandas-100.html" class="on" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="index.html" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/index.html" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a></div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>🐼 <span class="accent">100 Pandas commands</span> that every analyst must know</h1>
+  <p>A quick guide with all the essential Pandas commands — from loading files to window functions, pivot tables and merging tables. Every command comes with an explanation and a code example. <b>search</b> or <b>Filter by category</b>.</p>
+  <div class="hero-stats">
+    <div class="s"><span class="n">100</span><span class="l">commands</span></div>
+    <div class="s"><span class="n">14</span><span class="l">categories</span></div>
+    <div class="s"><span class="n">🆓</span><span class="l">Completely free</span></div>
+  </div>
+  <div style="margin-top:1.5rem">
+    <a href="quiz-pandas.html" style="display:inline-block;background:linear-gradient(90deg,rgba(255,176,32,.15),rgba(255,92,138,.1));border:1px solid rgba(255,176,32,.4);color:#FFB020;padding:.7rem 1.5rem;border-radius:25px;font-weight:700;font-size:14px;text-decoration:none;transition:all .15s" onmouseover="this.style.background='linear-gradient(90deg,rgba(255,176,32,.25),rgba(255,92,138,.2))'" onmouseout="this.style.background='linear-gradient(90deg,rgba(255,176,32,.15),rgba(255,92,138,.1))'">📝 Test yourself — a 100-question multiple-choice quiz ←</a>
+  </div>
+</section>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search"><input id="searchInput" type="text" placeholder="Search for a command, keyword, or explanation... (e.g.: groupby, subtraction, sort)" autocomplete="off"></div>
+  <div class="match-count" id="matchCount"><b>100</b> Commands shown</div>
+</div>
+<div class="chips" id="chips"></div>
+
+<!-- MAIN GRID -->
+<main class="main" id="main"></main>
+
+<button class="toc-toggle" id="tocToggle" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Back to top</button>
+
+<footer class="footer">
+  <div>return to: <a href="index.html">🏠 Home</a> · <a href="quiz-pandas.html">📝 Pandas quiz</a> · <a href="reference.html">📘 SQL function library</a> · <a href="practice.html">✏️ Exercises</a> · <a href="course.html">📚 Study material</a></div>
+  <div style="margin-top:.7rem;color:var(--text3)">SQL.course · Eliran Grossman — Learn SQL and Data Analysis</div>
+</footer>
+
+<script>
+const DATA = [
+  // ===== 1. Loading & initial exploration =====
+  {c:1, cat:'load', code:"import pandas as pd", desc:"<b>Always the first step</b> — imports the Pandas library into the workspace and lets you use all its functions through the shorthand <b>pd</b>."},
+  {c:2, cat:'load', code:"df = pd.read_csv('file.csv')", desc:"Loads data from a CSV file into a DataFrame named <b>df</b> — the table you'll work with throughout the rest of the code."},
+  {c:3, cat:'load', code:"df.head()", desc:"Shows the <b>first 5 rows</b> of the table. Useful for an initial peek at the structure and values."},
+  {c:4, cat:'load', code:"df.tail()", desc:"Shows the <b>5 most recent rows</b> of the table — useful for checking the end, especially with data sorted by time."},
+  {c:5, cat:'load', code:"df.shape", desc:"Returns a tuple with <b>(number of rows, number of columns)</b> — the fastest way to know the size of the dataset."},
+  {c:6, cat:'load', code:"df.info()", desc:"Technical summary: column names, data types (int/float/object), number of valid values, and memory usage."},
+  {c:7, cat:'load', code:"df.describe()", desc:"<b>Descriptive statistics</b> for every numeric column: count, mean, standard deviation, minimum, maximum, quartiles."},
+  {c:8, cat:'load', code:"df.columns", desc:"Returns the <b>list of column names</b> in the table — useful for a quick check or for loops."},
+  {c:9, cat:'load', code:"pd.read_csv('file.csv', usecols=['col1','col2'])", desc:"Loads only <b>specific columns</b> from the file — saves time and memory on large files with many columns you don't need."},
+  {c:10, cat:'load', code:"pd.read_csv('file.csv', parse_dates=['date_col'])", desc:"Loads the file and, at the same time, <b>converts a date column</b> to datetime — format — no need for a separate conversion later."},
+  {c:11, cat:'load', code:"df.copy()", desc:"Creates an <b>independent copy</b> of the DataFrame. Important for preventing a situation where a change to the copy accidentally affects the original."},
+  {c:12, cat:'load', code:"df.sample(n=100)", desc:"Pulls a <b>random sample of 100 rows</b> from the table — great for quick checks and developing on a small subset."},
+  {c:13, cat:'load', code:"df.sample(frac=0.1)", desc:"Pulls a <b>random percentage</b> of rows (here 10%) — handy when the sample size depends on the table's size."},
+  {c:14, cat:'load', code:"df.iloc[::-1]", desc:"<b>Reverses the order of the rows</b> in the table (the last becomes first) — useful for reverse ordering without changing the data."},
+  {c:15, cat:'load', code:"pd.set_option('display.max_columns', None)", desc:"Cancels the column-hiding with three dots — Pandas will show <b>all columns</b> without truncation in the middle."},
+  {c:16, cat:'load', code:"df.memory_usage(deep=True)", desc:"Shows <b>how much memory</b> (in bytes) each column uses — critical for optimizing large datasets."},
+
+  // ===== 2. Selection / filtering =====
+  {c:17, cat:'select', code:"df['column_name']", desc:"Pulls a <b>single column</b> from the table (as a Series). The most basic form of accessing data."},
+  {c:18, cat:'select', code:"df[['col1', 'col2']]", desc:"Pulls <b>multiple columns</b> together as a smaller DataFrame. Note the double brackets."},
+  {c:19, cat:'select', code:"df[df['age'] > 30]", desc:"<b>Filtering rows</b> by a condition — equivalent to <code>WHERE age &gt; 30</code> in SQL. Shows only rows that meet the condition."},
+  {c:20, cat:'select', code:"df['new_column'] = 100", desc:"creates a <b>new column</b> and puts a fixed value into it (here 100) or an expression computed from other columns."},
+  {c:21, cat:'select', code:"df.loc[rows, columns]", desc:"Retrieval by <b>names (labels)</b> of rows and columns. For example: <code>df.loc[5, 'name']</code>."},
+  {c:22, cat:'select', code:"df.iloc[rows, columns]", desc:"Fetching by <b>numeric position (index)</b>. For example: <code>df.iloc[0, 1]</code> = row 0 column 1."},
+  {c:23, cat:'select', code:"df.nlargest(5, 'column')", desc:"Returns the <b>5 rows with the highest values</b> in the column. Equivalent to <code>ORDER BY ... DESC LIMIT 5</code>."},
+  {c:24, cat:'select', code:"df.nsmallest(5, 'column')", desc:"Returns the <b>5 rows with the lowest values</b> in the column. Equivalent to <code>ORDER BY ... ASC LIMIT 5</code>."},
+  {c:25, cat:'select', code:"df.query(\"age > 30 and city == 'Tel Aviv'\")", desc:"<b>SQL-style filtering</b> — you write the condition as a string. More readable than applying complex conditions with parentheses."},
+  {c:26, cat:'select', code:"df.filter(items=['col1','col2'])", desc:"Another way to select columns by name — sometimes more convenient than double brackets, especially with a dynamic list."},
+  {c:27, cat:'select', code:"df.filter(like='word')", desc:"Pulls <b>all the columns whose name contains</b> a certain string. For example, pulling all the <code>date_</code> columns at once."},
+  {c:28, cat:'select', code:"df.select_dtypes(include=['float64','int64'])", desc:"Returns only the <b>numeric columns</b> — useful before statistical calculations that don't work on text."},
+  {c:29, cat:'select', code:"df.select_dtypes(exclude=['object'])", desc:"Returns the table <b>without text columns</b> — filters out the-object (object (text) columns and keeps numbers and dates."},
+  {c:30, cat:'select', code:"df['column'].between(10, 20)", desc:"Checks whether the values in a column are <b>in the range</b> between 10 and 20 (inclusive). The exact equivalent of <code>BETWEEN</code> in SQL."},
+
+  // ===== 3. Unique / duplicates =====
+  {c:31, cat:'unique', code:"df['column'].unique()", desc:"Returns a list of <b>all unique values</b> in a column. Equivalent to <code>SELECT DISTINCT</code> in SQL."},
+  {c:32, cat:'unique', code:"df['column'].nunique()", desc:"Counts <b>how many unique values</b> are in a column — a single number describing the variety. Equivalent to <code>COUNT(DISTINCT col)</code>."},
+  {c:33, cat:'unique', code:"df['column'].value_counts()", desc:"Counts <b>how many times each value appears</b> in a column, sorted from most common to rarest. Great for checking distributions."},
+  {c:34, cat:'unique', code:"df.duplicated()", desc:"Returns a boolean Series that marks <b>duplicate rows</b> (True/False) — also possible by specific columns."},
+  {c:35, cat:'unique', code:"df.drop_duplicates()", desc:"<b>Removes duplicate rows</b> from the table and keeps only the first one that appears. You can define which columns to check by."},
+
+  // ===== 4. Missing values =====
+  {c:36, cat:'missing', code:"df.isna().sum()", desc:"Counts <b>how many missing values (NaN)</b> are in each column — the first step in any data-quality check."},
+  {c:37, cat:'missing', code:"df.dropna()", desc:"<b>Deletes rows</b> that have at least one missing value. Use with caution — it can delete a lot of data."},
+  {c:38, cat:'missing', code:"df.fillna(0)", desc:"<b>Fills in all the missing values</b> with a fixed value (here 0). You can also do it per column: <code>fillna({'col': 'X'})</code>."},
+  {c:39, cat:'missing', code:"df.dropna(thresh=3)", desc:"Deletes rows only if they have <b>fewer than 3 valid values</b>. Keeps partial rows if they have enough information."},
+  {c:40, cat:'missing', code:"df['column'].notna()", desc:"<b>Inverse of isna</b> — returns True for filled cells, False for missing ones. Useful for filtering only rows with a value."},
+  {c:41, cat:'missing', code:"df.isna().any()", desc:"Returns True/False <b>for every column</b> — whether it has at least one missing value. A quick, high-level check."},
+  {c:42, cat:'missing', code:"df.ffill()", desc:"<b>Forward Fill</b> — fills missing values by 'pulling' the last valid value from above. Great for repeated headers."},
+  {c:43, cat:'missing', code:"df.bfill()", desc:"<b>Backward Fill</b> — fills missing values using the next valid value that appears below them."},
+  {c:44, cat:'missing', code:"df.interpolate()", desc:"<b>Smart interpolation</b> of missing values by calculating proportionally between the value before and after. Perfect for time series and charts."},
+
+  // ===== 5. Joins / merge =====
+  {c:45, cat:'merge', code:"pd.merge(df1, df2, on='id', how='left')", desc:"<b>Merging two tables</b> by a shared column — equivalent to <code>LEFT JOIN</code> in SQL. Keeps all the rows from df1."},
+  {c:46, cat:'merge', code:"pd.concat([df1, df2])", desc:"<b>Vertical stacking</b> of tables one below the other — equivalent to <code>UNION ALL</code> in SQL."},
+  {c:47, cat:'merge', code:"df.insert(0, 'new_col', values)", desc:"Adds <b>a new column at an exact position</b> — here 0 = the first column from the left (or from the right in RTL)."},
+  {c:48, cat:'merge', code:"df.pop('column_name')", desc:"<b>pulls a column out</b> of the table and keeps it as a Series, while at the same time removing it from the source."},
+  {c:49, cat:'merge', code:"df.loc[len(df)] = ['val1','val2']", desc:"<b>Adds a new row</b> at the bottom of the table (the number of values must match the number of columns)."},
+
+  // ===== 6. Strings =====
+  {c:50, cat:'string', code:"df['column'].str.lower()", desc:"Turns all the text in the column into<b>lowercase</b> (for English). Useful before case-insensitive comparisons."},
+  {c:51, cat:'string', code:"df['column'].str.contains('text')", desc:"Filters rows where the text in a column <b>contains a certain string</b>. Equivalent to <code>LIKE '%text%'</code> in SQL."},
+  {c:52, cat:'string', code:"df['column'].str.replace('old','new')", desc:"<b>Replaces text</b> or a word in all the values of a column. Also supports regular expressions."},
+  {c:53, cat:'string', code:"df['column'].str.split(',', expand=True)", desc:"<b>Splits a text column</b> into several separate columns by a delimiter character (here, a comma)."},
+  {c:54, cat:'string', code:"df['column'].str.strip()", desc:"<b>Removes</b> extra spaces from the start and end of the text. The exact equivalent of <code>TRIM</code> in SQL."},
+  {c:55, cat:'string', code:"df['column'].str.len()", desc:"Returns the <b>text length</b> (number of characters) in each cell. Useful for validation checks and cleanup."},
+  {c:56, cat:'string', code:"df['column'].replace(['old1','old2'], ['new1','new2'])", desc:"<b>Bulk replace</b> — replaces every value in the first list with the matching value from the second list, in one shot."},
+  {c:57, cat:'string', code:"df.columns = df.columns.str.replace(' ','_')", desc:"Replaces <b>spaces with underscores</b> in column names — prevents typos and allows dot access (<code>df.col_name</code>)."},
+
+  // ===== 7. Dates =====
+  {c:58, cat:'date', code:"pd.to_datetime(df['date_column'])", desc:"Converts a text column to a<b>smart date format</b> — after the conversion you can do time calculations, comparisons and extracting parts."},
+  {c:59, cat:'date', code:"df['date_column'].dt.year", desc:"Extracts the <b>year</b> from a date column. Useful for grouping by year."},
+  {c:60, cat:'date', code:"df['date_column'].dt.month", desc:"Pulls the <b>month</b> (1-12) — very handy for grouping monthly data or analyzing seasonality."},
+  {c:61, cat:'date', code:"df['date_column'].dt.day_name()", desc:"Returns the <b>day-of-week name</b> (Sunday/Monday etc.) — useful for analyzing usage patterns by day."},
+  {c:62, cat:'date', code:"df['date_column'].dt.is_month_end", desc:"A logical check — returns True if the date is <b>the last day of the month</b>. Useful for filtering month-end."},
+
+  // ===== 8. Type conversions =====
+  {c:63, cat:'convert', code:"df['column'].astype(int)", desc:"<b>Converts the data type</b> of a column (for example from text to an integer, or to a decimal number)."},
+  {c:64, cat:'convert', code:"df.astype({'col1':'int','col2':'float'})", desc:"<b>Multi conversion</b> — changes the type of several columns at once using a dictionary."},
+  {c:65, cat:'convert', code:"df['column'].astype('category')", desc:"converts repeating text to the <b>category</b> type — saves memory significantly and speeds up filters."},
+
+  // ===== 9. Aggregation & statistics =====
+  {c:66, cat:'agg', code:"df['column'].sum()", desc:"computes the <b>total sum</b> of a column. <code>.mean()</code>, <code>.max()</code>, <code>.min()</code>, and <code>.count()</code> also work the same way."},
+  {c:67, cat:'agg', code:"df.groupby('department').mean()", desc:"<b>Groups by category</b> and calculates the average for each group. Equivalent to <code>GROUP BY</code> in SQL."},
+  {c:68, cat:'agg', code:"df.groupby('col').agg({'col1':'sum','col2':'mean'})", desc:"<b>Multiple aggregation</b> — a different operation for each column after grouping. Sum for one, average for another."},
+  {c:69, cat:'agg', code:"pd.crosstab(df['col1'], df['col2'])", desc:"<b>Frequency table (cross-tab)</b> — counts how many times each combination of two categories appears. Great for relationships between categorical variables."},
+  {c:70, cat:'agg', code:"df['column'].idxmax()", desc:"Returns the <b>index</b> (row number) of the <b>maximum</b> value in a column. Useful when you want the entire row of the maximum."},
+  {c:71, cat:'agg', code:"df['column'].idxmin()", desc:"Returns the <b>index</b> of the <b>minimum</b> value in the column."},
+  {c:72, cat:'agg', code:"df['column'].diff()", desc:"Calculates the <b>difference between a row and</b> the one before it. Great for calculating daily price change, growth, etc."},
+  {c:73, cat:'agg', code:"df['column'].mode()", desc:"Returns the <b>most common value</b> in the column — equivalent to MODE in statistics."},
+  {c:74, cat:'agg', code:"df['column'].std()", desc:"<b>Standard deviation</b> — measures how spread out the data is from the average. A high value = highly spread-out data."},
+  {c:75, cat:'agg', code:"df['column'].var()", desc:"<b>Variance</b> — the standard deviation squared. Another measure of data spread."},
+  {c:76, cat:'agg', code:"df.corr()", desc:"<b>Correlation matrix</b> — returns the correlation between every pair of numeric columns. A value between -1 and 1."},
+
+  // ===== 10. Window functions =====
+  {c:77, cat:'window', code:"df['column'].cumsum()", desc:"<b>Running Total</b> — for every row: its value + the sum of all previous ones. Useful for tracking revenue since the start of the year."},
+  {c:78, cat:'window', code:"df['column'].shift(1)", desc:"<b>The LAG function</b> — pushes the values one row down. Compare today's value to yesterday's (use <code>-1</code> for LEAD)."},
+  {c:79, cat:'window', code:"df['column'].rolling(7).mean()", desc:"<b>Moving Average</b> over a window of 7 rows — critical for trend analysis and smoothing noise in time series."},
+  {c:80, cat:'window', code:"df['column'].rank(ascending=False)", desc:"<b>Ranking rows</b> — equivalent to <code>RANK()</code> in SQL. For finding the top customers or the highest performers."},
+  {c:81, cat:'window', code:"df['column'].pct_change()", desc:"<b>Percent change</b> between a row and the one before it. Great for calculating monthly or daily growth in percent."},
+  {c:82, cat:'window', code:"df.cumsum(axis=1)", desc:"<b>Running total across columns</b> (left to right) — useful if you have January/February/March columns and need a cumulative monthly total."},
+
+  // ===== 11. Reshape & Pivot =====
+  {c:83, cat:'reshape', code:"pd.pivot_table(df, values='sales', index='city', columns='year', aggfunc='sum')", desc:"<b>A classic Pivot Table (Pivot)</b> — summarizing data by rows × columns, just like PivotTable in Excel."},
+  {c:84, cat:'reshape', code:"df.melt(id_vars=['id'])", desc:"<b>Unpivot</b> — the reverse operation of pivot. Turns a wide table with many columns into a long, normalized table."},
+  {c:85, cat:'reshape', code:"df.set_index('id_column')", desc:"Takes a column and <b>turns it into the index</b> (primary key) of the table instead of the sequential numbers."},
+  {c:86, cat:'reshape', code:"df.reset_index()", desc:"<b>Resets the index</b> back to sequential numbers (0,1,2...) and turns the previous index back into a regular column."},
+  {c:87, cat:'reshape', code:"df.explode('column_name')", desc:"<b>Exploding lists</b> — if a cell contains a list of items, creates a separate row for each item. Useful for tags data or multiple categories."},
+
+  // ===== 12. Conditional logic =====
+  {c:88, cat:'logic', code:"df['column'].apply(function)", desc:"Runs a <b>custom function</b> on every cell in a column — the most powerful tool when you need logic that has no built-in command."},
+  {c:89, cat:'logic', code:"df['column'].map({'Yes':1, 'No':0})", desc:"<b>Translating values</b> via a dictionary — great for preparing data for models (for example converting Yes/No to 1/0 in customer churn analysis)."},
+  {c:90, cat:'logic', code:"df['column'].clip(lower=0, upper=100)", desc:"<b>Capping values</b> — everything below 0 becomes 0, everything above 100 becomes 100. Great for handling outliers."},
+  {c:91, cat:'logic', code:"pd.cut(df['age'], bins=[0,18,35,65,100])", desc:"<b>Binning (Bins)</b> — splits continuous values (age, salary) into groups. Handy for turning numbers into categories like 'young' or 'adult'."},
+  {c:92, cat:'logic', code:"df.where(df['age'] > 18, other=0)", desc:"<b>Conditional retention</b> — leaves values that meet the condition as they are, and replaces the rest with an alternate value you defined."},
+  {c:93, cat:'logic', code:"df.mask(df['age'] < 18, 0)", desc:"<b>The opposite of where</b> — replaces values with a new value everywhere the condition <b>holds</b>."},
+  {c:94, cat:'logic', code:"df.eval('new_col = col1 + col2')", desc:"<b>Mathematical calculations</b> on columns via a string — sometimes runs faster than the regular way on huge tables."},
+
+  // ===== 13. Sort, rename, drop =====
+  {c:95, cat:'sort', code:"df.sort_values('price')", desc:"<b>Sorting the table</b> by column values (default: ascending). Add <code>ascending=False</code> for descending order."},
+  {c:96, cat:'sort', code:"df.rename(columns={'old_name':'new_name'})", desc:"<b>Renaming a column</b> without harming the data. Convenient for fixing column names that come from the file."},
+  {c:97, cat:'sort', code:"df.drop(columns=['column_name'])", desc:"<b>Deleting a column</b> entirely from the table. You can also delete a list of columns in one go."},
+
+  // ===== 14. Export =====
+  {c:98, cat:'export', code:"df.to_csv('new_data.csv', index=False)", desc:"<b>Saving to a CSV file</b>. The flag <code>index=False</code> is important — it prevents saving an unnecessary index column in the file."},
+  {c:99, cat:'export', code:"df.to_excel('file.xlsx', sheet_name='Data')", desc:"<b>Saving to an Excel file</b>, with the option to set the sheet name inside the file."},
+  {c:100, cat:'export', code:"df.to_json('data.json')", desc:"<b>Export to JSON</b> — very efficient for loading data into web apps or JavaScript interfaces."},
+];
+
+const CATEGORIES = [
+  {id:'load', name:'Loading and getting familiar with the data', icon:'📥'},
+  {id:'select', name:'Retrieval, filtering, and creating columns', icon:'🔍'},
+  {id:'unique', name:'Unique values and duplicates', icon:'✨'},
+  {id:'missing', name:'Handling missing values', icon:'❓'},
+  {id:'merge', name:'Joining and merging tables', icon:'🔗'},
+  {id:'string', name:'Working with text', icon:'📝'},
+  {id:'date', name:'Working with dates', icon:'📅'},
+  {id:'convert', name:'Conversions and data types', icon:'🔄'},
+  {id:'agg', name:'Aggregation and statistics', icon:'📊'},
+  {id:'window', name:'Window functions and trends', icon:'🪟'},
+  {id:'reshape', name:'Reshaping the table (Pivot)', icon:'🔀'},
+  {id:'logic', name:'Conditional logic and smart conversions', icon:'🧠'},
+  {id:'sort', name:'Sorting, renaming and deleting', icon:'↕️'},
+  {id:'export', name:'Export and save', icon:'💾'},
+];
+
+let activeCat = 'all';
+let searchTerm = '';
+
+function render(){
+  const main = document.getElementById('main');
+  const q = searchTerm.toLowerCase().trim();
+  let total = 0;
+  let html = '';
+  CATEGORIES.forEach(cat => {
+    if(activeCat !== 'all' && activeCat !== cat.id) return;
+    const items = DATA.filter(d => d.cat === cat.id).filter(d => {
+      if(!q) return true;
+      return d.code.toLowerCase().includes(q) || d.desc.toLowerCase().includes(q);
+    });
+    if(items.length === 0) return;
+    total += items.length;
+    html += `<section class="section" id="cat-${cat.id}">\n      <div class="section-header">\n        <span class="section-icon">${cat.icon}</span>\n        <span class="section-title">${cat.name}</span>\n        <span class="section-count">${items.length} commands</span>\n      </div>\n      <div class="grid">\n        ${items.map(d => `
+          <div class="card">
+            <span class="card-num">#${d.c}</span>
+            <div class="card-code"><button class="copy" onclick="copyCode(this)">Copy</button>${escapeHtml(d.code)}</div>
+            <div class="card-desc">${d.desc}</div>
+          </div>`).join('')}
+      </div>
+    </section>`;
+  });
+  if(total === 0){
+    html = `<div class="empty"><div class="ico">🔎</div>No matching commands found. Try a different search.</div>`;
+  }
+  main.innerHTML = html;
+  document.getElementById('matchCount').innerHTML = `<b>${total}</b> commands shown`;
+}
+
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function copyCode(btn){
+  const code = btn.parentElement.innerText.replace(/^Copy\s*/,'');
+  navigator.clipboard.writeText(code).then(()=>{
+    btn.textContent = '✓ copied';
+    btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='copy'; btn.classList.remove('done');}, 1200);
+  });
+}
+
+function renderChips(){
+  const chips = document.getElementById('chips');
+  const counts = {};
+  DATA.forEach(d => counts[d.cat] = (counts[d.cat]||0)+1);
+  let html = `<button class="chip ${activeCat==='all'?'on':''}" onclick="setCat('all')">All <span class="cnt">${DATA.length}</span></button>`;
+  CATEGORIES.forEach(c => {
+    html += `<button class="chip ${activeCat===c.id?'on':''}" onclick="setCat('${c.id}')">${c.icon} ${c.name} <span class="cnt">${counts[c.id]||0}</span></button>`;
+  });
+  chips.innerHTML = html;
+}
+
+function setCat(cat){
+  activeCat = cat;
+  renderChips();
+  render();
+  window.scrollTo({top:document.querySelector('.controls').offsetTop - 70, behavior:'smooth'});
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchTerm = e.target.value;
+  render();
+});
+
+window.addEventListener('scroll', () => {
+  document.getElementById('tocToggle').classList.toggle('show', window.scrollY > 600);
+});
+
+renderChips();
+render();
+</script>
+</body>
+</html>

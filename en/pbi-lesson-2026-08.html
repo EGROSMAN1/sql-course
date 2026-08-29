@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>August 2026 update — themes, split refresh, and OneLake | Power BI Course</title>
+<meta name="description" content="A full lesson on the August 2026 Power BI update: Modern Visual Defaults and the theme pane reaching general availability, split semantic model refresh, images from OneLake, slicer and matrix, mobile, and 14 known bugs with workarounds.">
+<meta property="og:title" content="August 2026 update — themes, split refresh, and OneLake | Power BI Course">
+<meta property="og:description" content="A full lesson on the August 2026 Power BI update: Modern Visual Defaults and the theme pane reaching general availability, split semantic model refresh, images from OneLake, slicer and matrix, mobile, and 14 known bugs with workarounds.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Heebo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#070a0c; --bg-1:#0c1114; --bg-2:#11181c; --bg-3:#161f23;
+  --line-soft:rgba(255,255,255,.05); --line:rgba(255,255,255,.08);
+  --line-strong:rgba(0,212,200,.20); --line-glow:rgba(0,212,200,.40);
+  --fg-1:#f0f5f7; --fg-2:#a8b4ba; --fg-3:#8a979e; --fg-4:#7a8992;
+  --acc:#00d4c8; --acc-dim:#00a89d; --acc-soft:rgba(0,212,200,.10); --acc-glow:rgba(0,212,200,.25);
+  --pbi:#f2c811; --pbi-soft:rgba(242,200,17,.12); --pbi-glow:rgba(242,200,17,.30);
+  --ok:#4ade80; --bad:#f87171;
+  --font:'Heebo','Segoe UI','Arial Hebrew',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --header-h:56px; --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{height:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* app frame: the bars are laid out in flow at the top, the lesson scrolls in its own pane below them.
+   nothing can ever slide underneath a bar, so no topic is ever clipped at the top. */
+body{font-family:var(--font);background:var(--bg-0);color:var(--fg-1);line-height:1.7;-webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;-webkit-tap-highlight-color:rgba(242,200,17,.18);
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;scroll-behavior:smooth;scroll-padding-top:16px}
+h1,h2,h3{overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}
+[hidden]{display:none!important}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--pbi);outline-offset:3px;border-radius:4px}
+.skip-link{position:absolute;top:-60px;right:16px;background:var(--pbi);color:#111;padding:10px 18px;border-radius:8px;font-weight:700;z-index:200;transition:top .2s}
+.skip-link:focus{top:10px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.mono{font-family:var(--mono)}
+
+/* HEADER */
+header.site{flex:0 0 auto;height:var(--header-h);background:var(--bg-0);border-bottom:1px solid var(--line);z-index:100}
+.hd{max-width:1080px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));gap:16px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pbi);box-shadow:0 0 12px var(--pbi-glow)}
+.hd nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.hd nav::-webkit-scrollbar{display:none}
+.hd nav a{font-size:.85rem;color:var(--fg-2);padding:6px 12px;border-radius:8px;white-space:nowrap}
+.hd nav a:hover{color:var(--fg-1);background:var(--bg-2)}
+.hd nav a.back{color:var(--acc);border:1px solid var(--line-strong)}
+@media(max-width:900px){.hd nav a.opt{display:none}}
+@media(max-width:560px){
+  .hd{gap:10px}
+  .logo{font-size:.95rem}
+  .hd nav a{font-size:.8rem;padding:6px 10px}
+}
+
+/* TOPIC BAR — the presentation control strip: always on screen, never scrolls away */
+.topicbar{position:relative;flex:0 0 auto;background:var(--bg-1);border-bottom:1px solid var(--line);z-index:98;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+/* a 16px fade over the top of the scrolling pane: while at rest it covers only the top padding,
+   while scrolling the text dissolves into the background instead of being sliced by a hard edge */
+.topicbar::after{content:"";position:absolute;top:100%;right:0;left:0;height:16px;z-index:2;pointer-events:none;
+  background:linear-gradient(var(--bg-0),rgba(7,10,12,0))}
+.topicbar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:10px;min-height:54px;
+  padding:7px max(20px,env(safe-area-inset-right)) 7px max(20px,env(safe-area-inset-left))}
+.tb-progress{height:3px;background:var(--bg-2)}
+
+.progress-bar{display:block;height:100%;width:0;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .25s ease}
+.tb-menu,.tb-home{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg-2);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s}
+.tb-menu:hover,.tb-home:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.tb-home:active{transform:scale(.97)}
+.tb-ic-svg{width:19px;height:19px;flex:0 0 auto}
+.tb-ic{font-size:1rem}
+
+/* prev / next — the two controls the lesson is driven by */
+.tb-nav{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-1);border-radius:10px;padding:7px 13px;font-size:.85rem;font-weight:600;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s}
+.tb-nav:hover:not(:disabled){border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-3)}
+.tb-nav:active:not(:disabled){transform:scale(.97)}
+.tb-nav:disabled{opacity:.32;cursor:not-allowed}
+.tb-arrow{font-size:1.05rem;line-height:1}
+.tb-now{flex:1 1 auto;min-width:0;line-height:1.25;text-align:center}
+.tb-title{display:block;font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.tb-meta{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.tb-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--pbi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-meta .tb-count::before{content:"·";margin-inline-end:8px;color:var(--fg-4)}
+.tb-quiz{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:var(--acc);border:1px solid var(--acc);
+  color:#04120f;border-radius:99px;padding:7px 16px;font-size:.84rem;font-weight:800;white-space:nowrap;
+  box-shadow:0 0 14px rgba(0,212,200,.28);transition:filter .15s,transform .1s,box-shadow .15s}
+.tb-quiz:hover{filter:brightness(1.1);box-shadow:0 0 20px rgba(0,212,200,.45)}
+.tb-quiz:active{transform:scale(.97)}
+.tb-quiz-s{display:none}
+.tb-quiz.on-quiz{background:transparent;border-color:var(--line);color:var(--fg-2);box-shadow:none;font-weight:700}
+.tb-quiz.on-quiz:hover{border-color:var(--pbi-glow);color:var(--pbi);filter:none}
+.tb-count{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);direction:ltr;unicode-bidi:isolate;white-space:nowrap;flex:0 0 auto}
+
+/* phones: the two arrows keep full tap size, the labels give way to the title */
+@media(max-width:720px){
+  .tb-nav-t,.tb-home-t{display:none}
+  .tb-quiz-t{display:none}
+  .tb-quiz-s{display:inline}
+  .tb-home{padding:0;width:44px;height:44px;gap:0}
+  .tb-nav{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .tb-quiz{padding:0 13px;height:44px;justify-content:center;gap:0;border-radius:10px;font-size:.85rem;white-space:nowrap}
+}
+@media(max-width:560px){
+  .tb-menu-t{display:none}
+  .tb-menu{padding:0;width:44px;height:44px;justify-content:center;gap:0}
+  .topicbar-inner{gap:8px;padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left))}
+  .tb-chap{font-size:.68rem;letter-spacing:.06em}
+  .tb-title{font-size:.85rem}
+  .tb-count{font-size:.7rem}
+}
+@media(max-width:420px){
+  .tb-nav,.tb-menu,.tb-home{width:40px;height:40px}
+  .tb-quiz{height:40px;padding:0 9px;font-size:.76rem}
+  .topicbar-inner{gap:4px;padding-inline:8px}
+  .tb-title{font-size:.78rem}
+  .tb-ic-svg{width:17px;height:17px}
+}
+@media(max-width:340px){
+  .tb-title{display:none}          /* the topic name is the big heading right below anyway */
+  .tb-meta{justify-content:center}
+}
+
+/* TOUCH TARGETS — WCAG 2.5.8 / iOS HIG minimum */
+@media(pointer:coarse){
+  .toc-item{min-height:46px}
+  .drawer-x{min-width:44px;min-height:44px}
+  .tb-menu{min-height:42px}
+  .tb-quiz{min-height:42px}
+  .hd nav a{min-height:40px;display:flex;align-items:center}
+  .ba-toggle button{min-height:44px}
+  .tabs button{min-height:44px}
+  .dikw button{min-height:46px}
+  .q-opt{min-height:46px;align-items:center}
+  .hw label{min-height:52px;align-items:center}
+  .btn{min-height:46px}
+  .pg-btn{min-height:60px}
+}
+
+/* PAGES */
+.page{padding:34px 0 10px;animation:fade .22s ease}
+.scroller{animation:appear .28s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page .sec-title:focus{outline:none}
+.page .sec-title:focus-visible{outline:2px solid var(--pbi);outline-offset:4px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}}
+#hero-block{display:block}
+
+/* PAGER */
+.pager{display:flex;gap:12px;margin:34px 0 6px;border-top:1px solid var(--line-soft);padding-top:22px}
+@media(max-width:400px){.pager{gap:8px}.pg-btn{padding:11px 12px}.pg-name{font-size:.82rem}}
+.pg-btn{flex:1 1 0;min-width:0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;text-align:left;color:var(--fg-1);display:block}
+.pg-btn:hover:not(:disabled){border-color:var(--pbi-glow);background:var(--bg-2)}
+.pg-btn:disabled{opacity:.35;cursor:not-allowed}
+.pg-btn.next{text-align:left;background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 70%);border-color:var(--pbi-glow)}
+.pg-dir{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--pbi);margin-bottom:3px}
+.pg-name{display:block;font-size:.88rem;font-weight:600;color:var(--fg-2);line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pg-hint{text-align:center;font-size:.75rem;color:var(--fg-4);margin-bottom:20px}
+@media(max-width:560px){.pg-hint{display:none}.pg-btn{padding:12px 14px}}
+
+/* DRAWER */
+.drawer-back{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;animation:fade .15s}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(340px,86vw);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-1);border-left:1px solid var(--line);z-index:151;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}
+.drawer-head b{font-size:1rem}
+.drawer-x{background:none;border:none;color:var(--fg-2);font-size:1.1rem;padding:6px 10px;border-radius:8px}
+.drawer-x:hover{color:var(--fg-1);background:var(--bg-3)}
+.toc{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px}
+.toc-chap{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--pbi);padding:14px 8px 6px;border-top:1px solid var(--line-soft);margin-top:6px}
+.toc-chap:first-child{border-top:none;margin-top:0;padding-top:6px}
+.toc-item{width:100%;display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--fg-2);font-size:.88rem;text-align:left}
+.toc-item:hover{background:var(--bg-2);color:var(--fg-1)}
+.toc-n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.toc-t{flex:1 1 auto;min-width:0}
+.toc-done{flex:0 0 auto;color:var(--ok);opacity:0;font-size:.8rem}
+.toc-item.visited .toc-done{opacity:1}
+.toc-item.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi);font-weight:600}
+.toc-item.on .toc-n{color:var(--pbi)}
+.drawer-foot{padding:12px 16px;border-top:1px solid var(--line)}
+.drawer-foot .btn{width:100%;padding:9px 0;font-size:.85rem}
+
+main{padding-top:26px}
+
+/* HERO */
+.hero{text-align:center;padding:18px 0 6px}
+.hero .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.25em;color:var(--pbi);text-transform:uppercase}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);font-weight:800;margin:14px 0 10px;line-height:1.35;padding-bottom:2px}
+.hero h1 em{font-style:normal;color:var(--pbi)}
+.hero p.sub{color:var(--fg-2);max-width:640px;margin:0 auto;font-size:1.05rem}
+.hero .stats{display:flex;gap:28px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero .stat{text-align:center}
+.hero .stat b{display:block;font-size:1.6rem;color:var(--fg-1)}
+.hero .stat span{font-size:.8rem;color:var(--fg-3)}
+
+/* SECTIONS */
+.section{padding:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);color:var(--pbi);font-size:.85rem;letter-spacing:.15em}
+.sec-title{font-size:clamp(1.25rem,3.5vw,1.9rem);font-weight:800;margin:4px 0 6px;line-height:1.4;padding-bottom:2px}
+.sec-sub{color:var(--fg-3);margin-bottom:26px}
+
+/* CARDS / GRIDS */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--fg-2)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);padding:2px 9px;border-radius:99px;margin-bottom:10px}
+.tag.teal{color:var(--acc);background:var(--acc-soft);border-color:var(--line-glow)}
+
+/* COURSE MAP (6 parts) */
+.map{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.part{position:relative;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;gap:16px;align-items:flex-start}
+.part .num{flex:0 0 44px;height:44px;border-radius:12px;background:var(--bg-3);color:var(--fg-3);font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.part h3{font-size:1rem;margin-bottom:4px}
+.part p{font-size:.85rem;color:var(--fg-3)}
+.part .st{position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;color:var(--fg-4);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+.part.active{border-color:var(--pbi-glow);background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 60%)}
+.part.active .num{background:var(--pbi);color:#111;box-shadow:0 0 18px var(--pbi-glow)}
+.part.active .st{color:var(--pbi);border-color:var(--pbi-glow)}
+.part.active:hover{transform:translateY(-2px);transition:transform .15s}
+
+/* FLOW (Collect→Organize→Analyze→Present / ETL) */
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.flow .step{flex:1 1 150px;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.flow .step b{display:block;font-size:1rem;color:var(--pbi)}
+.flow .step span{font-size:.8rem;color:var(--fg-3)}
+.flow .arr{align-self:center;color:var(--fg-4);font-size:1.2rem}
+@media(max-width:640px){
+  .flow{flex-direction:column}
+  .flow .step{flex:1 1 auto;width:100%}
+  .flow .arr{transform:rotate(-90deg);margin:-2px auto}
+}
+
+/* DIKW pyramid interactive */
+.dikw{display:flex;flex-direction:column;gap:8px;max-width:560px;margin:0 auto}
+.dikw button{border:1px solid var(--line);background:var(--bg-1);color:var(--fg-1);border-radius:10px;padding:12px 16px;font-size:.95rem;font-weight:600;text-align:center;transition:border-color .15s,background .15s}
+.dikw button:hover{border-color:var(--pbi-glow)}
+.dikw button[aria-expanded="true"]{border-color:var(--pbi);background:var(--pbi-soft);color:var(--pbi)}
+.dikw button:nth-child(1){width:40%;align-self:center}
+.dikw button:nth-child(3){width:60%;align-self:center}
+.dikw button:nth-child(5){width:80%;align-self:center}
+.dikw button:nth-child(7){width:100%}
+.dikw .desc{display:none;font-size:.88rem;color:var(--fg-2);background:var(--bg-2);border:1px solid var(--line-soft);border-radius:10px;padding:12px 16px;text-align:center}
+.dikw .desc.open{display:block}
+@media(max-width:560px){.dikw button:nth-child(1){width:70%}.dikw button:nth-child(3){width:80%}.dikw button:nth-child(5){width:90%}}
+
+/* TIMELINE */
+.tl{position:relative;padding-right:22px;border-right:2px solid var(--line)}
+.tl .ev{position:relative;padding:0 0 26px}
+.tl .ev::before{content:"";position:absolute;right:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--bg-0);border:2px solid var(--pbi)}
+.tl .yr{font-family:var(--mono);color:var(--pbi);font-size:.85rem}
+.tl h3{font-size:1rem;margin:2px 0}
+.tl p{font-size:.88rem;color:var(--fg-2);max-width:640px}
+
+/* ANALYST BARS */
+.bars{display:grid;gap:14px;max-width:680px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:5px}
+.bar-row .lbl b{color:var(--pbi)}
+.bar-track{height:12px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width 1s ease}
+.note{margin-top:16px;background:var(--acc-soft);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--fg-2)}
+.note b{color:var(--acc)}
+
+/* BEFORE / AFTER TOGGLE */
+.ba-toggle{display:flex;gap:0;border:1px solid var(--line);border-radius:99px;overflow:hidden;width:max-content;margin:0 auto 18px}
+.ba-toggle button{background:var(--bg-1);color:var(--fg-2);border:none;padding:9px 26px;font-size:.92rem;font-weight:600}
+.ba-toggle button[aria-pressed="true"]{background:var(--pbi);color:#111}
+.ba-list{list-style:none;max-width:640px;margin:0 auto;display:grid;gap:8px}
+.ba-list li{background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:.93rem;display:flex;gap:10px;align-items:flex-start}
+.ba-list li .ic{font-weight:800}
+.ba-list.bad li .ic{color:var(--bad)}
+.ba-list.good li .ic{color:var(--ok)}
+
+/* REASONS accordion cards */
+.reasons{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.reason{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.reason>button{width:100%;background:none;border:none;color:var(--fg-1);display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;font-size:.98rem;font-weight:700}
+.reason .metric{flex:0 0 auto;font-family:var(--mono);font-size:.85rem;color:var(--pbi);background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:8px;padding:4px 10px}
+.reason .chev{margin-inline-start:auto;color:var(--fg-3);transition:transform .2s}
+.reason>button[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.reason .body{display:none;padding:0 18px 16px;color:var(--fg-2);font-size:.9rem}
+.reason .body.open{display:block}
+
+/* ECOSYSTEM TABS */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:10px;padding:9px 18px;font-size:.92rem;font-weight:600}
+.tabs button[aria-selected="true"]{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.tabpanel{display:none;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tabpanel.open{display:block}
+.tabpanel .role{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
+.tabpanel h3{font-size:1.15rem;margin:6px 0 8px}
+.tabpanel p{color:var(--fg-2);font-size:.93rem;max-width:680px}
+.chiplist{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.8rem;background:var(--bg-2);border:1px solid var(--line);border-radius:99px;padding:5px 13px;color:var(--fg-2)}
+
+/* COMPARISON TABLE */
+.tbl-wrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:var(--r)}
+@media(max-width:700px){
+  .tbl-wrap{background:linear-gradient(90deg,var(--bg-1) 30%,transparent),linear-gradient(270deg,var(--bg-1) 30%,transparent) 100% 0,
+    linear-gradient(90deg,rgba(0,212,200,.22),transparent 14px),linear-gradient(270deg,rgba(0,212,200,.22),transparent 14px) 100% 0;
+    background-repeat:no-repeat;background-size:34px 100%,34px 100%,14px 100%,14px 100%;background-attachment:local,local,scroll,scroll}
+}
+table.cmp{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+table.cmp caption{text-align:left;padding:14px 18px;color:var(--fg-3);font-size:.85rem;caption-side:top;background:var(--bg-1)}
+table.cmp th,table.cmp td{padding:11px 16px;text-align:left;border-bottom:1px solid var(--line-soft)}
+table.cmp thead th{background:var(--bg-2);color:var(--fg-1);font-size:.85rem}
+table.cmp tbody th{color:var(--fg-2);font-weight:600;background:var(--bg-1)}
+table.cmp td.pbi{color:var(--fg-1)}
+table.cmp td.xl{color:var(--fg-3)}
+table.cmp tr:last-child th,table.cmp tr:last-child td{border-bottom:none}
+
+/* QUADRANT */
+.quad{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;max-width:620px;margin:0 auto;aspect-ratio:1.5;min-height:260px}
+@media(max-width:480px){.quad{aspect-ratio:auto;min-height:0}.quad .q{min-height:96px}.quad .pbi-dot{font-size:.68rem;padding:3px 8px}}
+.quad .q{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative}
+.quad .q h3{font-size:.9rem;color:var(--fg-2);font-weight:600}
+.quad .q span{font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.quad .q.leaders{border-color:var(--pbi-glow);background:linear-gradient(150deg,var(--pbi-soft),var(--bg-1) 70%)}
+.quad .pbi-dot{position:absolute;top:16px;right:14px;background:var(--pbi);color:#111;font-weight:800;font-size:.75rem;border-radius:99px;padding:4px 11px;box-shadow:0 0 16px var(--pbi-glow)}
+.axes{display:flex;justify-content:space-between;max-width:620px;margin:8px auto 0;font-size:.75rem;color:var(--fg-4);font-family:var(--mono)}
+.competitors{margin-top:26px}
+.comp-row{display:flex;gap:12px;align-items:baseline;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:11px 16px;margin-bottom:8px;font-size:.9rem}
+.comp-row .lc{flex:0 0 20px;font-family:var(--mono);font-weight:700;color:var(--pbi)}
+.comp-row .lc.c{color:var(--fg-3)}
+.comp-row b{min-width:150px}
+@media(max-width:560px){.comp-row{flex-wrap:wrap}.comp-row b{min-width:0;flex:1 1 auto}.comp-row span{flex:1 1 100%}}
+.comp-row span{color:var(--fg-3);font-size:.84rem}
+
+/* SOURCES chips */
+.src-cols{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.src-col h3{font-size:.95rem;color:var(--acc);margin-bottom:10px}
+
+/* DEMO STEPS checklist */
+.steps{counter-reset:st;max-width:720px}
+.steps li{list-style:none;position:relative;padding:0 44px 18px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--acc);font-family:var(--mono);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;right:14px;top:32px;bottom:0;width:1px;background:var(--line)}
+.steps li b{display:block}
+.steps li span{font-size:.88rem;color:var(--fg-2)}
+.steps code{font-family:var(--mono);font-size:.82rem;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:6px;padding:1px 7px;color:var(--acc);direction:ltr;display:inline-block;unicode-bidi:isolate}
+
+/* FIELD TYPES */
+.ft{display:flex;gap:12px;align-items:center;background:var(--bg-1);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.ft .ic{flex:0 0 40px;height:40px;border-radius:10px;background:var(--bg-3);color:var(--pbi);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.ft b{font-size:.92rem}
+.ft span{display:block;font-size:.8rem;color:var(--fg-3)}
+
+/* MATRIX DEMO */
+.matrix-demo table{border-collapse:collapse;font-size:.88rem;width:100%;max-width:560px}
+.matrix-demo th,.matrix-demo td{border:1px solid var(--line);padding:9px 14px;text-align:center}
+.matrix-demo thead th{background:var(--bg-2)}
+.matrix-demo tbody th{background:var(--bg-1);text-align:left;font-family:var(--mono);font-weight:500}
+.matrix-demo td{color:var(--fg-2);transition:background .15s}
+.matrix-demo td.hot{background:var(--pbi-soft);color:var(--pbi);font-weight:700}
+.matrix-demo tfoot th,.matrix-demo tfoot td{background:var(--bg-2);font-weight:700;color:var(--fg-1)}
+.matrix-hint{font-size:.82rem;color:var(--fg-4);margin-top:8px}
+
+/* KPI CARDS */
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kpi{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center}
+.kpi b{display:block;font-size:1.6rem;color:var(--pbi)}
+.kpi span{font-size:.85rem;color:var(--fg-2)}
+.kpi code{display:block;margin-top:8px;font-family:var(--mono);font-size:.68rem;color:var(--fg-4);direction:ltr}
+
+/* DAX code */
+.code-cap{font-size:.86rem;color:var(--fg-3);margin:18px 0 -10px;line-height:1.6}
+.code-wrap{margin:18px 0;max-width:100%}
+.qnav-b-wrap{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+/* 63 topics is too long for a flat list — chapters fold */
+.toc-chap,.lt-chap{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;min-height:40px}
+.toc-chap::after,.lt-chap::after{content:"\25be";font-size:.8rem;opacity:.65;transition:transform .18s;flex:0 0 auto}
+.toc-chap.is-shut::after,.lt-chap.is-shut::after{transform:rotate(90deg)}
+.toc-chap:hover,.lt-chap:hover{color:var(--acc)}
+.toc-group[hidden],.lt-items[hidden]{display:none}
+.toc-chap .cnt,.lt-chap .cnt{font-family:var(--mono);font-size:.62rem;color:var(--fg-4);margin-inline-start:auto;margin-inline-end:6px}
+/* one-tap access to the exercises from anywhere */
+.qjump{display:flex;flex-wrap:wrap;gap:6px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.qjump-t{width:100%;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--acc);margin:0 0 3px}
+.qjump button{background:var(--bg-1);border:1px solid var(--line);color:var(--fg-2);border-radius:999px;padding:7px 12px;font-family:var(--font);font-size:.78rem;font-weight:600;min-height:38px}
+.qjump button:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.qjump button.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lt-jump{margin:16px 0 10px;border:1px solid var(--line);border-radius:var(--r)}
+/* finger-sized hit area for inline links, without moving the layout */
+.ln-home a,.bullets li a,footer a,.next-cta a,.drawer-links a,.lesson-jump a{position:relative}
+.ln-home a::after,.bullets li a::after,footer a::after,.next-cta a::after,.lesson-jump a::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:44px;transform:translateY(-50%);pointer-events:auto}
+.drawer-links a{min-height:40px;display:inline-flex;align-items:center}
+/* code snippets inside a question, with their own copy button */
+.q-code-wrap{display:block;position:relative;margin:12px 0 2px}
+.q-code{display:block;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;padding:13px 14px;font-family:var(--mono);font-size:.83rem;line-height:1.75;color:var(--fg-1);direction:ltr;text-align:left;overflow-x:auto;white-space:normal}
+.qc-copy{position:absolute;top:6px;left:6px;z-index:2;display:inline-flex;align-items:center;gap:5px;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-3);border-radius:8px;padding:5px 9px;font-family:var(--font);font-size:.72rem;font-weight:600;min-height:32px;line-height:1}
+.qc-copy:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.qc-copy.is-done{border-color:rgba(74,222,128,.5);color:var(--ok);background:rgba(74,222,128,.12)}
+.q-code-wrap:not(:hover) .qc-t{display:none}
+.qc-copy.is-done .qc-t{display:inline}
+@media(pointer:coarse){.qc-t{display:none!important}.qc-copy.is-done .qc-t{display:inline!important}}
+@media(max-width:560px){.q-code{font-size:.78rem;padding:12px 11px}}
+/* grid items default to min-width:auto, so a wide table can blow the track out — pin them */
+.tasks{grid-template-columns:minmax(0,1fr)}
+.tasks>.task,.grid>*{min-width:0}
+.code-cap + .code-wrap{margin-top:10px}
+.code-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-2);
+  border:1px solid var(--line);border-bottom:none;border-radius:var(--r) var(--r) 0 0;padding:6px 8px 6px 12px}
+.code-lang{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;color:var(--fg-4);
+  unicode-bidi:isolate;flex:0 0 auto}
+.code-copy{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:32px;
+  background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:8px;
+  padding:5px 11px;font-family:var(--font);font-size:.78rem;font-weight:600;line-height:1;
+  transition:border-color .15s,color .15s,background .15s}
+.code-copy:hover{border-color:var(--pbi-glow);color:var(--pbi);background:var(--bg-2)}
+.code-copy:active{transform:scale(.97)}
+.code-copy .cc-ic{width:15px;height:15px;flex:0 0 auto}
+.code-copy .ic-done{display:none}
+.code-copy.is-done{border-color:rgba(74,222,128,.45);color:var(--ok);background:rgba(74,222,128,.10)}
+.code-copy.is-done .ic-copy{display:none}
+.code-copy.is-done .ic-done{display:block}
+.code-copy.is-fail{border-color:rgba(248,113,113,.45);color:var(--bad);background:rgba(248,113,113,.10)}
+.code-wrap .code{margin:0;border-radius:0 0 var(--r) var(--r)}
+@media(max-width:560px){
+  .code-bar{padding:6px 8px}
+  .code-copy{font-size:.76rem;padding:5px 10px}
+  .code-lang{font-size:.64rem;letter-spacing:.1em}
+  .code-wrap .code{padding:14px 14px;font-size:.82rem}
+}
+.code{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;color:var(--fg-1)}
+.code .k{color:var(--pbi)}.code .f{color:var(--acc)}.code .c{color:var(--fg-4)}
+
+/* ============ PRACTICE ============ */
+.practice-box{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  background:linear-gradient(160deg,var(--acc-soft),var(--bg-1) 65%);border:1px solid var(--line-strong);
+  border-radius:var(--r);padding:20px;margin-bottom:18px}
+.practice-box h3{font-size:1.1rem;margin:6px 0 4px}
+.practice-box p{font-size:.9rem;color:var(--fg-2);max-width:420px}
+.pb-actions{display:flex;gap:10px;flex-wrap:wrap}
+.practice-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--bg-1);
+  border:1px solid var(--line-strong);border-radius:var(--r);padding:16px 18px}
+.pc-note{font-size:.85rem;color:var(--fg-3);font-family:var(--mono)}
+
+.tasks{display:grid;gap:14px;margin-top:24px}
+.task{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.task-h{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:8px}
+.task-n{flex:0 0 auto;width:28px;height:28px;border-radius:8px;background:var(--pbi);color:#111;
+  font-family:var(--mono);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+.task-q{font-size:.92rem;color:var(--fg-2);margin-bottom:12px}
+.sol-toggle{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;
+  padding:9px 18px;font-size:.88rem;font-weight:700}
+.sol-toggle:hover{border-color:var(--acc);color:var(--acc)}
+.sol-toggle[aria-expanded="true"]{background:var(--acc-soft);border-color:var(--line-glow);color:var(--acc)}
+@media(pointer:coarse){.sol-toggle{min-height:44px}}
+.sol-body{display:none;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.sol-body.open{display:block}
+.sol-body .steps{margin-bottom:14px}
+.sol-body .tbl-wrap{margin-bottom:12px}
+.sol-check{font-size:.88rem;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.28);
+  border-radius:10px;padding:10px 14px}
+.sol-check b{color:var(--ok)}
+@media(max-width:560px){.task{padding:15px 13px}.practice-box{padding:16px}}
+
+/* ============ LESSON CONTENTS ============ */
+.lesson-toc{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.lesson-toc h3{font-size:1rem;margin-bottom:4px}
+.lesson-toc .lt-sub{font-size:.85rem;color:var(--fg-3);margin-bottom:14px}
+.lt-chap{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--pbi);margin:14px 0 6px;border-top:1px solid var(--line-soft);padding-top:12px}
+.lt-chap:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lt-items{display:grid;gap:4px;margin-bottom:2px}
+.lt-item{display:flex;gap:9px;align-items:baseline;background:none;border:1px solid transparent;border-radius:8px;padding:7px 9px;color:var(--fg-2);font-size:.88rem;text-align:left;width:100%}
+.lt-item:hover{background:var(--bg-2);color:var(--fg-1);border-color:var(--line)}
+.lt-item .n{font-family:var(--mono);font-size:.72rem;color:var(--fg-4);flex:0 0 auto}
+.lt-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;border-top:1px solid var(--line-soft);padding-top:14px}
+@media(pointer:coarse){.lt-item{min-height:44px;align-items:center}}
+
+/* continuous mode — the whole lesson in one scroll */
+body.all-topics .pager,body.all-topics .pg-hint{display:none}
+body.all-topics #hero-block{display:block!important}
+.all-bar{display:none;position:sticky;top:0;z-index:60;margin:0 0 18px;
+  background:var(--pbi-soft);border:1px solid var(--pbi-glow);border-radius:12px;padding:10px 14px;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+body.all-topics .all-bar{display:flex}
+.all-bar span{font-size:.85rem;color:var(--pbi);font-weight:600}
+body.all-topics .page{border-top:1px solid var(--line-soft);padding-top:26px;animation:none}
+body.all-topics .page:first-of-type{border-top:none}
+
+/* ============ SCREENSHOTS ============ */
+figure.shot{margin:18px 0;background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+/* --nw = the screenshot's own pixel width: it may shrink, never stretch past it (no blur) */
+figure.shot button.shot-btn{position:relative;display:block;width:100%;max-width:var(--nw,100%);margin:0 auto;
+  padding:0;background:none;border:none;border-radius:10px;overflow:hidden;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto;max-width:100%;border-radius:10px;background:#fff}
+figure.shot.tall button.shot-btn{max-width:min(var(--nw,100%),380px)}
+figure.shot.tall img{max-height:72vh;width:auto;margin:0 auto}
+.shot-zoom{position:absolute;top:8px;inset-inline-start:8px;z-index:2;background:rgba(7,10,12,.82);
+  border:1px solid var(--line);color:var(--fg-1);border-radius:8px;padding:4px 10px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;pointer-events:none}
+figure.shot figcaption{font-size:.84rem;color:var(--fg-3);margin-top:10px;line-height:1.5}
+figure.shot figcaption b{color:var(--pbi);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;display:block;margin-bottom:3px}
+figure.shot.narrow{max-width:430px}
+figure.shot.mid{max-width:620px}
+.shot-hint{font-size:.75rem;color:var(--fg-4);margin-top:8px}
+.shot-scroll{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;border-radius:10px}
+@media(max-width:760px){
+  /* nothing is cropped on a phone: every screenshot fits the column,
+     and the tap-to-zoom view is where the small UI text gets read */
+  figure.shot{padding:10px}
+  figure.shot .shot-btn,figure.shot img{width:100%;max-width:100%}
+  figure.shot.tall .shot-btn{max-width:100%}
+  figure.shot.tall img{max-height:58vh;width:auto;margin:0 auto}
+  figure.shot figcaption{font-size:.82rem}
+  .shot-zoom{font-size:.7rem;padding:4px 9px}
+}
+.shots-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.shots-2 figure.shot{margin:0;max-width:none}
+.shots-2 figure.shot .shot-btn{max-width:100%}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--fg-2);font-size:.85rem}
+.lb-close{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-1);border-radius:10px;padding:8px 16px;font-weight:700}
+.lb-close:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.lb-body{flex:1 1 auto;overflow:auto;display:flex;align-items:center;justify-content:center;margin-top:10px;overscroll-behavior:contain}
+.lb-body img{max-width:100%;max-height:100%;border-radius:10px;background:#fff}
+.lightbox.zoomed .lb-body{cursor:grab}
+@media(max-width:560px){.lb-bar{font-size:.8rem}.lb-close,.lb-zoom{padding:9px 14px}}
+/* zoomed: natural size, pan by scrolling — this is what makes small UI text readable on a phone */
+.lightbox.zoomed .lb-body{align-items:flex-start;justify-content:flex-start}
+.lightbox.zoomed .lb-body img{max-width:none;max-height:none;width:auto;height:auto}
+.lb-zoom{background:var(--pbi);border:1px solid var(--pbi);color:#111;border-radius:10px;padding:8px 16px;font-weight:800}
+.lb-zoom:hover{filter:brightness(1.08)}
+.lb-actions{display:flex;gap:8px}
+
+/* ============ VISUALIZATION DEMOS ============ */
+ul.plain{list-style:none;display:grid;gap:7px;margin-top:10px}
+ul.plain li{font-size:.9rem;color:var(--fg-2);padding-inline-start:14px;position:relative}
+ul.plain li::before{content:"";position:absolute;inset-inline-start:0;top:.65em;width:5px;height:5px;border-radius:50%;background:var(--pbi)}
+ul.plain li b{color:var(--fg-1)}
+
+.demo{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.demo-status{font-size:.85rem;color:var(--fg-3);margin-top:10px}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.demo-controls .btn{flex:0 0 auto}
+
+/* mock canvas: chart + shape with switchable stacking */
+.demo-canvas{position:relative;height:220px;background:var(--bg-0);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.demo-canvas.small{height:180px;flex:1 1 260px}
+@media(max-width:480px){.demo-canvas{height:200px}.mc-bar i{min-width:14px}}
+.mock-chart{position:absolute;inset:14px;padding:10px 12px;background:var(--bg-1);border:1px solid var(--line-soft);border-radius:8px;z-index:1}
+.mc-title{display:block;font-size:.72rem;color:var(--fg-3);margin-bottom:8px}
+.mc-bar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mc-bar i{display:block;height:11px;border-radius:3px;background:linear-gradient(270deg,var(--acc),var(--acc-dim))}
+.mc-bar b{font-size:.7rem;color:var(--fg-3);font-family:var(--mono)}
+.mock-shape{position:absolute;inset:14px;background:#2b7fd4;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem;z-index:2;
+  box-shadow:0 2px 14px rgba(0,0,0,.35);transition:opacity .2s}
+.mock-shape.back{z-index:0}
+.mock-shape.hidden,.mock-chart.hidden{opacity:0;pointer-events:none}
+
+/* selection pane mock */
+#sel-demo{display:flex;gap:16px;flex-wrap:wrap}
+.sel-pane{flex:1 1 240px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sel-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--fg-3);padding:9px 12px;border-bottom:1px solid var(--line)}
+.sel-list{list-style:none;padding:6px}
+.sel-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:.86rem;background:var(--bg-1);border:1px solid var(--line-soft);margin-bottom:6px}
+.sel-item .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-item.off .nm{color:var(--fg-4);text-decoration:line-through}
+.sel-btn{background:var(--bg-3);border:1px solid var(--line);color:var(--fg-2);border-radius:7px;width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;flex:0 0 auto}
+.sel-btn:hover:not(:disabled){color:var(--pbi);border-color:var(--pbi-glow)}
+.sel-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(pointer:coarse){.sel-btn{width:38px;height:38px}}
+
+/* sparkline svg */
+.spark{width:80px;height:24px}
+.spark polyline{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* conditional-formatting preview */
+.cf-preview{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:16px}
+.cf-caption{font-size:.85rem;color:var(--fg-3);margin-bottom:10px}
+.cf-cells{display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px}
+.cf-cell{border-radius:9px;padding:14px 6px;text-align:center;font-family:var(--mono);font-weight:700;font-size:.95rem;
+  border:1px solid var(--line);color:#04120f;transition:background .3s,color .3s}
+.cf-legend{font-size:.8rem;color:var(--fg-3);margin-top:10px}
+
+/* parameter demos */
+.param-demo{margin-top:4px}
+.param-label{display:block;font-size:.88rem;color:var(--fg-2);margin-bottom:10px;font-weight:600}
+.param-demo input[type=range]{width:100%;accent-color:var(--pbi);height:26px}
+.param-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.param-out .kpi{padding:12px}
+.param-out .kpi b{font-size:1.25rem}
+.field-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fs-btn{background:var(--bg-2);border:1px solid var(--line);color:var(--fg-2);border-radius:99px;padding:8px 18px;font-size:.88rem;font-weight:600}
+.fs-btn:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.fs-btn.on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+@media(pointer:coarse){.fs-btn{min-height:44px}}
+.mini-chart{display:grid;gap:9px}
+.mc-row{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.mc-row .lbl{color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-row .track{background:var(--bg-2);border-radius:99px;height:14px;overflow:hidden}
+.mc-row .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.mc-row .val{font-family:var(--mono);font-size:.8rem;color:var(--pbi);min-width:64px;text-align:start}
+@media(max-width:480px){.mc-row{grid-template-columns:76px 1fr}.mc-row .val{grid-column:2;text-align:end}}
+
+/* ============ QUIZ ============ */
+.quiz{max-width:760px}
+.q-head{margin:40px 0 6px}
+.quiz-intro{color:var(--fg-3);font-size:.9rem;margin-bottom:20px;max-width:760px}
+
+.q-item{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.q-item .q-text{font-size:.98rem;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--fg-1)}
+.q-opts{display:grid;gap:8px}
+
+/* option buttons — neutral state */
+.q-opt{width:100%;text-align:left;background:var(--bg-2);color:var(--fg-1);border:1px solid var(--line);
+  border-radius:12px;padding:13px 16px;font-size:.93rem;line-height:1.5;position:relative;
+  transition:border-color .15s,background .15s,transform .1s}
+.q-opt::after{content:"";position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);
+  font-size:1rem;font-weight:800;line-height:1}
+.q-opt:not([aria-disabled="true"]):hover{border-color:var(--pbi-glow);background:var(--bg-3)}
+.q-opt:not([aria-disabled="true"]):active{transform:scale(.995)}
+.q-opt[aria-disabled="true"]{cursor:default}
+.q-item.answered .q-opt:focus-visible{outline-offset:2px}
+
+/* answered states — change these two blocks to recolour the whole quiz */
+.q-opt.correct{border-color:var(--ok);background:rgba(74,222,128,.12);color:var(--ok);font-weight:600;padding-inline-start:40px}
+.q-opt.correct::after{content:"✓";color:var(--ok)}
+.q-opt.incorrect{border-color:var(--bad);background:rgba(248,113,113,.12);color:var(--bad);font-weight:600;padding-inline-start:40px}
+.q-opt.incorrect::after{content:"✕";color:var(--bad)}
+.q-item.answered .q-opt:not(.correct):not(.incorrect){opacity:.45}
+
+/* explanation — hidden until an answer is chosen */
+.q-exp{display:none;margin-top:14px;font-size:.88rem;line-height:1.65;color:var(--fg-2);
+  background:var(--bg-2);border-inline-start:3px solid var(--fg-4);border-radius:10px;padding:12px 16px}
+.q-item.answered .q-exp{display:block;animation:expIn .25s ease}
+.q-item.answered.is-correct .q-exp{border-inline-start-color:var(--ok)}
+.q-item.answered.is-incorrect .q-exp{border-inline-start-color:var(--bad)}
+.q-exp b{color:var(--fg-1)}
+.q-exp em{font-style:normal;color:var(--pbi)}
+@keyframes expIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q-item.answered .q-exp{animation:none}}
+
+/* running score */
+.quiz-summary{max-width:760px;margin:20px 0 12px}
+.qs-bar{height:8px;background:var(--bg-2);border-radius:99px;overflow:hidden}
+.qs-fill{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(270deg,var(--pbi),var(--acc));transition:width .35s ease}
+.qs-text{font-size:.9rem;color:var(--fg-2);margin-top:8px;font-weight:600}
+.qs-text b{color:var(--pbi)}
+.quiz-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+@media(max-width:560px){
+  .q-item{padding:16px 14px}
+  .q-item .q-text{font-size:.95rem}
+  .q-opt{padding:12px 14px;font-size:.9rem}
+  .q-opt.correct,.q-opt.incorrect{padding-inline-start:34px}
+  .q-opt::after{inset-inline-start:11px}
+  .q-exp{font-size:.86rem;padding:11px 13px}
+}
+
+.btn{display:inline-block;background:var(--pbi);color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;font-size:.95rem;text-align:center;line-height:1.4}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--line)}
+
+/* HOMEWORK checklist */
+.hw{max-width:720px;display:grid;gap:10px}
+.hw label{display:flex;gap:12px;align-items:flex-start;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;font-size:.93rem}
+.hw input{accent-color:var(--pbi);width:18px;height:18px;margin-top:3px;flex:0 0 auto}
+.hw label:has(input:checked),.hw label.done{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.hw label:has(input:checked) b,.hw label.done b{color:var(--pbi)}
+.hw-progress{font-size:.88rem;color:var(--fg-3);margin-top:6px}
+
+/* RESOURCES */
+.res a.card{display:block;transition:border-color .15s}
+.res a.card:hover{border-color:var(--pbi-glow)}
+.res .url{font-family:var(--mono);font-size:.76rem;color:var(--acc);direction:ltr;display:inline-block}
+
+/* NEXT CTA */
+.next-cta{text-align:center;background:linear-gradient(160deg,var(--pbi-soft),var(--bg-1) 70%);border:1px solid var(--pbi-glow);border-radius:var(--r);padding:34px 22px;margin-top:10px}
+.next-cta h2{font-size:1.3rem;margin-bottom:8px}
+.next-cta p{color:var(--fg-2);max-width:560px;margin:0 auto 18px}
+
+footer.site{border-top:1px solid var(--line);margin-top:60px;padding:30px 0;text-align:center;color:var(--fg-3);font-size:.85rem}
+
+/* PRINT — students print the whole lesson, not the open topic */
+
+/* ============ OPENING TOPIC ============ */
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.howto{margin-bottom:34px}
+.howto .card p{font-size:.9rem;color:var(--fg-2)}
+.howto .card b{color:var(--fg-1);font-weight:700}
+.p1-h{font-size:1.15rem;font-weight:800;margin:38px 0 4px}
+.p1-sub{color:var(--fg-3);font-size:.92rem;margin-bottom:16px}
+
+/* ============ QUESTIONS STRIP ============ */
+.qnav{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 26px}
+.qnav-t{display:block;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--acc);margin-bottom:9px}
+.qnav-b-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qnav-b{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  color:var(--fg-2);border-radius:10px;padding:10px 12px;font-size:.85rem;font-weight:600;text-align:left;
+  transition:border-color .15s,color .15s,background .15s}
+.qnav-b b{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--bg-3);color:var(--fg-3);
+  font-size:.75rem;display:flex;align-items:center;justify-content:center}
+.qnav-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qnav-b:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+.qnav-b.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.qnav-b.is-on b{background:var(--pbi);color:#111}
+
+/* ============ DRAWER SITE LINKS ============ */
+.drawer-links{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+.drawer-links a{font-size:.82rem;color:var(--fg-2);padding:7px 11px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)}
+.drawer-links a:first-child{color:var(--acc);border-color:var(--line-strong)}
+@media(pointer:coarse){.drawer-links a{min-height:40px;display:flex;align-items:center}}
+
+/* ============ COURSE LESSON NAV ============ */
+.lesson-nav{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));margin:0 0 12px}
+.ln-item{position:relative;display:flex;gap:14px;align-items:flex-start;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;color:inherit;
+  transition:border-color .15s,background .15s,transform .15s}
+a.ln-item:hover{border-color:var(--pbi-glow);background:var(--bg-2)}
+a.ln-item:active{transform:scale(.99)}
+.ln-num{flex:0 0 40px;height:40px;border-radius:11px;background:var(--bg-3);color:var(--fg-3);
+  font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.ln-txt{min-width:0}
+.ln-item h3{font-size:.98rem;margin:0 0 3px}
+.ln-item p{font-size:.84rem;color:var(--fg-3);margin:0}
+.ln-st{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.09em;color:var(--fg-4);border:1px solid var(--line);border-radius:99px;padding:2px 9px}
+.ln-item.is-current{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.ln-item.is-current .ln-num{background:var(--pbi);color:#111}
+.ln-item.is-current .ln-st{color:var(--pbi);border-color:var(--pbi-glow)}
+a.ln-item .ln-st{color:var(--acc);border-color:var(--line-strong)}
+.ln-item.is-soon{opacity:.5}
+.ln-home{margin:0 0 8px;font-size:.9rem}
+.ln-home a{color:var(--acc)}
+@media(pointer:coarse){.ln-item{min-height:72px}}
+@media(max-width:560px){.lesson-nav{grid-template-columns:1fr}.ln-item{padding:16px 14px 14px}}
+
+/* ============ LESSON SWITCHING — available from every topic ============ */
+.drawer-lessons{border-bottom:1px solid var(--line);padding:12px 14px 14px}
+.dl-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--acc);margin-bottom:8px}
+.dl-list{display:grid;gap:5px}
+.dl-item{display:flex;align-items:center;gap:9px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:9px;padding:8px 10px;color:var(--fg-2);font-size:.84rem;min-height:42px}
+a.dl-item:hover{border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-n{flex:0 0 22px;height:22px;border-radius:6px;background:var(--bg-3);color:var(--fg-3);
+  font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dl-t{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.dl-s{flex:0 0 auto;font-family:var(--mono);font-size:.7rem;color:var(--fg-4)}
+.dl-item.is-current{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.dl-item.is-current .dl-n{background:var(--pbi);color:#111}
+.dl-item.is-current .dl-s{color:var(--pbi)}
+a.dl-item .dl-s{color:var(--acc)}
+.dl-item.is-soon{opacity:.45}
+.dl-home{display:block;margin-top:10px;font-size:.82rem;color:var(--acc)}
+.lesson-jump{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 0}
+.lesson-jump .btn{font-size:.83rem}
+@media(max-width:560px){.lesson-jump{flex-direction:column}.lesson-jump .btn{width:100%;text-align:center}}
+
+/* ============ LESSON RAIL — cross-lesson navigation, always visible ============ */
+.hd{display:flex;align-items:center;gap:14px;max-width:1080px;margin:0 auto;height:100%;
+  padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.lesson-rail{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.lesson-rail::-webkit-scrollbar{display:none}
+.lr{flex:0 0 auto;display:flex;align-items:center;gap:7px;scroll-snap-align:center;
+  background:var(--bg-1);border:1px solid var(--line);border-radius:99px;padding:0 13px;height:32px;
+  color:var(--fg-3);font-size:.8rem;font-weight:600;white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s}
+.lr b{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--fg-4)}
+a.lr:hover{border-color:var(--pbi-glow);color:var(--fg-1)}
+a.lr:hover b{color:var(--pbi)}
+.lr.is-on{background:var(--pbi-soft);border-color:var(--pbi-glow);color:var(--pbi)}
+.lr.is-on b{color:var(--pbi)}
+.lr.is-soon{opacity:.42;cursor:not-allowed}
+@media(pointer:coarse){.lr{height:36px}}
+@media(max-width:860px){.hd .brand{display:none}}
+@media(max-width:560px){
+  .hd{gap:0;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+  .lr{height:32px;padding:0 11px;font-size:.76rem}
+  .lr b{font-size:.68rem}
+}
+
+/* ============ MOBILE PASS — phone-first corrections ============ */
+@media(max-width:560px){
+  /* On phone the header shrinks to just the lessons bar — still always available */
+  :root{--header-h:44px}
+  /* one short row: ☰ · Previous · Title · Next · Questions — nothing wraps, nothing hides content */
+  .topicbar-inner{flex-wrap:nowrap;gap:6px;padding:5px max(10px,env(safe-area-inset-right)) 5px max(10px,env(safe-area-inset-left))}
+  .tb-menu,.tb-home,.tb-nav{width:44px;height:44px;flex:0 0 auto}
+  .tb-quiz{flex:0 0 auto;height:44px;padding:0 11px;box-shadow:none;font-size:.8rem}
+  .tb-ic-svg{width:18px;height:18px}
+  .tb-now{flex:1 1 auto;min-width:0;text-align:center}
+  .tb-title{font-size:.82rem;line-height:1.3}
+  .tb-meta{gap:6px}
+  .tb-chap{font-size:.68rem;letter-spacing:.04em}
+  .tb-count{font-size:.68rem}
+  .tb-meta .tb-count::before{margin-inline-end:6px}
+  .qnav-b-wrap{grid-template-columns:1fr}
+  .qnav-b{min-height:46px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center}
+  .p1-h{margin-top:30px}
+  main{padding-top:18px}
+  .page{padding:20px 0 8px}
+  .wrap{padding:0 max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left))}
+  .hero{padding:10px 0 4px}
+  .hero .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 10px;margin-top:20px}
+  .hero .stat b{font-size:1.3rem}
+  .hero p.sub{font-size:.95rem}
+  .sec-sub{margin-bottom:18px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+  .kpi{padding:13px}
+  .kpi b{font-size:1.1rem}
+  .practice-box{flex-direction:column;align-items:stretch}
+  .pb-actions{flex-direction:column}
+  .pb-actions .btn{width:100%;text-align:center}
+  .practice-cta{flex-direction:column;align-items:stretch;gap:10px}
+  .practice-cta .btn{width:100%;text-align:center}
+  .quiz-actions .btn{flex:1 1 100%;text-align:center}
+  .lb-bar{flex-wrap:wrap;gap:8px}
+  .lb-bar #lb-cap{order:3;width:100%;font-size:.78rem;line-height:1.4}
+  .drawer{width:min(340px,92vw)}
+  footer.site{margin-top:40px;padding:22px 0 calc(22px + env(safe-area-inset-bottom))}
+  .pager{margin-top:26px;padding-top:18px}
+  .part .st{font-size:.72rem}
+  .toc-chap{font-size:.72rem}
+}
+@media(max-width:400px){
+  .hero .stats{gap:12px 8px}
+  .hero h1{font-size:1.5rem}
+  .sec-title{font-size:1.15rem}
+}
+/* every control a finger can hit is at least 44px on touch devices */
+@media(pointer:coarse){
+  .tb-nav,.tb-menu,.tb-home,.tb-quiz{min-width:44px;min-height:44px}
+  .lb-close,.lb-zoom{min-height:44px}
+  .reason>button{min-height:52px}
+  .lt-item{min-height:46px}
+  .shot-btn{min-height:44px}
+  .sol-toggle{min-height:46px}
+  .pg-btn{min-height:56px}
+}
+/* drawer keeps its own scroll: no rubber-banding into the page behind it */
+.drawer .toc{overscroll-behavior:contain}
+
+@media print{
+  header.site,.topicbar,.pager,.pg-hint,.drawer,.drawer-back,.skip-link{display:none!important}
+  body{display:block;height:auto;overflow:visible}
+  .scroller{overflow:visible;height:auto}
+  main{padding-top:0}
+  .page{display:block!important;visibility:visible!important;break-after:page;padding:0 0 20px}
+  .page[hidden]{display:block!important}
+  #hero-block{display:block!important}
+  .reason .body,.dikw .desc,.tabpanel{display:block!important}
+  .tabpanel[hidden]{display:block!important}
+  body{background:#fff;color:#000}
+  .card,.part,.kpi,.ft,.step,.q-item,.hw label,.comp-row{border-color:#bbb;background:#fff}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.7em;color:#555}
+}
+footer.site a{color:var(--fg-3)}
+</style>
+<style>
+/* ============ BI-DIRECTIONAL STORY (Contoso) ============ */
+.bd-src{font-family:var(--mono);font-size:.7rem;color:var(--fg-4);margin:-8px 0 16px}
+.bd-map{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 16px}
+.bd-t{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:11px 10px;text-align:center;
+  transition:border-color .25s,background .25s}
+.bd-t .nm{display:block;font-size:.86rem;font-weight:700;color:var(--fg-2)}
+.bd-t .ct{display:block;font-family:var(--mono);font-size:.9rem;color:var(--fg-4);margin-top:3px}
+.bd-t.fact{grid-column:1/-1;order:9;border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.bd-t.fact .nm{color:var(--pbi);font-size:.95rem;font-weight:900}
+.bd-t.fact .ct{color:var(--pbi)}
+.bd-t.hit{border-color:var(--acc);background:rgba(0,212,200,.10)}
+.bd-t.hit .ct{color:var(--acc);font-weight:700}
+.bd-t.blocked{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.bd-t.blocked .ct{color:#ff8f8f;font-weight:700}
+
+.bd-chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.bd-node{flex:1 1 130px;background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+.bd-node b{display:block;font-family:var(--mono);font-size:1.15rem;color:var(--fg-2)}
+.bd-node span{display:block;font-size:.76rem;color:var(--fg-4);margin-top:2px}
+.bd-node.on{border-color:var(--acc);background:rgba(0,212,200,.1)}
+.bd-node.on b{color:var(--acc)}
+.bd-node.slicer{border-color:var(--pbi-glow);background:var(--pbi-soft)}
+.bd-node.slicer b{color:var(--pbi);font-size:.95rem}
+.bd-node.stuck{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.bd-node.stuck b{color:#ff8f8f}
+.bd-arrow{flex:0 0 auto;align-self:center;font-family:var(--mono);font-size:1.1rem;color:var(--acc);padding:0 2px}
+.bd-arrow.bad{color:#ff6b6b}
+.bd-arrow.both{color:#ffa94d}
+
+.bd-steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.bd-steps button{flex:1 1 auto;background:var(--bg-2);border:1px solid var(--line);color:var(--fg-3);
+  border-radius:10px;padding:9px 10px;font-family:inherit;font-size:.8rem;font-weight:700;min-height:44px;cursor:pointer}
+.bd-steps button[aria-pressed="true"]{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
+.bd-steps button[data-step="3"][aria-pressed="true"]{background:rgba(255,107,107,.12);border-color:rgba(255,107,107,.5);color:#ff8f8f}
+.bd-steps button[data-step="4"][aria-pressed="true"]{background:rgba(255,169,77,.14);border-color:rgba(255,169,77,.55);color:#ffa94d}
+.bd-say{background:var(--bg-1);border:1px solid var(--line);border-inline-start:3px solid var(--acc);
+  border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--fg-2);min-height:76px}
+.bd-say.bad{border-inline-start-color:#ff6b6b}
+.bd-say.both{border-inline-start-color:#ffa94d}
+.bd-say b{color:var(--fg-1)}
+
+.bd-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:0 0 16px}
+.bd-tbl{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bd-tbl h3{margin:0;padding:9px 12px;font-size:.82rem;background:var(--bg-2);border-bottom:1px solid var(--line);color:var(--fg-2)}
+.bd-tbl table{width:100%;border-collapse:collapse;font-size:.78rem}
+.bd-tbl th{background:rgba(242,200,17,.07);color:var(--pbi);font-family:var(--mono);font-size:.7rem;
+  font-weight:600;padding:6px 8px;text-align:left;border-bottom:1px solid var(--line)}
+.bd-tbl td{padding:6px 8px;border-bottom:1px solid var(--line-soft,rgba(255,255,255,.04));color:var(--fg-2)}
+.bd-tbl tr.yes td{background:rgba(74,222,128,.07);color:var(--fg-1)}
+.bd-tbl tr.no td{color:var(--fg-4);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.25)}
+.bd-tbl tr.yes td:first-child::before{content:"✓ ";color:var(--ok)}
+.bd-tbl .more{padding:7px 8px;font-size:.72rem;color:var(--fg-4);font-family:var(--mono)}
+.bd-tbl .key{color:var(--pbi);font-family:var(--mono)}
+.bd-big{display:flex;align-items:baseline;gap:10px;justify-content:center;background:var(--bg-1);
+  border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 16px}
+.bd-big b{font-family:var(--mono);font-size:2rem;color:var(--acc);line-height:1}
+.bd-big span{font-size:.86rem;color:var(--fg-3)}
+.bd-big.warn b{color:#ff8f8f}
+.bd-big.gold b{color:var(--pbi)}
+.bd-two{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:0 0 16px}
+.bd-rule{background:var(--bg-1);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.bd-rule h3{margin:0 0 6px;font-size:.92rem}
+.bd-rule.yes{border-inline-start:3px solid var(--ok)}
+.bd-rule.yes h4{color:var(--ok)}
+.bd-rule.no{border-inline-start:3px solid #ff6b6b}
+.bd-rule.no h4{color:#ff8f8f}
+.bd-rule p{font-size:.86rem;color:var(--fg-2);margin:0}
+@media(max-width:560px){
+  .bd-map{grid-template-columns:repeat(2,1fr)}
+  .bd-chain{flex-direction:column}
+  .bd-arrow{transform:rotate(-90deg);align-self:center}
+  .bd-node{flex:1 1 auto}
+  .bd-steps button{flex:1 1 100%}
+}
+</style>
+
+<style>
+figure.shot.mid{max-width:800px}
+figure.shot.narrow{max-width:440px}
+figure.shot.narrow.tall button.shot-btn{max-width:min(var(--nw,100%),400px)}
+figure.shot img{image-rendering:-webkit-optimize-contrast}
+@media(max-width:720px){figure.shot.narrow.tall button.shot-btn{max-width:100%}}
+.bullets{margin:0 0 22px;padding-inline-start:22px}
+.bullets li{margin-bottom:10px}
+.hw{background:var(--bg-1);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:0 0 26px}
+.hw h3{margin:0 0 10px;font-size:1rem}
+.hw label{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:.92rem;cursor:pointer}
+.hw label.done{color:var(--fg-4);text-decoration:line-through}
+.hw input{width:18px;height:18px;accent-color:var(--pbi)}
+.hw-progress{margin:10px 0 0;font-family:var(--mono);font-size:.78rem;color:var(--acc)}
+@media(pointer:coarse){.hw label{min-height:44px}}
+</style>
+
+
+<style>
+/* ===== executive summary — first thing on the monthly page ===== */
+.exec{background:linear-gradient(200deg,var(--pbi-soft),var(--bg-1) 62%);
+  border:1px solid var(--pbi-glow);border-radius:var(--r);padding:20px 22px;margin:0 0 26px;min-width:0}
+.exec-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.exec-h b{font-size:1.08rem;color:var(--fg-1);font-weight:800}
+.exec-tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:#111;background:var(--pbi);
+  border-radius:99px;padding:3px 9px;font-weight:700;flex:0 0 auto}
+.exec-sub{font-size:.86rem;color:var(--fg-3);margin-bottom:14px;line-height:1.6}
+.exec ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.exec li{position:relative;padding-inline-start:22px;font-size:.95rem;color:var(--fg-2);line-height:1.7;overflow-wrap:break-word}
+.exec li::before{content:"";position:absolute;inset-inline-start:0;top:.62em;width:8px;height:8px;
+  border-radius:2px;background:var(--pbi);transform:rotate(45deg)}
+.exec li b{color:var(--fg-1)}
+.exec-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.exec-foot .btn{flex:0 0 auto}
+.exec-time{font-size:.8rem;color:var(--fg-4);font-family:var(--mono)}
+/* ===== tables become stacked cards on phones — no horizontal scrolling,
+       no clipped Hebrew, every cell keeps its column label ===== */
+@media (max-width:640px){
+  .tbl-wrap.stack{overflow-x:visible;border:0;border-radius:0;background:none}
+  .tbl-wrap.stack table.cmp{min-width:0;font-size:.92rem;display:block}
+  .tbl-wrap.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tbl-wrap.stack tbody{display:block}
+  .tbl-wrap.stack tr{display:block;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg-1);margin-bottom:10px;overflow:hidden}
+  .tbl-wrap.stack td,.tbl-wrap.stack th{display:block;border-bottom:1px solid var(--line-soft);
+    padding:11px 14px;text-align:start;overflow-wrap:break-word}
+  .tbl-wrap.stack tr td:last-child,.tbl-wrap.stack tr th:last-child{border-bottom:0}
+  .tbl-wrap.stack td::before{content:attr(data-l);display:block;font-size:.7rem;font-weight:700;
+    color:var(--fg-4);letter-spacing:.04em;margin-bottom:4px}
+  .tbl-wrap.stack td:not([data-l])::before{content:none}
+}
+@media (max-width:559px){
+  .exec{padding:17px 17px 16px}
+  .exec li{font-size:.9rem}
+  .exec-foot .btn{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<noscript>
+  <style>.page[hidden]{display:block!important}body{display:block;height:auto;overflow:visible}.scroller{overflow:visible;height:auto}.topicbar,.pager,.pg-hint{display:none}</style>
+  <div style="background:#f2c811;color:#111;padding:12px;text-align:center;font-weight:600">All 64 topics are shown here in sequence. The interactive components require JavaScript.</div>
+</noscript>
+
+<header class="site">
+  <div class="hd">
+    <a class="brand" href="index.html" title="To the course homepage"><b>SQL</b> with Eliran</a>
+    <nav class="lesson-rail" id="lesson-rail" aria-label="Navigation between course lessons">
+        <a class="lr lr-home" href="pbi.html" title="The home page of the platform"><svg class="lr-ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Home page</span></a>
+      <a class="lr" href="pbi-course.html" title="Power BI basics"><b>1</b><span>Base</span></a>
+      <a class="lr" href="pbi-course-2.html" title="Data modeling"><b>2</b><span>Modeling</span></a>
+      <a class="lr" href="pbi-course-3.html" title="Power Query and ETL"><b>3</b><span>Power Query</span></a>
+      <a class="lr" href="pbi-course-4.html" title="M and DAX basics"><b>4</b><span>M and DAX</span></a>
+        <a class="lr lr-x is-on" href="pbi-updates.html" aria-current="page" title="The Monthly Power BI Updates"><b>◷</b><span>Updates</span></a><span class="lr-sep" aria-hidden="true"></span><a class="lr lr-site" href="index.html" title="To the course homepage"><b>↩</b><span>The course</span></a><a class="lr lr-x" href="pbi-quiz.html" title="The full question bank"><b>?</b><span>Question bank</span></a><a class="lr lr-x" href="dax-reference.html" title="DAX function index"><b>Fx</b><span>DAX reference</span></a>
+      </nav>
+  </div>
+</header>
+
+<div class="topicbar" id="topicbar">
+  <div class="topicbar-inner">
+    <button type="button" class="tb-menu" id="tb-menu" aria-expanded="false" aria-controls="drawer" aria-label="Opening the topic list">
+      <span class="tb-ic" aria-hidden="true">☰</span><span class="tb-menu-t">topics</span>
+    </button>
+    <button type="button" class="tb-home" id="tb-home" aria-label="Back to the first page of the lesson">
+      <svg class="tb-ic-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span class="tb-home-t">main</span>
+    </button>
+    <button type="button" class="tb-nav" id="tb-prev" aria-keyshortcuts="ArrowRight">
+      <span class="tb-arrow" aria-hidden="true">→</span><span class="tb-nav-t">Previous</span>
+    </button>
+    <div class="tb-now">
+      <span class="tb-title" id="tb-title"></span>
+      <span class="tb-meta">
+        <span class="tb-chap" id="tb-chap"></span>
+        <span class="tb-count" id="tb-count" dir="ltr"></span>
+      </span>
+    </div>
+    <button type="button" class="tb-nav" id="tb-next" aria-keyshortcuts="ArrowLeft">
+      <span class="tb-nav-t">next</span><span class="tb-arrow" aria-hidden="true">←</span>
+    </button>
+    <button type="button" class="tb-quiz" id="tb-quiz">
+      <span id="tb-quiz-label" class="tb-quiz-t">for the test</span><span id="tb-quiz-short" class="tb-quiz-s">for the test</span>
+    </button>
+  </div>
+  <div class="tb-progress" aria-hidden="true"><span class="progress-bar" id="pbar"></span></div>
+</div>
+
+<div class="scroller" id="scroller">
+<main id="main" class="wrap">
+
+<div class="all-bar" id="all-bar">
+  <span>Continuous reading mode — all 13 topics</span>
+  <button type="button" class="btn ghost" id="all-exit">Return to single-topic mode</button>
+</div>
+
+<div id="hero-block">
+<section class="hero">
+  <span class="kicker">Power BI updates · August 2026</span>
+  <h1><em>themes</em>, split refresh and OneLake</h1>
+  <p class="sub">The theming system leaves preview and becomes the default, refresh splits into three separate operations, and images secured in OneLake finally make it into the report. Also: dozens of formatting options in the slicer and the matrix.</p>
+  <div class="stats" role="list"><div class="stat" role="listitem"><b>13</b><span>Topics in the lesson</span></div><div class="stat" role="listitem"><b>12</b><span>Quiz questions</span></div><div class="stat" role="listitem"><b>14</b><span>Bugs and workarounds</span></div><div class="stat" role="listitem"><b>18.08</b><span>Publish date</span></div></div>
+  <div class="hero-cta">
+    <button type="button" class="btn" data-goto="u8p2">Beginners — the first topic ←</button>
+    <button type="button" class="btn ghost" data-goto="u8p12">To the quiz</button>
+    <a class="btn ghost" href="pbi-updates.html">All the updates</a>
+    <a class="btn ghost" href="dax-reference.html">DAX function guide</a>
+  </div>
+</section></div>
+
+<section class="page" id="u8p1" data-chap="opening" data-title="How the lesson works" aria-label="Introduction — how the lesson works">
+  <div class="sec-num">opening</div>
+  <h2 class="sec-title">How the lesson works</h2>
+  <p class="sec-sub">August 2026 update: themes reach general availability, refresh splits into three operations, and images from OneLake enter the report.</p>
+<div class="exec">
+  <div class="exec-h"><span class="exec-tag">August 2026</span><b>Executive Summary — What's New This Month</b></div>
+  <p class="exec-sub">Five minutes of reading that give you the full picture, before diving deep. Published on 18.08.2026.</p>
+  <ul><li><b>Modern Visual Defaults and the theme pane are generally available.</b> New reports open on the Fluent 2 base theme. The theme pane is available in both Desktop and the browser, with import and export of custom themes.</li><li><b>A silent change that will break existing themes:</b> Font overrides were removed from the base theme, so the text segment now applies consistently across all visuals.</li><li><b>Refreshing a semantic model splits into three operations:</b> Refresh schema and data, sync schema only, or refresh data only — and also at the level of a single table.</li><li><b>Date picker for slicers left preview,</b> with a new Single date setting that limits it to one date, and clearing the selection from an icon in the header.</li><li><b>OneLake files as an image source in the report.</b> Images in OneLake are used in the image visual, in table and matrix cells, in cards and slicers — and Power BI authenticates as the viewer, without needing anonymous access.</li><li><b>Expanding and collapsing column headers in a matrix</b> In general availability, with the option to set the freeze state of row headers as the report default.</li><li><b>Fabric Apps permissions are loosening:</b> By the end of August, app consumers will need only Read permission on the semantic model instead of Build.</li><li><b>mobile:</b> A rotate-view button on the wrist, and data export to Excel directly from the app — while preserving filtering and row-level security.</li><li><b>14 known bugs and limitations</b> documented in Chapter VI, with a workaround for each.</li></ul>
+  <div class="exec-foot"><button type="button" class="btn" data-goto="u8p2">Beginner ←</button><span class="exec-time">Estimated reading time · 70 minutes</span></div>
+</div>
+<div class="grid g3"><div class="card"><span class="tag">01</span><h3>Navigating between topics</h3><p>the buttons <b>Previous</b> F<b>next</b> fixed at the top of the screen. Also available via keyboard shortcut, by swiping on a phone, or by jumping to a topic from the topics list.</p></div><div class="card"><span class="tag">02</span><h3>Questions and practice</h3><p>At the end of the lesson there's a short quiz with immediate feedback for every question. The button <b>for the test</b> Available in the top bar at any time.</p></div><div class="card"><span class="tag">03</span><h3>Progress is saved</h3><p>The topic where you stopped and the topics you have read are saved only in your browser. You can close and come back, and reset from the topics list.</p></div></div>
+<nav class="lesson-toc" id="lesson-toc" aria-label="The lesson's full table of contents"></nav>
+<h3 class="p1-h">How each topic is built</h3><p class="p1-sub">Every topic opens with an explanation <b>why</b> The feature exists — the real-world pain and the vision behind it — and continues into the technical detail. At the end of the lesson: a bugs and workarounds chapter, and a 12-question quiz.</p><h3 class="p1-h">What the lesson covers</h3><p class="p1-sub">August 2026 update, published on August 18.</p><div class="grid g2"><div class="card"><span class="tag teal">design</span><h3>Themes in general availability</h3><p>Fluent 2 as the default, a full theme pane, and the impact of removing font overrides.</p></div><div class="card"><span class="tag teal">modeling</span><h3>Split refresh</h3><p>three separate refresh actions, even at the table level — the tool missing for fixing a schema without paying for a full load.</p></div><div class="card"><span class="tag teal">reporting</span><h3>OneLake and images</h3><p>OneLake addresses as an image source in six visual types, with authentication under the viewer's identity.</p></div><div class="card"><span class="tag teal">Slicer and matrix</span><h3>Dozens of design options</h3><p>Date picker in GA, the Dropdown and Hierarchy segment in the slicer, expanding and collapsing columns in a matrix.</p></div><div class="card"><span class="tag teal">Mobile and development</span><h3>Rotation, export, and PBIP</h3><p>A view-rotation button, export to Excel, and instant loading of external changes to the project.</p></div><div class="card"><span class="tag teal">production</span><h3>Bugs and workarounds</h3><p>14 known phenomena, the reason for each, and the fix.</p></div></div><div class="note"><b>Prerequisite:</b> Getting to know the formatting pane, semantic model and refresh. Anyone who took the July lesson will recognize this as the direct continuation of two topics — themes and modeling in the browser.</div>
+</section>
+<section class="page" id="u8p2" data-chap="Chapter I · Design and Themes" data-title="The themes come out of preview" aria-label="Chapter I · Formatting and themes — themes emerge from preview" hidden>
+  <div class="sec-num">Chapter I · Design and Themes</div>
+  <h2 class="sec-title">The themes come out of preview</h2>
+  <p class="sec-sub">What was experimental in July became the default for every new report.</p>
+<h3 style="margin:26px 0 10px">Why Microsoft introduced this</h3><p><b>the pain.</b> Visual consistency across an organization is a matter of trust, not aesthetics. A report where every page looks different creates uncertainty for the reader even when the data is correct — they don't know whether a color difference means something. Until now, consistency was achieved in two poor ways: manual work on every visual, or a JSON file that only one person in the organization knew how to edit.</p><p><b>the vision.</b> To take the theme out of the file and bring it into the interface, so every report creator can define a consistent visual language without writing a line of code — and export it for reuse. In August this becomes generally available and the default, meaning no longer an add-on but the starting point.</p><h3 style="margin:26px 0 10px">What's available now</h3><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the ability</th><th scope="col">details</th></tr></thead><tbody><tr><td data-l="the ability">Base set</td><td data-l="details">New reports open on <b>Fluent 2</b>. You can swap the base palette from the theme pane</td></tr><tr><td data-l="the ability">Color palettes</td><td data-l="details">Choosing and matching a palette for the whole report</td></tr><tr><td data-l="the ability">Text styles</td><td data-l="details">Changing fonts and styles in one place</td></tr><tr><td data-l="the ability">Visual and page properties</td><td data-l="details">Background, border, padding, page size, and wallpaper — for the entire report at once</td></tr><tr><td data-l="the ability">Import and export</td><td data-l="details">A custom theme is saved as a file and used in other reports or organizational themes</td></tr><tr><td data-l="the ability">where</td><td data-l="details"><b>Both in Desktop and in the browser</b> — a substantial change from July, when the experience was Desktop-only</td></tr></tbody></table></div><div class="note"><b>Update to the July lesson:</b> Anyone who learned there that Fluent 2 and the theme pane are available only in Desktop — that is no longer true. Both capabilities are GA and in the browser.</div>
+</section>
+<section class="page" id="u8p3" data-chap="Chapter I · Design and Themes" data-title="The silent change that will break existing themes" aria-label="Chapter I · Design and Themes — the quiet change that will break existing themes" hidden>
+  <div class="sec-num">Chapter I · Design and Themes</div>
+  <h2 class="sec-title">The silent change that will break existing themes</h2>
+  <p class="sec-sub">One line in the official announcement, and an impact you'll feel in every report and file.</p>
+<div class="note"><b>Font overrides have been removed from the base theme.</b> The meaning: the Text section in the theme pane now applies <b>Consistently across all the visuals</b>, instead of the base theme overriding it in certain visuals.</div><p>This sounds like an improvement, and it is one — but it changes the behavior of existing reports. If your organizational theme defined one font and in practice some visuals showed a different font because of an override from the base theme, those visuals may now change appearance.</p><ol class="steps"><li><b>Check before applying</b><span>Open a copy of the central report and swap the base dataset. Compare page by page before touching production.</span></li><li><b>Remember the order of precedence</b><span>Base theme ← custom theme ← manual formatting on a visual. Manual formatting always wins, so manually formatted visuals simply won't respond.</span></li><li><b>Reset correctly</b><span>to zero <b>Single segment</b> In the format pane, not the whole visual — Reset to default also removes button actions, conditional formatting and field-based images.</span></li><li><b>Exported at the end</b><span>Once the theme sits right, export it to a file and add it to the organizational themes.</span></li></ol><div class="sol-check"><b>✓</b> <b>For those who teach or manage a team:</b> This is the moment to set one organizational theme and roll it out, before every analyst discovers the theme pane on their own and produces five different visual languages.</div>
+</section>
+<section class="page" id="u8p4" data-chap="Chapter II · Modeling and refresh" data-title="Semantic model refresh splits into three" aria-label="Chapter II · Modeling and Refresh — Semantic Model Refresh Splits into Three" hidden>
+  <div class="sec-num">Chapter II · Modeling and refresh</div>
+  <h2 class="sec-title">Semantic model refresh splits into three</h2>
+  <p class="sec-sub">The most useful feature this month for anyone managing a model in production.</p>
+<h3 style="margin:26px 0 10px">Why Microsoft introduced this</h3><p><b>the pain.</b> Until now, refresh was a single, indivisible operation. Added a column to the source? Full refresh required. Fixed a field's name? Full refresh. In a model with hundreds of millions of rows, that means waiting an hour and burning capacity — to sync a structural change that takes a second.</p><p><b>The deeper problem.</b> The lack of separation between schema and data turned every small structural change into an operational decision. Teams postponed schema fixes to the nightly refresh window, and in the meantime worked with a model that did not match the source.</p><h3 style="margin:26px 0 10px">The three options in the Refresh button</h3><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the option</th><th scope="col">What it does</th><th scope="col">When to use</th></tr></thead><tbody><tr><td data-l="the option"><b>Refresh schema and data</b></td><td data-l="What it does">The familiar behavior: syncs structure and loads data</td><td data-l="When to use">A routine refresh, or after a change that touches both</td></tr><tr><td data-l="the option"><b>Sync schema only</b></td><td data-l="What it does">Syncs the model structure against the source, without loading data</td><td data-l="When to use">A column was added at the source, a type was changed, a field was added — structural change only</td></tr><tr><td data-l="the option"><b>Refresh data only</b></td><td data-l="What it does">Loading data without touching the schema</td><td data-l="When to use">When the structure is stable and you only want up-to-date data</td></tr></tbody></table></div><div class="note"><b>and additionally — table-level refresh.</b> You can perform refresh operations on a single table rather than the whole model. In a model with ten fact tables, that's the difference between a one-minute refresh and a one-hour refresh.</div><div class="sol-check"><b>✓</b> <b>How this connects to the July lesson:</b> We learned there that TMDL only changes metadata and doesn't refresh, and that you have to refresh manually after changing a Power Query expression. Now this manual refresh is much cheaper — <em>Sync schema only</em> on the table you touched, instead of a full model refresh.</div>
+</section>
+<section class="page" id="u8p5" data-chap="Chapter III · Reporting, images, and OneLake" data-title="OneLake Files as an Image Source" aria-label="Chapter III · Reporting, Images and OneLake — OneLake files as an image source" hidden>
+  <div class="sec-num">Chapter III · Reporting, images, and OneLake</div>
+  <h2 class="sec-title">OneLake Files as an Image Source</h2>
+  <p class="sec-sub">The solution to a problem everyone who's tried to put a logo or employee photo in a report has run into.</p>
+<h3 style="margin:26px 0 10px">Why Microsoft introduced this</h3><p><b>The pain, and a big one.</b> Until now, an image in a Power BI report required a URL <b>Accessible anonymously</b>. Not SharePoint, not OneDrive, nothing behind a login. Organizations that wanted to show employee photos, vendor logos, or product images had to choose between two bad options: expose the images to the open internet, or give up.</p><p><b>What Microsoft did.</b> Power BI is now validating <b>In the viewer's name</b> against OneLake. In other words, the images stay secured inside the organization, and anyone without permission simply doesn't see them — without exposing anything outward.</p><h3 style="margin:26px 0 10px">Where it works</h3><div class="grid g3"><div class="card"><span class="tag">01</span><h3>Image visual</h3><p>Image visual with a OneLake address as source.</p></div><div class="card"><span class="tag">02</span><h3>Table and matrix</h3><p>Images inside cells, like a product image column.</p></div><div class="card"><span class="tag">03</span><h3>Card visual</h3><p>An image in the card, including a hover state added in June.</p></div><div class="card"><span class="tag">04</span><h3>slicers</h3><p>A button slicer and a list slicer with images.</p></div><div class="card"><span class="tag">05</span><h3>Custom icons</h3><p>The Icons component in conditional formatting of a table and matrix.</p></div><div class="card"><span class="tag">06</span><h3>maps</h3><p>A reference layer on the map and Shape map files — they too come from a OneLake address.</p></div></div><div class="note"><b>Why this changes the architecture:</b> OneLake becomes the report's asset repository, not just its data. Logos, icons, TopoJSON files for sales regions — all in one place, permission-managed, and backed up along with the rest of the items.</div>
+</section>
+<section class="page" id="u8p6" data-chap="Chapter III · Reporting, images, and OneLake" data-title="Slicer and matrix — styling and control" aria-label="Chapter III · Reporting, Images, and OneLake — Slicer and Matrix — Formatting and Control" hidden>
+  <div class="sec-num">Chapter III · Reporting, images, and OneLake</div>
+  <h2 class="sec-title">Slicer and matrix — styling and control</h2>
+  <p class="sec-sub">The two most common visuals in an enterprise report get dozens of new options.</p>
+<h3 style="margin:20px 0 10px">Date picker for the slicer — now in GA</h3><p>The feature we taught in June as a preview has reached general availability, with two additions:</p><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the addition</th><th scope="col">What it does</th></tr></thead><tbody><tr><td data-l="the addition"><b>Single date</b></td><td data-l="What it does">A new definition under <span class='mono' dir='ltr'>Visual > Slicer settings > Selection controls</span> that limits the slicer to one date at a time</td></tr><tr><td data-l="the addition">Cleaning from the header</td><td data-l="What it does">You can clear the selection from an icon in the slicer header, without opening the calendar</td></tr><tr><td data-l="the addition">What already existed</td><td data-l="What it does">Relative selections that roll forward with time, a calendar, and a slider for choosing a range or a single date</td></tr></tbody></table></div><h3 style="margin:26px 0 10px">New formatting segments in the slicer</h3><div class="grid g2"><div class="card"><span class="tag teal">Dropdown</span><h3>A new section in the formatting pane</h3><p>Dropdown border color, rounded corners, color and transparency of the open icon, and an Accent bar option.</p></div><div class="card"><span class="tag teal">Hierarchy</span><h3>A new segment added</h3><p>Coloring the expand/collapse icons in the hierarchical slicer — especially important in dark themes.</p></div></div><h3 style="margin:26px 0 10px">matrix</h3><div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the ability</th><th scope="col">details</th></tr></thead><tbody><tr><td data-l="the ability">Expanding and collapsing column headers (GA)</td><td data-l="details">+/- icons when there is more than one field in Columns. The color and size can be adjusted under <span class='mono' dir='ltr'>Column headers > +/- icons</span></td></tr><tr><td data-l="the ability">Freeze mode by default</td><td data-l="details">Sets the freeze state of row headers under <span class='mono' dir='ltr'>Layout > Freeze</span>, and the definition <b>Saved with the report</b></td></tr><tr><td data-l="the ability">Temporary freeze</td><td data-l="details">the right-click freeze options remain, for a one-off change in a session that isn't saved</td></tr></tbody></table></div><div class="sol-check"><b>✓</b> <b>The distinction worth teaching:</b> The setting in the formatting pane is what every reader gets; the right-click is a personal, temporary preference. Until now there was only the second option, so every reader had to freeze it themselves.</div>
+</section>
+<section class="page" id="u8p7" data-chap="Chapter III · Reporting, images, and OneLake" data-title="Charts, maps and comments" aria-label="Chapter III · Reporting, images and OneLake — charts, maps and comments" hidden>
+  <div class="sec-num">Chapter III · Reporting, images, and OneLake</div>
+  <h2 class="sec-title">Charts, maps and comments</h2>
+  <p class="sec-sub">Finishing touches that save manual tweaking.</p>
+<div class="grid g3"><div class="card"><span class="tag">01</span><h3>Outer padding (GA)</h3><p>A new setting under Layout that controls the gap between the edges of the chart area and the first and last category. For column, bar, line, ribbon and waterfall charts. Zero percent fills the area, and combined with Space between categories set to zero — a full fill.</p></div><div class="card"><span class="tag">02</span><h3>Azure Maps — Shape Matching</h3><p>The reference layer renders faster, and filtering, cross-highlighting and zoom respond more smoothly. No configuration change needed.</p></div><div class="card"><span class="tag">03</span><h3>Azure Maps — filtering and zoom</h3><p>When you filter down to a smaller dataset, the map reloads and includes points that were outside the initial 30,000-point limit — and it also automatically focuses on the filtered area.</p></div><div class="card"><span class="tag">04</span><h3>A central value in the donut (GA)</h3><p>A donut chart shows a value at the center without assuming a card above it. Format, display units, font, labels, images and background — and the value updates with filtering, cross-highlighting, drill-down and slice selection.</p></div><div class="card"><span class="tag">05</span><h3>Reviews in enterprise apps</h3><p>You can comment on report pages and on visuals inside an enterprise app, start a discussion and tag with @. The comment retains the current report context.</p></div><div class="card"><span class="tag">06</span><h3>Copilot and bookmarks</h3><p>Copilot Summary and the Copilot Narrative visual now also read visuals that are hidden by default and revealed via bookmark. RLS and OLS continue to be enforced.</p></div></div><div class="note"><b>For anyone who built a report around the 30,000-point limit in Azure Maps:</b> The behavior changed. A filter that previously returned a partial picture will now return the full data points of the filtered region.</div>
+</section>
+<section class="page" id="u8p8" data-chap="Chapter IV · Permissions, mobile, and development" data-title="Fabric Apps — lower-level permission for consumers" aria-label="Chapter IV · Permissions, Mobile, and Development — Fabric Apps — lower permission for consumers" hidden>
+  <div class="sec-num">Chapter IV · Permissions, mobile, and development</div>
+  <h2 class="sec-title">Fabric Apps — lower-level permission for consumers</h2>
+  <p class="sec-sub">A small change in wording, a big one in governance.</p>
+<div class="note"><b>By the end of August:</b> Fabric App consumers will need <b>Read</b> only on the semantic model, instead of <b>Build</b>. App creators still need Build.</div><h3 style="margin:26px 0 10px">Why Microsoft introduced this</h3><p><b>Why this matters.</b> The Build permission isn't just "view". It allows building new content on top of the model: connecting your own report to it, exporting data, and accessing it through the XMLA endpoint. When an app consumer simply requires Build, the organization has effectively given every end user access far broader than they need — and that's exactly the definition of violating the principle of least privilege.</p><p>The change aligns Fabric Apps with what we saw in July in enterprise apps: permissions that match exactly what the user does, and no more.</p><div class="sol-check"><b>✓</b> <b>Recommended action:</b> Go over the users who got Build just to consume an app, and downgrade them to Read. This reduces the exposure surface without hurting anyone.</div>
+</section>
+<section class="page" id="u8p9" data-chap="Chapter IV · Permissions, mobile, and development" data-title="Mobile and development" aria-label="Chapter IV · Permissions, Mobile and Development — Mobile and Development" hidden>
+  <div class="sec-num">Chapter IV · Permissions, mobile, and development</div>
+  <h2 class="sec-title">Mobile and development</h2>
+  <p class="sec-sub">Two mobile improvements that field staff will feel immediately, and one for developers.</p>
+<div class="grid g2"><div class="card"><span class="tag teal">mobile</span><h3>View rotation button</h3><p>button <b>Rotate view</b> In the report's bottom bar on mobile, lets you switch layout with a single tap — <b>Even when the phone is locked in portrait mode</b>. Launched for iOS and Android.</p></div><div class="card"><span class="tag teal">mobile</span><h3>Exporting to Excel from the app</h3><p>Exporting data from a visual directly from the mobile app, via focus mode or the three-dot menu. The export reflects the filtering, slicers, drill-down state, and row-level security.</p></div><div class="card"><span class="tag teal">development</span><h3>Instant loading of PBIP</h3><p>Power BI Desktop detects external changes to project files and offers to apply them with one click. An entry point was also added that opens the project directly in Visual Studio Code.</p></div><div class="card"><span class="tag teal">connectivity</span><h3>Accessibility in Power Query</h3><p>Contrast and readability improvements in the interface across light and dark themes, and connector icons with transparent backgrounds automatically get a white background in dark mode.</p></div></div><div class="note"><b>Why the rotate button is more than it sounds:</b> We learned that the mobile layout is only shown in portrait mode, and tilting the device brings back the regular layout. Users who lock their phone to portrait mode were stuck with only the mobile layout. The button solves this without disabling the lock.</div><div class="sol-check"><b>✓</b> <b>For those working with PBIP and Git:</b> Instant reload closes the loop that started with Desktop Bridge in June. You edit a file in an external editor or an AI agent, and Desktop offers to apply it - without closing and reopening the file.</div>
+</section>
+<section class="page" id="u8p10" data-chap="Chapter V · Messages and Tracking" data-title="What must be marked on the calendar" aria-label="Chapter V · Notifications and Tracking — what must be logged" hidden>
+  <div class="sec-num">Chapter V · Messages and Tracking</div>
+  <h2 class="sec-title">What must be marked on the calendar</h2>
+  <p class="sec-sub">One recurring message worth handling before October.</p>
+<div class="note"><b>Starting from October:</b> Users with Power BI Desktop from March 2026 and earlier <b>won't be able to save and share files to OneDrive and SharePoint</b>. You need to update Power BI Desktop to keep this capability. The message has recurred since June and July — about two months left.</div><h3 style="margin:26px 0 10px">What's worth checking in the organization now</h3><ol class="steps"><li><b>To locate old versions</b><span>to check who on the team is still on a version from before April 2026. In large organizations this is usually whoever does not have installation permissions.</span></li><li><b>To check the themes</b><span>After removing the font overrides, open a copy of a key report and make sure the look has not changed.</span></li><li><b>To remove unnecessary Build permissions</b><span>Users who only consume a Fabric App can be downgraded to Read.</span></li><li><b>Consider split refresh in processes</b><span>Any process that does a full refresh just to sync the schema — a candidate for switching to Sync schema only.</span></li></ol><div class="sol-check"><b>✓</b> <b>Downloadable version:</b> The August 2026 version of Power BI Desktop is available in the Microsoft Download Center. It's always recommended to work with the latest version — older versions don't receive support, and can't open files saved in newer versions.</div>
+</section>
+<section class="page" id="u8p11" data-chap="Chapter VI · Bugs and Workarounds" data-title="14 known phenomena and the solution for each" aria-label="Chapter VI · Bugs and Workarounds — 14 known issues and the fix for each one" hidden>
+  <div class="sec-num">Chapter VI · Bugs and Workarounds</div>
+  <h2 class="sec-title">14 known phenomena and the solution for each</h2>
+  <p class="sec-sub">Based on the official documentation and on behaviors that users report. It is worth reviewing this before updating in production.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">the phenomenon</th><th scope="col">the reason</th><th scope="col">The workaround</th></tr></thead><tbody><tr><td data-l="the phenomenon">Fonts changed in an old report after switching to a new base theme</td><td data-l="the reason">The font overrides were removed from the base theme, so the text section now applies to all the visuals</td><td data-l="The workaround">Test on a copy before production; set the font explicitly in the Text section of the theme pane</td></tr><tr><td data-l="the phenomenon">I swapped the theme and half the visuals didn't respond</td><td data-l="the reason">Manual formatting on a visual always overrides the theme</td><td data-l="The workaround">to reset the relevant section in the formatting pane — not Reset to default on the entire visual</td></tr><tr><td data-l="the phenomenon">Reset to default deleted important settings of mine</td><td data-l="the reason">Fully resetting a visual also removes button actions, conditional formatting rules, images from a URL or field, and alt text labels</td><td data-l="The workaround">To reset just a single section; before a big reset — save a copy of the report</td></tr><tr><td data-l="the phenomenon">Existing pages stayed at the old size after switching the base theme</td><td data-l="the reason">Only new pages get the canvas size of the base theme</td><td data-l="The workaround">Update via the Page section in the theme pane, which applies to all pages at once</td></tr><tr><td data-l="the phenomenon">OneLake image not displayed in the report</td><td data-l="the reason">The viewer doesn't have permission for the file, or the format isn't supported</td><td data-l="The workaround">Power BI authenticates as the viewer — make sure there's permission on the Lakehouse or the folder, and use the supported formats</td></tr><tr><td data-l="the phenomenon">The OneLake address I copied returns an Unauthorized error in the browser</td><td data-l="the reason">OneLake addresses require authentication; a browser check without a token will always fail</td><td data-l="The workaround">Don't check in the browser — check inside the report itself, where the authentication happens</td></tr><tr><td data-l="the phenomenon">A column I originally added doesn't appear in the model</td><td data-l="the reason">Data-only refresh doesn't sync schema</td><td data-l="The workaround">to run <b>Sync schema only</b> or <b>Refresh schema and data</b>, not Refresh data only</td></tr><tr><td data-l="the phenomenon">Refreshing the entire model takes an hour for one small structural change</td><td data-l="the reason">A habit from the era when refresh was a single action</td><td data-l="The workaround">Refresh at the single-table level, and Sync schema only when you don't need data</td></tr><tr><td data-l="the phenomenon">+/- icons don't appear in the matrix's column headers</td><td data-l="the reason">The capability is only active when there's more than one field in Columns</td><td data-l="The workaround">to add a second field to the column hierarchy; color and size are controlled under Column headers > +/- icons</td></tr><tr><td data-l="the phenomenon">Freezing row headers is not saved for users</td><td data-l="the reason">Freezing via right-click is temporary and per-session</td><td data-l="The workaround">Set freeze mode as the default under Layout > Freeze in the formatting pane — this is saved with the report</td></tr><tr><td data-l="the phenomenon">The Azure map now shows more points than before</td><td data-l="the reason">The map reloads on filter and includes points that were outside the 30,000-point limit, and also automatically focuses</td><td data-l="The workaround">Intentional behavior. Reports built around the old limitation — check that the conclusions still hold</td></tr><tr><td data-l="the phenomenon">Fabric App consumers get overly broad access</td><td data-l="the reason">In the past, Build permission was required, which also allows building on top of the model and exporting</td><td data-l="The workaround">From the end of August, Read is enough. Go over the existing permissions and lower</td></tr><tr><td data-l="the phenomenon">The mobile layout is stuck showing even when you want the regular one</td><td data-l="the reason">The device is locked in portrait mode, and the mobile layout loads automatically</td><td data-l="The workaround">button <b>Rotate view</b> In the footer it swaps the layout on click, without releasing the lock</td></tr><tr><td data-l="the phenomenon">A change I made in an external editor isn't visible in Desktop</td><td data-l="the reason">Until now, Desktop hasn't detected external changes to PBIP files</td><td data-l="The workaround">From the August version, a prompt is shown to apply the change with one click; if it does not appear — make sure the project is open as PBIP and not as pbix</td></tr></tbody></table></div>
+</section>
+<section class="page" id="u8p12" data-chap="Chapter VII · Self-check" data-title="Quiz — 12 questions" aria-label="Chapter VII · Self-Check — Quiz — 12 questions" hidden>
+  <div class="sec-num">Chapter VII · Self-check</div>
+  <h2 class="sec-title">Quiz — 12 questions</h2>
+  <p class="sec-sub">One question at a time. A correct answer is colored green, an incorrect one red, and the correct answer is always revealed along with a full technical explanation.</p>
+<div class="quiz" id="quiz-u8"><article class="q-item" data-correct="c"><h3 class="q-text" id="u8q1">On which base theme will a new report open, from the August 2026 version?</h3><div class="q-opts" role="group" aria-labelledby="u8q1"><button type="button" class="q-opt" data-key="a">Classic 2018</button><button type="button" class="q-opt" data-key="b">Classic 2026</button><button type="button" class="q-opt" data-key="c">Fluent 2</button><button type="button" class="q-opt" data-key="d">Depends on the organization's settings</button></div><div class="q-exp" role="status"><b>explanation:</b> With the move to general availability, Fluent 2 went from a preview theme to the default for every new report. In July it was still experimental and required manual activation, in Desktop only. You can still switch the base theme to Classic 2026 or Classic 2018 from the theme pane, for example for consistency with older reports in the organization.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u8q2">What does removing the base system font overrides mean?</h3><div class="q-opts" role="group" aria-labelledby="u8q2"><button type="button" class="q-opt" data-key="a">You can no longer change fonts</button><button type="button" class="q-opt" data-key="b">The text box now applies consistently to all the visuals</button><button type="button" class="q-opt" data-key="c">The font is determined by the browser</button><button type="button" class="q-opt" data-key="d">You need to set the font for each visual separately</button></div><div class="q-exp" role="status"><b>explanation:</b> In the past, the base theme overrode the font setting in certain visuals, so a theme that defined one font didn't always actually get applied. Now the Text section in the theme panel applies uniformly to everything. This is an improvement — but it <b>Changes the behavior of existing reports</b>, so it's essential to test on a copy before applying in production.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u8q3">You added a new column at the data source. Which refresh operation will sync it most cheaply?</h3><div class="q-opts" role="group" aria-labelledby="u8q3"><button type="button" class="q-opt" data-key="a">Sync schema only</button><button type="button" class="q-opt" data-key="b">Refresh data only</button><button type="button" class="q-opt" data-key="c">Refresh schema and data</button><button type="button" class="q-opt" data-key="d">Either one, there's no difference</button></div><div class="q-exp" role="status"><b>explanation:</b> Sync schema only synchronizes the model structure against the source without loading data — exactly what's needed for a structural change. Refresh data only is the opposite, and so <b>no</b> will bring the column, and that's a common mistake. Refresh schema and data will work but will pay for a full load that isn't needed. In a large model that's the difference between a second and an hour.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u8q4">What's distinctive about an image sourced from a OneLake address compared to a regular address?</h3><div class="q-opts" role="group" aria-labelledby="u8q4"><button type="button" class="q-opt" data-key="a">It loads faster</button><button type="button" class="q-opt" data-key="b">It must be public</button><button type="button" class="q-opt" data-key="c">Power BI authenticates as the viewer, so the image stays secure</button><button type="button" class="q-opt" data-key="d">It's saved inside the pbix file</button></div><div class="q-exp" role="status"><b>explanation:</b> That's exactly the problem this feature solves. Until now, an image in a report required an anonymously accessible URL — not SharePoint, not OneDrive, nothing behind a login. Organizations were forced to choose between exposing images to the open internet or giving up on them. Now Power BI performs the authentication on the viewer's behalf, so anyone without permission simply doesn't see it — with no external exposure.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u8q5">The expand/collapse icons for column headers in the matrix aren't showing up. What's probably missing?</h3><div class="q-opts" role="group" aria-labelledby="u8q5"><button type="button" class="q-opt" data-key="a">Enabling the preview</button><button type="button" class="q-opt" data-key="b">The second field in the column hierarchy</button><button type="button" class="q-opt" data-key="c">Model refresh</button><button type="button" class="q-opt" data-key="d">Write permission on the report</button></div><div class="q-exp" role="status"><b>explanation:</b> The capability is only active when there’s more than one field in the Columns area — without a hierarchy there’s nothing to expand or collapse. The feature is generally available, so it doesn’t require a preview, and it isn’t related to refresh or permissions. Once there’s a hierarchy, you can control the color and size of the icons under Column headers and then +/- icons.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u8q6">What's the difference between freezing row headers in the formatting pane versus freezing with a right-click?</h3><div class="q-opts" role="group" aria-labelledby="u8q6"><button type="button" class="q-opt" data-key="a">In the format pane it's saved with the report; via right-click it's temporary and per-session</button><button type="button" class="q-opt" data-key="b">No difference</button><button type="button" class="q-opt" data-key="c">With a right-click the freeze is stronger</button><button type="button" class="q-opt" data-key="d">In the format pane this only works on mobile</button></div><div class="q-exp" role="status"><b>explanation:</b> This is the important distinction in the feature. Until now there was only right-click, meaning every reader had to freeze it themselves each time anew. The setting under Layout then Freeze is saved with the report, so it’s what every reader gets by default. Right-click remains as a temporary personal preference, and that’s the right combination.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u8q7">What permission will Fabric App consumers need on the semantic model starting end of August?</h3><div class="q-opts" role="group" aria-labelledby="u8q7"><button type="button" class="q-opt" data-key="a">Build</button><button type="button" class="q-opt" data-key="b">Admin</button><button type="button" class="q-opt" data-key="c">Read</button><button type="button" class="q-opt" data-key="d">No permission needed</button></div><div class="q-exp" role="status"><b>explanation:</b> The change from Build to Read is a significant governance shift. Build isn't just viewing: it allows connecting new reports on top of the model, exporting data, and accessing it through the XMLA endpoint. When an app consumer was required to have Build, the organization was effectively granting every end user far broader access than they needed. App creators still need Build.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u8q8">What does the Outer padding setting do in a bar chart?</h3><div class="q-opts" role="group" aria-labelledby="u8q8"><button type="button" class="q-opt" data-key="a">Spacing between the columns themselves</button><button type="button" class="q-opt" data-key="b">Gap between the edges of the chart area and the first and last category</button><button type="button" class="q-opt" data-key="c">Padding around the whole visual</button><button type="button" class="q-opt" data-key="d">Spacing between the title and the chart</button></div><div class="q-exp" role="status"><b>explanation:</b> The setting is under Layout and controls only the spacing at the edges of the chart area. The gap <b>between</b> The categories are controlled by a separate setting called Space between categories, and to fill the chart area completely you need to set both to zero percent. The setting is available for columns, bars, line, ribbon and waterfall.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u8q9">A user has locked their phone in portrait mode and wants to see the regular layout. What is the fix as of August?</h3><div class="q-opts" role="group" aria-labelledby="u8q9"><button type="button" class="q-opt" data-key="a">The Rotate view button in the report's bottom header</button><button type="button" class="q-opt" data-key="b">To unlock the rotation</button><button type="button" class="q-opt" data-key="c">To open the report in the browser</button><button type="button" class="q-opt" data-key="d">There's no solution, it's a limitation</button></div><div class="q-exp" role="status"><b>explanation:</b> Until now, the mobile layout loaded automatically in portrait mode, and the only way to get back to the regular layout was to tilt the device — which doesn't work when rotation is locked. The Rotate view button switches layouts with a single tap, without touching device settings. Opening it in a browser will indeed always show the regular layout, but that's a workaround, not the solution this update offers.</div></article><article class="q-item" data-correct="c"><h3 class="q-text" id="u8q10">You changed the base theme and the existing pages stayed at the old size. Why?</h3><div class="q-opts" role="group" aria-labelledby="u8q10"><button type="button" class="q-opt" data-key="a">Need to refresh the model</button><button type="button" class="q-opt" data-key="b">The base theme wasn't saved</button><button type="button" class="q-opt" data-key="c">Only new pages get the canvas size of the base theme</button><button type="button" class="q-opt" data-key="d">This is a bug with no fix</button></div><div class="q-exp" role="status"><b>explanation:</b> Switching the base theme doesn't change the size of pages that already exist in the report — deliberate behavior, so as not to break layouts. The solution is the Page section in the theme pane, which updates page size, background color and wallpaper for all pages at once instead of going page by page.</div></article><article class="q-item" data-correct="b"><h3 class="q-text" id="u8q11">You copied a OneLake address and pasted it into a browser — you get an Unauthorized error. What does that mean?</h3><div class="q-opts" role="group" aria-labelledby="u8q11"><button type="button" class="q-opt" data-key="a">The file is corrupt</button><button type="button" class="q-opt" data-key="b">Nothing — OneLake addresses require authentication, and checking in a browser without a token will always fail</button><button type="button" class="q-opt" data-key="c">You don't have permission for the file</button><button type="button" class="q-opt" data-key="d">The file needs to be made public</button></div><div class="q-exp" role="status"><b>explanation:</b> This is a common diagnostic mistake. The address requires an auth token, and a browser where you paste the address directly doesn’t send it — even if you’re logged into the service. The correct check is inside the report itself, where Power BI performs the authentication on the viewer’s behalf. And making the file public is exactly what the feature is meant to prevent.</div></article><article class="q-item" data-correct="a"><h3 class="q-text" id="u8q12">How does this update make working with TMDL, which we learned in July, cheaper?</h3><div class="q-opts" role="group" aria-labelledby="u8q12"><button type="button" class="q-opt" data-key="a">You can sync just the schema after a change, instead of a full refresh</button><button type="button" class="q-opt" data-key="b">TMDL now refreshes automatically</button><button type="button" class="q-opt" data-key="c">A refresh is no longer needed</button><button type="button" class="q-opt" data-key="d">TMDL moved to table level</button></div><div class="q-exp" role="status"><b>explanation:</b> In July we learned that TMDL changes metadata only and doesn't refresh, so after a change to a Power Query expression or a calculated column a manual refresh was required — which was costly. Now you can run Sync schema only, even at the level of a single table. TMDL itself hasn't changed and still doesn't refresh — what's changed is <b>price</b> the refresh that follows it.</div></article></div><div class="quiz-summary" role="status" aria-live="polite"><div class="qs-bar"><span class="qs-fill"></span></div><p class="qs-text">You haven't answered questions yet — 0 out of 12</p></div><div class="quiz-actions"><button type="button" class="btn ghost quiz-reset">Resetting the quiz</button></div>
+</section>
+<section class="page" id="u8p13" data-chap="Chapter VII · Self-check" data-title="Summary and next steps" aria-label="Chapter VII · Self-Check — Summary and what's next" hidden>
+  <div class="sec-num">Chapter VII · Self-check</div>
+  <h2 class="sec-title">Summary and next steps</h2>
+  <p class="sec-sub">Ten rows that summarize the lesson.</p>
+<div class="tbl-wrap stack"><table class="cmp"><thead><tr><th scope="col">topic</th><th scope="col">what to remember</th></tr></thead><tbody><tr><td data-l="topic">themes</td><td data-l="what to remember">Fluent 2 by default, the theme panel in GA also in the browser, import and export for organizational themes</td></tr><tr><td data-l="topic">Priority order in design</td><td data-l="what to remember">Base theme ← custom theme ← manual formatting. Manual always wins</td></tr><tr><td data-l="topic">Font warning</td><td data-l="what to remember">The font overrides were removed from the base theme — check old reports on a copy</td></tr><tr><td data-l="topic">refresh</td><td data-l="what to remember">Three separate actions, also at the table level. Sync schema only is the new and useful one</td></tr><tr><td data-l="topic">OneLake</td><td data-l="what to remember">Secured images in the report, authenticated as the viewer — instead of a public URL</td></tr><tr><td data-l="topic">slicer</td><td data-l="what to remember">Date picker in GA with Single date, and new Dropdown and Hierarchy segments</td></tr><tr><td data-l="topic">matrix</td><td data-l="what to remember">Expanding and collapsing columns in GA, and row freezing that's saved with the report</td></tr><tr><td data-l="topic">permissions</td><td data-l="what to remember">Fabric App consumers drop from Build to Read starting end of August</td></tr><tr><td data-l="topic">mobile</td><td data-l="what to remember">A view-rotation button, and export to Excel that respects filtering and RLS</td></tr><tr><td data-l="topic">to mark in the calendar</td><td data-l="what to remember">October — Desktop versions from March 2026 and earlier lose the ability to save to OneDrive and SharePoint</td></tr></tbody></table></div><div class="next-cta"><h2>You finished the August update</h2><p>The last three updates tell one story: logic, model, report, and design — everything becomes something you can manage, version, and share.</p><div class="quiz-actions" style="justify-content:center"><a class="btn" href="pbi-lesson-2026-07.html">To the July 2026 update ←</a><a class="btn ghost" href="pbi-updates.html">All the updates</a><button type="button" class="btn ghost" data-goto="u8p1">To the start of the lesson</button></div></div>
+</section>
+<nav class="pager" aria-label="Navigation between lesson topics">
+  <button type="button" class="pg-btn" id="pg-prev">
+    <span class="pg-dir">→ Previous</span><span class="pg-name" id="pg-prev-name"></span>
+  </button>
+  <button type="button" class="pg-btn next" id="pg-next">
+    <span class="pg-dir">Next ←</span><span class="pg-name" id="pg-next-name"></span>
+  </button>
+</nav>
+<p class="pg-hint">You can also navigate with the buttons at the top of the screen, keyboard arrows, and on phone with a swipe</p>
+<div class="lesson-jump">
+  <a class="btn ghost" href="pbi-lesson-2026-07.html">To the July 2026 update ←</a>
+  <a class="btn ghost" href="pbi-updates.html">All Power BI updates ←</a>
+  <button type="button" class="btn ghost" id="open-lessons">All course lessons</button>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Power BI · Updates Module — August 2026 · <a href="index.html">SQL with Eliran</a></p>
+  </div>
+</footer>
+</div><!-- /scroller -->
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="An enlarged view of the screenshot">
+  <div class="lb-bar">
+    <button type="button" class="lb-close" id="lb-close">Close ✕</button>
+    <button type="button" class="lb-zoom" id="lb-zoom" aria-pressed="false">Full size</button>
+    <span id="lb-cap"></span>
+  </div>
+  <div class="lb-body"><img id="lb-img" src="" alt=""></div>
+</div>
+
+<div class="drawer-back" id="drawer-back" hidden></div>
+<aside class="drawer" id="drawer" hidden role="dialog" aria-modal="true" aria-label="The lesson's topic list">
+  <div class="drawer-head">
+    <b>The lesson topics</b>
+    <button type="button" class="drawer-x" id="drawer-x" aria-label="Closing the topic list">✕</button>
+  </div>
+  <nav class="drawer-lessons" aria-label="Navigation between course lessons">
+    <div class="dl-head">Course lessons</div>
+    <div class="dl-list"><a class="dl-item" href="pbi-course.html"><span class="dl-n">1</span><span class="dl-t">Power BI basics</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-course-2.html"><span class="dl-n">2</span><span class="dl-t">Data modeling</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-course-3.html"><span class="dl-n">3</span><span class="dl-t">Power Query and ETL</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-course-4.html"><span class="dl-n">4</span><span class="dl-t">M and DAX basics</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-lesson-2026-06.html"><span class="dl-n">06</span><span class="dl-t">June 2026 update</span><span class="dl-s">Transition ←</span></a><a class="dl-item" href="pbi-lesson-2026-07.html"><span class="dl-n">07</span><span class="dl-t">July 2026 update</span><span class="dl-s">Transition ←</span></a><div class="dl-item is-current" aria-current="page"><span class="dl-n">08</span><span class="dl-t">August 2026 update</span><span class="dl-s">you are here</span></div></div>
+    <a class="dl-home" href="pbi-updates.html">→ All Power BI updates</a>
+  </nav>
+  <div class="toc" id="toc"><div class="toc-chap">opening</div><button type="button" class="toc-item" data-go="0"><span class="toc-n">01</span><span class="toc-t">How the lesson works</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter I · Design and Themes</div><button type="button" class="toc-item" data-go="1"><span class="toc-n">02</span><span class="toc-t">The themes come out of preview</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="2"><span class="toc-n">03</span><span class="toc-t">The silent change that will break existing themes</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter II · Modeling and refresh</div><button type="button" class="toc-item" data-go="3"><span class="toc-n">04</span><span class="toc-t">Semantic model refresh splits into three</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter III · Reporting, images, and OneLake</div><button type="button" class="toc-item" data-go="4"><span class="toc-n">05</span><span class="toc-t">OneLake Files as an Image Source</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="5"><span class="toc-n">06</span><span class="toc-t">Slicer and matrix — styling and control</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="6"><span class="toc-n">07</span><span class="toc-t">Charts, maps and comments</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter IV · Permissions, mobile, and development</div><button type="button" class="toc-item" data-go="7"><span class="toc-n">08</span><span class="toc-t">Fabric Apps — lower-level permission for consumers</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="8"><span class="toc-n">09</span><span class="toc-t">Mobile and development</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter V · Messages and Tracking</div><button type="button" class="toc-item" data-go="9"><span class="toc-n">10</span><span class="toc-t">What must be marked on the calendar</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter VI · Bugs and Workarounds</div><button type="button" class="toc-item" data-go="10"><span class="toc-n">11</span><span class="toc-t">14 known phenomena and the solution for each</span><span class="toc-done" aria-hidden="true">✓</span></button><div class="toc-chap">Chapter VII · Self-check</div><button type="button" class="toc-item" data-go="11"><span class="toc-n">12</span><span class="toc-t">Quiz — 12 questions</span><span class="toc-done" aria-hidden="true">✓</span></button><button type="button" class="toc-item" data-go="12"><span class="toc-n">13</span><span class="toc-t">Summary and next steps</span><span class="toc-done" aria-hidden="true">✓</span></button></div>
+  <div class="drawer-foot">
+    <button type="button" class="btn ghost" id="toc-reset">Resetting progress</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+"use strict";
+
+/* Each module is isolated: a failure in one must never break the others. */
+function mod(name,fn){ try{ fn(); }catch(err){ if(window.console)console.error('[pbi-course] '+name,err); } }
+function $(sel,root){ return (root||document).querySelector(sel); }
+function $$(sel,root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+var SCROLLER=document.getElementById('scroller');
+function scrollTop0(){ if(SCROLLER)SCROLLER.scrollTop=0; else try{ window.scrollTo(0,0); }catch(e){} }
+function lockScroll(on){ if(SCROLLER)SCROLLER.style.overflowY=on?'hidden':''; }
+
+
+/* ---------- measure the fixed header stack (header + progress + topic bar) ---------- */
+
+/* ---------- paged lesson router ---------- */
+var LESSON={pages:[],index:0,go:function(){}}; window.LESSON=LESSON;
+mod('router',function(){
+  var pages=$$('.page'); if(!pages.length)return;
+  var total=pages.length;
+  var bar=$('#pbar'), tbChap=$('#tb-chap'), tbTitle=$('#tb-title'), tbCount=$('#tb-count');
+  var prev=$('#pg-prev'), next=$('#pg-next'), prevName=$('#pg-prev-name'), nextName=$('#pg-next-name');
+  var tbPrev=$('#tb-prev'), tbNext=$('#tb-next'), tbHome=$('#tb-home');
+  var tocItems=$$('.toc-item'), hero=$('#hero-block');
+  var KEY='pbi-u08-page-v1', VKEY='pbi-u08-visited-v1';
+  var visited={};
+  try{ visited=JSON.parse(localStorage.getItem(VKEY)||'{}')||{}; }catch(e){ visited={}; }
+
+  function save(i){
+    try{
+      localStorage.setItem(KEY,String(i));
+      visited[i]=1; localStorage.setItem(VKEY,JSON.stringify(visited));
+    }catch(e){}
+  }
+  function markVisited(){
+    tocItems.forEach(function(it,k){ it.classList.toggle('visited',!!visited[k]); });
+  }
+  function show(i,push,noScroll){
+    i=Math.max(0,Math.min(total-1,i));
+    if(allOn && LESSON.setAll)document.body.classList.remove('all-topics'), allOn=false;
+    pages.forEach(function(pg,k){
+      var on=(k===i);
+      pg.hidden=!on; pg.style.display=on?'':'none';
+    });
+    LESSON.index=i;
+    var cur=pages[i];
+    if(tbChap)tbChap.textContent=cur.dataset.chap||'';
+    if(tbTitle)tbTitle.textContent=cur.dataset.title||'';
+    if(tbCount)tbCount.textContent=(i+1)+' / '+total;
+    if(bar)bar.style.width=((i+1)/total*100)+'%';
+    if(hero){ hero.hidden=(i>0); hero.style.display=(i>0)?'none':''; }
+    if(prev){
+      prev.disabled=(i===0);
+      if(prevName)prevName.textContent=i>0?pages[i-1].dataset.title:'';
+    }
+    if(next){
+      next.disabled=(i===total-1);
+      if(nextName)nextName.textContent=i<total-1?pages[i+1].dataset.title:'You finished the lesson';
+    }
+    /* the top strip mirrors the pager, and names its target for screen readers */
+    if(tbHome){
+      tbHome.disabled=(i===0);
+      tbHome.setAttribute('aria-label',i===0?'You\'re on the first page of the lesson':'Back to the first page of the lesson');
+    }
+    if(tbPrev){
+      tbPrev.disabled=(i===0);
+      tbPrev.setAttribute('aria-label',i>0?('The previous topic — '+pages[i-1].dataset.title):'This is the first topic');
+    }
+    if(tbNext){
+      tbNext.disabled=(i===total-1);
+      tbNext.setAttribute('aria-label',i<total-1?('The next topic — '+pages[i+1].dataset.title):'This is the last topic');
+    }
+    tocItems.forEach(function(it,k){ it.classList.toggle('on',k===i); });
+    if(typeof syncQuizBtn==='function')syncQuizBtn(i);
+    save(i); markVisited();
+    if(push){
+      try{
+        if(window.history && history.replaceState) history.replaceState(null,'','#'+cur.id);
+        else window.location.hash=cur.id;
+      }catch(e){/* sandboxed/file:// contexts forbid history writes — navigation must continue */}
+    }
+    if(!noScroll)scrollTop0();
+    if(push){                       /* land the caret inside the new topic, not back at the top of the DOM */
+      var h=cur.querySelector('.sec-title');
+      if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(e){ h.focus(); } }
+    }
+    try{ document.title=(cur.dataset.title||'')+' · Power BI basics'; }catch(e){}
+  }
+  LESSON.pages=pages; LESSON.go=function(i){show(i,true);};
+
+  if(prev)prev.addEventListener('click',function(){show(LESSON.index-1,true);});
+  if(next)next.addEventListener('click',function(){show(LESSON.index+1,true);});
+  if(tbHome)tbHome.addEventListener('click',function(){ show(0,true); });   /* always one tap from the opening topic */
+  if(tbPrev)tbPrev.addEventListener('click',function(){show(LESSON.index-1,true);});
+  if(tbNext)tbNext.addEventListener('click',function(){show(LESSON.index+1,true);});
+  tocItems.forEach(function(it,k){
+    it.addEventListener('click',function(){ show(k,true); closeDrawer(); });
+  });
+
+  /* contents list on the opening topic — the whole lesson at a glance */
+  var lt=$('#lesson-toc');
+  if(lt){
+    var html='<h3>Full lesson contents</h3><p class="lt-sub">'+total+' topics. You can jump directly to any of them, or go topic by topic with the buttons at the top of the screen.</p>';
+    var lastChap=null, open=false;
+    pages.forEach(function(pg,k){
+      if(pg.dataset.chap!==lastChap){
+        if(open)html+='</div>';
+        html+='<div class="lt-chap">'+pg.dataset.chap+'</div><div class="lt-items">';
+        lastChap=pg.dataset.chap; open=true;
+      }
+      html+='<button type="button" class="lt-item" data-go="'+k+'"><span class="n">'+
+            (k+1<10?'0':'')+(k+1)+'</span><span>'+pg.dataset.title+'</span></button>';
+    });
+    if(open)html+='</div>';
+    html+='<div class="lt-actions"><button type="button" class="btn ghost" id="lt-all">Show the whole lesson in one sequence</button></div>';
+    lt.innerHTML=html;
+    $$('.lt-item',lt).forEach(function(b){
+      b.addEventListener('click',function(){ show(+b.dataset.go,true); });
+    });
+  }
+
+  /* continuous mode — every topic in one scroll, for review or for teaching from the page */
+  var allBar=$('#all-bar'), allOn=false;
+  function setAll(on){
+    allOn=on;
+    document.body.classList.toggle('all-topics',on);
+    pages.forEach(function(pg,k){
+      if(on){ pg.hidden=false; pg.style.display=''; }
+      else { var vis=(k===LESSON.index); pg.hidden=!vis; pg.style.display=vis?'':'none'; }
+    });
+    var hero=$('#hero-block');
+    if(hero && on){ hero.hidden=false; hero.style.display=''; }
+    if(tbTitle)tbTitle.textContent=on?'The whole lesson in sequence':pages[LESSON.index].dataset.title;
+    if(tbCount)tbCount.textContent=on?(total+' / '+total):((LESSON.index+1)+' / '+total);
+    scrollTop0();
+  }
+  var ltAll=$('#lt-all');
+  if(ltAll)ltAll.addEventListener('click',function(){ setAll(true); closeDrawer(); });
+  var allExit=$('#all-exit');
+  if(allExit)allExit.addEventListener('click',function(){ setAll(false); show(LESSON.index,true); });
+  LESSON.setAll=setAll;
+
+  /* the questions block: self-check quiz → homework → multiple-choice quiz.
+     One button in the strip owns it, and it always leads back to the first questions page. */
+  var Q_IDS=['u8p12'];
+  var qIdx=[];
+  Q_IDS.forEach(function(id){ pages.forEach(function(pg,k){ if(pg.id===id)qIdx.push(k); }); });
+  qIdx.sort(function(a,b){return a-b;});
+  var qFirst=qIdx.length?qIdx[0]:-1;
+  var quizBtn=$('#tb-quiz'), quizLabel=$('#tb-quiz-label'), quizShort=$('#tb-quiz-short'), returnTo=null;
+  if(quizBtn && qFirst<0) quizBtn.hidden=true;
+  function syncQuizBtn(i){
+    if(!quizBtn||qFirst<0)return;
+    var atFirst=(i===qFirst), inBlock=(qIdx.indexOf(i)>-1);
+    quizBtn.classList.toggle('on-quiz',atFirst);
+    var label=atFirst?'Back to the lesson':(inBlock?'To the start of the quiz':'for the test');
+    var short=atFirst?'return':(inBlock?'to the beginning':'for the test');
+    if(quizLabel) quizLabel.textContent=label;
+    if(quizShort) quizShort.textContent=short;
+    quizBtn.setAttribute('aria-label',atFirst
+      ? 'Back to the topic you came from'
+      : (inBlock?'Back to the quiz page':'for the test — 12 questions on this update'));
+    /* the strip inside the questions pages marks where you are */
+    $$('.qnav-b').forEach(function(b){
+      var on=(b.getAttribute('data-goto')===pages[i].id);
+      b.classList.toggle('is-on',on);
+      if(on)b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
+  }
+  var practiceIdx=-1;
+  pages.forEach(function(pg,k){ if(pg.querySelector('.tasks')) practiceIdx=k; });
+  var goPractice=$('#go-practice');
+  if(goPractice)goPractice.addEventListener('click',function(){ if(practiceIdx>=0)show(practiceIdx,true); });
+
+  /* any control with data-goto="<page id>" jumps to that topic */
+  $$('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=b.getAttribute('data-goto');
+      for(var k=0;k<pages.length;k++){ if(pages[k].id===id){ show(k,true); break; } }
+    });
+  });
+
+  if(quizBtn)quizBtn.addEventListener('click',function(){
+    if(qFirst<0)return;
+    if(LESSON.index===qFirst){
+      show(returnTo!==null?returnTo:0,true);          /* back to the topic you came from */
+    }else{
+      if(qIdx.indexOf(LESSON.index)<0) returnTo=LESSON.index;   /* remember only lesson topics */
+      show(qFirst,true);
+    }
+  });
+
+  /* drawer */
+  var drawer=$('#drawer'), back=$('#drawer-back'), menu=$('#tb-menu'), x=$('#drawer-x');
+  var lastFocus=null;
+  function focusables(){
+    return $$('button:not([disabled])',drawer);
+  }
+  function trap(e){
+    if(e.key!=='Tab'||!drawer||drawer.hidden)return;
+    var f=focusables(); if(!f.length)return;
+    var first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  function openDrawer(){
+    if(!drawer)return;
+    lastFocus=document.activeElement;
+    drawer.hidden=false; if(back)back.hidden=false;
+    if(menu)menu.setAttribute('aria-expanded','true');
+    lockScroll(true);
+    document.addEventListener('keydown',trap,true);
+    var on=$('.toc-item.on'); if(on){on.focus();on.scrollIntoView({block:'center'});}
+  }
+  function closeDrawer(){
+    if(!drawer||drawer.hidden)return;
+    drawer.hidden=true; if(back)back.hidden=true;
+    if(menu)menu.setAttribute('aria-expanded','false');
+    lockScroll(false);
+    document.removeEventListener('keydown',trap,true);
+    var restorable=lastFocus&&document.contains(lastFocus)&&
+      (lastFocus.matches?lastFocus.matches('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'):false);
+    var target=restorable?lastFocus:menu;
+    if(target&&target.focus)target.focus();
+  }
+  if(menu)menu.addEventListener('click',function(){ drawer && drawer.hidden?openDrawer():closeDrawer(); });
+  if(x)x.addEventListener('click',closeDrawer);
+  if(back)back.addEventListener('click',closeDrawer);
+
+  var drawerAll=document.createElement('button');
+  drawerAll.type='button'; drawerAll.className='btn ghost'; drawerAll.id='drawer-all';
+  drawerAll.textContent='The whole lesson in sequence';
+  drawerAll.style.marginBottom='8px';
+  drawerAll.addEventListener('click',function(){ setAll(true); closeDrawer(); });
+  var foot=$('.drawer-foot'); if(foot)foot.insertBefore(drawerAll,foot.firstChild);
+
+  var resetBtn=$('#toc-reset');
+  if(resetBtn)resetBtn.addEventListener('click',function(){
+    visited={};
+    try{localStorage.removeItem(VKEY);localStorage.removeItem(KEY);}catch(e){}
+    markVisited(); show(0,true); closeDrawer();
+  });
+
+  /* touch: swipe across the page moves between topics, like flipping a slide.
+     Ignored inside anything that scrolls sideways on its own, and while an overlay is open. */
+  var tx=0, ty=0, tracking=false;
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){ tracking=false; return; }
+    var t=e.target;
+    if(t&&t.closest&&t.closest('.tbl-wrap,.drawer,.lightbox,figure.shot,input[type="range"],.topicbar')){ tracking=false; return; }
+    if(document.body.classList.contains('all-topics')){ tracking=false; return; }
+    var d=$('#drawer'), lb=$('#lightbox');
+    if((d&&!d.hidden)||(lb&&!lb.hidden)){ tracking=false; return; }
+    tx=e.touches[0].clientX; ty=e.touches[0].clientY; tracking=true;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!tracking)return; tracking=false;
+    var t=e.changedTouches&&e.changedTouches[0]; if(!t)return;
+    var dx=t.clientX-tx, dy=t.clientY-ty;
+    if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.6)return;   /* horizontal, and clearly deliberate */
+    show(LESSON.index+(dx<0?1:-1),true);                        /* RTL: swipe left = next topic */
+  },{passive:true});
+
+  /* keyboard: arrows move between topics, Esc closes drawer */
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){ closeDrawer(); return; }
+    var t=e.target, tag=t&&t.tagName;
+    if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||(t&&t.isContentEditable))return;
+    if(t&&t.closest&&t.closest('[role="tablist"],[role="tab"]'))return;   /* tabs own the arrows */
+    if(drawer&&!drawer.hidden)return;
+    if(e.key==='ArrowLeft'){ e.preventDefault(); show(LESSON.index+1,true); }   /* RTL: left = forward */
+    else if(e.key==='ArrowRight'){ e.preventDefault(); show(LESSON.index-1,true); }
+  });
+
+  window.addEventListener('hashchange',function(){
+    var id=''; try{ id=location.hash.slice(1); }catch(e){ return; }
+    var k=pages.findIndex?pages.findIndex(function(pg){return pg.id===id;}):-1;
+    if(k>=0 && k!==LESSON.index) show(k,false);
+  });
+
+  /* opening position: hash wins, then last saved page */
+  var startIdx=0, hashId='';
+  try{ hashId=location.hash.slice(1); }catch(e){}
+  var byHash=-1;
+  pages.forEach(function(pg,k){ if(pg.id===hashId) byHash=k; });
+  if(byHash>=0) startIdx=byHash;
+  else{ try{ var saved=parseInt(localStorage.getItem(KEY),10); if(!isNaN(saved)) startIdx=saved; }catch(e){} }
+  show(startIdx,false,true);
+});
+
+/* ---------- DIKW pyramid ---------- */
+mod('dikw',function(){
+  $$('#dikw button').forEach(function(btn){
+    var panel=document.getElementById(btn.getAttribute('aria-controls'));
+    if(!panel)return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      panel.classList.toggle('open',!open);
+    });
+  });
+});
+
+/* ---------- analyst time bars ---------- */
+mod('bars',function(){
+  var bars=$('#bars'); if(!bars)return;
+  var fills=$$('.bar-fill',bars);
+  function fill(){ fills.forEach(function(f){ f.style.width=(f.dataset.w||0)+'%'; }); }
+  var page=bars.closest('.page');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting) fill(); });
+    },{threshold:.25});
+    io.observe(bars);
+  }
+  /* pages are display:none until opened, so also fill whenever this topic becomes visible */
+  if(page && 'MutationObserver' in window){
+    new MutationObserver(function(){ if(!page.hidden) setTimeout(fill,60); })
+      .observe(page,{attributes:true,attributeFilter:['hidden']});
+  }
+  if(!page || !page.hidden) fill();
+  setTimeout(function(){ if(!page||!page.hidden) fill(); },1200);
+});
+
+/* ---------- before / after toggle ---------- */
+mod('beforeAfter',function(){
+  var bBefore=$('#ba-before'), bAfter=$('#ba-after');
+  var lBefore=$('#ba-list-before'), lAfter=$('#ba-list-after');
+  if(!bBefore||!bAfter||!lBefore||!lAfter)return;
+  function set(after){
+    bBefore.setAttribute('aria-pressed',String(!after));
+    bAfter.setAttribute('aria-pressed',String(after));
+    lBefore.hidden=after;  lBefore.style.display=after?'none':'';
+    lAfter.hidden=!after;  lAfter.style.display=after?'':'none';
+  }
+  bBefore.addEventListener('click',function(){set(false);});
+  bAfter.addEventListener('click',function(){set(true);});
+  set(false);
+});
+
+/* ---------- 8 reasons accordion ---------- */
+mod('reasons',function(){
+  $$('.reason>button').forEach(function(btn){
+    var body=btn.parentElement.querySelector('.body'); if(!body)return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.classList.toggle('open',!open);
+    });
+  });
+});
+
+/* ---------- tabs (scoped per tablist) ---------- */
+mod('tabs',function(){
+  $$('[role="tablist"]').forEach(function(list){
+    var tabs=$$('[role="tab"]',list); if(!tabs.length)return;
+    function select(tab,focus){
+      tabs.forEach(function(t){
+        var sel=(t===tab);
+        t.setAttribute('aria-selected',String(sel));
+        t.tabIndex=sel?0:-1;
+        var pnl=document.getElementById(t.getAttribute('aria-controls'));
+        if(pnl){ pnl.hidden=!sel; pnl.classList.toggle('open',sel); pnl.style.display=sel?'':'none'; }
+      });
+      if(focus)tab.focus();
+    }
+    tabs.forEach(function(t,i){
+      t.addEventListener('click',function(){select(t,false);});
+      t.addEventListener('keydown',function(e){
+        var dir=0;
+        if(e.key==='ArrowLeft')dir=1;          /* RTL: left arrow = next tab */
+        else if(e.key==='ArrowRight')dir=-1;
+        else if(e.key==='Home'){e.preventDefault();select(tabs[0],true);return;}
+        else if(e.key==='End'){e.preventDefault();select(tabs[tabs.length-1],true);return;}
+        if(dir){e.preventDefault();select(tabs[(i+dir+tabs.length)%tabs.length],true);}
+      });
+    });
+    var initial=tabs.filter(function(t){return t.getAttribute('aria-selected')==='true';})[0]||tabs[0];
+    select(initial,false);
+  });
+});
+
+/* ---------- matrix demo ---------- */
+mod('matrix',function(){
+  var table=$('#mx'), hint=$('#mx-hint'); if(!table)return;
+  var head=table.tHead?table.tHead.rows[0]:null;
+  $$('#mx tbody td').forEach(function(td){
+    function on(){
+      $$('#mx td.hot').forEach(function(x){x.classList.remove('hot');});
+      td.classList.add('hot');
+      if(!hint)return;
+      var rowTh=td.parentElement.querySelector('th');
+      var colTh=head?head.cells[td.cellIndex]:null;
+      hint.textContent='The currently highlighted value: '+(rowTh?rowTh.textContent:'')+' · '+(colTh?colTh.textContent:'')+' — '+td.textContent+' thousand ₪';
+    }
+    td.addEventListener('mouseenter',on);
+    td.addEventListener('focus',on);
+    td.addEventListener('click',on);
+  });
+});
+
+/* ---------- self-check quiz ----------
+   Data lives in the HTML (data-correct on each .q-item, data-key on each .q-opt);
+   this module holds logic only, so questions can be edited without touching JS. */
+mod('quiz',function(){
+  $$('.quiz').forEach(setupQuiz);   /* every .quiz block on the page runs on its own score */
+});
+function setupQuiz(quiz){
+  if(!quiz)return;
+  var scope=(quiz.closest?quiz.closest('.page'):null)||document;
+  var items=$$('.q-item',quiz);
+  var fill=$('.qs-fill',scope), text=$('.qs-text',scope), reset=$('.quiz-reset',scope);
+  var total=items.length, answered=0, right=0;
+
+  function updateSummary(){
+    if(fill)fill.style.width=(total?answered/total*100:0)+'%';
+    if(!text)return;
+    if(!answered){ text.textContent='You haven\'t answered any questions yet — 0 out of '+total; return; }
+    var msg=answered<total
+      ? 'you answered '+answered+' out of '+total+' — correct so far: '+right
+      : 'you finished! '+right+' Correct answers out of '+total+
+        (right===total?' — perfect'
+          :right>=total*0.8?' — nice control over the material'
+          :right>=total*0.6?' — it\'s worth reviewing the topics that were missed'
+          :' — it\'s worth going over the lesson again');
+    text.textContent=msg;
+  }
+
+  function answer(item,btn){
+    if(item.classList.contains('answered'))return;          /* one attempt per question */
+    var correctKey=item.dataset.correct;
+    var isRight=btn.dataset.key===correctKey;
+
+    $$('.q-opt',item).forEach(function(opt){
+      opt.setAttribute('aria-disabled','true');   /* stays focusable & readable, unlike [disabled] */
+      if(opt.dataset.key===correctKey) opt.classList.add('correct');   /* always reveal the right answer */
+    });
+    if(!isRight) btn.classList.add('incorrect');
+
+    item.classList.add('answered', isRight?'is-correct':'is-incorrect');
+    var exp=$('.q-exp',item);
+    if(exp && !$('.q-verdict',exp)){
+      var verdict=document.createElement('span');
+      verdict.className='q-verdict visually-hidden';
+      verdict.textContent=isRight?'Correct answer. ':'Incorrect answer. ';
+      exp.insertBefore(verdict,exp.firstChild);
+    }
+
+    answered++; if(isRight)right++;
+    updateSummary();
+  }
+
+  items.forEach(function(item){
+    $$('.q-opt',item).forEach(function(btn){
+      btn.addEventListener('click',function(){ answer(item,btn); });
+    });
+  });
+
+  if(reset)reset.addEventListener('click',function(){
+    items.forEach(function(item){
+      item.classList.remove('answered','is-correct','is-incorrect');
+      var v=$('.q-verdict',item); if(v)v.parentNode.removeChild(v);
+      $$('.q-opt',item).forEach(function(opt){
+        opt.removeAttribute('aria-disabled');
+        opt.classList.remove('correct','incorrect');
+      });
+    });
+    answered=0; right=0; updateSummary();
+    var first=$('.q-item',quiz); if(first)first.scrollIntoView({block:'center',behavior:'smooth'});
+  });
+
+  updateSummary();
+}
+
+/* ---------- practice: per-task solution toggles ---------- */
+mod('solutions',function(){
+  $$('.sol-toggle').forEach(function(btn){
+    var body=btn.nextElementSibling;
+    if(!body||!body.classList.contains('sol-body'))return;
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.classList.toggle('open',!open);
+      btn.textContent=open?'Showing the solution':'Hiding the solution';
+    });
+  });
+});
+
+/* ---------- screenshot lightbox ---------- */
+mod('lightbox',function(){
+  var box=$('#lightbox'), img=$('#lb-img'), cap=$('#lb-cap'), close=$('#lb-close'), zoom=$('#lb-zoom');
+  if(!box)return;
+  var opener=null;
+  var touch = !!(window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+  function setZoom(on){
+    on=!!on;
+    box.classList.toggle('zoomed',on);
+    if(zoom){
+      zoom.setAttribute('aria-pressed',String(on));
+      zoom.textContent = on ? 'Fit to screen' : 'full size';
+    }
+  }
+  function open(src,alt,caption,natW){
+    opener=document.activeElement;
+    img.src=src; img.alt=alt||'';
+    if(cap)cap.textContent=caption||'';
+    box.hidden=false; lockScroll(true);
+    /* a screenshot wider than the screen opens at natural size — that is the readable state.
+       one that already fits opens fitted, so nothing is needlessly enlarged. */
+    var wider=!natW||natW>(window.innerWidth||0);
+    setZoom(touch&&wider);
+    var body=$('.lb-body',box);
+    if(body)setTimeout(function(){                    /* start in the middle: panning works both ways */
+      try{ body.scrollLeft=Math.max(0,(body.scrollWidth-body.clientWidth)/2); }catch(e){}
+    },0);
+    close.focus();
+  }
+  function shut(){
+    box.hidden=true; img.src=''; lockScroll(false);
+    if(opener&&opener.focus)opener.focus();
+  }
+  $$('.shot-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var im=$('img',btn), fig=btn.closest('figure');
+      var cp=fig?$('figcaption',fig):null;
+      open(im.getAttribute('src'), im.getAttribute('alt'), cp?cp.textContent.trim():'', +im.getAttribute('width')||0);
+    });
+  });
+  if(zoom)zoom.addEventListener('click',function(){ setZoom(!box.classList.contains('zoomed')); });
+  if(close)close.addEventListener('click',shut);
+  box.addEventListener('click',function(e){ if(e.target===box||e.target.className==='lb-body')shut(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!box.hidden)shut(); });
+});
+
+/* ---------- layers demo (Bring to front / Send to back) ---------- */
+mod('layersDemo',function(){
+  var shape=$('#lshape'), status=$('#lstatus'); if(!shape)return;
+  $$('#layers-demo [data-layer]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var back=btn.dataset.layer==='back';
+      shape.classList.toggle('back',back);
+      if(status)status.textContent=back
+        ? 'Currently: the shape is in the background — the chart is exposed and fully readable'
+        : 'Currently: the shape is above the chart and covers it completely';
+    });
+  });
+});
+
+/* ---------- selection pane demo (reorder + show/hide) ---------- */
+mod('selectionDemo',function(){
+  var list=$('#sel-list'), canvas=$('#sc'), status=$('#sstatus');
+  if(!list||!canvas)return;
+  var objs=[{key:'shape',name:'Shape',on:true},{key:'chart',name:'Count of Product_ID',on:true}];
+
+  function render(){
+    list.innerHTML='';
+    objs.forEach(function(o,i){
+      var li=document.createElement('li');
+      li.className='sel-item'+(o.on?'':' off');
+      li.innerHTML='<button type="button" class="sel-btn" data-act="up" '+(i===0?'disabled':'')+
+          ' aria-label="Uploading '+o.name+' one layer">▲</button>'+
+        '<button type="button" class="sel-btn" data-act="down" '+(i===objs.length-1?'disabled':'')+
+          ' aria-label="Downloading '+o.name+' one layer">▼</button>'+
+        '<span class="nm">'+o.name+'</span>'+
+        '<button type="button" class="sel-btn" data-act="eye" aria-pressed="'+(!o.on)+'"'+
+          ' aria-label="'+(o.on?'Hide ':'Show ')+o.name+'">'+(o.on?'👁':'🚫')+'</button>';
+      li.querySelectorAll('.sel-btn').forEach(function(b){
+        b.addEventListener('click',function(){
+          var act=b.dataset.act;
+          if(act==='up'&&i>0){ objs.splice(i-1,0,objs.splice(i,1)[0]); }
+          else if(act==='down'&&i<objs.length-1){ objs.splice(i+1,0,objs.splice(i,1)[0]); }
+          else if(act==='eye'){ o.on=!o.on; }
+          render();
+        });
+      });
+      list.appendChild(li);
+    });
+    objs.forEach(function(o,i){
+      var el=canvas.querySelector('[data-obj="'+o.key+'"]');
+      if(!el)return;
+      el.style.zIndex=String(objs.length-i);      /* first in the list is drawn on top */
+      el.classList.toggle('hidden',!o.on);
+    });
+    if(status)status.textContent='Current order: '+objs.map(function(o){
+      return o.name+(o.on?'':' (hidden)');
+    }).join(' ← ')+'  |  The first item is drawn above the rest';
+  }
+  render();
+});
+
+/* ---------- conditional formatting preview (Gradient vs Rules) ---------- */
+mod('cfDemo',function(){
+  var wrap=$('#cf-cells'), caption=$('#cf-caption'), legend=$('#cf-legend');
+  if(!wrap)return;
+  var values=[18,42,55,63,78,94], min=18, max=94;
+  function paint(style){
+    wrap.innerHTML='';
+    values.forEach(function(v){
+      var cell=document.createElement('div');
+      cell.className='cf-cell';
+      cell.textContent=v;
+      if(style==='gradient'){
+        var t=(v-min)/(max-min);                       /* light blue -> deep blue */
+        cell.style.background='rgb('+Math.round(214-150*t)+','+Math.round(233-120*t)+','+Math.round(250-70*t)+')';
+        cell.style.color=t>0.55?'#fff':'#04120f';
+      }else{
+        var c = v<50 ? '#f87171' : (v<70 ? '#f2c811' : '#4ade80');
+        cell.style.background=c; cell.style.color='#111';
+      }
+      wrap.appendChild(cell);
+    });
+    if(caption)caption.textContent='Preview — style '+(style==='gradient'?'Gradient':'Rules');
+    if(legend)legend.textContent=style==='gradient'
+      ? 'The color moves in sequence: ' + min + ' In light blue up to ' + max + ' in dark blue — no thresholds, just a ratio.'
+      : 'Three rules: below 50 red · 50 to 70 yellow · 70 and above green.';
+  }
+  paint('gradient');
+  var tabs=$$('#cf-demo [role="tab"]');
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){ paint(t.id.indexOf('rules')>-1?'rules':'gradient'); });
+    t.addEventListener('keyup',function(e){
+      if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='Home'||e.key==='End'){
+        var sel=tabs.filter(function(x){return x.getAttribute('aria-selected')==='true';})[0];
+        if(sel)paint(sel.id.indexOf('rules')>-1?'rules':'gradient');
+      }
+    });
+  });
+});
+
+/* ---------- what-if parameter (Numeric range) ---------- */
+mod('paramNumeric',function(){
+  var slider=$('#disc'), val=$('#disc-val'), rev=$('#disc-rev'), delta=$('#disc-delta');
+  if(!slider)return;
+  var base=5019000;
+  function money(n){
+    return n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+Math.round(n/1000)+'K';
+  }
+  function update(){
+    var pct=+slider.value;
+    var after=base*(1-pct/100);
+    if(val)val.textContent=pct+'%';
+    if(rev)rev.textContent=money(after);
+    if(delta)delta.textContent=pct===0?'$0':'−'+money(base-after);
+    slider.setAttribute('aria-valuetext',pct+' Discount percentage, revenue '+money(after));
+  }
+  slider.addEventListener('input',update);
+  update();
+});
+
+/* ---------- field parameter (switch the displayed measure) ---------- */
+mod('paramFields',function(){
+  var chart=$('#fs-chart'), desc=$('#fs-desc'); if(!chart)return;
+  var data={
+    sales:{label:'sales',unit:'$',rows:[['Clothing',1310000],['Furniture',1260000],['Electronics',1240000],['Food',1200000]]},
+    qty:{label:'quantity',unit:'',rows:[['Clothing',268],['Furniture',260],['Electronics',246],['Food',226]]},
+    profit:{label:'profit',unit:'$',rows:[['Clothing',315000],['Furniture',214000],['Electronics',372000],['Food',180000]]}
+  };
+  function fmt(n,unit){
+    if(unit!=='$')return String(n);
+    return n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+Math.round(n/1000)+'K';
+  }
+  function draw(key){
+    var d=data[key]; if(!d)return;
+    var max=Math.max.apply(null,d.rows.map(function(r){return r[1];}));
+    chart.innerHTML=d.rows.map(function(r){
+      return '<div class="mc-row"><span class="lbl">'+r[0]+'</span>'+
+             '<span class="track"><span class="fill" style="width:'+(r[1]/max*100).toFixed(1)+'%"></span></span>'+
+             '<span class="val">'+fmt(r[1],d.unit)+'</span></div>';
+    }).join('');
+    chart.setAttribute('aria-label',d.label+' By category');
+    if(desc)desc.textContent='Currently showing: '+d.label+' by category — the slicer replaced the field, not the visual';
+  }
+  $$('.fs-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      $$('.fs-btn').forEach(function(b){
+        b.classList.toggle('on',b===btn);
+        b.setAttribute('aria-pressed',String(b===btn));
+      });
+      draw(btn.dataset.measure);
+    });
+  });
+  draw('sales');
+});
+
+/* ---------- homework checklist ---------- */
+
+/* ---------- copy button on every code block ---------- */
+mod('codeCopy',function(){
+  function codeText(el){
+    var clone=el.cloneNode(true), brs=clone.getElementsByTagName('br');
+    while(brs.length){ var br=brs[0]; br.parentNode.replaceChild(document.createTextNode('\n'),br); }
+    var t=clone.textContent||'';
+    return t.replace(/\u00a0/g,' ').replace(/[ \t]+(\n)/g,'$1').replace(/\n{3,}/g,'\n\n').replace(/[ \t]+$/,'').trim();
+  }
+  function legacyCopy(text){
+    try{
+      var ta=document.createElement('textarea');
+      ta.value=text; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.top='0'; ta.style.left='-9999px'; ta.style.opacity='0';
+      document.body.appendChild(ta);
+      ta.select(); try{ ta.setSelectionRange(0,ta.value.length); }catch(e){}
+      var ok=document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    }catch(e){ return false; }
+  }
+  function copyText(text,done){
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(function(){ done(true); },function(){ done(legacyCopy(text)); });
+    } else { done(legacyCopy(text)); }
+  }
+  function flash(btn,ok){
+    var t=$('.cc-t',btn);
+    btn.classList.remove('is-done','is-fail');
+    btn.classList.add(ok?'is-done':'is-fail');
+    if(t)t.textContent=ok?'copied':'failed';
+    if(btn._ccT)clearTimeout(btn._ccT);
+    btn._ccT=setTimeout(function(){
+      btn.classList.remove('is-done','is-fail');
+      if(t)t.textContent='copying';
+    },1900);
+  }
+  $$('.code-wrap').forEach(function(wrap){
+    var btn=$('.code-copy',wrap), block=$('.code',wrap);
+    if(!btn||!block)return;
+    btn.addEventListener('click',function(){
+      copyText(codeText(block),function(ok){ flash(btn,ok); });
+    });
+  });
+});
+
+/* ---------- "All course lessons" opens the drawer from any topic ---------- */
+mod('lessonJump',function(){
+  var b=$('#open-lessons'), menu=$('#tb-menu');
+  if(!b||!menu)return;
+  b.addEventListener('click',function(){ menu.click(); });
+});
+
+/* ---------- the active lesson pill scrolls itself into view ---------- */
+mod('lessonRail',function(){
+  var rail=$('#lesson-rail'); if(!rail)return;
+  var on=$('.lr.is-on',rail); if(!on)return;
+  var target = on.offsetLeft - (rail.clientWidth - on.offsetWidth)/2;
+  try{ rail.scrollTo({left:target, behavior:'auto'}); }catch(e){ rail.scrollLeft=target; }
+});
+
+mod('homework',function(){
+  [['#hw-dax','#hw-dax-progress','pbi-l4-hw']].forEach(function(cfg){
+    buildChecklist(cfg[0],cfg[1],cfg[2]);
+  });
+});
+function buildChecklist(sel,outSel,KEY){
+  var hw=$(sel), out=$(outSel); if(!hw)return;
+  var boxes=$$('input',hw);
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(boxes.map(function(b){return b.checked;}))); }catch(e){} }
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY); if(!raw)return;
+      var arr=JSON.parse(raw);
+      if(Object.prototype.toString.call(arr)==='[object Array]')
+        arr.forEach(function(v,i){ if(boxes[i])boxes[i].checked=!!v; });
+    }catch(e){}
+  }
+  function update(){
+    boxes.forEach(function(b){
+      var lab=b.closest('label'); if(lab)lab.classList.toggle('done',b.checked);
+    });
+    if(!out)return;
+    var n=boxes.filter(function(b){return b.checked;}).length;
+    out.textContent=n+' out of '+boxes.length+' Tasks completed'+(n===boxes.length?' — great job!':'');
+  }
+  boxes.forEach(function(b){ b.addEventListener('change',function(){save();update();}); });
+  load(); update();
+}
+
+})();
+</script>
+<script>
+// nav-scale.js — injected before </body> by build.py
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+  if(!window.LESSON||!LESSON.pages)return;
+  var pages=LESSON.pages;
+
+  function shortTitle(t){
+    return String(t||'').split(' \u2014 ')[0].split(' \u00b7 ')[0].replace(/^\u05d1\u05e0\u05e7 /,'').trim();
+  }
+
+  /* exercise pages = anything holding a question bank or the task list */
+  var exercises=[];
+  pages.forEach(function(p,i){
+    if(p.querySelector('.quiz')||p.querySelector('.tasks')){
+      var n=p.querySelectorAll('.q-item').length||p.querySelectorAll('.task').length;
+      exercises.push({i:i,label:shortTitle(p.dataset.title),n:n});
+    }
+  });
+
+  function buildJump(cls){
+    var box=document.createElement('div');
+    box.className='qjump '+cls;
+    var t=document.createElement('span');
+    t.className='qjump-t';
+    t.textContent='\u05de\u05e2\u05d1\u05e8 \u05de\u05d4\u05d9\u05e8 \u05dc\u05ea\u05e8\u05d2\u05d9\u05dc\u05d9\u05dd';
+    box.appendChild(t);
+    exercises.forEach(function(e){
+      var b=document.createElement('button');
+      b.type='button';
+      b.setAttribute('data-jump',e.i);
+      b.textContent=e.label+' \u00b7 '+e.n;
+      box.appendChild(b);
+    });
+    box.addEventListener('click',function(ev){
+      var b=ev.target.closest?ev.target.closest('button[data-jump]'):null;
+      if(!b)return;
+      LESSON.go(+b.getAttribute('data-jump'));
+      var d=$('#drawer'), x=$('#drawer-x');
+      if(d && x && !d.hidden) x.click();
+    });
+    return box;
+  }
+
+  function syncJump(){
+    var cur=pages[LESSON.index]?pages[LESSON.index].id:null;
+    $$('.qjump button[data-jump]').forEach(function(b){
+      b.classList.toggle('is-on',pages[+b.getAttribute('data-jump')].id===cur);
+    });
+  }
+
+  function toggle(h,g){
+    var shut=!h.classList.contains('is-shut');
+    h.classList.toggle('is-shut',shut);
+    g.hidden=shut;
+    h.setAttribute('aria-expanded',String(!shut));
+  }
+
+  function wire(h,g){
+    var c=document.createElement('span');
+    c.className='cnt';
+    c.textContent=g.children.length;
+    h.appendChild(c);
+    h.setAttribute('role','button');
+    h.setAttribute('tabindex','0');
+    h.addEventListener('click',function(){ toggle(h,g); });
+    h.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(h,g); }
+    });
+  }
+
+  /* ---- drawer: shortcut strip, then fold every chapter ---- */
+  var toc=$('.toc');
+  if(toc){
+    if(exercises.length) toc.parentNode.insertBefore(buildJump('qjump-drawer'),toc);
+    $$('.toc-chap',toc).forEach(function(h){
+      var g=document.createElement('div');
+      g.className='toc-group';
+      var n=h.nextSibling;
+      while(n && !(n.nodeType===1 && n.classList.contains('toc-chap'))){
+        var nx=n.nextSibling;
+        if(n.nodeType===1) g.appendChild(n); else n.parentNode.removeChild(n);
+        n=nx;
+      }
+      h.parentNode.insertBefore(g,h.nextSibling);
+      wire(h,g);
+    });
+  }
+
+  /* ---- opening topic: same treatment for the full contents list ---- */
+  var lt=$('#lesson-toc');
+  if(lt){
+    if(exercises.length){
+      var sub=lt.querySelector('.lt-sub');
+      var jb=buildJump('lt-jump');
+      if(sub && sub.nextSibling) lt.insertBefore(jb,sub.nextSibling); else lt.appendChild(jb);
+    }
+    $$('.lt-chap',lt).forEach(function(h){
+      var g=h.nextElementSibling;
+      if(g && g.classList.contains('lt-items')) wire(h,g);
+    });
+  }
+
+  function label(h){
+    return h.childNodes[0]?String(h.childNodes[0].textContent).trim():'';
+  }
+
+  function openCurrentOnly(){
+    var cur=pages[LESSON.index]?pages[LESSON.index].dataset.chap:null;
+    $$('.toc-chap').concat($$('.lt-chap')).forEach(function(h){
+      var g=h.nextElementSibling;
+      if(!g)return;
+      var open=(label(h)===cur);
+      h.classList.toggle('is-shut',!open);
+      g.hidden=!open;
+      h.setAttribute('aria-expanded',String(open));
+    });
+  }
+
+  openCurrentOnly();
+  syncJump();
+
+  /* keep the strip and the open chapter in step as the reader moves */
+  var seen=LESSON.index;
+  setInterval(function(){
+    if(LESSON.index===seen)return;
+    seen=LESSON.index;
+    syncJump();
+    var cur=pages[LESSON.index].dataset.chap;
+    $$('.toc-chap').forEach(function(h){
+      var g=h.nextElementSibling;
+      if(!g)return;
+      if(label(h)===cur){
+        h.classList.remove('is-shut');
+        g.hidden=false;
+        h.setAttribute('aria-expanded','true');
+      }
+    });
+  },240);
+})();
+
+/* ---- copy button on code snippets inside questions (delegated, so it also
+        covers questions that are rendered later) ---- */
+(function(){
+  function text(el){
+    var c = el.cloneNode(true), brs = c.getElementsByTagName('br');
+    while (brs.length){ var b = brs[0]; b.parentNode.replaceChild(document.createTextNode('\n'), b); }
+    return (c.textContent || '').replace(/\u00a0/g, ' ').replace(/[ \t]+(\n)/g, '$1').trim();
+  }
+  function legacy(t){
+    try{
+      var a = document.createElement('textarea');
+      a.value = t; a.setAttribute('readonly','');
+      a.style.position='fixed'; a.style.left='-9999px';
+      document.body.appendChild(a); a.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(a); return ok;
+    }catch(e){ return false; }
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.qc-copy') : null;
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    var wrap = btn.closest('.q-code-wrap');
+    var code = wrap && wrap.querySelector('.q-code');
+    if (!code) return;
+    var t = text(code);
+    var done = function(ok){
+      btn.classList.toggle('is-done', ok);
+      var lbl = btn.querySelector('.qc-t');
+      if (lbl) lbl.textContent = ok ? 'copied' : 'failed';
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function(){
+        btn.classList.remove('is-done');
+        if (lbl) lbl.textContent = 'copying';
+      }, 1700);
+    };
+    if (navigator.clipboard && window.isSecureContext)
+      navigator.clipboard.writeText(t).then(function(){ done(true); }, function(){ done(legacy(t)); });
+    else done(legacy(t));
+  }, true);
+})();
+</script>
+<style>
+/* --- QA fix: finger-sized hit areas on touch devices (WCAG 2.5.5).
+   Placed last in the document so it wins over the in-body stylesheet. --- */
+@media (pointer:coarse), (max-width:900px){
+  .lesson-rail .lr{min-height:44px}
+  .qjump button,.lt-jump button,.qnav-b,.tb-nav,.tb-menu,.tb-home,.tb-quiz,
+  .btn,.sol-toggle,.shot-btn,.toc-item,.lt-item{min-height:44px}
+  .lt-chap{min-height:44px;display:flex;align-items:center}
+  .ln-home a,.foot a,footer a{display:inline-flex;align-items:center;min-height:44px}
+}
+</style>
+
+<style>
+/* --- unified platform rail: home + lessons + question bank + DAX index --- */
+.lr-home{background:var(--acc-soft);border-color:var(--line-strong);color:var(--acc);font-weight:700}
+.lr-home:hover{border-color:var(--acc);color:var(--acc)}
+.lr-ic{width:15px;height:15px;flex:0 0 auto}
+.lr-sep{flex:0 0 auto;width:1px;height:18px;background:var(--line);margin:0 3px}
+.lr-x b{font-family:var(--mono);font-size:.7rem;color:var(--acc)}
+.lr-x:hover b{color:var(--pbi)}
+@media(max-width:560px){.lr-home span{display:none}.lr-home{padding:0 11px}}
+</style>
+
+<script>
+/* The toolbar meta labels are single-line with ellipsis. Mirror their text into
+   a title attribute so the full string stays reachable when it is truncated. */
+(function(){
+  var t=document.querySelector('.tb-title'), c=document.querySelector('.tb-chap');
+  if(!t&&!c) return;
+  function sync(el){ if(el){ var v=(el.textContent||'').trim(); if(v) el.setAttribute('title',v); } }
+  [t,c].forEach(function(el){
+    if(!el) return;
+    sync(el);
+    try{ new MutationObserver(function(){ sync(el); })
+           .observe(el,{childList:true,characterData:true,subtree:true}); }catch(e){}
+  });
+})();
+</script>
+
+<style>
+/* --- mobile QA: the topic label clipped from 390px down. Instead of hiding it,
+   let it take its own full-width row so nothing is cut and nothing is lost. --- */
+@media(max-width:900px){
+  .topicbar-inner{flex-wrap:wrap}
+  .tb-now{order:9;flex:1 0 100%;min-width:0;text-align:center;padding-top:3px}
+  .tb-title{display:block;white-space:normal;overflow:visible;text-overflow:clip;
+    font-size:.8rem;line-height:1.35}
+  .tb-chap{white-space:normal;overflow:visible;text-overflow:clip}
+}
+/* above the mobile breakpoint keep the single row, but let a long topic name
+   wrap inside its own box instead of being cut by an ellipsis */
+@media(min-width:901px){
+  .tb-title,.tb-chap{white-space:normal;overflow:visible;text-overflow:clip}
+  .tb-now{padding-block:2px}
+}
+</style>
+
+<style>
+/* return path to the main course site, reachable on mobile too */
+.lr-site b{font-family:var(--mono);font-size:.8rem;color:var(--acc)}
+.lr-site:hover b{color:var(--pbi)}
+</style>
+</body>
+</html>

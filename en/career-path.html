@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>My Path | Data Code - Eliran Grossman</title>
-<meta name="description" content="Full learning path: Python → Pandas → SQL → Power BI. Personal progress tracking, levels, and certificate.">
+<title>My Track | Data Course - Eliran Grossman</title>
+<meta name="description" content="The full learning track: Python → Pandas → SQL → Power BI. Personal progress tracking, levels, and a certificate.">
 <link rel="canonical" href="https://egrosman1.github.io/sql-course/en/career-path.html">
 <meta name="theme-color" content="#00d4c8">
 
@@ -37,7 +37,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Heebo", "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
-    direction: ltr;
+    direction:ltr;
     line-height: 1.5;
     min-height: 100vh;
   }
@@ -377,13 +377,13 @@
 <!-- Top bar -->
 <div class="topbar">
   <a href="index.html" class="home-btn">🏠 Home</a>
-  <a href="../career-path.html" class="lang-link">עברית ←</a>
+  <a href="../career-path.html" class="lang-link">עברית →</a>
 </div>
 
 <!-- Hero -->
 <div class="hero">
-  <h1>🗺️ My Path</h1>
-  <p>Your full learning journey - from beginner to data expert. Track your progress, unlock new steps, and earn a certificate.</p>
+  <h1>🗺️ My track</h1>
+  <p>Your full learning journey - from beginner to data expert. Track your progress, unlock new stages, and earn a certificate.</p>
   
   <div class="stats-strip" id="stats-strip">
     <div class="stat-card">
@@ -394,29 +394,36 @@
     <div class="stat-card">
       <div class="stat-icon">🔥</div>
       <div class="stat-val" id="stat-streak">0</div>
-      <div class="stat-label">Streak</div>
+      <div class="stat-label">sequence</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">🎖️</div>
       <div class="stat-val" id="stat-level">1</div>
-      <div class="stat-label">Level</div>
+      <div class="stat-label">level</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">🏅</div>
       <div class="stat-val" id="stat-badges">0</div>
-      <div class="stat-label">Badges</div>
+      <div class="stat-label">medals</div>
     </div>
   </div>
 </div>
 
 
-  <div class="info-card" style="background:linear-gradient(135deg,#2a1f4a,#4a2d61);border:2px solid #8b5cf6;margin-bottom:20px;" class="guided-projects-banner">
-    <h3 style="color:#c4b5fd;">🚀 Guided Projects (NEW)</h3>
-    <p>5 multi-step Israeli projects: telecom churn, real estate, COVID, sales, football. Each builds your portfolio.</p>
-    <a href="projects.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#8b5cf6,#9333ea);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">View Projects →</a>
+  <div class="info-card guided-projects-banner" style="background:linear-gradient(135deg,#2a1f4a,#4a2d61);border:2px solid #8b5cf6;margin-bottom:20px;">
+    <h3 style="color:#c4b5fd;">🚀 Guided Projects (new!)</h3>
+    <p>5 multi-stage Israeli projects: customer churn, real estate, COVID, sales, football. Build a real portfolio.</p>
+    <a href="projects.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#8b5cf6,#9333ea);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">View projects ←</a>
   </div>
 
-<!-- Path -->
+
+  <div class="info-card" style="background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(219,39,119,0.06));border:2px solid #ec4899;margin-bottom:20px;">
+    <h3 style="color:#ec4899;">🔍 Search for an exercise by topic (new!)</h3>
+    <p>Filter from 80+ exercises by topic tags, difficulty level, and course. A search mechanism like LeetCode.</p>
+    <a href="tags.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">Search now ←</a>
+  </div>
+
+  <!-- Path -->
 <div class="path" id="path">
   <!-- Steps will be rendered here by JS -->
 </div>
@@ -424,10 +431,16 @@
 <!-- Footer info -->
 <div class="path" style="padding-top:0;">
   <div class="info-card">
-    <h3>💡 How it works</h3>
-    <p>Complete exercises in each step to unlock the next one. Your progress is saved in your browser and synced between steps. Each exercise = +10 XP. Completing the full path = official certificate.</p>
+    <h3>💡 How does it work?</h3>
+    <p>Complete exercises at each stage to unlock the next stage. Your progress is saved in the browser and synced across stages. Each exercise = +10 XP. Completing a full track = an official certificate.</p>
   </div>
 </div>
+  <div class="info-card" style="background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,136,0,0.06));border:2px solid #ffd700;margin-bottom:20px;">
+    <h3 style="color:#ffd700;">🗓️ Daily challenge (new!)</h3>
+    <p>30 challenges, one a day. Keep your streak and win a medal!</p>
+    <a href="daily.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#ffd700,#ff8800);color:#1a1a2e;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">To today's challenge ←</a>
+  </div>
+
 
 <script>
 (function() {
@@ -438,9 +451,9 @@
     {
       id: 'python-basics',
       icon: '🐍',
-      title: 'Python Basics',
-      sub: 'Variables, conditions, loops',
-      desc: 'Start here! 170 guided exercises that take you from zero to writing scripts.',
+      title: 'Python basics',
+      sub: 'Variables, conditionals, loops',
+      desc: 'Start here! 170 guided exercises that will take you from zero to being able to write scripts.',
       url: 'python-lesson.html',
       courseId: 'python-lesson',
       total: 170,
@@ -449,9 +462,9 @@
     {
       id: 'python-course',
       icon: '📚',
-      title: 'Python Comprehensive Course',
+      title: 'Comprehensive Python course',
       sub: 'Advanced modules',
-      desc: 'Overview of the full course: 10 ordered modules. Browse in order or pick what interests you.',
+      desc: 'An overview of the whole course: 10 modules arranged by choice. Browse in order or pick what interests you.',
       url: 'python-course.html',
       courseId: 'python-course',
       total: 0,
@@ -460,9 +473,9 @@
     {
       id: 'pandas',
       icon: '🐼',
-      title: 'Pandas - Data Analysis',
+      title: 'Pandas - data analysis',
       sub: '150 exercises + advanced practice',
-      desc: 'The most important data library. DataFrame, filter, groupby, merge, plus bonus: 20 Pyodide exercises with real matplotlib.',
+      desc: 'The most important library for data. DataFrame, filter, groupby, merge, and a bonus: 20 Pyodide exercises with real matplotlib.',
       url: 'pandas-lesson.html',
       courseId: 'pandas-lesson',
       total: 150,
@@ -471,9 +484,9 @@
     {
       id: 'quiz',
       icon: '🎓',
-      title: '100 Questions Challenge',
+      title: '100-question challenge',
       sub: 'Test yourself',
-      desc: 'Comprehensive quiz covering everything you learned in Python. Ideal for interview prep.',
+      desc: 'A comprehensive quiz covering everything you learned in Python. Ideal for interview prep.',
       url: 'quiz-python-100.html',
       courseId: 'quiz-python-100',
       total: 100,
@@ -483,8 +496,8 @@
       id: 'playground',
       icon: '🎮',
       title: 'Playground - Free Practice',
-      sub: 'Write code freely',
-      desc: 'Jupyter-like environment - build with cells, use Israeli datasets, export files.',
+      sub: 'Write code without limitation',
+      desc: 'A Jupyter-like environment - build and work with cells, use Israeli datasets, export files.',
       url: 'python-playground.html',
       courseId: 'python-playground',
       total: 0,
@@ -496,8 +509,8 @@
       icon: '🗃️',
       title: 'SQL - Database Queries',
       sub: 'Recommended after Python + Pandas',
-      desc: "Eliran's original course - SQL from 0 to complex JOINs, with 4 simulators on real data.",
-      url: '../simulator.html',
+      desc: 'Eliran\'s original course - SQL from 0 to complex JOINs, with 4 simulators on real data.',
+      url: 'simulator.html',
       courseId: 'sql',
       total: 0,
       unlockAfter: 100,
@@ -505,9 +518,9 @@
     {
       id: 'powerbi',
       icon: '📊',
-      title: 'Power BI - Dashboards',
-      sub: 'Coming soon',
-      desc: "Eliran's Power BI exercises - data connections, measures, interactive visualization.",
+      title: 'Power BI - dashboards',
+      sub: 'coming soon',
+      desc: 'Eliran\'s Power BI exercises - connecting to data, creating measures, interactive visualization.',
       url: 'pbi-simulator.html',
       courseId: 'powerbi',
       total: 0,
@@ -517,9 +530,9 @@
     {
       id: 'certificate',
       icon: '🏆',
-      title: 'Completion Certificate',
+      title: 'Certificate of completion',
       sub: 'Official proof of your skills',
-      desc: 'You made it! Get a PDF certificate to download/print + LinkedIn share button.',
+      desc: 'You made it! Get a downloadable, printable PDF certificate + a LinkedIn share button.',
       url: 'pandas-lesson.html',  // open cert modal from here
       courseId: 'certificate',
       total: 0,
@@ -589,10 +602,10 @@
 
   function getStatusBadge(status) {
     const labels = {
-      'locked': '🔒 Locked',
-      'available': '✨ Available',
-      'in-progress': '⏳ In Progress',
-      'completed': '✅ Completed'
+      'locked': '🔒 locked',
+      'available': '✨ available',
+      'in-progress': '⏳ in progress',
+      'completed': '✅ completed'
     };
     return labels[status] || '';
   }
@@ -623,32 +636,20 @@
         const eligible = totalCompleted() >= 50;
         const certPct = Math.min(100, Math.floor((totalCompleted() / 50) * 100));
         progressHTML = `
-          <div class="step-progress-wrap">
-            <div class="step-progress-row">
-              <span>${eligible ? 'Eligible for certificate!' : 'Progress to certificate'}</span>
-              <span class="step-progress-pct">${totalCompleted()} / 50</span>
-            </div>
-            <div class="step-progress-bar"><div class="step-progress-fill" style="width:${certPct}%"></div></div>
-          </div>
+          <div class="step-progress-wrap">\n            <div class="step-progress-row">\n              <span>${eligible ? 'Eligible for certificate!' : 'Progress to certificate'}</span>\n              <span class="step-progress-pct">${totalCompleted()} / 50</span>\n            </div>\n            <div class="step-progress-bar"><div class="step-progress-fill" style="width:${certPct}%"></div></div>\n          </div>
         `;
       } else if (total > 0) {
         progressHTML = `
-          <div class="step-progress-wrap">
-            <div class="step-progress-row">
-              <span>${done} of ${total} exercises</span>
-              <span class="step-progress-pct">${pct}%</span>
-            </div>
-            <div class="step-progress-bar"><div class="step-progress-fill" style="width:${pct}%"></div></div>
-          </div>
+          <div class="step-progress-wrap">\n            <div class="step-progress-row">\n              <span>${done} of ${total} exercises</span>\n              <span class="step-progress-pct">${pct}%</span>\n            </div>\n            <div class="step-progress-bar"><div class="step-progress-fill" style="width:${pct}%"></div></div>\n          </div>
         `;
       }
       
       // Button
       let buttonHTML = '';
-      const btnText = status === 'completed' ? 'Review' : (done > 0 ? 'Continue' : 'Start');
+      const btnText = status === 'completed' ? 'Return to practice' : (done > 0 ? 'continue' : 'start');
       
       if (status === 'locked') {
-        buttonHTML = `<button class="step-btn disabled">🔒 Unlock after ${step.unlockAfter} exercises</button>`;
+        buttonHTML = `<button class="step-btn disabled">🔒 Unlocks after ${step.unlockAfter} exercises</button>`;
       } else if (step.isCertificate) {
         if (status === 'available') {
           buttonHTML = `<button class="step-btn" id="cert-open-btn">🏆 View Certificate</button>`;
@@ -656,26 +657,13 @@
           buttonHTML = `<button class="step-btn disabled">🔒 ${50 - totalCompleted()} more exercises</button>`;
         }
       } else {
-        buttonHTML = `<a href="${step.url}" class="step-btn">${btnText} →</a>`;
+        buttonHTML = `<a href="${step.url}" class="step-btn">${btnText} ←</a>`;
       }
       
       const stepClass = step.isCertificate ? 'step cert-step ' + status : 'step ' + status;
       
       html += `
-        <div class="${stepClass}" data-step-id="${step.id}">
-          <div class="step-num">${idx + 1}</div>
-          <div class="step-header">
-            <div class="step-icon">${step.icon}</div>
-            <div class="step-titles">
-              <div class="step-title">${step.title}${step.optional ? ' <span style="font-size:11px;opacity:0.7">(optional)</span>' : ''}</div>
-              <div class="step-sub">${step.sub}</div>
-            </div>
-            <div class="step-status-badge">${getStatusBadge(status)}</div>
-          </div>
-          <div class="step-desc">${step.desc}</div>
-          ${progressHTML}
-          <div class="step-actions">${buttonHTML}</div>
-        </div>
+        <div class="${stepClass}" data-step-id="${step.id}">\n          <div class="step-num">${idx + 1}</div>\n          <div class="step-header">\n            <div class="step-icon">${step.icon}</div>\n            <div class="step-titles">\n              <div class="step-title">${step.title}${step.optional ? ' <span style="font-size:11px;opacity:0.7">(optional)</span>' : ''}</div>\n              <div class="step-sub">${step.sub}</div>\n            </div>\n            <div class="step-status-badge">${getStatusBadge(status)}</div>\n          </div>\n          <div class="step-desc">${step.desc}</div>\n          ${progressHTML}\n          <div class="step-actions">${buttonHTML}</div>\n        </div>
       `;
     });
     

@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced SQL Questions — Free Quiz | SQL.course</title>
+<title>Advanced-level SQL questions — free quiz | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -124,31 +124,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries, and complex aggregations. For data analyst interview prep.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html">
+<meta name="description" content="An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries and complex aggregations. To prepare for analyst interviews.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/quiz-advanced2.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="Multiple-Choice Questions — Advanced | SQL">
-<meta property="og:description" content="An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries, and complex aggregations. For data analyst interview prep.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="Multiple-choice questions — Advanced level | SQL">
+<meta property="og:description" content="An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries and complex aggregations. To prepare for analyst interviews.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Multiple-Choice Questions — Advanced | SQL">
-<meta name="twitter:description" content="An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries, and complex aggregations. For data analyst interview prep.">
+<meta name="twitter:title" content="Multiple-choice questions — Advanced level | SQL">
+<meta name="twitter:description" content="An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries and complex aggregations. To prepare for analyst interviews.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <script type="application/ld+json">
 [
@@ -159,13 +159,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "SQL Advanced Quiz",
+        "name": "Advanced SQL quiz",
         "item": "https://egrosman1.github.io/sql-course/quiz-advanced2.html"
       }
     ]
@@ -173,8 +173,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "Advanced SQL Questions — Free Quiz | SQL.course",
-    "description": "An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries, and complex aggregations. For data analyst interview prep.",
+    "name": "Advanced-level SQL questions — free quiz | SQL.course",
+    "description": "An advanced SQL quiz: multiple-choice questions with explanations on Window Functions, CTEs, correlated subqueries and complex aggregations. To prepare for analyst interviews.",
     "url": "https://egrosman1.github.io/sql-course/quiz-advanced2.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -189,7 +189,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -203,14 +203,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 <body data-quiz-id="advanced2">
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">🧠 Questions — Advanced</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">🧠 Questions — Advanced level</div>
   <div class="topnav-right">
     <div class="ltabs">
       <a href="quiz-beginner.html" class="ltab">🌱 Beginner</a>
-      <a href="quiz-medium.html" class="ltab">📗 Intermediate</a>
-      <a href="quiz-advanced2.html" class="ltab active">🧠 Advanced</a>
-      <a href="../quiz-advanced2.html" class="ltab" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="quiz-advanced2.html" class="ltab" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/quiz-advanced2.html" class="ltab" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+      <a href="quiz-medium.html" class="ltab">📗 medium</a>
+      <a href="quiz-advanced2.html" class="ltab active">🧠 advanced</a><a href="../quiz-advanced2.html" class="ltab" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="quiz-advanced2.html" class="ltab" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/quiz-advanced2.html" class="ltab" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
     </div>
     <div class="score-badge" id="scoreText">✅ 0 / 0</div>
   </div>
@@ -229,7 +228,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
   <span class="fb-saved-score" id="fb-saved-score"></span>
   <button class="fb-save-btn" id="fb-save-btn" onclick="triggerSave()" style="display:none">💾 Save progress</button>
   <button class="fb-history-btn" id="fb-history-btn" onclick="fbToggleHistory()">📊 History</button>
-  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">Sign out</button>
+  <button class="fb-logout-btn" id="fb-logout-btn" onclick="fbLogout()">Exit</button>
 </div>
 <div id="fb-history-wrap" style="display:none">
   <div id="fb-history-panel" style="max-width:700px;margin:0 auto"></div>
@@ -237,13 +236,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 
 <div class="hero">
   <div class="hero-badge">🧠 LEVEL 3 · ADVANCED</div>
-  <h1 class="hero-title">Multiple-Choice Questions — <em>Advanced</em></h1>
-  <p class="hero-desc">Subqueries · Window Functions · Date Functions — 60 questions</p>
+  <h1 class="hero-title">Multiple-choice questions — <em>Advanced level</em></h1>
+  <p class="hero-desc">Subqueries · Window Functions · Date functions — 60 questions</p>
   <div class="hero-stats">
     <div class="hs"><div class="hs-n" id="heroAnswered">0</div><div class="hs-l">answered</div></div>
-    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">correct</div></div>
+    <div class="hs"><div class="hs-n" id="heroCorrect">0</div><div class="hs-l">correctness</div></div>
     <div class="hs"><div class="hs-n">60</div><div class="hs-l">questions</div></div>
-    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">score</div></div>
+    <div class="hs"><div class="hs-n" id="heroPct">0%</div><div class="hs-l">grade</div></div>
   </div>
 </div>
 
@@ -258,68 +257,68 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:h
 <script>
 const Q=[
   // ── Subqueries ──
-  {n:1,s:"Part A — Subqueries",t:"What is a subquery?",o:["A query that runs after the main query.","A query placed inside another query (SELECT, INSERT, UPDATE, or DELETE).","A function for joining tables.","A command for creating a temporary table."],c:1,e:"A subquery is an inner query that passes results to the outer query."},
-  {n:2,s:"Part A — Subqueries",t:"Where can a subquery be placed?",o:["Only in WHERE.","Only in FROM.","In SELECT, FROM, WHERE, and HAVING.","Only in ORDER BY."],c:2,e:"Subqueries are versatile and can be used in almost any part of a query."},
-  {n:3,s:"Part A — Subqueries",t:"What is a correlated subquery?",o:["A subquery that runs only once.","A subquery that returns more than one column.","A subquery that relies on values from the outer query for each row.","A subquery that performs a JOIN."],c:2,e:"In a correlated subquery, the inner query is re-run for each row processed by the outer query."},
-  {n:4,s:"Part A — Subqueries",t:"Which operators do we use when a subquery in WHERE returns more than one value?",o:["= , < , >","IN, ANY, ALL","LIKE, BETWEEN","GROUP BY"],c:1,e:"Operators like IN let you compare a value against a list returned by a subquery."},
-  {n:5,s:"Part A — Subqueries",t:"What does the EXISTS operator return?",o:["The first value found.","A count of the rows.","A boolean value (true/false) depending on whether the subquery returned any rows.","An error if the query is empty."],c:2,e:"EXISTS checks for the presence of records without returning the data itself."},
-  {n:6,s:"Part A — Subqueries",t:"When do we use a subquery inside the FROM?",o:["To filter rows.","To treat the query result as a temporary table (an inline view).","To compute the average of a single row.","To sort data."],c:1,e:"A subquery in FROM lets you manipulate data and then query it again."},
-  {n:7,s:"Part A — Subqueries",t:"What is the limitation of a scalar subquery?",o:["It must return at least 10 rows.","It must return exactly one value (one row and one column).","It works only with numbers.","It cannot appear in SELECT."],c:1,e:"A scalar query serves as a single value within an expression."},
-  {n:8,s:"Part A — Subqueries",t:"What happens if a subquery in IN returns NULL?",o:["The query fails.","The NULL value is treated as a match for anything.","Comparison against NULL in IN can lead to unexpected results (usually no rows are returned).","SQL automatically ignores the NULL."],c:2,e:"In SQL, a comparison to NULL is always UNKNOWN."},
-  {n:9,s:"Part A — Subqueries",t:"What is the difference between ANY and ALL?",o:["There is no difference.","ANY checks all the values, ALL checks at least one.","ANY returns true if the condition holds for at least one value, ALL requires it to hold for all.","ANY is used only for numbers."],c:2,e:"ANY = at least one. ALL = all of them without exception."},
-  {n:10,s:"Part A — Subqueries",t:"How can you write the query 'show employees who earn more than the average'?",o:["WHERE salary > AVG(salary)","WHERE salary > (SELECT AVG(salary) FROM employees)","GROUP BY salary HAVING salary > AVG","JOIN (SELECT AVG...)"],c:1,e:"You cannot use an aggregate function directly in WHERE without a subquery."},
-  {n:11,s:"Part A — Subqueries",t:"What is the advantage of a CTE (WITH clause) over a subquery in FROM?",o:["It is faster.","It makes the code more readable and lets you reuse the same 'temporary table' within the same query.","It does not require permissions.","It works only in MySQL."],c:1,e:"A CTE is a modern, clean way to define subqueries."},
-  {n:12,s:"Part A — Subqueries",t:"Can a subquery contain ORDER BY?",o:["Always.","Usually not (unless you use TOP or LIMIT), because an inner data set does not require ordering.","Only if there is a JOIN.","Only in WHERE."],c:1,e:"ORDER BY in a subquery is meaningless unless combined with TOP/LIMIT."},
-  {n:13,s:"Part A — Subqueries",t:"What happens if a scalar subquery accidentally returns two rows?",o:["The system takes the first one.","The system merges them.","The query fails with a runtime error.","NULL is shown."],c:2,e:"A scalar subquery that returns more than one row causes an error."},
-  {n:14,s:"Part A — Subqueries",t:"When is it better to use a JOIN instead of a subquery?",o:["Always.","When you need to show columns from both tables in the final result.","When the tables are very small.","When you want to filter by a single value."],c:1,e:"A JOIN is better when you need columns from both tables. A subquery is better for existence checks and filtering."},
-  {n:15,s:"Part A — Subqueries",t:"What does the NOT EXISTS operator do?",o:["Checks whether a column does not exist.","Returns true only if a subquery returns no rows.","Deletes rows that do not exist.","Checks NULL values."],c:1,e:"NOT EXISTS = an Anti-Join — it finds rows with no match in the other table."},
-  {n:16,s:"Part A — Subqueries",t:'What is a "Nested Subquery"?',o:["A query inside a JOIN.","A subquery located inside another subquery.","A query that returns a list.","A parallel query."],c:1,e:"A nested subquery enables complex logic but can hurt performance."},
-  {n:17,s:"Part A — Subqueries",t:"In which part of a query do we use a subquery to update data in one table based on another table?",o:["SELECT","UPDATE ... SET column = (SELECT ...)","FROM","GROUP BY"],c:1,e:"UPDATE with a subquery in SET lets you take values from another table."},
-  {n:18,s:"Part A — Subqueries",t:"What is a subquery in HAVING?",o:["Filtering rows before grouping.","Filtering groups based on a calculation performed in a subquery.","A way to sort groups.","An invalid command."],c:1,e:"HAVING + a subquery = filtering groups by a complex calculation from another table."},
-  {n:19,s:"Part A — Subqueries",t:"Can you use IN with a subquery that returns two columns?",o:["Yes, always.","Only if the outer query compares against a pair of columns (in databases like PostgreSQL/Oracle).","No, IN accepts only one column.","Only if the columns are of text type."],c:1,e:"A row subquery (multiple columns) is supported in PostgreSQL and Oracle."},
-  {n:20,s:"Part A — Subqueries",t:"What is the performance difference between IN and EXISTS?",o:["IN is always faster.","EXISTS is always slower.","In modern systems the optimizer usually turns them into the same operation, but EXISTS is considered more efficient for large lists.","There is no difference at all."],c:2,e:"EXISTS is better for large lists because it stops at the first match."},
+  {n:1,s:"Part A — Subqueries",t:"What is a subquery?",o:["A query that runs after the main query.","A query located inside another query (SELECT, INSERT, UPDATE or DELETE).","A function for joining tables.","A command to create a temporary table."],c:1,e:"A subquery is an inner query that passes results to the outer query."},
+  {n:2,s:"Part A — Subqueries",t:"Where can a subquery be placed?",o:["Only in WHERE.","Only in FROM.","in SELECT, FROM, WHERE, and HAVING.","Only in ORDER BY."],c:2,e:"Subqueries are versatile and can be used in almost any part of a query."},
+  {n:3,s:"Part A — Subqueries",t:"What is a correlated subquery?",o:["A subquery that runs only once.","A subquery that returns more than one column.","A subquery that relies on values from the outer query for each row.","A subquery that performs a JOIN."],c:2,e:"In a correlated query, the inner query is re-executed for every row processed by the outer query."},
+  {n:4,s:"Part A — Subqueries",t:"Which operators do we use when a subquery in WHERE returns more than one value?",o:["= , < , >","IN, ANY, ALL","LIKE, BETWEEN","GROUP BY"],c:1,e:"Operators like IN let you compare a value against a list returned from a subquery."},
+  {n:5,s:"Part A — Subqueries",t:"What does the EXISTS operator return?",o:["The first value found.","A count of the rows.","A boolean value (true/false) depending on whether rows were returned from a subquery.","An error if the query is empty."],c:2,e:"EXISTS checks for the presence of records without returning the data itself."},
+  {n:6,s:"Part A — Subqueries",t:"When do we use a subquery inside the FROM?",o:["To filter rows.","In order to treat the query result as a temporary table (Inline View).","To calculate the average of a single row.","To sort data."],c:1,e:"A subquery in FROM lets you manipulate data and then query it again."},
+  {n:7,s:"Part A — Subqueries",t:"What is the limitation of a Scalar Subquery?",o:["It must return at least 10 rows.","It must return exactly one value (one row and one column).","It works only with numbers.","It can't appear in the SELECT."],c:1,e:"A scalar subquery is used as a single value within an expression."},
+  {n:8,s:"Part A — Subqueries",t:"What happens if a subquery in IN returns NULL?",o:["The query fails.","The value NULL is considered a match for everything.","Comparing against NULL in IN can lead to unexpected results (usually no rows will be returned).","SQL ignores NULL automatically."],c:2,e:"In SQL, a comparison to NULL is always UNKNOWN."},
+  {n:9,s:"Part A — Subqueries",t:"What is the difference between ANY and ALL?",o:["No difference.","ANY checks all values, ALL checks at least one.","ANY returns true if the condition holds for at least one value; ALL requires it to hold for all of them.","ANY is used only for numbers."],c:2,e:"ANY = at least one. ALL = all of them, no exceptions."},
+  {n:10,s:"Part A — Subqueries",t:"How can you write a query for 'show employees who earn more than average'?",o:["WHERE salary > AVG(salary)","WHERE salary > (SELECT AVG(salary) FROM employees)","GROUP BY salary HAVING salary > AVG","JOIN (SELECT AVG...)"],c:1,e:"You can't use an aggregate function directly in WHERE without a subquery."},
+  {n:11,s:"Part A — Subqueries",t:"What's the advantage of a CTE (WITH clause) over a subquery in FROM?",o:["It's faster.","it makes the code more readable and allows reuse of the same 'temporary table' within the same query.","It doesn't require permissions.","It works only in MySQL."],c:1,e:"A CTE is a modern, clean way to define subqueries."},
+  {n:12,s:"Part A — Subqueries",t:"Can a subquery contain ORDER BY?",o:["always.","Usually not (unless TOP or LIMIT is used), because an inner dataset doesn't require order.","Only if there's a JOIN.","Only in WHERE."],c:1,e:"ORDER BY in a subquery is meaningless unless combined with TOP/LIMIT."},
+  {n:13,s:"Part A — Subqueries",t:"What happens if a Scalar Subquery mistakenly returns two rows?",o:["The system will take the first one.","The system will connect them.","The query will fail with a runtime error.","NULL will be shown."],c:2,e:"A Scalar Subquery that returns more than one row will cause an error."},
+  {n:14,s:"Part A — Subqueries",t:"When is it better to use a JOIN instead of a subquery?",o:["always.","When you need to display columns from both tables in the final result.","When the tables are very small.","When you want to filter by a single value."],c:1,e:"JOIN is preferable when you need columns from both tables. Subquery is preferable for existence checks/filtering."},
+  {n:15,s:"Part A — Subqueries",t:"What does the NOT EXISTS operator do?",o:["Checks whether a column does not exist.","Returns true only if a subquery returns no rows.","Deletes rows that do not exist.","Checks NULL values."],c:1,e:"NOT EXISTS = Anti-Join — finds rows with no match in the second table."},
+  {n:16,s:"Part A — Subqueries",t:'What is a "Nested Subquery"?',o:["A query inside a JOIN.","A subquery nested inside another subquery.","A query that returns a list.","A parallel query."],c:1,e:"Nested Subquery = a nested query — enables complex logic but can hurt performance."},
+  {n:17,s:"Part A — Subqueries",t:"In which part of the query would we use a subquery to update data in one table based on another table?",o:["SELECT","UPDATE ... SET column = (SELECT ...)","FROM","GROUP BY"],c:1,e:"UPDATE with a subquery in SET lets you take values from another table."},
+  {n:18,s:"Part A — Subqueries",t:"What is a subquery in HAVING?",o:["Filtering rows before grouping.","Filtering groups based on a calculation performed in a subquery.","A way to sort groups.","Invalid command."],c:1,e:"HAVING + Subquery = filtering groups by a complex calculation from another table."},
+  {n:19,s:"Part A — Subqueries",t:"Can you use IN with a subquery that returns two columns?",o:["Yes, always.","only if the outer query compares against a pair of columns (in databases like PostgreSQL/Oracle).","No, IN accepts only one column.","Only if the columns are of text type."],c:1,e:"Row Subquery (multiple columns) is supported in PostgreSQL and Oracle."},
+  {n:20,s:"Part A — Subqueries",t:"What's the performance difference between IN and EXISTS?",o:["IN is always faster.","EXISTS is always slower.","In modern systems the optimizer usually turns them into the same operation, but EXISTS is considered more efficient for large lists.","No difference at all."],c:2,e:"EXISTS is preferable for large lists because it stops at the first match."},
   // ── Window Functions ──
-  {n:21,s:"Part B — Window Functions",t:"What is the main characteristic of a window function?",o:["It reduces the number of rows (aggregation).","It performs a calculation over a set of rows without losing the detail of the individual rows.","It works only on time windows.","It replaces GROUP BY."],c:1,e:"SUM() OVER() keeps all the rows and shows the sum next to them — unlike GROUP BY."},
-  {n:22,s:"Part B — Window Functions",t:"Which keyword is used to define a window function?",o:["GROUP BY","OVER","WINDOW","PARTITION"],c:1,e:"OVER is the word that defines the 'window' over which the function operates."},
-  {n:23,s:"Part B — Window Functions",t:"What does PARTITION BY do?",o:["Sorts the results.","Splits the rows into groups (e.g. by department) for the calculation within the window.","Deletes disk partitions.","Joins tables."],c:1,e:"PARTITION BY is like GROUP BY — but within a window, without collapsing rows."},
-  {n:24,s:"Part B — Window Functions",t:"What is the difference between ROW_NUMBER() and RANK()?",o:["There is no difference.","ROW_NUMBER gives a unique running number, RANK gives the same number to equal values (and leaves a gap in the next number).","RANK does not skip numbers.","ROW_NUMBER works only on dates."],c:1,e:"A tie in RANK: both get 1, the next gets 3 (not 2)."},
-  {n:25,s:"Part B — Window Functions",t:"How does DENSE_RANK() rank in the case of a tie?",o:["It skips numbers.","It gives random numbers.","It gives the same number to equal values but leaves no gap in the next number.","It always starts from 0."],c:2,e:"A tie in DENSE_RANK: both get 1, the next gets 2 (not 3)."},
-  {n:26,s:"Part B — Window Functions",t:"What does the LAG() function do?",o:["Computes the average of the next row.","Accesses the value of a previous row (e.g. to compute growth versus last month).","Delays the query.","Returns the last row in the table."],c:1,e:"LAG = a look backward. LEAD = a look forward."},
+  {n:21,s:"Part B — Window Functions",t:"What's the main characteristic of a window function?",o:["It reduces the number of rows (Aggregation).","It performs a calculation over a group of rows without losing the detail of the individual rows.","It only works on time windows.","It replaces GROUP BY."],c:1,e:"SUM() OVER() keeps all the rows and shows the sum alongside them — unlike GROUP BY."},
+  {n:22,s:"Part B — Window Functions",t:"Which keyword is used to define a window function?",o:["GROUP BY","OVER","WINDOW","PARTITION"],c:1,e:"OVER is the word that defines the 'window' the function will operate on."},
+  {n:23,s:"Part B — Window Functions",t:"What does the PARTITION BY clause do?",o:["Sorts the results.","Divides the rows into groups (for example by department) for the calculation within the window.","Deletes partitions on disk.","Connects tables."],c:1,e:"PARTITION BY is like GROUP BY — but within a window, without collapsing rows."},
+  {n:24,s:"Part B — Window Functions",t:"What's the difference between ROW_NUMBER() and RANK()?",o:["No difference.","ROW_NUMBER gives a unique running number, RANK gives the same number to equal values (and leaves a gap in the next number).","RANK doesn't skip numbers.","ROW_NUMBER only works on dates."],c:1,e:"A tie in RANK: both get 1, the next gets 3 (not 2)."},
+  {n:25,s:"Part B — Window Functions",t:"What is the ranking of DENSE_RANK() in the case of a tie?",o:["It skips numbers.","It gives random numbers.","It gives an identical number to identical values but doesn't leave a gap in the next number.","It always starts from 0."],c:2,e:"A tie in DENSE_RANK: both get 1, the next one gets 2 (not 3)."},
+  {n:26,s:"Part B — Window Functions",t:"What does the LAG() function do?",o:["Calculates the average of the next row.","Accesses the value of a previous row (for example, to calculate growth vs. last month).","Delays the query.","Returns the last row in the table."],c:1,e:"LAG = look back. LEAD = look forward."},
   {n:27,s:"Part B — Window Functions",t:"What does the LEAD() function do?",o:["Returns the maximum value.","Accesses the value of the next row in the window.","Finds the leader of the group.","Sorts the data in ascending order."],c:1,e:"LEAD lets you compare the current row to a future row."},
-  {n:28,s:"Part B — Window Functions",t:"What is the use of ORDER BY inside the OVER?",o:["Sorting the final result of the query.","Setting the order in which the function processes the rows (critical for a running total).","Defining the column name.","It is invalid."],c:1,e:"ORDER BY inside OVER sets the scan order of the function."},
-  {n:29,s:"Part B — Window Functions",t:"How do you compute a running total?",o:["SUM(price) GROUP BY date","SUM(price) OVER (ORDER BY date)","SUM(price) OVER (PARTITION BY date)","ADD(price)"],c:1,e:"SUM() OVER(ORDER BY date) computes a running total over time."},
-  {n:30,s:"Part B — Window Functions",t:"What does the FIRST_VALUE() function do?",o:["Returns the first row in the table.","Returns the first value in the defined data window.","Returns the value 1.","Finds the minimum."],c:1,e:"FIRST_VALUE lets you show the first value next to each row."},
-  {n:31,s:"Part B — Window Functions",t:"What is the difference between SUM without OVER and SUM with OVER?",o:["There is no difference.","Without OVER it returns an error.","Without OVER it returns one row per group, with OVER it returns the sum for every single row.","OVER is faster."],c:2,e:"GROUP BY collapses rows — OVER keeps them."},
-  {n:32,s:"Part B — Window Functions",t:"What is the window frame (e.g. ROWS BETWEEN...)?",o:["Another name for a table.","A precise definition of which rows around the current row are included in the calculation (e.g. a moving average).","A command to resize the screen.","A type of JOIN."],c:1,e:"A window frame defines the range of rows for the calculation — critical for a moving average."},
-  {n:33,s:"Part B — Window Functions",t:"What does UNBOUNDED PRECEDING mean?",o:["Up to the next row.","From the start of the window (all the rows before the current row).","No bounds at all.","Only the previous row."],c:1,e:"UNBOUNDED PRECEDING = from the first row in the window up to the current row."},
-  {n:34,s:"Part B — Window Functions",t:"Which function splits the rows into 4 equal groups (quartiles)?",o:["QUARTER()","DIVIDE(4)","NTILE(4)","PART(4)"],c:2,e:"NTILE(4) splits all the rows into 4 groups of equal size."},
-  {n:35,s:"Part B — Window Functions",t:"What does the LAST_VALUE() function do?",o:["Returns NULL.","Returns the last value in the window (requires a correct frame definition).","Deletes the last row.","Finds the maximum."],c:1,e:"LAST_VALUE requires ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING for a correct result."},
-  {n:36,s:"Part B — Window Functions",t:"Can you use window functions in WHERE?",o:["Yes.","No, they are computed after the WHERE (you need a subquery or a CTE).","Only if there is a GROUP BY.","Only in SQL Server."],c:1,e:"Window functions are computed after WHERE — wrap them in a CTE and then filter."},
-  {n:37,s:"Part B — Window Functions",t:"What does CURRENT ROW mean within a window definition?",o:["The first row in the table.","The last row that was read.","The row on which the calculation is being performed right now.","A system error."],c:2,e:"CURRENT ROW = the current row in the calculation."},
-  {n:38,s:"Part B — Window Functions",t:"Which function returns the relative position of a row as a percentage (0 to 1)?",o:["PERCENT()","PERCENT_RANK()","RANK_PCT()","RATIO()"],c:1,e:"PERCENT_RANK = (rank-1)/(rows-1). It returns 0 for the first and 1 for the last."},
-  {n:39,s:"Part B — Window Functions",t:"What is the advantage of LAG/LEAD over a SELF JOIN?",o:["They look nicer.","They are far more efficient and faster in terms of performance.","They do not require a primary key.","They work only on numbers."],c:1,e:"LAG/LEAD are written in a single line and are very efficient — a SELF JOIN burdens the optimizer."},
-  {n:40,s:"Part B — Window Functions",t:"What does SELECT ROW_NUMBER() OVER(ORDER BY id) return?",o:["The ID of the row.","A running sequence number (1, 2, 3...) by ID order.","The total number of rows.","Duplicate rows."],c:1,e:"ROW_NUMBER() OVER(ORDER BY id) numbers the rows sequentially by sort order."},
+  {n:28,s:"Part B — Window Functions",t:"What is the use of ORDER BY inside OVER?",o:["Sorting the final result of the query.","Determining the order in which the function treats the rows (critical for calculating a running total).","Defining the column name.","This isn't valid."],c:1,e:"ORDER BY inside OVER determines the function's scan order."},
+  {n:29,s:"Part B — Window Functions",t:"How do you calculate a running total?",o:["SUM(price) GROUP BY date","SUM(price) OVER (ORDER BY date)","SUM(price) OVER (PARTITION BY date)","ADD(price)"],c:1,e:"SUM() OVER(ORDER BY date) computes a running total over time."},
+  {n:30,s:"Part B — Window Functions",t:"What does the function FIRST_VALUE() do?",o:["Returns the first row in the table.","Returns the first value in the defined data window.","Returns the value 1.","Finds the minimum."],c:1,e:"FIRST_VALUE lets you show the first value alongside every row."},
+  {n:31,s:"Part B — Window Functions",t:"What's the difference between SUM without OVER and SUM with OVER?",o:["No difference.","Without OVER it returns an error.","Without OVER it returns one row per group, with OVER it returns the sum for every single row.","OVER is faster."],c:2,e:"GROUP BY collapses rows — OVER keeps them."},
+  {n:32,s:"Part B — Window Functions",t:"What is the Window Frame (e.g. ROWS BETWEEN...)?",o:["Another name for the table.","A precise definition of which rows around the current row are included in the calculation (for example, a moving average).","A command to change the screen size.","A type of JOIN."],c:1,e:"Window Frame defines the range of rows for the calculation — critical for a moving average."},
+  {n:33,s:"Part B — Window Functions",t:"What is the meaning of UNBOUNDED PRECEDING?",o:["Up to the next row.","from the start of the window (all rows before the current row).","With no boundaries at all.","Only the previous row."],c:1,e:"UNBOUNDED PRECEDING = from the first row in the window to the current row."},
+  {n:34,s:"Part B — Window Functions",t:"Which function divides the rows into 4 equal groups (quartiles)?",o:["QUARTER()","DIVIDE(4)","NTILE(4)","PART(4)"],c:2,e:"NTILE(4) divides all rows into 4 equally sized groups."},
+  {n:35,s:"Part B — Window Functions",t:"What does the function LAST_VALUE() do?",o:["Returns NULL.","Returns the last value in the window (requires setting the Frame correctly).","Deletes the last row.","Finds the maximum."],c:1,e:"LAST_VALUE requires ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING for a correct result."},
+  {n:36,s:"Part B — Window Functions",t:"Can window functions be used in WHERE?",o:["yes.","No, they're calculated after the WHERE (you need to use a Subquery or CTE).","Only if there's a GROUP BY.","Only in SQL Server."],c:1,e:"Window functions are calculated after WHERE — you need to wrap in a CTE and then filter."},
+  {n:37,s:"Part B — Window Functions",t:"What does CURRENT ROW mean inside a window definition?",o:["The first row in the table.","The last row that was read.","The row on which the calculation is being performed right now.","System error."],c:2,e:"CURRENT ROW = the current row in the calculation."},
+  {n:38,s:"Part B — Window Functions",t:"Which function returns a row's relative position in percentage (0 to 1)?",o:["PERCENT()","PERCENT_RANK()","RANK_PCT()","RATIO()"],c:1,e:"PERCENT_RANK = (rank-1)/(rows-1). Returns 0 for the first and 1 for the last."},
+  {n:39,s:"Part B — Window Functions",t:"What is the advantage of LAG/LEAD over a SELF JOIN?",o:["They're prettier.","they're much more efficient and faster in terms of performance.","They do not require a primary key.","They work only on numbers."],c:1,e:"LAG/LEAD are written in a single line and are very efficient — a SELF JOIN burdens the optimizer."},
+  {n:40,s:"Part B — Window Functions",t:"What does this return: SELECT ROW_NUMBER() OVER(ORDER BY id)?",o:["the ID of the row.","A running serial number (1, 2, 3...) by ID order.","The total number of rows.","Duplicate rows."],c:1,e:"ROW_NUMBER() OVER(ORDER BY id) numbers rows sequentially according to the sort."},
   // ── Dates ──
-  {n:41,s:"Part C — Date Functions",t:"Which function returns the current date and time?",o:["NOW() (in MySQL/Postgres)","GETDATE() (in SQL Server)","CURRENT_TIMESTAMP","All answers are correct (depending on the database)."],c:3,e:"Every engine supports its own form — NOW, GETDATE, CURRENT_TIMESTAMP."},
-  {n:42,s:"Part C — Date Functions",t:"How can you extract only the year from a date?",o:["YEAR(date) / EXTRACT(YEAR FROM date)","DATE_YEAR()","GET_YEAR()","SUBSTRING(date, 1, 4)"],c:0,e:"YEAR() is common, EXTRACT is the standard ANSI form."},
-  {n:43,s:"Part C — Date Functions",t:"What does the DATEDIFF() function do?",o:["Adds two dates together.","Computes the difference (in days, months, etc.) between two dates.","Checks whether a date is valid.","Changes a date format."],c:1,e:"DATEDIFF(day, start, end) = the number of days between two dates."},
+  {n:41,s:"Part C — Date Functions",t:"Which function returns the current date and time?",o:["NOW() (in MySQL/Postgres)","GETDATE() (in SQL Server)","CURRENT_TIMESTAMP","All the answers are correct (depends on the database)."],c:3,e:"All engines support their own formula — NOW, GETDATE, CURRENT_TIMESTAMP."},
+  {n:42,s:"Part C — Date Functions",t:"How can you extract just the year from a date?",o:["YEAR(date) / EXTRACT(YEAR FROM date)","DATE_YEAR()","GET_YEAR()","SUBSTRING(date, 1, 4)"],c:0,e:"YEAR() is common, EXTRACT is the ANSI standard."},
+  {n:43,s:"Part C — Date Functions",t:"What does the DATEDIFF() function do?",o:["Adds two dates.","Calculates the difference (in days, months, etc.) between two dates.","Checks whether a date is valid.","Changes the date format."],c:1,e:"DATEDIFF(day, start, end) = the number of days between two dates."},
   {n:44,s:"Part C — Date Functions",t:"How do you add 10 days to a given date?",o:["date + 10","DATEADD(day, 10, date) / date + INTERVAL '10 days'","ADD_DAYS(date, 10)","INSERT_TIME(10)"],c:1,e:"DATEADD in SQL Server, INTERVAL in MySQL/PostgreSQL."},
   {n:45,s:"Part C — Date Functions",t:"Which function returns the day of the week?",o:["DAY()","WEEK()","DAYNAME() / TO_CHAR(date, 'Day')","DATE_PART()"],c:2,e:"DAYNAME in MySQL, TO_CHAR in Oracle/PostgreSQL."},
-  {n:46,s:"Part C — Date Functions",t:"What does the MONTH() function do?",o:["Returns the number of days in the month.","Returns the month number (1-12).","Returns the month name.","Checks whether a month has passed."],c:1,e:"MONTH() returns the month number — 1 for January, 12 for December."},
-  {n:47,s:"Part C — Date Functions",t:"What is the standard date format in SQL?",o:["DD-MM-YYYY","MM-DD-YYYY","YYYY-MM-DD","YYYY-DD-MM"],c:2,e:"ISO 8601 = YYYY-MM-DD. This is the international standard."},
+  {n:46,s:"Part C — Date Functions",t:"What does the MONTH() function do?",o:["Returns the number of days in the month.","Returns the month number (1-12).","Returns the month name.","Checks whether a month has passed."],c:1,e:"MONTH() returns a month number — 1 for January, 12 for December."},
+  {n:47,s:"Part C — Date Functions",t:"What's the standard date format in SQL?",o:["DD-MM-YYYY","MM-DD-YYYY","YYYY-MM-DD","YYYY-DD-MM"],c:2,e:"ISO 8601 = YYYY-MM-DD. This is the international standard."},
   {n:48,s:"Part C — Date Functions",t:"How do you find the last day of the current month?",o:["LAST_DAY()","EOMONTH() (SQL Server) / LAST_DAY() (MySQL)","END_MONTH()","MONTH_LIMIT()"],c:1,e:"EOMONTH in SQL Server, LAST_DAY in MySQL."},
   {n:49,s:"Part C — Date Functions",t:"What does DATEPART(weekday, date) do?",o:["Returns the day name.","Returns a numeric representation of the day of the week.","Returns the week number in the year.","Splits the date."],c:1,e:"DATEPART(weekday) returns 1-7, DATEPART(week) returns the week number in the year."},
-  {n:50,s:"Part C — Date Functions",t:"What is the difference between DATE and DATETIME?",o:["There is no difference.","DATE holds only day/month/year, DATETIME also holds hours/minutes/seconds.","DATETIME is only for the future.","DATE takes up more memory."],c:1,e:"DATE = 3 bytes. DATETIME = 8 bytes (including the time)."},
-  {n:51,s:"Part C — Date Functions",t:"How do we convert the string '2023-01-01' into a date object?",o:["CAST('2023-01-01' AS DATE) / TO_DATE()","CONVERT_TO_TIME()","MAKE_DATE()","It always happens automatically."],c:0,e:"CAST is the ANSI standard, TO_DATE() is common in Oracle/PostgreSQL."},
-  {n:52,s:"Part C — Date Functions",t:"What does EXTRACT(QUARTER FROM date) return?",o:["The day number within the quarter.","The quarter number in the year (1-4).","The sales for the quarter.","25% of the date."],c:1,e:"EXTRACT(QUARTER) = 1 for January-March, 2 for April-June, 3 for July-September, 4 for October-December."},
-  {n:53,s:"Part C — Date Functions",t:"What does ISDATE() do?",o:["Checks whether the date is today.","Checks whether a given string is a valid date (returns 1 or 0).","Converts a date to text.","Returns the data type."],c:1,e:"ISDATE() is useful for data cleaning — before a CAST to date."},
-  {n:54,s:"Part C — Date Functions",t:"How do you compute a person's age in SQL?",o:["YEAR(NOW()) - YEAR(birthdate)","DATEDIFF(year, birthdate, GETDATE())","The methods above are common, but you must be precise by accounting for the day and month.","AGE(birthdate)"],c:2,e:"Computing an exact age requires comparing the month and day — not just the year."},
-  {n:55,s:"Part C — Date Functions",t:"What does TIMESTAMPDIFF do?",o:["Computes a time difference in seconds only.","Computes the difference between two time values in chosen units (hours, minutes, etc.).","Creates a new timestamp.","Changes the time zone."],c:1,e:"TIMESTAMPDIFF(HOUR, start, end) = the number of hours between two times."},
-  {n:56,s:"Part C — Date Functions",t:"What is a Unix timestamp?",o:["A date in text format.","The number of seconds elapsed since January 1, 1970.","An Apple date format.","An internal SQL clock."],c:1,e:"A Unix timestamp = epoch time. Widely used in APIs and distributed systems."},
-  {n:57,s:"Part C — Date Functions",t:"How can you display a date in the format 'DD/MM/YYYY'?",o:["FORMAT(date, 'dd/MM/yyyy')","TO_CHAR(date, 'DD/MM/YYYY')","CONVERT(VARCHAR, date, 103)","All answers are correct (depending on the database)."],c:3,e:"FORMAT in SQL Server, TO_CHAR in Oracle/PostgreSQL, CONVERT with code 103 in SQL Server."},
-  {n:58,s:"Part C — Date Functions",t:"What does SYSDATE do in Oracle?",o:["Deletes the system date.","Returns the current date and time of the server.","Updates the clock.","Returns only the year."],c:1,e:"SYSDATE in Oracle = GETDATE() in SQL Server = NOW() in MySQL."},
-  {n:59,s:"Part C — Date Functions",t:"What is the DATE_TRUNC function?",o:["Deleting the date from the table.","'Rounding' a date to a given time unit (e.g. the start of the month or the start of the day).","Trimming a date string.","Extending the date."],c:1,e:"DATE_TRUNC('month', date) = the first date of the month. Useful for monthly reports."},
-  {n:60,s:"Part C — Date Functions",t:"What happens if you add a day to December 31?",o:["An error.","The date stays the same.","The date becomes January 1 of the following year.","The system returns NULL."],c:2,e:"SQL automatically handles the month/year rollover in date calculations."}
+  {n:50,s:"Part C — Date Functions",t:"What's the difference between DATE and DATETIME?",o:["No difference.","DATE holds only day/month/year, DATETIME also holds hours/minutes/seconds.","DATETIME is only for the future.","DATE takes up more space in memory."],c:1,e:"DATE = 3 bytes. DATETIME = 8 bytes (including time)."},
+  {n:51,s:"Part C — Date Functions",t:"How do we turn the string '2023-01-01' into a date object?",o:["CAST('2023-01-01' AS DATE) / TO_DATE()","CONVERT_TO_TIME()","MAKE_DATE()","This happens automatically, always."],c:0,e:"CAST is the ANSI standard, TO_DATE() is common in Oracle/PostgreSQL."},
+  {n:52,s:"Part C — Date Functions",t:"What does EXTRACT(QUARTER FROM date) return?",o:["The day number within the quarter.","the quarter number in the year (1-4).","The quarter's sales.","25% of the date."],c:1,e:"EXTRACT(QUARTER) = 1 for Jan-Mar, 2 for Apr-Jun, 3 for Jul-Sep, 4 for Oct-Dec."},
+  {n:53,s:"Part C — Date Functions",t:"What does ISDATE() do?",o:["Checks if the date is today.","Checks whether a given string is a valid date (returns 1 or 0).","Changes a date to text.","Returns the data type."],c:1,e:"ISDATE() is useful for data cleaning — before a CAST to date."},
+  {n:54,s:"Part C — Date Functions",t:"How do you calculate a person's age in SQL?",o:["YEAR(NOW()) - YEAR(birthdate)","DATEDIFF(year, birthdate, GETDATE())","The methods above are common, but you need to be precise about day and month handling.","AGE(birthdate)"],c:2,e:"An exact age calculation requires comparing month and day — not just year."},
+  {n:55,s:"Part C — Date Functions",t:"What does TIMESTAMPDIFF do?",o:["Calculates a time difference in seconds only.","Calculates the difference between two time values in the chosen units (hours, minutes, etc.).","Creates a new timestamp.","Changes the time zone."],c:1,e:"TIMESTAMPDIFF(HOUR, start, end) = number of hours between two times."},
+  {n:56,s:"Part C — Date Functions",t:"What is the Unix Timestamp?",o:["A date in text format.","The number of seconds that have passed since January 1, 1970.","Apple's date format.","SQL's internal clock."],c:1,e:"Unix Timestamp = epoch time. Widely used in APIs and distributed systems."},
+  {n:57,s:"Part C — Date Functions",t:"How can you display a date in 'DD/MM/YYYY' format?",o:["FORMAT(date, 'dd/MM/yyyy')","TO_CHAR(date, 'DD/MM/YYYY')","CONVERT(VARCHAR, date, 103)","All the answers are correct (depends on the database)."],c:3,e:"FORMAT in SQL Server, TO_CHAR in Oracle/PostgreSQL, CONVERT with code 103 in SQL Server."},
+  {n:58,s:"Part C — Date Functions",t:"What does SYSDATE do in Oracle?",o:["Deletes the system date.","Returns the server's current date and time.","Updates the clock.","Returns only the year."],c:1,e:"SYSDATE in Oracle = GETDATE() in SQL Server = NOW() in MySQL."},
+  {n:59,s:"Part C — Date Functions",t:"What is the DATE_TRUNC function?",o:["Deleting the date from the table.","'Rounding' a date to a specific time unit (for example the start of the month or the start of the day).","Slicing a date string.","Extending the date."],c:1,e:"DATE_TRUNC('month', date) = the first date of the month. Useful for monthly reports."},
+  {n:60,s:"Part C — Date Functions",t:"What happens if you add a day to December 31?",o:["error.","The date stays the same.","The date becomes January 1 of the following year.","The system returns NULL."],c:2,e:"SQL automatically handles the month/year rollover in date calculations."}
 ];
 
 const L=['A','B','C','D'];
@@ -350,7 +349,7 @@ function selectOption(qi,oi){
     if(i===oi&&!ok)o.classList.add('wrong-ans');
   });
   const exp=document.getElementById('exp-'+qi);
-  exp.querySelector('.exp-text').innerHTML=(ok?'✅ Correct! ':'❌ Wrong — the correct answer is marked in green. ')+q.e;
+  exp.querySelector('.exp-text').innerHTML=(ok?'✅ correct! ':'❌ You got it wrong — the correct answer is marked in green. ')+q.e;
   exp.classList.add('show');
   updateScore();
 }
@@ -363,14 +362,14 @@ function buildQuiz(){
     const opts=q.o.map((o,oi)=>`<div class="option" onclick="selectOption(${i},${oi})"><div class="opt-letter">${L[oi]}</div><div class="opt-text">${o}</div></div>`).join('');
     mc.innerHTML+=`<div class="q-card" id="qcard-${i}"><div class="q-meta"><div class="q-num">Question ${q.n}</div><div class="q-sec-tag">${q.s.split('—')[1]?.trim()||q.s}</div></div><div class="q-text">${q.t}</div><div class="options">${opts}</div><div class="explanation" id="exp-${i}"><div class="exp-label">💡 Explanation</div><div class="exp-text"></div></div></div>`;
   });
-  mc.innerHTML+=`<div class="finish-card" id="finishCard"><div class="finish-emoji">🏆</div><div class="finish-title">You finished the advanced level!</div><div class="finish-score" id="finishScore">0/60</div><div class="finish-grade" id="finishGrade"></div><div class="finish-sub" id="finishSub"></div><br><button class="retry-btn" onclick="resetQuiz()">🔄 Try again</button><a href="quiz-medium.html" class="level-link">📗 Back to the intermediate level</a></div>`;
+  mc.innerHTML+=`<div class="finish-card" id="finishCard"><div class="finish-emoji">🏆</div><div class="finish-title">You finished the advanced level!</div><div class="finish-score" id="finishScore">0/60</div><div class="finish-grade" id="finishGrade"></div><div class="finish-sub" id="finishSub"></div><br><button class="retry-btn" onclick="resetQuiz()">🔄 Try again</button><a href="quiz-medium.html" class="level-link">📗 Back to medium level</a></div>`;
 }
 
 function showFinish(){
   if(window.fbAutoSave&&window.currentUser)window.fbAutoSave(correct,Q.length);
   const pct=Math.round(correct/Q.length*100);
   document.getElementById('finishScore').textContent=correct+' / '+Q.length;
-  const grades=[[90,'🏆 Excellent!','Impressive command of the advanced level!'],[75,'⭐ Very good','A little more practice and you will nail it!'],[60,'👍 Good','Worth reviewing the weaker material.'],[0,'💪 Keep practicing','Review the chapters and try again!']];
+  const grades=[[90,'🏆 excellent!','Impressive mastery at the advanced level!'],[75,'⭐ Very good','A little more practice and you\'ll reach perfection!'],[60,'👍 good','It\'s worth reviewing the weaker material.'],[0,'💪 Keep practicing','Go over the chapters and try again!']];
   const [,grade,sub]=grades.find(([t])=>pct>=t);
   document.getElementById('finishGrade').textContent=grade;
   document.getElementById('finishSub').textContent=sub;

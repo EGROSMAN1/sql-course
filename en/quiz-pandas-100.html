@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>🐼 Pandas 100 Quiz | Data Course</title>
+<meta name="description" content="100 Pandas questions with automatic code checking and cumulative scoring. LeetCode style.">
+<meta name="theme-color" content="#150458">
+
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+<style>
+  :root {
+    --bg: #0a0d1f; --bg2: #121530; --bg3: #1a1f3a; --bg4: #252a52;
+    --border: #2a2f5c; --border2: #353a6b;
+    --text: #f8fafc; --text2: #aab; --text3: #888fa6;
+    --cyan: #00d4c8; --green: #00e5a0; --gold: #ffd700; --orange: #ff8800;
+    --purple: #8b5cf6; --pink: #ec4899; --red: #ef4444;
+    --easy: #10b981; --medium: #f59e0b; --hard: #ef4444;
+    --panda: #8b5cf6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+  -webkit-tap-highlight-color: rgba(0,212,200,0.2);
+  -webkit-text-size-adjust: 100%;
+    font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    direction:ltr; line-height: 1.5;
+  }
+
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .home-btn {
+    background: linear-gradient(135deg, var(--panda), #6b21a8);
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12.5px;
+  }
+  .score-pill {
+    margin-inline-start: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #2a1f0a, #4a3a1f);
+    border: 1.5px solid var(--gold);
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .reset-score-btn {
+    background: rgba(239,68,68,0.1);
+    color: var(--red);
+    border: 1px solid rgba(239,68,68,0.3);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .progress-strip {
+    background: var(--bg2);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 11.5px;
+  }
+  .progress-stat {
+    display: flex; align-items: center; gap: 4px; color: var(--text2);
+  }
+  .progress-stat .val { font-weight: 700; }
+  .progress-stat.easy .val { color: var(--easy); }
+  .progress-stat.medium .val { color: var(--medium); }
+  .progress-stat.hard .val { color: var(--hard); }
+  .progress-bar-wrap {
+    flex: 1; height: 6px; background: var(--bg);
+    border-radius: 3px; overflow: hidden; margin-inline-start: 8px;
+  }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--panda), var(--cyan));
+    transition: width .5s;
+  }
+
+  .filter-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-bar::-webkit-scrollbar { height: 0; }
+  .filter-pill {
+    padding: 6px 12px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    color: var(--text2);
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+  .filter-pill.active {
+    background: var(--panda); color: #fff; border-color: var(--panda); font-weight: 700;
+  }
+  .filter-pill.diff-easy.active { background: var(--easy); border-color: var(--easy); color: #000; }
+  .filter-pill.diff-medium.active { background: var(--medium); border-color: var(--medium); color: #000; }
+  .filter-pill.diff-hard.active { background: var(--hard); border-color: var(--hard); color: #fff; }
+  .filter-search {
+    flex: 1; min-width: 130px;
+    padding: 6px 12px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 12px;
+    font-family: inherit;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 14px;
+  }
+
+  .question-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .q-num {
+    background: linear-gradient(135deg, var(--panda), #6b21a8);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .q-topic { flex: 1; font-size: 13px; color: var(--text); font-weight: 600; }
+  .q-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+  .badge {
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-diff-easy { background: rgba(16,185,129,0.18); color: var(--easy); }
+  .badge-diff-medium { background: rgba(245,158,11,0.18); color: var(--medium); }
+  .badge-diff-hard { background: rgba(239,68,68,0.18); color: var(--hard); }
+  .badge-points {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,136,0,0.15));
+    color: var(--gold);
+    border: 1px solid rgba(255,215,0,0.4);
+  }
+  .badge-earned {
+    background: linear-gradient(135deg, var(--green), #00a884);
+    color: #000;
+  }
+
+  .question-text {
+    background: rgba(139,92,246,0.06);
+    border-inline-start: 3px solid var(--panda);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+  .question-text code {
+    background: rgba(139,92,246,0.2);
+    color: #c4b5fd;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: "SF Mono", Monaco, Menlo, monospace;
+    font-size: 12.5px;
+  }
+  .question-text b { color: var(--cyan); }
+
+  .editor-label {
+    font-size: 11.5px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .code-editor {
+    width: 100%;
+    background: #0a0d1f;
+    color: #e0e6ff;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SF Mono", Monaco, Menlo, "Courier New", monospace;
+    font-size: 14px;
+    direction: ltr;
+    text-align: left;
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 140px;
+    tab-size: 4;
+    user-select: text;
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
+  }
+  .code-editor:focus { outline: none; border-color: var(--panda); }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform .15s;
+  }
+  .btn:hover, .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.6; cursor: wait; }
+  .btn-run { background: linear-gradient(135deg, var(--green), #00a884); color: #000; }
+  .btn-solution { background: linear-gradient(135deg, var(--gold), var(--orange)); color: #1a1a2e; }
+  .btn-reset { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  .output-section { margin-top: 12px; display: none; }
+  .output-section.show { display: block; }
+  .output-box {
+    background: #0a0d1f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "SF Mono", Monaco, Menlo, monospace;
+    font-size: 13px;
+    color: #e0e6ff;
+    white-space: pre-wrap;
+    direction: ltr;
+    text-align: left;
+    max-height: 280px;
+    overflow-y: auto;
+    min-height: 40px;
+  }
+  .output-box.error { color: #ff6b6b; }
+
+  .verdict {
+    margin-top: 10px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+  }
+  .verdict.show { display: block; animation: pop .4s ease; }
+  @keyframes pop {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .verdict.success {
+    background: linear-gradient(135deg, rgba(0,229,160,0.15), rgba(139,92,246,0.15));
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+  .verdict.fail {
+    background: rgba(255,176,32,0.1);
+    color: var(--orange);
+    border: 1px solid rgba(255,176,32,0.3);
+  }
+  .verdict .points-earned {
+    display: block;
+    font-size: 22px;
+    margin: 4px 0;
+    color: var(--gold);
+  }
+
+  .solution-section {
+    margin-top: 18px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,136,0,0.04));
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 12px;
+    padding: 16px;
+    display: none;
+  }
+  .solution-section.show { display: block; animation: slide-in .4s ease; }
+  @keyframes slide-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .solution-warning {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: var(--red);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  .solution-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+  .solution-header h3 { margin: 0; font-size: 17px; color: var(--gold); }
+  .copy-btn {
+    margin-inline-start: auto;
+    background: rgba(255,215,0,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(255,215,0,0.3);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .solution-code {
+    background: #0a0d1f;
+    border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 8px;
+    padding: 12px;
+    overflow-x: auto;
+  }
+  .solution-code pre {
+    margin: 0;
+    color: var(--gold);
+    font-family: "SF Mono", Monaco, Menlo, monospace;
+    font-size: 13.5px;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  .nav-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    justify-content: space-between;
+  }
+  .nav-btn {
+    background: var(--bg4);
+    color: var(--text);
+    border: 1px solid var(--border2);
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .confetti {
+    position: fixed;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 10px; }
+    .question-card { padding: 11px; }
+    .q-num { font-size: 13px; padding: 3px 10px; }
+    .q-topic { font-size: 12px; }
+    .badge { font-size: 11px; padding: 2px 7px; }
+    .question-text { font-size: 13.5px; padding: 10px 13px; }
+    .code-editor { font-size: 13px; padding: 10px; min-height: 110px; }
+    .btn { padding: 9px 14px; font-size: 12.5px; }
+    .solution-code pre { font-size: 12px; }
+    .progress-strip { flex-wrap: wrap; gap: 6px; }
+    .score-pill { padding: 4px 10px; font-size: 11px; }
+  }
+
+  /* === CODE EDITOR TOOLBAR === */
+  .editor-wrap {
+    position: relative;
+  }
+  .editor-toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: var(--bg4);
+    border: 1px solid var(--border2);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    flex-wrap: wrap;
+  }
+  .editor-toolbar .tb-btn {
+    background: var(--bg3);
+    color: var(--text2);
+    border: 1px solid var(--border2);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    -webkit-tap-highlight-color: rgba(0,212,200,0.2);
+  }
+  .editor-toolbar .tb-btn:hover, .editor-toolbar .tb-btn:active {
+    background: var(--cyan);
+    color: #000;
+    border-color: var(--cyan);
+  }
+  .editor-toolbar .tb-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .editor-toolbar .tb-btn.copied {
+    background: var(--green);
+    color: #000;
+    border-color: var(--green);
+  }
+  .editor-wrap .code-editor {
+    border-radius: 0 0 8px 8px !important;
+    border-top: none !important;
+  }
+  
+  @media (max-width: 480px) {
+    .editor-toolbar { padding: 5px; gap: 3px; }
+    .editor-toolbar .tb-btn { padding: 5px 8px; font-size: 11px; }
+  }
+
+
+/* ===== In-depth explanation after a correct solution ===== */
+.why-box{margin-top:11px;padding:11px 13px;border-radius:9px;background:rgba(0,212,200,.07);
+ border:1px solid rgba(0,212,200,.26);font-size:13.5px;line-height:1.8;text-align:left;
+ direction:ltr;font-weight:400}
+.why-box .why-title{font-weight:700;font-size:12px;margin-bottom:5px;opacity:.9}
+.why-box code{background:rgba(0,0,0,.3);padding:1px 5px;border-radius:4px;
+ font-family:ui-monospace,Consolas,monospace;font-size:12.5px;direction:ltr;display:inline-block}
+.why-box pre{background:rgba(0,0,0,.32);border-radius:8px;padding:9px 11px;overflow:auto;
+ direction:ltr;text-align:left;margin:7px 0;font-size:12.5px}
+.why-box ul{margin:6px 0;padding-inline-start:20px}.why-box li{margin:3px 0}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="home-btn">🏠 Home</a>
+  <button class="reset-score-btn" id="reset-score-btn">🔄 Reset</button>
+  <div class="score-pill">
+    🐼 <span id="total-score">0</span> / <span id="max-score">2000</span>
+  </div>
+</div>
+
+<div class="progress-strip">
+  <div class="progress-stat easy">🟢 <span class="val" id="easy-done">0</span>/30</div>
+  <div class="progress-stat medium">🟡 <span class="val" id="medium-done">0</span>/50</div>
+  <div class="progress-stat hard">🔴 <span class="val" id="hard-done">0</span>/20</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-pill active" data-filter-type="diff" data-filter="all">All (100)</button>
+  <button class="filter-pill diff-easy" data-filter-type="diff" data-filter="easy">🟢 Easy (30)</button>
+  <button class="filter-pill diff-medium" data-filter-type="diff" data-filter="medium">🟡 Intermediate (50)</button>
+  <button class="filter-pill diff-hard" data-filter-type="diff" data-filter="hard">🔴 Hard (20)</button>
+  <button class="filter-pill" data-filter-type="status" data-filter="todo">⭕ Unsolved</button>
+  <button class="filter-pill" data-filter-type="status" data-filter="done">✅ Solved</button>
+  <input type="search" class="filter-search" id="search" placeholder="🔍 Search by topic..." autocomplete="off">
+</div>
+
+<div class="container">
+  <div id="content">loading...</div>
+</div>
+
+<script>
+// ============== DATA ==============
+window.PANDAS_QUIZ = [{"num": 1, "difficulty": "easy", "topic": "Creating a DataFrame", "q": "Create a <code>DataFrame</code> with 2 columns: <code>name</code> with \"Avi\" and \"Bni\", and <code>age</code> with 30 and 25. Print the table.",
+    explain: "A DataFrame is built from a dictionary where each key is a column name and each value is the list of cells for that column. All the lists must be the same length, otherwise an error is thrown. Note that the order of the keys in the dictionary determines the order of the columns in the table.", "starter": "", "solution": "df = DataFrame({\"name\": [\"Avi\", \"Bni\"], \"age\": [30, 25]})\nprint(df)", "check": "(out, code) => /Avi/.test(out) && /30/.test(out) && /DataFrame\\(/.test(code)"}, {"num": 2, "difficulty": "easy", "topic": "Creating a DataFrame", "q": "Create a DataFrame of 3 cities: a <code>city</code> column with \"TLV\", \"JLM\", \"HFA\", and a <code>pop</code> column with 460000, 920000, 280000. Print it.",
+    explain: "When building a DataFrame from a dictionary, each key becomes a column name and each list becomes the column's content. The three cities and the three numbers must be the same length — if one list is shorter, pandas will throw an error rather than fill in missing values on its own.", "starter": "", "solution": "df = DataFrame({\"city\": [\"TLV\", \"JLM\", \"HFA\"], \"pop\": [460000, 920000, 280000]})\nprint(df)", "check": (out, code) => /DataFrame\(/.test(code) && /TLV/.test(out) && /JLM/.test(out) && /920000/.test(out)}, {"num": 3, "difficulty": "easy", "topic": "Creating a DataFrame", "q": "From a <b>list of dictionaries</b>: <code>[{\"x\":1,\"y\":2}, {\"x\":3,\"y\":4}]</code> - create a DataFrame and print it.",
+    explain: "There are two main ways to build a DataFrame: a dictionary of lists (column by column) or a list of dictionaries (row by row). In a list of dictionaries each dictionary is a row, and the keys become the column names. If one dictionary is missing a key that exists in another, pandas fills that cell with None instead of raising an error.", "starter": "", "solution": "df = DataFrame([{\"x\":1,\"y\":2}, {\"x\":3,\"y\":4}])\nprint(df)", "check": (out, code) => /DataFrame\(\s*\[/.test(code) && /x\|y/.test(out) && /1\|2/.test(out) && /3\|4/.test(out)}, {"num": 4, "difficulty": "easy", "topic": "shape and columns", "q": "Load the dataset <code>cities-weather</code>. Print the table's <code>shape</code>.",
+    explain: "shape returns a tuple of (number of rows, number of columns). Note that this is an attribute, not a method — you write df.shape without parentheses. To get only the number of rows, use df.shape[0], and this is the standard way to count records.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nprint(df.shape)", "check": (out, code) => /data\.load\(\s*["']cities-weather["']\s*\)/.test(code) && /\.shape/.test(code) && /\(\s*6\s*,\s*4\s*\)/.test(out)}, {"num": 5, "difficulty": "easy", "topic": "shape and columns", "q": "Load <code>students</code> and print the column names (<code>columns</code>).",
+    explain: "df.columns returns the column names. Like shape, it's an attribute, not a method. Before any analysis it's worth running shape and columns to know what you're working with — how many rows there are and exactly what the columns are called, including case.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df.columns)", "check": (out, code) => /data\.load/.test(code) && /\.columns/.test(code) && /name/.test(out) && /math/.test(out) && /english/.test(out) && /history/.test(out)}, {"num": 6, "difficulty": "easy", "topic": "head and tail", "q": "Load <code>students</code> and print the <b>first 3 rows</b>.",
+    explain: "head(n) returns the first n rows; without an argument the default is 5. This is the first operation you do on any new table to peek at the data without flooding the screen. Note that head returns a new table and doesn't change the original.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df.head(3))", "check": (out, code) => /\.head\(\s*3\s*\)/.test(code) && /Gal/.test(out) && /Tomer/.test(out) && /Yael/.test(out) && !/Noa/.test(out)}, {"num": 7, "difficulty": "easy", "topic": "head and tail", "q": "Load <code>sales</code> and print the <b>last 2 rows</b>.",
+    explain: "tail(n) returns the last n rows. The combination of head+tail gives a quick picture of the start and end of the data, and in time series this immediately reveals whether the table is sorted chronologically. It's important to remember that tail doesn't renumber the rows.", "starter": "", "solution": "df = data.load(\"sales\")\nprint(df.tail(2))", "check": (out, code) => /\.tail\(\s*2\s*\)/.test(code) && /November/.test(out) && /December/.test(out) && !/October/.test(out)}, {"num": 8, "difficulty": "easy", "topic": "Access to the column", "q": "From <code>students</code>: print only the <code>math</code> column.",
+    explain: "Square brackets with a single column name return a Series — a one-dimensional vector. Double brackets with a list, like df[[\"math\"]], return a DataFrame with one column. The difference matters: you can call mean or sum directly on a Series, while on a DataFrame you get a result per column.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df[\"math\"])", "check": (out, code) => /df\[\s*["']math["']\s*\]/.test(code) && /88/.test(out) && /95/.test(out) && /70/.test(out)}, {"num": 9, "difficulty": "easy", "topic": "Access to the column", "q": "From <code>real-estate</code>: print the columns <code>neighborhood</code> and <code>price_m</code> only.",
+    explain: "To select several columns you pass a list inside the square brackets, hence the double brackets: df[[\"a\", \"b\"]]. The list also determines the order of the columns in the result, so you can reorder without an extra step. Writing it without the inner brackets will throw an error.", "starter": "", "solution": "df = data.load(\"real-estate\")\nprint(df[[\"neighborhood\", \"price_m\"]])", "check": (out, code) => /\[\s*\[\s*["']neighborhood["']/.test(code) && /neighborhood\|price_m/.test(out) && !/rooms/.test(out)}, {"num": 10, "difficulty": "easy", "topic": "Built-in datasets", "q": "Use <code>data.list()</code> to print all the available datasets.",
+    explain: "data.list() prints all the built-in datasets with a short description. This is the starting point for every exercise: first you see what's available, then you load with data.load using the exact name. Note that the function prints on its own, so there's no need to wrap it in print.", "starter": "", "solution": "data.list()", "check": (out, code) => /data\.list\(\s*\)/.test(code) && /cities-weather/.test(out) && /students/.test(out) && /salaries/.test(out)}, {"num": 11, "difficulty": "easy", "topic": "sorting", "q": "Load <code>salaries</code> and sort from highest salary to lowest. Print.",
+    explain: "sort_values sorts by a column, and the default is from smallest to largest; so for a descending sort you need ascending=False. The method returns a new table and doesn't change the original, so you must save the result in a variable. The original index is kept and isn't renumbered.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.sort_values(\"salary\", ascending=False)\nprint(result)", "check": (out, code) => /sort_values/.test(code) && /ascending\s*=\s*False/.test(code) && /Hani\|R&D\|28000/.test(out) && /Carmel\|Marketing\|12000/.test(out)}, {"num": 12, "difficulty": "easy", "topic": "sorting", "q": "Load <code>real-estate</code> and sort from cheapest to most expensive apartment by <code>price_m</code>. Print it.",
+    explain: "ascending=True is the default, but writing it explicitly clarifies the intent to whoever reads the code. You can also sort by several columns at once by passing a list, e.g. sort_values([\"rooms\", \"price_m\"]) — first by rooms and within each group by price.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.sort_values(\"price_m\", ascending=True)\nprint(result)", "check": (out, code) => /sort_values\(\s*["']price_m["']/.test(code) && /Kiryat Shalom\|3\|65\|1\.9/.test(out) && /Neve Tzedek\|4\|110\|6\.8/.test(out)}, {"num": 13, "difficulty": "easy", "topic": "Sort + head", "q": "From <code>football</code>: find the team with the most points (<code>points</code>). Print one row.",
+    explain: "The combination of a descending sort followed by head(1) is the classic pattern for pulling the leading record, and it also works when you want Top N. Note that you can chain the two methods in one line because each one returns a new table. A shorter alternative is nlargest(1, \"points\").", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.sort_values(\"points\", ascending=False).head(1)\nprint(result)", "check": (out, code) => /sort_values/.test(code) && /head\(\s*1\s*\)/.test(code) && /Maccabi Tel Aviv\|55/.test(out) && !/Beitar/.test(out)}, {"num": 14, "difficulty": "easy", "topic": "Sort + head", "q": "From <code>sales</code>: find the month with the lowest sales. Print.",
+    explain: "To find the minimum, sort in ascending order and take the first row. Note that if two months shared the same revenue, head(1) would arbitrarily return only one of them — when that matters, it's better to filter by the minimum value itself and get all the equal rows.", "starter": "", "solution": "df = data.load(\"sales\")\nresult = df.sort_values(\"revenue\", ascending=True).head(1)\nprint(result)", "check": (out, code) => /sort_values/.test(code) && /head\(\s*1\s*\)/.test(code) && /February\|38000/.test(out) && !/December/.test(out)}, {"num": 15, "difficulty": "easy", "topic": "filtering", "q": "From <code>students</code>: filter only students with <code>math &gt; 85</code>. Print.",
+    explain: "Filtering in pandas is done in two steps: first you build a boolean mask — a series of True/False the length of the table — then you pass it in square brackets, df[mask]. In this environment the > operator isn't available on a column, so you use pandas' comparison methods: gt greater than, lt less than, ge greater than or equal, le less than or equal, eq equal, and ne not equal.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df[df[\"math\"].gt(85)]\nprint(result)", "check": (out, code) => /\.gt\(\s*85\s*\)/.test(code) && /df\s*(?:\.loc)?\s*\[/.test(code) && /Yael\|92/.test(out) && /Maya\|95/.test(out) && !/Tomer/.test(out)}, {"num": 16, "difficulty": "easy", "topic": "filtering", "q": "From <code>real-estate</code>: filter apartments with <code>rooms &gt;= 4</code>. Print.",
+    explain: "ge is greater-or-equal, meaning greater than or equal to, while gt is greater-than, strictly greater. Here we want four rooms or more, so apartments with exactly 4 rooms must be included and ge is the right choice. Note that the result keeps the original index, so the row numbers aren’t consecutive.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df[df[\"rooms\"].ge(4)]\nprint(result)", "check": (out, code) => /\.ge\(\s*4\s*\)/.test(code) && /df\s*(?:\.loc)?\s*\[/.test(code) && /Rothschild/.test(out) && /Ramat Aviv\|5/.test(out) && !/Florentin/.test(out)}, {"num": 17, "difficulty": "easy", "topic": "filtering", "q": "From <code>salaries</code>: filter employees whose department is \"R&D\".",
+    explain: "eq compares equality and returns a boolean mask, exactly like gt and lt. String comparison is case- and whitespace-sensitive: \"R&D\" is not equal to \"r&d\" nor to \"R&D \" with a trailing space. When filtering by several possible values, isin is far more readable than a chain of eq with the or operator.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df[df[\"department\"].eq(\"R&D\")]\nprint(result)", "check": (out, code) => /\.eq\(\s*["']R&D["']\s*\)/.test(code) && /df\s*(?:\.loc)?\s*\[/.test(code) && /Benny\|R&D/.test(out) && /Hani\|R&D/.test(out) && !/Marketing/.test(out)}, {"num": 18, "difficulty": "easy", "topic": "filtering", "q": "From <code>telecom-churn</code>: filter only customers who churned (<code>churn == 1</code>). Print.",
+    explain: "eq(1) creates a boolean mask flagging the customers who churned, and passing it in square brackets returns only those rows. A useful tip for 0/1 flag columns: their mean is exactly the percentage rate, so df[\"churn\"].mean() gives the churn rate without any filtering at all.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df[df[\"churn\"].eq(1)]\nprint(churners)", "check": (out, code) => /\.eq\(\s*1\s*\)/.test(code) && /df\s*(?:\.loc)?\s*\[/.test(code) && /\|102\|/.test(out) && /\|110\|/.test(out) && !/\|101\|/.test(out)}, {"num": 19, "difficulty": "easy", "topic": "len", "q": "From <code>telecom-churn</code>: how many customers are there in total? Use <code>shape</code>.",
+    explain: "df.shape[0] is the number of rows and df.shape[1] is the number of columns. len(df) also returns the number of rows and is completely equivalent. Note that len on a Series returns the number of values including missing ones, while count skips them — a difference that shows up immediately when there is missing data.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nprint(df.shape[0])", "check": (out, code) => /\.shape\s*\[\s*0\s*\]/.test(code) && /data\.load/.test(code) && /(^|\D)15(\D|$)/.test(out)}, {"num": 20, "difficulty": "easy", "topic": "len", "q": "From <code>football</code>: how many teams are in the league?",
+    explain: "shape[0] counts physical rows in the table. If several rows for the same group appeared, the question of how many groups there are would require nunique on the name column rather than a row count. It's always worth asking whether the row is the unit you want to count, or whether there are duplicates.", "starter": "", "solution": "df = data.load(\"football\")\nprint(df.shape[0])", "check": (out, code) => /\.shape\s*\[\s*0\s*\]/.test(code) && /data\.load\(\s*["']football["']\s*\)/.test(code) && /(^|\D)5(\D|$)/.test(out)}, {"num": 21, "difficulty": "easy", "topic": "mean", "q": "From <code>students</code>: calculate the <b>average</b> of the <code>math</code> scores.",
+    explain: "mean automatically skips missing values and calculates the average only over what exists, so an average isn't always the sum divided by the number of rows. Note that the output appears as 83.40000000000001: that's what floating-point arithmetic looks like in practice, and for a clean display you round with round.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df[\"math\"].mean())", "check": (out, code) => /\.mean\(/.test(code) && /df\s*\[\s*["']math["']\s*\]/.test(code) && /83\.4/.test(out)}, {"num": 22, "difficulty": "easy", "topic": "sum", "q": "From <code>sales</code>: calculate <b>total annual revenue</b> (<code>revenue</code>).",
+    explain: "sum totals all the column's values and skips missing values. The total annual revenue here is 720000. Note that sum on a completely empty series returns 0, not an error, so in a real report it's worth also checking how many rows actually went into the calculation before drawing a conclusion from the sum.", "starter": "", "solution": "df = data.load(\"sales\")\nprint(df[\"revenue\"].sum())", "check": (out, code) => /\.sum\(/.test(code) && /df\s*\[\s*["']revenue["']\s*\]/.test(code) && /720000/.test(out)}, {"num": 23, "difficulty": "easy", "topic": "max", "q": "From <code>cities-weather</code>: what's the highest temperature?",
+    explain: "max returns the maximum value in a column, but doesn't reveal which row it belongs to. To get the row label of the maximum you use idxmax, and to get the full row you sort descending and take head(1). The distinction between the value and the row carrying it comes up in almost every analysis.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nprint(df[\"temp\"].max())", "check": (out, code) => /\.max\(/.test(code) && /df\s*\[\s*["']temp["']\s*\]/.test(code) && /(^|\D)31(\D|$)/.test(out)}, {"num": 24, "difficulty": "easy", "topic": "min", "q": "From <code>salaries</code>: what is the lowest salary?",
+    explain: "min returns the lowest value and skips missing values. If all the values in a column are missing, the result will be empty rather than an error — so in a real report you always check count alongside min and max, to know how many values the calculation was actually based on.", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"salary\"].min())", "check": (out, code) => /\.min\(/.test(code) && /df\s*\[\s*["']salary["']\s*\]/.test(code) && /12000/.test(out)}, {"num": 25, "difficulty": "easy", "topic": "count", "q": "From <code>real-estate</code>: how many neighborhoods are there (<code>nunique</code> (nunique of <code>neighborhood</code>)?",
+    explain: "nunique counts how many distinct values a column has and ignores missing values. Note that in this dataset every neighborhood appears once, so nunique happens to equal the number of rows. In a table with duplicates the two numbers would diverge, which is exactly why you check them together when cleaning data.", "starter": "", "solution": "df = data.load(\"real-estate\")\nprint(df[\"neighborhood\"].nunique())", "check": (out, code) => /nunique\(/.test(code) && /df\s*\[\s*["']neighborhood["']\s*\]/.test(code) && /(^|\D)8(\D|$)/.test(out)}, {"num": 26, "difficulty": "easy", "topic": "describe", "q": "From <code>students</code>: print the table's <code>describe()</code> (full statistics).",
+    explain: "describe centers count, mean, std, min, the three quartiles, and max for every numeric column into one table. Text columns like name are not included. This is the first operation you run on new data: it immediately exposes unusual ranges, missing values, and asymmetric distributions.", "starter": "", "solution": "df = data.load(\"students\")\nprint(df.describe())", "check": "(out, code) => /describe\\(/.test(code) && /math/.test(out)"}, {"num": 27, "difficulty": "easy", "topic": "value_counts", "q": "From <code>salaries</code>: count how many employees are in each <code>department</code>.",
+    explain: "value_counts counts how many times each value appears in a column and returns a Series sorted from most to least common. It's the fastest way to get to know a categorical column. Note that it skips missing values by default, so the sum of the counts may be smaller than the number of rows.", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"department\"].value_counts())", "check": "(out, code) => /value_counts/.test(code) && (/Sales/.test(out))"}, {"num": 28, "difficulty": "easy", "topic": "value_counts", "q": "From <code>telecom-churn</code>: count how many customers are in each <code>plan</code> type.",
+    explain: "value_counts returns the values sorted from most to least common, so the first row is always the largest category. Here premium leads with 7 customers. If you want percentages instead of counts, pass normalize=True, which is more convenient for comparing groups of different sizes.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nprint(df[\"plan\"].value_counts())", "check": (out, code) => /value_counts/.test(code) && /premium\s+7/.test(out) && /basic\s+4/.test(out) && /standard\s+4/.test(out)}, {"num": 29, "difficulty": "easy", "topic": "unique", "q": "From <code>salaries</code>: find the list of unique departments (<code>unique()</code>).",
+    explain: "unique returns the distinct values in a column in their first order of appearance, without sorting. This differs from value_counts, which returns both a count and sorts. When you only want the number of distinct values, use nunique, which avoids building the whole list.", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"department\"].unique())", "check": "(out, code) => /unique\\(/.test(code) && /Sales/.test(out)"}, {"num": 30, "difficulty": "easy", "topic": "Access to the value", "q": "From <code>cities-weather</code>: print <b>the temperature of Tel Aviv</b>. Filter with <code>.eq()</code> and take the first value with <code>.iloc[0]</code>.",
+    explain: "After filtering, the original index is preserved: if the row that remained was originally row number 4, its label stays 4. So [0] on the result may raise a KeyError or return a completely different row. iloc[0] always returns the first value by physical position, so it’s the right choice after filtering or sorting.", "starter": "", "solution": "df = data.load(\"cities-weather\")\ntlv = df[df[\"city\"].eq(\"Tel Aviv\")]\nprint(tlv[\"temp\"].iloc[0])", "check": (out, code) => /\.eq\(/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /(^|\D)24(\D|$)/.test(out)}, {"num": 31, "difficulty": "medium", "topic": "GroupBy", "q": "From <code>salaries</code>: group by <code>department</code> and calculate the <b>average salary</b> for each department.",
+    explain: "After groupby, it’s best to immediately select the column you’re interested in, here [\"salary\"], and only then apply the aggregation function. That way the result is clean and contains exactly what was asked. If you apply mean to the whole table, text columns like name produce missing values or an error, since a mean of names has no meaning.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\")[\"salary\"].mean()\nprint(result)", "check": (out, code) => /groupby\(\s*["']department["']\s*\)/.test(code) && /\.mean\(/.test(code) && /Sales\s+17000/.test(out) && /R&D\s+24500/.test(out) && /Marketing\s+13000/.test(out)}, {"num": 32, "difficulty": "medium", "topic": "GroupBy", "q": "From <code>salaries</code>: group by <code>department</code> and count employees in each department (<code>count</code>).",
+    explain: "count after groupby counts, within each group, how many non-missing values there are in each column, so you get one column per field. Here there are no missing values, so all the columns are identical. When there is missing data the numbers diverge, and that's exactly the difference from size, which just counts rows.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").count()\nprint(result)", "check": (out, code) => /groupby/.test(code) && /\.count\(/.test(code) && /Sales\|5\|5\|5/.test(out) && /R&D\|4\|4\|4/.test(out)}, {"num": 33, "difficulty": "medium", "topic": "GroupBy", "q": "From <code>telecom-churn</code>: group by <code>plan</code> and compute the average <code>monthly_bill</code>.",
+    explain: "Selecting the column right after groupby avoids unnecessary computation and produces focused output. Note that without the selection, an average of customer_id would also be computed — a number that is arithmetically valid and completely meaningless from a business standpoint. Always ask whether aggregating a column has a real interpretation.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nresult = df.groupby(\"plan\")[\"monthly_bill\"].mean()\nprint(result)", "check": (out, code) => /groupby\(\s*["']plan["']\s*\)/.test(code) && /monthly_bill/.test(code) && /\.mean\(/.test(code) && /basic\s+46/.test(out) && /premium\s+120/.test(out)}, {"num": 34, "difficulty": "medium", "topic": "GroupBy", "q": "From <code>salaries</code>: group by department and calculate the <b>total salary</b> per department (<code>sum</code>).",
+    explain: "Selecting the column before aggregating gives exactly what was asked: total salary in each department. Note that summing the tenure column would have been a meaningless number, and summing a names column in real pandas would have concatenated the strings together without warning. Explicitly selecting the column prevents both mishaps.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\")[\"salary\"].sum()\nprint(result)", "check": (out, code) => /groupby/.test(code) && /salary/.test(code) && /\.sum\(/.test(code) && /Sales\s+85000/.test(out) && /R&D\s+98000/.test(out) && /Marketing\s+39000/.test(out)}, {"num": 35, "difficulty": "medium", "topic": "GroupBy + Max", "q": "From <code>salaries</code>: group by department and print the <b>highest salary</b> in each department (<code>max</code>).",
+    explain: "max after groupby returns the highest value in each group, but not the row it came from. If you apply max to the whole table, each column gets its own maximum separately, and the resulting row doesn't describe any real employee. To get the employee itself you need idxmax or sorting within each group.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\")[\"salary\"].max()\nprint(result)", "check": (out, code) => /groupby/.test(code) && /salary/.test(code) && /\.max\(/.test(code) && /Sales\s+19000/.test(out) && /R&D\s+28000/.test(out) && /Marketing\s+14000/.test(out)}, {"num": 36, "difficulty": "medium", "topic": "GroupBy + Size", "q": "From <code>salaries</code>: group by <code>department</code> and print the <b>size of each group</b> using <code>size()</code>.",
+    explain: "size returns how many rows are in each group and returns a single Series. The difference from count is fundamental: size counts rows including ones with missing values, while count counts, per column separately, only the values that are present. When there is missing data the two numbers diverge, and then the distinction is critical.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.groupby(\"department\").size()\nprint(result)", "check": (out, code) => /groupby\(\s*["']department["']\s*\)/.test(code) && /\.size\(/.test(code) && /Sales\s+5/.test(out) && /R&D\s+4/.test(out) && /Marketing\s+3/.test(out)}, {"num": 37, "difficulty": "medium", "topic": "Multiple condition", "q": "From <code>students</code>: filter students with <b>math &gt; 80</b> and also <b>english &gt; 80</b>. Use <code>.gt()</code> and the <code>&amp;</code> operator.",
+    explain: "To combine two conditions use logical & for and, | for or, and ~ for negation. These are not Python's and, or, and not: Python's connective words try to convert the entire mask to a single truth value and therefore fail. Golden rule: wrap every condition in parentheses, because & has higher precedence than comparison.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df[df[\"math\"].gt(80) & df[\"english\"].gt(80)]\nprint(result)", "check": (out, code) => /\.gt\(\s*80\s*\)/.test(code) && /&/.test(code) && !/lambda/.test(code) && /Yael\|92\|88/.test(out) && /Noa\|84\|90/.test(out) && !/Tomer/.test(out)}, {"num": 38, "difficulty": "medium", "topic": "Multiple condition", "q": "From <code>telecom-churn</code>: filter customers with <code>monthly_bill &gt; 100</code> and <code>tenure_months &gt; 40</code>.",
+    explain: "Each condition produces a separate boolean mask, and & combines them element-by-element so a row stays only if both conditions hold for it. The more conditions you add, the faster the result shrinks, so after multiple filters it is always worth printing shape[0] to make sure you have not ended up with an empty table.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nresult = df[df[\"monthly_bill\"].gt(100) & df[\"tenure_months\"].gt(40)]\nprint(result)", "check": (out, code) => /\.gt\(\s*100\s*\)/.test(code) && /\.gt\(\s*40\s*\)/.test(code) && /&/.test(code) && !/lambda/.test(code) && /\|102\|/.test(out) && /\|112\|/.test(out) && !/\|101\|/.test(out)}, {"num": 39, "difficulty": "medium", "topic": "condition or", "q": "From <code>cities-weather</code>: filter cities with <code>temp &gt; 25</code> <b>or</b> <code>humidity &gt; 65</code>. Use <code>.gt()</code> and the <code>|</code> operator.",
+    explain: "The | operator is logical or: a row is included if at least one of the conditions holds, so the result is always greater than or equal to that of &. Here Tel Aviv gets in thanks to the high humidity even though its temperature is below 25, and Eilat gets in thanks to the heat. Jerusalem fails both conditions and so doesn't appear.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nresult = df[df[\"temp\"].gt(25) | df[\"humidity\"].gt(65)]\nprint(result)", "check": (out, code) => /\.gt\(\s*25\s*\)/.test(code) && /\.gt\(\s*65\s*\)/.test(code) && /\|/.test(code) && !/lambda/.test(code) && /Tel Aviv/.test(out) && /Eilat/.test(out) && !/Jerusalem/.test(out)}, {"num": 40, "difficulty": "medium", "topic": "in operator", "q": "From <code>real-estate</code>: filter apartments in the \"Florentin\" or \"Rothschild\" neighborhoods (use <code>isin</code>).",
+    explain: "isin takes a list of values and returns a boolean mask flagging which rows contain one of them. It's the readable alternative to a long chain of eq joined with |, and it's also faster. To get the opposite, i.e. everything not in the list, prefix the mask with ~: df[~df[\"col\"].isin([...])].", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df[df[\"neighborhood\"].isin([\"Florentin\", \"Rothschild\"])]\nprint(result)", "check": (out, code) => /\.isin\(/.test(code) && /Florentin/.test(code) && /Florentin\|3\|75/.test(out) && /Rothschild\|4\|95/.test(out) && !/Jaffa/.test(out)}, {"num": 41, "difficulty": "medium", "topic": "New column", "q": "From <code>students</code>: add a column <code>total</code> that is the <b>sum</b> of math + english + history. Build it manually in a loop.",
+    explain: "Adding a column is done with a simple assignment: df[\"total\"] = values, where the list length equals the number of rows. The loop here teaches the mechanism, but in pandas it's standard to write this vectorized: df[\"math\"] + df[\"english\"] + df[\"history\"] directly returns a summed Series, with no loop and no risk of a length mistake.", "starter": "", "solution": "df = data.load(\"students\")\ntotals = []\nfor i in range(df.shape[0]):\n    t = df[\"math\"][i] + df[\"english\"][i] + df[\"history\"][i]\n    totals.append(t)\ndf[\"total\"] = totals\nprint(df)", "check": (out, code) => /df\s*\[\s*["']total["']\s*\]\s*=/.test(code) && /for\s/.test(code) && /Gal\|88\|78\|85\|251/.test(out) && /Shira\|89\|91\|92\|272/.test(out)}, {"num": 42, "difficulty": "medium", "topic": "New column", "q": "From <code>real-estate</code>: add a column <code>price_per_sqm</code> = price_m * 1000000 / sqm.",
+    explain: "Price per meter is a ratio between two columns, so the calculation happens row by row. round without a second argument returns a whole number, which suits price per meter. With real data you must make sure the denominator is neither zero nor missing, otherwise the calculation will fail or give infinity instead of a number.", "starter": "", "solution": "df = data.load(\"real-estate\")\nprices = []\nfor i in range(df.shape[0]):\n    p = df[\"price_m\"][i] * 1000000 / df[\"sqm\"][i]\n    prices.append(round(p))\ndf[\"price_per_sqm\"] = prices\nprint(df)", "check": (out, code) => /price_per_sqm/.test(code) && /1000000/.test(code) && /df\s*\[\s*["']price_per_sqm["']\s*\]\s*=/.test(code) && /Florentin\|3\|75\|3\.2\|42667/.test(out)}, {"num": 43, "difficulty": "medium", "topic": "New column - condition", "q": "From <code>students</code>: add a <code>grade</code> column that is \"A\" if math &gt; 90, otherwise \"B\".",
+    explain: "A one-line conditional expression, value_if_true if condition else value_if_false, is very convenient for building a categorical column. Notice the boundary: the condition is strictly greater than 90, so a score of exactly 90 gets a B. Here the comparison with > is valid because it operates on a single value pulled from the column, not on the whole column.", "starter": "", "solution": "df = data.load(\"students\")\ngrades = []\nfor i in range(df.shape[0]):\n    g = \"A\" if df[\"math\"][i] > 90 else \"B\"\n    grades.append(g)\ndf[\"grade\"] = grades\nprint(df)", "check": (out, code) => /df\s*\[\s*["']grade["']\s*\]\s*=/.test(code) && /["']A["']/.test(code) && /Yael\|92\|88\|90\|A/.test(out) && /Gal\|88\|78\|85\|B/.test(out)}, {"num": 44, "difficulty": "medium", "topic": "New column - calculation", "q": "from<code>football</code>: Add a column <code>goal_diff</code> = goals_for - goals_against.",
+    explain: "Arithmetic operations between two columns are done element-by-element and return a new Series, so you can simply write df[\"goals_for\"] - df[\"goals_against\"] with no loop at all. Note that the goal difference can be negative, like for Beitar, and that is real information, not an error.", "starter": "", "solution": "df = data.load(\"football\")\ndiffs = []\nfor i in range(df.shape[0]):\n    diffs.append(df[\"goals_for\"][i] - df[\"goals_against\"][i])\ndf[\"goal_diff\"] = diffs\nprint(df)", "check": (out, code) => /df\s*\[\s*["']goal_diff["']\s*\]\s*=/.test(code) && /goals_against/.test(code) && /Maccabi Tel Aviv\|55\|17\|4\|3\|54\|21\|33/.test(out) && /Beitar\|38\|10\|8\|6\|32\|33\|-1/.test(out)}, {"num": 45, "difficulty": "medium", "topic": "apply", "q": "From <code>students</code>: use <code>apply</code> on the math column — add a column <code>math_pct</code> that is math/100.",
+    explain: "apply runs a function on every value in a Series and returns a new Series; the original stays unchanged. This is the general way to apply logic that has no built-in equivalent. For simple arithmetic calculations like dividing by 100, df[\"math\"] / 100 is still preferable — it's shorter and faster than apply.", "starter": "", "solution": "df = data.load(\"students\")\nseries = df[\"math\"]\npcts = series.apply(lambda x: x/100)\ndf[\"math_pct\"] = list(pcts)\nprint(df)", "check": (out, code) => /\.apply\(/.test(code) && /lambda/.test(code) && /math_pct/.test(code) && /Gal\|88\|78\|85\|0\.88/.test(out) && /Maya\|95\|84\|88\|0\.95/.test(out)}, {"num": 46, "difficulty": "medium", "topic": "apply + map", "q": "From <code>cities-weather</code>: add a column <code>temp_f</code> = temp * 9/5 + 32 (Fahrenheit). Use a loop.",
+    explain: "The formula for converting to Fahrenheit is multiplying by 9/5 and adding 32. Note that some results print as 73.40000000000001 rather than 73.4 despite round: this is how decimal numbers are stored in memory in binary, and even the constant 73.4 itself will look this way. round did in fact round — only the display isn't exact, and for tidy output you use a string format.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nf_temps = []\nfor i in range(df.shape[0]):\n    f_temps.append(round(df[\"temp\"][i] * 9/5 + 32, 1))\ndf[\"temp_f\"] = f_temps\nprint(df)", "check": (out, code) => /temp_f/.test(code) && /9/.test(code) && /32/.test(code) && /df\s*\[\s*["']temp_f["']\s*\]\s*=/.test(code) && /Tel Aviv\|24\|68\|0\|75\.2/.test(out) && /Eilat\|31\|55\|0\|87\.8/.test(out)}, {"num": 47, "difficulty": "medium", "topic": "mean conditional", "q": "From <code>telecom-churn</code>: calculate the <b>average monthly_bill</b> only for customers who churned (churn=1). Print.",
+    explain: "A conditional average is built in two steps: first filter to the desired mask, then apply mean on the column. The same result is also obtained from groupby(\"churn\")[\"monthly_bill\"].mean(), which gives the average for churners and non-churners at once. When comparing two groups, the groupby version is usually more readable.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df[df[\"churn\"].eq(1)]\nprint(churners[\"monthly_bill\"].mean())", "check": (out, code) => /\.eq\(\s*1\s*\)/.test(code) && /\.mean\(/.test(code) && !/\.filter\(/.test(code) && /92\.8/.test(out)}, {"num": 48, "difficulty": "medium", "topic": "percent", "q": "From <code>telecom-churn</code>: calculate the <b>percentage of customers who churned</b> out of the total. Print a number.",
+    explain: "A percentage is calculated as the ratio between the number of rows that passed the filter and the total number of rows, times 100. A shortcut worth knowing: when a column contains only 0 and 1, its average is exactly that ratio, so df[\"churn\"].mean() * 100 gives the same answer without filtering and without computing shape twice.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df[df[\"churn\"].eq(1)]\npct = churners.shape[0] / df.shape[0] * 100\nprint(round(pct, 1))", "check": (out, code) => /\.eq\(\s*1\s*\)/.test(code) && /shape\s*\[\s*0\s*\]/.test(code) && !/\.filter\(/.test(code) && /46\.7/.test(out)}, {"num": 49, "difficulty": "medium", "topic": "rate", "q": "From <code>football</code>: for each team — compute <code>win_rate</code> = wins / (wins+draws+losses). Add it as a column.",
+    explain: "Win rate is wins divided by total games, so you must first compute the denominator from the sum of three columns. Computing a ratio always requires making sure the denominator isn't zero: a team with no games would crash the loop with a division-by-zero error. Rounding to two decimal places makes the result readable.", "starter": "", "solution": "df = data.load(\"football\")\nrates = []\nfor i in range(df.shape[0]):\n    total = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    rates.append(round(df[\"wins\"][i] / total, 2))\ndf[\"win_rate\"] = rates\nprint(df)", "check": (out, code) => /win_rate/.test(code) && /df\s*\[\s*["']win_rate["']\s*\]\s*=/.test(code) && /draws/.test(code) && /Maccabi Tel Aviv\|55\|17\|4\|3\|54\|21\|0\.71/.test(out) && /Beitar\|38\|10\|8\|6\|32\|33\|0\.42/.test(out)}, {"num": 50, "difficulty": "medium", "topic": "progress", "q": "From <code>covid-israel</code>: add a column <code>positive_rate</code> = positive / tested * 100 (rounded to 2 digits).",
+    explain: "The positive rate is the number of positives divided by the number tested, times 100. It is important to understand that this is a ratio, not a count: if the number of tests drops sharply, the rate can rise even without an increase in actual cases. That is why a real report always shows the numerator, the denominator, and the ratio together, not just the percentage.", "starter": "", "solution": "df = data.load(\"covid-israel\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append(round(df[\"positive\"][i] / df[\"tested\"][i] * 100, 2))\ndf[\"positive_rate\"] = rates\nprint(df)", "check": (out, code) => /positive_rate/.test(code) && /df\s*\[\s*["']positive_rate["']\s*\]\s*=/.test(code) && /tested/.test(code) && /01\/01\|3200\|45000\|180\|7\.11/.test(out) && /22\/01\|8200\|67000\|410\|12\.24/.test(out)}, {"num": 51, "difficulty": "medium", "topic": "Top N", "q": "From <code>salaries</code>: find the <b>3 highest earners</b>. Print names and salaries.",
+    explain: "The pattern of descending sort followed by head(n) is the standard way to get a Top N, and selecting columns with double brackets leaves only what’s relevant to the report. An equivalent shortcut is nlargest(3, \"salary\"). Note that if two employees share third place, cutting at 3 will arbitrarily take only one of them.", "starter": "", "solution": "df = data.load(\"salaries\")\nresult = df.sort_values(\"salary\", ascending=False).head(3)\nprint(result[[\"name\", \"salary\"]])", "check": (out, code) => /sort_values/.test(code) && /head\(\s*3\s*\)/.test(code) && /\[\s*\[/.test(code) && /Hani\|28000/.test(out) && /Yossi\|23000/.test(out) && !/Benny/.test(out)}, {"num": 52, "difficulty": "medium", "topic": "Top N", "q": "From <code>real-estate</code>: <b>2 cheapest neighborhoods</b> by price per\"sqm. Calculate price_per_sqm and sort.",
+    explain: "Notice that the cheapest apartment by total price is not necessarily the cheapest per square meter: Ramat Aviv costs 4.5 million and still ranks among the two cheapest per meter, because it is especially large. Normalizing by size is at the heart of analytical work — it turns incomparable numbers into a uniform metric.", "starter": "", "solution": "df = data.load(\"real-estate\")\npps = []\nfor i in range(df.shape[0]):\n    pps.append(df[\"price_m\"][i] * 1000000 / df[\"sqm\"][i])\ndf[\"price_per_sqm\"] = pps\nresult = df.sort_values(\"price_per_sqm\").head(2)\nprint(result[[\"neighborhood\", \"price_per_sqm\"]])", "check": (out, code) => /head\(\s*2\s*\)/.test(code) && /price_per_sqm/.test(code) && /sort_values/.test(code) && /Kiryat Shalom\|29230/.test(out) && /Ramat Aviv\|34615/.test(out) && !/Neve Tzedek/.test(out)}, {"num": 53, "difficulty": "medium", "topic": "Bottom N", "q": "From <code>students</code>: the <b>3 weakest students</b> in math. Print name + math.",
+    explain: "To find the lowest values you sort ascending and take the first ones; the equivalent shortcut is nsmallest(3, \"math\"). Important point: missing values in the sort column are pushed to the end of the table by default, so they won't accidentally end up in the list of weakest — behavior you can change with na_position.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.sort_values(\"math\", ascending=True).head(3)\nprint(result[[\"name\", \"math\"]])", "check": (out, code) => /sort_values/.test(code) && /ascending\s*=\s*True/.test(code) && /head\(\s*3\s*\)/.test(code) && /Aviv\|70/.test(out) && /Tomer\|76/.test(out) && !/Gal/.test(out)}, {"num": 54, "difficulty": "medium", "topic": "Sort by name", "q": "From <code>real-estate</code>: sort neighborhoods by <b>alphabetical</b> name. Print neighborhood.",
+    explain: "sort_values also works on text columns, and the sort is done by character value, not by language rules. So in Hebrew and other languages the order can look surprising, and in English all uppercase letters come before lowercase ones. When the order matters to the end user, sort by a normalized key rather than by the raw string.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df.sort_values(\"neighborhood\", ascending=True)\nprint(result[\"neighborhood\"])", "check": (out, code) => /sort_values\(\s*["']neighborhood["']/.test(code) && /Babylonian/.test(out) && /'Babylonian'/.test(out) && /'Ramat Aviv'/.test(out)}, {"num": 55, "difficulty": "medium", "topic": "pct_change", "q": "From <code>sales</code>: calculate the <code>pct_change</code> of revenue (percent change between months). Print the Series.",
+    explain: "pct_change calculates the relative change between each value and the one before it. The first value is always empty since it has no comparison point, so average calculations on the result must ignore it. Note that the values are fractions, not percentages: 0.3684 means a 36.84 percent increase, and to get percentages you multiply by 100.", "starter": "", "solution": "df = data.load(\"sales\")\nchanges = df[\"revenue\"].pct_change()\nprint(changes)", "check": (out, code) => /pct_change/.test(code) && /df\s*\[\s*["']revenue["']\s*\]/.test(code) && /None/.test(out) && /0\.3684/.test(out) && /-0\.155/.test(out)}, {"num": 56, "difficulty": "medium", "topic": "cumsum", "q": "From <code>sales</code>: calculate the <code>cumsum</code> of revenue (cumulative sum). Print.",
+    explain: "cumsum returns a running sum: each value is the sum of everything before it including itself. So the last value, 720000, equals exactly the sum of the entire column — a convenient sanity check. It's important to remember that cumsum depends entirely on row order, so it's meaningful only when the table is sorted chronologically.", "starter": "", "solution": "df = data.load(\"sales\")\ncum = df[\"revenue\"].cumsum()\nprint(cum)", "check": (out, code) => /cumsum/.test(code) && /df\s*\[\s*["']revenue["']\s*\]/.test(code) && /45000/.test(out) && /720000/.test(out)}, {"num": 57, "difficulty": "medium", "topic": "A complex formula", "q": "From <code>football</code>: for each team - calculate <code>efficiency</code> = goals_for / (wins+draws+losses). Add as a column.",
+    explain: "Normalizing by number of games played lets you compare teams that played a different number of games. Notice the column name: efficiency is vague, while goals_per_game would accurately describe what's actually computed. Precise column names are part of the analysis, because they prevent the report from being misread later.", "starter": "", "solution": "df = data.load(\"football\")\neffs = []\nfor i in range(df.shape[0]):\n    total = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    effs.append(round(df[\"goals_for\"][i] / total, 2))\ndf[\"efficiency\"] = effs\nprint(df[[\"team\", \"efficiency\"]])", "check": (out, code) => /efficiency/.test(code) && /goals_for/.test(code) && /df\s*\[\s*["']efficiency["']\s*\]\s*=/.test(code) && /Maccabi Tel Aviv\|2\.25/.test(out) && /Beitar\|1\.33/.test(out)}, {"num": 58, "difficulty": "medium", "topic": "A complex formula", "q": "From <code>covid-israel</code>: calculate the <b>average positive_rate</b> for the first week vs. the last week. Use head(4).tail(4).",
+    explain: "head and tail cut off the start and end of the period and let you compare two time windows. Look at the result itself: 9.54 vs 9.74 are almost the same, meaning the positive rate barely changed — even though the absolute number of cases dropped from 3200 to 2400. This is exactly why you look at ratios and not just counts.", "starter": "", "solution": "df = data.load(\"covid-israel\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append(df[\"positive\"][i] / df[\"tested\"][i] * 100)\ndf[\"rate\"] = rates\nfirst = df.head(4)\nlast = df.tail(4)\nprint(\"First 4 avg:\", first[\"rate\"].mean())\nprint(\"Last 4 avg:\", last[\"rate\"].mean())", "check": (out, code) => /head\(\s*4\s*\)/.test(code) && /tail\(\s*4\s*\)/.test(code) && /\.mean\(/.test(code) && /First 4 avg: 9\.54/.test(out) && /Last 4 avg: 9\.74/.test(out)}, {"num": 59, "difficulty": "medium", "topic": "groupby + sort", "q": "From <code>salaries</code>: group by department, calculate the average, and sort from the highest department to lowest.",
+    explain: "When you group and then average, it's worth first removing text columns that have no meaning in the aggregation, otherwise you get empty columns or an error. After grouping, the result is a regular table in every respect, so you can go on and sort it like any other DataFrame. Chaining a group-by and a sort is the most common pattern in management reports.", "starter": "", "solution": "df = data.load(\"salaries\")\ngrouped = df.drop(columns=[\"name\"]).groupby(\"department\").mean()\nresult = grouped.sort_values(\"salary\", ascending=False)\nprint(result)", "check": (out, code) => /groupby/.test(code) && /sort_values/.test(code) && /24500/.test(out) && /13000/.test(out) && out.indexOf("R&D") >= 0 && out.indexOf("R&D") < out.indexOf("Sales") && out.indexOf("Sales") < out.indexOf("Marketing")}, {"num": 60, "difficulty": "medium", "topic": "groupby + filter", "q": "From <code>telecom-churn</code>: group churners (churn=1) by plan and count. Print.",
+    explain: "Filtering and then grouping is a common sequence, but note the result: the standard category disappeared entirely from the table, because no customer on that plan churned. groupby shows only groups that have rows after filtering, so a report like this can hide exactly the most interesting group — the one with zero cases.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df[df[\"churn\"].eq(1)]\nresult = churners.groupby(\"plan\").count()\nprint(result)", "check": (out, code) => /\.eq\(\s*1\s*\)/.test(code) && /groupby/.test(code) && !/\.filter\(/.test(code) && /premium\|4/.test(out) && /basic\|3/.test(out) && !/standard/.test(out)}, {"num": 61, "difficulty": "medium", "topic": "drop", "q": "From <code>students</code>: remove the <code>history</code> column. Print it.",
+    explain: "drop with columns removes columns and returns a new table — the original table stays intact, so you must save the result in a variable. The same method also removes rows if you pass index instead of columns. Note that passing a column name that doesn’t exist will raise an error, unless you add errors=\"ignore\".", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.drop(columns=[\"history\"])\nprint(result)", "check": (out, code) => /drop\(/.test(code) && /columns\s*=/.test(code) && /history/.test(code) && /name\|math\|english/.test(out) && !/history/.test(out)}, {"num": 62, "difficulty": "medium", "topic": "rename", "q": "From <code>students</code>: rename the column <code>math</code> to <code>math_score</code>. Print.",
+    explain: "rename takes a dictionary shaped old-name to new-name and changes only what's in it. The important point: if you accidentally write \"Math\" instead of \"math\", pandas won't warn you — it simply won't change anything, and it'll look as if the code didn't work. So after rename it's always worth printing columns to check.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df.rename(columns={\"math\": \"math_score\"})\nprint(result)", "check": (out, code) => /rename/.test(code) && /columns\s*=\s*\{/.test(code) && /math_score/.test(out) && /name\|math_score\|english\|history/.test(out)}, {"num": 63, "difficulty": "medium", "topic": "fillna", "q": "Create a DataFrame with <code>None</code> values: <code>{\"a\": [1, None, 3], \"b\": [4, 5, None]}</code>. Fill None with 0 and print.",
+    explain: "fillna replaces missing values with a value you give and returns a new table. But filling with zero isn’t a technical decision, it’s an analytical one: \"no data\" and \"the value is zero\" are completely different things, and zero drags down averages and distorts the distribution. Sometimes it’s more correct to fill with the mean or median, and sometimes to leave it missing.", "starter": "", "solution": "df = DataFrame({\"a\": [1, None, 3], \"b\": [4, 5, None]})\nresult = df.fillna(0)\nprint(result)", "check": (out, code) => /fillna\(\s*0\s*\)/.test(code) && /DataFrame\(/.test(code) && /1\|4/.test(out) && /0\|5/.test(out) && /3\|0/.test(out)}, {"num": 64, "difficulty": "medium", "topic": "dropna", "q": "Create a DataFrame: <code>{\"a\": [1, None, 3], \"b\": [4, 5, 6]}</code>. Remove rows with None.",
+    explain: "dropna removes every row that has at least one missing value — notice that here it also deletes the valid value 5 in column b, just because its neighbor in column a is missing. In wide tables this can wipe out most of the data. You can limit the check to specific columns with subset, or require a minimum number of present values with thresh.", "starter": "", "solution": "df = DataFrame({\"a\": [1, None, 3], \"b\": [4, 5, 6]})\nresult = df.dropna()\nprint(result)", "check": (out, code) => /dropna/.test(code) && /DataFrame\(/.test(code) && /1\|4/.test(out) && /3\|6/.test(out) && !/\|5/.test(out)}, {"num": 65, "difficulty": "medium", "topic": "drop_duplicates", "q": "Create a DataFrame: <code>{\"a\": [1, 2, 1, 3], \"b\": [4, 5, 4, 6]}</code>. Remove duplicates.",
+    explain: "drop_duplicates compares all columns together by default, so a row is considered a duplicate only if it's completely identical. In practice you usually want to identify duplicates by a business key, like customer number, and then pass subset. The keep parameter determines which copy is kept — the first, the last, or none.", "starter": "", "solution": "df = DataFrame({\"a\": [1, 2, 1, 3], \"b\": [4, 5, 4, 6]})\nresult = df.drop_duplicates()\nprint(result)", "check": (out, code) => /drop_duplicates/.test(code) && /DataFrame\(/.test(code) && /1\|4/.test(out) && /2\|5/.test(out) && /3\|6/.test(out)}, {"num": 66, "difficulty": "medium", "topic": "astype", "q": "From <code>football</code>: convert the <code>points</code> column to <code>float</code>. Use <code>astype</code>.",
+    explain: "astype takes only the target type, and you apply it to the column: df[\"points\"].astype(float). To convert several columns at once, you can pass a dict to the whole table, df.astype({\"points\": float}). Note that the conversion fails with an error if there's a value that can't be converted, and for more forgiving handling you use to_numeric with errors.", "starter": "", "solution": "df = data.load(\"football\")\ndf[\"points\"] = df[\"points\"].astype(float)\nprint(df[\"points\"])", "check": (out, code) => /\.astype\(\s*float\s*\)/.test(code) && /df\s*\[\s*["']points["']\s*\]\s*=/.test(code) && /55\.0/.test(out) && /38\.0/.test(out)}, {"num": 67, "difficulty": "medium", "topic": "clip", "q": "From <code>salaries</code>: clip the <code>salary</code> column between 15000 and 25000.",
+    explain: "clip trims extreme values into a range: everything below lower becomes lower and everything above upper becomes upper. Note that Hani's salary dropped from 28000 to 25000 and Carmel's rose from 12000 to 15000 — the original data was lost. clip is useful for stabilizing charts and models, but after it you can no longer identify who the outlier was.", "starter": "", "solution": "df = data.load(\"salaries\")\ndf[\"salary\"] = df[\"salary\"].clip(lower=15000, upper=25000)\nprint(df)", "check": (out, code) => /\.clip\(/.test(code) && /lower\s*=\s*15000/.test(code) && /upper\s*=\s*25000/.test(code) && /df\s*\[\s*["']salary["']\s*\]\s*=/.test(code) && /Hani\|R&D\|25000/.test(out) && /Carmel\|Marketing\|15000/.test(out)}, {"num": 68, "difficulty": "medium", "topic": "nunique", "q": "From <code>salaries</code>: how many different departments are there?",
+    explain: "nunique counts distinct values, not rows: there are 12 employees here but only 3 departments. That's exactly the difference from count, which would return 12, and from shape[0], which is also 12. When analyzing a categorical column, nunique tells you how many categories there are, and value_counts tells you how large each one is.", "starter": "", "solution": "df = data.load(\"salaries\")\nprint(df[\"department\"].nunique())", "check": (out, code) => /nunique\(/.test(code) && /df\s*\[\s*["']department["']\s*\]/.test(code) && /(^|\D)3(\D|$)/.test(out)}, {"num": 69, "difficulty": "medium", "topic": "set_index", "q": "From <code>football</code>: turn the <code>team</code> column into an index (<code>set_index</code>).",
+    explain: "set_index turns a column into the row label. The benefit is access by name instead of by number: after the operation you can retrieve a row with loc[\"Maccabi Haifa\"] instead of remembering its position. The index is also used for joining tables and for label-aligned calculations. reset_index returns the column to its regular place.", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.set_index(\"team\")\nprint(result)\nprint(\"Index:\", list(result.index))", "check": (out, code) => /set_index/.test(code) && /\.index/.test(code) && /Index:/.test(out) && /Maccabi Tel Aviv/.test(out) && /Beitar/.test(out)}, {"num": 70, "difficulty": "medium", "topic": "isna", "q": "Create a DataFrame with None: <code>{\"x\": [1, None, 3]}</code>. Check with <code>isna()</code> and print.",
+    explain: "isna returns a table of the same size where True marks a missing value. In practice you almost never look at this table in full, but rather at df.isna().sum(), which gives how many values are missing in each column — the first step in any data cleaning. Note that the opposite method is notna.", "starter": "", "solution": "df = DataFrame({\"x\": [1, None, 3]})\nprint(df.isna())", "check": (out, code) => /isna/.test(code) && /DataFrame\(/.test(code) && /False/.test(out) && /True/.test(out)}, {"num": 71, "difficulty": "medium", "topic": "Merge", "q": "Create 2 tables and join them with <code>merge</code>: employees={name:[\"Avi\",\"Bni\"], dept_id:[1,2]} and departments={dept_id:[1,2], dept_name:[\"Sales\",\"R&D\"]}.",
+    explain: "merge joins two tables by a shared key column, exactly like JOIN in SQL. The default is inner: only rows that have a match in both tables are kept, and everything else disappears with no warning. So after every merge it's worth comparing shape before and after, to make sure you haven't accidentally lost rows.", "starter": "", "solution": "employees = DataFrame({\"name\": [\"Avi\", \"Bni\"], \"dept_id\": [1, 2]})\ndepartments = DataFrame({\"dept_id\": [1, 2], \"dept_name\": [\"Sales\", \"R&D\"]})\nresult = employees.merge(departments, on=\"dept_id\")\nprint(result)", "check": (out, code) => /merge/.test(code) && /on\s*=\s*["']dept_id["']/.test(code) && /Avi\|1\|Sales/.test(out) && /Bni\|2\|R&D/.test(out)}, {"num": 72, "difficulty": "medium", "topic": "Merge left", "q": "The same 2 tables — use <code>how=\"left\"</code>. Add a row to employees: dept_id=99 (doesn't exist). Print it.",
+    explain: "how=\"left\" keeps all rows of the left table even when they have no match, and fills the columns from the right with a missing value. Here Carmel stays in the result with dept_name empty — and that’s exactly the point: to see who isn’t found in the mapping instead of silently losing them. Counting the missing values after a left join is an excellent quality check.", "starter": "", "solution": "employees = DataFrame({\"name\": [\"Avi\", \"Bni\", \"Carmel\"], \"dept_id\": [1, 2, 99]})\ndepartments = DataFrame({\"dept_id\": [1, 2], \"dept_name\": [\"Sales\", \"R&D\"]})\nresult = employees.merge(departments, on=\"dept_id\", how=\"left\")\nprint(result)", "check": (out, code) => /merge/.test(code) && /how\s*=\s*["']left["']/.test(code) && /Carmel\|99\|None/.test(out) && /Avi\|1\|Sales/.test(out)}, {"num": 73, "difficulty": "medium", "topic": "concat", "q": "Create 2 DataFrames identical in columns and concatenate them vertically (<code>concat</code>): df1={a:[1,2]} and df2={a:[3,4]}.",
+    explain: "concat stacks tables on top of each other by rows, so it’s suited to combining monthly files into an annual table. Don’t confuse it with merge: concat adds rows, merge adds columns based on a key. After concat, the original indexes are concatenated and may repeat, so it’s common to renumber them.", "starter": "", "solution": "df1 = DataFrame({\"a\": [1, 2]})\ndf2 = DataFrame({\"a\": [3, 4]})\nresult = DataFrame.concat([df1, df2])\nprint(result)", "check": (out, code) => /concat/.test(code) && /df1/.test(code) && /df2/.test(code) && /\|1/.test(out) && /\|4/.test(out)}, {"num": 74, "difficulty": "medium", "topic": "dates", "q": "From <code>sales</code>: compare <code>revenue</code> in summer months (June, July, August) to winter (December, January, February). Print the totals.",
+    explain: "isin is the right tool for filtering by a list of categories, and it's much more readable than a chain of eq combined with |. Note the interpretation: summer leads with 211000 vs 172000, but winter includes December, which is an unusual month with 89000. A sum of three months is very sensitive to a single outlier month, so it's worth looking at the median too.", "starter": "", "solution": "df = data.load(\"sales\")\nsummer = df[df[\"month\"].isin([\"June\",\"July\",\"August\"])]\nwinter = df[df[\"month\"].isin([\"December\",\"January\",\"February\"])]\nprint(\"Summer:\", summer[\"revenue\"].sum())\nprint(\"Winter:\", winter[\"revenue\"].sum())", "check": (out, code) => /\.isin\(/.test(code) && !/\.filter\(/.test(code) && /Summer: 211000/.test(out) && /Winter: 172000/.test(out)}, {"num": 75, "difficulty": "medium", "topic": "Visual representation", "q": "From <code>cities-weather</code>: find the city with the <b>highest ratio</b> between humidity and temp. Compute the ratio, sort, print the city name.",
+    explain: "After sorting and slicing, the index labels remain those of the original rows — they aren’t renumbered. So [0] may raise a KeyError or return the wrong row, and iloc[0] is the safe way to take the first value by position. The rule: [] works by label, iloc[] works by position.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nratios = []\nfor i in range(df.shape[0]):\n    ratios.append(df[\"humidity\"][i] / df[\"temp\"][i])\ndf[\"ratio\"] = ratios\nresult = df.sort_values(\"ratio\", ascending=False).head(1)\nprint(result[\"city\"].iloc[0])", "check": (out, code) => /humidity/.test(code) && /temp/.test(code) && /sort_values/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /Haifa/.test(out) && !/Eilat/.test(out)}, {"num": 76, "difficulty": "medium", "topic": "apply on series", "q": "From <code>students</code>: for the math column, create a new Series that shows \"Pass\" if > 80, otherwise \"Fail\". Use <code>apply</code>.",
+    explain: "apply runs the function on each value individually, so inside the lambda x is a single number and you can use the > operator as usual. Note the boundary: the condition is strictly greater than, so a score of exactly 80 gets Fail. The result is a new Series — the original column hasn't changed.", "starter": "", "solution": "df = data.load(\"students\")\nresult = df[\"math\"].apply(lambda x: \"Pass\" if x > 80 else \"Fail\")\nprint(result)", "check": (out, code) => /\.apply\(/.test(code) && /lambda/.test(code) && /Pass/.test(code) && /'Pass'/.test(out) && /'Fail'/.test(out)}, {"num": 77, "difficulty": "medium", "topic": "map", "q": "From <code>salaries</code>: use <code>map</code> on the department column - return a Series of icons: Sales→💼, R&D→🔬, Marketing→📢.",
+    explain: "map maps each value in a Series according to a dictionary, and it is the clean way to replace codes with readable labels. The critical point: a value that does not appear in the dictionary becomes a missing value with no warning at all. So after map it is always worth checking isna().sum() and making sure the mapping covered every category.", "starter": "", "solution": "df = data.load(\"salaries\")\nicons = {\"Sales\": \"💼\", \"R&D\": \"🔬\", \"Marketing\": \"📢\"}\nresult = df[\"department\"].map(icons)\nprint(result)", "check": (out, code) => /\.map\(/.test(code) && /Sales/.test(code) && /Marketing/.test(code) && /💼/.test(out) && /🔬/.test(out) && /📢/.test(out)}, {"num": 78, "difficulty": "medium", "topic": "rounding", "q": "From <code>real-estate</code>: round the price_m column into a new column <code>price_rounded</code> (to 1 digit).",
+    explain: "Notice that the new column came out identical to the original: all the prices were already at one decimal place, so rounding did not change anything. That is a good reminder to check the data before applying an operation. Instead of a loop you can write df[\"price_m\"].round(1) and round the whole column at once.", "starter": "", "solution": "df = data.load(\"real-estate\")\nrounded = []\nfor i in range(df.shape[0]):\n    rounded.append(round(df[\"price_m\"][i], 1))\ndf[\"price_rounded\"] = rounded\nprint(df)", "check": (out, code) => /round\(/.test(code) && /df\s*\[\s*["']price_rounded["']\s*\]\s*=/.test(code) && /Florentin\|3\|75\|3\.2\|3\.2/.test(out) && /Neve Tzedek\|4\|110\|6\.8\|6\.8/.test(out)}, {"num": 79, "difficulty": "medium", "topic": "min/max combine", "q": "From <code>students</code>: find the <b>highest total score</b> among math/english/history for each student. Print their name.",
+    explain: "After sorting and slicing, always access the value with iloc[0] and not with [0], because the labels remain those of the original rows. A shorter alternative: df[\"total\"].idxmax() directly returns the row label with the highest value, and then df.loc[label, \"name\"] gives the name without any sorting at all.", "starter": "", "solution": "df = data.load(\"students\")\ntotals = []\nfor i in range(df.shape[0]):\n    t = df[\"math\"][i] + df[\"english\"][i] + df[\"history\"][i]\n    totals.append(t)\ndf[\"total\"] = totals\nresult = df.sort_values(\"total\", ascending=False).head(1)\nprint(result[\"name\"].iloc[0])", "check": (out, code) => /sort_values/.test(code) && /head\(\s*1\s*\)/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /Shira/.test(out) && !/Maya/.test(out)}, {"num": 80, "difficulty": "medium", "topic": "reset_index", "q": "From <code>football</code>: use <code>reset_index</code> to add a numbering column.",
+    explain: "reset_index moves the index back to a regular column and renumbers the rows from zero. Its real use is after filtering or sorting, when the labels are no longer sequential and become confusing. If the old index does not matter to you, reset_index(drop=True) renumbers without adding a column.", "starter": "", "solution": "df = data.load(\"football\")\nresult = df.reset_index()\nprint(result)", "check": (out, code) => /reset_index/.test(code) && /index\|team/.test(out) && /0\|Maccabi Tel Aviv/.test(out)}, {"num": 81, "difficulty": "hard", "topic": "Complex journey", "q": "From <code>telecom-churn</code>: find the <b>plan</b> with the <b>highest churn rate</b>. Print the plan name.",
+    explain: "Since churn is a column of 0s and 1s, its mean within each group is exactly the churn rate. idxmax returns the label of the group with the highest value, i.e. the track name itself, without sorting and without positional access. Analytical warning: basic leads with 0.75, but that’s based on only four customers.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nrates = df.groupby(\"plan\")[\"churn\"].mean()\nprint(rates.idxmax())", "check": (out, code) => /groupby\(\s*["']plan["']\s*\)/.test(code) && /churn/.test(code) && /idxmax/.test(code) && /basic/.test(out) && !/premium/.test(out)}, {"num": 82, "difficulty": "hard", "topic": "Double analysis", "q": "From <code>students</code>: for each student calculate the <b>range</b> (max minus min) of their 3 grades. Find the student with the largest range.",
+    explain: "The range is the difference between the highest and lowest value, and it’s a simple spread measure but very sensitive to a single outlier. Don’t confuse it with variance or standard deviation, which measure spread around the mean and take all values into account. Here max and min are Python functions on a list, not pandas methods.", "starter": "", "solution": "df = data.load(\"students\")\nspreads = []\nfor i in range(df.shape[0]):\n    scores = [df[\"math\"][i], df[\"english\"][i], df[\"history\"][i]]\n    spreads.append(max(scores) - min(scores))\ndf[\"spread\"] = spreads\nresult = df.sort_values(\"spread\", ascending=False).head(1)\nprint(result[[\"name\", \"spread\"]])", "check": (out, code) => /max\(/.test(code) && /min\(/.test(code) && /sort_values/.test(code) && /history/.test(code) && /Maya\|11/.test(out)}, {"num": 83, "difficulty": "hard", "topic": "A complex formula", "q": "From <code>football</code>: calculate <code>points_per_game</code> = points / (wins+draws+losses) and sort. Print the Top 3.",
+    explain: "Points per game normalize the score by the number of games and let you compare teams that played a different number of games. Note that here the ranking comes out identical to the ranking by points, because all the teams played 24 games — normalizing only changes the picture when the denominators differ, for example mid-season.", "starter": "", "solution": "df = data.load(\"football\")\nppgs = []\nfor i in range(df.shape[0]):\n    games = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    ppgs.append(round(df[\"points\"][i] / games, 2))\ndf[\"ppg\"] = ppgs\nresult = df.sort_values(\"ppg\", ascending=False).head(3)\nprint(result[[\"team\", \"ppg\"]])", "check": (out, code) => /points/.test(code) && /head\(\s*3\s*\)/.test(code) && /sort_values/.test(code) && /Maccabi Tel Aviv\|2\.29/.test(out) && /Maccabi Haifa\|2/.test(out)}, {"num": 84, "difficulty": "hard", "topic": "multi-aggregation", "q": "From <code>salaries</code>: for each department - print: number of employees, average salary, standard deviation. Build it manually.",
+    explain: "Looping over unique values is the manual way of doing what groupby does automatically, and it's useful for understanding what happens under the hood. Note the standard deviation: for Marketing it's calculated on only three employees, and a dispersion measure on such a small sample isn't stable and no conclusions should be drawn from it.", "starter": "", "solution": "df = data.load(\"salaries\")\ndepts = df[\"department\"].unique()\nfor d in depts:\n    sub = df[df[\"department\"].eq(d)]\n    print(d, \"count:\", sub.shape[0], \"avg:\", round(sub[\"salary\"].mean(), 1), \"std:\", round(sub[\"salary\"].std(), 1))", "check": (out, code) => /\.eq\(/.test(code) && /unique/.test(code) && /\.std\(/.test(code) && !/\.filter\(/.test(code) && /Sales count: 5/.test(out) && /R&D count: 4/.test(out) && /std:/.test(out)}, {"num": 85, "difficulty": "hard", "topic": "merge + groupby", "q": "Create 2 tables, merge them, then groupby. employees={name:[\"Avi\",\"Bni\",\"Galit\"], dept_id:[1,2,1], salary:[15000,22000,18000]} and departments={dept_id:[1,2], dept_name:[\"Sales\",\"R&D\"]}. After merging - compute average salary by dept_name.",
+    explain: "The sequence join-then-group is the heart of working with several tables: first you bring in the readable name from the dimension table, then you group by it. It's important to explicitly choose the aggregation column — without that, an average of dept_id would also get computed, a number that's mathematically valid but has no business meaning whatsoever.", "starter": "", "solution": "employees = DataFrame({\"name\": [\"Avi\",\"Bni\",\"Galit\"], \"dept_id\": [1,2,1], \"salary\": [15000,22000,18000]})\ndepartments = DataFrame({\"dept_id\": [1,2], \"dept_name\": [\"Sales\",\"R&D\"]})\nmerged = employees.merge(departments, on=\"dept_id\")\nresult = merged.groupby(\"dept_name\")[\"salary\"].mean()\nprint(result)", "check": (out, code) => /merge/.test(code) && /groupby\(\s*["']dept_name["']\s*\)/.test(code) && /salary/.test(code) && /Sales\s+16500/.test(out) && /R&D\s+22000/.test(out)}, {"num": 86, "difficulty": "hard", "topic": "pct change", "q": "From <code>sales</code>: which month had <b>the biggest jump</b> in revenue compared to the previous month? Print the month name.",
+    explain: "pct_change measures relative, not absolute, change, so a month that jumped from 10 to 20 beats a month that rose from 1000 to 1500. Note that January can never win here, since it has no previous month and its value is missing. After sorting, access the value with iloc[0], since the labels are not renumbered.", "starter": "", "solution": "df = data.load(\"sales\")\nchanges = df[\"revenue\"].pct_change()\ndf[\"change\"] = list(changes)\nresult = df.sort_values(\"change\", ascending=False).head(1)\nprint(result[\"month\"].iloc[0])", "check": (out, code) => /pct_change/.test(code) && /sort_values/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /December/.test(out) && !/July/.test(out)}, {"num": 87, "difficulty": "hard", "topic": "multi-filter + agg", "q": "From <code>telecom-churn</code>: for customers with <code>tenure_months &gt; 30</code> - what's the churn rate? Print a percentage.",
+    explain: "The combination of filtering then averaging a flag column is a recurring pattern: mean on a column of 0s and 1s returns exactly the rate, and multiplying by 100 turns it into a percentage. The result here is surprising — it's actually the veteran customers who churn more, which turns the common assumption on its head and warrants further investigation.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nveterans = df[df[\"tenure_months\"].gt(30)]\nchurn_rate = veterans[\"churn\"].mean() * 100\nprint(round(churn_rate, 1))", "check": (out, code) => /\.gt\(\s*30\s*\)/.test(code) && /\.mean\(/.test(code) && !/\.filter\(/.test(code) && /57\.1/.test(out)}, {"num": 88, "difficulty": "hard", "topic": "segmentation", "q": "From <code>salaries</code>: segment employees into categories: Junior (years &lt; 3), Mid (3-5), Senior (&gt;5). Add as a column.",
+    explain: "In segmentation, the boundaries are the important decision: they must cover every value and not overlap each other. The order of if/elif is what guarantees this — once a condition is met, the rest aren’t checked at all. pandas has a dedicated tool for this called cut, which takes a list of boundaries and a list of labels and does the same thing in one line.", "starter": "", "solution": "df = data.load(\"salaries\")\nsegments = []\nfor i in range(df.shape[0]):\n    y = df[\"years\"][i]\n    if y < 3: segments.append(\"Junior\")\n    elif y <= 5: segments.append(\"Mid\")\n    else: segments.append(\"Senior\")\ndf[\"segment\"] = segments\nprint(df)", "check": (out, code) => /Junior/.test(code) && /Senior/.test(code) && /df\s*\[\s*["']segment["']\s*\]\s*=/.test(code) && /Avi\|Sales\|15000\|2\|Junior/.test(out) && /Hila\|R&D\|25000\|7\|Senior/.test(out)}, {"num": 89, "difficulty": "hard", "topic": "top by group", "q": "From <code>salaries</code>: in each department - find the employee with the highest salary. Print name, department, salary.",
+    explain: "This is the top-per-group pattern: iterate over each category, filter to it, sort, and take the first one. Note the use of iloc[0] — after filtering and sorting the labels don't start from zero. If two employees share the highest salary in the same department, head(1) will take only one of them without warning.", "starter": "", "solution": "df = data.load(\"salaries\")\ndepts = df[\"department\"].unique()\nfor d in depts:\n    sub = df[df[\"department\"].eq(d)]\n    top = sub.sort_values(\"salary\", ascending=False).head(1)\n    print(top[\"name\"].iloc[0], \"-\", d, \"-\", top[\"salary\"].iloc[0])", "check": (out, code) => /\.eq\(/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /sort_values/.test(code) && !/\.filter\(/.test(code) && /Liat - Sales - 19000/.test(out) && /Hani - R&D - 28000/.test(out)}, {"num": 90, "difficulty": "hard", "topic": "distance analysis", "q": "From <code>cities-weather</code>: find the <b>two cities</b> whose difference in <code>temp</code> is the largest. Print their names.",
+    explain: "The maximum gap between two values is always obtained between the minimum and the maximum, so it's enough to sort and take the edges — no need to check every pair. The critical point: after sort_values the labels stay those of the original rows, so [0] would return the first row of the original table, not the smallest one. iloc[0] and iloc[-1] work by position, so they're the correct choice here.", "starter": "", "solution": "df = data.load(\"cities-weather\")\nsorted_df = df.sort_values(\"temp\", ascending=True)\ncoldest = sorted_df[\"city\"].iloc[0]\nhottest = sorted_df[\"city\"].iloc[-1]\ngap = sorted_df[\"temp\"].iloc[-1] - sorted_df[\"temp\"].iloc[0]\nprint(\"Coldest:\", coldest, \"Hottest:\", hottest, \"Gap:\", gap)", "check": (out, code) => /sort_values/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /\.iloc\s*\[\s*-1\s*\]/.test(code) && /Tzfat/.test(out) && /Eilat/.test(out) && /14/.test(out) && !/Tel Aviv/.test(out)}, {"num": 91, "difficulty": "hard", "topic": "correlation", "q": "From <code>football</code>: check whether there's a relationship between wins and goals_for. Calculate whether the teams with the most wins also have the most goals. Compare the Top 3.",
+    explain: "The two lists came out identical, which hints at a relationship between wins and goals — but a hint is not proof. Overlap between two lists is not a correlation measure, and with only five teams it could be entirely coincidental. For a real measurement you use corr, which returns a number between minus one and one, and it too does not indicate causation.", "starter": "", "solution": "df = data.load(\"football\")\ntop_wins = df.sort_values(\"wins\", ascending=False).head(3)\ntop_goals = df.sort_values(\"goals_for\", ascending=False).head(3)\nprint(\"Top by wins:\", list(top_wins[\"team\"]))\nprint(\"Top by goals:\", list(top_goals[\"team\"]))", "check": (out, code) => /sort_values/.test(code) && /wins/.test(code) && /goals_for/.test(code) && /Top by wins:/.test(out) && /Top by goals:/.test(out) && /Maccabi Haifa/.test(out)}, {"num": 92, "difficulty": "hard", "topic": "final analysis", "q": "From <code>real-estate</code>: calculate <b>price_per_sqm</b> for each neighborhood, then print <b>overall statistics</b>: average, minimum, and maximum.",
+    explain: "The three metrics together tell a story that none of them tells alone: the maximum is more than double the minimum, meaning the market isn't homogeneous and the average alone is misleading. This is why a real report never shows an average without a dispersion measure alongside it, and sometimes a median, which is less sensitive to outliers, is preferable.", "starter": "", "solution": "df = data.load(\"real-estate\")\npps = []\nfor i in range(df.shape[0]):\n    pps.append(df[\"price_m\"][i] * 1000000 / df[\"sqm\"][i])\ndf[\"pps\"] = pps\nprint(\"Mean:\", round(df[\"pps\"].mean()))\nprint(\"Min:\", round(df[\"pps\"].min()))\nprint(\"Max:\", round(df[\"pps\"].max()))", "check": (out, code) => /sqm/.test(code) && /\.mean\(/.test(code) && /\.min\(/.test(code) && /\.max\(/.test(code) && /Mean: 44583/.test(out) && /Min: 29231/.test(out) && /Max: 61818/.test(out)}, {"num": 93, "difficulty": "hard", "topic": "aggregation 2-step", "q": "From <code>telecom-churn</code>: for each plan, compute the <b>average tenure_months</b> only for customers who churned. Print.",
+    explain: "Two-stage aggregation: first filter to the relevant population, and only then group. The result reveals two completely different profiles — premium churners were long-time customers, while basic churners left almost immediately. Notice that standard disappears from the table because no such customer churned; a group with zero cases simply doesn’t appear.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df[df[\"churn\"].eq(1)]\nresult = churners.groupby(\"plan\")[\"tenure_months\"].mean()\nprint(result)", "check": (out, code) => /\.eq\(\s*1\s*\)/.test(code) && /groupby\(\s*["']plan["']\s*\)/.test(code) && /tenure_months/.test(code) && !/\.filter\(/.test(code) && /premium\s+66/.test(out) && /basic\s+9/.test(out) && !/standard/.test(out)}, {"num": 94, "difficulty": "hard", "topic": "multi-criteria", "q": "From <code>students</code>: find students who are <b>good at everything</b> - math &gt; 80 and english &gt; 80 and history &gt; 80. Count how many.",
+    explain: "You can chain as many conditions as you want with &, and each condition narrows down the result. When you only want to count, there's a nice shortcut: the boolean mask is also a vector of zeros and ones, so mask.sum() returns the number of rows that passed directly — without building a filtered table at all.", "starter": "", "solution": "df = data.load(\"students\")\ngood = df[df[\"math\"].gt(80) & df[\"english\"].gt(80) & df[\"history\"].gt(80)]\nprint(\"Count:\", good.shape[0])", "check": (out, code) => /\.gt\(\s*80\s*\)/.test(code) && /&/.test(code) && !/lambda/.test(code) && /Count:\s*5/.test(out)}, {"num": 95, "difficulty": "hard", "topic": "data quality", "q": "From <code>covid-israel</code>: check — are there weeks where <code>positive_rate</code> &gt; 12%? If so — which ones?",
+    explain: "After every filter it’s worth printing the number of rows found too, otherwise an empty table looks exactly like a bug in the code. Look at the result: only one week crossed the threshold, and at just 12.24 — very close to 12. A threshold that separates such close values is an arbitrary decision that should be stated, not an objective truth.", "starter": "", "solution": "df = data.load(\"covid-israel\")\nrates = []\nfor i in range(df.shape[0]):\n    rates.append(df[\"positive\"][i] / df[\"tested\"][i] * 100)\ndf[\"positive_rate\"] = rates\nhigh = df[df[\"positive_rate\"].gt(12)]\nprint(\"Found:\", high.shape[0])\nprint(high[[\"date\", \"positive_rate\"]])", "check": (out, code) => /\.gt\(\s*12\s*\)/.test(code) && /positive_rate/.test(code) && !/\.where\(/.test(code) && /Found:\s*1/.test(out) && /22\/01\|12\.23/.test(out)}, {"num": 96, "difficulty": "hard", "topic": "Sensitive case", "q": "From <code>real-estate</code>: find an <b>apartment cheaper than 3M NIS</b> with <b>5+ rooms</b>. Print the neighborhood name (if none exists - print \"None\").",
+    explain: "The empty result is the correct answer: there is no apartment that is both cheaper than 3 million and has 5+ rooms, because size and price move together. The professional lesson is that code must handle the empty case explicitly — without checking shape[0], accessing the first value would crash, and in a real report a crash like that only surfaces for the user.", "starter": "", "solution": "df = data.load(\"real-estate\")\nresult = df[df[\"price_m\"].lt(3) & df[\"rooms\"].ge(5)]\nif result.shape[0] > 0:\n    print(result[\"neighborhood\"].iloc[0])\nelse:\n    print(\"none\")", "check": (out, code) => /\.lt\(\s*3\s*\)/.test(code) && /\.ge\(\s*5\s*\)/.test(code) && /shape\s*\[\s*0\s*\]/.test(code) && !/\.where\(/.test(code) && /Ein/.test(out)}, {"num": 97, "difficulty": "hard", "topic": "time series", "q": "From <code>sales</code>: find the <b>3 months</b> that contributed the <b>highest percentage to the annual total</b> (sort descending).",
+    explain: "Computing a share of the total requires first the overall sum and then dividing each value by it. A simple sanity check: the sum of all percentages must come out to 100. The insight here is that three months out of twelve, i.e. a quarter of the time, generate about a third of annual revenue — a concentration that warrants operational attention.", "starter": "", "solution": "df = data.load(\"sales\")\ntotal = df[\"revenue\"].sum()\npcts = []\nfor i in range(df.shape[0]):\n    pcts.append(round(df[\"revenue\"][i] / total * 100, 1))\ndf[\"pct_of_year\"] = pcts\nresult = df.sort_values(\"pct_of_year\", ascending=False).head(3)\nprint(result[[\"month\", \"pct_of_year\"]])", "check": (out, code) => /\.sum\(/.test(code) && /sort_values/.test(code) && /head\(\s*3\s*\)/.test(code) && /December\|12\.4/.test(out) && /Yoni\|10/.test(out) && /August\|9\.9/.test(out)}, {"num": 98, "difficulty": "hard", "topic": "cross-table", "q": "From <code>football</code>: calculate <b>win percentage</b> + <b>average goals per game</b> for each team. Which team has the best balance (sum of both)?",
+    explain: "Notice the problem with adding them: the win rate ranges between 0 and 1, while the average goals ranges around 2, so the second component almost completely dominates the weighted score. Adding metrics on different scales without normalizing is a common mistake — the correct way is to standardize each metric before adding, or to declare weights explicitly.", "starter": "", "solution": "df = data.load(\"football\")\nscores = []\nfor i in range(df.shape[0]):\n    total = df[\"wins\"][i] + df[\"draws\"][i] + df[\"losses\"][i]\n    win_pct = df[\"wins\"][i] / total\n    avg_goals = df[\"goals_for\"][i] / total\n    scores.append(round(win_pct + avg_goals, 2))\ndf[\"score\"] = scores\nresult = df.sort_values(\"score\", ascending=False).head(1)\nprint(result[[\"team\", \"score\"]])\nprint(\"Best:\", result[\"team\"].iloc[0])", "check": (out, code) => /wins/.test(code) && /goals_for/.test(code) && /sort_values/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /Best: Maccabi Tel Aviv/.test(out) && /2\.96/.test(out)}, {"num": 99, "difficulty": "hard", "topic": "complete analysis", "q": "From <code>telecom-churn</code>: \"Executive report: total customers, % churn, average bill, average tenure. Print.",
+    explain: "A good executive report always shows both the absolute size and the rate: 46.7 percent churn sounds dramatic, but that's 7 customers out of 15, and you can't draw conclusions from it about a large population. Note that the average bill prints with a long decimal tail despite round — that's what floating-point arithmetic looks like, and in a real report you'd format the number as a string.", "starter": "", "solution": "df = data.load(\"telecom-churn\")\nchurners = df[df[\"churn\"].eq(1)]\nprint(\"Total customers:\", df.shape[0])\nprint(\"Churn rate:\", round(churners.shape[0] / df.shape[0] * 100, 1), \"%\")\nprint(\"Avg bill:\", round(df[\"monthly_bill\"].mean(), 1))\nprint(\"Avg tenure:\", round(df[\"tenure_months\"].mean(), 1))", "check": (out, code) => /\.eq\(\s*1\s*\)/.test(code) && /shape\s*\[\s*0\s*\]/.test(code) && !/\.filter\(/.test(code) && /Total customers: 15/.test(out) && /Churn rate: 46\.7/.test(out) && /Avg tenure: 38\.1/.test(out)}, {"num": 100, "difficulty": "hard", "topic": "🏆 Final challenge", "q": "🏆 <b>Final challenge</b>: from <code>salaries</code>: 1) add a column <code>annual_bonus</code> = salary * (years/10) 2) group by department and compute total bonus 3) find the department with the highest total bonus. Print its name.",
+    explain: "The final challenge combines everything we've learned: a calculated column, grouping, aggregation, sorting, and value access. Note that dropping the names column before grouping avoids a junk column, and iloc[0] is the safe way to take the first row after sorting. And finally, an analytical question: the formula multiplies by tenure, so it biases the result in favor of a long-tenured department — the metric is a decision, not a fact.", "starter": "", "solution": "df = data.load(\"salaries\")\nbonuses = []\nfor i in range(df.shape[0]):\n    b = df[\"salary\"][i] * (df[\"years\"][i] / 10)\n    bonuses.append(round(b))\ndf[\"annual_bonus\"] = bonuses\ngrouped = df.drop(columns=[\"name\"]).groupby(\"department\").sum()\nresult = grouped.sort_values(\"annual_bonus\", ascending=False).head(1)\nprint(result[\"department\"].iloc[0])", "check": (out, code) => /annual_bonus/.test(code) && /groupby/.test(code) && /sort_values/.test(code) && /\.iloc\s*\[\s*0\s*\]/.test(code) && /R&D/.test(out) && !/Sales/.test(out)}];
+window.PYTHON_PRELUDE = "# =============================================================\n# MINI-PANDAS v2 - Extended DataFrame API for Skulpt\n# Auto-injected into Playground + pandas course\n# =============================================================\n\nclass DataFrame:\n    \"\"\"Minimal DataFrame implementation with ~95% of pandas common ops.\"\"\"\n    \n    def __init__(self, data):\n        if isinstance(data, list):\n            if len(data) == 0:\n                self._data = {}\n                self._columns = []\n            else:\n                self._columns = list(data[0].keys())\n                self._data = {}\n                for col in self._columns:\n                    self._data[col] = [row.get(col) for row in data]\n        else:\n            self._data = dict(data)\n            self._columns = list(self._data.keys())\n        if self._data:\n            first_col = self._columns[0]\n            self._nrows = len(self._data[first_col])\n        else:\n            self._nrows = 0\n    \n    @property\n    def shape(self):\n        return (self._nrows, len(self._columns))\n    \n    @property\n    def columns(self):\n        return list(self._columns)\n    \n    @property\n    def values(self):\n        \"\"\"Return list of rows (each row is a list of values).\"\"\"\n        result = []\n        for i in range(self._nrows):\n            row = []\n            for c in self._columns:\n                row.append(self._data[c][i])\n            result.append(row)\n        return result\n    \n    def head(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][:n]\n        return DataFrame(new_data)\n    \n    def tail(self, n=5):\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = self._data[c][-n:]\n        return DataFrame(new_data)\n    \n    def __len__(self):\n        return self._nrows\n    \n    def __getitem__(self, key):\n        if isinstance(key, str):\n            return Series(self._data[key], name=key)\n        if isinstance(key, list):\n            # Boolean mask?\n            if len(key) == self._nrows and len(key) > 0 and isinstance(key[0], bool):\n                new_data = {}\n                for c in self._columns:\n                    new_data[c] = []\n                    for i in range(self._nrows):\n                        if key[i]:\n                            new_data[c].append(self._data[c][i])\n                return DataFrame(new_data)\n            # Column selection\n            new_data = {}\n            for c in key:\n                if c in self._data:\n                    new_data[c] = self._data[c]\n            return DataFrame(new_data)\n        raise TypeError(\"Invalid key type\")\n    \n    def __setitem__(self, key, value):\n        if isinstance(value, Series):\n            value = value._data\n        if isinstance(value, list):\n            if len(value) != self._nrows:\n                raise ValueError(\"Length mismatch\")\n            self._data[key] = list(value)\n        else:\n            self._data[key] = [value] * self._nrows\n        if key not in self._columns:\n            self._columns.append(key)\n    \n    def sort_values(self, by, ascending=True):\n        col_data = self._data[by]\n        indices = list(range(self._nrows))\n        # Handle None values - put at end\n        def sort_key(i):\n            v = col_data[i]\n            if v is None:\n                return (1, 0) if ascending else (0, 0)\n            return (0, v)\n        indices.sort(key=sort_key, reverse=not ascending)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in indices]\n        return DataFrame(new_data)\n    \n    def filter(self, col, op, value):\n        \"\"\"SQL-like filter: df.filter('age', '>', 18)\"\"\"\n        mask = []\n        col_data = self._data[col]\n        for v in col_data:\n            if v is None:\n                mask.append(False); continue\n            if op == \">\": mask.append(v > value)\n            elif op == \"<\": mask.append(v < value)\n            elif op == \">=\": mask.append(v >= value)\n            elif op == \"<=\": mask.append(v <= value)\n            elif op == \"==\": mask.append(v == value)\n            elif op == \"!=\": mask.append(v != value)\n            elif op == \"in\":\n                if isinstance(value, list): mask.append(v in value)\n                else: mask.append(False)\n            else:\n                raise ValueError(\"Unknown operator: \" + op)\n        return self[mask]\n    \n    def where(self, fn):\n        \"\"\"Filter rows: df.where(lambda row: row['age'] > 18)\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = []\n        for i in range(self._nrows):\n            row = {}\n            for c in self._columns:\n                row[c] = self._data[c][i]\n            if fn(row):\n                for c in self._columns:\n                    new_data[c].append(self._data[c][i])\n        return DataFrame(new_data)\n    \n    def apply(self, fn, axis=0):\n        \"\"\"Apply function. axis=0: per column. axis=1: per row.\"\"\"\n        if axis == 1:\n            # Per row - returns Series\n            result = []\n            for i in range(self._nrows):\n                row = {}\n                for c in self._columns:\n                    row[c] = self._data[c][i]\n                result.append(fn(row))\n            return Series(result)\n        # Per column\n        result = {}\n        for c in self._columns:\n            result[c] = fn(self._data[c])\n        return result\n    \n    def mean(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals) / len(vals)\n        return result\n    \n    def sum(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = sum(vals)\n        return result\n    \n    def min(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = min(vals)\n        return result\n    \n    def max(self):\n        result = {}\n        for c in self._columns:\n            vals = [v for v in self._data[c] if v is not None]\n            if vals: result[c] = max(vals)\n        return result\n    \n    def count(self):\n        \"\"\"Count non-null per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            cnt = 0\n            for v in self._data[c]:\n                if v is not None:\n                    cnt += 1\n            result[c] = cnt\n        return result\n    \n    def describe(self):\n        result = {}\n        for c in self._columns:\n            vals = []\n            for v in self._data[c]:\n                if isinstance(v, (int, float)) and not isinstance(v, bool):\n                    vals.append(v)\n            if vals:\n                result[c] = {\n                    \"count\": len(vals),\n                    \"mean\": round(sum(vals)/len(vals), 2),\n                    \"min\": min(vals),\n                    \"max\": max(vals)\n                }\n        return result\n    \n    def to_dict(self):\n        return dict(self._data)\n    \n    # ===== Data cleaning =====\n    \n    def drop(self, columns=None, index=None):\n        \"\"\"Drop columns or rows.\"\"\"\n        if columns is not None:\n            cols_to_drop = columns if isinstance(columns, list) else [columns]\n            new_data = {}\n            new_cols = []\n            for c in self._columns:\n                if c not in cols_to_drop:\n                    new_data[c] = self._data[c]\n                    new_cols.append(c)\n            result = DataFrame(new_data)\n            result._columns = new_cols\n            return result\n        if index is not None:\n            indices = index if isinstance(index, list) else [index]\n            new_data = {}\n            for c in self._columns:\n                new_data[c] = []\n                for i in range(self._nrows):\n                    if i not in indices:\n                        new_data[c].append(self._data[c][i])\n            return DataFrame(new_data)\n        return DataFrame(self._data)\n    \n    def drop_duplicates(self):\n        \"\"\"Remove duplicate rows.\"\"\"\n        seen = []\n        keep_indices = []\n        for i in range(self._nrows):\n            row_tuple = tuple(self._data[c][i] for c in self._columns)\n            if row_tuple not in seen:\n                seen.append(row_tuple)\n                keep_indices.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep_indices]\n        return DataFrame(new_data)\n    \n    def isna(self):\n        \"\"\"Return df of booleans where values are None.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [v is None for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def fillna(self, value):\n        \"\"\"Replace None values.\"\"\"\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [value if v is None else v for v in self._data[c]]\n        return DataFrame(new_data)\n    \n    def dropna(self):\n        \"\"\"Drop rows with any None.\"\"\"\n        keep = []\n        for i in range(self._nrows):\n            has_none = False\n            for c in self._columns:\n                if self._data[c][i] is None:\n                    has_none = True; break\n            if not has_none:\n                keep.append(i)\n        new_data = {}\n        for c in self._columns:\n            new_data[c] = [self._data[c][i] for i in keep]\n        return DataFrame(new_data)\n    \n    def rename(self, columns):\n        \"\"\"Rename columns: df.rename({'old':'new'})\"\"\"\n        new_data = {}\n        new_cols = []\n        for c in self._columns:\n            new_name = columns.get(c, c)\n            new_data[new_name] = self._data[c]\n            new_cols.append(new_name)\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def astype(self, col, dtype):\n        \"\"\"Convert column to type. dtype: int, float, str.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None)\n            elif dtype == int or dtype == \"int\":\n                new_vals.append(int(v))\n            elif dtype == float or dtype == \"float\":\n                new_vals.append(float(v))\n            elif dtype == str or dtype == \"str\":\n                new_vals.append(str(v))\n            else:\n                new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def clip(self, col, lower=None, upper=None):\n        \"\"\"Clip values in column to range.\"\"\"\n        new_data = dict(self._data)\n        new_vals = []\n        for v in self._data[col]:\n            if v is None:\n                new_vals.append(None); continue\n            if lower is not None and v < lower: v = lower\n            if upper is not None and v > upper: v = upper\n            new_vals.append(v)\n        new_data[col] = new_vals\n        return DataFrame(new_data)\n    \n    def nunique(self):\n        \"\"\"Count unique values per column.\"\"\"\n        result = {}\n        for c in self._columns:\n            seen = []\n            for v in self._data[c]:\n                if v not in seen:\n                    seen.append(v)\n            result[c] = len(seen)\n        return result\n    \n    # ===== Grouping / aggregation =====\n    \n    def groupby(self, by):\n        \"\"\"Group by column.\"\"\"\n        return GroupBy(self, by)\n    \n    # ===== Merging =====\n    \n    def merge(self, other, on, how=\"inner\"):\n        \"\"\"Merge two DataFrames on a key column. how: 'inner' or 'left'.\"\"\"\n        # Build index for other df\n        other_index = {}\n        for i in range(other._nrows):\n            k = other._data[on][i]\n            if k not in other_index:\n                other_index[k] = []\n            other_index[k].append(i)\n        \n        # New columns: my cols + other cols (without duplicate 'on')\n        my_cols = list(self._columns)\n        other_cols = [c for c in other._columns if c != on]\n        new_data = {}\n        for c in my_cols:\n            new_data[c] = []\n        for c in other_cols:\n            new_data[c] = []\n        \n        for i in range(self._nrows):\n            key = self._data[on][i]\n            if key in other_index:\n                for j in other_index[key]:\n                    for c in my_cols:\n                        new_data[c].append(self._data[c][i])\n                    for c in other_cols:\n                        new_data[c].append(other._data[c][j])\n            elif how == \"left\":\n                for c in my_cols:\n                    new_data[c].append(self._data[c][i])\n                for c in other_cols:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    # ===== Concat =====\n    \n    @staticmethod\n    def concat(dfs):\n        \"\"\"Concatenate list of DataFrames vertically.\"\"\"\n        if not dfs: return DataFrame({})\n        new_data = {}\n        cols = dfs[0]._columns\n        for c in cols:\n            new_data[c] = []\n        for df in dfs:\n            for c in cols:\n                if c in df._data:\n                    new_data[c].extend(df._data[c])\n                else:\n                    new_data[c].extend([None] * df._nrows)\n        return DataFrame(new_data)\n    \n    # ===== Set/reset index =====\n    \n    def set_index(self, col):\n        \"\"\"Make a column the row index (for display only - we don't really track indices).\"\"\"\n        # Just move that column to first position\n        if col not in self._columns:\n            raise ValueError(\"Column not found: \" + col)\n        new_cols = [col] + [c for c in self._columns if c != col]\n        new_data = {}\n        for c in new_cols:\n            new_data[c] = self._data[c]\n        result = DataFrame(new_data)\n        result._columns = new_cols\n        return result\n    \n    def reset_index(self):\n        \"\"\"Add an index column.\"\"\"\n        new_data = {\"index\": list(range(self._nrows))}\n        for c in self._columns:\n            new_data[c] = self._data[c]\n        return DataFrame(new_data)\n    \n    # ===== Info =====\n    \n    def info(self):\n        \"\"\"Print summary.\"\"\"\n        print(\"DataFrame: \" + str(self._nrows) + \" rows x \" + str(len(self._columns)) + \" columns\")\n        print(\"Columns:\")\n        for c in self._columns:\n            non_null = 0\n            for v in self._data[c]:\n                if v is not None: non_null += 1\n            sample = self._data[c][0] if self._nrows > 0 else None\n            type_name = type(sample).__name__ if sample is not None else \"unknown\"\n            print(\"  \" + c + \" (\" + type_name + \"): \" + str(non_null) + \" non-null\")\n    \n    def __str__(self):\n        return self._render_text()\n    \n    def __repr__(self):\n        return self._render_text()\n    \n    def _render_text(self):\n        if not self._columns:\n            return \"Empty DataFrame\"\n        lines = []\n        header = \"__DATAFRAME__|\" + \"|\".join([str(c) for c in self._columns])\n        lines.append(header)\n        for i in range(self._nrows):\n            row_vals = []\n            for c in self._columns:\n                row_vals.append(str(self._data[c][i]))\n            lines.append(\"__DATAROW__|\" + \"|\".join(row_vals))\n        lines.append(\"__DATAFRAME_END__\")\n        return \"\\n\".join(lines)\n\n\nclass GroupBy:\n    \"\"\"Result of df.groupby(col). Supports .mean(), .sum(), .count(), .agg().\"\"\"\n    def __init__(self, df, by):\n        self._df = df\n        self._by = by\n        # Build groups\n        self._groups = {}\n        col_data = df._data[by]\n        for i in range(df._nrows):\n            key = col_data[i]\n            if key not in self._groups:\n                self._groups[key] = []\n            self._groups[key].append(i)\n    \n    def _agg(self, fn):\n        \"\"\"Apply agg function per group, return DataFrame.\"\"\"\n        other_cols = [c for c in self._df._columns if c != self._by]\n        new_data = {self._by: []}\n        for c in other_cols:\n            new_data[c] = []\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            for c in other_cols:\n                vals = []\n                for i in indices:\n                    v = self._df._data[c][i]\n                    if isinstance(v, (int, float)) and not isinstance(v, bool):\n                        vals.append(v)\n                if vals:\n                    new_data[c].append(fn(vals))\n                else:\n                    new_data[c].append(None)\n        return DataFrame(new_data)\n    \n    def mean(self):\n        return self._agg(lambda v: round(sum(v)/len(v), 2))\n    \n    def sum(self):\n        return self._agg(sum)\n    \n    def max(self):\n        return self._agg(max)\n    \n    def min(self):\n        return self._agg(min)\n    \n    def count(self):\n        \"\"\"Count rows per group.\"\"\"\n        new_data = {self._by: [], \"count\": []}\n        for key, indices in self._groups.items():\n            new_data[self._by].append(key)\n            new_data[\"count\"].append(len(indices))\n        return DataFrame(new_data)\n    \n    def size(self):\n        \"\"\"Same as count - rows per group.\"\"\"\n        return self.count()\n\n\nclass Series:\n    \"\"\"A column from a DataFrame.\"\"\"\n    def __init__(self, data, name=None):\n        self._data = list(data)\n        self.name = name\n    \n    def __len__(self):\n        return len(self._data)\n    \n    def __getitem__(self, i):\n        return self._data[i]\n    \n    def __iter__(self):\n        return iter(self._data)\n    \n    def gt(self, other): return [v > other for v in self._data if v is not None] if False else [v > other if v is not None else False for v in self._data]\n    def lt(self, other): return [v < other if v is not None else False for v in self._data]\n    def ge(self, other): return [v >= other if v is not None else False for v in self._data]\n    def le(self, other): return [v <= other if v is not None else False for v in self._data]\n    def eq(self, other): return [v == other for v in self._data]\n    \n    def mean(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        if nums: return sum(nums) / len(nums)\n        return 0\n    \n    def sum(self):\n        nums = [v for v in self._data if isinstance(v, (int, float)) and not isinstance(v, bool)]\n        return sum(nums)\n    \n    def max(self):\n        vals = [v for v in self._data if v is not None]\n        return max(vals) if vals else None\n    \n    def min(self):\n        vals = [v for v in self._data if v is not None]\n        return min(vals) if vals else None\n    \n    def unique(self):\n        seen = []\n        for v in self._data:\n            if v not in seen:\n                seen.append(v)\n        return seen\n    \n    def nunique(self):\n        return len(self.unique())\n    \n    def count(self):\n        cnt = 0\n        for v in self._data:\n            if v is not None: cnt += 1\n        return cnt\n    \n    def value_counts(self):\n        counts = {}\n        for v in self._data:\n            if v in counts: counts[v] += 1\n            else: counts[v] = 1\n        # Sort by count descending\n        items = list(counts.items())\n        items.sort(key=lambda x: -x[1])\n        result = {}\n        for k, v in items:\n            result[k] = v\n        return result\n    \n    def isna(self):\n        return [v is None for v in self._data]\n    \n    def fillna(self, value):\n        return Series([value if v is None else v for v in self._data], name=self.name)\n    \n    def apply(self, fn):\n        return Series([fn(v) for v in self._data], name=self.name)\n    \n    def map(self, mapping):\n        \"\"\"Map values via dict or function.\"\"\"\n        if isinstance(mapping, dict):\n            return Series([mapping.get(v, v) for v in self._data], name=self.name)\n        return Series([mapping(v) for v in self._data], name=self.name)\n    \n    def round(self, n=0):\n        return Series([round(v, n) if isinstance(v, (int, float)) else v for v in self._data], name=self.name)\n    \n    def cumsum(self):\n        result = []\n        total = 0\n        for v in self._data:\n            if isinstance(v, (int, float)):\n                total += v\n            result.append(total)\n        return Series(result, name=self.name)\n    \n    def pct_change(self):\n        result = [None]\n        for i in range(1, len(self._data)):\n            prev = self._data[i-1]\n            curr = self._data[i]\n            if prev and isinstance(prev, (int, float)) and isinstance(curr, (int, float)):\n                result.append((curr - prev) / prev)\n            else:\n                result.append(None)\n        return Series(result, name=self.name)\n    \n    def __str__(self):\n        return str(self._data)\n    \n    def __repr__(self):\n        return \"Series(\" + str(self._data) + \")\"\n\n\n# =============================================================\n# DATASETS - Israeli context for learning\n# =============================================================\n\n_DATASETS = {\n    \"cities-weather\": {\n        \"name\": \"Weather in Israeli cities\",\n        \"desc\": \"temperatures and humidity\",\n        \"data\": {\n            \"city\": [\"Tel Aviv\", \"Jerusalem\", \"Haifa\", \"Beer Sheva\", \"Eilat\", \"Safed\"],\n            \"temp\": [24, 19, 23, 27, 31, 17],\n            \"humidity\": [68, 50, 72, 40, 55, 45],\n            \"rain_mm\": [0, 2, 0, 0, 0, 5]\n        }\n    },\n    \"real-estate\": {\n        \"name\": \"Apartment prices in Tel Aviv\",\n        \"desc\": \"8 apartments\",\n        \"data\": {\n            \"neighborhood\": [\"Florentin\", \"Rothschild\", \"Neve Tzedek\", \"Jaffa\", \"Ramat Aviv\", \"Bavli\", \"Kiryat Shalom\", \"Old North\"],\n            \"rooms\": [3, 4, 4, 3, 5, 4, 3, 4],\n            \"sqm\": [75, 95, 110, 70, 130, 100, 65, 90],\n            \"price_m\": [3.2, 5.1, 6.8, 2.9, 4.5, 4.1, 1.9, 4.7]\n        }\n    },\n    \"football\": {\n        \"name\": \"Premier League - 5 teams\",\n        \"desc\": \"Statistics\",\n        \"data\": {\n            \"team\": [\"Maccabi Tel Aviv\", \"Hapoel Beer Sheva\", \"Maccabi Haifa\", \"Hapoel Tel Aviv\", \"Beitar\"],\n            \"points\": [55, 52, 48, 42, 38],\n            \"wins\": [17, 16, 14, 12, 10],\n            \"draws\": [4, 4, 6, 6, 8],\n            \"losses\": [3, 4, 4, 6, 6],\n            \"goals_for\": [54, 49, 41, 38, 32],\n            \"goals_against\": [21, 22, 25, 30, 33]\n        }\n    },\n    \"students\": {\n        \"name\": \"student grades\",\n        \"desc\": \"Grades in 3 subjects\",\n        \"data\": {\n            \"name\": [\"Gal\", \"Tomer\", \"Yael\", \"Noa\", \"Aviv\", \"Maya\", \"Daniel\", \"Shira\", \"Itay\", \"Roni\"],\n            \"math\": [88, 76, 92, 84, 70, 95, 81, 89, 73, 86],\n            \"english\": [78, 85, 88, 90, 72, 84, 79, 91, 68, 82],\n            \"history\": [85, 80, 90, 86, 76, 88, 84, 92, 70, 87]\n        }\n    },\n    \"sales\": {\n        \"name\": \"monthly sales\",\n        \"desc\": \"Store turnover\",\n        \"data\": {\n            \"month\": [\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"],\n            \"revenue\": [45000, 38000, 52000, 49000, 61000, 72000, 68000, 71000, 58000, 53000, 64000, 89000],\n            \"units\": [120, 95, 140, 130, 165, 195, 180, 192, 155, 140, 170, 240]\n        }\n    },\n    \"covid-israel\": {\n        \"name\": \"Israel COVID data\",\n        \"desc\": \"Cases per month\",\n        \"data\": {\n            \"date\": [\"01/01\", \"08/01\", \"15/01\", \"22/01\", \"29/01\", \"05/02\", \"12/02\", \"19/02\"],\n            \"positive\": [3200, 4500, 6100, 8200, 7800, 5300, 3900, 2400],\n            \"tested\": [45000, 52000, 60000, 67000, 65000, 50000, 41000, 35000],\n            \"hospitalized\": [180, 230, 320, 410, 380, 290, 220, 160]\n        }\n    },\n    \"eurovision\": {\n        \"name\": \"Eurovision - Israel\",\n        \"desc\": \"results\",\n        \"data\": {\n            \"year\": [2018, 2019, 2021, 2022, 2023, 2024],\n            \"place\": [1, 23, 17, 13, 3, 5],\n            \"points\": [529, 35, 93, 61, 362, 375],\n            \"song\": [\"Toy\", \"Home\", \"Set Me Free\", \"I.M\", \"Unicorn\", \"Hurricane\"]\n        }\n    },\n    \"telecom-churn\": {\n        \"name\": \"Telecom customer churn\",\n        \"desc\": \"15 customers with churn data\",\n        \"data\": {\n            \"customer_id\": [101,102,103,104,105,106,107,108,109,110,111,112,113,114,115],\n            \"age\": [25, 45, 32, 58, 29, 41, 36, 52, 27, 48, 33, 60, 30, 44, 38],\n            \"monthly_bill\": [45.5, 120.0, 80.3, 150.0, 35.0, 95.0, 70.5, 130.0, 50.0, 110.0, 65.0, 140.0, 55.0, 100.0, 75.0],\n            \"tenure_months\": [12, 60, 24, 84, 6, 36, 18, 72, 8, 48, 30, 96, 14, 42, 22],\n            \"churn\": [0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0],\n            \"plan\": [\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\",\"premium\",\"basic\",\"premium\",\"standard\"]\n        }\n    },\n    \"salaries\": {\n        \"name\": \"Salaries by department\",\n        \"desc\": \"12 employees\",\n        \"data\": {\n            \"name\": [\"Avi\",\"Beni\",\"Galit\",\"Dana\",\"Hila\",\"Victor\",\"Zohar\",\"Chani\",\"Tal\",\"Yossi\",\"Carmel\",\"Liat\"],\n            \"department\": [\"Sales\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"Marketing\",\"R&D\",\"Sales\",\"R&D\",\"Marketing\",\"Sales\"],\n            \"salary\": [15000, 22000, 18000, 13000, 25000, 16000, 14000, 28000, 17000, 23000, 12000, 19000],\n            \"years\": [2, 5, 3, 1, 7, 4, 2, 8, 3, 6, 1, 4]\n        }\n    }\n}\n\n\nclass _Datasets:\n    \"\"\"Pre-loaded datasets. Usage: df = data.load('cities-weather')\"\"\"\n    \n    def list(self):\n        \"\"\"List all available datasets.\"\"\"\n        for key in _DATASETS:\n            info = _DATASETS[key]\n            print(\"  \" + key + \": \" + info[\"name\"] + \" - \" + info[\"desc\"])\n    \n    def load(self, name):\n        \"\"\"Load a dataset as a DataFrame.\"\"\"\n        if name not in _DATASETS:\n            keys = list(_DATASETS.keys())\n            raise ValueError(\"Dataset not found: \" + name)\n        return DataFrame(_DATASETS[name][\"data\"])\n    \n    def info(self, name):\n        \"\"\"Show info about a dataset.\"\"\"\n        if name not in _DATASETS:\n            print(\"Dataset not found: \" + name)\n            return\n        info = _DATASETS[name]\n        print(\"DATASET: \" + info[\"name\"])\n        print(\"  \" + info[\"desc\"])\n        df = DataFrame(info[\"data\"])\n        print(\"  shape: \" + str(df.shape[0]) + \" rows x \" + str(df.shape[1]) + \" cols\")\n\n\ndata = _Datasets()\n";
+
+// ============== APP ==============
+(function() {
+  'use strict';
+  
+  const STORAGE_KEY = 'pandas_quiz_100_scores';
+  const POINTS = { easy: 10, medium: 20, hard: 30 };
+  const BONUS = { easy: 5, medium: 10, hard: 15 };  // first-try
+  
+  const allQuestions = window.PANDAS_QUIZ;
+  let filtered = allQuestions.slice();
+  let currentIdx = 0;
+  let currentDiff = 'all';
+  let currentStatus = null;
+  let searchQuery = '';
+  
+  const attempts = {};
+  const solutionViewed = new Set();
+  
+  function getScores() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch(e) { return {}; }
+  }
+  function saveScore(num, points) {
+    const scores = getScores();
+    if (!scores[num] || scores[num].points < points) {
+      scores[num] = { points, time: new Date().toISOString() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+    }
+  }
+  function getScore(num) { return getScores()[num] || null; }
+  function getTotalScore() {
+    return Object.values(getScores()).reduce((s, x) => s + x.points, 0);
+  }
+  function getMaxScore() {
+    return allQuestions.reduce((s, q) => s + POINTS[q.difficulty] + BONUS[q.difficulty], 0);
+  }
+  function getCounts() {
+    const scores = getScores();
+    const r = { easy: 0, medium: 0, hard: 0 };
+    allQuestions.forEach(q => {
+      if (scores[q.num]) r[q.difficulty]++;
+    });
+    return r;
+  }
+  
+  function updateHeader() {
+    document.getElementById('total-score').textContent = getTotalScore();
+    document.getElementById('max-score').textContent = getMaxScore();
+    const c = getCounts();
+    document.getElementById('easy-done').textContent = c.easy;
+    document.getElementById('medium-done').textContent = c.medium;
+    document.getElementById('hard-done').textContent = c.hard;
+    const total = c.easy + c.medium + c.hard;
+    document.getElementById('progress-fill').style.width = (total / 100 * 100) + '%';
+  }
+  
+  function applyFilters() {
+    filtered = allQuestions.filter(q => {
+      if (currentDiff !== 'all' && q.difficulty !== currentDiff) return false;
+      if (currentStatus === 'done' && !getScore(q.num)) return false;
+      if (currentStatus === 'todo' && getScore(q.num)) return false;
+      if (searchQuery) {
+        const text = (q.q + ' ' + q.topic).toLowerCase();
+        if (!text.includes(searchQuery.toLowerCase())) return false;
+      }
+      return true;
+    });
+    currentIdx = 0;
+    render();
+  }
+  
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"\']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+  
+  
+  // === CODE EDITOR TOOLBAR (copy/paste/cut/select) ===
+  function wireEditorToolbar() {
+    const editor = document.getElementById('code-input');
+    if (!editor) return;
+    
+    const copyBtn = document.getElementById('tb-copy');
+    const pasteBtn = document.getElementById('tb-paste');
+    const cutBtn = document.getElementById('tb-cut');
+    const selectBtn = document.getElementById('tb-select');
+    const clearBtn = document.getElementById('tb-clear');
+    
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const text = editor.value;
+        if (!text) return;
+        const showCopied = () => {
+          copyBtn.classList.add('copied');
+          copyBtn.innerHTML = '✅ copied';
+          setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = '📋 copy';
+          }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+            // Fallback
+            editor.select();
+            document.execCommand('copy');
+            showCopied();
+          });
+        } else {
+          editor.select();
+          document.execCommand('copy');
+          showCopied();
+        }
+      });
+    }
+    
+    if (pasteBtn) {
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          if (navigator.clipboard && navigator.clipboard.readText) {
+            const text = await navigator.clipboard.readText();
+            // Insert at cursor position
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.value = editor.value.slice(0, start) + text + editor.value.slice(end);
+            // Move cursor to end of pasted text
+            editor.selectionStart = editor.selectionEnd = start + text.length;
+            editor.focus();
+            pasteBtn.classList.add('copied');
+            pasteBtn.innerHTML = '✅ pasted';
+            setTimeout(() => {
+              pasteBtn.classList.remove('copied');
+              pasteBtn.innerHTML = '📥 paste';
+            }, 1500);
+          } else {
+            // Fallback: focus and tell user
+            editor.focus();
+            alert('To paste: long-press the editor and choose "Paste"');
+          }
+        } catch(e) {
+          editor.focus();
+          alert('Cannot access the clipboard. Use Ctrl+V or long press');
+        }
+      });
+    }
+    
+    if (cutBtn) {
+      cutBtn.addEventListener('click', () => {
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const selected = editor.value.slice(start, end) || editor.value;
+        const showCut = () => {
+          cutBtn.classList.add('copied');
+          cutBtn.innerHTML = '✅ derived';
+          setTimeout(() => {
+            cutBtn.classList.remove('copied');
+            cutBtn.innerHTML = '✂️ cut';
+          }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(selected).then(() => {
+            if (start === end) {
+              // Cut everything
+              editor.value = '';
+            } else {
+              editor.value = editor.value.slice(0, start) + editor.value.slice(end);
+              editor.selectionStart = editor.selectionEnd = start;
+            }
+            showCut();
+          });
+        } else {
+          editor.select();
+          document.execCommand('cut');
+          showCut();
+        }
+      });
+    }
+    
+    if (selectBtn) {
+      selectBtn.addEventListener('click', () => {
+        editor.focus();
+        editor.select();
+      });
+    }
+    
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('clear all the code?')) {
+          editor.value = '';
+          editor.focus();
+        }
+      });
+    }
+  }
+
+
+  function render() {
+    updateHeader();
+    
+    if (filtered.length === 0) {
+      document.getElementById('content').innerHTML = 
+        '<div style="text-align:center;padding:30px;color:var(--text2);">No questions found</div>';
+      return;
+    }
+    
+    if (currentIdx >= filtered.length) currentIdx = 0;
+    const q = filtered[currentIdx];
+    const score = getScore(q.num);
+    const basePoints = POINTS[q.difficulty];
+    const maxPoints = basePoints + BONUS[q.difficulty];
+    
+    const diffLabels = { easy: '🟢 easy', medium: '🟡 medium', hard: '🔴 hard' };
+    const pointsBadge = score 
+      ? `<span class="badge badge-earned">✅ ${score.points} pts</span>`
+      : `<span class="badge badge-points">🏆 up to ${maxPoints} pts</span>`;
+    
+    document.getElementById('content').innerHTML = `
+      <div class="question-card">\n        <div class="q-header">\n          <div class="q-num">#${q.num}</div>\n          <div class="q-topic">${escapeHtml(q.topic)}</div>\n          <div class="q-badges">\n            <span class="badge badge-diff-${q.difficulty}">${diffLabels[q.difficulty]}</span>\n            ${pointsBadge}\n          </div>\n        </div>\n        \n        <div class="question-text">${q.q}</div>\n        \n        <div class="editor-label">💻 Write your code:</div>\n        <div class="editor-wrap">\n          <div class="editor-toolbar">\n            <button class="tb-btn" id="tb-copy" type="button">📋 Copy</button>\n            <button class="tb-btn" id="tb-paste" type="button">📥 Paste</button>\n            <button class="tb-btn" id="tb-cut" type="button">✂️ Cut</button>\n            <button class="tb-btn" id="tb-select" type="button">🔘 Select All</button>\n            <button class="tb-btn" id="tb-clear" type="button">🗑️ Clear</button>\n          </div>\n          <textarea class="code-editor" id="code-input" spellcheck="false" rows="9">${escapeHtml(q.starter || '')}</textarea>\n        </div>\n        \n        <div class="actions">\n          <button class="btn btn-run" id="run-btn">▶ Run & Check</button>\n          <button class="btn btn-solution" id="sol-btn">💡 Show Solution</button>\n          <button class="btn btn-reset" id="reset-btn">🔄 Clear</button>\n        </div>\n        \n        <div class="output-section" id="output-section">\n          <div class="editor-label" style="margin-top:14px;">📤 Result:</div>\n          <div class="output-box" id="output-box"></div>\n        </div>\n        \n        <div class="verdict" id="verdict"></div>\n        \n        <div class="solution-section" id="solution-section">\n          ${!score ? '<div class="solution-warning">⚠️ Viewing the solution before solving it will cut your score in half</div>' : ''}\n          <div class="solution-header">\n            <h3>💡 Official solution</h3>\n            <button class="copy-btn" id="copy-btn">📋 Copy</button>\n          </div>\n          <div class="solution-code">\n            <pre>${escapeHtml(q.solution)}</pre>\n          </div>\n        </div>\n        \n        <div class="nav-row">\n          <button class="nav-btn" id="prev-btn" ${currentIdx === 0 ? 'disabled' : ''}>→ Previous</button>\n          <button class="nav-btn" id="next-btn" ${currentIdx === filtered.length - 1 ? 'disabled' : ''}>Next ←</button>\n        </div>\n      </div>
+    `;
+    
+    wireUp(q);
+  }
+  
+  function wireUp(q) {
+    document.getElementById('run-btn').addEventListener('click', () => runCode(q));
+    wireEditorToolbar();
+    document.getElementById('sol-btn').addEventListener('click', () => {
+      const sec = document.getElementById('solution-section');
+      const btn = document.getElementById('sol-btn');
+      if (sec.classList.contains('show')) {
+        sec.classList.remove('show');
+        btn.innerHTML = '💡 Show solution';
+      } else {
+        sec.classList.add('show');
+        btn.innerHTML = '🙈 Hide solution';
+        solutionViewed.add(q.num);
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      document.getElementById('code-input').value = q.starter || '';
+      document.getElementById('output-section').classList.remove('show');
+      document.getElementById('solution-section').classList.remove('show');
+      document.getElementById('verdict').classList.remove('show');
+      document.getElementById('sol-btn').innerHTML = '💡 Show solution';
+    });
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(q.solution).then(() => {
+          const b = document.getElementById('copy-btn');
+          b.textContent = '✅ copied!';
+          setTimeout(() => { b.textContent = '📋 copy'; }, 1800);
+        });
+      }
+    });
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      if (currentIdx > 0) { currentIdx--; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+    });
+    document.getElementById('next-btn').addEventListener('click', () => {
+      if (currentIdx < filtered.length - 1) { currentIdx++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+    });
+  }
+  
+  function runCode(q) {
+    if (typeof Sk === 'undefined') {
+      alert('Python is still loading...');
+      return;
+    }
+    
+    const code = document.getElementById('code-input').value;
+    const outBox = document.getElementById('output-box');
+    const outSection = document.getElementById('output-section');
+    const verdict = document.getElementById('verdict');
+    const runBtn = document.getElementById('run-btn');
+    
+    outSection.classList.add('show');
+    outBox.textContent = '⏳ Running...';
+    outBox.classList.remove('error');
+    verdict.classList.remove('show');
+    runBtn.disabled = true;
+    
+    attempts[q.num] = (attempts[q.num] || 0) + 1;
+    
+    let buffer = '';
+    Sk.configure({
+      output: (text) => { buffer += text; },
+      read: (f) => {
+        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][f] === undefined) {
+          throw "File not found: '" + f + "'";
+        }
+        return Sk.builtinFiles["files"][f];
+      },
+      __future__: Sk.python3,
+      execLimit: 8000,
+    });
+    
+    const fullCode = (window.PYTHON_PRELUDE || '') + String.fromCharCode(10) + String.fromCharCode(10) + code;
+    
+    Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, fullCode, true))
+      .then(() => {
+        runBtn.disabled = false;
+        outBox.textContent = buffer || '(no output)';
+        outBox.classList.remove('error');
+        
+        // Run check function
+        let passed = false;
+        try {
+          const checkFn = eval('(' + q.check + ')');
+          passed = checkFn(buffer, code);
+        } catch(e) {
+          console.warn('Check error:', e);
+          passed = false;
+        }
+        
+        if (passed) {
+          if (q.explain) {
+            const _p = outBox.parentNode;
+            const _old = _p.querySelector('.why-box'); if (_old) _old.remove();
+            const _w = document.createElement('div');
+            _w.className = 'why-box';
+            _w.innerHTML = '<div class="why-title">Why This Works</div>' + q.explain;
+            _p.insertBefore(_w, outBox.nextSibling);
+          }
+          const basePoints = POINTS[q.difficulty];
+          const bonus = BONUS[q.difficulty];
+          const maxPoints = basePoints + bonus;
+          
+          let earned;
+          let msg;
+          
+          if (solutionViewed.has(q.num)) {
+            earned = Math.floor(basePoints / 2);
+            msg = ' (watched solution)';
+          } else if (attempts[q.num] === 1) {
+            earned = maxPoints;
+            msg = ' (first time! 🎯)';
+          } else {
+            earned = basePoints;
+            msg = '';
+          }
+          
+          const existing = getScore(q.num);
+          if (!existing || existing.points < earned) {
+            saveScore(q.num, earned);
+          }
+          
+          verdict.className = 'verdict show success';
+          verdict.innerHTML = `
+            ✅ <b>Correct answer!</b>\n            <span class="points-earned">+${earned} points${msg}</span>\n            ${existing && existing.points >= earned ? '<small>(previous score kept)</small>' : ''}
+          `;
+          
+          updateHeader();
+          if (earned >= 15) launchConfetti();
+          
+          // Update badge
+          setTimeout(() => {
+            const badges = document.querySelectorAll('.badge-points, .badge-earned');
+            badges.forEach(b => {
+              if (b.classList.contains('badge-points')) {
+                b.className = 'badge badge-earned';
+                b.textContent = `✅ ${earned} pts`;
+              }
+            });
+          }, 600);
+        } else {
+          verdict.className = 'verdict show fail';
+          verdict.innerHTML = `
+            🤔 <b>Incorrect answer</b><br>\n            <small>Check the output and try again. Need help? "Show solution" (but this will reduce your score)</small>
+          `;
+        }
+      })
+      .catch((e) => {
+        runBtn.disabled = false;
+        outBox.textContent = String(e);
+        outBox.classList.add('error');
+        verdict.className = 'verdict show fail';
+        verdict.innerHTML = '⚠️ <b>Error in code</b><br><small>Check the message above</small>';
+      });
+  }
+  
+  function launchConfetti() {
+    const colors = ['#8b5cf6', '#00e5a0', '#ffd700', '#ec4899'];
+    for (let i = 0; i < 25; i++) {
+      const conf = document.createElement('div');
+      conf.className = 'confetti';
+      conf.style.left = Math.random() * 100 + '%';
+      conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      conf.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      conf.style.transition = 'top 2s linear, opacity 2s linear';
+      document.body.appendChild(conf);
+      requestAnimationFrame(() => {
+        conf.style.top = '110vh';
+        conf.style.opacity = '0';
+      });
+      setTimeout(() => conf.remove(), 2200);
+    }
+  }
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.filterType;
+      const value = btn.dataset.filter;
+      const isActive = btn.classList.contains('active');
+      
+      document.querySelectorAll(`.filter-pill[data-filter-type="${type}"]`).forEach(b => b.classList.remove('active'));
+      
+      if (type === 'diff') {
+        currentDiff = value;
+        btn.classList.add('active');
+      } else if (type === 'status') {
+        if (isActive) {
+          currentStatus = null;
+        } else {
+          currentStatus = value;
+          btn.classList.add('active');
+        }
+      }
+      
+      applyFilters();
+    });
+  });
+  
+  let searchTimer;
+  document.getElementById('search').addEventListener('input', (e) => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = e.target.value.trim();
+      applyFilters();
+    }, 250);
+  });
+  
+  document.getElementById('reset-score-btn').addEventListener('click', () => {
+    if (confirm('reset the entire score?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      render();
+    }
+  });
+  
+  render();
+})();
+</script>
+
+</body>
+</html>

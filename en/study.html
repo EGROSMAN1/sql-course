@@ -12,7 +12,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SQL Study Material — Summaries & Examples | SQL.course</title>
+<title>SQL study material — summaries and examples | SQL.course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -87,7 +87,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 
 /* TABLE */
 .data-table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
-.data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.65rem 1rem;text-align:right;border:1px solid var(--border)}
+.data-table th{background:var(--bg3);color:var(--text2);font-weight:700;padding:.65rem 1rem;text-align:left;border:1px solid var(--border)}
 .data-table td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.6}
 .data-table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
 .data-table .pk{color:var(--yellow);font-family:var(--mono);font-size:11px;font-weight:700}
@@ -196,7 +196,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   .question-card{padding:1rem!important;border-radius:10px}
   .q-text,.question-text{font-size:14px!important;line-height:1.6}
   .options,.answers{gap:.5rem!important}
-  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:right;border-radius:8px}
+  .option-btn,.answer-btn{font-size:13px!important;padding:.7rem .85rem!important;text-align:left;border-radius:8px}
   .explain-box{font-size:12.5px!important;padding:.65rem .85rem!important}
   .hero-title,.quiz-title{font-size:1.5rem!important}
   .hero-stats,.quiz-stats{gap:.6rem!important;flex-wrap:wrap}
@@ -252,31 +252,31 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 
 /* trilingual flag toggle — compact on mobile (3 langs) */
 @media(max-width:560px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:11px;padding:3px 7px;gap:3px}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:16px;height:11px}
   .lang-flags{flex-wrap:wrap;gap:4px}
 }
 @media(max-width:380px){
-  a[title="עברית"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
-  a[title="עברית"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
+  a[title="Hebrew"],a[title="English"],a[title="中文"]{font-size:0;padding:3px 5px;gap:0}
+  a[title="Hebrew"] svg,a[title="English"] svg,a[title="中文"] svg{width:18px;height:12px}
 }
 </style>
 
-<meta name="description" content="Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.">
-<link rel="canonical" href="https://egrosman1.github.io/sql-course/study.html">
+<meta name="description" content="Organized SQL study material: summaries, code examples and practice for every topic — from SELECT and JOIN to Window Functions. Full preparation for analyst interviews.">
+<link rel="canonical" href="https://egrosman1.github.io/sql-course/en/study.html">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="he_IL">
-<meta property="og:url" content="https://egrosman1.github.io/sql-course/study.html">
-<meta property="og:site_name" content="Free SQL Course - Eliran Grossman">
-<meta property="og:title" content="Study Material — SQL Course">
-<meta property="og:description" content="Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://egrosman1.github.io/sql-course/en/study.html">
+<meta property="og:site_name" content="SQL Course - Eliran Grossman">
+<meta property="og:title" content="Study material — SQL Course">
+<meta property="og:description" content="Organized SQL study material: summaries, code examples and practice for every topic — from SELECT and JOIN to Window Functions. Full preparation for analyst interviews.">
 <meta property="og:image" content="https://egrosman1.github.io/sql-course/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="he_IL">
+  <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Study Material — SQL Course">
-<meta name="twitter:description" content="Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.">
+<meta name="twitter:title" content="Study material — SQL Course">
+<meta name="twitter:description" content="Organized SQL study material: summaries, code examples and practice for every topic — from SELECT and JOIN to Window Functions. Full preparation for analyst interviews.">
 <meta name="twitter:image" content="https://egrosman1.github.io/sql-course/eliran.png">
 <script type="application/ld+json">
 [
@@ -287,13 +287,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
       {
         "@type": "ListItem",
         "position": 1,
-        "name": "Home",
+        "name": "home page",
         "item": "https://egrosman1.github.io/sql-course/"
       },
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "Study Material",
+        "name": "Study material",
         "item": "https://egrosman1.github.io/sql-course/study.html"
       }
     ]
@@ -301,8 +301,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": "SQL Study Material — Summaries & Examples | SQL.course",
-    "description": "Structured SQL study material: summaries, code examples, and practice for every topic — from SELECT and JOIN to Window Functions. Full prep for analyst interviews.",
+    "name": "SQL study material — summaries and examples | SQL.course",
+    "description": "Organized SQL study material: summaries, code examples and practice for every topic — from SELECT and JOIN to Window Functions. Full preparation for analyst interviews.",
     "url": "https://egrosman1.github.io/sql-course/study.html",
     "inLanguage": "he",
     "isAccessibleForFree": true,
@@ -317,7 +317,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     "author": {
       "@type": "Person",
       "name": "Eliran Grossman",
-      "jobTitle": "SQL Instructor & Analytics Lead, Partner"
+      "jobTitle": "SQL instructor and analytics manager, Partner"
     },
     "isPartOf": {
       "@type": "Course",
@@ -331,37 +331,36 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <body>
 
 <div class="topnav">
-  <a href="index.html" class="back-btn">← Home</a>
-  <div class="topnav-title">📖 Study Material</div>
+  <a href="index.html" class="back-btn">← Home page</a>
+  <div class="topnav-title">📖 Study material</div>
   <div class="topnav-links">
-    <a href="course.html" class="topnav-link">📚 Learn</a>
-    <a href="../study.html" class="topnav-link" title="עברית"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> עברית</a><a href="study.html" class="topnav-link" title="English" aria-current="page"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/study.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
-    <a href="practice.html" class="topnav-link">✏️ Practice</a>
-    <a href="quiz.html" class="topnav-link">🧠 Quiz</a>
+    <a href="course.html" class="topnav-link">📚 Study material</a><a href="../study.html" class="topnav-link" title="Hebrew"><svg width="19" height="13" viewBox="0 0 55 40" style="vertical-align:-1px;border-radius:2px;border:1px solid rgba(0,0,0,.15)"><rect width="55" height="40" fill="#fff"/><rect width="55" height="5" y="6" fill="#0038b8"/><rect width="55" height="5" y="29" fill="#0038b8"/><g fill="none" stroke="#0038b8" stroke-width="2"><polygon points="27.5,13 33,23 22,23"/><polygon points="27.5,27 22,17 33,17"/></g></svg> Hebrew</a><a href="study.html" class="topnav-link" title="English"><svg width="19" height="13" viewBox="0 0 57 40" style="vertical-align:-1px;border-radius:2px"><rect width="57" height="40" fill="#b22234"/><g fill="#fff"><rect width="57" height="3.08" y="3.08"/><rect width="57" height="3.08" y="9.23"/><rect width="57" height="3.08" y="15.38"/><rect width="57" height="3.08" y="21.54"/><rect width="57" height="3.08" y="27.69"/><rect width="57" height="3.08" y="33.85"/></g><rect width="24" height="21.5" fill="#3c3b6e"/></svg> English</a><a href="../zh/study.html" class="topnav-link" title="中文"><svg width="19" height="13" viewBox="0 0 60 40" style="vertical-align:-1px;border-radius:2px"><rect width="60" height="40" fill="#de2910"/><g fill="#ffde00"><polygon points="10,5 11.8,10.5 17.6,10.5 12.9,13.9 14.7,19.4 10,16 5.3,19.4 7.1,13.9 2.4,10.5 8.2,10.5"/><circle cx="20" cy="4" r="1.5"/><circle cx="24.5" cy="7.5" r="1.5"/><circle cx="24.5" cy="12.5" r="1.5"/><circle cx="20" cy="16" r="1.5"/></g></svg> 中文</a>
+    <a href="practice.html" class="topnav-link">✏️ Exercises</a>
+    <a href="quiz.html" class="topnav-link">🧠 quiz</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="menu">
     <span></span><span></span><span></span>
   </button>
 </div>
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html">🏠 Home</a>
-  <a href="tirgul-makif.html">🎯 Full Practice</a>
-  <a href="course.html">📚 Learning Material</a>
-  <a href="practice.html">✏️ Practice</a>
-  <a href="quiz.html">🧠 Quiz</a>
+  <a href="tirgul-makif.html">🎯 Comprehensive practice</a>
+  <a href="course.html">📚 Study material</a>
+  <a href="practice.html">✏️ Exercises</a>
+  <a href="quiz.html">🧠 quiz</a>
 </div>
 
 <div class="hero">
-  <div class="hero-badge">📖 Organized Study Material</div>
-  <h1 class="hero-title">Study Material — SQL Course</h1>
+  <div class="hero-badge">📖 Organized study material</div>
+  <h1 class="hero-title">Study material — SQL Course</h1>
   <p class="hero-sub">In-depth explanations of databases, the Northwind structure, and SQL fundamentals</p>
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="showTab(0)">🗄️ What is a Database?</button>
-  <button class="tab-btn" onclick="showTab(1)">🏗️ Northwind Structure</button>
-  <button class="tab-btn" onclick="showTab(2)">🔑 Keys & Relationships</button>
-  <button class="tab-btn" onclick="showTab(3)">📊 SQL vs Excel</button>
+  <button class="tab-btn active" onclick="showTab(0)">🗄️ What is a database?</button>
+  <button class="tab-btn" onclick="showTab(1)">🏗️ Northwind structure</button>
+  <button class="tab-btn" onclick="showTab(2)">🔑 Keys and relationships</button>
+  <button class="tab-btn" onclick="showTab(3)">📊 SQL vs. Excel</button>
 </div>
 
 <div class="main">
@@ -370,43 +369,43 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <div class="tab-pane active" id="tab-0">
   <div class="sec-header">
     <div class="sec-num">Part 1</div>
-    <div class="sec-title">🗄️ What is a Database?</div>
-    <div class="sec-desc">The easiest way to understand a database is to picture it as a <strong>huge, sophisticated digital library</strong>. While an Excel file is like a single sheet of paper, a database is the structure that holds thousands of "notebooks," keeps them organized, and lets you find information in a fraction of a second.</div>
+    <div class="sec-title">🗄️ What is a database?</div>
+    <div class="sec-desc">To understand what a database is, it's easiest to picture it as<strong>A huge, sophisticated digital library</strong>. While an Excel file is like a single sheet of paper, a database is the structure that holds thousands of "notebooks", keeps them organized, and lets you find information in a split second.</div>
   </div>
 
   <div class="content-sec">
     <div class="content-sec-title">🏛️ What is a database and what does it do?</div>
     <div class="concept">
-      <div class="concept-lbl">Definition</div>
+      <div class="concept-lbl">definition</div>
       <div class="concept-body">
-        A database is an <strong>organized collection of information stored electronically</strong>. The system that manages the data is called a <strong>DBMS (Database Management System)</strong> — such as MySQL, SQL Server, or Oracle.
+        A database is <strong>An organized collection of data stored electronically</strong>. The system that manages the data is called <strong>DBMS (Database Management System)</strong> — like MySQL, SQL Server, or Oracle.
       </div>
     </div>
 
     <div class="concept">
-      <div class="concept-lbl">5 Main Roles</div>
+      <div class="concept-lbl">5 main roles</div>
       <div class="concept-body">
         <div class="steps">
-          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Storing huge volumes</strong> — unlike Excel, which starts to "choke" at a million rows, a database handles <strong>billions of rows</strong> with ease.</div></div>
-          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Fast retrieval</strong> — with SQL you can find a specific value among millions <strong>in milliseconds</strong>.</div></div>
-          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Security and permissions</strong> — defining exactly who can view, edit, and delete data.</div></div>
-          <div class="step"><div class="step-n">4</div><div class="step-t"><strong>Data Integrity</strong> — preventing duplicates and contradictions (e.g., two customers with the same ID number).</div></div>
-          <div class="step"><div class="step-n">5</div><div class="step-t"><strong>Concurrent access</strong> — hundreds of users read and write at the same time without "the file getting locked."</div></div>
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>Storing massive quantities</strong> — unlike Excel, which starts "hitting a wall" at a million rows, a database handles <strong>Billions of rows</strong> easily.</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Fast retrieval</strong> — with SQL you can find a specific piece of data out of millions <strong>Within milliseconds</strong>.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Security and permissions</strong> — determining exactly who can view, edit, and delete information.</div></div>
+          <div class="step"><div class="step-n">4</div><div class="step-t"><strong>Data Integrity</strong> — preventing duplicates and contradictions (for example, two customers with the same ID number).</div></div>
+          <div class="step"><div class="step-n">5</div><div class="step-t"><strong>Working in parallel</strong> — hundreds of users read and write simultaneously without "the file locking".</div></div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">🏗️ The Database Hierarchy</div>
+    <div class="content-sec-title">🏗️ The database hierarchy</div>
     <div class="concept">
-      <div class="concept-lbl">From the Highest Level to the Lowest</div>
+      <div class="concept-lbl">From high level to low</div>
       <div class="concept-body">
         <div class="steps">
-          <div class="step"><div class="step-n">☁️</div><div class="step-t"><strong>Server / Instance</strong> — the computer or cloud the software runs on.</div></div>
-          <div class="step"><div class="step-n">🗄️</div><div class="step-t"><strong>Database</strong> — the main "warehouse." For example: "a sales system."</div></div>
-          <div class="step"><div class="step-n">📁</div><div class="step-t"><strong>Schema</strong> — a logical division within the warehouse (like departments in a supermarket: customers, finance...).</div></div>
-          <div class="step"><div class="step-n">📋</div><div class="step-t"><strong>Tables</strong> — the basic units where the data is actually stored.</div></div>
+          <div class="step"><div class="step-n">☁️</div><div class="step-t"><strong>Server (Server/Instance)</strong> — the computer or cloud the software runs on.</div></div>
+          <div class="step"><div class="step-n">🗄️</div><div class="step-t"><strong>Database</strong> — the main \"warehouse\". For example: \"Sales system\".</div></div>
+          <div class="step"><div class="step-n">📁</div><div class="step-t"><strong>Schema (Schema)</strong> — a logical division within the warehouse (like departments in a supermarket: customers, finance...).</div></div>
+          <div class="step"><div class="step-n">📋</div><div class="step-t"><strong>Tables (Tables)</strong> — the basic units in which the data is actually stored.</div></div>
           <div class="step"><div class="step-n">🔍</div><div class="step-t"><strong>Additional objects</strong> — Views (saved queries), Procedures (workflows).</div></div>
         </div>
       </div>
@@ -414,28 +413,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">📋 Table Structure — the Heart of the Database</div>
+    <div class="content-sec-title">📋 Table structure — the heart of the database</div>
     <div class="concept">
-      <div class="concept-lbl">Explanation</div>
+      <div class="concept-lbl">explanation</div>
       <div class="concept-body">
-        A table is built as a grid — but unlike Excel, it's <strong>rigid</strong>: every column has a predefined role and data type.
+        The table is built as a Grid — but unlike Excel, it <strong>rigid</strong>: every column has a predefined role and data type.
       </div>
     </div>
     <table class="data-table">
-      <tr><th>Component</th><th>Description</th><th>Example</th></tr>
+      <tr><th>component</th><th>description</th><th>example</th></tr>
       <tr>
-        <td><strong>Column / Field</strong></td>
+        <td><strong>Column (Column/Field)</strong></td>
         <td>Defines the data type. Every column has a name and a type (number, text, date)</td>
-        <td>A "customer name" or "product price" column</td>
+        <td>a "customer name" or "product price" column</td>
       </tr>
       <tr>
-        <td><strong>Row / Record</strong></td>
-        <td>Represents a single instance of an entity. Each row is one complete "object"</td>
+        <td><strong>Row (Row/Record)</strong></td>
+        <td>Represents a single instance of an entity. Every row is one complete "object"</td>
         <td>All the details of a specific customer</td>
       </tr>
       <tr>
         <td><span class="pk">🔑 Primary Key</span></td>
-        <td>A column that must be unique for each row — the record's "ID card"</td>
+        <td>A column that must be unique for every row — the record's "ID card"</td>
         <td>CustomerID</td>
       </tr>
       <tr>
@@ -446,7 +445,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     </table>
 
     <div class="concept">
-      <div class="concept-lbl">A Visual Example — the Products Table</div>
+      <div class="concept-lbl">Visual example — Products table</div>
       <div class="concept-body">
         <table class="data-table">
           <tr>
@@ -465,17 +464,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
     <div class="hl tip">
       <div class="hl-icon">💡</div>
       <div class="hl-text">
-        <strong>About this example:</strong><br>
+        <strong>Explanation of the example:</strong><br>
         • <strong>Primary Key</strong>: ProductID ensures no two products share the same number<br>
-        • <strong>Foreign Key</strong>: CategoryID links to the Categories table — where category 1 = "Computers", 2 = "Peripherals"<br>
-        • <strong>Types</strong>: ListPrice is always a number, ProductName is always text
+        • <strong>Foreign Key</strong>: CategoryID links to the Categories table — there it states that category 1 = \"Computers\", 2 = \"Peripherals\"<br>
+        • <strong>types</strong>: ListPrice is always a number, ProductName is always text
       </div>
     </div>
   </div>
 
   <div class="hl info">
     <div class="hl-icon">🎯</div>
-    <div class="hl-text"><strong>In summary:</strong> a database is the engine behind every app and website you know. It stores information in linked tables and lets you quickly extract complex business insights.</div>
+    <div class="hl-text"><strong>to summarize:</strong> A database is the engine behind every app and website you know. It stores data in linked tables, and lets you pull complex business insights quickly.</div>
   </div>
 </div>
 
@@ -483,14 +482,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <div class="tab-pane" id="tab-1">
   <div class="sec-header">
     <div class="sec-num">Part 2</div>
-    <div class="sec-title">🏪 The Northwind Database Structure</div>
-    <div class="sec-desc">Northwind is a classic database that simulates a <strong>trading company</strong>. It includes 8 central tables linked to one another. This is the database we'll use throughout the course.</div>
+    <div class="sec-title">🏪 Structure of the Northwind database</div>
+    <div class="sec-desc">Northwind is a classic database that simulates <strong>Trading company</strong>. It includes 8 core tables linked to one another. This is the database we'll use throughout the entire course.</div>
   </div>
 
   <div class="content-sec">
     <div class="content-sec-title">🗂️ The 8 Tables of Northwind</div>
     <div class="diagram-wrap">
-      <div class="diagram-header">📊 Table Structure — Northwind</div>
+      <div class="diagram-header">📊 Table structure — Northwind</div>
       <div class="diagram-body">
 
         <div class="db-table">
@@ -579,32 +578,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">🔗 Relationships Between the Tables</div>
+    <div class="content-sec-title">🔗 Relationships between tables</div>
     <table class="data-table">
-      <tr><th>From Table</th><th>Linked Via</th><th>To Table</th><th>Meaning</th></tr>
+      <tr><th>from a table</th><th>relationship through</th><th>to a table</th><th>meaning</th></tr>
       <tr><td>Orders</td><td>CustomerID</td><td>Customers</td><td>Every order belongs to a customer</td></tr>
       <tr><td>Orders</td><td>EmployeeID</td><td>Employees</td><td>Every order was handled by an employee</td></tr>
-      <tr><td>Orders</td><td>ShipVia</td><td>Shippers</td><td>Every order was shipped by a shipping company</td></tr>
-      <tr><td>Order Details</td><td>OrderID</td><td>Orders</td><td>The line items of each order</td></tr>
+      <tr><td>Orders</td><td>ShipVia</td><td>Shippers</td><td>Every order was sent by a shipping company</td></tr>
+      <tr><td>Order Details</td><td>OrderID</td><td>Orders</td><td>Details of every order</td></tr>
       <tr><td>Order Details</td><td>ProductID</td><td>Products</td><td>Which product was ordered</td></tr>
       <tr><td>Products</td><td>SupplierID</td><td>Suppliers</td><td>Who supplies the product</td></tr>
       <tr><td>Products</td><td>CategoryID</td><td>Categories</td><td>Which category the product belongs to</td></tr>
     </table>
     <div class="hl tip">
       <div class="hl-icon">💡</div>
-      <div class="hl-text"><strong>Tip:</strong> the <strong>Orders</strong> table is the heart of Northwind — it links to 4 other tables. Most of the JOIN queries we write will go through it.</div>
+      <div class="hl-text"><strong>tip:</strong> table of <strong>Orders</strong> It's the heart of Northwind — it's linked to 4 other tables. Most of the JOIN queries we'll write will pass through it.</div>
     </div>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">🎯 Your First Query on Northwind</div>
+    <div class="content-sec-title">🎯 First query on Northwind</div>
     <div class="concept">
       <div class="concept-lbl">Basic SELECT</div>
       <div class="concept-body">
-        Once you connect to Northwind, you can retrieve data:<br><br>
+        After connecting to Northwind, you can pull data:<br><br>
         <code>USE Northwind;</code><br>
         <code>SELECT * FROM customers LIMIT 5;</code><br><br>
-        If you see 5 rows of customers — the database is working perfectly! 🎉
+        If you see 5 rows of customers — the database is working great! 🎉
       </div>
     </div>
   </div>
@@ -614,49 +613,49 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <div class="tab-pane" id="tab-2">
   <div class="sec-header">
     <div class="sec-num">Part 3</div>
-    <div class="sec-title">🔑 Keys & Relationships</div>
+    <div class="sec-title">🔑 Keys and relationships</div>
     <div class="sec-desc">Keys are the foundation of relationships between tables — they're what turns a collection of separate tables into a real database.</div>
   </div>
 
   <div class="content-sec">
     <div class="content-sec-title">🔑 Primary Key</div>
     <div class="concept">
-      <div class="concept-lbl">Definition & Rules</div>
+      <div class="concept-lbl">Definition and rules</div>
       <div class="concept-body">
-        A column (or combination of columns) that identifies each row <strong>completely uniquely</strong>.<br><br>
+        A column (or combination of columns) that identifies each row <strong>Completely unique</strong>.<br><br>
         <strong>3 rules:</strong><br>
-        1. No two values can be identical<br>
-        2. It cannot be NULL<br>
-        3. It doesn't change over time<br><br>
-        <strong>Example:</strong> <code>CustomerID</code> in the customers table — every customer has their own unique number.
+        1. There can't be two identical values<br>
+        2. Cannot be NULL<br>
+        3. Does not change over time<br><br>
+        <strong>example:</strong> <code>CustomerID</code> In the customers table — every customer has their own unique number.
       </div>
     </div>
     <div class="hl tip">
       <div class="hl-icon">💡</div>
-      <div class="hl-text">A Primary Key is the <strong>"ID card"</strong> of every row in a table — just as no two ID cards can share the same number.</div>
+      <div class="hl-text">Primary Key is <strong>"ID card"</strong> of every row in the table. Just as two ID cards can't share the same number.</div>
     </div>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">🔗 Foreign Key</div>
+    <div class="content-sec-title">🔗 Foreign Key — foreign key</div>
     <div class="concept">
-      <div class="concept-lbl">Definition</div>
+      <div class="concept-lbl">definition</div>
       <div class="concept-body">
-        A column in one table that points to a Primary Key <strong>in another table</strong>. It creates the relationship between the tables.<br><br>
-        <strong>Example:</strong> <code>CustomerID</code> in the orders table points to <code>CustomerID</code> in the customers table.<br><br>
-        Meaning: "every order has a defined customer that can be found in the customers table."
+        A column in one table that points to a Primary Key <strong>in another table</strong>. Creates the relationship between the tables.<br><br>
+        <strong>example:</strong> <code>CustomerID</code> in the orders table points to<code>CustomerID</code> In the customers table.<br><br>
+        This means: "every order has a defined customer that can be found in the customers table."
       </div>
     </div>
     <div class="hl warn">
       <div class="hl-icon">⚠️</div>
-      <div class="hl-text"><strong>Referential Integrity:</strong> you can't create an order with a CustomerID that doesn't exist in the customers table. The database keeps the relationships valid.</div>
+      <div class="hl-text"><strong>Referential Integrity:</strong> You can't create an order with a CustomerID that doesn't exist in the customers table. The database enforces referential integrity.</div>
     </div>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">📊 Types of Relationships</div>
+    <div class="content-sec-title">📊 Relationship types</div>
     <table class="data-table">
-      <tr><th>Relationship Type</th><th>Explanation</th><th>Example in Northwind</th></tr>
+      <tr><th>relationship type</th><th>explanation</th><th>An example in Northwind</th></tr>
       <tr>
         <td><strong>1:N (One-to-Many)</strong></td>
         <td>One row in table A is linked to many in table B</td>
@@ -664,30 +663,30 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
       </tr>
       <tr>
         <td><strong>N:N (Many-to-Many)</strong></td>
-        <td>Requires a junction table — many to many</td>
-        <td>Orders ↔ Products (via Order Details)</td>
+        <td>Requires a bridge table — many-to-many</td>
+        <td>Order ↔ Products (via Order Details)</td>
       </tr>
       <tr>
         <td><strong>1:1 (One-to-One)</strong></td>
         <td>One row in table A = one row in table B</td>
-        <td>Less common — e.g., separate contact details</td>
+        <td>less common — for example separate contact details</td>
       </tr>
     </table>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">🔄 How Does This Relate to JOIN?</div>
+    <div class="content-sec-title">🔄 How is this related to JOIN?</div>
     <div class="concept">
-      <div class="concept-lbl">The Direct Connection</div>
+      <div class="concept-lbl">The direct context</div>
       <div class="concept-body">
-        The JOIN command uses exactly these primary-key/foreign-key relationships to combine tables:<br><br>
+        The JOIN statement uses exactly the primary and foreign key relationships to connect tables:<br><br>
         <code>JOIN orders ON customers.CustomerID = orders.CustomerID</code><br><br>
-        Every JOIN we write combines tables through the columns that define the relationship between them.
+        Every JOIN we write connects tables through the columns that define the relationship between them.
       </div>
     </div>
     <div class="hl info">
       <div class="hl-icon">🎯</div>
-      <div class="hl-text"><strong>The rule:</strong> before every JOIN, ask yourself — <strong>through which column are the tables linked?</strong> The answer is usually the primary/foreign key.</div>
+      <div class="hl-text"><strong>the rule:</strong> Before every JOIN, ask yourself — <strong>Through which column are the tables linked?</strong> The answer is usually the primary/foreign key.</div>
     </div>
   </div>
 </div>
@@ -696,98 +695,98 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:
 <div class="tab-pane" id="tab-3">
   <div class="sec-header">
     <div class="sec-num">Part 4</div>
-    <div class="sec-title">📊 SQL vs Excel</div>
-    <div class="sec-desc">Two excellent tools — but for different uses. Understanding the difference will help you know when to use each.</div>
+    <div class="sec-title">📊 SQL vs. Excel</div>
+    <div class="sec-desc">Two excellent tools — but for different uses. Understanding the difference will help you know when to use each one.</div>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">⚡ Full Comparison</div>
+    <div class="content-sec-title">⚡ Full comparison</div>
     <table class="data-table">
-      <tr><th>Criterion</th><th>Excel</th><th>SQL</th></tr>
+      <tr><th>criterion</th><th>Excel</th><th>SQL</th></tr>
       <tr>
-        <td><strong>Data volume</strong></td>
-        <td class="bad">up to ~1M rows</td>
-        <td class="good">billions of rows</td>
+        <td><strong>Amount of data</strong></td>
+        <td class="bad">Up to ~1M rows</td>
+        <td class="good">Billions of rows</td>
       </tr>
       <tr>
-        <td><strong>Speed</strong></td>
-        <td class="bad">slow with large files</td>
-        <td class="good">very fast at any size</td>
+        <td><strong>speed</strong></td>
+        <td class="bad">Slow with large files</td>
+        <td class="good">Very fast at any size</td>
       </tr>
       <tr>
-        <td><strong>Sharing & accessibility</strong></td>
-        <td class="bad">files passed around, conflicting versions</td>
-        <td class="good">one central database for everyone</td>
+        <td><strong>Sharing and access</strong></td>
+        <td class="bad">Files floating around, different versions</td>
+        <td class="good">One central database for everyone</td>
       </tr>
       <tr>
         <td><strong>Data security</strong></td>
-        <td class="bad">anyone can edit</td>
-        <td class="good">precise permissions per user</td>
+        <td class="bad">Anyone can edit</td>
+        <td class="good">Precise permissions for each user</td>
       </tr>
       <tr>
-        <td><strong>Human error</strong></td>
-        <td class="bad">easy to enter a wrong value</td>
-        <td class="good">a rigid structure prevents mistakes</td>
+        <td><strong>Human errors</strong></td>
+        <td class="bad">Easy to enter a wrong value</td>
+        <td class="good">A rigid structure prevents mistakes</td>
       </tr>
       <tr>
-        <td><strong>Concurrent work</strong></td>
-        <td class="bad">the file locks — one person at a time</td>
-        <td class="good">hundreds of users at once</td>
+        <td><strong>Working in parallel</strong></td>
+        <td class="bad">File locks — only one at a time</td>
+        <td class="good">Hundreds of users concurrently</td>
       </tr>
       <tr>
         <td><strong>Visual flexibility</strong></td>
-        <td class="good">charts and colors with ease</td>
-        <td class="bad">requires a separate BI tool</td>
+        <td class="good">Charts and colors made easy</td>
+        <td class="bad">Requires a separate BI tool</td>
       </tr>
       <tr>
-        <td><strong>Accessibility for the average user</strong></td>
-        <td class="good">an intuitive graphical interface</td>
-        <td class="bad">requires learning a language</td>
+        <td><strong>Accessibility for a regular user</strong></td>
+        <td class="good">An intuitive graphical interface</td>
+        <td class="bad">Requires learning a language</td>
       </tr>
       <tr>
         <td><strong>Precise retrieval</strong></td>
-        <td class="bad">loads the whole file into memory</td>
-        <td class="good">retrieves only what's needed</td>
+        <td class="bad">Loads the entire file into memory</td>
+        <td class="good">Fetches only what's needed</td>
       </tr>
     </table>
   </div>
 
   <div class="content-sec">
-    <div class="content-sec-title">🎯 When to Use Each One?</div>
+    <div class="content-sec-title">🎯 When to use each one?</div>
     <div class="concept">
-      <div class="concept-lbl">Use Excel When You Want</div>
+      <div class="concept-lbl">Use Excel when you want</div>
       <div class="concept-body">
-        ✅ A one-off analysis of small files (up to a few hundred thousand rows)<br>
-        ✅ Quick visualization — charts, Pivot Tables<br>
+        ✅ One-off analysis of small files (up to a few hundred thousand rows)<br>
+        ✅ Fast visualization — charts, pivot tables<br>
         ✅ Working with data already exported from the database<br>
         ✅ Easy sharing with managers who don't know SQL
       </div>
     </div>
     <div class="concept">
-      <div class="concept-lbl">Use SQL When You Want</div>
+      <div class="concept-lbl">Use SQL when you want</div>
       <div class="concept-body">
         ✅ Working with millions of rows and up<br>
         ✅ Complex queries that join multiple tables<br>
         ✅ Reports that refresh automatically<br>
-        ✅ Maintaining the "single source of truth" — correct, centralized data<br>
-        ✅ Automation and running repeated processes
+        ✅ Keeping the "single source of truth" — correct, centralized data<br>
+        ✅ Automation and running repetitive processes
       </div>
     </div>
     <div class="hl tip">
       <div class="hl-icon">💡</div>
-      <div class="hl-text"><strong>In practice:</strong> analysts use SQL to pull data from the database — then bring it into Excel, Power BI, or Python for analysis and visualization. <strong>The two complement each other!</strong></div>
+      <div class="hl-text"><strong>in practice:</strong> Analysts use SQL to pull data from the database — and then bring it into Excel, Power BI, or Python for analysis and visualization. <strong>The two complement each other!</strong></div>
     </div>
   </div>
 
   <div class="content-sec">
     <div class="content-sec-title">📈 Conclusion — Why Learn SQL?</div>
     <div class="concept">
-      <div class="concept-lbl">3 Key Reasons</div>
+      <div class="concept-lbl">3 main reasons</div>
       <div class="concept-body">
         <div class="steps">
-          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>A universal language</strong> — SQL works with MySQL, SQL Server, Oracle, PostgreSQL, and more. Learn it once — use it everywhere.</div></div>
-          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Market demand</strong> — SQL is one of the most sought-after skills in any Data, BI, Analytics, or Product role.</div></div>
-          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Analytical independence</strong> — instead of waiting for IT to prepare a report, you pull the data you need exactly when you need it.</div></div>
+          <div class="step"><div class="step-n">1</div><div class="step-t"><strong>A universal language</strong> — SQL works with MySQL, SQL Server, Oracle, PostgreSQL and more. Learn it once — work everywhere.</div></div>
+          <div class="step"><div class="step-n">2</div><div class="step-t"><strong>Market demand</strong> — SQL is one of the most in-demand skills in any Data, BI, Analytics and Product role.</div></div>
+          <div class="step"><div class="step-n">3</div><div class="step-t"><strong>Analytical independence</strong> — instead of waiting for IT to prepare a report for you, you pull the data you need exactly when you need it.</div></div>
         </div>
       </div>
     </div>
