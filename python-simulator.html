@@ -17,21 +17,21 @@
     --cyan: #00d4c8; --green: #00e5a0; --gold: #ffd700; --orange: #ff8800;
     --purple: #8b5cf6; --pink: #ec4899; --red: #ef4444;
     --easy: #10b981; --medium: #f59e0b; --hard: #ef4444;
-  }
+  ;--tc1:#0a0d1f;--tc2:#f8fafc;--tc3:#121530;--tc4:#2a2f5c;--tc5:#2a1f0a;--tc6:#4a3a1f;--tc7:#ffd700;--tc8:#ffd700;--tc9:rgba(239,68,68,0.1);--tc10:#ef4444;--tc11:rgba(239,68,68,0.3);--tc12:#aab;--tc13:#00d4c8;--tc14:#10b981;--tc15:#f59e0b;--tc16:#252a52;--tc17:#353a6b;--tc18:#10b981;--tc19:#10b981;--tc20:#ef4444;--tc21:#1a1f3a;--tc22:#888fa6;--tc23:rgba(55,118,171,0.18);--tc24:#5b9fc7;--tc25:rgba(139,92,246,0.18);--tc26:#b8a6e5;--tc27:rgba(16,185,129,0.18);--tc28:rgba(245,158,11,0.18);--tc29:rgba(239,68,68,0.18);--tc30:rgba(255,215,0,0.2);--tc31:rgba(255,136,0,0.15);--tc32:rgba(255,215,0,0.4);--tc33:rgba(255,215,0,0.07);--tc34:rgba(255,215,0,0.18);--tc35:#e0e6ff;--tc36:#00d4c8;--tc37:#ff6b6b;--tc38:rgba(0,229,160,0.15);--tc39:rgba(0,212,200,0.15);--tc40:#00e5a0;--tc41:#00e5a0;--tc42:rgba(255,176,32,0.1);--tc43:#ff8800;--tc44:rgba(255,176,32,0.3);--tc45:rgba(255,215,0,0.08);--tc46:rgba(255,136,0,0.04);--tc47:rgba(255,215,0,0.2);--tc48:rgba(255,215,0,0.15);--tc49:rgba(255,215,0,0.3);--tc50:rgba(255,215,0,0.25);--tc51:rgba(0,212,200,0.05);--tc52:rgba(0,212,200,0.18);--tc53:rgba(139,92,246,0.06);--tc54:rgba(139,92,246,0.25);--tc55:#8b5cf6;--tc56:#c4b5fd;--tc57:rgba(0,212,200,.07);--tc58:rgba(0,212,200,.26);--tc59:rgba(0,0,0,.3);--tc60:rgba(0,0,0,.32)}
   * { box-sizing: border-box; }
   body {
     margin: 0;
   -webkit-tap-highlight-color: rgba(0,212,200,0.2);
   -webkit-text-size-adjust: 100%;
     font-family: -apple-system, "Heebo", "Segoe UI", Roboto, sans-serif;
-    background: var(--bg); color: var(--text);
+    background: var(--tc1); color: var(--tc2);
     direction: rtl; line-height: 1.5;
   }
 
   /* Top bar with score */
   .topbar {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
+    background: var(--tc3);
+    border-bottom: 1px solid var(--tc4);
     padding: 10px 14px;
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@
     z-index: 50;
   }
   .home-btn {
-    background: linear-gradient(135deg, var(--cyan), var(--green));
+    background: linear-gradient(135deg, #00d4c8, #00e5a0);
     color: #000;
     padding: 7px 12px;
     border-radius: 8px;
@@ -54,19 +54,19 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: linear-gradient(135deg, #2a1f0a, #4a3a1f);
-    border: 1.5px solid var(--gold);
+    background: linear-gradient(135deg, var(--tc5), var(--tc6));
+    border: 1.5px solid var(--tc7);
     padding: 5px 12px;
     border-radius: 14px;
     font-size: 12.5px;
     font-weight: 700;
-    color: var(--gold);
+    color: var(--tc8);
   }
   .score-pill .total-icon { font-size: 14px; }
   .reset-score-btn {
-    background: rgba(239,68,68,0.1);
-    color: var(--red);
-    border: 1px solid rgba(239,68,68,0.3);
+    background: var(--tc9);
+    color: var(--tc10);
+    border: 1px solid var(--tc11);
     padding: 5px 10px;
     border-radius: 8px;
     font-size: 11px;
@@ -76,9 +76,9 @@
 
   /* Progress strip */
   .progress-strip {
-    background: var(--bg2);
+    background: var(--tc3);
     padding: 8px 14px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--tc4);
     display: flex;
     gap: 10px;
     align-items: center;
@@ -88,30 +88,30 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    color: var(--text2);
+    color: var(--tc12);
   }
-  .progress-stat .val { color: var(--cyan); font-weight: 700; }
-  .progress-stat.easy .val { color: var(--easy); }
-  .progress-stat.medium .val { color: var(--medium); }
-  .progress-stat.hard .val { color: var(--hard); }
+  .progress-stat .val { color: var(--tc13); font-weight: 700; }
+  .progress-stat.easy .val { color: var(--tc14); }
+  .progress-stat.medium .val { color: var(--tc15); }
+  .progress-stat.hard .val { color: var(--tc10); }
   .progress-bar-wrap {
     flex: 1;
     height: 6px;
-    background: var(--bg);
+    background: var(--tc1);
     border-radius: 3px;
     overflow: hidden;
     margin-inline-start: 8px;
   }
   .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--cyan), var(--green));
+    background: linear-gradient(90deg, #00d4c8, #00e5a0);
     transition: width .5s;
   }
 
   /* Filter bar */
   .filter-bar {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
+    background: var(--tc3);
+    border-bottom: 1px solid var(--tc4);
     padding: 8px 14px;
     display: flex;
     gap: 6px;
@@ -121,29 +121,29 @@
   .filter-bar::-webkit-scrollbar { height: 0; }
   .filter-pill {
     padding: 6px 12px;
-    background: var(--bg4);
-    border: 1px solid var(--border2);
+    background: var(--tc16);
+    border: 1px solid var(--tc17);
     border-radius: 14px;
-    color: var(--text2);
+    color: var(--tc12);
     font-size: 11.5px;
     cursor: pointer;
     font-family: inherit;
     flex-shrink: 0;
   }
   .filter-pill.active {
-    background: var(--cyan); color: #000; border-color: var(--cyan); font-weight: 700;
+    background: #00d4c8; color: #000; border-color: #00d4c8; font-weight: 700;
   }
-  .filter-pill.diff-easy.active { background: var(--easy); border-color: var(--easy); }
-  .filter-pill.diff-medium.active { background: var(--medium); border-color: var(--medium); }
-  .filter-pill.diff-hard.active { background: var(--hard); border-color: var(--hard); color: #fff; }
+  .filter-pill.diff-easy.active { background: var(--tc18); border-color: var(--tc19); }
+  .filter-pill.diff-medium.active { background: #f59e0b; border-color: #f59e0b; }
+  .filter-pill.diff-hard.active { background: var(--tc20); border-color: var(--tc20); color: #fff; }
   .filter-search {
     flex: 1;
     min-width: 130px;
     padding: 6px 12px;
-    background: var(--bg4);
-    border: 1px solid var(--border2);
+    background: var(--tc16);
+    border: 1px solid var(--tc17);
     border-radius: 14px;
-    color: var(--text);
+    color: var(--tc2);
     font-size: 12px;
     font-family: inherit;
   }
@@ -155,8 +155,8 @@
   }
 
   .exercise-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
+    background: var(--tc21);
+    border: 1px solid var(--tc4);
     border-radius: 12px;
     padding: 14px;
     margin-bottom: 12px;
@@ -168,12 +168,12 @@
     gap: 10px;
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--tc4);
     flex-wrap: wrap;
   }
   .ex-icon { font-size: 26px; line-height: 1; }
   .ex-title-block { flex: 1; min-width: 0; }
-  .ex-num { font-size: 11px; color: var(--text3); font-weight: 600; }
+  .ex-num { font-size: 11px; color: var(--tc22); font-weight: 600; }
   .ex-title { font-size: 14px; font-weight: 700; }
   
   /* Badges */
@@ -185,24 +185,24 @@
     font-weight: 700;
     text-transform: uppercase;
   }
-  .badge-course-python { background: rgba(55,118,171,0.18); color: #5b9fc7; }
-  .badge-course-pandas { background: rgba(139,92,246,0.18); color: #b8a6e5; }
-  .badge-diff-easy { background: rgba(16,185,129,0.18); color: var(--easy); }
-  .badge-diff-medium { background: rgba(245,158,11,0.18); color: var(--medium); }
-  .badge-diff-hard { background: rgba(239,68,68,0.18); color: var(--hard); }
+  .badge-course-python { background: var(--tc23); color: var(--tc24); }
+  .badge-course-pandas { background: var(--tc25); color: var(--tc26); }
+  .badge-diff-easy { background: var(--tc27); color: var(--tc14); }
+  .badge-diff-medium { background: var(--tc28); color: var(--tc15); }
+  .badge-diff-hard { background: var(--tc29); color: var(--tc10); }
   .badge-points {
-    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,136,0,0.15));
-    color: var(--gold);
-    border: 1px solid rgba(255,215,0,0.4);
+    background: linear-gradient(135deg, var(--tc30), var(--tc31));
+    color: var(--tc8);
+    border: 1px solid var(--tc32);
   }
   .badge-earned {
-    background: linear-gradient(135deg, var(--green), #00a884);
+    background: linear-gradient(135deg, #00e5a0, #00a884);
     color: #000;
   }
 
   .question-box {
-    background: rgba(255,215,0,0.07);
-    border-inline-start: 3px solid var(--gold);
+    background: var(--tc33);
+    border-inline-start: 3px solid var(--tc7);
     padding: 10px 14px;
     border-radius: 8px;
     font-size: 14px;
@@ -210,19 +210,19 @@
     margin-bottom: 12px;
   }
   .question-box code {
-    background: rgba(255,215,0,0.18);
-    color: var(--gold);
+    background: var(--tc34);
+    color: var(--tc8);
     padding: 2px 7px;
     border-radius: 4px;
     font-family: "SF Mono", Monaco, Menlo, monospace;
     font-size: 12.5px;
   }
-  .question-box b { color: var(--cyan); }
+  .question-box b { color: var(--tc13); }
 
   .editor-section { margin-bottom: 12px; }
   .editor-label {
     font-size: 11.5px;
-    color: var(--text3);
+    color: var(--tc22);
     text-transform: uppercase;
     letter-spacing: .5px;
     margin-bottom: 6px;
@@ -230,9 +230,9 @@
   }
   .code-editor {
     width: 100%;
-    background: #0a0d1f;
-    color: #e0e6ff;
-    border: 1px solid var(--border2);
+    background: var(--tc1);
+    color: var(--tc35);
+    border: 1px solid var(--tc17);
     border-radius: 8px;
     padding: 12px;
     font-family: "SF Mono", Monaco, Menlo, "Courier New", monospace;
@@ -247,7 +247,7 @@
     -webkit-user-select: text;
     -webkit-touch-callout: default;
   }
-  .code-editor:focus { outline: none; border-color: var(--cyan); }
+  .code-editor:focus { outline: none; border-color: var(--tc36); }
 
   .actions {
     display: flex;
@@ -267,20 +267,20 @@
   }
   .btn:hover, .btn:active { transform: scale(0.97); }
   .btn:disabled { opacity: 0.6; cursor: wait; }
-  .btn-run { background: linear-gradient(135deg, var(--green), #00a884); color: #000; }
-  .btn-solution { background: linear-gradient(135deg, var(--gold), var(--orange)); color: #1a1a2e; }
-  .btn-reset { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .btn-run { background: linear-gradient(135deg, #00e5a0, #00a884); color: #000; }
+  .btn-solution { background: linear-gradient(135deg, #ffd700, #ff8800); color: #1a1a2e; }
+  .btn-reset { background: var(--tc9); color: var(--tc10); border: 1px solid var(--tc11); }
 
   .output-section { margin-top: 12px; display: none; }
   .output-section.show { display: block; }
   .output-box {
-    background: #0a0d1f;
-    border: 1px solid var(--border);
+    background: var(--tc1);
+    border: 1px solid var(--tc4);
     border-radius: 8px;
     padding: 12px;
     font-family: "SF Mono", Monaco, Menlo, monospace;
     font-size: 13px;
-    color: #e0e6ff;
+    color: var(--tc35);
     white-space: pre-wrap;
     direction: ltr;
     text-align: left;
@@ -288,7 +288,7 @@
     overflow-y: auto;
     min-height: 40px;
   }
-  .output-box.error { color: #ff6b6b; }
+  .output-box.error { color: var(--tc37); }
 
   /* Verdict (with points!) */
   .verdict {
@@ -307,27 +307,27 @@
     100% { transform: scale(1); opacity: 1; }
   }
   .verdict.success {
-    background: linear-gradient(135deg, rgba(0,229,160,0.15), rgba(0,212,200,0.15));
-    color: var(--green);
-    border: 2px solid var(--green);
+    background: linear-gradient(135deg, var(--tc38), var(--tc39));
+    color: var(--tc40);
+    border: 2px solid var(--tc41);
   }
   .verdict.fail {
-    background: rgba(255,176,32,0.1);
-    color: var(--orange);
-    border: 1px solid rgba(255,176,32,0.3);
+    background: var(--tc42);
+    color: var(--tc43);
+    border: 1px solid var(--tc44);
   }
   .verdict .points-earned {
     display: block;
     font-size: 22px;
     margin: 4px 0;
-    color: var(--gold);
+    color: var(--tc8);
   }
 
   /* SOLUTION PANEL */
   .solution-section {
     margin-top: 18px;
-    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,136,0,0.04));
-    border: 2px solid rgba(255,215,0,0.4);
+    background: linear-gradient(135deg, var(--tc45), var(--tc46));
+    border: 2px solid var(--tc32);
     border-radius: 12px;
     padding: 16px;
     display: none;
@@ -338,9 +338,9 @@
     to { opacity: 1; transform: translateY(0); }
   }
   .solution-warning {
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.3);
-    color: var(--red);
+    background: var(--tc9);
+    border: 1px solid var(--tc11);
+    color: var(--tc10);
     padding: 8px 12px;
     border-radius: 6px;
     font-size: 12px;
@@ -353,18 +353,18 @@
     gap: 10px;
     margin-bottom: 14px;
     padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255,215,0,0.2);
+    border-bottom: 1px solid var(--tc47);
   }
   .solution-header h3 {
     margin: 0;
     font-size: 17px;
-    color: var(--gold);
+    color: var(--tc8);
   }
   .copy-btn {
     margin-inline-start: auto;
-    background: rgba(255,215,0,0.15);
-    color: var(--gold);
-    border: 1px solid rgba(255,215,0,0.3);
+    background: var(--tc48);
+    color: var(--tc8);
+    border: 1px solid var(--tc49);
     padding: 5px 12px;
     border-radius: 6px;
     font-size: 11.5px;
@@ -373,8 +373,8 @@
   }
 
   .solution-code {
-    background: #0a0d1f;
-    border: 1px solid rgba(255,215,0,0.25);
+    background: var(--tc1);
+    border: 1px solid var(--tc50);
     border-radius: 8px;
     padding: 12px;
     margin-bottom: 16px;
@@ -382,7 +382,7 @@
   }
   .solution-code pre {
     margin: 0;
-    color: var(--gold);
+    color: var(--tc8);
     font-family: "SF Mono", Monaco, Menlo, monospace;
     font-size: 13.5px;
     direction: ltr;
@@ -393,35 +393,35 @@
 
   .explanation-title {
     font-size: 14px;
-    color: var(--cyan);
+    color: var(--tc13);
     font-weight: 700;
     margin: 0 0 10px;
   }
   .exp-line-list { list-style: none; padding: 0; margin: 0 0 14px; }
   .exp-line {
-    background: rgba(0,212,200,0.05);
-    border-inline-start: 2px solid var(--cyan);
+    background: var(--tc51);
+    border-inline-start: 2px solid var(--tc36);
     padding: 10px 14px;
     border-radius: 6px;
     margin-bottom: 7px;
   }
   .exp-line-code {
-    color: var(--cyan);
+    color: var(--tc13);
     font-family: "SF Mono", Monaco, Menlo, monospace;
     font-size: 13px;
     direction: ltr;
     text-align: left;
     display: block;
     margin-bottom: 5px;
-    background: #0a0d1f;
+    background: var(--tc1);
     padding: 5px 9px;
     border-radius: 4px;
-    border: 1px solid var(--border2);
+    border: 1px solid var(--tc17);
   }
-  .exp-line-desc { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .exp-line-desc { font-size: 13px; color: var(--tc2); line-height: 1.6; }
   .exp-line-desc code {
-    background: rgba(0,212,200,0.18);
-    color: var(--cyan);
+    background: var(--tc52);
+    color: var(--tc13);
     padding: 1px 6px;
     border-radius: 3px;
     font-family: "SF Mono", Monaco, Menlo, monospace;
@@ -429,23 +429,23 @@
   }
 
   .theory-section {
-    background: rgba(139,92,246,0.06);
-    border: 1px solid rgba(139,92,246,0.25);
+    background: var(--tc53);
+    border: 1px solid var(--tc54);
     border-radius: 8px;
     padding: 12px 14px;
     margin-top: 10px;
   }
-  .theory-section h4 { margin: 0 0 8px; font-size: 13.5px; color: var(--purple); }
-  .theory-section .theory-content { font-size: 13px; color: var(--text); line-height: 1.7; }
+  .theory-section h4 { margin: 0 0 8px; font-size: 13.5px; color: var(--tc55); }
+  .theory-section .theory-content { font-size: 13px; color: var(--tc2); line-height: 1.7; }
   .theory-section code {
-    background: rgba(139,92,246,0.18); color: #c4b5fd;
+    background: var(--tc25); color: var(--tc56);
     padding: 1px 6px; border-radius: 4px;
     font-family: "SF Mono", Monaco, Menlo, monospace; font-size: 12px;
   }
   .theory-section pre {
-    background: #0a0d1f; padding: 8px 10px; border-radius: 6px;
-    border: 1px solid var(--border2); overflow-x: auto;
-    font-size: 12px; direction: ltr; text-align: left; color: #c4b5fd;
+    background: var(--tc1); padding: 8px 10px; border-radius: 6px;
+    border: 1px solid var(--tc17); overflow-x: auto;
+    font-size: 12px; direction: ltr; text-align: left; color: var(--tc56);
   }
 
   .nav-row {
@@ -455,9 +455,9 @@
     justify-content: space-between;
   }
   .nav-btn {
-    background: var(--bg4);
-    color: var(--text);
-    border: 1px solid var(--border2);
+    background: var(--tc16);
+    color: var(--tc2);
+    border: 1px solid var(--tc17);
     padding: 9px 18px;
     border-radius: 8px;
     cursor: pointer;
@@ -500,16 +500,16 @@
     display: flex;
     gap: 4px;
     padding: 6px;
-    background: var(--bg4);
-    border: 1px solid var(--border2);
+    background: var(--tc16);
+    border: 1px solid var(--tc17);
     border-bottom: none;
     border-radius: 8px 8px 0 0;
     flex-wrap: wrap;
   }
   .editor-toolbar .tb-btn {
-    background: var(--bg3);
-    color: var(--text2);
-    border: 1px solid var(--border2);
+    background: var(--tc21);
+    color: var(--tc12);
+    border: 1px solid var(--tc17);
     padding: 5px 10px;
     border-radius: 6px;
     font-size: 11.5px;
@@ -523,18 +523,18 @@
     -webkit-tap-highlight-color: rgba(0,212,200,0.2);
   }
   .editor-toolbar .tb-btn:hover, .editor-toolbar .tb-btn:active {
-    background: var(--cyan);
+    background: #00d4c8;
     color: #000;
-    border-color: var(--cyan);
+    border-color: #00d4c8;
   }
   .editor-toolbar .tb-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
   }
   .editor-toolbar .tb-btn.copied {
-    background: var(--green);
+    background: #00e5a0;
     color: #000;
-    border-color: var(--green);
+    border-color: #00e5a0;
   }
   .editor-wrap .code-editor {
     border-radius: 0 0 8px 8px !important;
@@ -548,17 +548,35 @@
 
 
 /* ===== הסבר מעמיק אחרי פתרון נכון ===== */
-.why-box{margin-top:11px;padding:11px 13px;border-radius:9px;background:rgba(0,212,200,.07);
- border:1px solid rgba(0,212,200,.26);font-size:13.5px;line-height:1.8;text-align:right;
+.why-box{margin-top:11px;padding:11px 13px;border-radius:9px;background:var(--tc57);
+ border:1px solid var(--tc58);font-size:13.5px;line-height:1.8;text-align:right;
  direction:rtl;font-weight:400}
 .why-box .why-title{font-weight:700;font-size:12px;margin-bottom:5px;opacity:.9}
-.why-box code{background:rgba(0,0,0,.3);padding:1px 5px;border-radius:4px;
+.why-box code{background:var(--tc59);padding:1px 5px;border-radius:4px;
  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;direction:ltr;display:inline-block}
-.why-box pre{background:rgba(0,0,0,.32);border-radius:8px;padding:9px 11px;overflow:auto;
+.why-box pre{background:var(--tc60);border-radius:8px;padding:9px 11px;overflow:auto;
  direction:ltr;text-align:left;margin:7px 0;font-size:12.5px}
 .why-box ul{margin:6px 0;padding-inline-start:20px}.why-box li{margin:3px 0}
 </style>
-</head>
+<script>(function(){try{var t=localStorage.getItem('egr-theme');if(t!=='light'&&t!=='dark')t='dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script><style id="theme-toggle-css">
+:root{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+.egr-theme-btn{display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 auto;width:20px;height:20px;min-width:20px;max-height:20px;padding:0;
+  margin-inline-start:6px;border-radius:50%;cursor:pointer;font-size:11px;line-height:1;
+  align-self:center;box-sizing:border-box;
+  background:transparent;color:inherit;vertical-align:middle;
+  border:1px solid rgba(128,128,128,.45);
+  transition:background .15s ease,transform .15s ease;-webkit-tap-highlight-color:transparent}
+.egr-theme-btn:hover{background:rgba(128,128,128,.18)}
+.egr-theme-btn:active{transform:scale(.92)}
+.egr-theme-btn:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.egr-theme-btn.egr-floating{position:fixed;inset-block-end:16px;inset-inline-start:16px;
+  z-index:9999;width:40px;height:40px;max-height:40px;font-size:17px;
+  background:var(--bg2,var(--bg-1,#1a1a2e));color:var(--text,var(--fg-1,#e8e8f0));
+  box-shadow:0 4px 14px rgba(0,0,0,.35)}
+@media print{.egr-theme-btn{display:none}}
+</style><style id="theme-light">html[data-theme="light"]{--bg:#e6e7ef;--bg2:#dadbe7;--bg3:#dbdde6;--bg4:#dbdce6;--border:#b9bcdb;--border2:#a8acd2;--text:#3c5166;--text2:#40404b;--text3:#515665;--pink:#a03268;--tc1:#e6e7ef;--tc2:#3c5166;--tc3:#dadbe7;--tc4:#b9bcdb;--tc5:#ece7de;--tc6:#e6e2db;--tc7:#706739;--tc8:#5a4f13;--tc9:rgba(238,211,211,0.1);--tc10:#af3333;--tc11:rgba(224,174,174,0.3);--tc12:#40404b;--tc13:#135854;--tc14:#1a5944;--tc15:#664a1a;--tc16:#dbdce6;--tc17:#a8acd2;--tc18:#d8e8e3;--tc19:#3a715f;--tc20:#c11111;--tc21:#dbdde6;--tc22:#515665;--tc23:rgba(211,226,238,0.18);--tc24:#355466;--tc25:rgba(219,211,238,0.18);--tc26:#57428b;--tc27:rgba(211,238,229,0.18);--tc28:rgba(238,228,211,0.18);--tc29:rgba(238,211,211,0.18);--tc30:rgba(238,234,211,0.2);--tc31:rgba(238,225,211,0.15);--tc32:rgba(224,216,174,0.4);--tc33:rgba(238,234,211,0.07);--tc34:rgba(238,234,211,0.18);--tc35:#2742b6;--tc36:#396f6c;--tc37:#972020;--tc38:rgba(211,238,230,0.15);--tc39:rgba(211,238,237,0.15);--tc40:#135944;--tc41:#3a7160;--tc42:rgba(238,228,211,0.1);--tc43:#6e4617;--tc44:rgba(224,206,174,0.3);--tc45:rgba(238,234,211,0.08);--tc46:rgba(238,225,211,0.04);--tc47:rgba(224,216,174,0.2);--tc48:rgba(238,234,211,0.15);--tc49:rgba(224,216,174,0.3);--tc50:rgba(224,216,174,0.25);--tc51:rgba(211,238,237,0.05);--tc52:rgba(211,238,237,0.18);--tc53:rgba(219,211,238,0.06);--tc54:rgba(189,174,224,0.25);--tc55:#764ed0;--tc56:#4f2fc6;--tc57:rgba(211,238,237,0.07);--tc58:rgba(174,224,221,0.26);--tc59:rgba(0,0,0,0.18);--tc60:rgba(0,0,0,0.192)}</style></head>
 <body>
 
 <div class="topbar">
@@ -804,7 +822,7 @@ window.SIM_EXERCISES = [
   "starter": "# הדפס 10 / 2\n",
   "solution": "print(10 / 2)",
   "check_fn": "(output, code) => { const c = code.replace(/#.*/g, ''); return output.trim() === \"5.0\" && /10\\s*\\/\\s*2/.test(c); }",
-  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
+  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
   "explanation": [
    {
     "line": "print(10 / 2)",
@@ -827,7 +845,7 @@ window.SIM_EXERCISES = [
   "starter": "# חילוק שלמים: 10 // 3\n",
   "solution": "print(10 // 3)",
   "check_fn": "(output, code) => { const c = code.replace(/#.*/g, ''); return output.trim() === \"3\" && /10\\s*\\/\\/\\s*3/.test(c); }",
-  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
+  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
   "explanation": [
    {
     "line": "print(10 // 3)",
@@ -850,7 +868,7 @@ window.SIM_EXERCISES = [
   "starter": "# מודולו: 10 % 3\n",
   "solution": "print(10 % 3)",
   "check_fn": "(output, code) => { const c = code.replace(/#.*/g, ''); return output.trim() === \"1\" && /10\\s*%\\s*3/.test(c); }",
-  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
+  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
   "explanation": [
    {
     "line": "print(10 % 3)",
@@ -873,7 +891,7 @@ window.SIM_EXERCISES = [
   "starter": "x = 8\n# בדוק זוגיות\n",
   "solution": "x = 8\nprint(x % 2 == 0)",
   "check_fn": "(output, code) => /True/.test(output) && /%\\s*2/.test(code)",
-  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
+  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
   "explanation": [
    {
     "line": "x = 8",
@@ -899,7 +917,7 @@ window.SIM_EXERCISES = [
   "starter": "# 5 בחזקת 3\n",
   "solution": "print(5 ** 3)",
   "check_fn": "(output, code) => output.trim() === \"125\" && /\\*\\*/.test(code)",
-  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
+  "theory": "<p>פייתון היא <b>מחשבון מצוין</b>. האופרטורים הבסיסיים מזכירים שיעורי חשבון, אבל יש כמה סימנים מיוחדים שחשוב להכיר כשעובדים עם דאטה:</p>\n\n<table style=\"width:100%;border-collapse:collapse\">\n<tr><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">אופרטור</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--tc4)\">מה עושה</th><th style=\"text-align:right;padding:.5rem;border-bottom:1px solid var(--border)\">דוגמה</th></tr>\n<tr><td style=\"padding:.5rem\"><code>+</code></td><td style=\"padding:.5rem\">חיבור</td><td style=\"padding:.5rem\"><code>5 + 3 = 8</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>-</code></td><td style=\"padding:.5rem\">חיסור</td><td style=\"padding:.5rem\"><code>5 - 3 = 2</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>*</code></td><td style=\"padding:.5rem\">כפל</td><td style=\"padding:.5rem\"><code>5 * 3 = 15</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>/</code></td><td style=\"padding:.5rem\">חילוק — תמיד מחזיר float!</td><td style=\"padding:.5rem\"><code>10 / 2 = 5.0</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>//</code></td><td style=\"padding:.5rem\">חילוק שלמים — מעגל כלפי מטה</td><td style=\"padding:.5rem\"><code>10 // 3 = 3</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>%</code></td><td style=\"padding:.5rem\">מודולו — שארית חילוק</td><td style=\"padding:.5rem\"><code>10 % 3 = 1</code></td></tr>\n<tr><td style=\"padding:.5rem\"><code>**</code></td><td style=\"padding:.5rem\">חזקה</td><td style=\"padding:.5rem\"><code>5 ** 3 = 125</code></td></tr>\n</table>\n\n<p style=\"margin-top:.7rem\"><b>טריק חשוב:</b> <code>%</code> (מודולו) הוא הדרך הקלאסית לבדוק זוגיות. אם <code>x % 2 == 0</code> אז x זוגי.</p>\n\n<h4>סדר פעולות</h4>\n<p>כמו בחשבון: קודם <code>**</code>, אחר כך <code>*  /  //  %</code>, ולבסוף <code>+  -</code>. לכן <code>2 + 3 * 4</code> הוא 14 ולא 20. לחישוב ממוצע חייבים סוגריים: <code>(a + b) / 2</code>.</p>\n\n<h4>שתי מלכודות במספרים שליליים</h4>\n<p><code>//</code> מעגל <b>כלפי מטה</b> ולא 'חותך': <code>-10 // 3</code> הוא <code>-4</code> (ולא -3). וב-<code>%</code> הסימן נקבע לפי המחלק: <code>-10 % 3</code> הוא <code>2</code>. על מספרים חיוביים שני האופרטורים מתנהגים בדיוק כמו שהיינו מצפים.</p>\n\n<h4>חילוק באפס</h4>\n<p><code>10 / 0</code> לא מחזיר אינסוף — הוא עוצר את התוכנית עם <code>ZeroDivisionError</code>. אותו דבר עבור <code>//</code> ו-<code>%</code>. זו השגיאה הנפוצה ביותר בחישובי יחסים ואחוזים, ובהמשך הקורס נלמד לטפל בה עם try/except.</p>\n\n<h4>הערה על מספרים עשרוניים</h4>\n<p>מחשבים שומרים float בקירוב בינארי, ולכן <code>0.1 + 0.2</code> מדפיס <code>0.30000000000000004</code>. זה לא באג — לכן לא משווים תוצאות float עם <code>==</code>, אלא מעגלים קודם עם <code>round(x, 2)</code>.</p>",
   "explanation": [
    {
     "line": "print(5 ** 3)",
@@ -5745,7 +5763,7 @@ window.PYTHON_PRELUDE = "# =====================================================
     
     if (filteredExercises.length === 0) {
       document.getElementById('content').innerHTML = 
-        '<div style="text-align:center;padding:30px;color:var(--text2);">לא נמצאו תרגילים שמתאימים לסינון</div>';
+        '<div style="text-align:center;padding:30px;color:var(--tc12);">לא נמצאו תרגילים שמתאימים לסינון</div>';
       return;
     }
     
@@ -6110,5 +6128,64 @@ window.PYTHON_PRELUDE = "# =====================================================
 })();
 </script>
 
-</body>
+<script>(function(){
+  var D=document,H=D.documentElement;
+  function cur(){return H.getAttribute('data-theme')==='light'?'light':'dark';}
+  var btn=D.createElement('button');
+  btn.type='button';btn.className='egr-theme-btn';btn.id='egrThemeBtn';
+  function paint(){var l=cur()==='light';
+    btn.textContent=l?'\u263D':'\u2600';
+    btn.title=l?'\u05DE\u05E2\u05D1\u05E8 \u05DC\u05DE\u05E6\u05D1 \u05DB\u05D4\u05D4':'\u05DE\u05E2\u05D1\u05E8 \u05DC\u05DE\u05E6\u05D1 \u05D1\u05D4\u05D9\u05E8';
+    btn.setAttribute('aria-label',btn.title);btn.setAttribute('aria-pressed',l?'true':'false');
+    var mt=D.querySelector('meta[name="theme-color"]');
+    if(mt){if(!mt.dataset.egrDark)mt.dataset.egrDark=mt.getAttribute('content')||'';
+      mt.setAttribute('content',l?'#f2f4f8':mt.dataset.egrDark);}}
+  btn.addEventListener('click',function(){
+    var n=cur()==='light'?'dark':'light';
+    H.setAttribute('data-theme',n);
+    try{localStorage.setItem('egr-theme',n);}catch(e){}
+    paint();});
+  function box(el){
+    if(!el)return null;
+    var c=el.closest?el.closest('header,.topnav,.topbar,.header,nav'):null;
+    return c||el.parentElement||el;
+  }
+  function float(){
+    if(btn.parentNode)btn.parentNode.removeChild(btn);
+    btn.style.marginInlineStart='';
+    btn.classList.add('egr-floating');
+    D.body.appendChild(btn);
+  }
+  function mount(){
+    var fl=D.querySelectorAll('a[title="\u05E2\u05D1\u05E8\u05D9\u05EA"],a[title="English"],a[title="\u4E2D\u6587"]');
+    var anchor=null,mode=0;
+    if(fl.length>=2&&fl[0].parentNode){anchor=fl[0];mode=1;}
+    else{
+      anchor=D.querySelector('.lang-flags')||D.querySelector('.lang')||
+             D.querySelector('.topnav-right')||D.querySelector('.header-right')||
+             D.querySelector('.nav-right')||D.querySelector('.topbar-right')||
+             D.querySelector('header .hd')||D.querySelector('.header-inner')||
+             D.querySelector('.topbar')||D.querySelector('.topnav')||
+             D.querySelector('header');
+      mode=anchor?2:0;
+    }
+    if(!mode){float();paint();return;}
+    var frame=box(anchor);
+    var h0=frame?frame.getBoundingClientRect().height:0;
+    var restore=null;
+    if(mode===1){
+      if(anchor.style&&anchor.style.marginInlineStart==='auto'){
+        restore=anchor;btn.style.marginInlineStart='auto';anchor.style.marginInlineStart='0';
+      }
+      anchor.parentNode.insertBefore(btn,anchor);
+    }else{anchor.appendChild(btn);}
+    // If squeezing the button in made the bar taller, it does not belong there.
+    var h1=frame?frame.getBoundingClientRect().height:0;
+    if(frame&&h1>h0+1){
+      if(restore)restore.style.marginInlineStart='auto';
+      float();
+    }
+    paint();}
+  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',mount);else mount();
+})();</script></body>
 </html>

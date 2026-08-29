@@ -26,7 +26,7 @@
     --purple: #8b5cf6;
     --pink: #ec4899;
     --red: #ef4444;
-  }
+  ;--tc1:#0a0d1f;--tc2:#f8fafc;--tc3:#121530;--tc4:#2a2f5c;--tc5:#aab;--tc6:#353a6b;--tc7:#00d4c8;--tc8:#00d4c8;--tc9:rgba(0,212,200,0.08);--tc10:rgba(139,92,246,0.06);--tc11:rgba(255,255,255,0.04);--tc12:#888fa6;--tc13:#1a1f3a;--tc14:#00e5a0;--tc15:rgba(0,229,160,0.08);--tc16:#ffd700;--tc17:#252a52;--tc18:rgba(255,215,0,0.18);--tc19:#ffd700;--tc20:rgba(0,212,200,0.18);--tc21:rgba(0,229,160,0.18);--tc22:#00e5a0;--tc23:#353a6b;--tc24:#2a1f4a;--tc25:#4a2d61;--tc26:rgba(255,215,0,0.15);--tc27:#8b5cf6;--tc28:#c4b5fd;--tc29:#8b5cf6;--tc30:#9333ea;--tc31:rgba(236,72,153,0.1);--tc32:rgba(219,39,119,0.06);--tc33:#ec4899;--tc34:#ec4899;--tc35:#ec4899;--tc36:#db2777;--tc37:rgba(255,215,0,0.1);--tc38:rgba(255,136,0,0.06)}
 
   * { box-sizing: border-box; }
   
@@ -35,8 +35,8 @@
   -webkit-tap-highlight-color: rgba(0,212,200,0.2);
   -webkit-text-size-adjust: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Heebo", "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--tc1);
+    color: var(--tc2);
     direction: rtl;
     line-height: 1.5;
     min-height: 100vh;
@@ -44,8 +44,8 @@
 
   /* Top bar */
   .topbar {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
+    background: var(--tc3);
+    border-bottom: 1px solid var(--tc4);
     padding: 12px 16px;
     display: flex;
     align-items: center;
@@ -56,7 +56,7 @@
     backdrop-filter: blur(8px);
   }
   .home-btn {
-    background: linear-gradient(135deg, var(--cyan), var(--green));
+    background: linear-gradient(135deg, #00d4c8, #00e5a0);
     color: #000;
     padding: 7px 14px;
     border-radius: 8px;
@@ -69,35 +69,35 @@
   }
   .lang-link {
     margin-inline-start: auto;
-    color: var(--text2);
+    color: var(--tc5);
     text-decoration: none;
     font-size: 13px;
-    border: 1px solid var(--border2);
+    border: 1px solid var(--tc6);
     padding: 6px 12px;
     border-radius: 8px;
     transition: all .15s;
   }
-  .lang-link:hover { color: var(--cyan); border-color: var(--cyan); }
+  .lang-link:hover { color: var(--tc7); border-color: var(--tc8); }
 
   /* Hero */
   .hero {
     text-align: center;
     padding: 28px 20px 20px;
-    background: linear-gradient(135deg, rgba(0,212,200,0.08) 0%, rgba(139,92,246,0.06) 100%);
-    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--tc9) 0%, var(--tc10) 100%);
+    border-bottom: 1px solid var(--tc4);
   }
   .hero h1 {
     margin: 0 0 8px;
     font-size: 26px;
-    background: linear-gradient(135deg, var(--cyan), var(--purple));
+    background: linear-gradient(135deg, #00d4c8, #8b5cf6);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: var(--cyan);
+    color: #00d4c8;
   }
   .hero p {
     margin: 0;
-    color: var(--text2);
+    color: var(--tc5);
     font-size: 14px;
     max-width: 560px;
     margin-inline: auto;
@@ -113,15 +113,15 @@
     padding: 0 16px;
   }
   .stat-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
+    background: var(--tc11);
+    border: 1px solid var(--tc4);
     border-radius: 10px;
     padding: 10px 6px;
     text-align: center;
   }
   .stat-icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
-  .stat-val { font-size: 18px; font-weight: 800; color: var(--cyan); line-height: 1.1; }
-  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .3px; margin-top: 2px; }
+  .stat-val { font-size: 18px; font-weight: 800; color: var(--tc7); line-height: 1.1; }
+  .stat-label { font-size: 10px; color: var(--tc12); text-transform: uppercase; letter-spacing: .3px; margin-top: 2px; }
 
   /* Path container */
   .path {
@@ -133,8 +133,8 @@
 
   /* Step card */
   .step {
-    background: var(--bg3);
-    border: 1.5px solid var(--border2);
+    background: var(--tc13);
+    border: 1.5px solid var(--tc6);
     border-radius: 16px;
     padding: 16px;
     margin-bottom: 18px;
@@ -142,18 +142,18 @@
     transition: transform .2s ease, border-color .2s ease;
   }
   .step.locked { opacity: 0.55; }
-  .step.completed { border-color: var(--green); background: linear-gradient(135deg, rgba(0,229,160,0.08) 0%, var(--bg3) 60%); }
-  .step.in-progress { border-color: var(--cyan); background: linear-gradient(135deg, rgba(0,212,200,0.08) 0%, var(--bg3) 60%); }
-  .step.available { border-color: var(--gold); }
+  .step.completed { border-color: var(--tc14); background: linear-gradient(135deg, var(--tc15) 0%, var(--tc13) 60%); }
+  .step.in-progress { border-color: var(--tc8); background: linear-gradient(135deg, var(--tc9) 0%, var(--tc13) 60%); }
+  .step.available { border-color: var(--tc16); }
   .step:not(.locked):hover { transform: translateY(-2px); }
   
   .step-num {
     position: absolute;
     top: -10px;
     inset-inline-start: 16px;
-    background: var(--bg3);
-    border: 1.5px solid var(--border2);
-    color: var(--text);
+    background: var(--tc13);
+    border: 1.5px solid var(--tc6);
+    color: var(--tc2);
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -163,9 +163,9 @@
     font-weight: 800;
     font-size: 13px;
   }
-  .step.completed .step-num { background: var(--green); color: #000; border-color: var(--green); }
-  .step.in-progress .step-num { background: var(--cyan); color: #000; border-color: var(--cyan); }
-  .step.available .step-num { background: var(--gold); color: #000; border-color: var(--gold); }
+  .step.completed .step-num { background: #00e5a0; color: #000; border-color: #00e5a0; }
+  .step.in-progress .step-num { background: #00d4c8; color: #000; border-color: #00d4c8; }
+  .step.available .step-num { background: #ffd700; color: #000; border-color: #ffd700; }
 
   .step-header {
     display: flex;
@@ -184,11 +184,11 @@
     margin: 0;
     font-size: 16px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--tc2);
   }
   .step-sub {
     font-size: 12.5px;
-    color: var(--text3);
+    color: var(--tc12);
     margin-top: 2px;
   }
   .step-status-badge {
@@ -201,14 +201,14 @@
     letter-spacing: .3px;
     white-space: nowrap;
   }
-  .step.locked .step-status-badge { background: var(--bg4); color: var(--text3); }
-  .step.available .step-status-badge { background: rgba(255,215,0,0.18); color: var(--gold); }
-  .step.in-progress .step-status-badge { background: rgba(0,212,200,0.18); color: var(--cyan); }
-  .step.completed .step-status-badge { background: rgba(0,229,160,0.18); color: var(--green); }
+  .step.locked .step-status-badge { background: var(--tc17); color: var(--tc12); }
+  .step.available .step-status-badge { background: var(--tc18); color: var(--tc19); }
+  .step.in-progress .step-status-badge { background: var(--tc20); color: var(--tc7); }
+  .step.completed .step-status-badge { background: var(--tc21); color: var(--tc22); }
 
   .step-desc {
     font-size: 13px;
-    color: var(--text2);
+    color: var(--tc5);
     margin: 6px 0 10px;
     line-height: 1.5;
   }
@@ -221,28 +221,28 @@
     display: flex;
     justify-content: space-between;
     font-size: 11.5px;
-    color: var(--text3);
+    color: var(--tc12);
     margin-bottom: 4px;
   }
   .step-progress-pct {
-    color: var(--cyan);
+    color: var(--tc7);
     font-weight: 700;
   }
-  .step.completed .step-progress-pct { color: var(--green); }
+  .step.completed .step-progress-pct { color: var(--tc22); }
   .step-progress-bar {
     width: 100%;
     height: 7px;
-    background: var(--bg);
+    background: var(--tc1);
     border-radius: 6px;
     overflow: hidden;
   }
   .step-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--cyan), var(--green));
+    background: linear-gradient(90deg, #00d4c8, #00e5a0);
     border-radius: 6px;
     transition: width .8s ease;
   }
-  .step.completed .step-progress-fill { background: var(--green); }
+  .step.completed .step-progress-fill { background: #00e5a0; }
 
   /* Step action */
   .step-actions {
@@ -252,7 +252,7 @@
     flex-wrap: wrap;
   }
   .step-btn {
-    background: linear-gradient(135deg, var(--cyan), var(--green));
+    background: linear-gradient(135deg, #00d4c8, #00e5a0);
     color: #000;
     border: none;
     padding: 9px 16px;
@@ -269,17 +269,17 @@
   }
   .step-btn:hover, .step-btn:active { transform: scale(0.98); }
   .step-btn.secondary {
-    background: var(--bg4);
-    color: var(--text);
-    border: 1px solid var(--border2);
+    background: var(--tc17);
+    color: var(--tc2);
+    border: 1px solid var(--tc6);
   }
   .step-btn.disabled {
-    background: var(--bg4);
-    color: var(--text3);
+    background: var(--tc17);
+    color: var(--tc12);
     cursor: not-allowed;
     pointer-events: none;
   }
-  .step.completed .step-btn { background: linear-gradient(135deg, var(--green), #00c896); }
+  .step.completed .step-btn { background: linear-gradient(135deg, #00e5a0, #00c896); }
 
   /* Connector line */
   .step::before {
@@ -289,28 +289,28 @@
     bottom: -18px;
     width: 2px;
     height: 18px;
-    background: linear-gradient(180deg, var(--border2), transparent);
+    background: linear-gradient(180deg, var(--tc23), transparent);
   }
   .step:last-of-type::before { display: none; }
-  .step.completed::before { background: var(--green); }
+  .step.completed::before { background: #00e5a0; }
 
   /* Final - Certificate card */
   .cert-step {
-    background: linear-gradient(135deg, #2a1f4a 0%, #4a2d61 100%);
-    border: 2px solid var(--gold);
+    background: linear-gradient(135deg, var(--tc24) 0%, var(--tc25) 100%);
+    border: 2px solid var(--tc16);
     text-align: center;
   }
   .cert-step .step-icon { font-size: 48px; }
-  .cert-step .step-title { font-size: 18px; color: var(--gold); }
+  .cert-step .step-title { font-size: 18px; color: var(--tc19); }
   .cert-step .step-btn {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
+    background: linear-gradient(135deg, #ffd700, #ff8800);
     color: #1a1a2e;
   }
 
   /* Side info card */
   .info-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
+    background: var(--tc13);
+    border: 1px solid var(--tc4);
     border-radius: 12px;
     padding: 14px;
     margin-top: 24px;
@@ -319,11 +319,11 @@
   .info-card h3 {
     margin: 0 0 6px;
     font-size: 15px;
-    color: var(--gold);
+    color: var(--tc19);
   }
   .info-card p {
     margin: 0;
-    color: var(--text2);
+    color: var(--tc5);
     font-size: 13px;
   }
 
@@ -336,17 +336,17 @@
     margin-top: 8px;
   }
   .achievement-badge {
-    background: var(--bg4);
-    border: 1px solid var(--border2);
+    background: var(--tc17);
+    border: 1px solid var(--tc6);
     padding: 4px 8px;
     border-radius: 12px;
     font-size: 11px;
-    color: var(--text2);
+    color: var(--tc5);
   }
   .achievement-badge.earned {
-    background: rgba(255,215,0,0.15);
-    border-color: var(--gold);
-    color: var(--gold);
+    background: var(--tc26);
+    border-color: var(--tc16);
+    color: var(--tc19);
   }
 
   /* Mobile */
@@ -371,7 +371,25 @@
     .cert-step .step-title { font-size: 16px; }
   }
 </style>
-</head>
+<script>(function(){try{var t=localStorage.getItem('egr-theme');if(t!=='light'&&t!=='dark')t='dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script><style id="theme-toggle-css">
+:root{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+.egr-theme-btn{display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 auto;width:20px;height:20px;min-width:20px;max-height:20px;padding:0;
+  margin-inline-start:6px;border-radius:50%;cursor:pointer;font-size:11px;line-height:1;
+  align-self:center;box-sizing:border-box;
+  background:transparent;color:inherit;vertical-align:middle;
+  border:1px solid rgba(128,128,128,.45);
+  transition:background .15s ease,transform .15s ease;-webkit-tap-highlight-color:transparent}
+.egr-theme-btn:hover{background:rgba(128,128,128,.18)}
+.egr-theme-btn:active{transform:scale(.92)}
+.egr-theme-btn:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.egr-theme-btn.egr-floating{position:fixed;inset-block-end:16px;inset-inline-start:16px;
+  z-index:9999;width:40px;height:40px;max-height:40px;font-size:17px;
+  background:var(--bg2,var(--bg-1,#1a1a2e));color:var(--text,var(--fg-1,#e8e8f0));
+  box-shadow:0 4px 14px rgba(0,0,0,.35)}
+@media print{.egr-theme-btn{display:none}}
+</style><style id="theme-light">html[data-theme="light"]{--bg:#e6e7ef;--bg2:#dadbe7;--bg3:#dbdde6;--bg4:#dbdce6;--border:#b9bcdb;--border2:#a8acd2;--text:#3c5166;--text2:#40404b;--text3:#515665;--pink:#a03268;--tc1:#e6e7ef;--tc2:#3c5166;--tc3:#dadbe7;--tc4:#b9bcdb;--tc5:#40404b;--tc6:#a8acd2;--tc7:#135854;--tc8:#396f6c;--tc9:rgba(211,238,237,0.08);--tc10:rgba(219,211,238,0.06);--tc11:rgba(0,0,0,0.03);--tc12:#515665;--tc13:#dbdde6;--tc14:#3a7160;--tc15:rgba(211,238,230,0.08);--tc16:#706739;--tc17:#dbdce6;--tc18:rgba(238,234,211,0.18);--tc19:#5a4f13;--tc20:rgba(211,238,237,0.18);--tc21:rgba(211,238,230,0.18);--tc22:#135944;--tc23:#dcdde5;--tc24:#dedbe6;--tc25:#e1dbe5;--tc26:rgba(238,234,211,0.15);--tc27:#735aaa;--tc28:#4f2fc6;--tc29:#763ff4;--tc30:#a14ded;--tc31:rgba(238,211,224,0.1);--tc32:rgba(238,211,223,0.06);--tc33:#984e73;--tc34:#a03268;--tc35:#b21261;--tc36:#cf226f;--tc37:rgba(238,234,211,0.1);--tc38:rgba(238,225,211,0.06)}</style></head>
 <body>
 
 <!-- Top bar -->
@@ -410,17 +428,17 @@
 </div>
 
 
-  <div class="info-card guided-projects-banner" style="background:linear-gradient(135deg,#2a1f4a,#4a2d61);border:2px solid #8b5cf6;margin-bottom:20px;">
-    <h3 style="color:#c4b5fd;">🚀 פרויקטים מודרכים (חדש!)</h3>
+  <div class="info-card guided-projects-banner" style="background:linear-gradient(135deg,var(--tc24),var(--tc25));border:2px solid var(--tc27);margin-bottom:20px;">
+    <h3 style="color:var(--tc28);">🚀 פרויקטים מודרכים (חדש!)</h3>
     <p>5 פרויקטים ישראלים רב-שלביים: נטישת לקוחות, נדל"ן, קורונה, מכירות, פוטבול. בונים פורטפוליו אמיתי.</p>
-    <a href="projects.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#8b5cf6,#9333ea);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">צפה בפרויקטים ←</a>
+    <a href="projects.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,var(--tc29),var(--tc30));color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">צפה בפרויקטים ←</a>
   </div>
 
 
-  <div class="info-card" style="background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(219,39,119,0.06));border:2px solid #ec4899;margin-bottom:20px;">
-    <h3 style="color:#ec4899;">🔍 חפש תרגיל לפי נושא (חדש!)</h3>
+  <div class="info-card" style="background:linear-gradient(135deg,var(--tc31),var(--tc32));border:2px solid var(--tc33);margin-bottom:20px;">
+    <h3 style="color:var(--tc34);">🔍 חפש תרגיל לפי נושא (חדש!)</h3>
     <p>סנן מתוך 80+ תרגילים לפי תגיות נושא, רמת קושי, וקורס. מנגנון חיפוש כמו ב-LeetCode.</p>
-    <a href="tags.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">חפש עכשיו ←</a>
+    <a href="tags.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,var(--tc35),var(--tc36));color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">חפש עכשיו ←</a>
   </div>
 
   <!-- Path -->
@@ -435,8 +453,8 @@
     <p>השלם תרגילים בכל שלב כדי לפתוח את השלב הבא. הצבירה שלך נשמרת בדפדפן ומסונכרנת בין השלבים. כל תרגיל = +10 XP. השלמת מסלול מלא = תעודה רשמית.</p>
   </div>
 </div>
-  <div class="info-card" style="background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,136,0,0.06));border:2px solid #ffd700;margin-bottom:20px;">
-    <h3 style="color:#ffd700;">🗓️ אתגר יומי (חדש!)</h3>
+  <div class="info-card" style="background:linear-gradient(135deg,var(--tc37),var(--tc38));border:2px solid var(--tc16);margin-bottom:20px;">
+    <h3 style="color:var(--tc19);">🗓️ אתגר יומי (חדש!)</h3>
     <p>30 אתגרים בעברית, אחד ביום. שמור על הרצף וזכה במדליה!</p>
     <a href="daily.html" style="display:inline-block;margin-top:10px;background:linear-gradient(135deg,#ffd700,#ff8800);color:#1a1a2e;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;">לאתגר היום ←</a>
   </div>
@@ -718,5 +736,64 @@
 })();
 </script>
 
-</body>
+<script>(function(){
+  var D=document,H=D.documentElement;
+  function cur(){return H.getAttribute('data-theme')==='light'?'light':'dark';}
+  var btn=D.createElement('button');
+  btn.type='button';btn.className='egr-theme-btn';btn.id='egrThemeBtn';
+  function paint(){var l=cur()==='light';
+    btn.textContent=l?'\u263D':'\u2600';
+    btn.title=l?'\u05DE\u05E2\u05D1\u05E8 \u05DC\u05DE\u05E6\u05D1 \u05DB\u05D4\u05D4':'\u05DE\u05E2\u05D1\u05E8 \u05DC\u05DE\u05E6\u05D1 \u05D1\u05D4\u05D9\u05E8';
+    btn.setAttribute('aria-label',btn.title);btn.setAttribute('aria-pressed',l?'true':'false');
+    var mt=D.querySelector('meta[name="theme-color"]');
+    if(mt){if(!mt.dataset.egrDark)mt.dataset.egrDark=mt.getAttribute('content')||'';
+      mt.setAttribute('content',l?'#f2f4f8':mt.dataset.egrDark);}}
+  btn.addEventListener('click',function(){
+    var n=cur()==='light'?'dark':'light';
+    H.setAttribute('data-theme',n);
+    try{localStorage.setItem('egr-theme',n);}catch(e){}
+    paint();});
+  function box(el){
+    if(!el)return null;
+    var c=el.closest?el.closest('header,.topnav,.topbar,.header,nav'):null;
+    return c||el.parentElement||el;
+  }
+  function float(){
+    if(btn.parentNode)btn.parentNode.removeChild(btn);
+    btn.style.marginInlineStart='';
+    btn.classList.add('egr-floating');
+    D.body.appendChild(btn);
+  }
+  function mount(){
+    var fl=D.querySelectorAll('a[title="\u05E2\u05D1\u05E8\u05D9\u05EA"],a[title="English"],a[title="\u4E2D\u6587"]');
+    var anchor=null,mode=0;
+    if(fl.length>=2&&fl[0].parentNode){anchor=fl[0];mode=1;}
+    else{
+      anchor=D.querySelector('.lang-flags')||D.querySelector('.lang')||
+             D.querySelector('.topnav-right')||D.querySelector('.header-right')||
+             D.querySelector('.nav-right')||D.querySelector('.topbar-right')||
+             D.querySelector('header .hd')||D.querySelector('.header-inner')||
+             D.querySelector('.topbar')||D.querySelector('.topnav')||
+             D.querySelector('header');
+      mode=anchor?2:0;
+    }
+    if(!mode){float();paint();return;}
+    var frame=box(anchor);
+    var h0=frame?frame.getBoundingClientRect().height:0;
+    var restore=null;
+    if(mode===1){
+      if(anchor.style&&anchor.style.marginInlineStart==='auto'){
+        restore=anchor;btn.style.marginInlineStart='auto';anchor.style.marginInlineStart='0';
+      }
+      anchor.parentNode.insertBefore(btn,anchor);
+    }else{anchor.appendChild(btn);}
+    // If squeezing the button in made the bar taller, it does not belong there.
+    var h1=frame?frame.getBoundingClientRect().height:0;
+    if(frame&&h1>h0+1){
+      if(restore)restore.style.marginInlineStart='auto';
+      float();
+    }
+    paint();}
+  if(D.readyState==='loading')D.addEventListener('DOMContentLoaded',mount);else mount();
+})();</script></body>
 </html>
