@@ -1,874 +1,1395 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://egrosman1.github.io/sql-course/sql.html</loc>
-    <lastmod>2026-09-04</lastmod>
+    <loc>https://egrosman.co.il/</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/python.html</loc>
-    <lastmod>2026-09-04</lastmod>
+    <loc>https://egrosman.co.il/sql.html</loc>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/powerbi.html</loc>
-    <lastmod>2026-09-04</lastmod>
+    <loc>https://egrosman.co.il/python.html</loc>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/powerbi.html</loc>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/"/>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/career-path.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/career-path.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/career-path.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/career-path.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/case_study_simulator_insurance.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/case_study_simulator_insurance.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/case_study_simulator_v2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/case_study_simulator_v2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/course.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/daily.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/daily.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/daily.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/daily.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/dax-reference.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/dax-reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/dax-reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/dax-reference.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/interview-insurance.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/interview-insurance.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/interview-telecom.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/interview-telecom.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/lessons.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/lessons.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pandas-100.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-100.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pandas-course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pandas-lesson.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-lesson.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-adventureworks.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-adventureworks.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-adventureworks.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-adventureworks.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-course-2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course-2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course-2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course-2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-course-3.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course-3.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course-3.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course-3.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-course-4.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course-4.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course-4.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course-4.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-education.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-education.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-education.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-education.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-lesson-2026-06.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-lesson-2026-06.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-lesson-2026-06.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-lesson-2026-06.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-lesson-2026-07.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-lesson-2026-07.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-lesson-2026-07.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-lesson-2026-07.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-lesson-2026-08.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-lesson-2026-08.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-lesson-2026-08.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-lesson-2026-08.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-logistics.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-logistics.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-logistics.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-logistics.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-pharma.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-pharma.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-pharma.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-pharma.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-quiz.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-quiz.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-retail.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-retail.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-retail.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-retail.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-space.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-space.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-space.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-space.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-telecom.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-telecom.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-ucl.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-ucl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-ucl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-ucl.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi-updates.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-updates.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-updates.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-updates.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/pbi.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/practice.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/practice.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/projects.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/projects.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/projects.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/projects.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/python-200.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-200.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-200.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-200.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/python-400.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-400.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-400.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-400.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/python-course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/python-lesson.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-lesson.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/python-playground.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-playground.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-playground.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-playground.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/python-simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-advanced2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-advanced2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-beginner.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-beginner.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-expert.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-expert.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-medium.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-medium.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-pandas-100.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-pandas-100.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-pandas.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-pandas.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-pandas.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-pandas.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz-python-100.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-python-100.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-python-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-python-100.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/quiz.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/reference.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/reference.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/setup.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/setup.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/simulator-cl.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-cl.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/simulator-nba.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-nba.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/simulator-nw.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-nw.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/sql-advanced-400.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/sql-algorithms.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/sql-algorithms.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/sql-algorithms.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/sql-algorithms.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/sql-basics-200.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/sql-basics-200.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/sql-basics-200.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/sql-basics-200.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/sql-hollywood-1000.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/sql-nba-500.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/study.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/study.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/study.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/study.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/study.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/tags.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/tags.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/tags.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/tags.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/videos.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/videos.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/videos2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/videos2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/career-path.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/career-path.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/career-path.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/career-path.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/case_study_simulator_insurance.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/case_study_simulator_insurance.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/case_study_simulator_v2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/case_study_simulator_v2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/course.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/daily.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/daily.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/daily.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/daily.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/dax-reference.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/dax-reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/dax-reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/dax-reference.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/en/interview-insurance.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/interview-insurance.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/interview-telecom.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/interview-telecom.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/lessons.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/lessons.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pandas-100.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-100.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pandas-course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pandas-lesson.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-lesson.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-adventureworks.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-adventureworks.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-adventureworks.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-adventureworks.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-course-2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course-2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course-2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course-2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-course-3.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course-3.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course-3.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course-3.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-course-4.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course-4.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course-4.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course-4.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-education.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-education.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-education.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-education.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-lesson-2026-06.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-lesson-2026-06.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-lesson-2026-06.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-lesson-2026-06.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-lesson-2026-07.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-lesson-2026-07.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-lesson-2026-07.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-lesson-2026-07.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-lesson-2026-08.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-lesson-2026-08.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-lesson-2026-08.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-lesson-2026-08.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-logistics.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-logistics.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-logistics.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-logistics.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-pharma.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-pharma.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-pharma.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-pharma.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-quiz.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-quiz.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-retail.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-retail.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-retail.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-retail.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-space.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-space.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-space.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-space.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-telecom.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-telecom.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-ucl.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-ucl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-ucl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-ucl.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi-updates.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-updates.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-updates.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-updates.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/pbi.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/practice.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/practice.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/projects.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/projects.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/projects.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/projects.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/python-200.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-200.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-200.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-200.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/python-400.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-400.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-400.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-400.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/python-course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/python-lesson.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-lesson.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-lesson.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/python-playground.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-playground.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-playground.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-playground.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/python-simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/python-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/python-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/python-simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-advanced2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-advanced2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-beginner.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-beginner.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-expert.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-expert.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-medium.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-medium.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-pandas-100.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-pandas-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-pandas-100.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-pandas.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-pandas.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-pandas.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-pandas.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz-python-100.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-python-100.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-python-100.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-python-100.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/quiz.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/reference.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/reference.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/setup.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/setup.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/simulator-cl.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-cl.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/simulator-nba.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-nba.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/simulator-nw.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-nw.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/sql-algorithms.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/sql-algorithms.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/sql-algorithms.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/sql-algorithms.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/sql-basics-200.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/sql-basics-200.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/sql-basics-200.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/sql-basics-200.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/study.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/study.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/study.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/study.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/study.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/tags.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/tags.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/tags.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/tags.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/videos.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/videos.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/en/videos2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/videos2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/zh/case_study_simulator_insurance.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/case_study_simulator_insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/case_study_simulator_insurance.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/zh/case_study_simulator_v2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/case_study_simulator_v2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/case_study_simulator_v2.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/zh/course.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/course.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/course.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/course.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/course.html"/>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://egrosman.co.il/zh/</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/course.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/interview-insurance.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/interview-insurance.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/interview-insurance.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/course.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/course.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/course.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/course.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/course.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/interview-telecom.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/interview-telecom.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/interview-telecom.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/course.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/course.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/course.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/course.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/course.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/lessons.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/lessons.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/lessons.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/course.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/course.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/course.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/course.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/lessons.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/pbi-simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/pbi-simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pbi-simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/lessons.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/practice.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/practice.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/practice.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/lessons.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/quiz-advanced2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-advanced2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-advanced2.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/lessons.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/lessons.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/practice.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/quiz-beginner.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-beginner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-beginner.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/practice.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/practice.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/quiz-expert.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-expert.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-expert.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/practice.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/practice.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/quiz-medium.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz-medium.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz-medium.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/practice.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/practice.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/study.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/quiz.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/quiz.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/quiz.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/study.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/study.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/study.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/study.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/study.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/reference.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/reference.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/reference.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/study.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/study.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/study.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/study.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/study.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/setup.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/setup.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/setup.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/study.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/study.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/study.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/study.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/reference.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/simulator-cl.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-cl.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-cl.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/reference.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/reference.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/simulator-nba.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-nba.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-nba.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/reference.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/reference.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/simulator-nw.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator-nw.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator-nw.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/reference.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/reference.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/setup.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/simulator.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/simulator.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/setup.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/en/setup.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/study.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/study.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/study.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/study.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/study.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/setup.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/setup.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/videos.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/videos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/videos.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/setup.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/setup.html"/>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://egrosman1.github.io/sql-course/videos.html</loc>
-    <lastmod>2026-05-24</lastmod>
+    <loc>https://egrosman.co.il/zh/videos2.html</loc>
+    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman.co.il/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman.co.il/zh/videos2.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/videos2.html"/>
+    <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/videos.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/videos.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/videos2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/videos2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/videos2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/videos2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/videos2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/quiz.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/quiz.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-beginner.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/quiz-beginner.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/quiz-beginner.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-beginner.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-beginner.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-medium.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/quiz-medium.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/quiz-medium.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-medium.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-medium.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-advanced2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/quiz-advanced2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-advanced2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-advanced2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-expert.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/quiz-expert.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/quiz-expert.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/quiz-expert.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-expert.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator-nw.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/simulator-nw.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/simulator-nw.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nw.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nw.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator-nba.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/simulator-nba.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/simulator-nba.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-nba.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-nba.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/simulator-cl.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/simulator-cl.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/simulator-cl.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/simulator-cl.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/simulator-cl.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/sql-simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/sql-simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/sql-simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/sql-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/sql-simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/tirgul-makif.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/tirgul-makif.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/tirgul-makif.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/tirgul-makif.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/tirgul-makif.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/pbi-simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/pbi-simulator.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/pbi-simulator.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pbi-simulator.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/interview-telecom.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/interview-telecom.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/interview-telecom.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-telecom.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-telecom.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/interview-insurance.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/interview-insurance.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/interview-insurance.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/interview-insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/interview-insurance.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/case_study_simulator_v2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_v2.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_v2.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html</loc>
-    <lastmod>2026-05-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://egrosman1.github.io/sql-course/en/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="zh" href="https://egrosman1.github.io/sql-course/zh/case_study_simulator_insurance.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/case_study_simulator_insurance.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pandas-100.html</loc>
-    <lastmod>2026-05-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/pandas-100.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/pandas-100.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/quiz-pandas.html</loc>
-    <lastmod>2026-05-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/quiz-pandas.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/quiz-pandas.html"/>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/python-course.html</loc>
-    <lastmod>2026-05-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://egrosman1.github.io/sql-course/python-course.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://egrosman1.github.io/sql-course/python-course.html"/>
-  </url>
-  <url><loc>https://egrosman1.github.io/sql-course/pandas-course.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-course.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-course-2.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-course-3.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-course-4.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-quiz.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-space.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-ucl.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/pbi-retail.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/dax-reference.html</loc>
-    <lastmod>2026-07-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/sql-advanced-400.html</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/sql-nba-500.html</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://egrosman1.github.io/sql-course/sql-hollywood-1000.html</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.5</priority>
   </url>
 </urlset>

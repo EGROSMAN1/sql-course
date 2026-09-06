@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://egrosman1.github.io/sql-course/sitemap.xml
+# עותקי גיבוי ישנים — לא לאינדוקס
+Disallow: /BACKUP-original-homepage.html
+Disallow: /HOMEPAGE-rename-to-index.html
+Disallow: /INTERVIEW-FOLDER-rename-to-index.html
+Disallow: /index_main_site.html
+
+# קבצי דאטה כבדים
+Disallow: /assets/
+Disallow: /*.xlsx$
+
+Sitemap: https://egrosman.co.il/sitemap.xml

@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>שיעור Pandas - קוד חי בעברית</title>
-<meta name="description" content="שיעור Pandas אינטראקטיבי. תרגל DataFrame בסימולטור חי - mini-pandas + 9 דאטהסטים ישראליים מובנים.">
-<meta name="robots" content="noindex">
-
+<title>שיעור Pandas בעברית — יצירת DataFrame עם קוד חי</title>
+<meta name="description" content="השיעור הראשון בקורס Pandas בעברית: מה זה DataFrame ואיך בונים אותו. תיאוריה לצד סימולטור חי עם דאטהסטים ישראליים מובנים, ישירות בדפדפן.">
 <style>
 :root{
   --bg:#080C14;--bg2:#0D1220;--bg3:#111828;--bg4:#16202E;
@@ -835,6 +833,396 @@ button:not(.cell-icon-btn):not(.jump-btn):not(.ex-nav-btn):not(.reset-btn):not(.
 }
 
 </style>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://egrosman.co.il/pandas-lesson.html">
+<link rel="alternate" hreflang="he" href="https://egrosman.co.il/pandas-lesson.html">
+<link rel="alternate" hreflang="en" href="https://egrosman.co.il/en/pandas-lesson.html">
+<link rel="alternate" hreflang="x-default" href="https://egrosman.co.il/pandas-lesson.html">
+<meta property="og:url" content="https://egrosman.co.il/pandas-lesson.html">
+<meta property="og:site_name" content="SQL.course · אלירן גרוסמן">
+<meta property="og:image" content="https://egrosman.co.il/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://egrosman.co.il/og-cover.png">
+<meta property="og:title" content="שיעור Pandas בעברית — יצירת DataFrame עם קוד חי">
+<meta property="og:description" content="השיעור הראשון בקורס Pandas בעברית: מה זה DataFrame ואיך בונים אותו. תיאוריה לצד סימולטור חי עם דאטהסטים ישראליים מובנים, ישירות בדפדפן.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:title" content="שיעור Pandas בעברית — יצירת DataFrame עם קוד חי">
+<meta name="twitter:description" content="השיעור הראשון בקורס Pandas בעברית: מה זה DataFrame ואיך בונים אותו. תיאוריה לצד סימולטור חי עם דאטהסטים ישראליים מובנים, ישירות בדפדפן.">
+<meta name="author" content="אלירן גרוסמן">
+<!--seo-jsonld-->
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "דף הבית", "item": "https://egrosman.co.il/"}, {"@type": "ListItem", "position": 2, "name": "מרכז הפייתון", "item": "https://egrosman.co.il/python.html"}, {"@type": "ListItem", "position": 3, "name": "שיעור Pandas בעברית", "item": "https://egrosman.co.il/pandas-lesson.html"}]}</script>
+<!--seo-jsonld-->
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="mobile-polish-v1">
+/* ===== ליטוש נייד — נוצר מתוך סריקה אמיתית של כל הדפים ===== */
+@media (max-width:900px){
+
+  /* --- 1. סרגל עליון: לא גולש מחוץ למסך --- */
+  .header-inner{ gap:8px; padding:0 10px; flex-wrap:nowrap; }
+  .header-right{ gap:8px; }
+  .lang{ flex:0 0 auto; }
+  .logo{ flex:0 1 auto; min-width:0; white-space:nowrap; }
+  .header-right{ flex:0 0 auto; margin-inline-start:auto; }
+  .topnav, .topbar{ flex-wrap:wrap; row-gap:6px; }
+  /* כותרת סימולטור ה-Case Study: הכפתורים היו רחבים מהמסך ונחתכו בקצה */
+  header{ gap:8px; padding-inline:10px; }
+  .header-actions{ flex-shrink:1; min-width:0; flex-wrap:nowrap;
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; }
+  .header-actions::-webkit-scrollbar{ display:none; }
+  .header-actions .btn{ flex:0 0 auto; }
+  .header-brand, .header-title, header > :first-child{ min-width:0; }
+
+  /* --- 2. אזורי מגע: 40px מינימום לכל דבר לחיץ --- */
+  #clear-btn,
+  #drawerClose,
+  #egrThemeDark,
+  #egrThemeLight,
+  #exSearch,
+  #fb-login-btn,
+  #formulaInput,
+  #gam-hud-btn,
+  #gam-mute-btn,
+  #hamburger,
+  #hint-btn,
+  #next-btn,
+  #prev-btn,
+  #reset-btn,
+  #reset-score-btn,
+  #run-btn,
+  #runBtn,
+  #schemaBtn1,
+  #search,
+  #search-input,
+  #si,
+  #sol-btn,
+  #stats-btn,
+  #tb-clear,
+  #tb-copy,
+  #tb-cut,
+  #tb-paste,
+  #tb-select,
+  #tglAuto,
+  #tglMirror,
+  #tlink-editor,
+  #tlink-erd,
+  a.active.active, button.active.active, summary.active.active, label.active.active,
+  a.back.back, button.back.back, summary.back.back, label.back.back,
+  .back-btn.back-btn,
+  .back-link.back-link,
+  .bar-btn.bar-btn,
+  a.chip.chip, button.chip.chip, summary.chip.chip, label.chip.chip,
+  .clear-dash.clear-dash,
+  a.copy.copy, button.copy.copy, summary.copy.copy, label.copy.copy,
+  .ec-ans.ec-ans,
+  .ec-hint.ec-hint,
+  .ec-sel.ec-sel,
+  .ex-nav-btn.ex-nav-btn,
+  .fb-clear.fb-clear,
+  .fb-help.fb-help,
+  .fb-run.fb-run,
+  .filter-pill.filter-pill,
+  .footer-link.footer-link,
+  .gam-celebration-close.gam-celebration-close,
+  .h-action.h-action,
+  .hbg.hbg,
+  .home-btn.home-btn,
+  .ilink.ilink,
+  .jump-btn.jump-btn,
+  .logo.logo,
+  a.lt.lt, button.lt.lt, summary.lt.lt, label.lt.lt,
+  a.ltab.ltab, button.ltab.ltab, summary.ltab.ltab, label.ltab.ltab,
+  a.mtab.mtab, button.mtab.mtab, summary.mtab.mtab, label.mtab.mtab,
+  a.on.on, button.on.on, summary.on.on, label.on.on,
+  .page-add.page-add,
+  a.pill.pill, button.pill.pill, summary.pill.pill, label.pill.pill,
+  .reset-btn.reset-btn,
+  .run-dax.run-dax,
+  .site-back.site-back,
+  .step-btn.step-btn,
+  .tb-btn.tb-btn,
+  .tools-btn.tools-btn,
+  a.xb.xb, button.xb.xb, summary.xb.xb, label.xb.xb,
+  a.xbtn.xbtn, button.xbtn.xbtn, summary.xbtn.xbtn, label.xbtn.xbtn{
+    min-height:40px; min-width:40px;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  a.logo{ justify-content:flex-start; min-width:0; flex:0 1 auto; }
+  .lang a{ min-height:36px; min-width:36px; display:inline-flex;
+    align-items:center; justify-content:center; }
+  /* מתגים מעוצבים שומרים על הצורה שלהם — אזור המגע מגיע מהתווית שסביבם */
+  .switch input, .switch input[type="checkbox"],
+  #tglAuto, #tglMirror{ min-width:0; min-height:0; }
+  .switch, label:has(> input[type="checkbox"]){
+    min-height:44px; display:inline-flex; align-items:center; }
+  input[type="checkbox"]:not(.switch input), input[type="radio"]{
+    min-width:22px; min-height:22px; }
+
+  /* --- 3. גודל טקסט קריא: 12px רצפה לכל תווית וכיתוב --- */
+  #dbst,
+  #dst,
+  #exJumpHint,
+  #fb-login-btn,
+  #globalScore,
+  #introSt,
+  #kernelStatus,
+  #max-score,
+  #moduleLabel,
+  #nextBtn,
+  #pandasCount,
+  #prevBtn,
+  #progTxt,
+  #progress-label,
+  #pyStatus,
+  #pythonCount,
+  #rSt,
+  #reset-score-btn,
+  #rowCount,
+  #runBtn,
+  #selectedVizName,
+  #sql-status,
+  #startSub,
+  #stats-btn,
+  #tab-0,
+  #tab-1,
+  #tab-2,
+  #tab-3,
+  #tb-chap,
+  #tb-clear,
+  #tb-copy,
+  #tb-count,
+  #tb-cut,
+  #tb-paste,
+  #tb-select,
+  #wbtn-0,
+  #wbtn-1,
+  #wbtn-10,
+  #wbtn-11,
+  #wbtn-12,
+  #wbtn-13,
+  #wbtn-14,
+  #wbtn-15,
+  #wbtn-16,
+  #wbtn-17,
+  #wbtn-18,
+  #wbtn-19,
+  #wbtn-2,
+  #wbtn-20,
+  #wbtn-21,
+  #wbtn-22,
+  #wbtn-23,
+  #wbtn-24,
+  #wbtn-25,
+  #wbtn-26,
+  #wbtn-27,
+  #wbtn-28,
+  #wbtn-29,
+  #wbtn-3,
+  #wbtn-30,
+  #wbtn-31,
+  #wbtn-32,
+  #wbtn-33,
+  #wbtn-34,
+  #wbtn-35,
+  #wbtn-36,
+  #wbtn-37,
+  #wbtn-38,
+  #wbtn-4,
+  #wbtn-5,
+  #wbtn-6,
+  #wbtn-7,
+  #wbtn-8,
+  #wbtn-9,
+  #xpNextLabel,
+  .about-item-desc.about-item-desc,
+  .add-calc-col.add-calc-col,
+  .add-calc-table.add-calc-table,
+  .add-measure.add-measure,
+  .back.back,
+  .back-btn.back-btn,
+  .back-link.back-link,
+  .bad.bad,
+  .badge.badge,
+  .badge-new.badge-new,
+  .card-num.card-num,
+  .card-tag.card-tag,
+  .cards-label.cards-label,
+  .case-stat-label.case-stat-label,
+  .case-subtitle.case-subtitle,
+  .case-tag.case-tag,
+  .case-technique.case-technique,
+  .cbtn.cbtn,
+  .ch-meta.ch-meta,
+  .chip.chip,
+  .clear-dash.clear-dash,
+  .concept-label.concept-label,
+  .concept-lbl.concept-lbl,
+  .copy.copy,
+  .dash-stat-lbl.dash-stat-lbl,
+  .db-badge.db-badge,
+  .desc.desc,
+  .diff-badge.diff-badge,
+  .ec-ans.ec-ans,
+  .ec-hint.ec-hint,
+  .ec-sel.ec-sel,
+  .ex-label.ex-label,
+  .ex-num.ex-num,
+  .ex-tag.ex-tag,
+  .ex-topic.ex-topic,
+  .exec-tag.exec-tag,
+  .eyebrow.eyebrow,
+  .fb-run.fb-run,
+  .filter-bar-label.filter-bar-label,
+  .filter-btn.filter-btn,
+  .footer-link.footer-link,
+  .footer-text.footer-text,
+  .good.good,
+  .hero-badge.hero-badge,
+  .hero-feature.hero-feature,
+  .hero-tag.hero-tag,
+  .home-btn.home-btn,
+  .hs-l.hs-l,
+  .ilink.ilink,
+  .label.label,
+  .lang.lang,
+  .lbl.lbl,
+  .lc-hot.lc-hot,
+  .lesson-num.lesson-num,
+  .lesson-tab.lesson-tab,
+  .lesson-tag.lesson-tag,
+  .ln-st.ln-st,
+  .lt-chap.lt-chap,
+  .ltab.ltab,
+  .meta.meta,
+  .mtab.mtab,
+  .nav-t.nav-t,
+  .on.on,
+  .opt-text.opt-text,
+  .page-add.page-add,
+  .page-tab.page-tab,
+  .panel-hdr.panel-hdr,
+  .part-badge.part-badge,
+  .pg-dir.pg-dir,
+  .pill.pill,
+  .prog.prog,
+  .prog-step.prog-step,
+  .project-tag.project-tag,
+  .q-diff.q-diff,
+  .q-num.q-num,
+  .q-sec-tag.q-sec-tag,
+  .q-section.q-section,
+  .q-section-tag.q-section-tag,
+  .q-topic.q-topic,
+  .qg-legend-item.qg-legend-item,
+  .qg-stats.qg-stats,
+  .qjump-t.qjump-t,
+  .relationships-btn.relationships-btn,
+  .required-badge.required-badge,
+  .reset-btn.reset-btn,
+  .result-tag.result-tag,
+  .rp-build.rp-build,
+  .rp-hdr.rp-hdr,
+  .rp-sub.rp-sub,
+  .sb-filter.sb-filter,
+  .sb-group.sb-group,
+  .sb-item-diff.sb-item-diff,
+  .sb-item-num.sb-item-num,
+  .sb-item-points.sb-item-points,
+  .score-pill.score-pill,
+  .sec-cnt.sec-cnt,
+  .sec-label.sec-label,
+  .sec-meta.sec-meta,
+  .sec-num.sec-num,
+  .section-eyebrow.section-eyebrow,
+  .section-label.section-label,
+  .section-title.section-title,
+  .stat-label.stat-label,
+  .stat-lbl.stat-lbl,
+  .stat-mini-label.stat-mini-label,
+  .stat-pill-label.stat-pill-label,
+  .step-n.step-n,
+  .step-status-badge.step-status-badge,
+  .sub.sub,
+  .tab-btn.tab-btn,
+  .tag.tag,
+  .tag-group-title.tag-group-title,
+  .tier-tab.tier-tab,
+  .topic-tag.topic-tag,
+  .topnav-link.topnav-link,
+  .topnav-title.topnav-title,
+  .vfp-empty.vfp-empty,
+  .video-part.video-part,
+  .xbtn.xbtn{ font-size:12px; }
+
+  /* אזור מגע לא נדחס על ידי המיכל */
+  .home-btn, .back-btn, .lang a, .lang-link, .tb-btn, .chip{ flex:0 0 auto; }
+  .home-btn{ min-width:44px; padding-inline:12px; }
+  .lang-link, footer a, .foot-inner a, .footer-link{
+    min-height:40px; display:inline-flex; align-items:center; }
+
+  /* --- 3ב. כיתובים קטנים שנשארו מתחת ל-12px --- */
+  body small, body th, body td,
+  body code:not(.CodeMirror code):not(pre code),
+  .topnav-link.topnav-link, .sub.sub, .label.label, .desc.desc,
+  .badge.badge, .m-chip.m-chip, .lesson-tab.lesson-tab, .copy.copy,
+  .fp-section-hdr.fp-section-hdr, .fp-drop.fp-drop,
+  .mobile-drag-hint.mobile-drag-hint, #exJumpHint,
+  .qjump-t.qjump-t, .ln-st.ln-st, .hs-l.hs-l{ font-size:12px; }
+
+  /* --- 4. שדות קלט: 16px מונע זום אוטומטי ב-iOS --- */
+  input[type="text"], input[type="search"], input[type="email"],
+  input[type="number"], textarea, select{ font-size:16px; }
+
+  /* --- 5. טבלאות רחבות גוללות בתוך עצמן ולא שוברות את העמוד --- */
+  table{ max-width:100%; }
+  table:not(.rgrid table):not(.CodeMirror table){
+    display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+  /* --- 5ג. בלוקי תוכן לא חורגים מרוחב המסך --- */
+  .concept, .concept-text, .concept-label, .concept-box,
+  .card, .box, .panel, blockquote, figure{
+    max-width:100%; min-width:0; overflow-wrap:anywhere; }
+}
+
+/* --- 5ב. יוצאים מן הכלל: דפים שהכריזו !important על גודל הטקסט --- */
+@media (max-width:900px){
+  .lesson-tab, .ex-nav-btn, .concept-text code, .theory pre,
+  .lesson-tabs button, .ex-nav a, .ex-nav button, .cbtn,
+  small, .filter-btn, .score-badge, .vfp-empty,
+  .sq-hdr, .fp-drop, .mobile-drag-hint{ font-size:12px !important; }
+  .ex-nav-btn, .ex-nav a{ min-height:40px !important; display:inline-flex !important;
+    align-items:center; justify-content:center; }
+  .topnav a, .topnav-link{ min-height:40px; display:inline-flex; align-items:center; }
+}
+
+/* --- 6. טלפונים (≤430px): הסרגל העליון מצטמצם כדי להיכנס במלואו --- */
+@media (max-width:430px){
+  .lang a{ min-width:32px; padding-inline:4px; font-size:10.5px; }
+  .header-inner{ gap:7px; padding:0 9px; }
+  a.logo{ min-width:76px; font-size:12.5px; }
+  .egr-theme.egr-mid button, .egr-theme.egr-compact button{ padding-inline:7px; }
+}
+/* מתחת ל-380px אין מקום לתוויות הכפתור — נשארים האייקונים, השם נשמר ב-aria-label */
+@media (max-width:380px){
+  .lang a{ min-width:30px; padding-inline:3px; }
+  a.logo{ min-width:64px; font-size:11.5px; }
+  .header-inner{ gap:6px; padding:0 8px; }
+}
+</style>
 <script>(function(){try{var t=localStorage.getItem('egr-theme');if(t!=='light'&&t!=='dark')t='dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script><style id="theme-toggle-css">
 :root{color-scheme:dark}
 html[data-theme="light"]{color-scheme:light}
@@ -869,6 +1257,26 @@ html[data-theme="light"] .egr-theme button[aria-pressed="true"]{background:#fff;
 html[data-theme="light"] .egr-theme.egr-floating{background:rgba(255,255,255,.95);
   border-color:rgba(0,0,0,.16);color:#1b1f24;box-shadow:0 6px 20px rgba(0,0,0,.18)}
 .egr-theme.egr-floating button{padding:5px 11px;font-size:12px}
+/* בנייד: הכפתור הצף יושב מעל סרגל הניווט הקבוע, ומצטמצם לאייקונים בלבד
+   כדי לא לכסות את התוכן. השם נשאר ב-title ובתווית הנגישות. */
+@media (max-width:900px){
+  .egr-theme.egr-floating{inset-block-end:calc(80px + env(safe-area-inset-bottom));
+    inset-inline-start:8px;padding:2px;gap:2px;opacity:.93}
+  .egr-theme.egr-floating button{padding:0;min-width:38px;min-height:38px;
+    justify-content:center;font-size:0}
+  .egr-theme.egr-floating .egr-i{font-size:15px}
+  .egr-theme.egr-floating button>span:not(.egr-i){display:none}
+}
+/* בנייד: אזור מגע של 40px, והמצב הפעיל מוצג כאייקון בלבד —
+   כך הכפתור נשאר ברור אבל לא דוחף את שאר הסרגל אל מחוץ למסך. */
+@media (max-width:900px){
+  .egr-theme button{min-height:40px;padding-block:0;padding-inline:9px}
+  .egr-theme button>span:not(.egr-i){display:none}
+  .egr-theme button{min-width:40px;justify-content:center;padding-inline:8px}
+  .egr-theme .egr-i{font-size:15px}
+  .egr-theme.egr-mid button,.egr-theme.egr-compact button{min-height:40px;font-size:11.5px}
+  .egr-theme.egr-floating button{min-height:40px;min-width:40px}
+}
 @media print{.egr-theme{display:none}}
 </style><style id="theme-light">html[data-theme="light"]{--bg:#eef0f4;--bg2:#e4e6ed;--bg3:#dde0e8;--bg4:#dce0e5;--border:rgba(0,0,0,0.045);--border2:rgba(0,0,0,0.075);--text:#2348a5;--text2:#4a535f;--text3:#788092;--code-bg:#edeff2;--code-text:#654a15;--tc1:#eef0f4;--tc2:#2348a5;--tc3:#14575f;--tc4:rgba(0,0,0,0.045);--tc5:#e4e6ed;--tc6:#4a535f;--tc7:#dde0e8;--tc8:#dce0e5;--tc9:#edeff2;--tc10:#654a15;--tc11:rgba(0,0,0,0.075);--tc12:#3c6e74;--tc13:rgba(211,238,230,0.12);--tc14:#3a7160;--tc15:#135944;--tc16:rgba(174,224,209,0.35);--tc17:#788092;--tc18:#5c4e14;--tc19:rgba(0,0,0,0.138);--tc20:#71673a;--tc21:rgba(238,233,211,0.12);--tc22:rgba(224,214,174,0.3);--tc23:#97202c;--tc24:rgba(238,211,215,0.04);--tc25:rgba(224,174,182,0.2);--tc26:rgba(211,238,230,0.1);--tc27:rgba(174,224,209,0.3);--tc28:rgba(238,228,211,0.08);--tc29:#664a16;--tc30:rgba(224,206,174,0.25);--tc31:rgba(0,0,0,0.02);--tc32:rgba(211,235,238,0.05);--tc33:rgba(174,219,224,0.25);--tc34:rgba(224,214,174,0.25);--tc35:rgba(238,233,211,0.04);--tc36:rgba(238,233,211,0.08);--tc37:rgba(224,214,174,0.15);--tc38:rgba(0,0,0,0.165);--tc39:#dbdde6;--tc40:#dbdde5;--tc41:#8189be;--tc42:#000000;--tc43:rgba(0,0,0,0.193);--tc44:rgba(0,0,0,0.275);--tc45:#694916;--tc46:#5a4f13;--tc47:rgba(0,0,0,0.42);--tc48:#dbdde6;--tc49:#dcdde5;--tc50:#706739;--tc51:rgba(0,0,0,0.165);--tc52:#654a15;--tc53:rgba(0,0,0,0.09);--tc54:rgba(0,0,0,0.188);--tc55:rgba(0,0,0,0.165);--tc56:rgba(0,0,0,0.45);--tc57:#a8acd2;--tc58:#424242;--tc59:rgba(0,0,0,0.075);--tc60:#dbdce6;--tc61:#40404b;--tc62:#dcdde5;--tc63:#292929;--tc64:#dcdce5;--tc65:#dddce4;--tc66:rgba(0,0,0,0.099);--tc67:#dadde7;--tc68:#7d8aca;--tc69:#0a4ebe;--tc70:rgba(0,0,0,0.099);--tc71:rgba(211,221,238,0.12);--tc72:rgba(174,193,224,0.25);--tc73:#2353a3;--tc74:#654a15;--tc75:rgba(0,0,0,0.098);--tc76:#13594b;--tc77:#404e71;--tc78:rgba(211,238,233,0.12);--tc79:rgba(213,217,236,0.95);--tc80:#e1dce5;--tc81:#e1dbe5;--tc82:#735aaa;--tc83:#4f2fc6;--tc84:rgba(0,0,0,0.138);--tc85:#a377e7;--tc86:#a14ded;--tc87:#6b5baa;--tc88:rgba(0,0,0,0.248);--tc89:rgba(212,215,237,0.95);--tc90:rgba(0,0,0,0.468);--tc91:#dedbe6;--tc92:rgba(0,0,0,0.22);--tc93:rgba(219,211,238,0.1);--tc94:#584770;--tc95:#763ff4;--tc96:rgba(0,0,0,0.15);--tc97:#5d5d5d;--tc98:rgba(219,211,238,0.08);--tc99:rgba(225,211,238,0.06);--tc100:rgba(189,174,224,0.3);--tc101:rgba(212,215,237,0.6);--tc102:rgba(189,174,224,0.25);--tc103:rgba(189,174,224,0.2);--tc104:rgba(211,215,238,0.7);--tc105:rgba(189,174,224,0.15);--tc106:rgba(174,224,214,0.5);--tc107:rgba(211,238,233,0.05);--tc108:rgba(219,211,238,0.15);--tc109:#dfe1ea;--tc110:#e6e7ef;--tc111:#2742b6;--tc112:rgba(238,234,211,0.15);--tc113:rgba(224,216,174,0.3);--tc114:rgba(0,0,0,0.06);--tc115:rgba(0,0,0,0.112);--tc116:rgba(211,238,233,0.15);--tc117:rgba(174,224,214,0.3);--tc118:rgba(238,228,211,0.1);--tc119:rgba(224,206,174,0.3);--tc120:rgba(224,216,174,0.25);--tc121:rgba(0,0,0,0.038);--tc122:rgba(0,0,0,0.09);--tc123:rgba(0,0,0,0.192);--tc124:rgba(0,0,0,0.204);--tc125:rgba(212,215,237,0.85);--tc126:rgba(0,0,0,0.165);--tc127:rgba(0,0,0,0.138);--tc128:#e0e0e0;--tc129:#73663b;--tc130:#7d7da5;--tc131:#5b4e25;--tc132:#818181;--tc133:#70673a;--tc134:#d9d9ea;--tc135:#0978b2;--tc136:#972020}</style></head>
 <body>
@@ -4029,7 +4437,7 @@ if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
     eliranName: 'אלירן גרוסמן',
     eliranTitle: 'מרצה SQL ב-Partner Communications',
     siteName: 'קוד דאטה',
-    siteUrl: 'egrosman1.github.io/sql-course',
+    siteUrl: 'egrosman.co.il',
     yourName: 'שמך כאן',
     enterName: 'הכנס שם לתעודה',
     download: 'הורד / הדפס',
@@ -4061,7 +4469,7 @@ if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
     eliranName: 'Eliran Grossman',
     eliranTitle: 'SQL Instructor at Partner Communications',
     siteName: 'Data Code',
-    siteUrl: 'egrosman1.github.io/sql-course',
+    siteUrl: 'egrosman.co.il',
     yourName: 'Your Name Here',
     enterName: 'Enter name for certificate',
     download: 'Download / Print',
@@ -4665,7 +5073,7 @@ if (typeof Sk !== 'undefined' && typeof CodeMirror !== 'undefined') {
   
   // ---- Share on LinkedIn ----
   function shareLinkedIn(title) {
-    const url = 'https://egrosman1.github.io/sql-course/' + (IS_RTL ? '' : 'en/');
+    const url = 'https://egrosman.co.il/' + (IS_RTL ? '' : 'en/');
     const text = IS_RTL 
       ? `🎉 סיימתי את "${title}" בקוד דאטה! קורס פייתון ופאנדס חינמי בעברית.`
       : `🎉 Just completed "${title}" at Data Code! Free Python and Pandas course.`;
@@ -6308,6 +6716,38 @@ window.PYODIDE_ADVANCED_EXERCISES = {
   }
 })();
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script id="mobile-safe-bottom">
+(function(){
+  if (!window.matchMedia || !matchMedia('(max-width:900px)').matches) return;
+  function pad(){
+    var best=0;
+    var els=document.body.getElementsByTagName('*');
+    for (var i=0;i<els.length;i++){
+      var e=els[i], cs;
+      try{ cs=getComputedStyle(e); }catch(err){ continue; }
+      if(cs.position!=='fixed'||cs.display==='none'||cs.visibility==='hidden') continue;
+      var b=e.getBoundingClientRect();
+      if(b.height<8||b.width<innerWidth*0.34) continue;
+      if(b.bottom > innerHeight-6 && b.top > innerHeight*0.55) best=Math.max(best,b.height);
+    }
+    document.body.style.paddingBottom = best ? (best+14)+'px' : '';
+  }
+  addEventListener('load',pad); addEventListener('resize',pad);
+  setTimeout(pad,1200); setTimeout(pad,3500);
+})();
+</script>
 <script>(function(){
   var D=document,H=D.documentElement;
   function cur(){return H.getAttribute('data-theme')==='light'?'light':'dark';}
@@ -6321,6 +6761,7 @@ window.PYODIDE_ADVANCED_EXERCISES = {
   bD.innerHTML='<span class="egr-i" aria-hidden="true">\u263E</span><span>Dark Mode</span>';
   bL.innerHTML='<span class="egr-i" aria-hidden="true">\u2600</span><span>Light Mode</span>';
   bD.title='Dark Mode';bL.title='Light Mode';
+  bD.setAttribute('aria-label','Dark Mode');bL.setAttribute('aria-label','Light Mode');
   wrap.appendChild(bD);wrap.appendChild(bL);
   function paint(){var l=cur()==='light';
     bD.setAttribute('aria-pressed',l?'false':'true');
